@@ -23,11 +23,12 @@
 6. **[仿真环境详解 (Simulation Environments)](./simulation_environments.md)** [New]
     - Isaac Sim vs MuJoCo vs PyBullet
     - 选型指南: 什么时候用什么？
-7. **[Sim-to-Real (仿真到真机)](./sim_to_real.md)**
+7. **[Sim-to-Real Guide](./sim_to_real.md)**: 仿真到真机的迁移指南。
     - Domain Randomization
     - Reality Gap 应对策略
+8. **[Sensor Integration Challenges](./sensor_integration.md)**: 触觉传感器与夹爪集成的五大工程难点。
 
 ## 学习建议
 - **硬件党**: 直接看 [硬件选型](./hardware.md)，了解最新的灵巧手和机器人平台。
 - **工程党**: 重点研读 [模型优化](./optimization.md)，掌握如何在 Jetson 上跑大模型。
-- **算法党**: [Sim-to-Real](./sim_to_real.md) 是必考题，务必理解 Domain Randomization 的细节。
+- **算法党**: [Sim-to-Real Guide](./sim_to_real.md) 是必考题，务必理解 Domain Randomization 的细节。

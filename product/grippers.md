@@ -33,6 +33,8 @@
 > **Note**: 部分机械臂厂商提供深度集成的原厂夹爪，例如：
 > - **Franka Hand**: 详见 [Franka Emika](../product/arms.md#franka-emika-research-3--production)
 > - **Agile Robots Adaptive Gripper**: 详见 [Agile Robots Diana 7](../product/arms.md#agile-robots-diana-7)
+>
+> **Technical Insight**: 想要了解夹爪与传感器集成的工程难点？请阅读 **[触觉传感器集成难点](../deployment/sensor_integration.md)**。
 
 ---
 [← Back to Product Index](./README.md)
