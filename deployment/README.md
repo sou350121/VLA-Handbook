@@ -4,8 +4,8 @@
 
 ## 目录
 1. **[硬件选型与成本 (Hardware & Pricing)](./hardware.md)**
-    - 灵巧手 (Dexterous Hands) 选型指南
-    - 机械臂与移动底盘
+    - 灵巧手/机械臂/传感器 **参考价格表**
+    - 选型对比 (参数 vs 价格)
 2. **[相机标定 (Camera Calibration)](./calibration.md)** [New]
     - Eye-in-Hand vs Eye-to-Hand
     - Aruco 标定实战

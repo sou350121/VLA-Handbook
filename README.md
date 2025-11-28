@@ -28,9 +28,11 @@
     - 详解了 **FAST** 动作 Token 化（DCT + BPE，5倍训练加速）。
     - 深入讲解 **Knowledge Insulation**（梯度隔离，防止灾难性遗忘）。
 3. **硬件选型指南**:
-    - 重点加强了 **灵巧手 (Dexterous Hands)** 的介绍。
+    - 重点加强了 **灵巧手 (Dexterous Hands)** 的介绍 (Shadow, Inspire, Unitree)。
+    - 新增 **触觉传感器 (Tactile Sensors)** 深度解析 (GelSight, Tashan, Parsen)。
     - 提供了 **Unitree, Agibot, Fourier** 等中国头部机器人公司的详细参数与价格参考。
     - 新增 **国际机器人公司** 和 **亚洲机器人公司** 对比表。
+    - 新增 **[传感器集成难点](./deployment/sensor_integration.md)** 专题。
 4. **实战导向**:
     - 提供了 **Sim-to-Real** 的具体技术路线 (Domain Randomization, Co-training)。
     - 提供了 **边缘部署** 的实战代码片段 (vLLM, Quantization)。
@@ -58,9 +60,18 @@
 │   ├── co_training.md          # 联合训练 (Co-training) 详解
 │   ├── tactile_vla.md          # 触觉感知与 VLA
 │   └── data.md                 # 数据处理 (RLDS, Co-training)
+├── product/                    # 🆕 机器人产品大百科
+│   ├── README.md               # 产品索引
+│   ├── humanoids.md            # 具身智能本体 (Tesla, Unitree)
+│   ├── hands.md                # 灵巧手 (Shadow, Inspire)
+│   ├── arms.md                 # 科研机械臂 (Franka, UR)
+│   ├── grippers.md             # 平行夹爪 (Robotiq, DH)
+│   ├── mobile_bases.md         # 移动底盘 (AgileX)
+│   └── sensors.md              # 触觉与感知 (GelSight, Tashan)
 ├── deployment/                 # 真机与部署
 │   ├── README.md               # 索引
-│   ├── hardware.md             # 硬件选型 (灵巧手, 机械臂)
+│   ├── hardware.md             # 硬件选型与价格参考
+│   ├── sensor_integration.md   # 🆕 触觉传感器集成难点
 │   ├── calibration.md          # 相机标定指南
 │   ├── pi0_deployment.md       # Pi0 真机部署
 │   ├── dexterous_hand_guide.md # 灵巧手部署实战
