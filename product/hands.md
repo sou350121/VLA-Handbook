@@ -27,6 +27,11 @@
 - **自由度**: 16 DOF。
 - **特点**: **开源项目**。成本低，Sim-to-Real 友好，学术界常用 (可自行 3D 打印)。
 
+## Parsen DexH13
+- **厂商**: Parsen (帕西尼感知)
+- **自由度**: 13 Active + 3 Passive。
+- **特点**: **触觉感知融合**。集成了数百个 ITPU 触觉单元 + 800万像素 AI 手眼相机，支持在手操作。
+
 ## Wonik Allegro Hand
 - **厂商**: Wonik Robotics
 - **自由度**: 16 DOF (4指)。
