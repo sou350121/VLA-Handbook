@@ -17,7 +17,15 @@
 | **Wonik** | Allegro | ~11万 - 18万 | 经典科研 | [Link](../product/hands.md#wonik-allegro-hand) |
 | **Shadow** | Shadow Hand | ~85万+ | **高端触觉**, 遥操作 | [Link](../product/hands.md#shadow-hand) |
 
-## 2. 机械臂 (Robotic Arms)
+## 2. 平行夹爪 (Grippers)
+
+| 厂商 | 型号 | 参考价格 (RMB) | 特点 | 详情 |
+| :--- | :--- | :--- | :--- | :--- |
+| **Robotiq** | 2F-85 | ~2.5万 - 3.5万 | **行业标准**, 极其稳定 | [Link](../product/grippers.md#robotiq-2f-85--2f-140) |
+| **DH** | AG-95 | ~0.8万 - 1.2万 | **高性价比**, 完美平替 | [Link](../product/grippers.md#dh-robotics-大寰机器人) |
+| **Franka** | Hand | (随臂赠送) | 深度集成, 高灵敏 | [Link](../product/grippers.md#franka-hand) |
+
+## 3. 机械臂 (Robotic Arms)
 
 | 厂商 | 型号 | 参考价格 (RMB) | 适用场景 | 详情 |
 | :--- | :--- | :--- | :--- | :--- |
@@ -25,7 +33,7 @@
 | **UR** | UR5e | ~20万 - 30万 | 工业级, 高精度 | [Link](../product/arms.md#ur5e) |
 | **Elephant** | myCobot 280 | ~3000 | 极低预算, 教育 | [Link](../product/arms.md#mycobot-280) |
 
-## 3. 移动底盘 (Mobile Bases)
+## 4. 移动底盘 (Mobile Bases)
 
 | 厂商 | 型号 | 参考价格 (RMB) | 适用场景 | 详情 |
 | :--- | :--- | :--- | :--- | :--- |
@@ -33,7 +41,7 @@
 | **AgileX** | Scout Mini | ~6万 | 室外越野 | [Link](../product/mobile_bases.md#agilex-limo--scout) |
 | **Unitree** | Go2 (Edu) | ~8万 - 16万 | 四足移动, 高算力 | [Link](../product/mobile_bases.md#unitree-go2) |
 
-## 4. 具身智能本体 (Humanoids)
+## 5. 具身智能本体 (Humanoids)
 
 | 厂商 | 型号 | 参考价格 (RMB) | 特点 | 详情 |
 | :--- | :--- | :--- | :--- | :--- |
@@ -41,7 +49,7 @@
 | **Fourier** | GR-1 | ~90万 - 100万 | 康复, 负重强 | [Link](../product/humanoids.md#fourier-gr-1) |
 | **Astribot** | S1 | ~50万 - 60万 (Est) | 极致速度 | [Link](../product/humanoids.md#astribot-s1) |
 
-## 5. 触觉传感器 (Tactile Sensors)
+## 6. 触觉传感器 (Tactile Sensors)
 
 | 厂商 | 型号 | 参考价格 | 特点 | 详情 |
 | :--- | :--- | :--- | :--- | :--- |

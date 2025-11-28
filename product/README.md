@@ -10,7 +10,10 @@
 ### 2. **[灵巧手 (Dexterous Hands)](./hands.md)**
 > Shadow Hand, Inspire, Unitree Dex3, Agibot X1, LEAP Hand...
 
-### 3. **[科研机械臂 (Research Arms)](./arms.md)**
+### 3. **[平行夹爪 (Parallel Grippers)](./grippers.md)**
+> Robotiq 2F-85, DH Robotics AG-95, Agile Robots...
+
+### 4. **[科研机械臂 (Research Arms)](./arms.md)**
 > WidowX 250 (ALOHA), UR5e, myCobot...
 
 ### 4. **[移动底盘 (Mobile Bases)](./mobile_bases.md)**
