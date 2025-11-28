@@ -93,12 +93,10 @@
 ### 📚 推荐学习路径
 
 ####学习者/应届生
-1. **理论先行**: 从 [理论基础](./theory/README.md) 开始
-   - 先读 `vla_arch.md` 和 `literature_review.md` 建立全局视野
-   - 深入 `diffusion_policy.md` 和 `pi0_flow_matching.md` 掌握核心算法
-2. **动手实践**: 挑战 [题库](./question-bank/README.md) 中的 OpenVLA 微调实战
-3. **硬件了解**: 浏览 [硬件选型](./deployment/hardware.md) 了解主流设备
-4. **公司调研**: 查看 [公司目录](./companies/README.md) 规划职业方向
+- **[理论基础 (Theory)](./theory/README.md)**: VLA 架构、Diffusion Policy、Sim-to-Real 等核心概念。
+- **[产品汇总 (Products)](./product/README.md)** [New]: Tesla Optimus, Unitree G1 等主流机器人产品技术参数详解。
+- **[公司名录 (Companies)](./companies/README.md)**: 2025 机器人公司求职指南 (国内/国际)。
+- **[真机部署 (Deployment)](./deployment/README.md)**: 硬件选型、量化加速、边缘计算。
 
 #### 在职转岗/跳槽者
 1. **速查复习**: 先看 [速查表](./cheat-sheet/README.md) 快速回顾核心概念
