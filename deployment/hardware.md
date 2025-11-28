@@ -58,6 +58,7 @@
 | **Qianjue** | XENSE-G1 | 询价 | **多模态**, 高精度 | [Link](../product/sensors.md#qianjue-xense-g1) |
 | **GelSight** | Mini | ~$3,000 | 视触觉, 3D拓扑 | [Link](../product/sensors.md#gelsight-mini) |
 | **Daimon** | DM-Tac W | ~$1,000 | **视触觉**, 120Hz | [Link](../product/sensors.md#daimon-dm-tac-w-series-通用视触觉传感器) |
+| **Tashan** | AI Tactile | 询价 | **数模混合芯片**, 接近觉 | [Link](../product/sensors.md#tashan-他山科技) |
 | **Xela** | uSkin | ~2万 - 4万 | 磁触觉, 柔性 | [Link](../product/sensors.md#xela-uskin) |
 
 ---
