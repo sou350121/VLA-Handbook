@@ -22,23 +22,17 @@
 - **PGE 系列**:
     - **特点**: 工业级电动夹爪，体积小，精度高。
 
-## Agile Robots (思灵机器人)
-- **厂商**: Agile Robots (中国/德国)
-- **产品**: 灵巧夹爪 (Adaptive Gripper)。
-- **特点**:
-    - **自适应**: 手指具有一定的柔性或连杆机构，能自适应包裹不同形状的物体。
-    - **力控**: 具备高精度的力控能力，适合精密装配。
-
 ## Daimon DM-Tac G (Visuotactile Gripper)
 - **厂商**: Daimon Robotics (戴盟机器人)
 - **定位**: 视触觉一体化夹爪。
 - **特点**: 将视触觉传感器直接集成在平行夹爪指尖，开箱即用。
 - **能力**: 集成高精度视触觉，每秒采集 **900万** 组数据，支持微米级接触变化识别 (如硬度辨识、滑移检测)。
 
-## Franka Hand
-- **厂商**: Franka Emika
-- **特点**: Franka Panda 机械臂自带的夹爪。
-- **优势**: 深度集成，API 调用极其简单，支持极其灵敏的力反馈。
+---
+
+> **Note**: 部分机械臂厂商提供深度集成的原厂夹爪，例如：
+> - **Franka Hand**: 详见 [Franka Emika](../product/arms.md#franka-emika-research-3--production)
+> - **Agile Robots Adaptive Gripper**: 详见 [Agile Robots Diana 7](../product/arms.md#agile-robots-diana-7)
 
 ---
 [← Back to Product Index](./README.md)

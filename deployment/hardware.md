@@ -24,7 +24,7 @@
 | :--- | :--- | :--- | :--- | :--- |
 | **Robotiq** | 2F-85 | ~2.5万 - 3.5万 | **行业标准**, 极其稳定 | [Link](../product/grippers.md#robotiq-2f-85--2f-140) |
 | **DH** | AG-95 | ~0.8万 - 1.2万 | **高性价比**, 完美平替 | [Link](../product/grippers.md#dh-robotics-大寰机器人) |
-| **Franka** | Hand | (随臂赠送) | 深度集成, 高灵敏 | [Link](../product/grippers.md#franka-hand) |
+| **Franka** | Hand | (随臂赠送) | 深度集成, 高灵敏 | [Link](../product/arms.md#franka-emika-research-3--production) |
 | **Daimon** | DM-Tac G | 询价 | **视触觉夹爪**, 高精度 | [Link](../product/grippers.md#daimon-dm-tac-g-visuotactile-gripper) |
 
 ## 3. 机械臂 (Robotic Arms)
