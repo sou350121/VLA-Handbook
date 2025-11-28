@@ -45,11 +45,48 @@
     - **高保真仿真**: 精确模拟切向力 (摩擦力) 和法向力。
     - **Sim-to-Real**: 填补了触觉数据在仿真中的空白，加速策略训练。
 
-## GelSight Mini
+## GelSight Family
 - **官网**: [https://www.gelsight.com/](https://www.gelsight.com/)
 - **厂商**: GelSight
-- **原理**: **视触觉 (Visuo-tactile)**。
-- **特点**: 基于光学原理，生成极高精度的 3D 表面拓扑图。
+- **原理**: **视触觉 (Visuo-tactile)**。基于光学原理，生成极高精度的 3D 表面拓扑图。
+- **产品线**:
+    - **GelSight Mini**: 标准科研版，高精度。
+    - **GelSight Slim**: 更紧凑，适合集成到灵巧手。
+
+## Daimon (戴盟机器人)
+- **官网**: [http://www.dmrobot.com/](http://www.dmrobot.com/)
+- **产品**: **DM-Tac 系列** (W/F/G)。
+- **特点**:
+    - **高分辨率**: >40,000 感测单元/cm²。
+    - **多模态**: 具备 DM-Tac G (视触觉夹爪)，集成度高。
+- **参考**: [RobotShop](https://www.robotshop.com/products/daimon-robotics-dm-tac-w-tactile-sensor-large)
+
+## 9DTact
+- **来源**: 学术成果 / 开源项目
+- **特点**: **超紧凑 (Compact)**。体积仅为 32.5mm x 25.5mm x 25.5mm，适合灵巧手集成。
+- **能力**: 6D 力估计 (1D 法向 + 2D 切向 + 3D 扭矩) + 3D 重建。
+- **参考**: [Project Page](https://github.com/Rwsl/9DTact)
+
+## Tac3D
+- **来源**: 学术成果
+- **原理**: **虚拟双目视觉 (Virtual Binocular)**。通过镜面反射实现单相机双视角，解决深度感知问题。
+- **参考**: [arXiv Paper](https://arxiv.org/abs/2308.08866)
+
+## Digit (Open Source)
+- **官网**: [https://digit.ml/](https://digit.ml/)
+- **来源**: Meta AI (Facebook) 开源。
+- **特点**:
+    - **低成本**: 易于制造，BOM 成本低。
+    - **生态**: 配套 PyTouch 开源库，社区活跃。
+- **参考**: [GitHub](https://github.com/facebookresearch/digit-interface)
+
+## Parsen (帕西尼感知)
+- **官网**: [https://www.paxini.com/](https://www.paxini.com/)
+- **产品**: PX 系列 (PX-6AX, PX-3AX)。
+- **特点**:
+    - **多维触觉**: 专注于多维触觉阵列。
+    - **高性价比**: 消费级产品 (PX-3AX) 价格极具竞争力 (约 ~200 RMB)。
+- **参考**: [36Kr 报道](https://36kr.com/p/2312636662486405)
 
 ## Xela uSkin
 - **官网**: [https://xelarobotics.com/](https://xelarobotics.com/)
