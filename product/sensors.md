@@ -4,8 +4,10 @@
 
 ## Qianjue (千觉机器人)
 > **Slogan**: "赋予机器人比人类更灵敏的触觉。"
+> **官网**: [http://qianjue.jinjiayun.net.cn/](http://qianjue.jinjiayun.net.cn/)
 
 ### **XENSE-G1 (多模态触觉传感器系列)**
+- **详情**: [产品页面](http://qianjue.jinjiayun.net.cn/product/367)
 - **定位**: 通用型高精度触觉传感器平台。
 - **核心参数**:
     - **分辨率**: **50,000 点/cm²** (信息密度是人类手指的 800 倍)。
@@ -17,6 +19,7 @@
     - **滑移检测**: 毫秒级检测物体滑落趋势，实现动态握力调整。
 
 ### **G1-WS (Wedge Shape / 夹爪专用型)**
+- **详情**: [产品页面](http://qianjue.jinjiayun.net.cn/product/386)
 - **设计**: **楔形结构**。
     - 前端最薄处仅 **5mm**，专为狭窄空间作业设计 (如密集排布的线缆插拔)。
 - **适配**: 完美适配 Robotiq 2F-85/140, Agile Robots 等主流夹爪。
@@ -25,6 +28,7 @@
     - **精密装配**: 轴承、齿轮等精密零部件的装配。
 
 ### **XENSE-Fingertip (指尖型)**
+- **详情**: [产品页面](http://qianjue.jinjiayun.net.cn/product/368)
 - **设计**: 仿生指尖曲面设计，模拟人类手指腹。
 - **用途**: 适用于灵巧手 (Dexterous Hand) 指尖，增强抓取的稳定性和感知能力。
 
@@ -42,11 +46,13 @@
     - **Sim-to-Real**: 填补了触觉数据在仿真中的空白，加速策略训练。
 
 ## GelSight Mini
+- **官网**: [https://www.gelsight.com/](https://www.gelsight.com/)
 - **厂商**: GelSight
 - **原理**: **视触觉 (Visuo-tactile)**。
 - **特点**: 基于光学原理，生成极高精度的 3D 表面拓扑图。
 
 ## Xela uSkin
+- **官网**: [https://xelarobotics.com/](https://xelarobotics.com/)
 - **厂商**: Xela Robotics
 - **原理**: **磁触觉**。
 - **特点**: 柔性皮肤，三维力感知，常用于 Allegro Hand 指尖。
