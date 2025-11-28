@@ -6,10 +6,13 @@
 
 ### 1.1. 映射公式
 将浮点数 $x$ 映射到整数 $q$：
+
 $$
 q = \text{round}\left( \frac{x}{S} + Z \right)
 $$
+
 反量化 (Dequantization)：
+
 $$
 \hat{x} = S(q - Z)
 $$
