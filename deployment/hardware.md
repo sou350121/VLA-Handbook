@@ -16,6 +16,7 @@
 | **LEAP** | LEAP Hand | ~1.4万 - 2.1万 | **开源低成本**, Sim-to-Real | [Link](../product/hands.md#leap-hand) |
 | **Wonik** | Allegro | ~11万 - 18万 | 经典科研 | [Link](../product/hands.md#wonik-allegro-hand) |
 | **Shadow** | Shadow Hand | ~85万+ | **高端触觉**, 遥操作 | [Link](../product/hands.md#shadow-hand) |
+| **Daimon** | DM-Hand1 | 询价 | **视触觉**, 仿人构型 | [Link](../product/hands.md#daimon-dm-hand1-视触觉灵巧手) |
 
 ## 2. 平行夹爪 (Grippers)
 
@@ -24,6 +25,7 @@
 | **Robotiq** | 2F-85 | ~2.5万 - 3.5万 | **行业标准**, 极其稳定 | [Link](../product/grippers.md#robotiq-2f-85--2f-140) |
 | **DH** | AG-95 | ~0.8万 - 1.2万 | **高性价比**, 完美平替 | [Link](../product/grippers.md#dh-robotics-大寰机器人) |
 | **Franka** | Hand | (随臂赠送) | 深度集成, 高灵敏 | [Link](../product/grippers.md#franka-hand) |
+| **Daimon** | DM-Tac G | 询价 | **视触觉夹爪**, 高精度 | [Link](../product/grippers.md#daimon-dm-tac-g-visuotactile-gripper) |
 
 ## 3. 机械臂 (Robotic Arms)
 
@@ -55,6 +57,7 @@
 | :--- | :--- | :--- | :--- | :--- |
 | **Qianjue** | XENSE-G1 | 询价 | **多模态**, 高精度 | [Link](../product/sensors.md#qianjue-xense-g1) |
 | **GelSight** | Mini | ~$3,000 | 视触觉, 3D拓扑 | [Link](../product/sensors.md#gelsight-mini) |
+| **Daimon** | DM-Tac W | ~$1,000 | **视触觉**, 120Hz | [Link](../product/sensors.md#daimon-dm-tac-w-series-通用视触觉传感器) |
 | **Xela** | uSkin | ~2万 - 4万 | 磁触觉, 柔性 | [Link](../product/sensors.md#xela-uskin) |
 
 ---
