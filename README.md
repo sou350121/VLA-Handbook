@@ -27,6 +27,8 @@
     - 涵盖了 **OpenVLA**, **WALL-OSS** (X Square), **Galaxea G0** (星海图) 等开源 SOTA 模型。
     - 详解了 **FAST** 动作 Token 化（DCT + BPE，5倍训练加速）。
     - 深入讲解 **Knowledge Insulation**（梯度隔离，防止灾难性遗忘）。
+    - 新增 **高效微调** (LoRA/QLoRA) 和 **量化理论** (AWQ, GPTQ) 详解。
+    - 新增 **空间数学** (坐标系转换, 旋转表示) 和 **评估体系** (Benchmarks, Metrics)。
 3. **硬件选型指南**:
     - 重点加强了 **灵巧手 (Dexterous Hands)** 的介绍 (Shadow, Inspire, Unitree)。
     - 新增 **触觉传感器 (Tactile Sensors)** 深度解析 (GelSight, Tashan, Parsen)。
@@ -36,6 +38,8 @@
 4. **实战导向**:
     - 提供了 **Sim-to-Real** 的具体技术路线 (Domain Randomization, Co-training)。
     - 提供了 **边缘部署** 的实战代码片段 (vLLM, Quantization)。
+    - 新增 **仿真环境对比** (Isaac Sim vs MuJoCo vs PyBullet) 选型指南。
+    - 新增 **相机标定** 实战指南 (Eye-in-Hand, Eye-to-Hand, Aruco)。
 
 ## 📂 项目结构 (Project Structure)
 
@@ -44,6 +48,7 @@
 ├── README.md                   # 项目主页 (Introduction & Roadmap)
 ├── theory/                     # 理论基础
 │   ├── README.md               # 索引
+│   ├── README_FUN.md           # 人话版索引 (轻松理解版)
 │   ├── vla_arch.md             # VLA 核心架构 (RT-1, RT-2, OpenVLA, Pi, WALL-OSS)
 │   ├── transformer_vs_cnn.md   # Backbone 对比 (ViT vs ResNet, SigLIP)
 │   ├── action_representations.md # 动作生成范式 (Tokenization vs Diffusion vs Flow)
@@ -59,7 +64,11 @@
 │   ├── knowledge_insulation.md # 知识绝缘技术 (防止灾难性遗忘)
 │   ├── co_training.md          # 联合训练 (Co-training) 详解
 │   ├── tactile_vla.md          # 触觉感知与 VLA
-│   └── data.md                 # 数据处理 (RLDS, Co-training)
+│   ├── data.md                 # 数据处理 (RLDS, Co-training)
+│   ├── spatial_math.md         # 空间数学 (坐标系, 旋转表示)
+│   ├── evaluation.md           # 评估体系 (Benchmarks, Metrics)
+│   ├── peft_lora.md            # 高效微调 (LoRA/QLoRA 原理)
+│   └── quantization_theory.md  # 量化理论 (AWQ, GPTQ)
 ├── product/                    # 🆕 机器人产品大百科
 │   ├── README.md               # 产品索引
 │   ├── humanoids.md            # 具身智能本体 (Tesla, Unitree)
@@ -76,6 +85,7 @@
 │   ├── pi0_deployment.md       # Pi0 真机部署
 │   ├── dexterous_hand_guide.md # 灵巧手部署实战
 │   ├── optimization.md         # 模型优化 (量化, TensorRT)
+│   ├── simulation_environments.md # 仿真环境详解 (Isaac Sim, MuJoCo, PyBullet)
 │   └── sim_to_real.md          # Sim-to-Real 技术
 ├── system-design/              # 系统设计
 │   ├── README.md               # 索引
@@ -103,19 +113,25 @@
 
 ### 📚 推荐学习路径
 
-####学习者/应届生
-- **[理论基础 (Theory)](./theory/README.md)**: VLA 架构、Diffusion Policy、Sim-to-Real 等核心概念。
-- **[产品汇总 (Products)](./product/README.md)** [New]: Tesla Optimus, Unitree G1 等主流机器人产品技术参数详解。
-- **[公司名录 (Companies)](./companies/README.md)**: 2025 机器人公司求职指南 (国内/国际)。
-- **[真机部署 (Deployment)](./deployment/README.md)**: 硬件选型、量化加速、边缘计算。
+#### 学习者/应届生
+1. **基础入门**: 先看 [理论基础 (Theory)](./theory/README.md) 的 **Part 1: Foundations**，理解数据格式、动作空间、评估体系。
+2. **架构理解**: 深入学习 **Part 2: Architecture & Algorithms**，掌握 VLA 核心架构和生成策略。
+3. **产品认知**: 浏览 [产品汇总 (Products)](./product/README.md)，了解主流机器人硬件参数。
+4. **实战准备**: 学习 [真机部署 (Deployment)](./deployment/README.md)，掌握硬件选型和模型优化。
+5. **求职规划**: 参考 [公司名录 (Companies)](./companies/README.md)，了解行业格局和岗位要求。
 
 #### 在职转岗/跳槽者
-1. **速查复习**: 先看 [速查表](./cheat-sheet/README.md) 快速回顾核心概念
+1. **速查复习**: 先看 [速查表](./cheat-sheet/README.md) 快速回顾核心概念和公式。
 2. **深度补充**: 针对性阅读 [理论基础](./theory/README.md) 中的薄弱环节
-   - FAST, Knowledge Insulation 等最新技术
-   - Galaxea G0, WALL-OSS 双系统架构对比
-3. **面试准备**: 刷 [题库](./question-bank/README.md) 模拟真实面试
-4. **目标公司**: 在 [公司目录](./companies/README.md) 中锁定意向公司
+   - **最新技术**: FAST, Knowledge Insulation, LoRA/QLoRA, 量化理论
+   - **前沿模型**: Galaxea G0, WALL-OSS 双系统架构对比
+   - **评估体系**: 理解 Benchmarks 和 Metrics 的设计原理
+3. **实战强化**: 重点学习 [真机部署](./deployment/README.md)
+   - 仿真环境选型 (Isaac Sim vs MuJoCo)
+   - 模型优化与边缘部署
+   - Sim-to-Real 技术路线
+4. **面试准备**: 刷 [题库](./question-bank/README.md) 模拟真实面试场景。
+5. **目标公司**: 在 [公司目录](./companies/README.md) 中锁定意向公司和岗位方向。
 
 #### 面试官/技术Leader
 1. **题库设计**: 参考 [面试官视角](./question-bank/interviewer_guide.md)
