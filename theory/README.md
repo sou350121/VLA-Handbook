@@ -55,6 +55,8 @@
 - **Reinforcement Learning** (`theory/reinforcement_learning.md`): PPO/SAC, Offline RL, Recap.
 - **Chain-of-Thought Reasoning** (`theory/chain_of_thought.md`): CoT, ReAct, structured reasoning.
 
+> **ASCII Cheat Sheet**: 所有的 ASCII 图都集中在 [`theory/ascii_cheatsheet.md`](./ascii_cheatsheet.md)，便于复习关键架构和流程。
+
 ### 多模态与表示学习 (Multimodal & Representation Learning)
 - **[多模态模型 (Multimodal Models)](./multimodal_models.md)** [New]: VLM 架构、融合策略 (Early/Mid/Late Fusion)、视觉编码器选择。
 - **[自监督学习 (Self-Supervised Learning)](./self_supervised_learning.md)** [New]: 对比学习 (CLIP/SimCLR)、掩码预测 (MAE)、R3M。
