@@ -110,7 +110,167 @@ $$
 
 ---
 
-## 5. 面试高频考点
+## 5. Evaluation Pipeline 构建 (Building Evaluation Pipeline)
+
+### 5.1 整体架构
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                   Evaluation Pipeline 架构                       │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│   ┌───────────┐    ┌───────────┐    ┌───────────┐    ┌────────┐│
+│   │   Data    │───▶│   Model   │───▶│  Metrics  │───▶│ Report ││
+│   │  Loader   │    │ Inference │    │ Compute   │    │ & Log  ││
+│   └───────────┘    └───────────┘    └───────────┘    └────────┘│
+│        │                │                │               │      │
+│        ▼                ▼                ▼               ▼      │
+│   RLDS/HDF5        Batch/Stream     SR/MSS/IR      W&B/TB      │
+│   CALVIN/SIMPLER   Multi-ckpt       Confidence     Artifacts   │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### 5.2 关键组件
+
+```python
+class EvaluationPipeline:
+    """VLA 评估流水线"""
+    
+    def __init__(self, config):
+        # 1. 数据管理
+        self.test_set = load_test_set(config.benchmark)  # CALVIN, SIMPLER, etc.
+        
+        # 2. 模型加载
+        self.model = load_model(config.checkpoint)
+        
+        # 3. 指标计算器
+        self.metrics = {
+            'success_rate': SuccessRateMetric(),
+            'mean_steps': MeanStepsMetric(),
+            'intervention_rate': InterventionRateMetric(),
+        }
+        
+        # 4. 日志记录
+        self.logger = WandBLogger(project=config.project)
+    
+    def run_episode(self, task):
+        """运行单个 Episode"""
+        obs = self.env.reset(task)
+        done = False
+        steps = 0
+        
+        while not done and steps < self.max_steps:
+            action = self.model.predict(obs)
+            obs, reward, done, info = self.env.step(action)
+            steps += 1
+        
+        return {
+            'success': info['success'],
+            'steps': steps,
+            'trajectory': info['trajectory']
+        }
+    
+    def evaluate(self, num_episodes=50):
+        """完整评估流程"""
+        results = []
+        
+        for i in range(num_episodes):
+            task = self.test_set.sample()
+            result = self.run_episode(task)
+            results.append(result)
+            
+            # 实时日志
+            self.logger.log_episode(i, result)
+        
+        # 计算指标
+        metrics = self.compute_metrics(results)
+        
+        # 置信区间
+        metrics['sr_ci'] = self.wilson_interval(
+            metrics['success_rate'], num_episodes
+        )
+        
+        # 保存结果
+        self.logger.log_summary(metrics)
+        self.save_artifacts(results)
+        
+        return metrics
+    
+    def wilson_interval(self, p, n, z=1.96):
+        """Wilson Score Interval for SR"""
+        denominator = 1 + z**2 / n
+        center = (p + z**2 / (2*n)) / denominator
+        spread = z * np.sqrt((p*(1-p) + z**2/(4*n)) / n) / denominator
+        return (center - spread, center + spread)
+```
+
+### 5.3 CI/CD 集成
+
+```yaml
+# .github/workflows/eval.yml
+name: Model Evaluation
+
+on:
+  push:
+    paths:
+      - 'checkpoints/**'
+
+jobs:
+  evaluate:
+    runs-on: self-hosted-gpu
+    steps:
+      - name: Run CALVIN Evaluation
+        run: |
+          python eval.py \
+            --benchmark calvin \
+            --checkpoint ${{ github.sha }} \
+            --num_episodes 100
+      
+      - name: Upload Results
+        uses: wandb/upload-artifact@v1
+        with:
+          name: eval-results
+          path: results/
+```
+
+### 5.4 失败案例分析
+
+```python
+class FailureAnalyzer:
+    """自动分析失败原因"""
+    
+    def analyze(self, failed_episodes):
+        categories = {
+            'perception': [],      # 视觉识别错误
+            'planning': [],        # 规划路径错误
+            'execution': [],       # 执行精度不足
+            'ik_failure': [],      # 逆运动学无解
+            'collision': [],       # 碰撞
+        }
+        
+        for ep in failed_episodes:
+            reason = self.classify_failure(ep)
+            categories[reason].append(ep)
+        
+        # 可视化
+        self.plot_failure_distribution(categories)
+        
+        # 生成报告
+        return self.generate_report(categories)
+```
+
+---
+
+## 6. 面试高频考点
+
+**Q: 具体讲讲怎么构建 Evaluation Pipeline 的？**
+A: 核心组件包括：
+1. **数据管理**: 标准化测试集 (CALVIN/SIMPLER)，版本控制，确保可复现
+2. **推理服务**: 支持多 Checkpoint 并行评估，Batch/Streaming 两种模式
+3. **指标计算**: 自动化 SR/MSS/IR 计算，Wilson Interval 置信区间
+4. **可视化**: 失败案例分析，Attention 可视化，轨迹回放
+5. **CI/CD 集成**: 每次训练自动触发评估，结果上传 W&B
 
 **Q: 什么是 "Cherry-picking"？如何避免？**
 A: Cherry-picking 指只展示成功的视频片段。避免方法是报告严格定义的 Success Rate，并公开所有尝试的原始视频 (Uncut Videos) 或日志。
@@ -124,3 +284,6 @@ L1: **Interpolation** (训练分布内，新位置/新角度)。
 L2: **Visual Extrapolation** (未见过的物体颜色/纹理/背景)。
 L3: **Semantic Extrapolation** (未见过的物体类别/新指令)。
 面试时要明确指出模型达到了哪一级别的泛化。
+
+---
+[← Back to Theory](./README.md)

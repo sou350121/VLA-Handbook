@@ -128,7 +128,95 @@ l_new = exp(m_old - m_new) * l_old + exp(m_block - m_new) * l_block
 | **Sparse Attention** | $O(N \log N)$ | 近似 | 超长文本 (不适合 VLA) |
 | **Linear Attention** | $O(N)$ | 近似 | 研究阶段 |
 
-## 5. 面试常见问题
+## 5. KV-Cache 推理加速 (KV-Cache for Inference)
+
+### 5.1 问题背景
+
+在自回归生成 (Autoregressive Generation) 时，每生成一个新 Token 都需要计算 Attention：
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                   无 KV-Cache 的推理                             │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│   生成 Token 1:  计算 K₁, V₁                                    │
+│   生成 Token 2:  重新计算 K₁, K₂, V₁, V₂  ← 重复计算!            │
+│   生成 Token 3:  重新计算 K₁, K₂, K₃, V₁, V₂, V₃  ← 更多重复!   │
+│   ...                                                           │
+│   生成 Token N:  重新计算 K₁...K_N, V₁...V_N  ← O(N²) 总计算量   │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### 5.2 KV-Cache 原理
+
+**核心思想**: 缓存已计算的 Key 和 Value，新 Token 只需计算增量。
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                   有 KV-Cache 的推理                             │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│   生成 Token 1:  计算 K₁, V₁ → 存入 Cache                        │
+│   生成 Token 2:  只计算 K₂, V₂ → 追加到 Cache                    │
+│   生成 Token 3:  只计算 K₃, V₃ → 追加到 Cache                    │
+│   ...                                                           │
+│   生成 Token N:  只计算 K_N, V_N → O(N) 总计算量                 │
+│                                                                 │
+│   Attention 计算:                                               │
+│   Q_new (1, d) × K_cache^T (N, d) → Scores (1, N)               │
+│   Scores × V_cache (N, d) → Output (1, d)                       │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### 5.3 加速效果
+
+| 指标 | 无 KV-Cache | 有 KV-Cache |
+| :--- | :--- | :--- |
+| 每 Token 计算量 | $O(N^2 d)$ | $O(Nd)$ |
+| 生成 N 个 Token | $O(N^3 d)$ | $O(N^2 d)$ |
+| N=1000 时加速比 | 1x | **~1000x** |
+
+### 5.4 显存代价
+
+KV-Cache 需要额外显存存储历史 K 和 V：
+
+$$
+\text{KV-Cache 显存} = 2 \times L \times N \times d \times \text{batch\_size} \times \text{bytes}
+$$
+
+- $L$: Transformer 层数
+- $N$: 序列长度
+- $d$: 隐藏维度
+- Factor 2: K 和 V 各一份
+
+**示例 (Llama-7B, FP16)**:
+- $L=32, d=4096, N=2048, \text{batch}=1$
+- KV-Cache = $2 \times 32 \times 2048 \times 4096 \times 2 \text{ bytes} \approx 1 \text{ GB}$
+
+### 5.5 KV-Cache 优化技术
+
+| 技术 | 原理 | 节省比例 |
+| :--- | :--- | :--- |
+| **GQA (Grouped Query Attention)** | 多个 Q 头共享 K/V 头 | 4-8x |
+| **MQA (Multi-Query Attention)** | 所有 Q 头共享一组 K/V | 更激进 |
+| **Paged Attention (vLLM)** | 类似虚拟内存，按需分配 | 动态优化 |
+| **KV-Cache 量化** | INT8/INT4 存储 | 2-4x |
+
+---
+
+## 6. 面试常见问题
+
+**Q: Flash Attention 的原理是什么？**
+A: 三个关键技术：
+1. **Tiling (分块)**: 将 $QK^T$ 分成小块计算，避免存储完整 $N \times N$ 矩阵
+2. **Kernel Fusion**: 将 $QK^T \to \text{softmax} \to \times V$ 融合进单个 CUDA Kernel，减少 HBM 读写
+3. **Online Softmax**: 增量更新归一化常数，支持分块计算
+结果: 内存 $O(N^2) \to O(N)$，速度 2-4x 加速。
+
+**Q: KV-Cache 如何加速推理？**
+A: 在自回归生成时，缓存已计算的 K 和 V，新 Token 只需计算增量 $K_{new}, V_{new}$。将每 Token 计算量从 $O(N^2 d)$ 降到 $O(Nd)$，N=1000 时约 1000 倍加速。代价是额外显存 $O(LNd)$。
 
 **Q: Flash Attention 是如何做到精确计算的？**
 A: 通过在线 Softmax 和分块计算，Flash Attention 在数学上等价于标准 Attention，只是改变了计算顺序和内存访问模式，没有引入任何近似。

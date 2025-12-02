@@ -584,6 +584,24 @@ torch.cuda.memory._dump_snapshot("memory_snapshot.pickle")
 
 ## 6. 面试高频 Q&A
 
+### Q0: 分布式训练中的 TP、PP、DP 分别是什么？
+
+| 策略 | 全称 | 切分维度 | 通信模式 | 适用场景 |
+| :--- | :--- | :--- | :--- | :--- |
+| **DP** | Data Parallelism | 数据批次 | All-Reduce 梯度 | 模型能放单卡 |
+| **TP** | Tensor Parallelism | 矩阵列/行 | All-Reduce 激活 | 单层放不下单卡 |
+| **PP** | Pipeline Parallelism | 网络层 | 点对点传输 | 层数多，跨节点 |
+
+**选择策略**:
+- **7B 单机 8 卡**: FSDP (ZeRO-3) 足够
+- **70B 多机**: TP=8 (节点内 NVLink) + PP=N (跨节点 IB)
+- **100B+**: 3D 并行 (DP + TP + PP)
+
+**关键点**:
+- TP 通信最频繁 (每层都要 All-Reduce)，必须放在 NVLink 连接的 GPU 间
+- PP 有 Bubble 问题，但通信量小，适合跨节点
+- DP 通信量 = 梯度大小，最简单但显存效率低
+
 ### Q1: 描述一次你遇到的大规模训练问题，是如何解决的？
 
 **模板回答**:

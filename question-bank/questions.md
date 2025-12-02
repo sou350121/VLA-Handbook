@@ -2,6 +2,79 @@
 
 本题库涵盖了 VLA 算法岗面试的高频问题，分为概念题、场景题和代码题。
 
+---
+
+## 🔥 高频八问 (Top 8 Must-Know Questions)
+
+以下是面试中最常被问到的 8 道核心问题，点击链接可跳转到详细解答。
+
+| # | 问题 | 详细解答位置 | 一句话答案 |
+| :--- | :--- | :--- | :--- |
+| 1 | 自注意力机制是什么？计算复杂度怎么算？ | [transformer_vs_cnn.md](../theory/transformer_vs_cnn.md#6-自注意力机制详解-self-attention-deep-dive) | $O(N^2 d)$ 时间，$O(N^2)$ 空间 |
+| 2 | KV-Cache 如何加速推理？ | [flash_attention.md](../theory/flash_attention.md#5-kv-cache-推理加速-kv-cache-for-inference) | 缓存历史 K/V，每 Token $O(N^2) \to O(N)$ |
+| 3 | LoRA 原理？与 P-Tuning/Adapter 异同？ | [peft_lora.md](../theory/peft_lora.md#4-peft-方法对比-comparison) | 低秩分解 $\Delta W=BA$，可合并无延迟 |
+| 4 | RLHF 流程？与 DPO 差异？ | [reinforcement_learning.md](../theory/reinforcement_learning.md#61-rlhf-完整流程-rlhf-pipeline) | RLHF 三阶段，DPO 跳过 Reward Model |
+| 5 | TP/PP/DP 分别是什么？ | [large_scale_training.md](../system-design/large_scale_training.md#q0-分布式训练中的-tpppDP-分别是什么) | DP 切数据，TP 切矩阵，PP 切层 |
+| 6 | Flash Attention 原理？ | [flash_attention.md](../theory/flash_attention.md#6-面试常见问题) | Tiling + Kernel Fusion + Online Softmax |
+| 7 | 视觉误判如何语言纠错？ | [multimodal_models.md](../theory/multimodal_models.md#q6-如果视觉模块误判如何通过语言纠错) | 闭环反馈 / CoT 自检 / 多模态一致性 |
+| 8 | 如何构建 Evaluation Pipeline？ | [evaluation.md](../theory/evaluation.md#5-evaluation-pipeline-构建-building-evaluation-pipeline) | 数据 → 推理 → 指标 → 日志，CI/CD 集成 |
+
+### 快速回顾
+
+<details>
+<summary>点击展开 8 道题的简答</summary>
+
+**Q1: 自注意力机制是什么？计算复杂度怎么算？**
+- **公式**: $\text{Attention}(Q,K,V) = \text{softmax}(QK^T/\sqrt{d_k})V$
+- **复杂度**: 时间 $O(N^2 d)$，空间 $O(N^2)$（存储注意力矩阵）
+- **瓶颈**: 序列长度 $N$ 大时显存爆炸 → Flash Attention 解决
+
+**Q2: KV-Cache 如何加速推理？**
+- **问题**: 自回归生成时每个 Token 都要重算历史 K/V
+- **方案**: 缓存已计算的 K/V，新 Token 只算增量
+- **效果**: 每 Token 计算 $O(N^2 d) \to O(Nd)$，N=1000 时约 1000x 加速
+- **代价**: 额外显存 $O(LNd)$
+
+**Q3: LoRA 原理？与 P-Tuning/Adapter 异同？**
+- **LoRA**: $W = W_0 + BA$，低秩分解，推理时可合并，无额外延迟
+- **P-Tuning**: 可学习 Soft Prompt，占用 Context Window
+- **Adapter**: 层间插入 MLP，有推理延迟
+- **核心差异**: LoRA 是唯一可"无痕合并"的方法
+
+**Q4: RLHF 流程？与 DPO 差异？**
+- **RLHF 三阶段**: SFT → Reward Model → PPO
+- **DPO**: 跳过 Reward Model，直接从偏好数据优化
+- **对比**: RLHF 需 4 模型，DPO 只需 2 模型，更稳定但效果略差
+
+**Q5: TP/PP/DP 分别是什么？**
+- **DP (Data Parallel)**: 切数据，All-Reduce 梯度
+- **TP (Tensor Parallel)**: 切矩阵，All-Reduce 激活
+- **PP (Pipeline Parallel)**: 切层，点对点传输
+- **选择**: 7B 用 FSDP，70B+ 用 3D 并行
+
+**Q6: Flash Attention 原理？**
+- **Tiling**: 分块计算，避免存储 $N \times N$ 矩阵
+- **Kernel Fusion**: QK^T → softmax → ×V 融合进单个 Kernel
+- **Online Softmax**: 增量更新归一化
+- **效果**: 内存 $O(N^2) \to O(N)$，速度 2-4x
+
+**Q7: 视觉误判如何语言纠错？**
+- **闭环反馈**: 用户语言指令纠正 ("不对，是左边那个")
+- **CoT 自检**: 输出推理链，发现矛盾
+- **多模态一致性**: 语言-视觉 Embedding 相似度检查
+- **主动询问**: 低置信度时请求确认
+
+**Q8: 如何构建 Evaluation Pipeline？**
+- **数据**: CALVIN/SIMPLER 标准测试集
+- **推理**: 多 Checkpoint 并行评估
+- **指标**: SR/MSS/IR + Wilson 置信区间
+- **日志**: W&B/TensorBoard + 失败案例分析
+- **CI/CD**: 训练后自动触发评估
+
+</details>
+
+---
+
 ## 1. 概念题 (Conceptual Questions)
 
 ### Q1: 解释一下 RT-2 的 Co-fine-tuning 策略，为什么它很重要？
