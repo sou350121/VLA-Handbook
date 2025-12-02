@@ -33,6 +33,7 @@
     - 新增 **[运动规划](./theory/motion_planning.md)** (RRT/PRM、TrajOpt、MoveIt)。
     - 新增 **[状态估计与传感器融合](./theory/state_estimation.md)** (Kalman/UKF、Particle、VIO)。
     - 新增 **[点云理解与 SLAM](./theory/pointcloud_slam.md)** (PointNet/KPConv、LOAM/LIO-SAM)。
+    - 新增 **[抓取算法与仿真平台](./theory/grasp_algorithms.md)** (DexGraspNet/GraspGF、Isaac Sim/SAPIEN)。
 3. **硬件选型指南**:
     - 重点加强了 **灵巧手 (Dexterous Hands)** 的介绍 (Shadow, Inspire, Unitree)。
     - 新增 **触觉传感器 (Tactile Sensors)** 深度解析 (GelSight, Tashan, Parsen)。
@@ -73,6 +74,7 @@
 │   ├── motion_planning.md      # 运动规划 (RRT/TrajOpt/MoveIt)
 │   ├── state_estimation.md     # 状态估计与融合 (Kalman/Particle/VIO)
 │   ├── pointcloud_slam.md      # 点云理解 & SLAM (LOAM/LIO-SAM)
+│   ├── grasp_algorithms.md     # 抓取算法 & 仿真 (DexGraspNet/Isaac)
 │   ├── data.md                 # 数据处理 (RLDS, Co-training)
 │   ├── spatial_math.md         # 空间数学 (坐标系, 旋转表示)
 │   ├── evaluation.md           # 评估体系 (Benchmarks, Metrics)
