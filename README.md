@@ -29,6 +29,10 @@
     - 深入讲解 **Knowledge Insulation**（梯度隔离，防止灾难性遗忘）。
     - 新增 **高效微调** (LoRA/QLoRA) 和 **量化理论** (AWQ, GPTQ) 详解。
     - 新增 **空间数学** (坐标系转换, 旋转表示) 和 **评估体系** (Benchmarks, Metrics)。
+    - 新增 **[视觉感知技术](./theory/perception_techniques.md)** (检测/跟踪/Occupancy/BEV/位姿估计)。
+    - 新增 **[运动规划](./theory/motion_planning.md)** (RRT/PRM、TrajOpt、MoveIt)。
+    - 新增 **[状态估计与传感器融合](./theory/state_estimation.md)** (Kalman/UKF、Particle、VIO)。
+    - 新增 **[点云理解与 SLAM](./theory/pointcloud_slam.md)** (PointNet/KPConv、LOAM/LIO-SAM)。
 3. **硬件选型指南**:
     - 重点加强了 **灵巧手 (Dexterous Hands)** 的介绍 (Shadow, Inspire, Unitree)。
     - 新增 **触觉传感器 (Tactile Sensors)** 深度解析 (GelSight, Tashan, Parsen)。
@@ -66,6 +70,9 @@
 │   ├── knowledge_insulation.md # 知识绝缘技术 (防止灾难性遗忘)
 │   ├── co_training.md          # 联合训练 (Co-training) 详解
 │   ├── tactile_vla.md          # 触觉感知与 VLA
+│   ├── motion_planning.md      # 运动规划 (RRT/TrajOpt/MoveIt)
+│   ├── state_estimation.md     # 状态估计与融合 (Kalman/Particle/VIO)
+│   ├── pointcloud_slam.md      # 点云理解 & SLAM (LOAM/LIO-SAM)
 │   ├── data.md                 # 数据处理 (RLDS, Co-training)
 │   ├── spatial_math.md         # 空间数学 (坐标系, 旋转表示)
 │   ├── evaluation.md           # 评估体系 (Benchmarks, Metrics)

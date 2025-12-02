@@ -93,6 +93,10 @@
 
 | 主题 | 文件 | 核心内容 |
 |:-----|:-----|:---------|
+| 👁️ **视觉感知技术** | [`perception_techniques.md`](./perception_techniques.md) | 检测/跟踪/Occupancy/BEV/位姿估计 |
+| 🧭 **运动规划** | [`motion_planning.md`](./motion_planning.md) | RRT/PRM、TrajOpt、MoveIt & cuRobo |
+| 📡 **状态估计** | [`state_estimation.md`](./state_estimation.md) | EKF/UKF、粒子滤波、IMU+视觉融合 |
+| 🛰️ **点云 & SLAM** | [`pointcloud_slam.md`](./pointcloud_slam.md) | 点云语义、配准、Visual/LiDAR SLAM 🆕 |
 | 🛡️ **知识绝缘** | [`knowledge_insulation.md`](./knowledge_insulation.md) | 微调时保护 VLM 通用常识 |
 | 🖐️ **触觉 VLA** | [`tactile_vla.md`](./tactile_vla.md) | GelSight/DIGIT，盲盒操作 |
 
