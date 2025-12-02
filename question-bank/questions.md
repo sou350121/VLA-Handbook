@@ -18,6 +18,10 @@
 | 6 | Flash Attention 原理？ | [flash_attention.md](../theory/flash_attention.md#6-面试常见问题) | Tiling + Kernel Fusion + Online Softmax |
 | 7 | 视觉误判如何语言纠错？ | [multimodal_models.md](../theory/multimodal_models.md#q6-如果视觉模块误判如何通过语言纠错) | 闭环反馈 / CoT 自检 / 多模态一致性 |
 | 8 | 如何构建 Evaluation Pipeline？ | [evaluation.md](../theory/evaluation.md#5-evaluation-pipeline-构建-building-evaluation-pipeline) | 数据 → 推理 → 指标 → 日志，CI/CD 集成 |
+| 9 | Model-Based vs Model-Free 区别？ | [reinforcement_learning.md](../theory/reinforcement_learning.md#31-model-free-vs-model-based) | Model-Free 直接学策略，Model-Based 先学环境模型 |
+| 10 | 马尔可夫性是什么？ | [reinforcement_learning.md](../theory/reinforcement_learning.md#22-马尔可夫性-markov-property) | 下一状态只依赖当前状态，与历史无关 |
+| 11 | 为什么最优价值函数就是最优策略？ | [reinforcement_learning.md](../theory/reinforcement_learning.md#25-最优价值函数与最优策略) | $\pi^*(s) = \arg\max_a Q^*(s,a)$，贪心即最优 |
+| 12 | 策略迭代 vs 值迭代？ | [reinforcement_learning.md](../theory/reinforcement_learning.md#32-策略迭代-vs-值迭代-policy-iteration-vs-value-iteration) | 策略迭代先评估再改进，值迭代直接迭代 Bellman |
 
 ### 快速回顾
 
@@ -70,6 +74,26 @@
 - **指标**: SR/MSS/IR + Wilson 置信区间
 - **日志**: W&B/TensorBoard + 失败案例分析
 - **CI/CD**: 训练后自动触发评估
+
+**Q9: Model-Based 和 Model-Free 的区别？**
+- **Model-Free**: 直接学习策略或价值函数，不尝试理解环境
+- **Model-Based**: 先学习环境动力学 $P(s'|s,a)$，再利用模型规划
+- **Trade-off**: Model-Free 简单但样本效率低，Model-Based 高效但有模型误差
+
+**Q10: 马尔可夫性是什么？**
+- **定义**: $P(s_{t+1}|s_t, a_t, s_{t-1}, ...) = P(s_{t+1}|s_t, a_t)$
+- **含义**: 当前状态是对历史的"充分统计量"，未来只依赖现在
+- **重要性**: Bellman 方程成立的前提，简化计算
+
+**Q11: 为什么最优价值函数就是最优策略？**
+- **核心**: $\pi^*(s) = \arg\max_a Q^*(s,a)$
+- **原因**: $Q^*(s,a)$ 表示执行 $a$ 后按最优策略行动的期望回报
+- **结论**: 对 $Q^*$ 贪心就是最优的，两者是"一体两面"
+
+**Q12: 策略迭代和值迭代的区别？**
+- **策略迭代**: 评估 (计算 $V^\pi$) + 改进 (贪心更新 $\pi$) 交替进行
+- **值迭代**: 直接迭代 Bellman 最优方程 $V(s) \leftarrow \max_a [R + \gamma \sum P V']$
+- **效率**: 策略迭代每轮迭代次数少但每轮计算多，值迭代相反
 
 </details>
 
