@@ -16,7 +16,13 @@
     - 持续评估 (Continuous Evaluation)
     - 车队管理 (Fleet Management & OTA)
 
-3.  **[评估系统设计 (Evaluation System)](./evaluation.md)**
+3.  **[大规模模型训练 (Large-Scale Training)](./large_scale_training.md)** 🆕
+    - GPU 集群选型与网络架构
+    - 分布式训练策略 (DDP, FSDP, TP, PP, 3D 并行)
+    - 训练优化 (混合精度, Gradient Checkpointing)
+    - 训练稳定性与调试
+
+4.  **[评估系统设计 (Evaluation System)](./evaluation.md)**
     - Simulation Benchmark (仿真基准)
     - Real-world Proxy (真机代理指标)
     - A/B Testing & Canary Deployment
