@@ -90,7 +90,7 @@
 
 ### 效率优化 (Efficiency)
 - **[Flash Attention](./flash_attention.md)**: 如何解决长序列 Transformer 的计算瓶颈。
-- **[高效微调 (PEFT & LoRA)](./peft_lora.md)**: LoRA / QLoRA 的数学原理，如何用 4GB 显存微调 7B 模型。
+- **[高效微调 (PEFT & LoRA)](./peft_lora.md)**: LoRA / QLoRA 的数学原理，如何用 QLoRA (~6GB) 微调 7B 模型。
 - **[量化理论 (Quantization Theory)](./quantization_theory.md)**: Symmetric vs Asymmetric, Per-Channel vs Per-Tensor, AWQ 原理。
 
 ## 🚀 Part 4: Advanced Topics (进阶专题)
