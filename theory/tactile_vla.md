@@ -54,41 +54,201 @@ Meta AI (FAIR) 开发的**开源**紧凑型触觉传感器，专为机器人手�
 | 开源 | 部分 | **完全开源** |
 | 适用场景 | 精密检测、研究 | 灵巧手、大规模部署 |
 
-### 2.3 其他触觉传感器
-- **TacTip**: 基于生物启发的软性触觉传感器
-- **BioTac**: 多模态传感器 (压力 + 温度 + 振动)
-- **ReSkin**: 磁性薄膜触觉传感器，可贴附于任意表面
+### 2.3 千觉 GelStereo (Xense Robotics)
+> **公司**: 千觉机器人科技（上海）有限公司，成立于 2024 年 5 月
+> **官网**: [xense-robotics.com](https://www.xense-robotics.com)
+
+基于**双目立体视觉 (Binocular Stereo)** 的高分辨率多模态触觉传感器。
+
+| 参数 | 规格 |
+| :--- | :--- |
+| 感知密度 | **人类手指 800 倍** |
+| 模态 | 三维力觉 + 动觉 + 滑觉 + 形貌 |
+| 原理 | 双目相机 + 弹性体 |
+| 输出 | 3D 点云 + 力分布图 |
+
+**核心技术 - GelStereo 原理**:
+
+```
+        左相机                右相机
+           \                  /
+            \   弹性体变形   /
+             \     ↓       /
+              ┌─────────┐
+              │ 接触区域 │  ← 物体接触
+              └─────────┘
+                  ↓
+           双目视差 → 3D 重建
+```
+
+1. **双目立体匹配**: 两个相机从不同角度拍摄弹性体表面，通过视差计算深度
+2. **亚像素精度**: 相比单目 GelSight，双目可实现更精确的 3D 形貌重建
+3. **实时性**: 无需复杂的光度立体 (Photometric Stereo) 算法，速度更快
+
+**与 GelSight 对比**:
+
+| 特性 | GelSight (单目) | GelStereo (双目) |
+| :--- | :--- | :--- |
+| 3D 重建方法 | 光度立体 (需多色光) | **立体匹配** (单色即可) |
+| 计算复杂度 | 高 | **低** |
+| 光照要求 | RGB 三色光 | 单色光 |
+| 深度精度 | 依赖标定 | **几何约束更强** |
+
+---
+
+### 2.4 戴盟 DM-Tac (DMRobot)
+> **公司**: 戴盟机器人，专注视触觉技术
+> **官网**: [dmrobot.com](https://www.dmrobot.com)
+
+全球首款**多维高分辨率高频率**视触觉传感器系列。
+
+#### DM-Tac W 传感器
+
+| 参数 | 规格 |
+| :--- | :--- |
+| 感知密度 | **4 万单元/cm²** (人类 240/cm²) |
+| 模态 | 形貌 + 纹理 + 软硬 + 滑移 + 三维力 |
+| 耐久性 | **500 万次按压测试** |
+| 厚度 | 毫米级 |
+
+**核心技术 - 单色光视触觉**:
+
+传统视触觉传感器 (如 GelSight) 使用 **RGB 三色光** 进行光度立体重建，戴盟采用**单色光**方案：
+
+| 方案 | 三色光 (RGB) | 单色光 (戴盟) |
+| :--- | :--- | :--- |
+| 光源 | 红/绿/蓝 LED | 单色 LED |
+| 算法 | 光度立体 | **原创解析算法** |
+| 算力需求 | 高 | **低** |
+| 发热 | 较高 | **低** |
+| 3D 重建 | 需融合三通道 | 直接解析 |
+
+**优势**:
+- **低功耗**: 单色光发热少，适合长时间工作
+- **高效率**: 无需复杂的多通道融合
+- **工业级耐用**: 500 万次按压，远超学术级传感器
+
+#### DM-Hand1 灵巧手
+集成 DM-Tac 传感器的五指灵巧手，每个指尖都有触觉感知。
+
+#### DM-EXton 遥操作系统
+穿戴式数据采集设备，用于收集高质量人类示教数据，为模仿学习提供触觉标注。
+
+---
+
+### 2.5 其他触觉传感器
+- **TacTip**: Bristol 大学，基于生物启发的软性触觉传感器
+- **BioTac**: SynTouch 公司，多模态传感器 (压力 + 温度 + 振动)
+- **ReSkin**: Meta AI，磁性薄膜触觉传感器，可贴附于任意表面
+- **Taxim**: CMU，基于有限元仿真的触觉传感器
 
 ## 3. 最新模型进展 (2024-2025)
 
-### 3.1 Tactile-VLA (2024)
-> **论文**: [A Touch, Vision, and Language Dataset for Multimodal Alignment](https://arxiv.org/abs/2402.13232) (ICML 2024)
+### 3.1 Tactile-VLA / TVL (ICML 2024)
+> **论文**: [A Touch, Vision, and Language Dataset for Multimodal Alignment](https://arxiv.org/abs/2402.13232)
+> **作者**: Max Fu, Gaurav Datta, et al. (UC Berkeley)
 > **代码**: [GitHub - Max-Fu/tvl](https://github.com/Max-Fu/tvl)
 
 **核心贡献**: 首个大规模触觉-视觉-语言对齐数据集和基准模型。
 
-**数据集 (TVL Dataset)**:
-- **44K 触觉-视觉-语言三元组**
-- 覆盖 100+ 种材质 (木材、金属、织物、塑料等)
-- 包含自然语言描述 ("rough and cold", "smooth and soft")
+#### 数据集 (TVL Dataset)
 
-**模型架构**:
+| 统计量 | 数值 |
+| :--- | :--- |
+| 样本数 | **44,000** 三元组 |
+| 材质种类 | 100+ 种 |
+| 传感器 | GelSight Mini |
+| 标注类型 | 自然语言描述 |
+
+**数据示例**:
+```
+触觉图像: [GelSight 压痕图]
+视觉图像: [物体 RGB 图]
+语言描述: "The surface feels rough and rigid, like sandpaper"
+```
+
+**数据采集流程**:
+1. 机器人用 GelSight 传感器接触物体表面
+2. 同时拍摄物体的 RGB 图像
+3. 人类标注员用自然语言描述触觉感受
+
+#### 模型架构详解
 
 ```
-Vision Encoder (CLIP ViT-L)  ──┐
-                               ├──> Cross-Modal Fusion ──> Language Decoder
-Tactile Encoder (ViT-B)  ─────┘
+┌─────────────────────────────────────────────────────────┐
+│                    TVL 模型架构                          │
+├─────────────────────────────────────────────────────────┤
+│                                                         │
+│   Vision Image ──→ CLIP ViT-L/14 ──→ [CLS] Token       │
+│                         ↓                               │
+│                   Vision Embedding (768d)               │
+│                         ↓                               │
+│                   ┌─────────────┐                       │
+│                   │  Projection │ (MLP)                 │
+│                   │    Layer    │                       │
+│                   └─────────────┘                       │
+│                         ↓                               │
+│                  Joint Embedding Space                  │
+│                         ↑                               │
+│                   ┌─────────────┐                       │
+│                   │  Projection │ (MLP)                 │
+│                   │    Layer    │                       │
+│                   └─────────────┘                       │
+│                         ↑                               │
+│                  Tactile Embedding (768d)               │
+│                         ↑                               │
+│  Tactile Image ──→ ViT-B/16 (MAE pretrained) ──→ [CLS] │
+│                                                         │
+│                  Joint Embedding Space                  │
+│                         ↓                               │
+│                   Cross-Attention                       │
+│                         ↓                               │
+│                  Language Decoder (GPT-2)               │
+│                         ↓                               │
+│                 "rough and cold..."                     │
+└─────────────────────────────────────────────────────────┘
 ```
 
-**关键技术**:
-1. **Tactile Encoder 预训练**: 使用 MAE 在触觉图像上自监督预训练
-2. **对比学习对齐**: 将触觉、视觉、语言三个模态投射到统一空间
-3. **触觉描述生成**: 给定触觉图像，生成自然语言描述
+#### 训练策略
 
-**下游任务**:
-- 材质分类 (Material Classification)
-- 触觉-语言检索 (Tactile-Language Retrieval)
-- 触觉问答 (Tactile QA)
+**Stage 1: Tactile Encoder 预训练 (MAE)**
+```python
+# 随机 Mask 75% 的 Tactile Patches
+masked_patches = random_mask(tactile_image, ratio=0.75)
+# 重建被 Mask 的 Patches
+reconstruction_loss = MSE(decoder(encoder(masked_patches)), original)
+```
+
+**Stage 2: 对比学习对齐 (Contrastive Alignment)**
+
+```math
+L_{align} = -log \frac{exp(sim(t_i, v_i) / τ)}{\sum_{j} exp(sim(t_i, v_j) / τ)}
+```
+
+- `t_i`: 触觉 Embedding
+- `v_i`: 对应的视觉 Embedding
+- `τ`: 温度参数 (0.07)
+
+**Stage 3: 语言生成微调**
+```python
+# 触觉 + 视觉 → 语言描述
+loss = CrossEntropy(decoder(tactile_emb, vision_emb), text_tokens)
+```
+
+#### 下游任务与性能
+
+| 任务 | 指标 | TVL 性能 |
+| :--- | :--- | :--- |
+| 材质分类 | Accuracy | 78.3% |
+| 触觉-语言检索 | R@1 | 45.2% |
+| 触觉问答 | BLEU-4 | 32.1 |
+| Zero-shot 材质识别 | Accuracy | 61.7% |
+
+#### 核心洞察
+
+1. **触觉-视觉互补**: 视觉擅长识别物体类别，触觉擅长判断物理属性
+2. **语言作为桥梁**: 自然语言描述使触觉语义可解释、可迁移
+3. **MAE 预训练有效**: 触觉图像的纹理特征适合 Masked Autoencoder
 
 **意义**: 为 VLA 提供了触觉语义理解的基础，使机器人能够"用语言描述触觉"。
 
@@ -192,6 +352,40 @@ ViT 在 OmniVTLA 等最新模型中更受欢迎，主要是为了**多模态对�
 2. **接触模型不精确**: 摩擦、滑移的物理建模困难
 3. **传感器特性**: 每个传感器的光学特性略有不同
 4. **解决方案**: 域随机化 (Domain Randomization)、真实数据微调
+
+---
+
+**Q5: GelStereo (千觉) vs GelSight 的技术差异?**
+
+| 维度 | GelSight | GelStereo |
+| :--- | :--- | :--- |
+| 3D 重建 | 光度立体 (Photometric Stereo) | **双目立体匹配** |
+| 光源 | RGB 三色 LED | 单色 LED |
+| 相机数 | 1 个 | **2 个** |
+| 原理 | 根据不同光照下的亮度变化推断法向量 | 根据双目视差直接计算深度 |
+| 优势 | 纹理细节更丰富 | **计算更快、几何约束更强** |
+
+---
+
+**Q6: DM-Tac (戴盟) 的单色光技术有什么优势?**
+
+传统三色光需要依次点亮 R/G/B 三盏灯拍摄三张图，再融合计算。单色光方案：
+- **更快**: 单次曝光即可
+- **更省电**: 只需一个光源
+- **发热低**: 适合密集部署 (如五指灵巧手)
+- **算法创新**: 通过原创解析算法弥补信息损失
+
+---
+
+**Q7: 如何选择触觉传感器?**
+
+| 场景 | 推荐 | 理由 |
+| :--- | :--- | :--- |
+| 学术研究/快速原型 | **DIGIT** | 开源、便宜、社区活跃 |
+| 高精度 3D 重建 | **GelSight** | 分辨率最高 |
+| 灵巧手集成 | **DM-Tac** | 超薄、耐用、高密度 |
+| 机械臂末端 | **GelStereo** | 双目 3D、实时性好 |
+| 大面积覆盖 | **ReSkin** | 磁性薄膜、可贴附 |
 
 
 ---
