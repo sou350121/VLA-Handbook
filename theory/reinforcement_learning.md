@@ -30,23 +30,23 @@
 
 ### 2.1 马尔可夫决策过程 (MDP)
 
-$$
-\text{MDP} = (S, A, P, R, \gamma)
-$$
+```
+MDP = (S, A, P, R, γ)
+```
 
-- **$S$**: 状态空间 (State Space) - 机器人观测到的一切
-- **$A$**: 动作空间 (Action Space) - 可执行的动作
-- **$P(s'|s,a)$**: 状态转移概率 - 环境动力学
-- **$R(s,a)$**: 奖励函数 - 行为好坏的反馈
-- **$\gamma$**: 折扣因子 - 未来奖励的权重 (通常 0.99)
+- **S**: 状态空间 (State Space) - 机器人观测到的一切
+- **A**: 动作空间 (Action Space) - 可执行的动作
+- **P(s'|s,a)**: 状态转移概率 - 环境动力学
+- **R(s,a)**: 奖励函数 - 行为好坏的反馈
+- **γ**: 折扣因子 - 未来奖励的权重 (通常 0.99)
 
 ### 2.2 马尔可夫性 (Markov Property)
 
 **定义**: 下一状态只依赖于当前状态和动作，与历史无关。
 
-$$
-P(s_{t+1} | s_t, a_t, s_{t-1}, a_{t-1}, \ldots) = P(s_{t+1} | s_t, a_t)
-$$
+```
+P(s_{t+1} | s_t, a_t, s_{t-1}, a_{t-1}, ...) = P(s_{t+1} | s_t, a_t)
+```
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -74,38 +74,44 @@ $$
 
 最大化**累积折扣回报 (Cumulative Discounted Return)**:
 
-$$
-G_t = \sum_{k=0}^{\infty} \gamma^k R_{t+k+1}
-$$
+```
+G_t = Σ_{k=0}^{∞} γ^k × R_{t+k+1}
+```
 
 ### 2.4 价值函数 (Value Functions)
 
 **状态价值函数 (State Value)**:
-$$
-V^\pi(s) = \mathbb{E}_\pi \left[ G_t | S_t = s \right]
-$$
+
+```
+V^π(s) = E_π[ G_t | S_t = s ]
+```
 
 **动作价值函数 (Action Value / Q-Function)**:
-$$
-Q^\pi(s, a) = \mathbb{E}_\pi \left[ G_t | S_t = s, A_t = a \right]
-$$
+
+```
+Q^π(s, a) = E_π[ G_t | S_t = s, A_t = a ]
+```
 
 **Bellman 方程**:
-$$
-Q^\pi(s, a) = R(s, a) + \gamma \mathbb{E}_{s' \sim P} \left[ V^\pi(s') \right]
-$$
+
+```
+Q^π(s, a) = R(s, a) + γ × E_{s' ~ P}[ V^π(s') ]
+```
 
 ### 2.5 最优价值函数与最优策略
 
 **最优价值函数**:
-$$
-V^*(s) = \max_\pi V^\pi(s), \quad Q^*(s, a) = \max_\pi Q^\pi(s, a)
-$$
+
+```
+V*(s) = max_π V^π(s)
+Q*(s, a) = max_π Q^π(s, a)
+```
 
 **最优策略**:
-$$
-\pi^*(s) = \arg\max_a Q^*(s, a)
-$$
+
+```
+π*(s) = argmax_a Q*(s, a)
+```
 
 **为什么最优价值函数就是最优策略？**
 
@@ -131,17 +137,16 @@ $$
 ```
 
 **数学推导**:
-1. **Bellman 最优方程**:
-   $$V^*(s) = \max_a \left[ R(s,a) + \gamma \sum_{s'} P(s'|s,a) V^*(s') \right]$$
-2. 如果我们知道 $V^*$，则最优动作是使上式取最大值的 $a$
-3. 这等价于 $\pi^*(s) = \arg\max_a Q^*(s,a)$
+1. **Bellman 最优方程**: `V*(s) = max_a [ R(s,a) + γ × Σ_{s'} P(s'|s,a) × V*(s') ]`
+2. 如果我们知道 `V*`，则最优动作是使上式取最大值的 `a`
+3. 这等价于 `π*(s) = argmax_a Q*(s,a)`
 
 ### 2.6 策略 (Policy)
 
-策略 $\pi(a|s)$ 定义了在状态 $s$ 下采取动作 $a$ 的概率。
+策略 `π(a|s)` 定义了在状态 `s` 下采取动作 `a` 的概率。
 
-- **确定性策略**: $a = \pi(s)$
-- **随机策略**: $a \sim \pi(\cdot|s)$
+- **确定性策略**: `a = π(s)`
+- **随机策略**: `a ~ π(·|s)`
 
 ## 3. RL 算法分类 (RL Algorithm Taxonomy)
 
@@ -275,11 +280,12 @@ $$
 **核心思想**: 限制策略更新幅度，防止训练崩溃。
 
 **目标函数**:
-$$
-L^{CLIP}(\theta) = \mathbb{E}_t \left[ \min \left( r_t(\theta) \hat{A}_t, \text{clip}(r_t(\theta), 1-\epsilon, 1+\epsilon) \hat{A}_t \right) \right]
-$$
 
-其中 $r_t(\theta) = \frac{\pi_\theta(a_t|s_t)}{\pi_{\theta_{old}}(a_t|s_t)}$ 是重要性采样比率。
+```
+L_CLIP(θ) = E_t[ min( r_t(θ) × Â_t, clip(r_t(θ), 1-ε, 1+ε) × Â_t ) ]
+```
+
+其中 `r_t(θ) = π_θ(a_t|s_t) / π_{θ_old}(a_t|s_t)` 是重要性采样比率。
 
 ```python
 import torch
@@ -353,9 +359,10 @@ class PPO:
 **核心思想**: 最大化奖励的同时最大化策略熵（鼓励探索）。
 
 **目标**:
-$$
-J(\pi) = \mathbb{E}_{\tau \sim \pi} \left[ \sum_t R(s_t, a_t) + \alpha H(\pi(\cdot|s_t)) \right]
-$$
+
+```
+J(π) = E_{τ ~ π}[ Σ_t R(s_t, a_t) + α × H(π(·|s_t)) ]
+```
 
 ```python
 class SAC:
@@ -422,9 +429,9 @@ class SAC:
 
 **思想**: 保守估计 Q 值，惩罚数据集外的动作。
 
-$$
-\mathcal{L}_{CQL} = \alpha \mathbb{E}_{s \sim D} \left[ \log \sum_a \exp(Q(s,a)) - \mathbb{E}_{a \sim D}[Q(s,a)] \right] + \mathcal{L}_{TD}
-$$
+```
+L_CQL = α × E_{s ~ D}[ log Σ_a exp(Q(s,a)) - E_{a ~ D}[Q(s,a)] ] + L_TD
+```
 
 #### 4.3.2 IQL (Implicit Q-Learning)
 
@@ -680,9 +687,9 @@ A: **RLHF 三阶段流程**:
 - **跳过 Reward Model**: 直接从偏好数据优化策略
 - **数学推导**: 将 RL 目标重参数化为分类问题
 
-$$
-\mathcal{L}_{DPO} = -\mathbb{E}\left[\log \sigma\left(\beta \log \frac{\pi_\theta(y_w|x)}{\pi_{ref}(y_w|x)} - \beta \log \frac{\pi_\theta(y_l|x)}{\pi_{ref}(y_l|x)}\right)\right]
-$$
+```
+L_DPO = -E[ log σ( β × log(π_θ(y_w|x) / π_ref(y_w|x)) - β × log(π_θ(y_l|x) / π_ref(y_l|x)) ) ]
+```
 
 | 对比 | RLHF | DPO |
 | :--- | :--- | :--- |
