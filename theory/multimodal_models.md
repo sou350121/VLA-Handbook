@@ -272,6 +272,184 @@ text_embedding = outputs.last_hidden_state[:, 0, :]  # [B, D]
 **代表**: Llama, Gemma, Qwen
 **适用**: 现代 VLA 的标准选择，利用强大的 In-context Learning
 
+---
+
+## 5.5 PaliGemma 详解 (VLA 常用 Backbone)
+
+> **论文**: [PaliGemma: A versatile 3B VLM for transfer](https://arxiv.org/abs/2407.07726) (Google, 2024)
+> **官方**: [HuggingFace](https://huggingface.co/google/paligemma-3b-pt-224)
+
+PaliGemma 是 Google 推出的轻量级 VLM，已成为 **π0、OpenVLA** 等 VLA 的首选 backbone。
+
+### 为什么 VLA 常用 PaliGemma?
+
+| 优势 | 说明 |
+| :--- | :--- |
+| **轻量高效** | 3B 参数，可在单卡 (24GB) 微调 |
+| **预训练充分** | 在大量图文数据上训练，视觉理解强 |
+| **开源友好** | Apache 2.0 许可，可商用 |
+| **模块化设计** | Vision Encoder 和 LLM 解耦，易于适配 |
+| **多分辨率** | 支持 224/448/896 输入尺寸 |
+
+### PaliGemma 架构
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                      PaliGemma 3B                           │
+├─────────────────────────────────────────────────────────────┤
+│                                                              │
+│   Image Input                    Text Input                  │
+│   [224×224×3]                    "Pick up the cup"           │
+│        │                              │                      │
+│        ▼                              ▼                      │
+│   ┌──────────────┐              ┌──────────────┐            │
+│   │   SigLIP     │              │   Gemma      │            │
+│   │  ViT-So400m  │              │  Tokenizer   │            │
+│   │  (400M)      │              │              │            │
+│   └──────┬───────┘              └──────┬───────┘            │
+│          │                             │                     │
+│   [256 patches]                  [L tokens]                  │
+│   [256, 1152]                    [L, 2048]                   │
+│          │                             │                     │
+│          ▼                             │                     │
+│   ┌──────────────┐                     │                     │
+│   │  Linear Proj │ (1152 → 2048)       │                     │
+│   └──────┬───────┘                     │                     │
+│          │                             │                     │
+│          └──────────┬──────────────────┘                     │
+│                     ▼                                        │
+│            [Vision] + [Text Tokens]                          │
+│                     │                                        │
+│                     ▼                                        │
+│   ┌─────────────────────────────────────────────────────────┐│
+│   │                 Gemma 2B LLM                            ││
+│   │          (18 Transformer Layers)                        ││
+│   │                                                         ││
+│   │    Self-Attention (Vision + Text 一起处理)               ││
+│   │                     ↓                                   ││
+│   │              Hidden States                              ││
+│   └─────────────────────────────────────────────────────────┘│
+│                     │                                        │
+│                     ▼                                        │
+│              [B, L, 2048]                                    │
+│           (送给 Action Head)                                 │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### 核心组件
+
+#### 1. SigLIP Vision Encoder
+
+```python
+# SigLIP vs CLIP
+# SigLIP 使用 Sigmoid Loss 而非 Softmax，更适合细粒度理解
+
+# 配置
+vision_config = {
+    "model": "ViT-So400m",      # 400M 参数
+    "image_size": 224,          # 或 448, 896
+    "patch_size": 14,           # 16×16 patches
+    "hidden_size": 1152,
+    "num_layers": 27,
+    "num_heads": 16
+}
+
+# 输出: [B, 256, 1152] (256 = (224/14)² patches)
+```
+
+#### 2. Gemma 2B LLM
+
+```python
+# Gemma 是 Google 的轻量级 LLM
+llm_config = {
+    "hidden_size": 2048,
+    "num_layers": 18,
+    "num_heads": 8,
+    "vocab_size": 256000,
+    "max_position": 8192,
+    "intermediate_size": 16384  # FFN
+}
+```
+
+#### 3. 投影层 (Linear Projection)
+
+```python
+# 将 SigLIP 特征投射到 Gemma 空间
+self.vision_proj = nn.Linear(1152, 2048)
+
+# 投射后，视觉 Token 和文本 Token 在同一空间
+vision_tokens = self.vision_proj(siglip_output)  # [B, 256, 2048]
+```
+
+### VLA 中的使用方式
+
+```python
+from transformers import AutoProcessor, PaliGemmaForConditionalGeneration
+
+# 加载模型
+model = PaliGemmaForConditionalGeneration.from_pretrained(
+    "google/paligemma-3b-pt-224",
+    torch_dtype=torch.bfloat16
+)
+processor = AutoProcessor.from_pretrained("google/paligemma-3b-pt-224")
+
+# 方式 1: 获取 Hidden States (用于 Action Head)
+def get_vlm_features(images, text):
+    inputs = processor(images=images, text=text, return_tensors="pt")
+    outputs = model(
+        **inputs,
+        output_hidden_states=True
+    )
+    # 最后一层 hidden states
+    hidden = outputs.hidden_states[-1]  # [B, L, 2048]
+    return hidden
+
+# 方式 2: 直接生成文本 (用于 CoT)
+def generate_text(images, text):
+    inputs = processor(images=images, text=text, return_tensors="pt")
+    outputs = model.generate(**inputs, max_new_tokens=100)
+    return processor.decode(outputs[0])
+```
+
+### PaliGemma 版本对比
+
+| 版本 | 参数量 | 输入分辨率 | 适用场景 |
+| :--- | :--- | :--- | :--- |
+| **paligemma-3b-pt-224** | 3B | 224×224 | VLA 首选，平衡效率 |
+| paligemma-3b-pt-448 | 3B | 448×448 | 需要更多细节 |
+| paligemma-3b-pt-896 | 3B | 896×896 | 高分辨率任务 |
+| paligemma-3b-mix-224 | 3B | 224×224 | 混合任务微调版 |
+
+### PaliGemma vs 其他 VLM
+
+| 模型 | 参数量 | 开源 | VLA 适用性 |
+| :--- | :--- | :--- | :--- |
+| **PaliGemma** | **3B** | ✅ Apache 2.0 | ⭐⭐⭐⭐⭐ 最常用 |
+| LLaVA 1.5 | 7B/13B | ✅ | ⭐⭐⭐⭐ 较大但成熟 |
+| Qwen-VL | 7B | ✅ | ⭐⭐⭐⭐ 中文支持好 |
+| GPT-4V | ~1T | ❌ | ⭐⭐ API 延迟高 |
+| PaLI-X | 55B | ❌ | ⭐ 太大无法部署 |
+
+### 面试常见问题
+
+**Q: 为什么 π0 选择 PaliGemma 而不是更大的 LLaVA?**
+
+A: 三个原因:
+1. **效率**: 3B 参数可在单卡训练/推理，满足机器人实时性要求
+2. **SigLIP**: 比 CLIP 更好的细粒度视觉理解
+3. **模块化**: Vision/Language 解耦，方便接 Action Head
+
+---
+
+**Q: PaliGemma 的 256 个 vision tokens 够用吗?**
+
+A: 对于大多数机器人任务足够:
+- 桌面操作: 224×224 分辨率 + 256 tokens 能覆盖关键物体
+- 需要精细操作时: 可用 448/896 版本 (1024/4096 tokens)
+- Trade-off: 更多 tokens = 更慢推理
+
+---
+
 ## 6. 投影层设计 (Projector Design)
 
 将视觉特征映射到语言空间是 VLA 的关键。
