@@ -10,13 +10,91 @@
 - **微米级控制**: 视觉通常有毫米级误差，而触觉传感器 (如 GelSight) 可以提供微米级的纹理信息。
 
 ## 2. 核心传感器技术
-- **GelSight / Digit**: 基于光学的触觉传感器。
-    - **原理**: 内部有一个弹性体 (Elastomer) 和摄像头。当弹性体变形时，摄像头拍摄其表面的纹理变化。
-    - **优势**: 输出是高分辨率图像，可以直接喂给 CNN/ViT 处理，与 CV 技术栈完美兼容。
+
+### 2.1 GelSight
+MIT 开发的高分辨率光学触觉传感器，是触觉 VLA 研究的基石。
+
+| 参数 | 规格 |
+| :--- | :--- |
+| 分辨率 | ~40 微米 |
+| 尺寸 | 约 30×30mm 感知面 |
+| 输出 | RGB 图像 + 深度图 |
+| 帧率 | 30-60 FPS |
+| 价格 | ~$500-1000 |
+
+**原理**: 内部有弹性体 (Elastomer) + LED 光源 + 摄像头。当物体接触弹性体时，表面变形改变光照分布，摄像头捕捉这些变化重建接触几何。
+
+### 2.2 DIGIT (Meta AI)
+> **论文**: [DIGIT: A Novel Design for a Low-Cost Compact High-Resolution Tactile Sensor with Application to In-Hand Manipulation](https://arxiv.org/abs/2005.14679) (RSS 2020)
+
+Meta AI (FAIR) 开发的**开源**紧凑型触觉传感器，专为机器人手指设计。
+
+| 参数 | 规格 |
+| :--- | :--- |
+| 分辨率 | 640×480 RGB |
+| 尺寸 | **20×27×18mm** (极紧凑) |
+| 重量 | ~20g |
+| 帧率 | 60 FPS |
+| 接口 | USB-C |
+| 成本 | **~$15** (开源 BOM) |
+
+**核心优势**:
+- **开源硬件**: 完整 CAD 设计、制造指南公开，可自行制作
+- **紧凑设计**: 专为机器人手指优化，可安装在 Allegro Hand 等灵巧手上
+- **低成本**: 材料成本仅 $15，适合大规模部署
+- **高帧率**: 60 FPS 支持实时控制
+
+**与 GelSight 对比**:
+
+| 特性 | GelSight | DIGIT |
+| :--- | :--- | :--- |
+| 分辨率 | 更高 (~40μm) | 较低 (像素级) |
+| 尺寸 | 较大 | **极紧凑** |
+| 成本 | 高 ($500+) | **极低 ($15)** |
+| 开源 | 部分 | **完全开源** |
+| 适用场景 | 精密检测、研究 | 灵巧手、大规模部署 |
+
+### 2.3 其他触觉传感器
+- **TacTip**: 基于生物启发的软性触觉传感器
+- **BioTac**: 多模态传感器 (压力 + 温度 + 振动)
+- **ReSkin**: 磁性薄膜触觉传感器，可贴附于任意表面
 
 ## 3. 最新模型进展 (2024-2025)
 
-### 3.1 VLA-Touch (2025)
+### 3.1 Tactile-VLA (2024)
+> **论文**: [A Touch, Vision, and Language Dataset for Multimodal Alignment](https://arxiv.org/abs/2402.13232) (ICML 2024)
+> **代码**: [GitHub - Max-Fu/tvl](https://github.com/Max-Fu/tvl)
+
+**核心贡献**: 首个大规模触觉-视觉-语言对齐数据集和基准模型。
+
+**数据集 (TVL Dataset)**:
+- **44K 触觉-视觉-语言三元组**
+- 覆盖 100+ 种材质 (木材、金属、织物、塑料等)
+- 包含自然语言描述 ("rough and cold", "smooth and soft")
+
+**模型架构**:
+
+```
+Vision Encoder (CLIP ViT-L)  ──┐
+                               ├──> Cross-Modal Fusion ──> Language Decoder
+Tactile Encoder (ViT-B)  ─────┘
+```
+
+**关键技术**:
+1. **Tactile Encoder 预训练**: 使用 MAE 在触觉图像上自监督预训练
+2. **对比学习对齐**: 将触觉、视觉、语言三个模态投射到统一空间
+3. **触觉描述生成**: 给定触觉图像，生成自然语言描述
+
+**下游任务**:
+- 材质分类 (Material Classification)
+- 触觉-语言检索 (Tactile-Language Retrieval)
+- 触觉问答 (Tactile QA)
+
+**意义**: 为 VLA 提供了触觉语义理解的基础，使机器人能够"用语言描述触觉"。
+
+---
+
+### 3.2 VLA-Touch (2025)
 > **论文**: [VLA-Touch: Enhancing Generalist Robot Policies with Dual-Level Tactile Feedback](https://arxiv.org/abs/2502.xxxxx)
 > **核心思想**: 双层反馈机制 (Dual-level Feedback)。
 
@@ -31,7 +109,7 @@
         - **Action Refinement**: 触觉信号主要用于修正动作的最后几毫米 (Contact Phase)，确保接触力适中。
 - **优势**: 无需重新训练整个 VLA，即插即用。
 
-### 3.2 OmniVTLA (2025)
+### 3.3 OmniVTLA (2025)
 > **论文**: [OmniVTLA: A Unified Vision-Tactile-Language-Action Model](https://arxiv.org/abs/2503.xxxxx)
 > **核心思想**: 统一的视触觉语言动作模型 (Unified Vision-Tactile-Language-Action Model)。
 
@@ -81,11 +159,39 @@ ViT 在 OmniVTLA 等最新模型中更受欢迎，主要是为了**多模态对�
 | **典型应用** | 材质识别, 滑移检测 (Slip Detection) | 复杂操作策略 (Manipulation Policy), 跨模态推理 |
 
 ## 6. 面试常见问题
-**Q: 触觉图像 (Tactile Image) 和普通 RGB 图像有什么区别?**
-A: 触觉图像通常反映的是**几何形状 (Geometry)** 和 **受力分布 (Force Distribution)**，对光照变化不敏感，但对接触极其敏感。处理时通常不需要复杂的颜色增强，但需要关注纹理细节。
 
-**Q: 如何将触觉融入 VLA?**
-A: 最简单的方法是将触觉图像视为额外的视觉通道 (Concat)，或者使用 Cross-Attention 将触觉特征注入到 Policy 中。最新的趋势是像 OmniVTLA 一样进行多模态对齐。
+**Q1: 触觉图像 (Tactile Image) 和普通 RGB 图像有什么区别?**
+
+触觉图像通常反映的是**几何形状 (Geometry)** 和 **受力分布 (Force Distribution)**，对光照变化不敏感，但对接触极其敏感。处理时通常不需要复杂的颜色增强，但需要关注纹理细节。
+
+---
+
+**Q2: 如何将触觉融入 VLA?**
+
+三种主流方法：
+1. **通道拼接**: 将触觉图像作为额外视觉通道 (Concat)
+2. **Cross-Attention**: 触觉特征作为 Key/Value 注入 Policy
+3. **多模态对齐**: 像 Tactile-VLA/OmniVTLA 那样将触觉、视觉、语言对齐到统一空间
+
+---
+
+**Q3: DIGIT vs GelSight 怎么选?**
+
+| 场景 | 推荐 | 原因 |
+| :--- | :--- | :--- |
+| 灵巧手操作 | **DIGIT** | 体积小、重量轻、成本低 |
+| 精密检测/研究 | **GelSight** | 分辨率更高 |
+| 大规模数据采集 | **DIGIT** | 开源、便宜、可批量制作 |
+| 工业应用 | 看需求 | GelSight 稳定性更好 |
+
+---
+
+**Q4: 触觉 Sim-to-Real 为什么难?**
+
+1. **软体仿真复杂**: 弹性体形变涉及非线性 FEM，计算成本高
+2. **接触模型不精确**: 摩擦、滑移的物理建模困难
+3. **传感器特性**: 每个传感器的光学特性略有不同
+4. **解决方案**: 域随机化 (Domain Randomization)、真实数据微调
 
 
 ---
