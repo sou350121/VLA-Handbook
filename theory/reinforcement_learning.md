@@ -692,13 +692,261 @@ $$
 | **计算量** | 高 | 低 |
 | **效果** | 略优 (理论上) | 接近 RLHF |
 
-## 8. 参考资源 (References)
+## 8. 主流 RL 框架 (RL Frameworks)
+
+### 8.1 框架对比
+
+| 框架 | 定位 | 优势 | 适用场景 |
+| :--- | :--- | :--- | :--- |
+| **Stable Baselines3** | 易用、稳定 | 文档完善，API 简洁 | 快速实验、教学 |
+| **RLlib** | 分布式、可扩展 | Ray 生态，多 GPU/节点 | 大规模训练 |
+| **CleanRL** | 单文件实现 | 代码清晰，易于修改 | 学习、研究 |
+| **TorchRL** | PyTorch 官方 | 与 PyTorch 深度集成 | 生产级应用 |
+| **SKRL** | Isaac Lab 集成 | GPU 并行，机器人专用 | 机器人 RL |
+
+### 8.2 Stable Baselines3 (SB3)
+
+**特点**: 最易上手的 RL 库，API 设计优雅。
+
+```python
+# Stable Baselines3 快速上手
+from stable_baselines3 import PPO, SAC, TD3
+from stable_baselines3.common.env_util import make_vec_env
+from stable_baselines3.common.callbacks import EvalCallback
+
+# 创建向量化环境
+env = make_vec_env("Pendulum-v1", n_envs=4)
+
+# 创建模型
+model = PPO(
+    "MlpPolicy",
+    env,
+    learning_rate=3e-4,
+    n_steps=2048,
+    batch_size=64,
+    n_epochs=10,
+    gamma=0.99,
+    verbose=1,
+    tensorboard_log="./logs/"
+)
+
+# 训练
+model.learn(total_timesteps=100_000, callback=EvalCallback(env))
+
+# 保存/加载
+model.save("ppo_pendulum")
+model = PPO.load("ppo_pendulum")
+
+# 推理
+obs = env.reset()
+for _ in range(1000):
+    action, _ = model.predict(obs, deterministic=True)
+    obs, reward, done, info = env.step(action)
+```
+
+**自定义网络**:
+
+```python
+from stable_baselines3.common.torch_layers import BaseFeaturesExtractor
+import torch.nn as nn
+
+class CustomCNN(BaseFeaturesExtractor):
+    """自定义 CNN 特征提取器 (用于图像输入)"""
+    def __init__(self, observation_space, features_dim=256):
+        super().__init__(observation_space, features_dim)
+        n_input_channels = observation_space.shape[0]
+        self.cnn = nn.Sequential(
+            nn.Conv2d(n_input_channels, 32, kernel_size=8, stride=4),
+            nn.ReLU(),
+            nn.Conv2d(32, 64, kernel_size=4, stride=2),
+            nn.ReLU(),
+            nn.Conv2d(64, 64, kernel_size=3, stride=1),
+            nn.ReLU(),
+            nn.Flatten(),
+        )
+        # 计算输出维度
+        with torch.no_grad():
+            n_flatten = self.cnn(torch.zeros(1, *observation_space.shape)).shape[1]
+        self.linear = nn.Linear(n_flatten, features_dim)
+    
+    def forward(self, observations):
+        return self.linear(self.cnn(observations))
+
+# 使用自定义网络
+policy_kwargs = dict(
+    features_extractor_class=CustomCNN,
+    features_extractor_kwargs=dict(features_dim=256),
+)
+model = PPO("CnnPolicy", env, policy_kwargs=policy_kwargs)
+```
+
+### 8.3 RLlib (Ray)
+
+**特点**: 分布式训练首选，支持多 GPU/多节点。
+
+```python
+# RLlib 分布式训练
+from ray import tune
+from ray.rllib.algorithms.ppo import PPOConfig
+
+# 配置
+config = (
+    PPOConfig()
+    .environment("CartPole-v1")
+    .framework("torch")
+    .rollouts(
+        num_rollout_workers=4,      # 并行 worker 数
+        num_envs_per_worker=2,      # 每个 worker 的环境数
+    )
+    .training(
+        lr=5e-5,
+        gamma=0.99,
+        train_batch_size=4000,
+        sgd_minibatch_size=128,
+        num_sgd_iter=30,
+        model={"fcnet_hiddens": [256, 256]},
+    )
+    .resources(
+        num_gpus=1,                  # 训练用 GPU
+        num_cpus_per_worker=1,
+    )
+)
+
+# 训练
+algo = config.build()
+for i in range(100):
+    result = algo.train()
+    print(f"Iter {i}: reward = {result['episode_reward_mean']:.2f}")
+
+# 或使用 Ray Tune 进行超参搜索
+tune.run(
+    "PPO",
+    config=config.to_dict(),
+    stop={"episode_reward_mean": 200},
+    num_samples=4,  # 并行搜索 4 组超参
+)
+```
+
+**多智能体 RL**:
+
+```python
+# RLlib 多智能体
+from ray.rllib.algorithms.ppo import PPOConfig
+
+config = (
+    PPOConfig()
+    .environment("MultiAgentCartPole")
+    .multi_agent(
+        policies={"policy_0", "policy_1"},
+        policy_mapping_fn=lambda agent_id, episode, **kwargs: f"policy_{agent_id}",
+    )
+)
+```
+
+### 8.4 SKRL (Isaac Lab 集成)
+
+**特点**: 专为 Isaac Lab 设计，GPU 并行训练。
+
+```python
+# SKRL + Isaac Lab
+from skrl.agents.torch.ppo import PPO, PPO_DEFAULT_CONFIG
+from skrl.trainers.torch import SequentialTrainer
+from skrl.envs.wrappers.torch import wrap_env
+
+# 包装 Isaac Lab 环境
+env = wrap_env(isaac_lab_env)
+
+# 配置
+cfg = PPO_DEFAULT_CONFIG.copy()
+cfg["rollouts"] = 16
+cfg["learning_epochs"] = 8
+cfg["mini_batches"] = 4
+cfg["discount_factor"] = 0.99
+cfg["lambda"] = 0.95
+cfg["learning_rate"] = 3e-4
+
+# 创建 Agent
+agent = PPO(
+    models={"policy": policy_net, "value": value_net},
+    memory=memory,
+    cfg=cfg,
+    observation_space=env.observation_space,
+    action_space=env.action_space,
+)
+
+# 训练
+trainer = SequentialTrainer(cfg=trainer_cfg, env=env, agents=agent)
+trainer.train()
+```
+
+### 8.5 框架选择指南
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    RL 框架选择决策树                             │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│   Q1: 是否需要分布式训练 (多 GPU/多节点)?                        │
+│       │                                                         │
+│       ├── 是 → RLlib (Ray 生态，分布式首选)                     │
+│       │                                                         │
+│       └── 否 → Q2: 是否使用 Isaac Lab?                          │
+│                    │                                            │
+│                    ├── 是 → SKRL (官方推荐)                     │
+│                    │                                            │
+│                    └── 否 → Q3: 目标是什么?                     │
+│                                 │                               │
+│                                 ├── 快速实验 → SB3              │
+│                                 ├── 学习研究 → CleanRL          │
+│                                 └── 生产部署 → TorchRL          │
+│                                                                 │
+│   💡 VLA 常用组合:                                              │
+│   • 仿真训练: Isaac Lab + SKRL/RSL-RL                           │
+│   • 大规模: RLlib + Ray Cluster                                 │
+│   • 快速验证: SB3 + Gymnasium                                   │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### 8.6 TORCS 与自动驾驶 RL
+
+**TORCS** (The Open Racing Car Simulator) 是经典的自动驾驶 RL 测试平台。
+
+```python
+# TORCS 环境使用 (gym_torcs)
+import gym
+import gym_torcs
+
+env = gym.make("Torcs-v0", vision=True, throttle=True)
+
+# 观测空间: 车辆状态 + 可选视觉
+# - speed, angle, trackPos, track sensors (19)
+# - 可选: RGB 图像 (64x64x3)
+
+# 动作空间: [steering, throttle, brake]
+# - steering: [-1, 1]
+# - throttle: [0, 1]
+# - brake: [0, 1]
+
+obs = env.reset()
+for _ in range(1000):
+    action = agent.act(obs)  # 你的策略
+    obs, reward, done, info = env.step(action)
+    if done:
+        obs = env.reset()
+```
+
+**注**: TORCS 主要用于自动驾驶研究，VLA 机器人领域更常用 Isaac Lab/MuJoCo。
+
+## 9. 参考资源 (References)
 
 - **PPO**: [Proximal Policy Optimization Algorithms](https://arxiv.org/abs/1707.06347)
 - **SAC**: [Soft Actor-Critic: Off-Policy Maximum Entropy Deep RL](https://arxiv.org/abs/1801.01290)
 - **CQL**: [Conservative Q-Learning for Offline RL](https://arxiv.org/abs/2006.04779)
 - **IQL**: [Offline RL with Implicit Q-Learning](https://arxiv.org/abs/2110.06169)
 - **Spinning Up**: [OpenAI Spinning Up in Deep RL](https://spinningup.openai.com/)
+- **Stable Baselines3**: [Docs](https://stable-baselines3.readthedocs.io/)
+- **RLlib**: [Docs](https://docs.ray.io/en/latest/rllib/)
+- **SKRL**: [Docs](https://skrl.readthedocs.io/)
 
 ---
 [← Back to Theory](./README.md)

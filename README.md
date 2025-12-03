@@ -180,7 +180,26 @@
 | **部署** | TensorRT, ONNX Runtime, vLLM | GPU 优化，大模型服务 |
 | **分布式** | PyTorch FSDP, DeepSpeed | 大模型训练，显存优化 |
 | **量化** | bitsandbytes, AWQ, GPTQ | QLoRA 训练，推理加速 |
-| **优化** | Flash Attention, torch.compile | 内存优化，编译加速 |
+| **优化** | Flash Attention, torch.compile, KV-Cache | 内存优化，编译加速 |
+
+### RL 框架 (RL Frameworks)
+
+| 框架 | 定位 | 适用场景 |
+| :--- | :--- | :--- |
+| **Stable Baselines3** | 易用、稳定 | 快速实验、教学 |
+| **RLlib (Ray)** | 分布式、可扩展 | 大规模训练 |
+| **SKRL** | Isaac Lab 集成 | 机器人 RL |
+| **CleanRL** | 单文件实现 | 学习、研究 |
+| **TorchRL** | PyTorch 官方 | 生产级应用 |
+
+### 机器人控制 (Robot Control)
+
+| 方法 | 原理 | 适用场景 |
+| :--- | :--- | :--- |
+| **PID** | 误差反馈 | 底层关节控制 |
+| **阻抗控制** | 弹簧-阻尼行为 | 接触任务、人机协作 |
+| **MPC** | 滚动优化 | 轨迹优化、避障 |
+| **Computed Torque** | 动力学补偿 | 高精度任务 |
 
 ### 机器人中间件 (Robotics Middleware)
 

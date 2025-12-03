@@ -43,6 +43,7 @@
 
 | 算法 | 输入 | 方法 | 特点 | 代码 |
 |:-----|:-----|:-----|:-----|:-----|
+| **Dex-Net** | 深度图 | GQ-CNN 评分 | 大规模合成数据 | github/BerkeleyAutomation |
 | **GPD** | 点云 | 采样 + CNN 评分 | 经典基线 | github/atenpas/gpd |
 | **PointNetGPD** | 点云 | PointNet 特征 + 评分 | 端到端 | github/lianghongzhuo |
 | **Contact-GraspNet** | 点云 | 6-DoF 直接回归 | 快速、单次前向 | github/NVlabs |
@@ -50,7 +51,161 @@
 | **GraspGF** | 点云 | Score-based 生成 | 多样性好 | github/graspgf |
 | **VGN** | TSDF | 3D CNN | 体素表示 | github/ethz-asl |
 
-### 1.2 Contact-GraspNet 架构
+### 1.2 Dex-Net 系列
+
+> **Dex-Net** (Dexterity Network) 是 UC Berkeley AUTOLAB 开发的数据驱动抓取系统，通过大规模合成数据训练抓取质量预测网络。
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                     Dex-Net 系统架构                                         │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│   数据生成 (Offline):                                                       │
+│   ┌─────────────────────────────────────────────────────────────────────┐   │
+│   │   3D 物体模型 (ShapeNet, YCB, 自定义)                               │   │
+│   │        │                                                            │   │
+│   │        ▼                                                            │   │
+│   │   抓取采样 (Antipodal Sampling)                                     │   │
+│   │        │                                                            │   │
+│   │        ▼                                                            │   │
+│   │   力闭合分析 (Ferrari-Canny Metric)                                 │   │
+│   │        │                                                            │   │
+│   │        ▼                                                            │   │
+│   │   渲染深度图 + 标注抓取质量                                         │   │
+│   │        │                                                            │   │
+│   │        ▼                                                            │   │
+│   │   Dex-Net 数据集 (数百万样本)                                       │   │
+│   └─────────────────────────────────────────────────────────────────────┘   │
+│                                                                             │
+│   推理 (Online):                                                            │
+│   ┌─────────────────────────────────────────────────────────────────────┐   │
+│   │   深度图 ──► 抓取采样 ──► GQ-CNN ──► 抓取质量评分 ──► 最佳抓取      │   │
+│   │                                                                     │   │
+│   │   GQ-CNN (Grasp Quality CNN):                                       │   │
+│   │   • 输入: 深度图裁剪 (32x32) + 抓取参数 (角度, 深度)               │   │
+│   │   • 输出: 抓取成功概率 P(success | grasp, depth)                   │   │
+│   └─────────────────────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+**Dex-Net 系列版本**:
+
+| 版本 | 发布 | 特点 | 数据规模 |
+|:-----|:-----|:-----|:-----|
+| **Dex-Net 1.0** | 2017 | 首个大规模合成数据集 | 10K 物体, 2.5M 抓取 |
+| **Dex-Net 2.0** | 2017 | GQ-CNN, 平行夹爪 | 6.7M 点云-抓取对 |
+| **Dex-Net 3.0** | 2018 | 吸盘抓取 | 2.8M 吸盘抓取 |
+| **Dex-Net 4.0** | 2019 | 多模态 (夹爪+吸盘) | 混合策略 |
+
+**GQ-CNN 架构**:
+
+```python
+# GQ-CNN 网络结构 (简化)
+import torch
+import torch.nn as nn
+
+class GQCNN(nn.Module):
+    """Grasp Quality CNN"""
+    def __init__(self):
+        super().__init__()
+        # 图像分支 (深度图)
+        self.conv1 = nn.Conv2d(1, 64, 7, stride=2)
+        self.conv2 = nn.Conv2d(64, 64, 5, stride=2)
+        self.conv3 = nn.Conv2d(64, 64, 3, stride=2)
+        
+        # 抓取参数分支
+        self.grasp_fc = nn.Linear(1, 16)  # 抓取深度
+        
+        # 融合层
+        self.fc1 = nn.Linear(64 * 2 * 2 + 16, 1024)
+        self.fc2 = nn.Linear(1024, 1024)
+        self.fc3 = nn.Linear(1024, 2)  # 成功/失败
+        
+    def forward(self, depth_crop, grasp_depth):
+        """
+        Args:
+            depth_crop: (B, 1, 32, 32) 深度图裁剪
+            grasp_depth: (B, 1) 抓取深度
+        """
+        # 图像特征
+        x = F.relu(self.conv1(depth_crop))
+        x = F.relu(self.conv2(x))
+        x = F.relu(self.conv3(x))
+        x = x.view(x.size(0), -1)
+        
+        # 抓取参数特征
+        g = F.relu(self.grasp_fc(grasp_depth))
+        
+        # 融合
+        x = torch.cat([x, g], dim=1)
+        x = F.relu(self.fc1(x))
+        x = F.relu(self.fc2(x))
+        x = self.fc3(x)
+        
+        return F.softmax(x, dim=1)
+
+# 推理
+def predict_grasp_quality(model, depth_image, grasp_candidates):
+    """评估候选抓取的质量"""
+    scores = []
+    for grasp in grasp_candidates:
+        # 裁剪深度图 (以抓取点为中心, 旋转对齐)
+        crop = crop_and_rotate(depth_image, grasp.center, grasp.angle, size=32)
+        crop = torch.from_numpy(crop).unsqueeze(0).unsqueeze(0).float()
+        depth = torch.tensor([[grasp.depth]]).float()
+        
+        with torch.no_grad():
+            prob = model(crop, depth)
+            scores.append(prob[0, 1].item())  # P(success)
+    
+    return scores
+```
+
+**Dex-Net 完整使用流程**:
+
+```python
+# Dex-Net 抓取规划
+from autolab_core import RigidTransform, DepthImage
+from gqcnn import GQCNN, GraspPlanner
+
+# 1. 加载模型
+model = GQCNN.load('models/gqcnn_pj.model')
+planner = GraspPlanner(model)
+
+# 2. 获取深度图
+depth_image = DepthImage.from_sensor(camera)
+
+# 3. 抓取规划
+grasps = planner.plan(
+    depth_image,
+    camera_intrinsics,
+    num_samples=1000,      # 采样数量
+    num_candidates=100,     # 候选数量
+    top_k=5,               # 返回 top-k
+)
+
+# 4. 选择最佳抓取
+best_grasp = grasps[0]
+print(f"抓取位置: {best_grasp.pose.position}")
+print(f"抓取角度: {best_grasp.angle}")
+print(f"成功概率: {best_grasp.quality:.3f}")
+
+# 5. 转换到机器人坐标系
+grasp_in_robot = camera_to_robot_transform * best_grasp.pose
+```
+
+**Dex-Net vs 其他方法对比**:
+
+| 维度 | Dex-Net | Contact-GraspNet | GraspGF |
+|:-----|:-----|:-----|:-----|
+| **输入** | 深度图 (单视角) | 点云 | 点云 |
+| **方法** | 采样 + GQ-CNN 评分 | 直接回归 | 生成式 |
+| **速度** | ~100ms | ~50ms | ~1s |
+| **泛化** | 中等 (需 Domain Randomization) | 强 | 强 |
+| **多样性** | 取决于采样 | 固定输出数 | 可控 |
+| **开源** | ✅ 完整 | ✅ | ✅ |
+
+### 1.3 Contact-GraspNet 架构
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -89,7 +244,7 @@
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### 1.3 GraspGF (Grasp Generative Flow)
+### 1.4 GraspGF (Grasp Generative Flow)
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -599,7 +754,19 @@ final_grasps = convert_to_se3(init_grasps)
 
 ## 6. 面试 Q&A
 
-### Q1: Contact-GraspNet vs GraspGF 区别？
+### Q1: Dex-Net 的核心原理是什么？
+
+**Dex-Net 三大核心**:
+1. **大规模合成数据**: 在仿真中生成数百万抓取样本，解决真机数据稀缺问题
+2. **GQ-CNN**: 学习从深度图预测抓取成功概率
+3. **Antipodal 采样**: 基于几何约束的抓取候选生成
+
+**为什么有效**:
+- 合成数据 + Domain Randomization 提高泛化
+- Ferrari-Canny Metric 提供物理可靠的标签
+- 端到端学习避免手工特征设计
+
+### Q2: Contact-GraspNet vs GraspGF 区别？
 
 | 维度 | Contact-GraspNet | GraspGF |
 |:-----|:-----------------|:--------|
@@ -609,25 +776,25 @@ final_grasps = convert_to_se3(init_grasps)
 | **多模态** | 较弱 | 强 (天然处理多模态) |
 | **适用** | 实时应用 | 需要多样抓取的场景 |
 
-### Q2: DexGraspNet 数据是怎么生成的？
+### Q3: DexGraspNet 数据是怎么生成的？
 
 1. **初始化**: 在物体周围随机采样手腕位姿
 2. **优化**: 最小化接触距离 + 穿透惩罚 + 力闭合约束
 3. **验证**: 在 Isaac Gym 中仿真，检查是否能成功抬起物体
 4. **筛选**: 保留成功率 > 50% 的抓取
 
-### Q3: Isaac Gym vs Isaac Lab 怎么选？
+### Q4: Isaac Gym vs Isaac Lab 怎么选？
 
 - **Isaac Gym**: 老项目、需要最大并行度、不需要 GUI
 - **Isaac Lab**: 新项目、需要模块化、需要与 Isaac Sim 互通
 
-### Q4: SAPIEN 的优势是什么？
+### Q5: SAPIEN 的优势是什么？
 
 - **Part-level 交互**: 专门为可交互物体设计 (开门、开抽屉)
 - **PartNet-Mobility**: 大规模关节物体数据集
 - **轻量**: 比 Isaac Sim 更轻量，适合快速实验
 
-### Q5: 如何评估抓取算法？
+### Q6: 如何评估抓取算法？
 
 | 指标 | 描述 |
 |:-----|:-----|
