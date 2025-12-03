@@ -154,51 +154,86 @@
 ## 🛠️ VLA 开发必备知识 (Development Essentials)
 
 ### 数据格式 (Data Formats)
-VLA 领域的标准化数据格式至关重要，以下是最常用的：
 
-#### RLDS (Robotic Learning Datasets Spec)
-- **标准**: Google DeepMind 主导，TensorFlow-based
-- **优势**: 统一格式，Open X-Embodiment 使用
-- **缺点**: 依赖 TensorFlow，对 PyTorch 用户不友好
-- **使用**: RT-1, RT-2, Octo
-
-#### LeRobot Format
-- **标准**: Hugging Face 推出，PyTorch-native
-- **优势**: 与 Transformers 生态无缝集成，易用
-- **缺点**: 相对较新，社区规模尚小
-- **使用**: OpenVLA (可选), WALL-OSS, Galaxea G0
-
-#### 推荐选择
-- **新项目**: 优先 **LeRobot Format** (PyTorch 生态)
-- **兼容性**: 使用 RLDS，但提供 LeRobot 转换脚本
-
-### 仿真环境 (Simulation Platforms)
-| 平台 | 优势 | 劣势 | 适用场景 |
+| 格式 | 框架 | 优势 | 使用场景 |
 | :--- | :--- | :--- | :--- |
-| **Isaac Sim (NVIDIA)** | 物理精度高，GPU加速 | 闭源，依赖NVIDIA硬件 | 人形机器人，大规模并行 |
-| **MuJoCo** | 速度快，轻量级 | 接触力模拟有限 | 机械臂操作，快速迭代 |
-| **PyBullet** | 完全开源，易上手 | 物理精度一般 | 学术研究，原型验证 |
-| **Gazebo** | ROS集成好 | 速度慢 | 移动机器人，SLAM |
+| **LeRobot** (推荐) | PyTorch | Transformers 生态集成 | OpenVLA, WALL-OSS, Galaxea G0 |
+| **RLDS** | TensorFlow | Open X-Embodiment 标准 | RT-1, RT-2, Octo |
+| **HDF5 / NPZ** | 通用 | 跨平台，读写快 | 自定义数据集 |
 
-### 深度学习框架
-- **训练**: **PyTorch** (主流) / JAX (Pi0, Google)
-- **部署**: TensorRT, ONNX Runtime, vLLM
-- **分布式**: PyTorch FSDP, DeepSpeed
+### 仿真环境 (Simulation)
 
-### 机器人中间件
-- **ROS 2**: 工业标准，Python/C++ API
-- **Isaac Lab**: NVIDIA 仿真-真机框架
-- **LeRobot**: Hugging Face 端到端工具链
+| 平台 | 速度 | 适用场景 | 文档 |
+| :--- | :--- | :--- | :--- |
+| **Isaac Lab** (推荐) | 极快 | 大规模训练，GPU 加速 | [GitHub](https://github.com/NVIDIA-Omniverse/Isaac-Lab) |
+| **MuJoCo** | 极快 | 快速迭代，算法验证 | [Docs](https://mujoco.readthedocs.io/) |
+| **Isaac Sim** | 快 | 高保真渲染，Sim-to-Real | [Docs](https://docs.omniverse.nvidia.com/apps/isaacsim/latest/) |
+| **SAPIEN** | 中等 | 抓取算法，复杂操作 | [GitHub](https://github.com/haosulab/SAPIEN) |
+| **PyBullet** | 中等 | 学术研究，教学 | [Docs](https://pybullet.org/) |
+| **Gazebo** | 慢 | ROS 集成，移动机器人 | [Tutorial](http://gazebosim.org/tutorials) |
 
-### 硬件控制接口
-- **灵巧手**: CAN Bus, USB, EtherCAT
-- **机械臂**: ROS MoveIt, SDK (如 Franka, UR)
-- **移动底盘**: ROS Navigation Stack
+### 深度学习框架 (DL Frameworks)
 
-### 版本控制与实验管理
-- **代码**: Git + GitHub/GitLab
-- **数据**: DVC, LFS (大文件)
-- **实验**: Weights & Biases, TensorBoard
+| 类别 | 工具 | 说明 |
+| :--- | :--- | :--- |
+| **训练** | PyTorch (主流), JAX (Pi0/Google) | 动态图，生态丰富 |
+| **部署** | TensorRT, ONNX Runtime, vLLM | GPU 优化，大模型服务 |
+| **分布式** | PyTorch FSDP, DeepSpeed | 大模型训练，显存优化 |
+| **量化** | bitsandbytes, AWQ, GPTQ | QLoRA 训练，推理加速 |
+| **优化** | Flash Attention, torch.compile | 内存优化，编译加速 |
+
+### 机器人中间件 (Robotics Middleware)
+
+| 工具 | 定位 | 说明 |
+| :--- | :--- | :--- |
+| **ROS 2** | 工业标准 | Python/C++ API，硬件抽象 |
+| **Isaac Lab** | NVIDIA 框架 | 仿真-真机，GPU 加速 |
+| **LeRobot** | VLA 工具链 | Hugging Face 端到端开发 |
+| **MoveIt 2** | 运动规划 | 路径规划，碰撞检测 |
+
+### 硬件控制接口 (Hardware Control)
+
+| 硬件 | 通信协议 | 常用工具/SDK |
+| :--- | :--- | :--- |
+| **灵巧手** | CAN Bus, USB, EtherCAT | Shadow/Inspire/Unitree SDK |
+| **机械臂** | EtherCAT, TCP/IP | ROS MoveIt, Franka/UR SDK |
+| **移动底盘** | CAN, Serial | ROS Navigation Stack |
+| **传感器** | USB, Ethernet | ROS cv_bridge, PCL |
+
+### 版本控制与实验管理 (Version Control & Experiment)
+
+| 类别 | 工具 | 说明 |
+| :--- | :--- | :--- |
+| **代码** | Git + GitHub/GitLab | 分布式版本控制 |
+| **大文件** | Git LFS, DVC | 模型权重，数据集 |
+| **实验** | Weights & Biases (推荐), TensorBoard | 实验跟踪，可视化 |
+| **模型** | MLflow, HuggingFace Hub | 模型注册，部署 |
+
+### 开发环境 (Development Environment)
+
+| 类别 | 工具 | 说明 |
+| :--- | :--- | :--- |
+| **Python** | Conda (推荐), venv | 环境隔离，依赖管理 |
+| **容器** | Docker + NVIDIA Container | 环境复现，部署 |
+| **GPU** | CUDA 11.8+, cuDNN, NCCL | PyTorch 兼容，分布式通信 |
+| **IDE** | VS Code, PyCharm | 调试，远程开发 |
+
+### 调试与性能分析 (Debug & Profiling)
+
+| 类别 | 工具 | 说明 |
+| :--- | :--- | :--- |
+| **调试** | pdb, ipdb, VS Code Debugger | Python 调试 |
+| **性能** | torch.profiler, NVIDIA Nsight | GPU 性能分析 |
+| **内存** | nvidia-smi, memory_profiler | 显存/内存监控 |
+
+### 学习资源 (Resources)
+
+| 类型 | 链接 |
+| :--- | :--- |
+| **官方文档** | [PyTorch](https://pytorch.org/docs/) · [ROS 2](https://docs.ros.org/) · [Isaac Sim](https://docs.omniverse.nvidia.com/apps/isaacsim/latest/) |
+| **开源项目** | [OpenVLA](https://github.com/openvla/openvla) · [LeRobot](https://github.com/huggingface/lerobot) · [Octo](https://github.com/octo-models/octo) · [Pi0](https://github.com/physint-ai/openpi) |
+| **数据集** | [Open X-Embodiment](https://robotics-transformer-x.github.io/) · [RLDS](https://github.com/google-research/rlds) |
+| **社区** | ROS Discourse · PyTorch Forums · Stack Overflow · GitHub Discussions |
 
 ## 🤝 贡献 (Contributing)
 
