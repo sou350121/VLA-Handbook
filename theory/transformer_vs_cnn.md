@@ -56,9 +56,9 @@ ViT 将图像视为一系列 Patch 的序列，完全摒弃了卷积。
 1.  **Patchify & Linear Projection (切片与线性映射)**:
     - 输入图像 $x \in \mathbb{R}^{H \times W \times C}$ 被切分为 $N$ 个 $P \times P$ 的 Patch $x_p \in \mathbb{R}^{N \times (P^2 \cdot C)}$。
     - **公式**:
-      $$
+```math
       z_0 = [x_p^1 E; x_p^2 E; \cdots; x_p^N E] + E_{pos}
-      $$
+```
       其中 $E \in \mathbb{R}^{(P^2 \cdot C) \times D}$ 是可学习的线性投影矩阵，$E_{pos} \in \mathbb{R}^{(N+1) \times D}$ 是位置编码。
     - **关键细节**: 这一步等价于一个 `Conv2d(in_channels=3, out_channels=D, kernel_size=P, stride=P)` 操作。
 
@@ -76,16 +76,16 @@ OpenVLA 的视觉编码器使用的是 **SigLIP** (来自 Google DeepMind)，而
 
 #### 1. 为什么不用 CLIP (Softmax Loss)?
 传统的 CLIP 使用 **InfoNCE Loss** (基于 Softmax)，需要维护巨大的负样本对 (Negative Pairs)。
-$$
+```math
 L_{CLIP} = -\frac{1}{N} \sum_{i=1}^N \log \frac{e^{x_i \cdot y_i / \tau}}{\sum_{j=1}^N e^{x_i \cdot y_j / \tau}}
-$$
+```
 - **通信瓶颈**: 分母 $\sum e^{...}$ 需要聚合所有 GPU 上的所有样本 (Global Reduction)。在分布式训练中，这会导致巨大的通信开销。
 
 #### 2. SigLIP 的创新 (Sigmoid Loss)
 SigLIP 将 $N \times N$ 的匹配问题转化为 **$N^2$ 个独立的二分类问题**。
-$$
+```math
 L_{SigLIP} = - \frac{1}{N} \sum_{i=1}^N \sum_{j=1}^N \left[ \mathbb{I}_{i=j} \log \sigma(x_i \cdot y_j / \tau + b) + \mathbb{I}_{i \neq j} \log (1 - \sigma(x_i \cdot y_j / \tau + b)) \right]
-$$
+```
 - **$\mathbb{I}_{i=j}$**: 正样本对 (对角线)，标签为 1。
 - **$\mathbb{I}_{i \neq j}$**: 负样本对 (非对角线)，标签为 0。
 - **优势**:
@@ -103,9 +103,9 @@ SigLIP 引入了一个可学习的 Bias $b$ (通常初始化为 $- \log N$)。
 
 自注意力机制的核心公式：
 
-$$
+```math
 \text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right) V
-$$
+```
 
 其中：
 - $Q = XW_Q$, $K = XW_K$, $V = XW_V$ (线性投影)
@@ -150,13 +150,13 @@ $$
 
 将注意力分成多个"头"，每个头关注不同的特征子空间：
 
-$$
+```math
 \text{MultiHead}(Q, K, V) = \text{Concat}(\text{head}_1, ..., \text{head}_h) W^O
-$$
+```
 
-$$
+```math
 \text{head}_i = \text{Attention}(QW_i^Q, KW_i^K, VW_i^V)
-$$
+```
 
 **优势**:
 - 不同头可以关注不同类型的关系 (位置、语义、纹理等)

@@ -944,7 +944,99 @@ for _ in range(1000):
 
 **注**: TORCS 主要用于自动驾驶研究，VLA 机器人领域更常用 Isaac Lab/MuJoCo。
 
-## 9. 参考资源 (References)
+## 9. LIBERO 终身学习基准 (Lifelong Learning Benchmark)
+
+> **LIBERO**: Benchmarking Knowledge Transfer for Lifelong Robot Learning [[GitHub](https://github.com/Lifelong-Robot-Learning/LIBERO)] [[Paper](https://arxiv.org/abs/2306.03310)]
+
+### 9.1 为什么关注 LIBERO?
+
+- **主流基准**: 多任务 / 终身学习 / 知识迁移研究默认引用的数据与任务集
+- **任务覆盖全面**: 提供受控分布偏移 (Spatial / Object / Goal) 与 entangled 任务 (LIBERO-100)
+- **开箱即用**: 打包示范数据、评测脚本、策略网络 (BC-RNN / BC-Transformer / BC-ViLT) 与算法 (base、ER、EWC、PackNet、Multitask)
+- **可扩展**: Procedural generation pipeline 支持生成更多 manipulation 任务，方便自定义研究
+
+### 9.2 任务套件总览
+
+| 套件 | 任务数 | 迁移挑战 | 说明 |
+| :--- | :--- | :--- | :--- |
+| **LIBERO-Spatial** | 30 | 空间关系 | 相同物体，不同空间布置 |
+| **LIBERO-Object** | 30 | 物体类型 | 不同物体属性，考验语义+抓取泛化 |
+| **LIBERO-Goal** | 30 | 目标变化 | 同场景，多目标组合 |
+| **LIBERO-100** | 100 | 混合 (Entangled) | 拆成 **LIBERO-90** (预训练) + **LIBERO-10** (终身学习测试) |
+
+### 9.3 数据与环境
+
+```bash
+# 环境安装
+conda create -n libero python=3.8.13
+conda activate libero
+git clone https://github.com/Lifelong-Robot-Learning/LIBERO.git
+cd LIBERO
+pip install -r requirements.txt
+pip install torch==1.11.0+cu113 torchvision==0.12.0+cu113 \
+            torchaudio==0.11.0 --extra-index-url https://download.pytorch.org/whl/cu113
+pip install -e .
+
+# 下载示范 (可选 --datasets 指定套件)
+python benchmark_scripts/download_libero_datasets.py --use-huggingface
+```
+
+### 9.4 训练 / 评测入口
+
+```bash
+# 终身学习训练
+export CUDA_VISIBLE_DEVICES=0
+python libero/lifelong/main.py \
+    seed=0 \
+    benchmark_name=LIBERO_90 \
+    policy=bc_transformer_policy \
+    lifelong=ewc
+
+# 脱机评测
+python libero/lifelong/evaluate.py \
+    --benchmark LIBERO_10 \
+    --task_id 0 \
+    --algo ewc \
+    --policy bc_transformer_policy \
+    --ep 50 \
+    --device_id 0
+```
+
+### 9.5 与 VLA 的结合方式
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                LIBERO + VLA 结合流程                             │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│   1. 数据层: 复用 LIBERO 示范训练 / 微调 VLA 的 Action Head     │
+│                                                                 │
+│   2. 评测层: 作为"终身学习回归测试集"，检查 Catastrophic        │
+│              Forgetting                                         │
+│                                                                 │
+│   3. 跨域迁移: 先用 LIBERO-90 预训练，再在 LIBERO-10 /          │
+│               自定义任务 → 真机验证 Sim-to-Real                  │
+│                                                                 │
+│   4. 算法组合: 将 RLHF / DPO 等上层优化与 EWC / PackNet 等      │
+│               底层正则结合，形成混合 pipeline                    │
+│                                                                 │
+│   💡 面试常问: "如何评估 VLA 的终身学习能力？"                   │
+│      → 使用 LIBERO-90 预训练 + LIBERO-10 测试遗忘程度            │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### 9.6 面试 Q&A
+
+**Q: 如何使用 LIBERO 评估 VLA 的终身学习能力？**
+
+A:
+1. **预训练**: 在 LIBERO-90 上训练 VLA 策略
+2. **终身学习**: 在 LIBERO-10 的 10 个任务上顺序微调
+3. **评估遗忘**: 每学完一个新任务后，测试所有旧任务的成功率
+4. **对比算法**: 比较 Sequential Fine-tuning (baseline) vs EWC / PackNet / ER
+5. **关键指标**: Forward Transfer (新任务学习速度) + Backward Transfer (旧任务遗忘程度)
+
+## 10. 参考资源 (References)
 
 - **PPO**: [Proximal Policy Optimization Algorithms](https://arxiv.org/abs/1707.06347)
 - **SAC**: [Soft Actor-Critic: Off-Policy Maximum Entropy Deep RL](https://arxiv.org/abs/1801.01290)

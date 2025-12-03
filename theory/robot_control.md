@@ -44,9 +44,9 @@
 
 **定义**: 给定关节角度 $\mathbf{q}$，求末端执行器位姿 $\mathbf{T}_{ee}$。
 
-$$
+```math
 \mathbf{T}_{ee} = FK(\mathbf{q}) = \mathbf{T}_1(\theta_1) \cdot \mathbf{T}_2(\theta_2) \cdots \mathbf{T}_n(\theta_n)
-$$
+```
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -124,9 +124,9 @@ rotation = R.from_matrix(T_ee[:3, :3])
 
 **定义**: 给定末端执行器目标位姿 $\mathbf{T}_{target}$，求关节角度 $\mathbf{q}$。
 
-$$
+```math
 \mathbf{q} = IK(\mathbf{T}_{target})
-$$
+```
 
 **方法对比**:
 
@@ -218,9 +218,9 @@ def rotation_error(R_current, R_target):
 
 **定义**: 关节速度到末端速度的映射。
 
-$$
+```math
 \dot{\mathbf{x}} = \mathbf{J}(\mathbf{q}) \cdot \dot{\mathbf{q}}
-$$
+```
 
 其中 $\dot{\mathbf{x}} = [v_x, v_y, v_z, \omega_x, \omega_y, \omega_z]^T$
 
@@ -237,9 +237,9 @@ $$
 
 **拉格朗日方程**:
 
-$$
+```math
 \mathbf{M}(\mathbf{q})\ddot{\mathbf{q}} + \mathbf{C}(\mathbf{q}, \dot{\mathbf{q}})\dot{\mathbf{q}} + \mathbf{g}(\mathbf{q}) = \boldsymbol{\tau}
-$$
+```
 
 - $\mathbf{M}(\mathbf{q})$: 惯性矩阵 (Mass Matrix)
 - $\mathbf{C}(\mathbf{q}, \dot{\mathbf{q}})$: 科氏力/离心力矩阵
@@ -315,9 +315,9 @@ J = pin.computeFrameJacobian(model, data, q, frame_id, pin.ReferenceFrame.LOCAL_
 
 **最基础的关节空间控制**:
 
-$$
+```math
 \tau = K_p (q_d - q) + K_d (\dot{q}_d - \dot{q}) + K_i \int (q_d - q) dt
-$$
+```
 
 ```python
 class PIDController:
@@ -386,9 +386,9 @@ class JointPIDController:
 
 **核心思想**: 让机器人表现得像弹簧-阻尼系统。
 
-$$
+```math
 \mathbf{F} = \mathbf{M}_d (\ddot{\mathbf{x}}_d - \ddot{\mathbf{x}}) + \mathbf{B}_d (\dot{\mathbf{x}}_d - \dot{\mathbf{x}}) + \mathbf{K}_d (\mathbf{x}_d - \mathbf{x})
-$$
+```
 
 - $\mathbf{M}_d$: 期望惯性
 - $\mathbf{B}_d$: 期望阻尼

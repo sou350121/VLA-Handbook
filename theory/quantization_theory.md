@@ -29,15 +29,15 @@
 ### 1.1. 映射公式
 将浮点数 $x$ 映射到整数 $q$：
 
-$$
+```math
 q = \text{round}\left( \frac{x}{S} + Z \right)
-$$
+```
 
 反量化 (Dequantization)：
 
-$$
+```math
 \hat{x} = S(q - Z)
-$$
+```
 其中：
 - $S$ (Scale): 缩放因子，决定了量化的粒度。
 - $Z$ (Zero-point): 零点偏移，用于对齐零点。

@@ -39,14 +39,14 @@
 
 ### 数学公式
 假设动作 $a \in [min, max]$，我们将其划分为 $N$ 个区间 (Bins)。
-$$
+```math
 Token = \text{round}\left( \frac{a - min}{max - min} \times (N - 1) \right)
-$$
+```
 - **RT-1**: 使用 $N=256$。
 - **预测**: 模型输出一个 Logits 向量 $z \in \mathbb{R}^N$，通过 Softmax 得到概率分布：
-$$
+```math
 P(Token = i) = \frac{e^{z_i}}{\sum_{j=0}^{N-1} e^{z_j}}
-$$
+```
 
 ### 优缺点
 - **优点**:
@@ -66,14 +66,14 @@ $$
 
 ### 数学公式
 - **前向过程 (加噪)**:
-$$
+```math
 q(x_t | x_0) = \mathcal{N}(x_t; \sqrt{\bar{\alpha}_t} x_0, (1 - \bar{\alpha}_t) I)
-$$
+```
 - **逆向过程 (去噪)**:
 模型 $\epsilon_\theta(x_t, t, \text{cond})$ 预测噪声，从而逐步还原动作：
-$$
+```math
 x_{t-1} = \frac{1}{\sqrt{\alpha_t}} \left( x_t - \frac{1 - \alpha_t}{\sqrt{1 - \bar{\alpha}_t}} \epsilon_\theta(x_t, t, \text{cond}) \right) + \sigma_t z
-$$
+```
 
 ### 优缺点
 - **优点**:

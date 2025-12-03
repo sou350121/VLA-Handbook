@@ -6,9 +6,9 @@
 
 ### 1.1. Success Rate (SR) - 成功率
 最直观但也最粗糙的指标。
-$$
+```math
 SR = \frac{1}{N} \sum_{i=1}^{N} \mathbb{I}(\text{task}_i \text{ completed})
-$$
+```
 - **定义**: $N$ 次尝试中成功的次数。
 - **置信区间 (Confidence Interval)**: 由于 $N$ 通常较小 (真机实验昂贵)，SR 的方差很大。建议使用 **Wald Interval** 或 **Wilson Score Interval** 报告误差范围。
   $$ \hat{p} \pm z \sqrt{\frac{\hat{p}(1-\hat{p})}{N}} $$
@@ -21,9 +21,9 @@ $$
 
 ### 1.3. Intervention Rate (IR) - 干预率
 适用于长程任务 (Long-horizon) 或自动驾驶。
-$$
+```math
 IR = \frac{\text{Total Interventions}}{\text{Total Operation Time (hours)}} \quad \text{or} \quad \frac{\text{Interventions}}{\text{Total Steps}}
-$$
+```
 - **定义**: 人类专家为了防止灾难性后果 (碰撞、掉落) 而接管机器人的频率。
 - **MPI (Miles Per Intervention)**: 自动驾驶常用，VLA 中对应 **Steps Per Intervention (SPI)**。
 

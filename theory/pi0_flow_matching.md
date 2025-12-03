@@ -11,9 +11,9 @@ Physical Intelligence 的 π0 模型核心在于引入了 **Flow Matching** 来�
 
 我们定义一个 **向量场 (Vector Field)** $v_t(x)$，它描述了样本在时间 $t$ 的移动速度和方向。
 
-$$
+```math
 \frac{dx}{dt} = v_t(x)
-$$
+```
 
 - $x_0$: 真实数据分布 (Real Data, e.g., 机器人的正确动作)。
 - $x_1$: 标准高斯噪声分布 (Noise, $\mathcal{N}(0, I)$)。
@@ -33,9 +33,9 @@ $$
 ### 2.1 线性插值路径 (Conditional Flow)
 为了训练模型，我们需要构造一个"正确答案"。假设我们已知一个真实样本 $x_0$ 和一个采样噪声 $x_1$，我们定义一条连接它们的直线路径：
 
-$$
+```math
 x_t = (1 - t)x_0 + t x_1, \quad t \in [0, 1]
-$$
+```
 
 - 当 $t=0$ 时， $x_t = x_0$ (数据)。
 - 当 $t=1$ 时， $x_t = x_1$ (噪声)。
@@ -43,18 +43,18 @@ $$
 ### 2.2 目标速度 (Target Velocity)
 对上面的路径 $x_t$ 对时间 $t$ 求导，得到该路径上的理想速度 $u_t(x|x_1)$：
 
-$$
+```math
 \frac{d}{dt} x_t = \frac{d}{dt} \left( (1 - t)x_0 + t x_1 \right) = x_1 - x_0
-$$
+```
 
 - **物理含义**: 目标速度是一个恒定向量，方向从 $x_0$ 指向 $x_1$。这非常直观：要从数据变到噪声，就一直往噪声方向走；反之亦然。
 
 ### 2.3 损失函数 (Loss Function)
 我们训练一个神经网络 $v_\theta(x_t, t, \text{cond})$ 来拟合这个目标速度。这就是 **Conditional Flow Matching (CFM)** loss：
 
-$$
+```math
 \mathcal{L}(\theta) = \mathbb{E}_{t, x_0, x_1} \left[ \Vert v_\theta(x_t, t, \text{cond}) - (x_1 - x_0) \Vert^2 \right]
-$$
+```
 
 - **输入**:
     - $x_t$: 当前时刻的插值状态 (混合了数据和噪声)。

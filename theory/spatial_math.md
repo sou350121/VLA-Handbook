@@ -30,9 +30,9 @@
 
 为了统一描述旋转 (Rotation) 和平移 (Translation)，我们使用 $4 \times 4$ 的齐次变换矩阵 $T$。
 
-$$
+```math
 T_{A}^{B} = \begin{bmatrix} R_{3\times3} & t_{3\times1} \\ 0_{1\times3} & 1 \end{bmatrix} \in SE(3)
-$$
+```
 
 - **物理含义**: 描述了坐标系 $\{A\}$ 相对于坐标系 $\{B\}$ 的位姿。
 - **点的变换**: 如果点 $P$ 在 $\{A\}$ 中的坐标是 $P_A = [x, y, z, 1]^T$，那么它在 $\{B\}$ 中的坐标是：
@@ -40,16 +40,16 @@ $$
 
 ### 2.1. 逆变换 (Inverse)
 求逆矩阵对应于反向变换 $T_{B}^{A} = (T_{A}^{B})^{-1}$：
-$$
+```math
 (T_{A}^{B})^{-1} = \begin{bmatrix} R^T & -R^T t \\ 0 & 1 \end{bmatrix}
-$$
+```
 > **注意**: 旋转矩阵是正交矩阵，所以 $R^{-1} = R^T$，计算非常快。
 
 ### 2.2. 链式法则 (Chain Rule)
 这是机器人学中最强大的工具。例如，已知相机相对于世界的外参 $T_{C}^{W}$，以及物体相对于相机的位姿 $T_{O}^{C}$，求物体在世界系下的位姿：
-$$
+```math
 T_{O}^{W} = T_{C}^{W} \times T_{O}^{C}
-$$
+```
 
 ---
 
@@ -112,22 +112,22 @@ VLA 模型如何理解 3D 世界？通过相机内参。
 ### 4.1. 针孔相机模型 (Pinhole Model)
 将 3D 点 $P_C = [X, Y, Z]^T$ 投影到 2D 像素平面 $p = [u, v]^T$：
 
-$$
+```math
 Z \begin{bmatrix} u \\ v \\ 1 \end{bmatrix} = K \begin{bmatrix} X \\ Y \\ Z \end{bmatrix}
-$$
+```
 
 其中 $K$ 是 **相机内参矩阵 (Intrinsics Matrix)**：
-$$
+```math
 K = \begin{bmatrix} f_x & 0 & c_x \\ 0 & f_y & c_y \\ 0 & 0 & 1 \end{bmatrix}
-$$
+```
 - $f_x, f_y$: 焦距 (Focal Length)，单位是像素。
 - $c_x, c_y$: 光心 (Principal Point)，通常是图像中心。
 
 ### 4.2. 深度反投影 (Deprojection)
 如果我们有深度图 $D(u, v) = Z$，可以将像素 $(u, v)$ 还原为 3D 点：
-$$
+```math
 X = \frac{(u - c_x) \cdot Z}{f_x}, \quad Y = \frac{(v - c_y) \cdot Z}{f_y}
-$$
+```
 这就是 **PointCloud** 生成的原理。
 
 ---
