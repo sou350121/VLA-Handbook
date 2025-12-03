@@ -25,9 +25,20 @@ MIT 开发的高分辨率光学触觉传感器，是触觉 VLA 研究的基石�
 **原理**: 内部有弹性体 (Elastomer) + LED 光源 + 摄像头。当物体接触弹性体时，表面变形改变光照分布，摄像头捕捉这些变化重建接触几何。
 
 ### 2.2 DIGIT (Meta AI)
-> **论文**: [DIGIT: A Novel Design for a Low-Cost Compact High-Resolution Tactile Sensor with Application to In-Hand Manipulation](https://arxiv.org/abs/2005.14679) (RSS 2020)
+> **论文**: [DIGIT: A Novel Design for a Low-Cost Compact High-Resolution Tactile Sensor](https://arxiv.org/abs/2005.14679) (RSS 2020)
+> **官网**: [digit.ml](https://digit.ml)
 
 Meta AI (FAIR) 开发的**开源**紧凑型触觉传感器，专为机器人手指设计。
+
+**代码库**:
+
+| 仓库 | 说明 | 链接 |
+| :--- | :--- | :--- |
+| **digit-interface** | Python 驱动接口 | [GitHub](https://github.com/facebookresearch/digit-interface) |
+| **TACTO** | DIGIT 仿真器 (PyBullet) | [GitHub](https://github.com/facebookresearch/tacto) |
+| **PyTouch** | 触觉 ML 库 | [GitHub](https://github.com/facebookresearch/PyTouch) |
+| **Sparsh** | 预训练触觉模型 | [GitHub](https://github.com/facebookresearch/sparsh) |
+| **3DCal** | 触觉传感器标定工具 | [GitHub](https://github.com/3DCal/3DCal) |
 
 | 参数 | 规格 |
 | :--- | :--- |
