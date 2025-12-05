@@ -52,11 +52,201 @@
 - **意义**: 更大的模型意味着更强的语义理解能力，能够处理更复杂的长指令 (e.g., "把那个红色的、有点破损的盒子折叠好放进箱子里")。
 
 ### 1.2 Action Expert (动作专家)
-- **问题**: 通用大模型通常"手笨"，难以处理穿针引线、精密装配等微米级操作。
-- **解决**: π0.6 引入了一个专门的 **Action Expert** 模块。
-    - 这是一个独立于 VLM 主干的小型高频网络。
-    - 专门负责将 VLM 的高层意图转化为高频、高精度的电机控制信号。
-    - 类似于人类的小脑 (负责运动控制) 与大脑 (负责思考) 的分工。
+
+> **核心创新**: Action Expert 是 π0.6 最重要的架构升级，解决了 VLM "脑子聪明但手笨" 的问题。
+
+#### 1.2.1 为什么需要 Action Expert?
+
+| 问题 | 说明 | 解决方案 |
+| :--- | :--- | :--- |
+| **VLM 手笨** | 通用大模型难以处理穿针引线、精密装配等微米级操作 | 专门的动作生成模块 |
+| **频率不匹配** | VLM 推理慢 (1-5Hz)，精细控制需要高频 (50-100Hz) | 轻量级高频网络 |
+| **职责混乱** | 语义理解和动作生成耦合，难以优化 | 大脑 (VLM) + 小脑 (Expert) 分离 |
+| **灾难性遗忘** | 训练动作生成会破坏 VLM 原有知识 | 冻结 VLM，只训练 Expert |
+
+#### 1.2.2 架构设计
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    Action Expert 详细架构                        │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│   VLM Hidden States              Noisy Actions       Timestep   │
+│   [B, L, 2048]                   [B, H, 7]           t ∈ [0,1]  │
+│   (来自 5B VLM)                  (带噪声的动作)       (ODE 时间) │
+│        │                              │                  │      │
+│        ▼                              ▼                  ▼      │
+│   ┌─────────────┐              ┌─────────────┐    ┌──────────┐ │
+│   │ Context Proj│              │ Action In   │    │Time Embed│ │
+│   │ 2048 → 512  │              │ 7 → 512     │    │Sinusoidal│ │
+│   └──────┬──────┘              └──────┬──────┘    └────┬─────┘ │
+│          │                            │                 │       │
+│          │                            ▼                 │       │
+│          │                    + Position Embed          │       │
+│          │                      (可学习位置编码)          │       │
+│          │                            │                 │       │
+│          │                            ▼                 │       │
+│          │         ┌─────────────────────────────────┐  │       │
+│          │         │     Transformer Layer × 4       │  │       │
+│          │         │  ┌───────────────────────────┐  │  │       │
+│          └────────▶│  │ 1. Self-Attention (动作内部)│  │◀─┘       │
+│                    │  │    动作序列的时序依赖       │  │          │
+│                    │  ├───────────────────────────┤  │          │
+│                    │  │ 2. Cross-Attention (VLM融合)│  │          │
+│                    │  │    动作 query VLM 理解     │  │          │
+│                    │  ├───────────────────────────┤  │          │
+│                    │  │ 3. FFN + AdaLN             │  │          │
+│                    │  │    时间信息注入            │  │          │
+│                    │  └───────────────────────────┘  │          │
+│                    └───────────────┬─────────────────┘          │
+│                                    │                            │
+│                                    ▼                            │
+│                             ┌─────────────┐                     │
+│                             │ Action Out  │                     │
+│                             │ 512 → 7     │                     │
+│                             └──────┬──────┘                     │
+│                                    │                            │
+│                                    ▼                            │
+│                           Velocity Field v(a_t, t)              │
+│                           [B, H, 7] (预测速度场)                 │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+#### 1.2.3 核心组件
+
+**1. AdaLN (Adaptive Layer Norm) - 时间注入**
+
+```python
+class AdaLayerNorm(nn.Module):
+    """用时间嵌入动态调制 LayerNorm 的 scale 和 shift"""
+    
+    def forward(self, x, t_emb):
+        # 从时间嵌入生成动态参数
+        scale, shift = self.adaln_modulation(t_emb).chunk(2, dim=-1)
+        
+        # 标准 LayerNorm
+        x = self.norm(x)
+        
+        # 动态调制: y = x * (1 + scale) + shift
+        return x * (1 + scale.unsqueeze(1)) + shift.unsqueeze(1)
+```
+
+**为什么需要 AdaLN?**
+- Flow Matching 中，不同时间步 t 的噪声水平不同
+- 模型需要知道当前在 ODE 的哪个阶段
+- AdaLN 将时间信息注入到每一层，指导去噪过程
+
+**2. Cross-Attention - VLM 融合**
+
+```python
+# 动作序列 attend to VLM context
+x_norm = self.cross_attn_norm(x, t_emb)
+x = x + self.cross_attn(
+    query=x_norm,        # 动作 (需要生成什么动作?)
+    key=context,         # VLM (理解了什么?)
+    value=context        # VLM (要做什么?)
+)[0]
+```
+
+**3. 完整单层实现**
+
+```python
+class ActionExpertLayer(nn.Module):
+    """单层 Action Expert: Self-Attn → Cross-Attn → FFN"""
+    
+    def forward(self, x, context, t_emb):
+        # 1. Self-Attention: 学习动作序列内部的时序关系
+        x_norm = self.self_attn_norm(x, t_emb)
+        x = x + self.self_attn(x_norm, x_norm, x_norm)[0]
+        
+        # 2. Cross-Attention: 动作 query VLM context
+        x_norm = self.cross_attn_norm(x, t_emb)
+        x = x + self.cross_attn(x_norm, context, context)[0]
+        
+        # 3. FFN: 非线性变换
+        x_norm = self.ffn_norm(x, t_emb)
+        x = x + self.ffn(x_norm)
+        
+        return x
+```
+
+#### 1.2.4 配置参数
+
+| 参数 | 值 | 说明 |
+| :--- | :--- | :--- |
+| `num_layers` | 4 | Transformer 层数 (轻量级) |
+| `num_heads` | 8 | 注意力头数 |
+| `hidden_dim` | 512 | 隐藏层维度 |
+| `action_dim` | 7 | 动作维度 (xyz + rotation + gripper) |
+| `action_horizon` | 50 | Action Chunk 长度 |
+| **总参数量** | **~10M** | 相比 5B VLM 非常轻量 |
+
+#### 1.2.5 与 π0 的对比
+
+| 特性 | π0 (Flow Matching) | π0.6 (Action Expert) |
+| :--- | :--- | :--- |
+| **VLM 参数** | 3B (PaliGemma) | 5B (Gemma 3) |
+| **动作生成** | VLM 直接输出 | 独立 Action Expert |
+| **Expert 参数** | - | ~10M |
+| **精细控制** | 一般 | **强** (专门优化) |
+| **训练策略** | 联合训练 | 可冻结 VLM，只训练 Expert |
+| **推理速度** | 快 | 更快 (Expert 轻量) |
+
+#### 1.2.6 类比：大脑与小脑的分工
+
+```
+人类神经系统:
+┌─────────────────┐     ┌─────────────────┐
+│     大脑        │ ──▶ │     小脑        │ ──▶ 精细动作
+│  (理解/规划)    │     │  (运动协调)     │
+│  "我要抓那个杯子" │     │  "手指张开、移动、闭合" │
+└─────────────────┘     └─────────────────┘
+
+π0.6 架构:
+┌─────────────────┐     ┌─────────────────┐
+│   5B VLM        │ ──▶ │  Action Expert  │ ──▶ 精细动作
+│  (理解/规划)    │     │  (动作生成)     │
+│  语义理解       │     │  高频控制信号   │
+└─────────────────┘     └─────────────────┘
+```
+
+#### 1.2.7 面试常见问题
+
+**Q1: Action Expert 为什么要独立出来，而不是让 VLM 直接输出动作?**
+
+A: 四个原因:
+1. **职责分离**: VLM 负责理解，Expert 负责生成，各司其职
+2. **效率**: Expert 只有 ~10M 参数，可以高频迭代 ODE 步骤 (Flow Matching 需要多步)
+3. **防止遗忘**: 训练时可冻结 VLM，只训练 Expert，保护 VLM 原有知识
+4. **灵活性**: 可以替换不同的 VLM backbone，Expert 保持不变
+
+**Q2: AdaLN 和普通 LayerNorm 有什么区别?**
+
+A:
+```
+普通 LayerNorm:  y = (x - μ) / σ * γ + β      (γ, β 是固定可学习参数)
+AdaLN:          y = (x - μ) / σ * (1 + scale(t)) + shift(t)  (由时间 t 动态生成)
+```
+AdaLN 让模型知道当前在 ODE 的哪个阶段，不同阶段有不同的去噪行为。
+
+**Q3: Cross-Attention 中，谁是 Query，谁是 Key/Value?**
+
+A:
+- **Query**: 动作序列 (需要生成什么动作?)
+- **Key/Value**: VLM context (理解了什么内容?)
+
+动作 "询问" VLM "我应该做什么?"，VLM 回答 "你应该......"
+
+**Q4: 为什么 Action Expert 只有 4 层?**
+
+A: 
+- Flow Matching 需要多步 ODE 迭代 (通常 1-10 步)
+- 每步都要过一遍 Expert，太深会很慢
+- 4 层足够将 VLM 理解转化为动作，复杂推理由 VLM 完成
+
+> **详细代码实现**: 参见 [π0 模型代码深度解析](./pi0_code_analysis.md#5-action-expert-详解)
+
+---
 
 ## 2. π*0.6 (Pi-Star): 强化学习的引入
 

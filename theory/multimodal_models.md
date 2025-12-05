@@ -450,6 +450,352 @@ A: 对于大多数机器人任务足够:
 
 ---
 
+## 5.6 主流 VLM 对比表（VLA 训练参考）
+
+> **目标**: 为 VLA 开发者提供当前市场上主流 Vision Language Model 的对比，重点关注**已在 VLA 项目中实际使用**的模型。
+> 
+> **最后更新**: 2025年12月5日
+
+---
+
+### 5.6.1 ✅ 已在 VLA 中实际使用（优先推荐）
+
+| 模型 | 机构 | 发布时间 | Vision Encoder | LLM Backbone | 参数量 | 输入分辨率 | 开源 | 许可证 | VLA 应用案例 | HuggingFace |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **PaliGemma 3B** | Google | 2024.07 | SigLIP ViT-So400m | Gemma 2B | 3B | 224/448/896 | ✅ | Apache 2.0 | **π0 (Pi-Zero)**, OpenVLA 变体 | [google/paligemma-3b-pt-224](https://huggingface.co/google/paligemma-3b-pt-224) |
+| **SigLIP** | Google | 2023.09 | ViT (Sigmoid Loss) | - | 400M-2.6B | 224-384 | ✅ | Apache 2.0 | **OpenVLA**, **RDT** (Vision Encoder) | [google/siglip-*](https://huggingface.co/models?search=siglip) |
+| **LLaVA 1.5/1.6** | - | 2023.10/2024.01 | CLIP/ViT | Llama 2/Vicuna | 7B/13B | 336/672 | ✅ | Apache 2.0 | **OpenVLA** (Llama 2 + SigLIP 组合) | [llava-hf/llava-1.5-*](https://huggingface.co/models?search=llava) |
+| **LLaVA-NeXT** | - | 2024.12 | CLIP/ViT | Llama 3/Vicuna | 7B/13B/34B | 672/1344 | ✅ | Apache 2.0 | 最新版本，性能提升 | [llava-hf/llava-next-*](https://huggingface.co/models?search=llava-next) |
+| **PaLI-X** | Google | 2023.12 | ViT-22B | PaLM-E | 55B | 224-1024 | ❌ | - | **RT-2** | - |
+
+**选择建议**:
+- **PaliGemma 3B**: VLA 训练首选，轻量高效（单卡 24GB 可训练），预训练充分，模块化设计
+- **SigLIP**: VLA 首选视觉编码器，比 CLIP 更强的细粒度理解，支持大 batch 训练
+- **LLaVA**: 成熟稳定，社区支持好，适合需要更大模型的场景
+
+### 5.6.2 🔄 适合 VLA 训练的开源 VLM（推荐尝试）
+
+#### 🆕 2025年最新发布
+
+| 模型 | 机构 | 发布时间 | Vision Encoder | LLM Backbone | 参数量 | 输入分辨率 | 开源 | 许可证 | 优势 | HuggingFace |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **Qwen2.5-VL** | 阿里巴巴 | 2025.03 | Window Attn ViT + MRoPE | Qwen2.5 LLM | 3B/7B/32B/72B | 任意分辨率 | ✅ | Apache 2.0 | **2025 SOTA**，数学推理强，长视频支持 | [Qwen/Qwen2.5-VL-*](https://huggingface.co/models?search=Qwen2.5-VL) |
+| **Eagle 2.5** | NVIDIA | 2025.04 | 长上下文 ViT | - | 8B | 长视频 | ✅ | Apache 2.0 | 长上下文多模态，Video-MME 72.4% | [nvidia/Eagle-*](https://huggingface.co/models?search=Eagle) |
+| **Seed 1.5-VL** | 字节跳动 | 2025.05 | - | - | 20B (激活) | - | ✅ | - | 媲美 Gemini 2.5 Pro，GUI 交互强 | [ByteDance/Seed-*](https://huggingface.co/models?search=Seed) |
+| **PLM** | Meta | 2025.05 | - | - | - | - | ✅ | MIT | 开源视觉语言模型，复杂视觉任务 | [meta-llama/PLM](https://github.com/facebookresearch/PLM) |
+| **GLM-4.5V** | 智谱AI | 2025 | 3D-RoPE ViT | GLM-4.5-Air | 106B (12B 激活) | - | ✅ | Apache 2.0 | MoE 架构，3D 空间推理 | [THUDM/GLM-4.5V](https://huggingface.co/models?search=GLM-4) |
+| **Llama 4 Scout/Maverick** | Meta | 2025.04 | ViT Patch | MoE Transformer | 16-128 专家 | - | ✅ | Meta Llama | 10M token 上下文，多模态 | [meta-llama/Llama-4](https://huggingface.co/models?search=llama-4) |
+
+#### 2024年发布（仍推荐）
+
+| 模型 | 机构 | 发布时间 | Vision Encoder | LLM Backbone | 参数量 | 输入分辨率 | 开源 | 许可证 | 优势 | HuggingFace |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **Qwen2-VL** | 阿里巴巴 | 2024.08 | InternViT | Qwen2 LLM | 2B/7B/72B | 448-1344 | ✅ | Apache 2.0 | 性能大幅提升 | [Qwen/Qwen2-VL-*](https://huggingface.co/models?search=Qwen2-VL) |
+| **InternVL2** | 商汤 | 2024.07 | InternViT-6B | InternLM2 | 2B/4B/8B/26B | 448-1344 | ✅ | Apache 2.0 | 多模态能力增强 | [OpenGVLab/InternVL2-*](https://huggingface.co/models?search=InternVL2) |
+| **MiniCPM-V 2.6** | 面壁智能 | 2024.08 | ViT | MiniCPM | 8B | 336-1344 | ✅ | Apache 2.0 | 超轻量级，边缘部署 | [openbmb/MiniCPM-V-*](https://huggingface.co/models?search=MiniCPM-V) |
+| **LLaVA-NeXT** | - | 2024.06 | CLIP/ViT | Llama 3/Vicuna | 7B/13B/34B | 672/1344 | ✅ | Apache 2.0 | 最新 LLaVA 版本 | [llava-hf/llava-next-*](https://huggingface.co/models?search=llava-next) |
+| **SmolVLA** | Hugging Face | 2024.12 | ViT-Small | TinyLlama | 450M | 224 | ✅ | Apache 2.0 | 超轻量级，VLA 研究入门 | [huggingface/smolvla](https://huggingface.co/models?search=smolvla) |
+
+#### 经典模型（仍可用）
+
+| 模型 | 机构 | 发布时间 | Vision Encoder | LLM Backbone | 参数量 | 输入分辨率 | 开源 | 许可证 | 优势 | HuggingFace |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **Qwen-VL** | 阿里巴巴 | 2023.11 | CLIP-ViT | Qwen LLM | 7B/72B | 448-1024 | ✅ | Apache 2.0 | 中文支持好 | [Qwen/Qwen-VL](https://huggingface.co/Qwen/Qwen-VL) |
+| **CogVLM** | 智谱AI | 2023.10 | EVA2-ViT | GLM | 17B | 490 | ✅ | Apache 2.0 | 视觉理解强，中文支持 | [THUDM/cogvlm-*](https://huggingface.co/models?search=cogvlm) |
+| **InternVL** | 商汤 | 2024.01 | InternViT | InternLM | 2B-26B | 448-1024 | ✅ | Apache 2.0 | 多分辨率支持 | [OpenGVLab/InternVL-*](https://huggingface.co/models?search=InternVL) |
+
+**适用场景**:
+- **Qwen2.5-VL** (🆕 2025): 中文指令 VLA 首选，数学推理强，支持任意分辨率和长视频
+- **Eagle 2.5** (🆕 2025): 长上下文多模态任务，视频理解
+- **Seed 1.5-VL** (🆕 2025): GUI 交互、复杂视觉推理
+- **GLM-4.5V** (🆕 2025): 3D 空间推理任务
+- **Llama 4** (🆕 2025): 超长上下文（10M token），文档分析
+- **Qwen2-VL**: 中文支持好（2024 版本）
+- **MiniCPM-V**: 边缘设备部署，资源受限场景
+- **SmolVLA**: 超轻量级研究，快速原型验证
+
+### 5.6.3 ❌ 闭源 API（参考，不适合直接训练）
+
+| 模型 | 机构 | 发布时间 | 参数量 | 特点 | VLA 适用性 |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **Gemini 2.5 Pro** 🆕 | Google | 2025.03 | 未公开 | **2025 SOTA**，1M token 上下文，内置思考功能 | ⭐⭐ API 调用，成本高 |
+| **Claude 3.7 Vision** 🆕 | Anthropic | 2025.02 | 未公开 | 高精度 OCR，图表解析 | ⭐⭐ API 调用，延迟问题 |
+| **GPT-4o** | OpenAI | 2024.05 | ~1T | 多模态理解强，统一 Transformer 架构 | ⭐⭐ API 延迟高，不适合实时控制 |
+| **GPT-4o-mini** | OpenAI | 2024.07 | 未公开 | 轻量版 GPT-4o，成本更低 | ⭐⭐ API 调用，延迟仍较高 |
+| **Gemini 1.5 Pro** | Google | 2024.02 | 未公开 | 1M token 上下文 | ⭐⭐ API 调用，成本高 |
+| **Claude 3.5 Sonnet** | Anthropic | 2024.06 | 未公开 | 视觉理解强，性能提升 | ⭐⭐ API 调用，延迟问题 |
+
+**说明**: 闭源 API 模型虽然能力强，但存在延迟高、成本高、无法本地部署等问题，不适合直接用于 VLA 训练。可作为参考或用于数据标注、CoT 推理等辅助任务。
+
+**2025 年闭源模型趋势**:
+- **Gemini 2.5 Pro**: 目前排行榜第一，内置推理思考功能
+- **Claude 3.7**: OCR 和图表解析能力大幅提升
+
+### 5.6.4 经典模型（历史参考）
+
+| 模型 | 机构 | 发布时间 | 特点 | VLA 影响 |
+| :--- | :--- | :--- | :--- | :--- |
+| **BLIP-2** | Salesforce | 2023.01 | Q-Former 架构创新 | ⭐ 早期 VLM，较少直接用于 VLA |
+| **Flamingo** | DeepMind | 2022.04 | Perceiver Resampler, Gated Cross-Attention | ⭐⭐ 架构创新影响深远，但未直接用于 VLA |
+
+### 5.6.5 VLA 训练选择指南
+
+#### 快速选择
+
+```
+需要轻量级、单卡训练？
+  ├─ 是 → PaliGemma 3B (首选)
+  └─ 否 → LLaVA 7B/13B
+
+只需要 Vision Encoder？
+  └─ SigLIP (VLA 首选)
+
+需要中文支持？
+  └─ Qwen-VL 7B
+
+需要边缘部署？
+  └─ MiniCPM-V 2.4B
+
+需要高分辨率输入？
+  └─ InternVL 或 PaliGemma 896px 版本
+```
+
+#### 技术对比
+
+| 特性 | PaliGemma 3B | LLaVA 7B | Qwen-VL 7B | SigLIP (Vision) |
+| :--- | :--- | :--- | :--- | :--- |
+| **训练效率** | ⭐⭐⭐⭐⭐ 单卡可训练 | ⭐⭐⭐ 需要多卡 | ⭐⭐⭐ 需要多卡 | ⭐⭐⭐⭐⭐ 仅 Vision |
+| **推理速度** | ⭐⭐⭐⭐ 快 | ⭐⭐⭐ 中等 | ⭐⭐⭐ 中等 | ⭐⭐⭐⭐⭐ 极快 |
+| **视觉理解** | ⭐⭐⭐⭐ 强 | ⭐⭐⭐⭐ 强 | ⭐⭐⭐⭐ 强 | ⭐⭐⭐⭐⭐ 最强 |
+| **中文支持** | ⭐⭐ 一般 | ⭐⭐ 一般 | ⭐⭐⭐⭐⭐ 优秀 | - |
+| **VLA 生态** | ⭐⭐⭐⭐⭐ 最常用 | ⭐⭐⭐⭐ 成熟 | ⭐⭐⭐ 较少 | ⭐⭐⭐⭐⭐ 最常用 |
+
+#### 实际应用案例
+
+1. **π0 (Pi-Zero)**: 使用 PaliGemma 3B 作为 VLM backbone，结合 Flow Matching 实现高频控制
+2. **OpenVLA**: 使用 Llama 2 7B + SigLIP 组合，通过 LoRA 高效微调
+3. **RT-2**: 使用 PaLI-X 55B（闭源），证明了 VLM 语义能力可迁移到机器人控制
+4. **RDT**: 使用 SigLIP 作为 Vision Encoder，专注于视觉特征提取
+
+### 5.6.6 集成建议
+
+#### 使用 PaliGemma 3B 训练 VLA
+
+```python
+from transformers import AutoProcessor, PaliGemmaForConditionalGeneration
+import torch
+
+# 1. 加载预训练模型
+model = PaliGemmaForConditionalGeneration.from_pretrained(
+    "google/paligemma-3b-pt-224",
+    torch_dtype=torch.bfloat16
+)
+processor = AutoProcessor.from_pretrained("google/paligemma-3b-pt-224")
+
+# 2. 获取多模态特征（用于 Action Head）
+def get_vlm_features(images, text_instructions):
+    inputs = processor(images=images, text=text_instructions, return_tensors="pt")
+    outputs = model(**inputs, output_hidden_states=True)
+    hidden = outputs.hidden_states[-1]  # [B, L, 2048]
+    return hidden
+
+# 3. 接 Action Head
+action_head = nn.Linear(2048, action_dim * chunk_size)
+actions = action_head(hidden[:, -1, :])  # 使用最后一个 token
+```
+
+#### 使用 SigLIP 作为 Vision Encoder
+
+```python
+from transformers import AutoProcessor, AutoModel
+import torch
+
+# 加载 SigLIP Vision Encoder
+vision_encoder = AutoModel.from_pretrained("google/siglip-base-patch16-224")
+processor = AutoProcessor.from_pretrained("google/siglip-base-patch16-224")
+
+# 提取视觉特征
+def extract_vision_features(images):
+    inputs = processor(images=images, return_tensors="pt")
+    outputs = vision_encoder(**inputs)
+    return outputs.last_hidden_state  # [B, N_patches, D]
+```
+
+### 5.6.7 Pre-training vs Fine-tuning vs Post-training
+
+> **重要概念**: 在 VLA 训练中，这三个术语有明确的区别和顺序。
+
+#### 训练阶段对比
+
+| 阶段 | 英文 | 中文 | 数据来源 | 训练目标 | 典型方法 | VLA 应用 |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **Pre-training** | Pre-training | 预训练 | 大规模通用数据 (ImageNet, CLIP, 互联网图文) | 学习通用视觉/语言特征 | 自监督学习、对比学习 | VLM backbone (PaliGemma, SigLIP) |
+| **Fine-tuning** | Fine-tuning | 微调 | 目标任务数据 (机器人示教数据) | 适配特定任务 | 监督学习 (BC), LoRA | OpenVLA, π0 在机器人数据上微调 |
+| **Post-training** | Post-training | 后训练 | 交互收集的数据 (成功+失败轨迹) | 自我改进，超越示教 | Offline RL (Recap) | π*0.6 的 Recap 算法 |
+
+#### 详细说明
+
+**1. Pre-training (预训练)**
+
+```
+大规模数据 (ImageNet/CLIP/互联网图文)
+        │
+        ▼
+  学习通用特征
+        │
+        ▼
+  预训练模型 (如 PaliGemma 3B)
+```
+
+- **目标**: 在大规模数据上学习通用的视觉和语言理解能力
+- **数据**: 通常不需要标注，使用自监督或对比学习
+- **结果**: 得到一个具备基础能力的模型
+- **VLA 应用**: 
+  - PaliGemma 3B 在互联网图文数据上预训练
+  - SigLIP 在图像-文本对上进行对比学习预训练
+
+**2. Fine-tuning (微调)**
+
+```
+预训练模型 (PaliGemma 3B)
+        │
+        ▼
+  目标任务数据 (机器人示教)
+        │
+        ▼
+  微调后模型 (适配机器人控制)
+```
+
+- **目标**: 在预训练模型基础上，用目标任务数据微调，使其适配特定任务
+- **数据**: 需要标注的示教数据 (observation-action pairs)
+- **方法**: 
+  - **Full Fine-tuning**: 更新所有参数（显存需求大）
+  - **LoRA/QLoRA**: 只训练少量参数（推荐）
+- **VLA 应用**:
+  - OpenVLA: 在机器人数据上 LoRA 微调
+  - π0: 在机器人数据上微调 PaliGemma
+
+**3. Post-training (后训练)**
+
+```
+微调后模型 (π0.6)
+        │
+        ▼
+  机器人交互收集数据 (成功+失败)
+        │
+        ▼
+  Offline RL (Recap 算法)
+        │
+        ▼
+  改进后模型 (π*0.6, 超越示教)
+```
+
+- **目标**: 通过分析成功和失败轨迹，自我改进，超越人类示教水平
+- **数据**: 机器人实际运行收集的数据（包含成功和失败案例）
+- **方法**: Offline RL (如 Recap 算法)
+- **特点**: 
+  - 不仅学习"怎么做"，还学习"怎么做得更好"
+  - 可以超越人类示教者的水平
+- **VLA 应用**: π*0.6 的 Recap 算法
+
+#### 完整训练流程示例 (π0.6 → π*0.6)
+
+```python
+# Phase 1: Pre-training (通常由模型提供方完成)
+# 使用大规模数据训练 PaliGemma 3B
+pretrained_vlm = load_pretrained("google/paligemma-3b-pt-224")
+
+# Phase 2: Fine-tuning (在机器人数据上微调)
+# 使用示教数据微调
+robot_demos = load_robot_demonstrations()  # 人类示教数据
+finetuned_model = fine_tune(pretrained_vlm, robot_demos, method="LoRA")
+# 得到 π0.6
+
+# Phase 3: Post-training (Recap, 自我改进)
+# 机器人交互收集数据
+interaction_data = robot.collect_data()  # 包含成功和失败轨迹
+
+# 使用 Offline RL 改进
+improved_model = recap_algorithm(finetuned_model, interaction_data)
+# 得到 π*0.6
+```
+
+#### 关键区别总结
+
+| 特性 | Pre-training | Fine-tuning | Post-training |
+| :--- | :--- | :--- | :--- |
+| **数据来源** | 通用大规模数据 | 目标任务示教数据 | 交互收集的成功+失败数据 |
+| **训练目标** | 学习通用特征 | 适配特定任务 | 自我改进，超越示教 |
+| **学习方式** | 自监督/对比学习 | 监督学习 (BC) | Offline RL |
+| **是否必需** | ✅ 是 (模型基础) | ✅ 是 (任务适配) | ⚠️ 可选 (性能提升) |
+| **典型时间** | 数周/月 (大规模) | 数小时/天 | 数天/周 (持续改进) |
+
+#### 面试常见问题
+
+**Q: Pre-training 和 Fine-tuning 的区别是什么？**
+
+A:
+- **Pre-training**: 在大规模通用数据上学习基础能力（如视觉理解、语言理解）
+- **Fine-tuning**: 在预训练模型基础上，用目标任务数据微调，使其适配特定任务（如机器人控制）
+
+**Q: Post-training 和 Fine-tuning 的区别是什么？**
+
+A:
+- **Fine-tuning**: 使用人类示教数据，学习"怎么做"（模仿学习）
+- **Post-training**: 使用交互收集的成功+失败数据，学习"怎么做得更好"（强化学习），可以超越人类示教水平
+
+**Q: 为什么需要 Pre-training？**
+
+A: 
+- 机器人数据稀缺且昂贵，从头训练需要大量数据
+- Pre-training 让模型具备通用能力，只需少量机器人数据即可适配
+- 类似人类先学基础知识，再学专业技能
+
+### 5.6.8 常见问题
+
+**Q: 为什么 VLA 首选 PaliGemma 3B 而不是更大的 LLaVA?**
+
+A: 三个原因:
+1. **效率**: 3B 参数可在单卡 (24GB) 训练/推理，满足机器人实时性要求
+2. **SigLIP**: 比 CLIP 更好的细粒度视觉理解
+3. **模块化**: Vision/Language 解耦，方便接 Action Head
+
+**Q: SigLIP 和 CLIP 的区别是什么？**
+
+A: 
+- **损失函数**: CLIP 使用 Softmax + Cross-Entropy (InfoNCE)，SigLIP 使用 Sigmoid + Binary CE
+- **Batch 依赖**: CLIP 的 Softmax 需要对比 batch 内所有样本，SigLIP 的 Sigmoid 每对独立计算
+- **扩展性**: SigLIP 更适合大 batch 训练，负样本利用更高效
+
+**Q: 如何选择 Vision Encoder 和 LLM 的组合？**
+
+A:
+- **轻量级**: PaliGemma 3B (SigLIP + Gemma 2B)
+- **平衡**: LLaVA (CLIP/ViT + Llama 2 7B)
+- **自定义**: SigLIP (Vision) + 任意 LLM (Language)
+
+**Q: 中文 VLA 任务应该选择哪个 VLM？**
+
+A: 推荐 **Qwen2.5-VL 7B**（🆕 2025.03），中文支持最好，数学推理能力强，支持任意分辨率和长视频。如果资源受限，可选择 **Qwen2.5-VL 3B** 版本。
+
+**Q: 有哪些 2025 年最新的 VLM 更新值得关注？**
+
+A: 
+- **Qwen2.5-VL** (2025.03): 阿里巴巴最新版本，**2025 SOTA**，数学推理强，支持任意分辨率
+- **Eagle 2.5** (2025.04): NVIDIA 发布，长上下文多模态，Video-MME 72.4%
+- **Seed 1.5-VL** (2025.05): 字节跳动发布，媲美 Gemini 2.5 Pro，GUI 交互强
+- **GLM-4.5V** (2025): 智谱AI，MoE 架构，3D 空间推理
+- **Llama 4** (2025.04): Meta 发布，10M token 上下文，多模态 MoE 架构
+- **PLM** (2025.05): Meta 开源视觉语言模型
+
+**Q: 2025年闭源 API 模型有哪些更新？**
+
+A:
+- **Gemini 2.5 Pro** (2025.03): Google 发布，排行榜第一，内置思考功能
+- **Claude 3.7 Vision** (2025.02): Anthropic 发布，高精度 OCR 和图表解析
+
+---
+
 ## 6. 投影层设计 (Projector Design)
 
 将视觉特征映射到语言空间是 VLA 的关键。

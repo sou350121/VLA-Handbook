@@ -245,6 +245,31 @@
 | **性能** | torch.profiler, NVIDIA Nsight | GPU 性能分析 |
 | **内存** | nvidia-smi, memory_profiler | 显存/内存监控 |
 
+### Vision Language Models (VLM) - VLA 训练参考
+
+> **最后更新**: 2025年12月5日
+
+| 模型 | 参数量 | 开源 | VLA 应用案例 | 适用性 | HuggingFace |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **PaliGemma 3B** | 3B | ✅ Apache 2.0 | π0, OpenVLA | ⭐⭐⭐⭐⭐ 最常用 | [google/paligemma-3b-pt-224](https://huggingface.co/google/paligemma-3b-pt-224) |
+| **SigLIP** | 400M-2.6B | ✅ Apache 2.0 | OpenVLA, RDT (Vision Encoder) | ⭐⭐⭐⭐⭐ VLA 首选视觉编码器 | [google/siglip-*](https://huggingface.co/models?search=siglip) |
+| **LLaVA 1.5/1.6** | 7B/13B | ✅ Apache 2.0 | OpenVLA (Llama 2 + SigLIP) | ⭐⭐⭐⭐ 成熟稳定 | [llava-hf/llava-1.5-*](https://huggingface.co/models?search=llava) |
+| **LLaVA-NeXT** | 7B/13B/34B | ✅ Apache 2.0 | - | ⭐⭐⭐⭐ 最新版本，性能提升 | [llava-hf/llava-next-*](https://huggingface.co/models?search=llava-next) |
+| **Qwen2.5-VL** 🆕 | 3B/7B/32B/72B | ✅ Apache 2.0 | - | ⭐⭐⭐⭐⭐ **2025 SOTA**，中文首选 | [Qwen/Qwen2.5-VL-*](https://huggingface.co/models?search=Qwen2.5-VL) |
+| **Eagle 2.5** 🆕 | 8B | ✅ Apache 2.0 | - | ⭐⭐⭐⭐ 长上下文多模态 | [nvidia/Eagle-*](https://huggingface.co/models?search=Eagle) |
+| **Seed 1.5-VL** 🆕 | 20B | ✅ | - | ⭐⭐⭐⭐ GUI 交互强 | [ByteDance/Seed-*](https://huggingface.co/models?search=Seed) |
+| **GLM-4.5V** 🆕 | 106B (12B 激活) | ✅ Apache 2.0 | - | ⭐⭐⭐⭐ 3D 空间推理 | [THUDM/GLM-4.5V](https://huggingface.co/models?search=GLM-4) |
+| **Llama 4** 🆕 | MoE (16-128专家) | ✅ Meta Llama | - | ⭐⭐⭐⭐ 10M token 上下文 | [meta-llama/Llama-4](https://huggingface.co/models?search=llama-4) |
+| **Qwen2-VL** | 2B/7B/72B | ✅ Apache 2.0 | - | ⭐⭐⭐⭐ 2024 版本 | [Qwen/Qwen2-VL-*](https://huggingface.co/models?search=Qwen2-VL) |
+| **MiniCPM-V** | 2.4B | ✅ Apache 2.0 | - | ⭐⭐⭐ 超轻量级 | [openbmb/MiniCPM-V](https://huggingface.co/openbmb/MiniCPM-V) |
+| **CogVLM** | 17B | ✅ Apache 2.0 | - | ⭐⭐⭐ 视觉理解强 | [THUDM/cogvlm-*](https://huggingface.co/models?search=cogvlm) |
+| **InternVL** | 2B-26B | ✅ Apache 2.0 | - | ⭐⭐⭐ 多分辨率支持 | [OpenGVLab/InternVL-*](https://huggingface.co/models?search=InternVL) |
+| **InternVL2** | 2B/4B/8B/26B | ✅ Apache 2.0 | - | ⭐⭐⭐⭐ 最新版本，多模态能力增强 | [OpenGVLab/InternVL2-*](https://huggingface.co/models?search=InternVL2) |
+| **SmolVLA** | 450M | ✅ Apache 2.0 | - | ⭐⭐⭐ 超轻量级，研究用 | [huggingface/smolvla](https://huggingface.co/models?search=smolvla) |
+| **PaLI-X** | 55B | ❌ | RT-2 | ⭐⭐ 闭源，难以部署 | - |
+
+> **选择建议**: VLA 训练首选 **PaliGemma 3B**（轻量高效）或 **SigLIP**（作为 Vision Encoder）。中文任务推荐 **Qwen2.5-VL**（🆕 2025 SOTA）。详细对比见 [多模态模型基础](./theory/multimodal_models.md#56-主流-vlm-对比表vla-训练参考)。
+
 ### 学习资源 (Resources)
 
 | 类型 | 链接 |
