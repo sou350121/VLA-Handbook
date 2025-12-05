@@ -6,6 +6,7 @@
 
 | 公司 | 核心产品 | 领域 | 融资/规模 (Est.) | 备注 |
 | :--- | :--- | :--- | :--- | :--- |
+| **ByteDance Seed (字节跳动)** | GR-3, GR-RL | 具身智能/VLA | **上市巨头** | Seed 团队专注通用 VLA 研究，GR-3 (40B) 是全球最大 VLA 之一；GR-RL 首个完成真机穿鞋带。[[官网](https://seed.bytedance.com/en/gr_rl)] |
 | **Unitree (宇树科技)** | Go2, B2, H1, G1 | 四足, 人形 | **B轮+ (独角兽)** | 行业领跑者，产品线最全，出货量大，性价比高。 |
 | **UBTech (优必选)** | Walker S, Cruzr | 人形, 服务 | **上市 (HK.9880)** | "人形机器人第一股"，工业场景落地快，规模巨大。 |
 | **Agibot (智元机器人)** | 远征 A2, 灵犀 X1 | 人形, 灵巧手 | **独角兽 (>70亿)** | 稚晖君创业项目，迭代速度极快，人才密度高。 |
@@ -26,13 +27,13 @@
 ## 求职建议
 
 ### 算法岗位关注点
-- **VLA/具身智能**: Agibot, X Square, Galbot, Robot Era
+- **VLA/具身智能**: ByteDance Seed, Agibot, X Square, Galbot, Robot Era
 - **运动控制/强化学习**: Unitree, LimX Dynamics, Deep Robotics
 - **SLAM/导航**: AgileX, Deep Robotics, Xiaomi
 - **感知/视觉**: UBTech, Fourier, Astribot
 
 ### 工作地点
-- **北京**: UBTech, Galbot, Robot Era, Kepler
+- **北京**: ByteDance Seed, UBTech, Galbot, Robot Era, Kepler
 - **上海**: Fourier, LimX Dynamics, Deep Robotics
 - **深圳**: Unitree, Agibot, Dreame
 - **杭州**: Unitree, X Square
