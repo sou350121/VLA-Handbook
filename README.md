@@ -20,17 +20,22 @@
 
 1. **全中文内容**: 所有文档均使用简体中文编写，专业术语保留英文对照。
 2. **最新技术覆盖**:
-    - 包含了 **Physical Intelligence (Pi)** 的 π0, π0.5, π0.6 模型解析。
-    - 涵盖了 **OpenVLA**, **WALL-OSS** (X Square), **Galaxea G0** (星海图) 等开源 SOTA 模型。
-    - 详解了 **FAST** 动作 Token 化（DCT + BPE，5倍训练加速）。
-    - 深入讲解 **Knowledge Insulation**（梯度隔离，防止灾难性遗忘）。
-    - 新增 **高效微调** (LoRA/QLoRA) 和 **量化理论** (AWQ, GPTQ) 详解。
-    - 新增 **空间数学** (坐标系转换, 旋转表示) 和 **评估体系** (Benchmarks, Metrics)。
-    - 新增 **[视觉感知技术](./theory/perception_techniques.md)** (检测/跟踪/Occupancy/BEV/位姿估计)。
-    - 新增 **[运动规划](./theory/motion_planning.md)** (RRT/PRM、TrajOpt、MoveIt)。
-    - 新增 **[状态估计与传感器融合](./theory/state_estimation.md)** (Kalman/UKF、Particle、VIO)。
-    - 新增 **[点云理解与 SLAM](./theory/pointcloud_slam.md)** (PointNet/KPConv、LOAM/LIO-SAM)。
-    - 新增 **[抓取算法与仿真平台](./theory/grasp_algorithms.md)** (DexGraspNet/GraspGF、Isaac Sim/SAPIEN)。
+    - 🆕 **2025 最新模型**: **Evo-1** (770M, LIBERO 94.8%), **SmolVLA** (450M, 60Hz), **ControlVLA** (10-shot 少样本)
+    - 🆕 **潜在动作学习**: **UniVLA** (IJRR 2024), **EvoVLA**, **MemoryVLA** - 跨机器人泛化新范式
+    - 🆕 **小模型 VLA 研究**: 边缘部署、模型压缩、知识蒸馏、210M 超越 55B 的惊人发现
+    - 🆕 **ByteDance GR-RL**: 三阶段 RL 训练、形态对称增强、首个真机穿鞋带 VLA
+    - 🆕 **论文索引系统**: 多维度查找（技术/公司/时间）、按分类组织的文献综述
+    - 包含了 **Physical Intelligence (Pi)** 的 π0, π0.5, π0.6 模型深度解析
+    - 涵盖了 **OpenVLA**, **WALL-OSS** (X Square), **Galaxea G0** (星海图) 等开源 SOTA 模型
+    - 详解了 **FAST** 动作 Token 化（DCT + BPE，5倍训练加速）
+    - 深入讲解 **Knowledge Insulation**（梯度隔离，防止灾难性遗忘）
+    - 新增 **高效微调** (LoRA/QLoRA) 和 **量化理论** (AWQ, GPTQ) 详解
+    - 新增 **空间数学** (坐标系转换, 旋转表示) 和 **评估体系** (Benchmarks, Metrics)
+    - 新增 **[视觉感知技术](./theory/perception_techniques.md)** (检测/跟踪/Occupancy/BEV/位姿估计)
+    - 新增 **[运动规划](./theory/motion_planning.md)** (RRT/PRM、TrajOpt、MoveIt)
+    - 新增 **[状态估计与传感器融合](./theory/state_estimation.md)** (Kalman/UKF、Particle、VIO)
+    - 新增 **[点云理解与 SLAM](./theory/pointcloud_slam.md)** (PointNet/KPConv、LOAM/LIO-SAM)
+    - 新增 **[抓取算法与仿真平台](./theory/grasp_algorithms.md)** (DexGraspNet/GraspGF、Isaac Sim/SAPIEN)
 3. **硬件选型指南**:
     - 重点加强了 **灵巧手 (Dexterous Hands)** 的介绍 (Shadow, Inspire, Unitree)。
     - 新增 **触觉传感器 (Tactile Sensors)** 深度解析 (GelSight, Tashan, Parsen)。
@@ -53,16 +58,20 @@
 ├── theory/                     # 理论基础
 │   ├── README.md               # 索引
 │   ├── README_FUN.md           # 人话版索引 (轻松理解版)
+│   ├── paper_index.md          # 🆕 论文索引 (多维度查找: 技术/公司/时间)
+│   ├── literature_review.md    # 🆕 核心文献技术归纳 (按技术分类组织)
+│   ├── small_vla_models.md     # 🆕 小模型 VLA 研究 (Evo-1, SmolVLA, 边缘部署)
+│   ├── vla_challenges.md       # 🆕 VLA 十大挑战 (NTU/Stanford 2025)
 │   ├── vla_arch.md             # VLA 核心架构 (RT-1, RT-2, OpenVLA, Pi, WALL-OSS)
 │   ├── transformer_vs_cnn.md   # Backbone 对比 (ViT vs ResNet, SigLIP)
 │   ├── action_representations.md # 动作生成范式 (Tokenization vs Diffusion vs Flow)
 │   ├── fast.md                 # FAST 动作 Token 化 (DCT + BPE, 5倍加速)
 │   ├── diffusion_policy.md     # 扩散策略详解 (DDPM, DDIM, EBM)
 │   ├── flash_attention.md      # 性能优化 (Kernel Fusion)
-│   ├── literature_review.md    # 核心文献技术归纳 (包含10个模型对比)
 │   ├── pi0_flow_matching.md    # Pi0 代码解构 (Flow Matching)
 │   ├── pi0_5_dissection.md     # Pi0.5 模型解剖 (Unified Model)
 │   ├── pi0_6_dissection.md     # Pi0.6 模型解剖 (Recap RL)
+│   ├── gr_rl_dissection.md     # 🆕 GR-RL 深度解析 (ByteDance Seed, 三阶段 RL)
 │   ├── wall_oss.md             # WALL-OSS 深度解析 (Uni-CoT, X Square Robot)
 │   ├── galaxea_g0.md           # Galaxea G0 双系统 VLA (星海图智能)
 │   ├── knowledge_insulation.md # 知识绝缘技术 (防止灾难性遗忘)
@@ -275,6 +284,39 @@
 | **开源项目** | [OpenVLA](https://github.com/openvla/openvla) · [LeRobot](https://github.com/huggingface/lerobot) · [Octo](https://github.com/octo-models/octo) · [Pi0](https://github.com/physint-ai/openpi) |
 | **数据集** | [Open X-Embodiment](https://robotics-transformer-x.github.io/) · [RLDS](https://github.com/google-research/rlds) |
 | **社区** | ROS Discourse · PyTorch Forums · Stack Overflow · GitHub Discussions |
+
+## 📝 更新日志 (Changelog)
+
+### 2025-12-08 🆕
+- **小模型 VLA 研究**: 新增 [small_vla_models.md](./theory/small_vla_models.md)
+  - Evo-1 (770M, LIBERO 94.8% SOTA)
+  - SmolVLA (450M, 45-60Hz 推理)
+  - ControlVLA (10-20 shot 少样本适配)
+  - 核心发现：210M SmolVLA 超越 55B RT-2-X
+- **潜在动作学习**: 新增 Latent Action Learning 章节
+  - UniVLA (IJRR 2024): 从视频学习跨机器人动作
+  - EvoVLA, MemoryVLA, TTF-VLA, OmniVLA, MergeVLA
+- **论文索引系统**: [paper_index.md](./theory/paper_index.md)
+  - 多维度索引（技术/公司/时间）
+  - 按技术分类的文献综述重构
+- **ByteDance GR-RL**: [gr_rl_dissection.md](./theory/gr_rl_dissection.md)
+  - 三阶段 RL 训练、形态对称增强
+  - 首个真机穿鞋带 VLA (78% 成功率)
+- **VLA 十大挑战**: [vla_challenges.md](./theory/vla_challenges.md)
+  - NTU/Stanford 2025 研究方向
+
+### 2025-12-06
+- 新增 VLA 总工程师研究方案系列
+- 工程师 vs 生物学家三轮辩论
+- 技术路线顾问细节研发方案
+
+### 2025-12-05
+- 新增多模态模型详解，包含 2025 最新 VLM
+- π0.6 Action Expert 深度解析
+
+### 2025-12-01
+- 新增视觉感知、运动规划、SLAM 专题
+- 新增传感器集成与末端执行器控制
 
 ## 🤝 贡献 (Contributing)
 
