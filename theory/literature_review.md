@@ -157,6 +157,82 @@
 
 ---
 
+#### 1.5 Latent Action 系列 (潜在动作学习) 🆕
+
+> **核心思想**: 从视频中学习"任务中心"的潜在动作表示，实现跨机器人泛化
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│              传统 VLA vs Latent Action VLA                       │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│   传统 VLA:                                                      │
+│   Image + Language ──→ Specific Robot Action (7-DoF)            │
+│                        └── 绑定特定机器人                        │
+│                                                                 │
+│   Latent Action VLA:                                            │
+│   Video ──→ Latent Action ──→ Decoder ──→ Any Robot Action      │
+│             (任务中心表示)      (可插拔)    (不同机器人)          │
+│             └── 机器人无关 ─────┘                                │
+│                                                                 │
+│   优势:                                                         │
+│   • 可利用海量互联网视频                                         │
+│   • 潜在动作空间更易泛化                                         │
+│   • 换机器人只需换 Decoder                                       │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+##### UniVLA (IJRR 2024)
+> **论文**: [UniVLA: Learning to Act Anywhere with Task-centric Latent Actions](https://journals.sagepub.com/doi/full/10.1177/02783649241227559)
+> **arXiv**: [2505.06111](https://arxiv.org/abs/2505.06111)
+
+- **核心问题**: 如何利用视频数据训练跨机器人泛化的 VLA 策略。
+- **核心技术**: **Task-centric Latent Actions (任务中心潜在动作)**。
+- **架构设计**:
+    - **Video Encoder**: 从视频序列提取视觉特征
+    - **Latent Action Model**: 学习与机器人无关的"任务意图"表示
+    - **Robot-specific Decoder**: 将潜在动作解码为具体机器人动作
+- **训练数据**: 互联网视频 + 机器人演示数据
+- **Key Contribution**: 
+    - 首次在 IJRR 顶刊发表的潜在动作 VLA 框架
+    - 在操作和导航任务上实现 SOTA
+    - 有效的 Sim-to-Real 迁移
+
+##### EvoVLA (2025)
+> **论文**: [EvoVLA: Self-Evolving Vision-Language-Action Model](https://arxiv.org/abs/2511.16166)
+
+- **核心问题**: 解决长时程任务中的"阶段幻觉"问题（模型报告进度 > 实际进度）。
+- **核心技术**: **自进化框架 (Self-Evolving Framework)**。
+- **三大创新**:
+    - **SAR (Stage-Aligned Reward)**: 阶段对齐奖励，三元对比学习
+    - **POE (Pose-Based Object Exploration)**: 基于姿态的探索（非原始像素）
+    - **Long-Horizon Memory**: 选择性上下文保留 + 门控融合
+- **性能**: Discoverse-L 基准上平均成功率 **69.2%** (+10.2%)，真机 **54.6%** (+11%)
+- **Key Contribution**: 解决长时程操作中的阶段幻觉，自监督持续进化
+
+##### MemoryVLA (2025)
+> **论文**: [MemoryVLA: Memory-Augmented VLA for Long-Horizon Manipulation](https://arxiv.org/abs/2508.19236)
+
+- **核心问题**: 长时程任务中的非马尔可夫性问题。
+- **核心技术**: **感知-认知记忆系统 (Perception-Cognition Memory)**。
+- **架构设计**:
+    - **工作记忆**: 短期任务上下文
+    - **感知记忆**: 历史视觉观测
+    - **认知记忆**: 高层任务语义
+- **Key Contribution**: 通过显式记忆机制处理长序列依赖
+
+##### 其他 2025 相关工作
+
+| 模型 | 核心创新 | 论文链接 |
+|:---|:---|:---|
+| **TTF-VLA** | Temporal Token Fusion，训练无关的多帧融合 | [arXiv:2508.19257](https://arxiv.org/abs/2508.19257) |
+| **OmniVLA** | 多传感器感知（红外/雷达/麦克风） | [arXiv:2511.01210](https://arxiv.org/abs/2511.01210) |
+| **MergeVLA** | 跨技能模型合并，知识迁移 | [arXiv:2511.18810](https://arxiv.org/abs/2511.18810) |
+| **ContextVLA** | 多帧上下文压缩 | 2025 |
+| **ReconVLA** | 隐式视觉注意力引导 | [arXiv:2508.10333](https://arxiv.org/abs/2508.10333) |
+
+---
+
 ### 2. 训练方法 (Training Methods)
 
 #### 2.1 BC (Behavior Cloning)

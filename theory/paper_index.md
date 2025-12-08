@@ -1,7 +1,7 @@
 # VLA 论文索引 (Paper Index)
 
 > **快速查找**: 多维度索引系统，帮助快速定位相关论文
-> **最后更新**: 2025-12-06
+> **最后更新**: 2025-12-08
 
 ---
 
@@ -35,6 +35,9 @@
 | **架构创新** | WALL-OSS | [详细](#wall-oss) |
 | | Galaxea G0 | [详细](#galaxea-g0) |
 | **训练技术** | Knowledge Insulation | [摘要](#knowledge-insulation) |
+| **Latent Action** | UniVLA | [详细](#univla) |
+| | EvoVLA | [详细](#evovla) |
+| | MemoryVLA | [详细](#memoryvla) |
 
 ### 按公司分类索引
 
@@ -67,11 +70,17 @@
 | | RDT-1B | [详细](#rdt) |
 | | Galaxea G0 | [详细](#galaxea-g0) |
 | | Knowledge Insulation | [摘要](#knowledge-insulation) |
+| | UniVLA | [详细](#univla) |
 | **2025** | π0.5 | [深度解析](./pi0_5_dissection.md) |
 | | π0.6 | [深度解析](./pi0_6_dissection.md) |
 | | FAST | [详细](#fast) |
 | | GR-RL | [深度解析](./gr_rl_dissection.md) |
 | | WALL-OSS | [详细](#wall-oss) |
+| | EvoVLA | [详细](#evovla) |
+| | MemoryVLA | [详细](#memoryvla) |
+| | TTF-VLA | [详细](#ttf-vla) |
+| | OmniVLA | [详细](#omnivla) |
+| | MergeVLA | [详细](#mergevla) |
 
 ---
 
@@ -129,6 +138,34 @@
   - 技术: CVAE + Action Chunking
   - 动作空间: 连续
   - [详细内容](./act.md)
+
+##### Latent Action 系列 🆕
+- **UniVLA** (IJRR 2024)
+  - 技术: Task-centric Latent Actions
+  - 核心: 从视频学习机器人无关的动作表示
+  - [详细内容](./literature_review.md#univla-ijrr-2024)
+
+- **EvoVLA** (2025)
+  - 技术: Self-Evolving + Stage-Aligned Reward
+  - 核心: 解决长时程"阶段幻觉"问题
+  - [详细内容](./literature_review.md#evovla-2025)
+
+- **MemoryVLA** (2025)
+  - 技术: Perception-Cognition Memory
+  - 核心: 感知-认知记忆系统
+  - [详细内容](./literature_review.md#memoryvla-2025)
+
+- **TTF-VLA** (2025)
+  - 技术: Temporal Token Fusion
+  - 核心: 训练无关的多帧融合
+
+- **OmniVLA** (2025)
+  - 技术: Multi-sensor Perception
+  - 核心: 红外/雷达/麦克风多传感器融合
+
+- **MergeVLA** (2025)
+  - 技术: Cross-skill Model Merging
+  - 核心: 跨技能知识迁移
 
 #### 2. 训练方法
 
