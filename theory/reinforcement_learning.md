@@ -1259,4 +1259,3 @@ A:
 
 ---
 [← Back to Theory](./README.md)
-
