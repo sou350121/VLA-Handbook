@@ -26,6 +26,7 @@
 | 📚 **[文献综述](./literature_review.md)** | VLA 发展史全景图（按分类组织） |
 | 🔍 **[论文索引](./paper_index.md)** | 🆕 多维度快速查找（技术/公司/时间） |
 | 🆕 **[VLA 十大挑战](./vla_challenges.md)** | NTU/斯坦福 2025 研究方向 |
+| 🔥 **[小模型 VLA 研究](./small_vla_models.md)** | 边缘部署、SmolVLA、蒸馏压缩 |
 
 ---
 
