@@ -276,6 +276,47 @@
 
 > **选择建议**: VLA 训练首选 **PaliGemma 3B**（轻量高效）或 **SigLIP**（作为 Vision Encoder）。中文任务推荐 **Qwen2.5-VL**（🆕 2025 SOTA）。详细对比见 [多模态模型基础](./theory/multimodal_models.md#56-主流-vlm-对比表vla-训练参考)。
 
+### 🔥 π0 / OpenPI - 开源实用度最高的 VLA 模型
+
+> **Physical Intelligence** 于 2025 年 2 月开源了 **π0 (Pi-Zero)** 系列模型，是目前**工程落地首选**的 VLA 方案。
+
+| 特性 | 说明 |
+| :--- | :--- |
+| **GitHub** | [OpenPI](https://github.com/Physical-Intelligence/openpi) (⭐ 3.5k+) |
+| **HuggingFace** | [physicalintelligence/pi0](https://huggingface.co/physicalintelligence) |
+| **LeRobot 集成** | 直接通过 `lerobot` 库加载和微调 |
+| **Backbone** | PaliGemma 3B (轻量高效) |
+| **核心技术** | Flow Matching (比 Diffusion 快 5-10x) |
+| **动作空间** | 连续 (无量化误差，精度高) |
+| **推理速度** | 1-10 步 ODE Solver，支持高频控制 (50Hz) |
+| **许可证** | Apache 2.0 (商业友好) |
+
+**为什么 π0 是首选？**
+1. **开源完整**: 模型权重 + 训练代码 + 数据处理全开源
+2. **工程成熟**: Physical Intelligence 是 VLA 领域最强团队，代码质量高
+3. **性能 SOTA**: Flow Matching 架构在精度和速度上优于 Diffusion Policy
+4. **生态完善**: 与 LeRobot / HuggingFace 深度集成，开箱即用
+5. **商业可用**: Apache 2.0 许可，可用于商业产品
+
+**快速开始**:
+```bash
+# 安装
+pip install lerobot
+
+# 加载预训练模型
+from lerobot.common.policies import Pi0Policy
+policy = Pi0Policy.from_pretrained("physicalintelligence/pi0-base")
+
+# 推理
+action = policy.select_action(observation)
+```
+
+**深度学习资源**:
+- [π0 Flow Matching 原理](./theory/pi0_flow_matching.md) - 核心算法详解
+- [π0 代码解析](./theory/pi0_code_analysis.md) - OpenPI 源码导读
+- [π0.5 模型解剖](./theory/pi0_5_dissection.md) - 开放世界泛化
+- [π0.6 模型解剖](./theory/pi0_6_dissection.md) - Recap 自我进化
+
 ### 学习资源 (Resources)
 
 | 类型 | 链接 |

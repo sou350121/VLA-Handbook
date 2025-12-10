@@ -24,7 +24,7 @@
 |:---|:---|:---|
 | **Diffusion** | Diffusion Policy | [详细](#diffusion-policy) |
 | | RDT-1B | [详细](#rdt) |
-| **Flow Matching** | π0 | [深度解析](./pi0_6_dissection.md#pi0) |
+| **Flow Matching** | π0 | [深度解析](./pi0_flow_matching.md) |
 | | π0.5 | [深度解析](./pi0_5_dissection.md) |
 | | π0.6 | [深度解析](./pi0_6_dissection.md) |
 | **Tokenization** | RT-2 | [深度解析](#rt-2) |
@@ -45,7 +45,7 @@
 |:---|:---|:---|
 | **Google DeepMind** | RT-2 | [深度解析](#rt-2) |
 | | RT-1 | [详细](#rt-1) |
-| **Physical Intelligence** | π0 | [深度解析](./pi0_6_dissection.md#pi0) |
+| **Physical Intelligence** | π0 | [深度解析](./pi0_flow_matching.md) |
 | | π0.5 | [深度解析](./pi0_5_dissection.md) |
 | | π0.6 | [深度解析](./pi0_6_dissection.md) |
 | | FAST | [详细](#fast) |
@@ -66,7 +66,7 @@
 | | RT-2 | [深度解析](#rt-2) |
 | | ACT | [详细](#act) |
 | **2024** | OpenVLA | [深度解析](#openvla) |
-| | π0 | [深度解析](./pi0_6_dissection.md#pi0) |
+| | π0 | [深度解析](./pi0_flow_matching.md) |
 | | RDT-1B | [详细](#rdt) |
 | | Galaxea G0 | [详细](#galaxea-g0) |
 | | Knowledge Insulation | [摘要](#knowledge-insulation) |
@@ -105,7 +105,7 @@
 - **π0** (2024)
   - 技术: Flow Matching, ODE Solver
   - 动作空间: 连续
-  - [深度解析](./pi0_6_dissection.md#pi0)
+  - [深度解析](./pi0_flow_matching.md) | [代码解析](./pi0_code_analysis.md)
 
 - **π0.5** (2025)
   - 技术: Flow Matching + 隐式推理
