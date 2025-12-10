@@ -58,7 +58,7 @@
 
 ##### π0 (Physical Intelligence, 2024)
 > **论文**: [π0: A Generalist Robot Foundation Model](https://www.physicalintelligence.company/blog/pi0)
-> **详细解析**: [pi0_6_dissection.md](./pi0_6_dissection.md#pi0)
+> **详细解析**: [pi0_flow_matching.md](./pi0_flow_matching.md) | [代码解析](./pi0_code_analysis.md)
 
 - **核心问题**: 解决 VLM 推理速度慢、难以进行高频 (50Hz) 连续控制的问题。
 - **核心技术**: **Flow Matching (流匹配)**。
@@ -393,7 +393,7 @@
 
 #### π0 (2024.10)
 - Flow Matching + VLM
-- [深度解析](./pi0_6_dissection.md#pi0)
+- [深度解析](./pi0_flow_matching.md)
 
 #### RDT-1B (2024.10)
 - 十亿参数扩散模型

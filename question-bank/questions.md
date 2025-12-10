@@ -1109,6 +1109,142 @@ def distance(p1, p2):
 
 ---
 
+## 🧪 代码实战突击 (30 题+解答)
+
+面向 VLA 具身算法岗常考的代码/工程题，按主题分组。每题给出考察点与解答要点，便于速练。
+
+### Python 基础 (Q1-Q5)
+
+#### Q1: 实现 LRU Cache（O(1) get/put）
+- **考察点**: 哈希 + 双向链表、边界处理。
+- **解答要点**: 用 `OrderedDict` 或自建双向链表；get/put 访问需移动到表头；容量超限删除尾节点；注意空缓存、重复 key。
+
+#### Q2: 流式读取 1GB 日志统计字段频次
+- **考察点**: IO/内存控制、生成器。
+- **解答要点**: `with open(..., buffering=...)` + 行迭代；按列解析计数；避免一次性 load；可用 `collections.Counter.update`；提供 top-k 输出。
+
+#### Q3: 变长序列的滑动窗口生成器
+- **考察点**: 迭代器协议、边界。
+- **解答要点**: `yield seq[i:i+win]`，窗口不足时提前退出；可选 stride；测试空序列/窗口大于长度。
+
+#### Q4: 有限状态机解析指令流（含错误处理）
+- **考察点**: 状态设计、异常。
+- **解答要点**: 用 `Enum` 标状态，dict 映射转移；非法转移抛自定义异常；附最小单测覆盖正常/异常路径。
+
+#### Q5: CLI 扫描大文件并确认删除
+- **考察点**: `argparse`、安全性。
+- **解答要点**: 参数含目录、阈值、dry-run；用 `pathlib.rglob` 过滤；输出大小排序；删除前交互确认。
+
+### PyTorch 训练 (Q6-Q12)
+
+#### Q6: 自定义 Dataset + collate_fn 处理变长序列
+- **考察点**: 数据管线、padding。
+- **解答要点**: `__getitem__` 返回原始序列；collate 里计算 max_len，`pad_sequence`；返回 lengths 供 RNN/Transformer mask。
+
+#### Q7: 训练循环含 AMP、梯度裁剪、LR 调度
+- **考察点**: 训练细节。
+- **解答要点**: `autocast` + `GradScaler`；`clip_grad_norm_`；scheduler.step() 时机（常在 optimizer.step 后）；记录 loss/grad norm。
+
+#### Q8: checkpoint 保存/恢复
+- **考察点**: 状态管理。
+- **解答要点**: 保存 `model/optimizer/scheduler/scaler/state_dict` 与 epoch/step；恢复后 `model.train()`；处理缺失文件与设备映射。
+
+#### Q9: DDP 最小示例
+- **考察点**: 多卡并行。
+- **解答要点**: `torch.distributed.init_process_group`；`DistributedSampler`；`DDP(model, device_ids=[rank])`；设置随机种子确保可复现。
+
+#### Q10: 自定义 Autograd Function (可微 clamp)
+- **考察点**: 前向/反向。
+- **解答要点**: `ctx.save_for_backward`；反向对区间外梯度截断；用数值梯度检验 `gradcheck`。
+
+#### Q11: 推理性能分析与优化
+- **考察点**: profiler 与优化手段。
+- **解答要点**: `torch.profiler.profile` 找热点；优化：避免重复 `.to()`、改用 `torch.compile`/JIT、合并小张量操作、使用 `pin_memory`/`non_blocking=True`。
+
+#### Q12: 简单权重衰减与梯度分组
+- **考察点**: 优化器配置。
+- **解答要点**: 将 `bias/LayerNorm` 排除 weight decay；param_groups 配置；验证参数量与学习率正确下发。
+
+### Git 协作 (Q13-Q16)
+
+#### Q13: 清理脏工作树并同步远端
+- **考察点**: 安全同步流程。
+- **解答要点**: `git status`→`git stash push -u`→`git fetch`→`git rebase origin/main` 或新分支→`git stash pop` 解决冲突→提交。
+
+#### Q14: `.gitignore` 设计避免泄漏
+- **考察点**: 配置与安全。
+- **解答要点**: 忽略 `.pt/.ckpt/.h5`、数据目录、`__pycache__`、`*.so`、日志；说明理由（体积/隐私/可重建）。
+
+#### Q15: `rebase -i` 压缩/改写提交
+- **考察点**: 历史整理。
+- **解答要点**: `git rebase -i HEAD~N` 选择 `squash/fixup/edit`；冲突用 `git status` 定位，解决后 `git rebase --continue`；必要时 `--abort`。
+
+#### Q16: pre-commit 钩子示例
+- **考察点**: 自动化检查。
+- **解答要点**: `.pre-commit-config.yaml` 启动 `black/ruff/mypy`；安装 `pre-commit install`；提交时阻止未格式化代码。
+
+### SLAM / 视觉里程计 (Q17-Q23)
+
+#### Q17: 特征匹配 + RANSAC 估计单应/本质矩阵
+- **考察点**: 前端估计。
+- **解答要点**: ORB/SIFT + `cv2.BFMatcher`；`findHomography` 或 `findEssentialMat` with RANSAC；输出内点掩码，剔除外点后姿态恢复。
+
+#### Q18: PnP 位姿估计
+- **考察点**: 3D-2D 求解。
+- **解答要点**: `cv2.solvePnP` / `solvePnPRansac`；给内参、畸变；用 EPnP 初值；验证重投影误差。
+
+#### Q19: 两帧视觉里程计 (EP & Pose Recovery)
+- **考察点**: 几何推导。
+- **解答要点**: 归一化相机坐标→`findEssentialMat`→`recoverPose`；尺度不可观，需 IMU/里程计融合。
+
+#### Q20: 简易闭环检测
+- **考察点**: Place Recognition。
+- **解答要点**: ORB BoW/NetVLAD 向量；余弦相似度阈值 + temporal consistency；触发回环约束。
+
+#### Q21: Pose Graph 优化
+- **考察点**: 后端优化。
+- **解答要点**: 节点=位姿，边=相对约束；误差项 `log(T_ij^-1 * T_i^-1 * T_j)`；用 G2O/Ceres 优化；鲁棒核抑制外点。
+
+#### Q22: 关键帧策略
+- **考察点**: 前端管理。
+- **解答要点**: 新帧加入条件：视差阈值/跟踪内点数/时间间隔；淘汰：冗余、覆盖率低；维护共视图更新边。
+
+#### Q23: 立体匹配 + 视差优化
+- **考察点**: 立体几何。
+- **解答要点**: 构造代价体（SAD/ Census），WTA 或 SGM；子像素插值；左右一致性检查 + 中值滤波。
+
+### 运动控制 / 轨迹规划 (Q24-Q30)
+
+#### Q24: 离散 PID（抗饱和）
+- **考察点**: 控制基础。
+- **解答要点**: `u = kp*e + ki*Σe*dt + kd*Δe/dt`；积分分离/限幅；死区与微分先行；仿真阶跃响应。
+
+#### Q25: Pure Pursuit 跟踪
+- **考察点**: 低速路径跟踪。
+- **解答要点**: 选前视点，曲率 `2*y_l/Ld^2`；转向角 `delta = atan(L*curvature)`；前视距离随速度调节。
+
+#### Q26: Stanley 控制器
+- **考察点**: 横向控制。
+- **解答要点**: 转向 = 航向误差 + `atan(k * crosstrack / v)`；低速抖动用增益限制或加前馈。
+
+#### Q27: A* / Hybrid A* 轨迹规划
+- **考察点**: 路径搜索。
+- **解答要点**: 栅格 + 启发式（Manhattan/Euclid）；Hybrid A* 采样朝向和 kinematic step；记录父节点复原路径；碰撞检测膨胀障碍。
+
+#### Q28: MPC (单轨模型 QP)
+- **考察点**: 预测控制。
+- **解答要点**: 线性化单轨模型，构建 `x_{k+1}=Ax+Bu`；代价包含跟踪误差与控制增量；用 OSQP/qpOASES 求解；软约束处理边界。
+
+#### Q29: 碰撞检测与安全距离
+- **考察点**: 几何判定。
+- **解答要点**: 车体矩形→圆或多边形；障碍膨胀 `inflate_radius`; 用 SAT/圆距离检测路径可行性；提前退出提升性能。
+
+#### Q30: 控制回路延迟/噪声仿真
+- **考察点**: 鲁棒性。
+- **解答要点**: 在仿真中注入时延/噪声；观察超调/震荡；改进：滤波、前馈、降低增益、加预测补偿。
+
+---
+
 ## 📝 总结
 
 本题库按三个核心类别组织，涵盖了 VLA 算法岗面试的高频问题。每个问题都包含：

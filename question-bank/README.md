@@ -7,8 +7,13 @@
     - 概念题: RT-2, Tokenization, Sim-to-Real, **Transformer vs CNN**, **Tactile VLA**, **Flash Attention**
     - 场景题: 小样本训练, 透明物体抓取
     - 代码题: PID, 几何计算
-    - **[OpenVLA 微调实战 (Fine-tuning)](./openvla_finetuning.md)** [New]
-2. **[考官视角 (Interviewer Guide)](./interviewer_guide.md)**
+2. **[代码实战题 (Code Questions)](./code_questions.md)** [New]
+    - 含推荐刷题顺序：Python 基础 → 数值 → 数据格式 → PyTorch → 学习算法 → Git → SLAM → 控制
+    - Python/PyTorch 基础、Git 协作、SLAM/运动控制、学习算法、数值计算、数据格式/对齐、视触数据处理 50- 题
+3. **[代码答案与解释 (Code Answers)](./code_answers.md)** [New]
+    - 同步的详细思路、示例代码、常见坑，附推荐刷题顺序
+4. **[OpenVLA 微调实战 (Fine-tuning)](./openvla_finetuning.md)** [New]
+5. **[考官视角 (Interviewer Guide)](./interviewer_guide.md)**
     - 评估维度 (Junior vs Senior)
     - 常见陷阱 (Red Flags)
     - 反向提问
