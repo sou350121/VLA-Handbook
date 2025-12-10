@@ -306,6 +306,267 @@ loss = CrossEntropy(decoder(tactile_emb, vision_emb), text_tokens)
 - **训练**: 使用大规模的多模态数据集 (包含图像、触觉图、语言指令、动作)。
 - **能力**: 能够执行 "Pick up the softest object" (抓起最软的物体) 这种需要跨模态推理的任务。
 
+---
+
+### 3.4 🔥 SaTA: 空间锚定触觉感知 (Sharpa + 清华 + 武大, 2025)
+
+> **论文**: [SaTA: Spatially-anchored Tactile Awareness for Dexterous Manipulation](https://arxiv.org/abs/2510.14647)
+> **机构**: Sharpa (新加坡 AI 机器人公司) + 清华大学 + 武汉大学
+> **核心突破**: **首次将触觉信号锚定到机械手自身坐标系**，实现视觉遮挡下的亚毫米级精度"盲操作"
+
+#### 3.4.1 核心问题
+
+传统触觉方法将触觉处理为简单的图像或局部纹理，**缺乏空间语义**：
+- 模型不知道"接触发生在哪里"
+- 无法判断"角度偏了多少"
+- 不清楚"下一步动作应该往哪个方向做"
+
+**类比**: 人类闭眼插充电线时，能凭"手感"判断插头和插孔的位置关系，这依赖于触觉与空间方位感的结合。SaTA 首次让机器人拥有这种能力。
+
+#### 3.4.2 架构设计
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                    SaTA 架构: 空间锚定触觉感知                        │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                     │
+│   触觉图像 (320×240)      指尖 6D 位姿          时间步              │
+│   [B, 5, H, W, 3]        [B, 5, 6]             t                   │
+│   (5个指尖传感器)         (手坐标系)                                 │
+│        │                     │                  │                   │
+│        ▼                     ▼                  ▼                   │
+│   ┌─────────┐          ┌──────────────┐   ┌──────────┐             │
+│   │ViT/CNN  │          │  傅里叶编码   │   │Sinusoidal│             │
+│   │Encoder  │          │ (多尺度6D)   │   │Embedding │             │
+│   └────┬────┘          └──────┬───────┘   └────┬─────┘             │
+│        │                      │                 │                   │
+│        ▼                      ▼                 │                   │
+│   Tactile                Position              │                   │
+│   Features               Encoding              │                   │
+│   [B, 5, D]              [B, 5, D]             │                   │
+│        │                      │                 │                   │
+│        │         ┌────────────┘                 │                   │
+│        │         │                              │                   │
+│        ▼         ▼                              │                   │
+│   ┌─────────────────────────────────────────┐   │                   │
+│   │         FiLM 调制层                       │   │                   │
+│   │  ┌─────────────────────────────────┐    │   │                   │
+│   │  │ γ = MLP(pos_enc)                │    │◀──┘                   │
+│   │  │ β = MLP(pos_enc)                │    │                       │
+│   │  │                                 │    │                       │
+│   │  │ out = γ * tactile_feat + β     │    │                       │
+│   │  │       ↑                         │    │                       │
+│   │  │  空间信息调制触觉特征            │    │                       │
+│   │  └─────────────────────────────────┘    │                       │
+│   └────────────────┬────────────────────────┘                       │
+│                    │                                                │
+│                    ▼                                                │
+│            空间锚定触觉 Token                                        │
+│            (具有空间语义的触觉表示)                                   │
+│                    │                                                │
+│                    ▼                                                │
+│            Policy Network (动作预测)                                 │
+│                    │                                                │
+│                    ▼                                                │
+│              🦾 精细动作                                             │
+│                                                                     │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+#### 3.4.3 三大核心设计
+
+| 设计 | 技术细节 | 作用 |
+| :--- | :--- | :--- |
+| **1. 手坐标系锚定** | 触觉锚定到手的 **URDF 坐标系** (腕部参考系)，而非世界坐标系 | 灵巧操作的成功取决于手内的相对几何关系，无论手腕如何移动，几何约束保持不变 |
+| **2. 傅里叶位置编码** | 对完整 **6D 位姿** (3D 位置 + 3D 旋转) 进行**多尺度编码** | 模型既能进行粗粒度的对齐判断，又能实现毫米级的微调操作 |
+| **3. FiLM 调制** | 使用 **Feature-wise Linear Modulation** 让空间信息调制触觉特征处理 | 每个触觉测量都成为既包含感知信息又具有空间语义的 Token |
+
+**傅里叶位置编码公式**:
+
+```math
+\gamma(p) = [\sin(2^0 \pi p), \cos(2^0 \pi p), ..., \sin(2^{L-1} \pi p), \cos(2^{L-1} \pi p)]
+```
+
+其中 $p$ 是 6D 位姿向量，$L$ 是频率级数。多尺度编码使得模型对不同精度的空间信息都敏感。
+
+**FiLM 调制公式**:
+
+```math
+\text{FiLM}(x, \gamma, \beta) = \gamma \cdot x + \beta
+```
+
+其中 $\gamma, \beta$ 由位置编码通过 MLP 生成，$x$ 是触觉特征。
+
+#### 3.4.4 硬件配置
+
+| 组件 | 规格 |
+| :--- | :--- |
+| **灵巧手** | SharpaWave，**22 自由度** |
+| **触觉传感器** | 每指尖 1 个视觉触觉传感器 |
+| **触觉分辨率** | **320×240** @ 30Hz |
+| **控制频率** | 30 Hz |
+
+#### 3.4.5 实验任务与结果
+
+| 任务 | 难点 | SaTA 成功率 | 最强基线 | 提升 |
+| :--- | :--- | :--- | :--- | :--- |
+| **自由空间 USB-C 插入** | 双手协调、空中对准、视觉完全遮挡 | **35%** | ~0% | N/A |
+| **扑克牌展开** | 精确侧向力控制，防止弯折 | **95%** | 65% | +30% |
+| **灯泡安装** | 垂直对准、旋入力控制 | **100%** | 70% | +30% |
+| **平均** | - | **76.7%** | 46.7% | **+30%** |
+
+**关键指标**:
+- **首次接触成功率 (FC)**: SaTA 48.3% vs 基线 25%
+- **平均完成时间**: 缩短 **28%** (更少的反复试探)
+
+#### 3.4.6 基线对比
+
+| 方法 | 描述 | 问题 |
+| :--- | :--- | :--- |
+| **Vision Only** | 纯视觉方法 | 视觉遮挡时完全失效 |
+| **Tactile-Flat** | 触觉作为平面图像 | 无空间语义，无法推理位置关系 |
+| **Tactile-Global** | 触觉锚定到世界坐标系 | 手腕移动时几何约束改变 |
+| **SaTA** | 触觉锚定到手坐标系 + FiLM 调制 | ✅ 空间语义完整 |
+
+#### 3.4.7 触觉感知的三个层次
+
+论文提出了灵巧操作中触觉感知的渐进层次：
+
+```
+Level 1: 门控信号 (Gating Signal) - 最基础
+├── 检测力突变以触发策略阶段转换
+├── 例: USB 插入时力峰值标志"对齐→插入"阶段转换
+└── 实现: 简单阈值检测
+
+Level 2: 几何推理 (Geometric Reasoning) - SaTA 重点
+├── 提供高精度的局部几何信息
+├── 通过空间锚定组织成适合推理的空间表示
+├── 达到毫米级精度控制
+└── 实现: FiLM + 傅里叶编码
+
+Level 3: 力主导控制 (Force-Dominant Control) - 最高级
+├── 策略完全基于力/触觉反馈，视觉仅提供粗略引导
+├── 例: 笔旋转需要持续的力调制
+└── 实现: 需要真实力反馈的触觉手套 或 真实世界 RL
+```
+
+#### 3.4.8 核心洞察与意义
+
+1. **范式转变**: 从"被动触觉"到"空间锚定触觉"
+   - 传统: 触觉 = 神经末梢 (只知道"有接触")
+   - SaTA: 触觉 = 触觉大脑 (知道"在哪里接触、偏了多少、该怎么调")
+
+2. **坐标系选择至关重要**:
+   - 世界坐标系: 手腕移动时几何约束改变，模型需要重新学习
+   - **手坐标系**: 几何约束不变，策略可迁移
+
+3. **设计原则通用性**: SaTA 的空间锚定原则可迁移至其他提供局部测量的传感模态 (如接近觉、力觉)
+
+#### 3.4.9 代码实现要点
+
+```python
+import torch
+import torch.nn as nn
+
+class FourierPositionEncoding(nn.Module):
+    """6D 位姿的傅里叶位置编码"""
+    def __init__(self, d_model=256, num_frequencies=10):
+        super().__init__()
+        self.num_frequencies = num_frequencies
+        # 频率: 2^0, 2^1, ..., 2^(L-1)
+        self.frequencies = 2.0 ** torch.arange(num_frequencies)
+        self.proj = nn.Linear(6 * 2 * num_frequencies, d_model)
+    
+    def forward(self, pose_6d):
+        """
+        pose_6d: [B, 5, 6] - 5个指尖的 6D 位姿 (3D pos + 3D rot)
+        """
+        B, N, D = pose_6d.shape
+        # 多尺度编码
+        freqs = self.frequencies.to(pose_6d.device)  # [L]
+        pose_scaled = pose_6d.unsqueeze(-1) * freqs * torch.pi  # [B, N, 6, L]
+        encoding = torch.cat([
+            torch.sin(pose_scaled),
+            torch.cos(pose_scaled)
+        ], dim=-1)  # [B, N, 6, 2L]
+        encoding = encoding.flatten(-2)  # [B, N, 6*2L]
+        return self.proj(encoding)  # [B, N, d_model]
+
+
+class FiLMLayer(nn.Module):
+    """Feature-wise Linear Modulation"""
+    def __init__(self, feature_dim, condition_dim):
+        super().__init__()
+        self.gamma_net = nn.Linear(condition_dim, feature_dim)
+        self.beta_net = nn.Linear(condition_dim, feature_dim)
+    
+    def forward(self, x, condition):
+        """
+        x: [B, N, D] - 触觉特征
+        condition: [B, N, D] - 空间编码
+        """
+        gamma = self.gamma_net(condition)  # 缩放因子
+        beta = self.beta_net(condition)    # 偏移量
+        return gamma * x + beta
+
+
+class SaTAModule(nn.Module):
+    """空间锚定触觉感知模块"""
+    def __init__(self, tactile_dim=256, d_model=256):
+        super().__init__()
+        self.tactile_encoder = nn.Sequential(
+            nn.Conv2d(3, 64, 7, stride=2, padding=3),
+            nn.ReLU(),
+            nn.Conv2d(64, 128, 3, stride=2, padding=1),
+            nn.ReLU(),
+            nn.AdaptiveAvgPool2d(1),
+            nn.Flatten(),
+            nn.Linear(128, tactile_dim)
+        )
+        self.pos_encoder = FourierPositionEncoding(d_model)
+        self.film = FiLMLayer(tactile_dim, d_model)
+    
+    def forward(self, tactile_images, fingertip_poses):
+        """
+        tactile_images: [B, 5, 3, H, W] - 5个指尖触觉图像
+        fingertip_poses: [B, 5, 6] - 手坐标系下的 6D 位姿
+        """
+        B, N = tactile_images.shape[:2]
+        
+        # 1. 触觉编码
+        tactile_flat = tactile_images.flatten(0, 1)  # [B*5, 3, H, W]
+        tactile_feat = self.tactile_encoder(tactile_flat)  # [B*5, D]
+        tactile_feat = tactile_feat.view(B, N, -1)  # [B, 5, D]
+        
+        # 2. 空间编码 (锚定到手坐标系)
+        pos_enc = self.pos_encoder(fingertip_poses)  # [B, 5, D]
+        
+        # 3. FiLM 调制: 空间信息调制触觉特征
+        spatially_anchored_tactile = self.film(tactile_feat, pos_enc)
+        
+        return spatially_anchored_tactile  # [B, 5, D]
+```
+
+#### 3.4.10 面试考点
+
+**Q: SaTA 为什么选择手坐标系而不是世界坐标系?**
+
+A: 灵巧操作的成功取决于**手内的相对几何关系** (如指尖与物体的相对位置)，而非手在世界中的绝对位置。锚定到手坐标系后：
+- 无论手腕如何移动或机械臂如何摆放，完成任务的几何约束始终不变
+- 策略可在不同位姿下复用，无需针对每个位置重新学习
+
+**Q: FiLM 调制的作用是什么?**
+
+A: FiLM 让空间信息**直接调制**触觉特征的处理过程，而非简单拼接。这使得：
+- 触觉纹理、边缘方向、压力分布等每个测量都**同时具有感知信息和空间语义**
+- 相比 Concat，FiLM 的条件信息注入更深层次
+
+**Q: 傅里叶位置编码的多尺度有什么好处?**
+
+A: 低频成分捕捉粗粒度位置 (厘米级)，高频成分捕捉细粒度位置 (毫米级)。这允许模型：
+- 先做粗对准 (低频敏感)
+- 再做精细调整 (高频敏感)
+
 ## 4. 挑战与未来
 1.  **数据稀缺**: 相比于图像数据，高质量的触觉-语言对 (Tactile-Language Pairs) 非常少。
 2.  **Sim-to-Real**: 触觉仿真非常困难 (涉及复杂的软体形变)，目前主要依赖真机数据收集。
