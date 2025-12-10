@@ -121,7 +121,9 @@
 
 | 公司 | 模型 | 文件 | 核心亮点 |
 |:-----|:-----|:-----|:---------|
-| **Physical Intelligence** | π0.5 | [`pi0_5_dissection.md`](./pi0_5_dissection.md) | Flow Matching + 隐式推理 |
+| **Physical Intelligence** | π0 ⭐ | [`pi0_flow_matching.md`](./pi0_flow_matching.md) | **开源 (OpenPI)**, Flow Matching 核心 |
+| | | [`pi0_code_analysis.md`](./pi0_code_analysis.md) | OpenPI 代码架构深度解析 |
+| | π0.5 | [`pi0_5_dissection.md`](./pi0_5_dissection.md) | Flow Matching + 隐式推理 |
 | | π0.6 | [`pi0_6_dissection.md`](./pi0_6_dissection.md) | Recap 自我进化 + Action Expert |
 | **ByteDance Seed** | GR-RL | [`gr_rl_dissection.md`](./gr_rl_dissection.md) | MoT 架构 + 三阶段 RL 训练 |
 | **X² (自变量)** | WALL-OSS | [`wall_oss.md`](./wall_oss.md) | Uni-CoT 边想边动 |
