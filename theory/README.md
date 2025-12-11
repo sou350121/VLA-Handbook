@@ -102,7 +102,8 @@
 | 🛰️ **点云 & SLAM** | [`pointcloud_slam.md`](./pointcloud_slam.md) | 点云语义、配准、Visual/LiDAR SLAM |
 | 🤖 **抓取算法 & 仿真** | [`grasp_algorithms.md`](./grasp_algorithms.md) | DexGraspNet/GraspGF、Isaac Sim/SAPIEN 🆕 |
 | 🛡️ **知识绝缘** | [`knowledge_insulation.md`](./knowledge_insulation.md) | 微调时保护 VLM 通用常识 |
-| 🖐️ **触觉 VLA** | [`tactile_vla.md`](./tactile_vla.md) | GelSight/DIGIT，盲盒操作 |
+| 🖐️ **触觉 VLA** | [`tactile_vla.md`](./tactile_vla.md) | GelSight/DIGIT/SaTA，盲盒操作 🆕 |
+| 🎮 **Isaac Lab** | [`isaac_lab.md`](./isaac_lab.md) | 🔥 GPU 仿真框架，单卡百万 FPS 🆕 |
 
 ---
 
