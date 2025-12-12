@@ -3,6 +3,93 @@
 > **论文**: [GELLO: A General, Low-Cost, and Intuitive Teleoperation Framework for Robot Manipulators](https://arxiv.org/abs/2309.13037)
 > **GitHub**: [wuphilipp/gello_software](https://github.com/wuphilipp/gello_software)
 > **硬件 CAD**: [wuphilipp/gello_mechanical](https://github.com/wuphilipp/gello_mechanical)
+> **本指南适用**: UR5 / UR5e 机械臂
+
+---
+
+## 0. 官方仓库与硬件采购
+
+### 0.1 官方仓库结构
+
+GELLO 项目分为两个仓库：
+
+```
+wuphilipp/
+├── gello_software/          # 软件代码
+│   ├── gello/
+│   │   ├── agents/          # 策略接口
+│   │   ├── cameras/         # 相机驱动 (RealSense, USB)
+│   │   ├── dynamixel/       # Dynamixel 电机控制
+│   │   └── robots/          # 机器人驱动
+│   │       ├── ur.py        # ⭐ UR5 驱动
+│   │       ├── franka.py    # Franka 驱动
+│   │       └── xarm.py      # xArm 驱动
+│   ├── scripts/
+│   │   ├── gello_get_offset.py   # 标定脚本
+│   │   └── launch_nodes.py       # 启动脚本
+│   └── experiments/         # 实验脚本
+│
+└── gello_mechanical/        # 硬件设计
+    ├── stl/                 # 3D 打印文件
+    │   ├── ur/              # ⭐ UR5 专用零件
+    │   ├── franka/
+    │   └── xarm/
+    ├── cad/                 # SolidWorks 源文件
+    └── BOM.md               # 物料清单
+```
+
+### 0.2 硬件采购清单 (淘宝)
+
+| 零件 | 规格 | 数量 | 淘宝参考价 | 备注 |
+|:---|:---|:---|:---|:---|
+| **Dynamixel XM430-W350** | 伺服电机 | 3 | ~¥800/个 | 大关节 (J1-J3) |
+| **Dynamixel XL330-M288** | 伺服电机 | 4 | ~¥200/个 | 小关节 (J4-J6) + 夹爪 |
+| **U2D2** | USB-Dynamixel 适配器 | 1 | ~¥300 | 官方适配器 |
+| **U2D2 Power Hub** | 电源分配板 | 1 | ~¥150 | 可选，方便供电 |
+| **12V 5A 电源** | DC 电源 | 1 | ~¥50 | XM430 供电 |
+| **5V 3A 电源** | DC 电源 | 1 | ~¥30 | XL330 供电 |
+| **3D 打印件** | PLA/PETG | 1套 | ~¥200-500 | 淘宝代打印 |
+| **轴承 6800ZZ** | 10×19×5mm | 若干 | ~¥5/个 | 关节轴承 |
+| **螺丝套装** | M2/M2.5/M3 | 1套 | ~¥30 | 内六角螺丝 |
+
+**总成本**: 约 **¥3500-4500** (不含机械臂)
+
+**淘宝搜索关键词**:
+- Dynamixel 伺服电机
+- U2D2 Dynamixel
+- 3D打印代工 PLA
+
+> ⚠️ **注意**: Dynamixel 电机有国产仿制品，价格约 1/3，但精度和寿命较差，建议正品。
+
+### 0.3 3D 打印说明
+
+```bash
+# 下载 UR5 专用 STL 文件
+git clone https://github.com/wuphilipp/gello_mechanical.git
+cd gello_mechanical/stl/ur
+
+# 需要打印的零件:
+ls *.stl
+# base.stl
+# link1.stl
+# link2.stl
+# link3.stl
+# link4.stl
+# link5.stl
+# link6.stl
+# gripper_mount.stl
+```
+
+**打印参数建议**:
+| 参数 | 推荐值 |
+|:---|:---|
+| 材料 | **PETG** (强度好) 或 PLA |
+| 层高 | 0.2mm |
+| 填充 | 30-50% |
+| 壁厚 | 3 层 |
+| 支撑 | 需要 (部分零件) |
+
+---
 
 ## 1. GELLO 概述
 
