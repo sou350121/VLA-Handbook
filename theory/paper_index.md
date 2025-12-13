@@ -1,7 +1,7 @@
 # VLA 论文索引 (Paper Index)
 
 > **快速查找**: 多维度索引系统，帮助快速定位相关论文
-> **最后更新**: 2025-12-08
+> **最后更新**: 2025-12-13
 
 ---
 
@@ -38,6 +38,12 @@
 | **Latent Action** | UniVLA | [详细](#univla) |
 | | EvoVLA | [详细](#evovla) |
 | | MemoryVLA | [详细](#memoryvla) |
+| **NeurIPS 2025** 🆕 | Artificial Hivemind | [详细](./neurips_2025_insights.md#1-artificial-hivemind-语言模型的同质化问题) |
+| | Gated Attention | [详细](./neurips_2025_insights.md#2-gated-attention-门控注意力机制) |
+| | 1000 Layer Networks | [详细](./neurips_2025_insights.md#3-1000-layer-networks-深层自监督-rl) |
+| | Diffusion Generalization | [详细](./neurips_2025_insights.md#4-diffusion-models-的泛化机制) |
+| | Superposition Scaling | [详细](./neurips_2025_insights.md#5-superposition-表示叠加与神经缩放) |
+| | RL Reasoning Limits | [详细](./neurips_2025_insights.md#6-rlvr-的局限性rl-真的能扩展推理能力吗) |
 
 ### 按公司分类索引
 
@@ -57,6 +63,12 @@
 | **X² (自变量)** | WALL-OSS | [详细](#wall-oss) |
 | **Galaxea AI** | G0 | [详细](#galaxea-g0) |
 | **Columbia** | Diffusion Policy | [详细](#diffusion-policy) |
+| **华盛顿大学** 🆕 | Artificial Hivemind | [详细](./neurips_2025_insights.md#1-artificial-hivemind-语言模型的同质化问题) |
+| **阿里千问** 🆕 | Gated Attention | [详细](./neurips_2025_insights.md#2-gated-attention-门控注意力机制) |
+| **普林斯顿** 🆕 | 1000 Layer Networks | [详细](./neurips_2025_insights.md#3-1000-layer-networks-深层自监督-rl) |
+| **巴黎 PSL** 🆕 | Diffusion Generalization | [详细](./neurips_2025_insights.md#4-diffusion-models-的泛化机制) |
+| **MIT** 🆕 | Superposition Scaling | [详细](./neurips_2025_insights.md#5-superposition-表示叠加与神经缩放) |
+| **清华大学** 🆕 | RL Reasoning Limits | [详细](./neurips_2025_insights.md#6-rlvr-的局限性rl-真的能扩展推理能力吗) |
 
 ### 按时间线索引
 
@@ -81,6 +93,7 @@
 | | TTF-VLA | [详细](#ttf-vla) |
 | | OmniVLA | [详细](#omnivla) |
 | | MergeVLA | [详细](#mergevla) |
+| | **NeurIPS 2025 Best Papers** 🆕 | [专题解读](./neurips_2025_insights.md) |
 
 ---
 

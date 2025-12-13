@@ -328,7 +328,18 @@ action = policy.select_action(observation)
 
 ## 📝 更新日志 (Changelog)
 
-### 2025-12-08 🆕
+### 2025-12-13 🆕
+- **NeurIPS 2025 最佳论文解读**: 新增 [neurips_2025_insights.md](./theory/neurips_2025_insights.md)
+  - 6 篇获奖论文的具身智能视角解读
+  - Artificial Hivemind: 模型同质化与机器人行为多样性
+  - Gated Attention: 门控注意力机制与边缘部署
+  - 1000 Layer Networks: 深层自监督 RL
+  - Diffusion Generalization: 扩散模型泛化机制
+  - Superposition Scaling: 表示叠加与多技能统一模型
+  - RL Reasoning Limits: RLVR 局限性分析
+  - **未来发展方向**: 技术趋势、待解决问题、突破口预测
+
+### 2025-12-08
 - **小模型 VLA 研究**: 新增 [small_vla_models.md](./theory/small_vla_models.md)
   - Evo-1 (770M, LIBERO 94.8% SOTA)
   - SmolVLA (450M, 45-60Hz 推理)
