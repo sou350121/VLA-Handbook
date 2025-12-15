@@ -11,11 +11,12 @@
 1) [Python 基础](#1-python-基础)  
 2) [Python 数学与数值计算](#7-python-数学与数值计算)  
 3) [数据格式与解析](#8-数据格式与解析)  
-4) [PyTorch 训练](#2-pytorch-训练)  
-5) [学习算法与模型](#6-学习算法与模型-xgboost--cnn--resnet)  
-6) [Git 协作](#3-git-协作)  
-7) [SLAM / 视觉里程计](#4-slam--视觉里程计)  
-8) [运动控制 / 轨迹规划](#5-运动控制--轨迹规划)  
+4) [Python 面向对象与类设计 (OOP)](#9-python-面向对象与类设计-oop)
+5) [PyTorch 训练](#2-pytorch-训练)  
+6) [学习算法与模型](#6-学习算法与模型-xgboost--cnn--resnet)  
+7) [Git 协作](#3-git-协作)  
+8) [SLAM / 视觉里程计](#4-slam--视觉里程计)  
+9) [运动控制 / 轨迹规划](#5-运动控制--轨迹规划)  
 
 ---
 
@@ -195,6 +196,25 @@ BasicBlock: 3x3 Conv-BN-ReLU-3x3 Conv-BN，加残差，最后 ReLU；确保通�
 
 **Q49 视触传感器数据对齐与可视化**  
 对齐相机帧与触觉/力矩传感器流（时间戳近邻或重采样），归一化力/扭矩并在同一时间轴可视化（图像 + 力曲线）。
+
+---
+
+## 9) Python 面向对象与类设计 (OOP)
+
+**Q50 抽象基类 (ABC) 定义统一接口**  
+使用 `abc.ABC` 和 `@abstractmethod` 定义 `BaseRobot`；子类必须实现 `connect/move/stop`；演示实例化基类报错。
+
+**Q51 继承与 super() 初始化**  
+子类 `HexapodRobot` 继承 `Robot`；在 `__init__` 中用 `super()` 传递参数；演示多重继承 (Mixin) 增加 `LoggableMixin` 功能。
+
+**Q52 @property 属性校验与封装**  
+在 `Joint` 类中用 `@property` 封装 `angle`；setter 中检查 `min_limit/max_limit`，越界抛出 ValueError 或自动截断。
+
+**Q53 魔术方法实现自定义序列**  
+实现 `Trajectory` 类；支持 `len(traj)`, `traj[i]`, `for point in traj`；实现 `__add__` 拼接两条轨迹。
+
+**Q54 类方法工厂与静态方法**  
+使用 `@classmethod` 实现 `from_json/from_yaml` 构造实例；使用 `@staticmethod` 实现无状态的工具函数 (如坐标转换)。
 
 ---
 

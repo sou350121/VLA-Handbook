@@ -3,6 +3,20 @@
 > **核心论文**: [Learning Fine-Grained Bimanual Manipulation with Low-Cost Hardware](https://arxiv.org/abs/2304.13705) (Tony Z. Zhao et al., RSS 2023)
 > **代表项目**: **ALOHA**, **Mobile ALOHA**, **ACT++**
 
+## 0. 主要數學思想 (Main Mathematical Idea)
+
+> **第一性原理**: **Compression of Intent (意图的压缩)**
+
+高维的动作空间（肌肉纤维/电机控制）往往是由低维的"意图"（Grab cup）驱动的。
+
+- **核心数学工具**: **Variational Inference (变分推断 / CVAE)**。
+- **解题逻辑**:
+    1.  **隐变量假设**: 假设复杂的动作序列 $a$ 是由一个不可观测的低维变量 $z$（意图/风格）生成的。
+    2.  **平衡**: 我们希望找到这个 $z$。ELBO (Evidence Lower Bound) 损失函数在两件事之间寻找平衡：
+        - **重建 (Reconstruction)**: $z$ 必须包含足够的信息来还原出精确的动作（要把活干好）。
+        - **正则 (Regularization)**: $z$ 的分布应该尽可能简单（如标准正态分布），以便于我们在推理时可以随意采样（通用性/生成能力）。
+    3.  **多模态**: 不同的 $z$ 代表不同的意图，从而生成不同的合理动作序列，解决了"平均化"问题。
+
 ## 1. 为什么需要 ACT? (Why?)
 
 传统的行为克隆 (Behavior Cloning, BC) 方法通常采用**单步预测**：每次只预测下一时刻的动作。这种方式存在严重的**误差累积 (Compounding Error)** 问题。

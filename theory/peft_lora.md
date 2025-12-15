@@ -2,6 +2,18 @@
 
 在 VLA 时代，我们通常基于 7B+ 的大模型进行微调。全量微调 (Full Fine-tuning) 极其昂贵，因此参数高效微调 (PEFT) 成为了必修课。
 
+## 0. 主要數學思想 (Main Mathematical Idea)
+
+> **第一性原理**: **Redundancy of Information (信息的冗余 / Intrinsic Dimension)**
+
+一个拥有 70 亿参数的通用模型，在学习一个特定技能（如"拿起杯子"）时，并不需要改变所有 70 亿个自由度。任务的本质变化通常发生在极低维的子空间中。
+
+- **核心数学工具**: **Low-Rank Matrix Decomposition (低秩矩阵分解 / SVD)**。
+- **解题逻辑**:
+    1.  **假设**: 权重矩阵的变化量 $\Delta W$ 是低秩的 (Low Rank)。即 $\text{rank}(\Delta W) \ll \min(d, k)$。
+    2.  **分解**: 任何低秩矩阵都可以分解为两个小矩阵的乘积 ($B \times A$)。
+    3.  **高效**: 我们不直接训练巨大的 $\Delta W$ ($d \times k$)，而是训练微小的 $A$ 和 $B$ ($r \times (d+k)$)。这就像用几个主成分（Principal Components）来近似复杂的变换。
+
 ## 1. LoRA (Low-Rank Adaptation)
 
 ```

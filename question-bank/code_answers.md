@@ -8,11 +8,12 @@
 1) [Python 基础](#1-python-基础)  
 2) [Python 数学与数值计算](#7-python-数学与数值计算)  
 3) [数据格式与解析](#8-数据格式与解析)  
-4) [PyTorch 训练](#2-pytorch-训练)  
-5) [学习算法与模型](#6-学习算法与模型-xgboost--cnn--resnet)  
-6) [Git 协作](#3-git-协作)  
-7) [SLAM / 视觉里程计](#4-slam--视觉里程计)  
-8) [运动控制 / 轨迹规划](#5-运动控制--轨迹规划)  
+4) [Python 面向对象与类设计 (OOP)](#9-python-面向对象与类设计-oop)
+5) [PyTorch 训练](#2-pytorch-训练)  
+6) [学习算法与模型](#6-学习算法与模型-xgboost--cnn--resnet)  
+7) [Git 协作](#3-git-协作)  
+8) [SLAM / 视觉里程计](#4-slam--视觉里程计)  
+9) [运动控制 / 轨迹规划](#5-运动控制--轨迹规划)  
 
 ---
 
@@ -918,6 +919,121 @@ def plot_frame_with_force(img_path, df_force, frame_ts):
     plt.show()
 ```
 - **验证**: 乱序时间戳需排序；未匹配时返回 NaN 并提示；力/扭矩单位统一后再归一化（如除以量程）。
+
+---
+
+## 9) Python 面向对象与类设计 (OOP)
+
+### Q50 抽象基类 (ABC) 定义统一接口
+- **概念/目标**: 强制子类实现特定方法，定义统一的 API 契约。
+- **为什么**: 大型项目中确保不同硬件驱动/模块遵循相同的接口。
+- **自实现步骤**: 继承 `abc.ABC`；装饰器 `@abstractmethod`；子类必须覆盖。
+- **示例**:
+```python
+from abc import ABC, abstractmethod
+
+class BaseRobot(ABC):
+    @abstractmethod
+    def connect(self): pass
+    @abstractmethod
+    def move(self, x, y): pass
+
+class Arm(BaseRobot):
+    def connect(self): print("Arm connected")
+    def move(self, x, y): print(f"Arm move to {x},{y}")
+
+# r = BaseRobot()  # TypeError: Can't instantiate abstract class
+a = Arm()
+a.connect()
+```
+- **验证要点**: 实例化基类报错；子类漏写抽象方法报错。
+
+### Q51 继承与 super() 初始化
+- **概念/目标**: 正确调用父类初始化逻辑，支持多重继承。
+- **为什么**: 避免重复代码；Mixin 模式增加功能。
+- **自实现步骤**: `super().__init__()` 传递必要参数；注意 MRO (Method Resolution Order)。
+- **示例**:
+```python
+class Robot:
+    def __init__(self, name): self.name = name
+
+class LoggableMixin:
+    def log(self, msg): print(f"[{self.name}] {msg}")
+
+class HexapodRobot(Robot, LoggableMixin):
+    def __init__(self, name, legs=6):
+        super().__init__(name)
+        self.legs = legs
+
+h = HexapodRobot("Spider", 6)
+h.log(f"has {h.legs} legs")
+```
+- **验证要点**: 父类属性正确初始化；Mixin 方法可用。
+
+### Q52 @property 属性校验与封装
+- **概念/目标**: 像访问属性一样调用 getter/setter，增加校验逻辑。
+- **为什么**: 防止设置非法物理参数（如关节角度越界）。
+- **自实现步骤**: `@property` 定义 getter；`@xxx.setter` 定义 setter。
+- **示例**:
+```python
+class Joint:
+    def __init__(self, angle=0.0, limits=(-1.0, 1.0)):
+        self._limits = limits
+        self.angle = angle  # 触发 setter
+
+    @property
+    def angle(self):
+        return self._angle
+
+    @angle.setter
+    def angle(self, value):
+        lo, hi = self._limits
+        if not (lo <= value <= hi):
+            raise ValueError(f"Angle {value} out of bounds {self._limits}")
+        self._angle = value
+```
+- **验证要点**: 读取正常；越界赋值抛异常。
+
+### Q53 魔术方法实现自定义序列
+- **概念/目标**: 实现 `__len__`, `__getitem__` 等，使对象表现得像 Python 内置类型。
+- **为什么**: 增加代码可读性，支持 `len()`, `for`, `+` 等操作。
+- **自实现步骤**: 实现对应 dunder methods。
+- **示例**:
+```python
+class Trajectory:
+    def __init__(self, points=None):
+        self.points = points or []
+    def __len__(self): return len(self.points)
+    def __getitem__(self, i): return self.points[i]
+    def __add__(self, other):
+        if not isinstance(other, Trajectory): return NotImplemented
+        return Trajectory(self.points + other.points)
+    def __repr__(self): return f"Trajectory(len={len(self)})"
+```
+- **验证要点**: `len(t)`；`t[0]`；`t1 + t2`。
+
+### Q54 类方法工厂与静态方法
+- **概念/目标**: `@classmethod` 作工厂构造；`@staticmethod` 作工具函数。
+- **为什么**: 提供多种实例化方式（如从 JSON/Config）；将相关工具函数组织在类中。
+- **自实现步骤**: `cls` 参数构造实例；无 `self/cls` 参数做纯函数。
+- **示例**:
+```python
+import json
+
+class Config:
+    def __init__(self, host, port):
+        self.host, self.port = host, port
+
+    @classmethod
+    def from_json(cls, json_str):
+        data = json.loads(json_str)
+        return cls(data["host"], data["port"])
+
+    @staticmethod
+    def validate_port(port):
+        return 0 <= port <= 65535
+```
+- **验证要点**: `Config.from_json(...)` 返回实例；`Config.validate_port` 可直接调用。
 
 ---
 

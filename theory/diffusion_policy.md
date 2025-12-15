@@ -3,6 +3,18 @@
 > **核心论文**: [Diffusion Policy: Visuomotor Policy Learning via Action Diffusion](https://arxiv.org/abs/2303.04137) (Cheng Chi et al., RSS 2023)
 > **代表模型**: **Octo**, **MimicGen**, **Toyota HPT**
 
+## 0. 主要數學思想 (Main Mathematical Idea)
+
+> **第一性原理**: **Constructing Structure from Chaos (从混沌中构建秩序)**
+
+物理世界中，熵增（有序变无序）是自然趋势，如墨水在水中扩散。Diffusion Model 试图在数学上**逆转**这一时间过程。
+
+- **核心数学工具**: **Langevin Dynamics (朗之万动力学)** 与 **Score Matching**。
+- **解题逻辑**:
+    1.  **逆向思维**: 如果我们知道数据是如何一步步变成噪声的（前向过程），那么只要学会每一步的"逆操作"（去噪），就能从纯噪声中恢复出数据。
+    2.  **梯度指引**: 学习数据分布的梯度场（Score Function，$\nabla_x \log p(x)$）。这就像在迷雾（噪声）中，每一步都沿着"数据密度更高"的方向走一小步，最终必然会走到数据流形上（生成合理的动作）。
+    3.  **多模态**: 不像回归模型寻找"平均值"，扩散模型学习的是整个地形（Landscape），因此可以从同一个噪声起点走到不同的终点（解决多解问题）。
+
 ## 1. 为什么需要 Diffusion Policy? (Why?)
 
 在 VLA 出现之前，主流的动作生成方式是 **MSE Regression** (均方误差回归) 或 **GMM** (高斯混合模型)。

@@ -2,6 +2,18 @@
 
 Flash Attention 是 Transformer 模型（包括 VLA）在部署时的核心优化技术，解决了标准 Attention 的内存瓶颈问题。
 
+## 0. 主要數學思想 (Main Mathematical Idea)
+
+> **第一性原理**: **Locality of Reference (引用的局部性 / Tiling)**
+
+在现代计算硬件（GPU）中，**搬运数据**比**计算数据**要慢得多且昂贵得多。数学公式等价并不代表计算效率等价。
+
+- **核心数学工具**: **Block Matrix Multiplication (分块矩阵乘法)** 与 **Online Statistics (在线统计量)**。
+- **解题逻辑**:
+    1.  **分块 (Tiling)**: 将巨大的矩阵 $N \times N$ 切分成小块，使得每个小块可以完全塞进 GPU 极快的片上缓存 (SRAM)。
+    2.  **在线 Softmax**: 标准 Softmax 需要遍历全行才能计算归一化因子。Flash Attention 利用数学技巧 ($e^{x-m}$)，使得 Softmax 可以分块增量计算，无需等待全行结果。
+    3.  **重计算**: 有时为了省去昂贵的显存读写 (HBM I/O)，宁愿在 SRAM 中重新算一遍（Recomputation）。这是典型的"时间换空间，空间换带宽"。
+
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │              Flash Attention vs 标准 Attention                  │

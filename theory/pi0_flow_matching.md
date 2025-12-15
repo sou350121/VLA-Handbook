@@ -1,8 +1,18 @@
 # Pi0 (π0) 代码解构：Flow Matching for VLA
 
-Physical Intelligence 的 π0 模型核心在于引入了 **Flow Matching** 来生成连续的动作序列，替代了传统的 Diffusion Policy 或离散 Tokenization。
-
 > **注意**: Pi0 已于 2025 年 2 月开源 (OpenPI / LeRobot)。以下代码基于 Flow Matching 原理和 VLA 架构通识进行的 **核心逻辑解构**，方便理解其数学过程。
+
+## 0. 主要數學思想 (Main Mathematical Idea)
+
+> **第一性原理**: **The Shortest Path (最短路径 / Optimal Transport)**
+
+Diffusion 就像一个醉汉（随机游走）跌跌撞撞地从噪声走回数据，路径曲折且低效。Flow Matching 试图构建一条**直达**的路径。
+
+- **核心数学工具**: **ODE (常微分方程)** 与 **Optimal Transport (最优传输)**。
+- **解题逻辑**:
+    1.  **拉直**: 在概率分布空间中，两点之间（噪声分布 vs 数据分布）最短的路径是直线（Geodesic）。
+    2.  **向量场**: 如果我们能直接学习到这条直线上的"速度向量"（Vector Field），那么推理时只需要沿着速度方向走几步（Euler积分）就能到达终点。
+    3.  **确定性**: 从随机的布朗运动（Diffusion）转变为确定性的流体运动（Flow），极大地减少了推理步数（100步 -> 10步）。
 
 ## 1. 核心思想：从噪声流向动作 (The Math behind Flow)
 
