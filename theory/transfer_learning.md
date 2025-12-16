@@ -1,5 +1,17 @@
 # 迁移学习 (Transfer Learning)
 
+## 主要数学思想 (Main Mathematical Idea)
+
+> **"Distribution Alignment (分布对齐) & Representation Invariance (表示不变性)"**
+
+迁移学习的核心数学问题是解决 **Domain Shift (域偏移)**，即源域分布 $P_S(X, Y)$ 与目标域分布 $P_T(X, Y)$ 不一致 ($P_S \neq P_T$)。
+
+解决这一问题的第一性原理是寻找一个映射函数 $\Phi$，使得映射后的特征分布尽可能接近：
+$$ \text{Minimize } \text{Distance}(P_S(\Phi(X)), P_T(\Phi(X))) $$
+其中 Distance 通常由 MMD (最大均值差异) 或 Adversarial Loss (对抗损失) 来衡量。本质上，这是在寻找一种**跨域不变的表示 (Invariant Representation)**，使得模型在新的环境中依然能识别出本质特征。
+
+---
+
 > **核心概念**: 迁移学习 (Transfer Learning) 是将在**源域 (Source Domain)** 学到的知识应用到**目标域 (Target Domain)** 的技术。在 VLA 领域，迁移学习是实现跨机器人、跨场景泛化的关键。
 
 ## 1. 为什么 VLA 需要迁移学习? (Why Transfer Learning?)
@@ -15,9 +27,9 @@
 
 ### 1.2 迁移学习的价值
 
-```math
+$$
 \text{数据收集成本} = \frac{\text{所需数据量}}{\text{数据收集效率}} \propto \frac{1}{\text{迁移能力}}
-```
+$$
 
 - **减少数据需求**: 预训练模型只需少量目标域数据微调
 - **提高泛化能力**: 学习跨域不变的特征表示

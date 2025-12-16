@@ -101,6 +101,8 @@
 │   ├── end_effector_control.md # 🆕 末端执行器控制系统
 │   ├── calibration.md          # 相机标定指南
 │   ├── pi0_deployment.md       # Pi0 真机部署
+│   ├── ur5_control_guide.md    # 🆕 UR5 Python 控制实战
+│   ├── ros_and_optimization.md # 🆕 ROS 集成与 Python 性能优化
 │   ├── dexterous_hand_guide.md # 灵巧手部署实战
 │   ├── optimization.md         # 模型优化 (量化, TensorRT)
 │   ├── simulation_environments.md # 仿真环境详解 (Isaac Sim, MuJoCo, PyBullet)
@@ -327,6 +329,15 @@ action = policy.select_action(observation)
 | **社区** | ROS Discourse · PyTorch Forums · Stack Overflow · GitHub Discussions |
 
 ## 📝 更新日志 (Changelog)
+
+### 2025-12-16 🆕
+- **数学第一性原理 (Mathematical First Principles)**:
+  - 为 15+ 篇核心理论文档增加了 "Main Mathematical Idea" 章节
+  - 涵盖 RL, Diffusion, Flow Matching, LoRA, Flash Attention 等
+- **真机部署实战 (Deployment)**:
+  - 新增 [ur5_control_guide.md](./deployment/ur5_control_guide.md): Linux Python 控制 UR5 实战
+  - 新增 [ros_and_optimization.md](./deployment/ros_and_optimization.md): ROS 集成与 Python 代码性能优化 (OOP, Safety, JIT)
+- **Python OOP 实战**: 题库新增面向对象编程在机器人控制中的应用题
 
 ### 2025-12-13 🆕
 - **NeurIPS 2025 最佳论文解读**: 新增 [neurips_2025_insights.md](./theory/neurips_2025_insights.md)

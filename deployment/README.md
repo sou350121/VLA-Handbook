@@ -37,6 +37,16 @@
     - Dynamixel 电机标定
     - 数据采集与 LeRobot 格式转换
     - 踩坑记录与最佳实践
+11. **[UR5 Python 控制实战 (UR5 Control Guide)](./ur5_control_guide.md)** 🆕
+    - Linux 环境配置 (Real-time kernel)
+    - `ur_rtde` 高频控制代码范例
+    - 保护性停止 (Protective Stop) 自动恢复
+    - VLA 模型推理与控制线程架构
+12. **[ROS 集成与算法优化 (ROS & Optimization)](./ros_and_optimization.md)** 🆕
+    - ROS 1/2 Driver 驱动选型与 Topic 接口
+    - Python 面向对象控制架构 (OOP)
+    - 安全装饰器 (Decorator) 设计
+    - Python 性能优化 (Zero-Allocation, Numba JIT)
 
 ## 学习建议
 - **硬件党**: 直接看 [硬件选型](./hardware.md)，了解最新的灵巧手和机器人平台。

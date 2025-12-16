@@ -37,14 +37,14 @@ Diffusion Policy 将动作生成建模为一个 **条件去噪过程 (Conditiona
 ### 2.1 前向过程 (Forward Process / Diffusion)
 将真实的动作轨迹 $x_0$ 逐步加噪，变成纯高斯噪声 $x_T$。
 
-```math
+$$
 q(x_t | x_{t-1}) = \mathcal{N}(x_t; \sqrt{1 - \beta_t} x_{t-1}, \beta_t I)
-```
+$$
 
 经过 $t$ 步后，可以直接写出 $x_t$ 与 $x_0$ 的关系：
-```math
+$$
 q(x_t | x_0) = \mathcal{N}(x_t; \sqrt{\bar{\alpha}_t} x_0, (1 - \bar{\alpha}_t) I)
-```
+$$
 
 其中 $\alpha_t = 1 - \beta_t$, $\bar{\alpha}_t = \prod_{i=1}^t \alpha_i$。
 
@@ -63,18 +63,19 @@ $\beta_t$ 的选择至关重要，通常有两种策略：
 
 去噪公式 (DDPM):
 
-```math
+$$
 x_{t-1} = \frac{1}{\sqrt{\alpha_t}} \left( x_t - \frac{1 - \alpha_t}{\sqrt{1 - \bar{\alpha}_t}} \epsilon_\theta(x_t, t, \text{Obs}) \right) + \sigma_t z
-```
+$$
 
 其中 $z \sim \mathcal{N}(0, I)$ 是随机噪声 (但在最后一步 $t=0$ 时设为 0)。$\sigma_t$ 是方差项，通常取 $\sqrt{\beta_t}$ 或 $\tilde{\beta}_t$。
 
 ### 2.4 损失函数 (Loss Function)
 非常简单，就是预测噪声与真实噪声的 MSE：
 
-```math
+$$
 \mathcal{L} = \mathbb{E}_{t, x_0, \epsilon} \left[ \| \epsilon - \epsilon_\theta(\sqrt{\bar{\alpha}_t} x_0 + \sqrt{1 - \bar{\alpha}_t} \epsilon, t, \text{Obs}) \|^2 \right]
-```
+$$
+
 
 ## 3. 网络架构 (Network Architecture)
 
@@ -105,9 +106,9 @@ Diffusion 的最大缺点是慢。DDPM 需要 100 步去噪，推理一次可能
 - **原理**: 将随机游走过程变为确定性过程 (Deterministic)，跳过中间步骤。DDIM 重新定义了前向过程，使得它是一个非马尔可夫过程，从而允许更大的步长。
 - **公式**:
 
-```math
+$$
 x_{t-1} = \sqrt{\bar{\alpha}_{t-1}} \underbrace{\left( \frac{x_t - \sqrt{1 - \bar{\alpha}_t} \epsilon_\theta}{\sqrt{\bar{\alpha}_t}} \right)}_{\text{predicted } x_0} + \underbrace{\sqrt{1 - \bar{\alpha}_{t-1} - \sigma_t^2} \epsilon_\theta}_{\text{direction pointing to } x_t} + \sigma_t \epsilon_t
-```
+$$
 
 - **效果**: 可以将步数从 100 步压缩到 **10-15 步**，同时保持较高的生成质量。
 
