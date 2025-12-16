@@ -67,6 +67,7 @@
 │   ├── action_representations.md # 动作生成范式 (Tokenization vs Diffusion vs Flow)
 │   ├── fast.md                 # FAST 动作 Token 化 (DCT + BPE, 5倍加速)
 │   ├── diffusion_policy.md     # 扩散策略详解 (DDPM, DDIM, EBM)
+│   ├── traditional_action_generation.md # 🆕 传统动作生成 (MSE, GMM)
 │   ├── flash_attention.md      # 性能优化 (Kernel Fusion)
 │   ├── pi0_flow_matching.md    # Pi0 代码解构 (Flow Matching)
 │   ├── pi0_5_dissection.md     # Pi0.5 模型解剖 (Unified Model)

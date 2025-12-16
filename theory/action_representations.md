@@ -63,6 +63,8 @@ $$
 ---
 
 ## 2. 扩散策略 (Diffusion Policy)
+> **前置阅读**: [传统动作生成方法 (MSE/GMM)](./traditional_action_generation.md) - 了解为什么 MSE 会导致"撞墙"，以及 GMM 的局限性。
+
 > **代表模型**: **Octo**, **MimicGen**, **Toyota HPT**
 
 ### 核心思想
