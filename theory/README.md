@@ -80,6 +80,7 @@
 | **RDT** | [`rdt.md`](./rdt.md) | 十亿参数扩散模型，双臂操作 |
 | **Flow Matching** | [`pi0_flow_matching.md`](./pi0_flow_matching.md) | 比 Diffusion 快 5x，π0 核心 |
 | **FAST** | [`fast.md`](./fast.md) | DCT 频域 Tokenization |
+| **传统方法** | [`traditional_action_generation.md`](./traditional_action_generation.md) | 🆕 MSE 回归与 GMM (基础) |
 
 ### ⚡ 效率优化 (Efficiency)
 
