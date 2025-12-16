@@ -131,9 +131,11 @@ RDT 使用 **DDPM** 框架进行训练，但采用了几个优化:
 
 #### 2.4.1 训练目标
 
-```math
+
+$$
 \mathcal{L} = \mathbb{E}_{t, a_0, \epsilon} \left[ \| \epsilon - \epsilon_\theta(a_t, t, c) \|^2 \right]
-```
+$$
+
 
 其中:
 - $a_0$: 真实动作序列 (Action Chunk)
@@ -214,9 +216,11 @@ def pad_action(action, embodiment_type):
 ```
 
 训练时，只对有效维度计算损失:
-```math
+
+$$
 \mathcal{L} = \mathbb{E} \left[ \| m \odot (\epsilon - \hat{\epsilon}) \|^2 \right]
-```
+$$
+
 
 ### 4.2 双臂协调优化 (Bimanual Coordination)
 

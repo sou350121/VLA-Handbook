@@ -243,9 +243,11 @@ reconstruction_loss = MSE(decoder(encoder(masked_patches)), original)
 
 **Stage 2: 对比学习对齐 (Contrastive Alignment)**
 
-```math
+
+$$
 L_{align} = -log \frac{exp(sim(t_i, v_i) / τ)}{\sum_{j} exp(sim(t_i, v_j) / τ)}
-```
+$$
+
 
 - `t_i`: 触觉 Embedding
 - `v_i`: 对应的视觉 Embedding
@@ -383,17 +385,21 @@ loss = CrossEntropy(decoder(tactile_emb, vision_emb), text_tokens)
 
 **傅里叶位置编码公式**:
 
-```math
+
+$$
 \gamma(p) = [\sin(2^0 \pi p), \cos(2^0 \pi p), ..., \sin(2^{L-1} \pi p), \cos(2^{L-1} \pi p)]
-```
+$$
+
 
 其中 $p$ 是 6D 位姿向量，$L$ 是频率级数。多尺度编码使得模型对不同精度的空间信息都敏感。
 
 **FiLM 调制公式**:
 
-```math
+
+$$
 \text{FiLM}(x, \gamma, \beta) = \gamma \cdot x + \beta
-```
+$$
+
 
 其中 $\gamma, \beta$ 由位置编码通过 MLP 生成，$x$ 是触觉特征。
 

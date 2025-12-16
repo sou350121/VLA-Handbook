@@ -7,9 +7,11 @@
 ### 1.1 传统 VLA 的局限
 
 传统 VLA 模型是**端到端**的：
-```math
+
+$$
 \text{Observation} + \text{Instruction} \xrightarrow{\text{VLA}} \text{Action}
-```
+$$
+
 
 **问题**:
 - **黑箱决策**: 无法理解机器人为什么这样做
@@ -19,9 +21,11 @@
 
 ### 1.2 CoT 的价值
 
-```math
+
+$$
 \text{Observation} + \text{Instruction} \xrightarrow{\text{VLA}} \underbrace{\text{Reasoning Steps}}_{\text{思维链}} \xrightarrow{} \text{Action}
-```
+$$
+
 
 - **可解释性**: 可以追溯机器人的"思考过程"
 - **复杂任务分解**: 自动将长任务拆解为子任务
