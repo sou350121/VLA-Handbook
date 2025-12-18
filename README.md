@@ -8,8 +8,7 @@
 
 ---
 
-<details open>
-<summary><b>🚀 建议阅读路线 (Suggested Reading Path)</b></summary>
+## 🚀 建议阅读路线 (Suggested Reading Path)
 
 ### 新手入门
 1. [Theory 总索引](./theory/README.md) → **Part 1: Foundations**（数据格式、动作空间、评估体系）
@@ -28,60 +27,9 @@
 
 > 💡 **详细路线**：查看 [Theory 总索引](./theory/README.md) 获取完整学习路径
 
-</details>
-
 ---
 
-## 🎯 核心入口
-
-| 模块 | 链接 | 说明 |
-|:-----|:-----|:-----|
-| **📚 Theory 总索引** | [`theory/README.md`](./theory/README.md) | 理论基础、核心算法、前沿架构 |
-| **🔍 论文索引** | [`theory/paper_index.md`](./theory/paper_index.md) | 多维度查找（技术/公司/时间） |
-| **📖 文献综述** | [`theory/literature_review.md`](./theory/literature_review.md) | VLA 发展史全景图（按技术分类） |
-| **🚀 真机部署** | [`deployment/README.md`](./deployment/README.md) | 硬件选型、ROS、优化、Sim-to-Real |
-| **💡 题库与实战** | [`question-bank/README.md`](./question-bank/README.md) | 面试真题、代码实战、微调指南 |
-| **📋 速查表** | [`cheat-sheet/README.md`](./cheat-sheet/README.md) | 时间线、核心公式 |
-| **📘 电子书** | [`book/README.md`](./book/README.md) | 合并版 Markdown/PDF/HTML |
-
----
-
-## 🧠 Theory 快速推荐
-
-> **优先阅读**：以下文档覆盖 VLA 核心概念与最新进展
-
-| 主题 | 文档 | 一句话总结 |
-|:-----|:-----|:---------|
-| **架构总览** | [`vla_arch.md`](./theory/vla_arch.md) | VLM Backbone + Action Head 设计范式 |
-| **动作生成** | [`diffusion_policy.md`](./theory/diffusion_policy.md) | 扩散去噪，解决多模态分布 |
-| | [`pi0_flow_matching.md`](./theory/pi0_flow_matching.md) | Flow Matching（比 Diffusion 快 5x） |
-| | [`act.md`](./theory/act.md) | CVAE + 动作分块，ALOHA 核心 |
-| **效率优化** | [`flash_attention.md`](./theory/flash_attention.md) | Tiling + 重计算，显存 O(N²)→O(N) |
-| | [`peft_lora.md`](./theory/peft_lora.md) | 低秩分解，QLoRA ~6GB 微调 7B |
-| **前沿模型** | [`pi0_6_dissection.md`](./theory/pi0_6_dissection.md) | Recap 自我进化 + Action Expert |
-| | [`gr_rl_dissection.md`](./theory/gr_rl_dissection.md) | ByteDance 三阶段 RL，真机穿鞋带 |
-| **导航专题** | [`vln_dualvln.md`](./theory/vln_dualvln.md) | DualVLN：慢规划/快执行的异步双系统 |
-
-> 💡 **更多推荐**：查看 [Theory 总索引](./theory/README.md) 获取完整学习路线图
-
----
-
-<details>
-<summary><b>✨ 为什么值得看（知识库价值）</b></summary>
-
-1. **模型谱系完整**：覆盖 RT-2 → OpenVLA → π0 → π0.6 → GR-RL → WALL-OSS 等主流模型
-2. **数学第一性原理**：15+ 篇核心文档包含 "Main Mathematical Idea" 章节（RL、Diffusion、Flow Matching、LoRA、Flash Attention 等）
-3. **真机部署踩坑**：UR5 控制、ROS 集成、Python 性能优化、Protective Stop 恢复等实战经验
-4. **论文索引系统**：多维度查找（技术/公司/时间），按分类组织的文献综述
-5. **2025 最新进展**：Evo-1、SmolVLA、DualVLN、GR-RL、NeurIPS 2025 解读等
-6. **全中文 + 工程导向**：专业术语保留英文对照，聚焦 Robotics 特有挑战
-
-</details>
-
----
-
-<details>
-<summary><b>📂 项目结构</b></summary>
+## 📂 项目结构
 
 ### 顶层目录
 
@@ -134,6 +82,52 @@ VLA-Handbook/
 ```
 
 </details>
+
+---
+
+## 🎯 核心入口
+
+| 模块 | 链接 | 说明 |
+|:-----|:-----|:-----|
+| **📚 Theory 总索引** | [`theory/README.md`](./theory/README.md) | 理论基础、核心算法、前沿架构 |
+| **🔍 论文索引** | [`theory/paper_index.md`](./theory/paper_index.md) | 多维度查找（技术/公司/时间） |
+| **📖 文献综述** | [`theory/literature_review.md`](./theory/literature_review.md) | VLA 发展史全景图（按技术分类） |
+| **🚀 真机部署** | [`deployment/README.md`](./deployment/README.md) | 硬件选型、ROS、优化、Sim-to-Real |
+| **💡 题库与实战** | [`question-bank/README.md`](./question-bank/README.md) | 面试真题、代码实战、微调指南 |
+| **📋 速查表** | [`cheat-sheet/README.md`](./cheat-sheet/README.md) | 时间线、核心公式 |
+| **📘 电子书** | [`book/README.md`](./book/README.md) | 合并版 Markdown/PDF/HTML |
+
+---
+
+## 🧠 Theory 快速推荐
+
+> **优先阅读**：以下文档覆盖 VLA 核心概念与最新进展
+
+| 主题 | 文档 | 一句话总结 |
+|:-----|:-----|:---------|
+| **架构总览** | [`vla_arch.md`](./theory/vla_arch.md) | VLM Backbone + Action Head 设计范式 |
+| **动作生成** | [`diffusion_policy.md`](./theory/diffusion_policy.md) | 扩散去噪，解决多模态分布 |
+| | [`pi0_flow_matching.md`](./theory/pi0_flow_matching.md) | Flow Matching（比 Diffusion 快 5x） |
+| | [`act.md`](./theory/act.md) | CVAE + 动作分块，ALOHA 核心 |
+| **效率优化** | [`flash_attention.md`](./theory/flash_attention.md) | Tiling + 重计算，显存 O(N²)→O(N) |
+| | [`peft_lora.md`](./theory/peft_lora.md) | 低秩分解，QLoRA ~6GB 微调 7B |
+| **前沿模型** | [`pi0_6_dissection.md`](./theory/pi0_6_dissection.md) | Recap 自我进化 + Action Expert |
+| | [`gr_rl_dissection.md`](./theory/gr_rl_dissection.md) | ByteDance 三阶段 RL，真机穿鞋带 |
+| **导航专题** | [`vln_dualvln.md`](./theory/vln_dualvln.md) | DualVLN：慢规划/快执行的异步双系统 |
+
+> 💡 **更多推荐**：查看 [Theory 总索引](./theory/README.md) 获取完整学习路线图
+
+---
+
+<details>
+<summary><b>✨ 为什么值得看（知识库价值）</b></summary>
+
+1. **模型谱系完整**：覆盖 RT-2 → OpenVLA → π0 → π0.6 → GR-RL → WALL-OSS 等主流模型
+2. **数学第一性原理**：15+ 篇核心文档包含 "Main Mathematical Idea" 章节（RL、Diffusion、Flow Matching、LoRA、Flash Attention 等）
+3. **真机部署踩坑**：UR5 控制、ROS 集成、Python 性能优化、Protective Stop 恢复等实战经验
+4. **论文索引系统**：多维度查找（技术/公司/时间），按分类组织的文献综述
+5. **2025 最新进展**：Evo-1、SmolVLA、DualVLN、GR-RL、NeurIPS 2025 解读等
+6. **全中文 + 工程导向**：专业术语保留英文对照，聚焦 Robotics 特有挑战
 
 </details>
 
