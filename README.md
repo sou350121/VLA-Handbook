@@ -3,167 +3,146 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
 
-> **面向 VLA（Vision-Language-Action）的学习与工程实战手册（含面试准备）。**
-> 覆盖理论基础、训练/推理优化、真机部署、题库与系统设计。
+> **VLA（Vision-Language-Action）领域的结构化知识库与工程实战手册。**
+> 覆盖理论基础、模型解析、真机部署、论文索引与题库。
 
-## 📖 项目简介 (Introduction)
+---
 
-随着具身智能 (Embodied AI) 的爆发，VLA (Vision-Language-Action) 模型成为连接数字世界与物理世界的关键。本项目旨在为致力于进入该领域的算法工程师提供一份**全中文、实战导向**的面试与学习手册。
+## 🎯 核心入口
 
-不同于通用的 CV/NLP 面试指南，本项目**聚焦于 Robotics 特有的挑战**：
-- **Action Tokenization**: 如何将连续动作离散化？
-- **Sim-to-Real**: 如何跨越仿真与真机的鸿沟？
-- **Deployment**: 如何在边缘设备 (Jetson) 上部署大模型？
-- **Hardware**: 灵巧手与机械臂的选型与控制。
+| 模块 | 链接 | 说明 |
+|:-----|:-----|:-----|
+| **📚 Theory 总索引** | [`theory/README.md`](./theory/README.md) | 理论基础、核心算法、前沿架构 |
+| **🔍 论文索引** | [`theory/paper_index.md`](./theory/paper_index.md) | 多维度查找（技术/公司/时间） |
+| **📖 文献综述** | [`theory/literature_review.md`](./theory/literature_review.md) | VLA 发展史全景图（按技术分类） |
+| **🚀 真机部署** | [`deployment/README.md`](./deployment/README.md) | 硬件选型、ROS、优化、Sim-to-Real |
+| **💡 题库与实战** | [`question-bank/README.md`](./question-bank/README.md) | 面试真题、代码实战、微调指南 |
+| **📋 速查表** | [`cheat-sheet/README.md`](./cheat-sheet/README.md) | 时间线、核心公式 |
+| **📘 电子书** | [`book/README.md`](./book/README.md) | 合并版 Markdown/PDF/HTML |
 
-## ✨ 项目亮点 (Highlights)
+---
 
-1. **全中文内容**: 所有文档均使用简体中文编写，专业术语保留英文对照。
-2. **最新技术覆盖**:
-    - 🆕 **2025 最新模型**: **Evo-1** (770M, LIBERO 94.8%), **SmolVLA** (450M, 60Hz), **ControlVLA** (10-shot 少样本)
-    - 🆕 **潜在动作学习**: **UniVLA** (IJRR 2024), **EvoVLA**, **MemoryVLA** - 跨机器人泛化新范式
-    - 🆕 **小模型 VLA 研究**: 边缘部署、模型压缩、知识蒸馏、210M 超越 55B 的惊人发现
-    - 🆕 **ByteDance GR-RL**: 三阶段 RL 训练、形态对称增强、首个真机穿鞋带 VLA
-    - 🆕 **论文索引系统**: 多维度查找（技术/公司/时间）、按分类组织的文献综述
-    - 包含了 **Physical Intelligence (Pi)** 的 π0, π0.5, π0.6 模型深度解析
-    - 涵盖了 **OpenVLA**, **WALL-OSS** (X Square), **Galaxea G0** (星海图) 等开源 SOTA 模型
-    - 详解了 **FAST** 动作 Token 化（DCT + BPE，5倍训练加速）
-    - 深入讲解 **Knowledge Insulation**（梯度隔离，防止灾难性遗忘）
-    - 新增 **高效微调** (LoRA/QLoRA) 和 **量化理论** (AWQ, GPTQ) 详解
-    - 新增 **空间数学** (坐标系转换, 旋转表示) 和 **评估体系** (Benchmarks, Metrics)
-    - 新增 **[视觉感知技术](./theory/perception_techniques.md)** (检测/跟踪/Occupancy/BEV/位姿估计)
-    - 新增 **[运动规划](./theory/motion_planning.md)** (RRT/PRM、TrajOpt、MoveIt)
-    - 新增 **[状态估计与传感器融合](./theory/state_estimation.md)** (Kalman/UKF、Particle、VIO)
-    - 新增 **[点云理解与 SLAM](./theory/pointcloud_slam.md)** (PointNet/KPConv、LOAM/LIO-SAM)
-    - 新增 **[抓取算法与仿真平台](./theory/grasp_algorithms.md)** (DexGraspNet/GraspGF、Isaac Sim/SAPIEN)
-3. **硬件选型指南**:
-    - 重点加强了 **灵巧手 (Dexterous Hands)** 的介绍 (Shadow, Inspire, Unitree)。
-    - 新增 **触觉传感器 (Tactile Sensors)** 深度解析 (GelSight, Tashan, Parsen)。
-    - 提供了 **Unitree, Agibot, Fourier** 等中国头部机器人公司的详细参数与价格参考。
-    - 新增 **国际机器人公司** 和 **亚洲机器人公司** 对比表。
-    - 新增 **[传感器集成难点](./deployment/sensor_integration.md)** 专题。
-    - 新增 **[末端执行器控制系统](./deployment/end_effector_control.md)** (数据驱动 + 触觉闭环)。
-4. **实战导向**:
-    - 提供了 **Sim-to-Real** 的具体技术路线 (Domain Randomization, Co-training)。
-    - 提供了 **边缘部署** 的实战代码片段 (vLLM, Quantization)。
-    - 新增 **仿真环境对比** (Isaac Sim vs MuJoCo vs PyBullet) 选型指南。
-    - 新增 **相机标定** 实战指南 (Eye-in-Hand, Eye-to-Hand, Aruco)。
-    - 新增 **[大规模模型训练](./system-design/large_scale_training.md)** (FSDP, 3D 并行, 训练稳定性)。
+## 🧠 Theory 快速推荐
 
-## 📂 项目结构 (Project Structure)
+> **优先阅读**：以下文档覆盖 VLA 核心概念与最新进展
+
+| 主题 | 文档 | 一句话总结 |
+|:-----|:-----|:---------|
+| **架构总览** | [`vla_arch.md`](./theory/vla_arch.md) | VLM Backbone + Action Head 设计范式 |
+| **动作生成** | [`diffusion_policy.md`](./theory/diffusion_policy.md) | 扩散去噪，解决多模态分布 |
+| | [`pi0_flow_matching.md`](./theory/pi0_flow_matching.md) | Flow Matching（比 Diffusion 快 5x） |
+| | [`act.md`](./theory/act.md) | CVAE + 动作分块，ALOHA 核心 |
+| **效率优化** | [`flash_attention.md`](./theory/flash_attention.md) | Tiling + 重计算，显存 O(N²)→O(N) |
+| | [`peft_lora.md`](./theory/peft_lora.md) | 低秩分解，QLoRA ~6GB 微调 7B |
+| **前沿模型** | [`pi0_6_dissection.md`](./theory/pi0_6_dissection.md) | Recap 自我进化 + Action Expert |
+| | [`gr_rl_dissection.md`](./theory/gr_rl_dissection.md) | ByteDance 三阶段 RL，真机穿鞋带 |
+| **导航专题** | [`vln_dualvln.md`](./theory/vln_dualvln.md) | DualVLN：慢规划/快执行的异步双系统 |
+
+> 💡 **更多推荐**：查看 [Theory 总索引](./theory/README.md) 获取完整学习路线图
+
+---
+
+<details>
+<summary><b>✨ 为什么值得看（知识库价值）</b></summary>
+
+1. **模型谱系完整**：覆盖 RT-2 → OpenVLA → π0 → π0.6 → GR-RL → WALL-OSS 等主流模型
+2. **数学第一性原理**：15+ 篇核心文档包含 "Main Mathematical Idea" 章节（RL、Diffusion、Flow Matching、LoRA、Flash Attention 等）
+3. **真机部署踩坑**：UR5 控制、ROS 集成、Python 性能优化、Protective Stop 恢复等实战经验
+4. **论文索引系统**：多维度查找（技术/公司/时间），按分类组织的文献综述
+5. **2025 最新进展**：Evo-1、SmolVLA、DualVLN、GR-RL、NeurIPS 2025 解读等
+6. **全中文 + 工程导向**：专业术语保留英文对照，聚焦 Robotics 特有挑战
+
+</details>
+
+---
+
+<details>
+<summary><b>🚀 建议阅读路线</b></summary>
+
+### 新手入门
+1. [Theory 总索引](./theory/README.md) → **Part 1: Foundations**（数据格式、动作空间、评估体系）
+2. **Part 2: Architecture & Algorithms**（VLA 核心架构、Diffusion Policy、Flow Matching）
+3. [真机部署索引](./deployment/README.md)（硬件选型、模型优化）
+
+### 研究导向
+1. [论文索引](./theory/paper_index.md) + [文献综述](./theory/literature_review.md)（快速定位相关论文）
+2. [Theory 总索引](./theory/README.md) → **Part 5: Model Zoo**（π0、GR-RL、WALL-OSS 深度解析）
+3. [VLA 十大挑战](./theory/vla_challenges.md)（NTU/Stanford 2025 研究方向）
+
+### 工程落地
+1. [真机部署索引](./deployment/README.md)（UR5 控制、ROS、优化）
+2. [Theory 总索引](./theory/README.md) → **效率优化**（Flash Attention、LoRA、量化）
+3. [题库与实战](./question-bank/README.md)（代码实战、微调指南）
+
+> 💡 **详细路线**：查看 [Theory 总索引](./theory/README.md) 获取完整学习路径
+
+</details>
+
+---
+
+<details>
+<summary><b>📂 项目结构</b></summary>
+
+### 顶层目录
 
 ```
-/opt/VLA-Handbook/
-├── README.md                   # 项目主页 (Introduction & Roadmap)
+VLA-Handbook/
+├── theory/          # 理论基础（核心）
+├── deployment/      # 真机与部署
+├── book/            # 电子书版本
+├── cheat-sheet/     # 速查表
+├── question-bank/   # 题库与实战
+├── product/         # 机器人产品大百科
+├── system-design/   # 系统设计
+└── companies/       # 机器人公司与求职
+```
+
+### 完整目录树
+
+<details>
+<summary>展开完整目录树</summary>
+
+```
+VLA-Handbook/
+├── README.md                   # 项目主页
 ├── theory/                     # 理论基础
 │   ├── README.md               # 索引
-│   ├── README_FUN.md           # 人话版索引 (轻松理解版)
-│   ├── paper_index.md          # 🆕 论文索引 (多维度查找: 技术/公司/时间)
-│   ├── literature_review.md    # 🆕 核心文献技术归纳 (按技术分类组织)
-│   ├── small_vla_models.md     # 🆕 小模型 VLA 研究 (Evo-1, SmolVLA, 边缘部署)
-│   ├── vla_challenges.md       # 🆕 VLA 十大挑战 (NTU/Stanford 2025)
-│   ├── vla_arch.md             # VLA 核心架构 (RT-1, RT-2, OpenVLA, Pi, WALL-OSS)
-│   ├── transformer_vs_cnn.md   # Backbone 对比 (ViT vs ResNet, SigLIP)
-│   ├── action_representations.md # 动作生成范式 (Tokenization vs Diffusion vs Flow)
-│   ├── fast.md                 # FAST 动作 Token 化 (DCT + BPE, 5倍加速)
-│   ├── diffusion_policy.md     # 扩散策略详解 (DDPM, DDIM, EBM)
-│   ├── traditional_action_generation.md # 🆕 传统动作生成 (MSE, GMM)
-│   ├── flash_attention.md      # 性能优化 (Kernel Fusion)
-│   ├── pi0_flow_matching.md    # Pi0 代码解构 (Flow Matching)
-│   ├── pi0_5_dissection.md     # Pi0.5 模型解剖 (Unified Model)
-│   ├── pi0_6_dissection.md     # Pi0.6 模型解剖 (Recap RL)
-│   ├── gr_rl_dissection.md     # 🆕 GR-RL 深度解析 (ByteDance Seed, 三阶段 RL)
-│   ├── wall_oss.md             # WALL-OSS 深度解析 (Uni-CoT, X Square Robot)
-│   ├── galaxea_g0.md           # Galaxea G0 双系统 VLA (星海图智能)
-│   ├── knowledge_insulation.md # 知识绝缘技术 (防止灾难性遗忘)
-│   ├── co_training.md          # 联合训练 (Co-training) 详解
-│   ├── tactile_vla.md          # 触觉感知与 VLA
-│   ├── motion_planning.md      # 运动规划 (RRT/TrajOpt/MoveIt)
-│   ├── vln_dualvln.md          # 🆕 视觉语言导航 (VLN): DualVLN 快慢系统
-│   ├── state_estimation.md     # 状态估计与融合 (Kalman/Particle/VIO)
-│   ├── pointcloud_slam.md      # 点云理解 & SLAM (LOAM/LIO-SAM)
-│   ├── grasp_algorithms.md     # 抓取算法 & 仿真 (DexGraspNet/Isaac)
-│   ├── data.md                 # 数据处理 (RLDS, Co-training)
-│   ├── spatial_math.md         # 空间数学 (坐标系, 旋转表示)
-│   ├── evaluation.md           # 评估体系 (Benchmarks, Metrics)
-│   ├── peft_lora.md            # 高效微调 (LoRA/QLoRA 原理)
-│   └── quantization_theory.md  # 量化理论 (AWQ, GPTQ)
-├── product/                    # 🆕 机器人产品大百科
-│   ├── README.md               # 产品索引
-│   ├── humanoids.md            # 具身智能本体 (Tesla, Unitree)
-│   ├── hands.md                # 灵巧手 (Shadow, Inspire)
-│   ├── arms.md                 # 科研机械臂 (Franka, UR)
-│   ├── grippers.md             # 平行夹爪 (Robotiq, DH)
-│   ├── mobile_bases.md         # 移动底盘 (AgileX)
-│   └── sensors.md              # 触觉与感知 (GelSight, Tashan)
+│   ├── README_FUN.md           # 人话版索引
+│   ├── paper_index.md          # 论文索引（多维度查找）
+│   ├── literature_review.md     # 文献综述（按技术分类）
+│   ├── vla_arch.md             # VLA 核心架构
+│   ├── diffusion_policy.md     # 扩散策略详解
+│   ├── pi0_flow_matching.md    # Flow Matching（π0 核心）
+│   ├── act.md                  # ACT（CVAE + 动作分块）
+│   ├── flash_attention.md      # Flash Attention
+│   ├── peft_lora.md            # LoRA/QLoRA 原理
+│   ├── vln_dualvln.md          # 视觉语言导航（VLN）
+│   └── ...                     # 更多文档见 theory/README.md
 ├── deployment/                 # 真机与部署
 │   ├── README.md               # 索引
-│   ├── hardware.md             # 硬件选型与价格参考
-│   ├── sensor_integration.md   # 触觉传感器集成难点
-│   ├── end_effector_control.md # 🆕 末端执行器控制系统
-│   ├── calibration.md          # 相机标定指南
-│   ├── pi0_deployment.md       # Pi0 真机部署
-│   ├── ur5_control_guide.md    # 🆕 UR5 Python 控制实战
-│   ├── ros_and_optimization.md # 🆕 ROS 集成与 Python 性能优化
-│   ├── dexterous_hand_guide.md # 灵巧手部署实战
-│   ├── optimization.md         # 模型优化 (量化, TensorRT)
-│   ├── simulation_environments.md # 仿真环境详解 (Isaac Sim, MuJoCo, PyBullet)
-│   └── sim_to_real.md          # Sim-to-Real 技术
-├── system-design/              # 系统设计
+│   ├── ur5_control_guide.md    # UR5 Python 控制实战
+│   ├── ros_and_optimization.md # ROS 集成与性能优化
+│   └── ...                     # 更多文档见 deployment/README.md
+├── book/                       # 电子书版本
 │   ├── README.md               # 索引
-│   ├── data_pipeline.md        # 数据闭环设计
-│   ├── cloud_infrastructure.md # 云端基础设施
-│   ├── large_scale_training.md # 🆕 大规模模型训练
-│   └── evaluation.md           # 评估系统设计
+│   └── output/                 # 合并版输出（Markdown/PDF/HTML）
 ├── cheat-sheet/                # 速查表
-│   ├── README.md               # 索引
-│   ├── timeline.md             # 关键论文时间线
-│   └── formulas.md             # 核心公式
 ├── question-bank/              # 题库与实战
-│   ├── README.md               # 索引
-│   ├── questions.md            # 面试真题
-│   ├── openvla_finetuning.md   # OpenVLA 微调实战
-│   └── interviewer_guide.md    # 考官视角指南
-└── companies/                  # 🆕 机器人公司与求职
-    ├── README.md               # 求职指南索引
-    ├── china.md                # 中国机器人公司
-    ├── international.md        # 国际机器人公司
-    ├── asia.md                 # 亚洲机器人公司 (SG/JP/TW/KR)
-    └── embodied_ai.md          # 具身智能软件平台
+├── product/                    # 机器人产品大百科
+├── system-design/              # 系统设计
+└── companies/                  # 机器人公司与求职
 ```
 
-## 🚀 快速开始 (Getting Started)
+</details>
 
-### 📚 推荐学习路径
+</details>
 
-#### 学习者/应届生
-1. **基础入门**: 先看 [理论基础 (Theory)](./theory/README.md) 的 **Part 1: Foundations**，理解数据格式、动作空间、评估体系。
-2. **架构理解**: 深入学习 **Part 2: Architecture & Algorithms**，掌握 VLA 核心架构和生成策略。
-3. **产品认知**: 浏览 [产品汇总 (Products)](./product/README.md)，了解主流机器人硬件参数。
-4. **实战准备**: 学习 [真机部署 (Deployment)](./deployment/README.md)，掌握硬件选型和模型优化。
-5. **求职规划**: 参考 [公司名录 (Companies)](./companies/README.md)，了解行业格局和岗位要求。
+---
 
-#### 在职转岗/跳槽者
-1. **速查复习**: 先看 [速查表](./cheat-sheet/README.md) 快速回顾核心概念和公式。
-2. **深度补充**: 针对性阅读 [理论基础](./theory/README.md) 中的薄弱环节
-   - **最新技术**: FAST, Knowledge Insulation, LoRA/QLoRA, 量化理论
-   - **前沿模型**: Galaxea G0, WALL-OSS 双系统架构对比
-   - **评估体系**: 理解 Benchmarks 和 Metrics 的设计原理
-3. **实战强化**: 重点学习 [真机部署](./deployment/README.md)
-   - 仿真环境选型 (Isaac Sim vs MuJoCo)
-   - 模型优化与边缘部署
-   - Sim-to-Real 技术路线
-4. **面试准备**: 刷 [题库](./question-bank/README.md) 模拟真实面试场景。
-5. **目标公司**: 在 [公司目录](./companies/README.md) 中锁定意向公司和岗位方向。
+<details>
+<summary><b>🛠️ VLA 开发必备知识</b></summary>
 
-#### 面试官/技术Leader
-1. **题库设计**: 参考 [面试官视角](./question-bank/interviewer_guide.md)
-2. **技术深度**: 查阅 [文献综述](./theory/literature_review.md) 了解前沿
-3. **系统设计**: 学习 [系统设计](./system-design/README.md) 评估候选人架构能力
-
-## 🛠️ VLA 开发必备知识 (Development Essentials)
-
-### 数据格式 (Data Formats)
+### 数据格式
 
 | 格式 | 框架 | 优势 | 使用场景 |
 | :--- | :--- | :--- | :--- |
@@ -171,7 +150,7 @@
 | **RLDS** | TensorFlow | Open X-Embodiment 标准 | RT-1, RT-2, Octo |
 | **HDF5 / NPZ** | 通用 | 跨平台，读写快 | 自定义数据集 |
 
-### 仿真环境 (Simulation)
+### 仿真环境
 
 | 平台 | 速度 | 适用场景 | 文档 |
 | :--- | :--- | :--- | :--- |
@@ -182,7 +161,7 @@
 | **PyBullet** | 中等 | 学术研究，教学 | [Docs](https://pybullet.org/) |
 | **Gazebo** | 慢 | ROS 集成，移动机器人 | [Tutorial](http://gazebosim.org/tutorials) |
 
-### 深度学习框架 (DL Frameworks)
+### 深度学习框架
 
 | 类别 | 工具 | 说明 |
 | :--- | :--- | :--- |
@@ -192,7 +171,7 @@
 | **量化** | bitsandbytes, AWQ, GPTQ | QLoRA 训练，推理加速 |
 | **优化** | Flash Attention, torch.compile, KV-Cache | 内存优化，编译加速 |
 
-### RL 框架 (RL Frameworks)
+### RL 框架
 
 | 框架 | 定位 | 适用场景 |
 | :--- | :--- | :--- |
@@ -202,7 +181,7 @@
 | **CleanRL** | 单文件实现 | 学习、研究 |
 | **TorchRL** | PyTorch 官方 | 生产级应用 |
 
-### 机器人控制 (Robot Control)
+### 机器人控制
 
 | 方法 | 原理 | 适用场景 |
 | :--- | :--- | :--- |
@@ -211,7 +190,7 @@
 | **MPC** | 滚动优化 | 轨迹优化、避障 |
 | **Computed Torque** | 动力学补偿 | 高精度任务 |
 
-### 机器人中间件 (Robotics Middleware)
+### 机器人中间件
 
 | 工具 | 定位 | 说明 |
 | :--- | :--- | :--- |
@@ -220,7 +199,7 @@
 | **LeRobot** | VLA 工具链 | Hugging Face 端到端开发 |
 | **MoveIt 2** | 运动规划 | 路径规划，碰撞检测 |
 
-### 硬件控制接口 (Hardware Control)
+### 硬件控制接口
 
 | 硬件 | 通信协议 | 常用工具/SDK |
 | :--- | :--- | :--- |
@@ -228,32 +207,6 @@
 | **机械臂** | EtherCAT, TCP/IP | ROS MoveIt, Franka/UR SDK |
 | **移动底盘** | CAN, Serial | ROS Navigation Stack |
 | **传感器** | USB, Ethernet | ROS cv_bridge, PCL |
-
-### 版本控制与实验管理 (Version Control & Experiment)
-
-| 类别 | 工具 | 说明 |
-| :--- | :--- | :--- |
-| **代码** | Git + GitHub/GitLab | 分布式版本控制 |
-| **大文件** | Git LFS, DVC | 模型权重，数据集 |
-| **实验** | Weights & Biases (推荐), TensorBoard | 实验跟踪，可视化 |
-| **模型** | MLflow, HuggingFace Hub | 模型注册，部署 |
-
-### 开发环境 (Development Environment)
-
-| 类别 | 工具 | 说明 |
-| :--- | :--- | :--- |
-| **Python** | Conda (推荐), venv | 环境隔离，依赖管理 |
-| **容器** | Docker + NVIDIA Container | 环境复现，部署 |
-| **GPU** | CUDA 11.8+, cuDNN, NCCL | PyTorch 兼容，分布式通信 |
-| **IDE** | VS Code, PyCharm | 调试，远程开发 |
-
-### 调试与性能分析 (Debug & Profiling)
-
-| 类别 | 工具 | 说明 |
-| :--- | :--- | :--- |
-| **调试** | pdb, ipdb, VS Code Debugger | Python 调试 |
-| **性能** | torch.profiler, NVIDIA Nsight | GPU 性能分析 |
-| **内存** | nvidia-smi, memory_profiler | 显存/内存监控 |
 
 ### Vision Language Models (VLM) - VLA 训练参考
 
@@ -264,7 +217,6 @@
 | **PaliGemma 3B** | 3B | ✅ Apache 2.0 | π0, OpenVLA | ⭐⭐⭐⭐⭐ 最常用 | [google/paligemma-3b-pt-224](https://huggingface.co/google/paligemma-3b-pt-224) |
 | **SigLIP** | 400M-2.6B | ✅ Apache 2.0 | OpenVLA, RDT (Vision Encoder) | ⭐⭐⭐⭐⭐ VLA 首选视觉编码器 | [google/siglip-*](https://huggingface.co/models?search=siglip) |
 | **LLaVA 1.5/1.6** | 7B/13B | ✅ Apache 2.0 | OpenVLA (Llama 2 + SigLIP) | ⭐⭐⭐⭐ 成熟稳定 | [llava-hf/llava-1.5-*](https://huggingface.co/models?search=llava) |
-| **LLaVA-NeXT** | 7B/13B/34B | ✅ Apache 2.0 | - | ⭐⭐⭐⭐ 最新版本，性能提升 | [llava-hf/llava-next-*](https://huggingface.co/models?search=llava-next) |
 | **Qwen2.5-VL** 🆕 | 3B/7B/32B/72B | ✅ Apache 2.0 | - | ⭐⭐⭐⭐⭐ **2025 SOTA**，中文首选 | [Qwen/Qwen2.5-VL-*](https://huggingface.co/models?search=Qwen2.5-VL) |
 | **Eagle 2.5** 🆕 | 8B | ✅ Apache 2.0 | - | ⭐⭐⭐⭐ 长上下文多模态 | [nvidia/Eagle-*](https://huggingface.co/models?search=Eagle) |
 | **Seed 1.5-VL** 🆕 | 20B | ✅ | - | ⭐⭐⭐⭐ GUI 交互强 | [ByteDance/Seed-*](https://huggingface.co/models?search=Seed) |
@@ -321,7 +273,7 @@ action = policy.select_action(observation)
 - [π0.5 模型解剖](./theory/pi0_5_dissection.md) - 开放世界泛化
 - [π0.6 模型解剖](./theory/pi0_6_dissection.md) - Recap 自我进化
 
-### 学习资源 (Resources)
+### 学习资源
 
 | 类型 | 链接 |
 | :--- | :--- |
@@ -330,45 +282,38 @@ action = policy.select_action(observation)
 | **数据集** | [Open X-Embodiment](https://robotics-transformer-x.github.io/) · [RLDS](https://github.com/google-research/rlds) |
 | **社区** | ROS Discourse · PyTorch Forums · Stack Overflow · GitHub Discussions |
 
-## 📝 更新日志 (Changelog)
+</details>
+
+---
+
+<details>
+<summary><b>📝 更新日志（最近更新）</b></summary>
+
+### 2025-12-18 🆕
+- **VLN 专题**: 新增 [`vln_dualvln.md`](./theory/vln_dualvln.md) - DualVLN 快慢系统（首个 VLN 基础模型）
+- **首页优化**: 重构为研究型 landing page，Theory 优先，长内容折叠收纳
 
 ### 2025-12-16 🆕
-- **数学第一性原理 (Mathematical First Principles)**:
-  - 为 15+ 篇核心理论文档增加了 "Main Mathematical Idea" 章节
-  - 涵盖 RL, Diffusion, Flow Matching, LoRA, Flash Attention 等
-- **真机部署实战 (Deployment)**:
-  - 新增 [ur5_control_guide.md](./deployment/ur5_control_guide.md): Linux Python 控制 UR5 实战
-  - 新增 [ros_and_optimization.md](./deployment/ros_and_optimization.md): ROS 集成与 Python 代码性能优化 (OOP, Safety, JIT)
+- **数学第一性原理**: 为 15+ 篇核心理论文档增加了 "Main Mathematical Idea" 章节
+- **真机部署实战**: 新增 UR5 Python 控制、ROS 集成与 Python 性能优化
 - **Python OOP 实战**: 题库新增面向对象编程在机器人控制中的应用题
 
 ### 2025-12-13 🆕
-- **NeurIPS 2025 最佳论文解读**: 新增 [neurips_2025_insights.md](./theory/neurips_2025_insights.md)
+- **NeurIPS 2025 最佳论文解读**: 新增 [`neurips_2025_insights.md`](./theory/neurips_2025_insights.md)
   - 6 篇获奖论文的具身智能视角解读
-  - Artificial Hivemind: 模型同质化与机器人行为多样性
-  - Gated Attention: 门控注意力机制与边缘部署
-  - 1000 Layer Networks: 深层自监督 RL
-  - Diffusion Generalization: 扩散模型泛化机制
-  - Superposition Scaling: 表示叠加与多技能统一模型
-  - RL Reasoning Limits: RLVR 局限性分析
-  - **未来发展方向**: 技术趋势、待解决问题、突破口预测
+  - Artificial Hivemind、Gated Attention、1000 Layer Networks 等
+
+<details>
+<summary>查看更多历史更新</summary>
 
 ### 2025-12-08
-- **小模型 VLA 研究**: 新增 [small_vla_models.md](./theory/small_vla_models.md)
+- **小模型 VLA 研究**: 新增 [`small_vla_models.md`](./theory/small_vla_models.md)
   - Evo-1 (770M, LIBERO 94.8% SOTA)
   - SmolVLA (450M, 45-60Hz 推理)
-  - ControlVLA (10-20 shot 少样本适配)
   - 核心发现：210M SmolVLA 超越 55B RT-2-X
-- **潜在动作学习**: 新增 Latent Action Learning 章节
-  - UniVLA (IJRR 2024): 从视频学习跨机器人动作
-  - EvoVLA, MemoryVLA, TTF-VLA, OmniVLA, MergeVLA
-- **论文索引系统**: [paper_index.md](./theory/paper_index.md)
-  - 多维度索引（技术/公司/时间）
-  - 按技术分类的文献综述重构
-- **ByteDance GR-RL**: [gr_rl_dissection.md](./theory/gr_rl_dissection.md)
-  - 三阶段 RL 训练、形态对称增强
-  - 首个真机穿鞋带 VLA (78% 成功率)
-- **VLA 十大挑战**: [vla_challenges.md](./theory/vla_challenges.md)
-  - NTU/Stanford 2025 研究方向
+- **潜在动作学习**: 新增 Latent Action Learning 章节（UniVLA, EvoVLA, MemoryVLA）
+- **论文索引系统**: [`paper_index.md`](./theory/paper_index.md) - 多维度索引（技术/公司/时间）
+- **ByteDance GR-RL**: [`gr_rl_dissection.md`](./theory/gr_rl_dissection.md) - 三阶段 RL 训练，首个真机穿鞋带 VLA (78% 成功率)
 
 ### 2025-12-06
 - 新增 VLA 总工程师研究方案系列
@@ -383,12 +328,18 @@ action = policy.select_action(observation)
 - 新增视觉感知、运动规划、SLAM 专题
 - 新增传感器集成与末端执行器控制
 
+</details>
+
+</details>
+
+---
+
 ## 🤝 贡献 (Contributing)
 
 欢迎提交 Issue 和 Pull Request！
-- 补充最新的 VLA 论文解读。
-- 分享你的真机部署经验。
-- 提供更多面试真题。
+- 补充最新的 VLA 论文解读
+- 分享你的真机部署经验
+- 提供更多面试真题
 
 ## 📄 许可证 (License)
 
