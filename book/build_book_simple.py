@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-VLA Interview Handbook - Simple Book Builder
+VLA Handbook - Simple Book Builder
 使用纯 Python 生成合并的 Markdown（无需 pandoc）
 
 PDF 转换可以使用:
@@ -48,26 +48,27 @@ CHAPTERS = [
     ("第18章 感知技术", "perception_techniques.md"),
     ("第19章 点云与 SLAM", "pointcloud_slam.md"),
     ("第20章 状态估计", "state_estimation.md"),
+    ("第21章 具身导航 (VLN) / DualVLN 快慢系统", "vln_dualvln.md"),
     
     # 第五部分：抓取与运动规划
     ("part5", "# 第五部分：抓取与运动规划"),
-    ("第21章 抓取算法", "grasp_algorithms.md"),
-    ("第22章 运动规划", "motion_planning.md"),
-    ("第23章 触觉 VLA", "tactile_vla.md"),
+    ("第22章 抓取算法", "grasp_algorithms.md"),
+    ("第23章 运动规划", "motion_planning.md"),
+    ("第24章 触觉 VLA", "tactile_vla.md"),
     
     # 第六部分：前沿模型解析
     ("part6", "# 第六部分：前沿模型解析"),
-    ("第24章 RDT (Robotics Diffusion Transformer)", "rdt.md"),
-    ("第25章 π0.5 解析", "pi0_5_dissection.md"),
-    ("第26章 π0.6 解析", "pi0_6_dissection.md"),
-    ("第27章 Galaxea G0", "galaxea_g0.md"),
-    ("第28章 WALL-OSS", "wall_oss.md"),
+    ("第25章 RDT (Robotics Diffusion Transformer)", "rdt.md"),
+    ("第26章 π0.5 解析", "pi0_5_dissection.md"),
+    ("第27章 π0.6 解析", "pi0_6_dissection.md"),
+    ("第28章 Galaxea G0", "galaxea_g0.md"),
+    ("第29章 WALL-OSS", "wall_oss.md"),
     
     # 第七部分：评估与推理
     ("part7", "# 第七部分：评估与推理"),
-    ("第29章 Chain-of-Thought 推理", "chain_of_thought.md"),
-    ("第30章 评估方法论", "evaluation.md"),
-    ("第31章 知识隔离", "knowledge_insulation.md"),
+    ("第30章 Chain-of-Thought 推理", "chain_of_thought.md"),
+    ("第31章 评估方法论", "evaluation.md"),
+    ("第32章 知识隔离", "knowledge_insulation.md"),
     
     # 附录
     ("appendix", "# 附录"),
@@ -112,13 +113,13 @@ def main():
     output_dir.mkdir(exist_ok=True)
     
     # 书籍头部
-    book = f"""# VLA 面试手册：从理论到实践
+    book = f"""# VLA Handbook：从理论到实践
 
 > **Vision-Language-Action 完全指南**
 >
 > 生成日期: {datetime.now().strftime("%Y年%m月%d日")}
 >
-> 在线版本: https://github.com/sou350121/vla-interview-handbook
+> 在线版本: https://github.com/sou350121/VLA-Handbook
 
 ---
 
@@ -136,10 +137,10 @@ def main():
             
         filepath = theory_dir / filename
         if not filepath.exists():
-            print(f"⚠️  跳过: {filename}")
+            print(f"[WARN] 跳过: {filename}")
             continue
         
-        print(f"📖 {title}")
+        print(f"[CHAPTER] {title}")
         content = filepath.read_text(encoding='utf-8')
         content = clean_content(content)
         
@@ -159,13 +160,13 @@ def main():
                 book += line + '\n'
     
     # 写入文件
-    output_path = output_dir / "VLA_Interview_Handbook_Full.md"
+    output_path = output_dir / "VLA_Handbook_Full.md"
     output_path.write_text(book, encoding='utf-8')
     
-    print(f"\n✅ 生成完成: {output_path}")
+    print(f"\n[OK] 生成完成: {output_path}")
     print(f"   文件大小: {output_path.stat().st_size / 1024:.1f} KB")
     print(f"   总字数约: {len(book)} 字符")
-    print("\n📄 转换为 PDF 的方法:")
+    print("\n[INFO] 转换为 PDF 的方法:")
     print("   1. 在线: https://md2pdf.netlify.app/")
     print("   2. VS Code: 安装 'Markdown PDF' 插件，右键导出")
     print("   3. Typora: 文件 → 导出 → PDF")

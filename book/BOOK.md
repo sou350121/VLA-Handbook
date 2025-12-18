@@ -1,4 +1,4 @@
-# VLA 面试手册：从理论到实践
+# VLA Handbook：从理论到实践
 
 > **Vision-Language-Action 完全指南**
 > 

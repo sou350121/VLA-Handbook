@@ -25,13 +25,13 @@ def convert_md_to_html(md_path: Path, html_path: Path):
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>VLA 面试手册</title>
+    <title>VLA Handbook</title>
     <style>
         @page {{
             size: A4;
             margin: 2cm;
             @top-center {{
-                content: "VLA 面试手册";
+                content: "VLA Handbook";
                 font-size: 10pt;
                 color: #666;
             }}
@@ -144,7 +144,7 @@ def convert_md_to_html(md_path: Path, html_path: Path):
 """
     
     html_path.write_text(full_html, encoding='utf-8')
-    print(f"✅ HTML 生成: {html_path}")
+    print(f"[OK] HTML 生成: {html_path}")
     return html_path
 
 
@@ -153,11 +153,11 @@ def convert_html_to_pdf(html_path: Path, pdf_path: Path):
     try:
         from weasyprint import HTML
         HTML(filename=str(html_path)).write_pdf(str(pdf_path))
-        print(f"✅ PDF 生成: {pdf_path}")
+        print(f"[OK] PDF 生成: {pdf_path}")
         print(f"   文件大小: {pdf_path.stat().st_size / 1024 / 1024:.2f} MB")
         return True
     except Exception as e:
-        print(f"❌ PDF 生成失败: {e}")
+        print(f"[ERR] PDF 生成失败: {e}")
         print("   请尝试其他方法转换 HTML 为 PDF")
         return False
 
@@ -166,18 +166,18 @@ def main():
     book_dir = Path(__file__).resolve().parent
     output_dir = book_dir / "output"
     
-    md_path = output_dir / "VLA_Interview_Handbook_Full.md"
-    html_path = output_dir / "VLA_Interview_Handbook.html"
-    pdf_path = output_dir / "VLA_Interview_Handbook.pdf"
+    md_path = output_dir / "VLA_Handbook_Full.md"
+    html_path = output_dir / "VLA_Handbook.html"
+    pdf_path = output_dir / "VLA_Handbook.pdf"
     
     if not md_path.exists():
-        print("❌ 请先运行 build_book_simple.py 生成 Markdown")
+        print("[ERR] 请先运行 build_book_simple.py 生成 Markdown")
         return
     
-    print("📖 转换 Markdown → HTML...")
+    print("[INFO] 转换 Markdown → HTML...")
     convert_md_to_html(md_path, html_path)
     
-    print("\n📄 转换 HTML → PDF...")
+    print("\n[INFO] 转换 HTML → PDF...")
     convert_html_to_pdf(html_path, pdf_path)
 
 

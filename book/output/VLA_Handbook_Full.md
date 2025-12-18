@@ -1,57 +1,105 @@
----
-title: "VLA 面试手册：从理论到实践"
-subtitle: "Vision-Language-Action 完全指南"
-author: "VLA Interview Handbook Contributors"
-date: "2025年12月03日"
-documentclass: report
-geometry: margin=2.5cm
-fontsize: 11pt
-toc: true
-toc-depth: 3
-numbersections: true
-colorlinks: true
-linkcolor: blue
-urlcolor: blue
-header-includes:
-  - \usepackage{ctex}
-  - \usepackage{fancyhdr}
-  - \pagestyle{fancy}
-  - \fancyhead[L]{VLA 面试手册}
-  - \fancyhead[R]{\thepage}
-  - \fancyfoot[C]{}
+# VLA Handbook：从理论到实践
+
+> **Vision-Language-Action 完全指南**
+>
+> 生成日期: 2025年12月18日
+>
+> 在线版本: https://github.com/sou350121/VLA-Handbook
+
 ---
 
-\newpage
+# 目录
 
-# 前言
 
-本书是 **VLA Interview Handbook** 项目的完整理论部分，系统性地介绍了视觉-语言-动作 (Vision-Language-Action) 模型的核心概念、关键技术与工程实践。
+# 第一部分：基础架构
 
-**适用读者**：
-- 准备机器人/具身智能方向面试的工程师
-- 希望系统学习 VLA 技术栈的研究者
-- 对多模态机器人感兴趣的学生
+- 第1章 Transformer vs CNN
+- 第2章 Flash Attention 与推理优化
+- 第3章 多模态模型基础
+- 第4章 VLA 架构总览
 
-**如何使用本书**：
-1. **系统学习**：按章节顺序阅读，建立完整知识体系
-2. **面试准备**：重点关注每章末尾的 Q&A 部分
-3. **查阅参考**：使用目录快速定位特定主题
+# 第二部分：策略生成与动作表示
 
-**在线版本**：https://github.com/sou350121/vla-interview-handbook
+- 第5章 动作表示方法
+- 第6章 Diffusion Policy
+- 第7章 Action Chunking Transformer (ACT)
+- 第8章 Flow Matching
+- 第9章 FAST 动作序列编码
 
-\newpage
+# 第三部分：训练技术与优化
+
+- 第10章 参数高效微调 (PEFT/LoRA)
+- 第11章 强化学习基础与 RLHF
+- 第12章 知识蒸馏
+- 第13章 自监督学习
+- 第14章 迁移学习与 Co-training
+- 第14章附 Co-training 详解
+- 第15章 量化技术
+
+# 第四部分：感知与空间智能
+
+- 第16章 空间数学基础
+- 第17章 机器人控制方法
+- 第18章 感知技术
+- 第19章 点云与 SLAM
+- 第20章 状态估计
+- 第21章 具身导航 (VLN) / DualVLN 快慢系统
+
+# 第五部分：抓取与运动规划
+
+- 第22章 抓取算法
+- 第23章 运动规划
+- 第24章 触觉 VLA
+
+# 第六部分：前沿模型解析
+
+- 第25章 RDT (Robotics Diffusion Transformer)
+- 第26章 π0.5 解析
+- 第27章 π0.6 解析
+- 第28章 Galaxea G0
+- 第29章 WALL-OSS
+
+# 第七部分：评估与推理
+
+- 第30章 Chain-of-Thought 推理
+- 第31章 评估方法论
+- 第32章 知识隔离
+
+# 附录
+
+- 附录A 数据格式与处理
+- 附录B 文献综述
+- 附录C ASCII 图表速查
+
+
+---
+
+
+---
 
 # 第一部分：基础架构
 
 
-\newpage
+---
 
-# 第1章 Transformer vs CNN
+## 第1章 Transformer vs CNN
 
+
+### 主要数学思想 (Main Mathematical Idea)
+
+> **"Global Attention vs. Local Connectivity (归纳偏置的权衡)"**
+
+Transformer 和 CNN 的核心对立在于如何处理信息：
+1.  **CNN (卷积)**: 假设 "相邻的像素是相关的" (**Local Connectivity**) 和 "特征在哪里并不重要" (**Translation Invariance**)。这是一种强烈的**归纳偏置 (Inductive Bias)**。
+2.  **Transformer (注意力)**: 假设 "任何两个像素之间都可能相关" (**Global Attention**)。它没有预设的偏置，完全依赖数据驱动的关系发现 (**Content-based Interactions**)。
+
+从数学上讲，CNN 的卷积核是一个**固定**的局部算子 $y_i = \sum_j w_{i-j} x_j$，而 Transformer 的注意力是一个**动态**的全局算子 $y_i = \sum_j \text{softmax}(q_i^T k_j) v_j$，其中权重取决于输入本身。
+
+---
 
 在 VLA (Vision-Language-Action) 面试中，理解 Backbone (骨干网络) 的差异至关重要。虽然现在的趋势是 Transformer (ViT) 一统天下，但 CNN (ResNet, EfficientNet) 依然在 RT-1 等经典模型中扮演重要角色。
 
-## 1. 核心差异一览表
+### 1. 核心差异一览表
 
 | 特性 | CNN (卷积神经网络) | Transformer (自注意力机制) |
 | :--- | :--- | :--- |
@@ -63,51 +111,51 @@ header-includes:
 | **擅长领域** | 图像纹理, 边缘检测 | 语义理解, 长距离依赖 |
 | **代表模型** | ResNet, EfficientNet | ViT, BERT, GPT |
 
-## 2. CNN (Convolutional Neural Networks)
+### 2. CNN (Convolutional Neural Networks)
 
-### 原理
+#### 原理
 CNN 模仿生物视觉皮层，通过**滑动窗口 (Sliding Window)** 提取特征。
 - **局部性 (Locality)**: 每次只看一小块区域 (e.g., 3x3 像素)。
 - **平移不变性 (Translation Invariance)**: 猫在图片左上角还是右下角，识别出的特征是一样的。
 - **层级结构**: 浅层学边缘/纹理，深层学形状/物体。
 
-### 在 VLA 中的应用
+#### 在 VLA 中的应用
 - **RT-1**: 使用 **EfficientNet-B3** 作为视觉编码器。
 - **优势**: 训练收敛快，对小数据集友好 (因为有很强的归纳偏置)。
 - **劣势**: 难以捕捉长距离关系 (比如：桌子左边的杯子和桌子右边的壶之间的关系，CNN 需要堆叠很多层才能"看"到两者)。
 
-## 3. Transformer (Attention Is All You Need)
+### 3. Transformer (Attention Is All You Need)
 
-### 原理
+#### 原理
 Transformer 抛弃了卷积，完全依赖 **Self-Attention (自注意力机制)**。
 - **全局感受野**: 每一个 Token (像素块) 都能直接"关注"到图像中的其他所有 Token。
 - **动态权重**: 卷积核的权重是固定的 (训练好后)，而 Attention Map 是根据输入动态生成的。
 
-### 在 VLA 中的应用
+#### 在 VLA 中的应用
 - **RT-2 / OpenVLA / Pi0**: 使用 **ViT (Vision Transformer)** 或 **SigLIP**。
 - **优势**:
     - **多模态统一**: 图像 Patch 和文本 Token 可以被同等对待，直接拼接输入 Transformer。
     - **Scaling Law**: 数据越多，模型越大，效果越好 (由弱归纳偏置决定)。
 - **劣势**: 训练极其昂贵，需要海量数据 (JFT-300M, LAION-5B) 才能超越 CNN。
 
-## 4. 为什么 VLA 转向 Transformer?
+### 4. 为什么 VLA 转向 Transformer?
 
 1.  **多模态融合**: 机器人需要同时处理视觉 (Vision) 和语言 (Language)。Transformer 是目前唯一能完美统一这两种模态的架构 (Early Fusion)。
 2.  **语义理解**: 机器人不再只是"执行动作"，而是需要"理解环境"。Transformer 在语义提取上远强于 CNN。
 3.  **时序建模**: 动作序列 (Action Sequence) 本质上是时间序列。Transformer (GPT 风格) 天生适合处理序列预测问题。
 
-## 5. 深度解析: ViT & SigLIP 技术细节
+### 5. 深度解析: ViT & SigLIP 技术细节
 在 OpenVLA 和 Pi0 等现代模型中，ViT (Vision Transformer) 通常搭配 **SigLIP** 预训练目标使用。
 
-### 5.1 Vision Transformer (ViT) 核心组件
+#### 5.1 Vision Transformer (ViT) 核心组件
 ViT 将图像视为一系列 Patch 的序列，完全摒弃了卷积。
 
 1.  **Patchify & Linear Projection (切片与线性映射)**:
     - 输入图像 $x \in \mathbb{R}^{H \times W \times C}$ 被切分为 $N$ 个 $P \times P$ 的 Patch $x_p \in \mathbb{R}^{N \times (P^2 \cdot C)}$。
     - **公式**:
-```math
+      $$
       z_0 = [x_p^1 E; x_p^2 E; \cdots; x_p^N E] + E_{pos}
-```
+      $$
       其中 $E \in \mathbb{R}^{(P^2 \cdot C) \times D}$ 是可学习的线性投影矩阵，$E_{pos} \in \mathbb{R}^{(N+1) \times D}$ 是位置编码。
     - **关键细节**: 这一步等价于一个 `Conv2d(in_channels=3, out_channels=D, kernel_size=P, stride=P)` 操作。
 
@@ -120,21 +168,21 @@ ViT 将图像视为一系列 Patch 的序列，完全摒弃了卷积。
     - **Average Pooling (GAP)**: 现代 ViT (如 SigLIP) 往往去掉 CLS Token，直接对所有 Patch 的输出取平均 (Global Average Pooling)。
       - **优势**: 能够利用全图信息，且对 Learning Rate 更鲁棒 (MAP 论文指出 GAP 优于 CLS)。
 
-### 5.2 SigLIP (Sigmoid Loss for Language Image Pre-training)
+#### 5.2 SigLIP (Sigmoid Loss for Language Image Pre-training)
 OpenVLA 的视觉编码器使用的是 **SigLIP** (来自 Google DeepMind)，而非传统的 CLIP。
 
 #### 1. 为什么不用 CLIP (Softmax Loss)?
 传统的 CLIP 使用 **InfoNCE Loss** (基于 Softmax)，需要维护巨大的负样本对 (Negative Pairs)。
-```math
+$$
 L_{CLIP} = -\frac{1}{N} \sum_{i=1}^N \log \frac{e^{x_i \cdot y_i / \tau}}{\sum_{j=1}^N e^{x_i \cdot y_j / \tau}}
-```
+$$
 - **通信瓶颈**: 分母 $\sum e^{...}$ 需要聚合所有 GPU 上的所有样本 (Global Reduction)。在分布式训练中，这会导致巨大的通信开销。
 
 #### 2. SigLIP 的创新 (Sigmoid Loss)
 SigLIP 将 $N \times N$ 的匹配问题转化为 **$N^2$ 个独立的二分类问题**。
-```math
+$$
 L_{SigLIP} = - \frac{1}{N} \sum_{i=1}^N \sum_{j=1}^N \left[ \mathbb{I}_{i=j} \log \sigma(x_i \cdot y_j / \tau + b) + \mathbb{I}_{i \neq j} \log (1 - \sigma(x_i \cdot y_j / \tau + b)) \right]
-```
+$$
 - **$\mathbb{I}_{i=j}$**: 正样本对 (对角线)，标签为 1。
 - **$\mathbb{I}_{i \neq j}$**: 负样本对 (非对角线)，标签为 0。
 - **优势**:
@@ -146,15 +194,15 @@ SigLIP 引入了一个可学习的 Bias $b$ (通常初始化为 $- \log N$)。
 - **原因**: 在训练初期，正样本极少 (1个)，负样本极多 ($N-1$个)。如果 Bias 为 0，Sigmoid 输出 0.5，会导致巨大的初始 Loss (因为大部分应该是 0)。
 - **Trick**: 初始化 $b = -10$ 或 $- \log N$，强制初始概率接近 0，匹配负样本占主导的先验分布，极大地稳定了训练。
 
-## 6. 自注意力机制详解 (Self-Attention Deep Dive)
+### 6. 自注意力机制详解 (Self-Attention Deep Dive)
 
-### 6.1 计算公式
+#### 6.1 计算公式
 
 自注意力机制的核心公式：
 
-```math
+$$
 \text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right) V
-```
+$$
 
 其中：
 - $Q = XW_Q$, $K = XW_K$, $V = XW_V$ (线性投影)
@@ -179,7 +227,7 @@ SigLIP 引入了一个可学习的 Bias $b$ (通常初始化为 $- \log N$)。
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-### 6.2 计算复杂度分析
+#### 6.2 计算复杂度分析
 
 | 步骤 | 操作 | 时间复杂度 | 空间复杂度 |
 | :--- | :--- | :--- | :--- |
@@ -195,17 +243,17 @@ SigLIP 引入了一个可学习的 Bias $b$ (通常初始化为 $- \log N$)。
 - **瓶颈**: 当 $N$ 很大时 (如 VLA 中多帧图像 + 语言 Token)，显存成为主要瓶颈
 - **解决方案**: Flash Attention (参见 [flash_attention.md](./flash_attention.md))
 
-### 6.3 Multi-Head Attention
+#### 6.3 Multi-Head Attention
 
 将注意力分成多个"头"，每个头关注不同的特征子空间：
 
-```math
+$$
 \text{MultiHead}(Q, K, V) = \text{Concat}(\text{head}_1, ..., \text{head}_h) W^O
-```
+$$
 
-```math
+$$
 \text{head}_i = \text{Attention}(QW_i^Q, KW_i^K, VW_i^V)
-```
+$$
 
 **优势**:
 - 不同头可以关注不同类型的关系 (位置、语义、纹理等)
@@ -213,7 +261,7 @@ SigLIP 引入了一个可学习的 Bias $b$ (通常初始化为 $- \log N$)。
 
 ---
 
-## 7. 面试常见问题
+### 7. 面试常见问题
 
 **Q: 自注意力机制是什么？计算复杂度怎么算？**
 A: 自注意力让序列中每个位置都能直接关注其他所有位置。计算 $QK^T$ 需要 $O(N^2 d)$ 时间和 $O(N^2)$ 空间，其中 $N$ 是序列长度，$d$ 是特征维度。这是 Transformer 处理长序列时的主要瓶颈。
@@ -230,12 +278,25 @@ A: 将一张图片切成一个个小方块 (e.g., 16x16 像素)，拉平成向�
 
 ---
 
-\newpage
 
-# 第2章 Flash Attention 与推理优化
+---
+
+## 第2章 Flash Attention 与推理优化
 
 
 Flash Attention 是 Transformer 模型（包括 VLA）在部署时的核心优化技术，解决了标准 Attention 的内存瓶颈问题。
+
+### 0. 主要數學思想 (Main Mathematical Idea)
+
+> **第一性原理**: **Locality of Reference (引用的局部性 / Tiling)**
+
+在现代计算硬件（GPU）中，**搬运数据**比**计算数据**要慢得多且昂贵得多。数学公式等价并不代表计算效率等价。
+
+- **核心数学工具**: **Block Matrix Multiplication (分块矩阵乘法)** 与 **Online Statistics (在线统计量)**。
+- **解题逻辑**:
+    1.  **分块 (Tiling)**: 将巨大的矩阵 $N \times N$ 切分成小块，使得每个小块可以完全塞进 GPU 极快的片上缓存 (SRAM)。
+    2.  **在线 Softmax**: 标准 Softmax 需要遍历全行才能计算归一化因子。Flash Attention 利用数学技巧 ($e^{x-m}$)，使得 Softmax 可以分块增量计算，无需等待全行结果。
+    3.  **重计算**: 有时为了省去昂贵的显存读写 (HBM I/O)，宁愿在 SRAM 中重新算一遍（Recomputation）。这是典型的"时间换空间，空间换带宽"。
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -273,9 +334,9 @@ Flash Attention 是 Transformer 模型（包括 VLA）在部署时的核心优�
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-## 1. 为什么需要 Flash Attention?
+### 1. 为什么需要 Flash Attention?
 
-### 标准 Attention 的问题
+#### 标准 Attention 的问题
 标准的 Scaled Dot-Product标准 Attention 计算公式：
 
 ```
@@ -286,9 +347,9 @@ Attention(Q, K, V) = softmax(Q·K^T / √d_k) · V
 - **实例**: 对于 ViT (序列长度 196), $196 \times 196 = 38,416$ 个浮点数。VLA 中若包含多帧图像，$N$ 可能达到数千。
 - **显存占用**: $O(N^2)$ 的内存占用使得长序列推理几乎不可行。
 
-## 2. Flash Attention 的核心思想
+### 2. Flash Attention 的核心思想
 
-### Tiling (分块计算)
+#### Tiling (分块计算)
 Flash Attention 通过 **分块 (Tiling)** 避免实际存储完整的 $QK^T$ 矩阵。
 
 **算法流程**:
@@ -297,7 +358,7 @@ Flash Attention 通过 **分块 (Tiling)** 避免实际存储完整的 $QK^T$ �
 3. 使用 **在线 Softmax (Online Softmax)** 技术增量更新归一化。
 4. 最终合并结果，避免将中间结果写回 HBM (High Bandwidth Memory)。
 
-### 2.1 Kernel Fusion (算子融合): IO-Aware Computing
+#### 2.1 Kernel Fusion (算子融合): IO-Aware Computing
 Flash Attention 的核心洞察是：**Transformer 的瓶颈不在计算 (FLOPs)，而在显存读写 (HBM IO)**。
 
 -   **HBM vs SRAM**:
@@ -312,7 +373,7 @@ Flash Attention 的核心洞察是：**Transformer 的瓶颈不在计算 (FLOPs)
     -   数据一旦从 HBM 加载到 SRAM，就在 SRAM 中完成 $QK^T$, Softmax, $PV$ 的所有计算，只把最终结果 $O$ 写回 HBM。
     -   **结果**: HBM 读写量从 $O(N^2)$ 降低到 $O(N)$，尽管 FLOPs 没变，但端到端速度提升了 2-4 倍。
 
-### 2.2 Recomputation (重计算): 换取显存的艺术
+#### 2.2 Recomputation (重计算): 换取显存的艺术
 在训练时的反向传播 (Backward Pass) 中，通常需要保存前向传播的中间激活值 (Activations) 来计算梯度。
 
 -   **标准做法**: 保存巨大的 $N \times N$ 注意力矩阵 $P$。这直接导致了 OOM (Out of Memory)。
@@ -324,7 +385,7 @@ Flash Attention 的核心洞察是：**Transformer 的瓶颈不在计算 (FLOPs)
     -   但由于 Attention 是 **IO-Bound** (受限于带宽) 的，重计算带来的额外 FLOPs 开销，远小于从 HBM 读取巨大矩阵 $P$ 的时间开销。
     -   **结论**: Recomputation 不仅省了显存，反而因为减少了 IO 而变快了。
 
-### 数学推导：在线 Softmax
+#### 数学推导：在线 Softmax
 
 标准 Softmax 需要两次扫描序列（一次求和，一次归一化）。Flash Attention 使用增量更新：
 
@@ -340,21 +401,21 @@ m_new = max(m_old, m_block)
 l_new = exp(m_old - m_new) * l_old + exp(m_block - m_new) * l_block
 ```
 
-## 3. 在 VLA 中的应用
+### 3. 在 VLA 中的应用
 
-### Wall-X / OpenVLA
+#### Wall-X / OpenVLA
 - **Wall-X**: requirements.txt 中明确依赖 `flash-attn==2.7.4`。
 - **OpenVLA**: 支持 Flash Attention 2 加速推理，尤其在处理长历史序列时。
 
-### Pi0
+#### Pi0
 - Pi0 使用 Flow Matching，推理时需要多步 ODE Solver。Flash Attention 在每一步都能显著减少显存占用。
 
-### 性能提升
+#### 性能提升
 - **速度**: 2-4x 加速（相比标准 Attention）。
 - **显存**: 内存占用从 $O(N^2)$ 降至 $O(N)$。
 - **部署**: 使得在消费级 GPU (e.g., RTX 4090) 上部署 7B VLA 成为可能。
 
-## 4. Flash Attention vs 其他优化
+### 4. Flash Attention vs 其他优化
 
 | 技术 | 内存复杂度 | 精度 | 适用场景 |
 | :--- | :--- | :--- | :--- |
@@ -363,9 +424,9 @@ l_new = exp(m_old - m_new) * l_old + exp(m_block - m_new) * l_block
 | **Sparse Attention** | $O(N \log N)$ | 近似 | 超长文本 (不适合 VLA) |
 | **Linear Attention** | $O(N)$ | 近似 | 研究阶段 |
 
-## 5. KV-Cache 推理加速 (KV-Cache for Inference)
+### 5. KV-Cache 推理加速 (KV-Cache for Inference)
 
-### 5.1 问题背景
+#### 5.1 问题背景
 
 在自回归生成 (Autoregressive Generation) 时，每生成一个新 Token 都需要计算 Attention：
 
@@ -383,7 +444,7 @@ l_new = exp(m_old - m_new) * l_old + exp(m_block - m_new) * l_block
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-### 5.2 KV-Cache 原理
+#### 5.2 KV-Cache 原理
 
 **核心思想**: 缓存已计算的 Key 和 Value，新 Token 只需计算增量。
 
@@ -405,7 +466,7 @@ l_new = exp(m_old - m_new) * l_old + exp(m_block - m_new) * l_block
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-### 5.3 加速效果
+#### 5.3 加速效果
 
 | 指标 | 无 KV-Cache | 有 KV-Cache |
 | :--- | :--- | :--- |
@@ -413,13 +474,15 @@ l_new = exp(m_old - m_new) * l_old + exp(m_block - m_new) * l_block
 | 生成 N 个 Token | $O(N^3 d)$ | $O(N^2 d)$ |
 | N=1000 时加速比 | 1x | **~1000x** |
 
-### 5.4 显存代价
+#### 5.4 显存代价
 
 KV-Cache 需要额外显存存储历史 K 和 V：
 
-```math
+
+$$
 \text{KV-Cache 显存} = 2 \times L \times N \times d \times \text{batch\_size} \times \text{bytes}
-```
+$$
+
 
 - $L$: Transformer 层数
 - $N$: 序列长度
@@ -430,7 +493,7 @@ KV-Cache 需要额外显存存储历史 K 和 V：
 - $L=32, d=4096, N=2048, \text{batch}=1$
 - KV-Cache = $2 \times 32 \times 2048 \times 4096 \times 2 \text{ bytes} \approx 1 \text{ GB}$
 
-### 5.5 KV-Cache 优化技术
+#### 5.5 KV-Cache 优化技术
 
 | 技术 | 原理 | 节省比例 |
 | :--- | :--- | :--- |
@@ -441,7 +504,7 @@ KV-Cache 需要额外显存存储历史 K 和 V：
 
 ---
 
-## 6. 面试常见问题
+### 6. 面试常见问题
 
 **Q: Flash Attention 的原理是什么？**
 A: 三个关键技术：
@@ -465,16 +528,17 @@ A: 是的。训练时通过 Recomputation 节省显存，推理时通过 Kernel 
 
 ---
 
-\newpage
 
-# 第3章 多模态模型基础
+---
+
+## 第3章 多模态模型基础
 
 
 > **核心概念**: 多模态模型 (Multimodal Models) 是指能够同时处理多种数据模态（如视觉、语言、音频、触觉等）的深度学习模型。在 VLA 领域，多模态能力是连接"看"、"说"、"做"的关键。
 
-## 1. 为什么需要多模态? (Why Multimodal?)
+### 1. 为什么需要多模态? (Why Multimodal?)
 
-### 1.1 机器人的感知需求
+#### 1.1 机器人的感知需求
 
 机器人在真实世界中需要同时处理多种信息：
 
@@ -486,25 +550,27 @@ A: 是的。训练时通过 Recomputation 节省显存，推理时通过 Kernel 
 | **触觉 (Tactile)** | 触觉传感器 | 感知接触力、纹理 |
 | **音频 (Audio)** | 麦克风 | 环境声音、语音交互 |
 
-### 1.2 单模态的局限性
+#### 1.2 单模态的局限性
 
 - **仅视觉**: 无法理解抽象指令（"把那个危险的东西拿走"）
 - **仅语言**: 无法定位具体物体（"桌上的红色杯子"在哪？）
 - **缺乏本体感知**: 不知道机械臂当前姿态，无法闭环控制
 
-### 1.3 多模态的优势
+#### 1.3 多模态的优势
 
-```math
+
+$$
 \text{多模态理解} > \sum \text{单模态理解}
-```
+$$
+
 
 - **语义接地 (Grounding)**: 将语言概念与视觉实体绑定
 - **跨模态推理**: "红色的东西"（语言）→ 锁定红色物体（视觉）→ 抓取动作
 - **鲁棒性**: 一个模态失效时，其他模态可以补偿
 
-## 2. 多模态架构演进 (Architecture Evolution)
+### 2. 多模态架构演进 (Architecture Evolution)
 
-### 2.1 早期：双塔模型 (Dual-Encoder)
+#### 2.1 早期：双塔模型 (Dual-Encoder)
 
 ```
           ┌─────────────┐      ┌─────────────┐
@@ -525,7 +591,7 @@ A: 是的。训练时通过 Recomputation 节省显存，推理时通过 Kernel 
 **特点**: 图像和文本独立编码，通过对比学习对齐到同一空间
 **局限**: 无法进行深度的跨模态交互
 
-### 2.2 中期：融合编码器 (Fusion Encoder)
+#### 2.2 中期：融合编码器 (Fusion Encoder)
 
 ```
           ┌─────────────┐      ┌─────────────┐
@@ -547,7 +613,7 @@ A: 是的。训练时通过 Recomputation 节省显存，推理时通过 Kernel 
 **特点**: 通过 Cross-Attention 实现深度交互
 **改进**: 支持更复杂的多模态推理
 
-### 2.3 现代：统一解码器 (Unified Decoder)
+#### 2.3 现代：统一解码器 (Unified Decoder)
 
 ```
           ┌─────────────┐
@@ -566,9 +632,9 @@ A: 是的。训练时通过 Recomputation 节省显存，推理时通过 Kernel 
 **特点**: 将视觉特征作为"虚拟 Token"输入到 LLM
 **优势**: 利用 LLM 的强大推理能力，支持任意输入输出组合
 
-## 3. VLA 中的多模态融合策略 (Fusion Strategies in VLA)
+### 3. VLA 中的多模态融合策略 (Fusion Strategies in VLA)
 
-### 3.1 早期融合 (Early Fusion)
+#### 3.1 早期融合 (Early Fusion)
 
 在特征提取阶段就进行融合。
 
@@ -592,7 +658,7 @@ class EarlyFusion(nn.Module):
 **优点**: 简单高效
 **缺点**: 不同模态的特征尺度可能不匹配
 
-### 3.2 中期融合 (Mid Fusion / Cross-Attention)
+#### 3.2 中期融合 (Mid Fusion / Cross-Attention)
 
 通过注意力机制动态融合。
 
@@ -619,7 +685,7 @@ class CrossModalAttention(nn.Module):
 **优点**: 动态学习模态间关系
 **缺点**: 计算开销大
 
-### 3.3 晚期融合 (Late Fusion)
+#### 3.3 晚期融合 (Late Fusion)
 
 各模态独立处理后再合并决策。
 
@@ -643,7 +709,7 @@ class LateFusion(nn.Module):
 **优点**: 各模态可以独立优化
 **缺点**: 无法学习复杂的跨模态交互
 
-### 3.4 VLA 中的主流方案：FiLM 调制
+#### 3.4 VLA 中的主流方案：FiLM 调制
 
 **FiLM (Feature-wise Linear Modulation)** 是 VLA 中最常用的条件注入方式。
 
@@ -670,9 +736,9 @@ class FiLM(nn.Module):
 - **RT-1**: 语言特征通过 FiLM 调制视觉特征
 - **Diffusion Policy**: 时间步 $t$ 通过 FiLM 注入到 U-Net
 
-## 4. 核心视觉编码器 (Vision Encoders)
+### 4. 核心视觉编码器 (Vision Encoders)
 
-### 4.1 ViT (Vision Transformer)
+#### 4.1 ViT (Vision Transformer)
 
 ```
 图像 [H, W, 3] 
@@ -693,21 +759,21 @@ class FiLM(nn.Module):
 - 每个 Patch 作为一个 Token
 - 通过 Self-Attention 建模全局关系
 
-### 4.2 SigLIP (Sigmoid Loss for Language-Image Pre-training)
+#### 4.2 SigLIP (Sigmoid Loss for Language-Image Pre-training)
 
 **改进 CLIP**:
 - 使用 Sigmoid 替代 Softmax (更好的批量对比学习)
 - 支持更大的 batch size
 - VLA 首选的视觉编码器 (OpenVLA, RDT)
 
-### 4.3 DINOv2 (Self-supervised Vision Transformer)
+#### 4.3 DINOv2 (Self-supervised Vision Transformer)
 
 **特点**:
 - 自监督预训练，无需标签
 - 强大的低层视觉特征 (边缘、纹理)
 - 适合需要精确空间信息的任务
 
-### 4.4 对比与选择
+#### 4.4 对比与选择
 
 | 编码器 | 预训练方式 | 特点 | VLA 应用 |
 | :--- | :--- | :--- | :--- |
@@ -716,9 +782,9 @@ class FiLM(nn.Module):
 | **CLIP/SigLIP** | 对比学习 | 语义对齐好 | OpenVLA, RDT |
 | **DINOv2** | 自监督 | 空间特征强 | 精细操作 |
 
-## 5. 语言编码器 (Language Encoders)
+### 5. 语言编码器 (Language Encoders)
 
-### 5.1 BERT-style (Encoder-only)
+#### 5.1 BERT-style (Encoder-only)
 
 ```python
 from transformers import BertModel
@@ -727,26 +793,525 @@ text = "pick up the red cup"
 inputs = tokenizer(text, return_tensors="pt")
 outputs = bert_model(**inputs)
 
-## 使用 [CLS] token 或平均池化
 text_embedding = outputs.last_hidden_state[:, 0, :]  # [B, D]
 ```
 
 **适用**: 理解型任务，指令嵌入
 
-### 5.2 T5-style (Encoder-Decoder)
+#### 5.2 T5-style (Encoder-Decoder)
 
 **适用**: 需要生成文本的任务 (如 CoT 推理)
 
-### 5.3 LLM-style (Decoder-only)
+#### 5.3 LLM-style (Decoder-only)
 
 **代表**: Llama, Gemma, Qwen
 **适用**: 现代 VLA 的标准选择，利用强大的 In-context Learning
 
-## 6. 投影层设计 (Projector Design)
+---
+
+### 5.5 PaliGemma 详解 (VLA 常用 Backbone)
+
+> **论文**: [PaliGemma: A versatile 3B VLM for transfer](https://arxiv.org/abs/2407.07726) (Google, 2024)
+> **官方**: [HuggingFace](https://huggingface.co/google/paligemma-3b-pt-224)
+
+PaliGemma 是 Google 推出的轻量级 VLM，已成为 **π0、OpenVLA** 等 VLA 的首选 backbone。
+
+#### 为什么 VLA 常用 PaliGemma?
+
+| 优势 | 说明 |
+| :--- | :--- |
+| **轻量高效** | 3B 参数，可在单卡 (24GB) 微调 |
+| **预训练充分** | 在大量图文数据上训练，视觉理解强 |
+| **开源友好** | Apache 2.0 许可，可商用 |
+| **模块化设计** | Vision Encoder 和 LLM 解耦，易于适配 |
+| **多分辨率** | 支持 224/448/896 输入尺寸 |
+
+#### PaliGemma 架构
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                      PaliGemma 3B                           │
+├─────────────────────────────────────────────────────────────┤
+│                                                              │
+│   Image Input                    Text Input                  │
+│   [224×224×3]                    "Pick up the cup"           │
+│        │                              │                      │
+│        ▼                              ▼                      │
+│   ┌──────────────┐              ┌──────────────┐            │
+│   │   SigLIP     │              │   Gemma      │            │
+│   │  ViT-So400m  │              │  Tokenizer   │            │
+│   │  (400M)      │              │              │            │
+│   └──────┬───────┘              └──────┬───────┘            │
+│          │                             │                     │
+│   [256 patches]                  [L tokens]                  │
+│   [256, 1152]                    [L, 2048]                   │
+│          │                             │                     │
+│          ▼                             │                     │
+│   ┌──────────────┐                     │                     │
+│   │  Linear Proj │ (1152 → 2048)       │                     │
+│   └──────┬───────┘                     │                     │
+│          │                             │                     │
+│          └──────────┬──────────────────┘                     │
+│                     ▼                                        │
+│            [Vision] + [Text Tokens]                          │
+│                     │                                        │
+│                     ▼                                        │
+│   ┌─────────────────────────────────────────────────────────┐│
+│   │                 Gemma 2B LLM                            ││
+│   │          (18 Transformer Layers)                        ││
+│   │                                                         ││
+│   │    Self-Attention (Vision + Text 一起处理)               ││
+│   │                     ↓                                   ││
+│   │              Hidden States                              ││
+│   └─────────────────────────────────────────────────────────┘│
+│                     │                                        │
+│                     ▼                                        │
+│              [B, L, 2048]                                    │
+│           (送给 Action Head)                                 │
+└─────────────────────────────────────────────────────────────┘
+```
+
+#### 核心组件
+
+#### 1. SigLIP Vision Encoder
+
+```python
+
+vision_config = {
+    "model": "ViT-So400m",      # 400M 参数
+    "image_size": 224,          # 或 448, 896
+    "patch_size": 14,           # 16×16 patches
+    "hidden_size": 1152,
+    "num_layers": 27,
+    "num_heads": 16
+}
+
+```
+
+#### 2. Gemma 2B LLM
+
+```python
+llm_config = {
+    "hidden_size": 2048,
+    "num_layers": 18,
+    "num_heads": 8,
+    "vocab_size": 256000,
+    "max_position": 8192,
+    "intermediate_size": 16384  # FFN
+}
+```
+
+#### 3. 投影层 (Linear Projection)
+
+```python
+self.vision_proj = nn.Linear(1152, 2048)
+
+vision_tokens = self.vision_proj(siglip_output)  # [B, 256, 2048]
+```
+
+#### VLA 中的使用方式
+
+```python
+from transformers import AutoProcessor, PaliGemmaForConditionalGeneration
+
+model = PaliGemmaForConditionalGeneration.from_pretrained(
+    "google/paligemma-3b-pt-224",
+    torch_dtype=torch.bfloat16
+)
+processor = AutoProcessor.from_pretrained("google/paligemma-3b-pt-224")
+
+def get_vlm_features(images, text):
+    inputs = processor(images=images, text=text, return_tensors="pt")
+    outputs = model(
+        **inputs,
+        output_hidden_states=True
+    )
+    # 最后一层 hidden states
+    hidden = outputs.hidden_states[-1]  # [B, L, 2048]
+    return hidden
+
+def generate_text(images, text):
+    inputs = processor(images=images, text=text, return_tensors="pt")
+    outputs = model.generate(**inputs, max_new_tokens=100)
+    return processor.decode(outputs[0])
+```
+
+#### PaliGemma 版本对比
+
+| 版本 | 参数量 | 输入分辨率 | 适用场景 |
+| :--- | :--- | :--- | :--- |
+| **paligemma-3b-pt-224** | 3B | 224×224 | VLA 首选，平衡效率 |
+| paligemma-3b-pt-448 | 3B | 448×448 | 需要更多细节 |
+| paligemma-3b-pt-896 | 3B | 896×896 | 高分辨率任务 |
+| paligemma-3b-mix-224 | 3B | 224×224 | 混合任务微调版 |
+
+#### PaliGemma vs 其他 VLM
+
+| 模型 | 参数量 | 开源 | VLA 适用性 |
+| :--- | :--- | :--- | :--- |
+| **PaliGemma** | **3B** | ✅ Apache 2.0 | ⭐⭐⭐⭐⭐ 最常用 |
+| LLaVA 1.5 | 7B/13B | ✅ | ⭐⭐⭐⭐ 较大但成熟 |
+| Qwen-VL | 7B | ✅ | ⭐⭐⭐⭐ 中文支持好 |
+| GPT-4V | ~1T | ❌ | ⭐⭐ API 延迟高 |
+| PaLI-X | 55B | ❌ | ⭐ 太大无法部署 |
+
+#### 面试常见问题
+
+**Q: 为什么 π0 选择 PaliGemma 而不是更大的 LLaVA?**
+
+A: 三个原因:
+1. **效率**: 3B 参数可在单卡训练/推理，满足机器人实时性要求
+2. **SigLIP**: 比 CLIP 更好的细粒度视觉理解
+3. **模块化**: Vision/Language 解耦，方便接 Action Head
+
+---
+
+**Q: PaliGemma 的 256 个 vision tokens 够用吗?**
+
+A: 对于大多数机器人任务足够:
+- 桌面操作: 224×224 分辨率 + 256 tokens 能覆盖关键物体
+- 需要精细操作时: 可用 448/896 版本 (1024/4096 tokens)
+- Trade-off: 更多 tokens = 更慢推理
+
+---
+
+### 5.6 主流 VLM 对比表（VLA 训练参考）
+
+> **目标**: 为 VLA 开发者提供当前市场上主流 Vision Language Model 的对比，重点关注**已在 VLA 项目中实际使用**的模型。
+> 
+> **最后更新**: 2025年12月5日
+
+---
+
+#### 5.6.1 ✅ 已在 VLA 中实际使用（优先推荐）
+
+| 模型 | 机构 | 发布时间 | Vision Encoder | LLM Backbone | 参数量 | 输入分辨率 | 开源 | 许可证 | VLA 应用案例 | HuggingFace |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **PaliGemma 3B** | Google | 2024.07 | SigLIP ViT-So400m | Gemma 2B | 3B | 224/448/896 | ✅ | Apache 2.0 | **π0 (Pi-Zero)**, OpenVLA 变体 | [google/paligemma-3b-pt-224](https://huggingface.co/google/paligemma-3b-pt-224) |
+| **SigLIP** | Google | 2023.09 | ViT (Sigmoid Loss) | - | 400M-2.6B | 224-384 | ✅ | Apache 2.0 | **OpenVLA**, **RDT** (Vision Encoder) | [google/siglip-*](https://huggingface.co/models?search=siglip) |
+| **LLaVA 1.5/1.6** | - | 2023.10/2024.01 | CLIP/ViT | Llama 2/Vicuna | 7B/13B | 336/672 | ✅ | Apache 2.0 | **OpenVLA** (Llama 2 + SigLIP 组合) | [llava-hf/llava-1.5-*](https://huggingface.co/models?search=llava) |
+| **LLaVA-NeXT** | - | 2024.12 | CLIP/ViT | Llama 3/Vicuna | 7B/13B/34B | 672/1344 | ✅ | Apache 2.0 | 最新版本，性能提升 | [llava-hf/llava-next-*](https://huggingface.co/models?search=llava-next) |
+| **PaLI-X** | Google | 2023.12 | ViT-22B | PaLM-E | 55B | 224-1024 | ❌ | - | **RT-2** | - |
+
+**选择建议**:
+- **PaliGemma 3B**: VLA 训练首选，轻量高效（单卡 24GB 可训练），预训练充分，模块化设计
+- **SigLIP**: VLA 首选视觉编码器，比 CLIP 更强的细粒度理解，支持大 batch 训练
+- **LLaVA**: 成熟稳定，社区支持好，适合需要更大模型的场景
+
+#### 5.6.2 🔄 适合 VLA 训练的开源 VLM（推荐尝试）
+
+#### 🆕 2025年最新发布
+
+| 模型 | 机构 | 发布时间 | Vision Encoder | LLM Backbone | 参数量 | 输入分辨率 | 开源 | 许可证 | 优势 | HuggingFace |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **Qwen2.5-VL** | 阿里巴巴 | 2025.03 | Window Attn ViT + MRoPE | Qwen2.5 LLM | 3B/7B/32B/72B | 任意分辨率 | ✅ | Apache 2.0 | **2025 SOTA**，数学推理强，长视频支持 | [Qwen/Qwen2.5-VL-*](https://huggingface.co/models?search=Qwen2.5-VL) |
+| **Eagle 2.5** | NVIDIA | 2025.04 | 长上下文 ViT | - | 8B | 长视频 | ✅ | Apache 2.0 | 长上下文多模态，Video-MME 72.4% | [nvidia/Eagle-*](https://huggingface.co/models?search=Eagle) |
+| **Seed 1.5-VL** | 字节跳动 | 2025.05 | - | - | 20B (激活) | - | ✅ | - | 媲美 Gemini 2.5 Pro，GUI 交互强 | [ByteDance/Seed-*](https://huggingface.co/models?search=Seed) |
+| **PLM** | Meta | 2025.05 | - | - | - | - | ✅ | MIT | 开源视觉语言模型，复杂视觉任务 | [meta-llama/PLM](https://github.com/facebookresearch/PLM) |
+| **GLM-4.5V** | 智谱AI | 2025 | 3D-RoPE ViT | GLM-4.5-Air | 106B (12B 激活) | - | ✅ | Apache 2.0 | MoE 架构，3D 空间推理 | [THUDM/GLM-4.5V](https://huggingface.co/models?search=GLM-4) |
+| **Llama 4 Scout/Maverick** | Meta | 2025.04 | ViT Patch | MoE Transformer | 16-128 专家 | - | ✅ | Meta Llama | 10M token 上下文，多模态 | [meta-llama/Llama-4](https://huggingface.co/models?search=llama-4) |
+
+#### 2024年发布（仍推荐）
+
+| 模型 | 机构 | 发布时间 | Vision Encoder | LLM Backbone | 参数量 | 输入分辨率 | 开源 | 许可证 | 优势 | HuggingFace |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **Qwen2-VL** | 阿里巴巴 | 2024.08 | InternViT | Qwen2 LLM | 2B/7B/72B | 448-1344 | ✅ | Apache 2.0 | 性能大幅提升 | [Qwen/Qwen2-VL-*](https://huggingface.co/models?search=Qwen2-VL) |
+| **InternVL2** | 商汤 | 2024.07 | InternViT-6B | InternLM2 | 2B/4B/8B/26B | 448-1344 | ✅ | Apache 2.0 | 多模态能力增强 | [OpenGVLab/InternVL2-*](https://huggingface.co/models?search=InternVL2) |
+| **MiniCPM-V 2.6** | 面壁智能 | 2024.08 | ViT | MiniCPM | 8B | 336-1344 | ✅ | Apache 2.0 | 超轻量级，边缘部署 | [openbmb/MiniCPM-V-*](https://huggingface.co/models?search=MiniCPM-V) |
+| **LLaVA-NeXT** | - | 2024.06 | CLIP/ViT | Llama 3/Vicuna | 7B/13B/34B | 672/1344 | ✅ | Apache 2.0 | 最新 LLaVA 版本 | [llava-hf/llava-next-*](https://huggingface.co/models?search=llava-next) |
+| **SmolVLA** | Hugging Face | 2024.12 | ViT-Small | TinyLlama | 450M | 224 | ✅ | Apache 2.0 | 超轻量级，VLA 研究入门 | [huggingface/smolvla](https://huggingface.co/models?search=smolvla) |
+
+#### 经典模型（仍可用）
+
+| 模型 | 机构 | 发布时间 | Vision Encoder | LLM Backbone | 参数量 | 输入分辨率 | 开源 | 许可证 | 优势 | HuggingFace |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **Qwen-VL** | 阿里巴巴 | 2023.11 | CLIP-ViT | Qwen LLM | 7B/72B | 448-1024 | ✅ | Apache 2.0 | 中文支持好 | [Qwen/Qwen-VL](https://huggingface.co/Qwen/Qwen-VL) |
+| **CogVLM** | 智谱AI | 2023.10 | EVA2-ViT | GLM | 17B | 490 | ✅ | Apache 2.0 | 视觉理解强，中文支持 | [THUDM/cogvlm-*](https://huggingface.co/models?search=cogvlm) |
+| **InternVL** | 商汤 | 2024.01 | InternViT | InternLM | 2B-26B | 448-1024 | ✅ | Apache 2.0 | 多分辨率支持 | [OpenGVLab/InternVL-*](https://huggingface.co/models?search=InternVL) |
+
+**适用场景**:
+- **Qwen2.5-VL** (🆕 2025): 中文指令 VLA 首选，数学推理强，支持任意分辨率和长视频
+- **Eagle 2.5** (🆕 2025): 长上下文多模态任务，视频理解
+- **Seed 1.5-VL** (🆕 2025): GUI 交互、复杂视觉推理
+- **GLM-4.5V** (🆕 2025): 3D 空间推理任务
+- **Llama 4** (🆕 2025): 超长上下文（10M token），文档分析
+- **Qwen2-VL**: 中文支持好（2024 版本）
+- **MiniCPM-V**: 边缘设备部署，资源受限场景
+- **SmolVLA**: 超轻量级研究，快速原型验证
+
+#### 5.6.3 ❌ 闭源 API（参考，不适合直接训练）
+
+| 模型 | 机构 | 发布时间 | 参数量 | 特点 | VLA 适用性 |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **Gemini 2.5 Pro** 🆕 | Google | 2025.03 | 未公开 | **2025 SOTA**，1M token 上下文，内置思考功能 | ⭐⭐ API 调用，成本高 |
+| **Claude 3.7 Vision** 🆕 | Anthropic | 2025.02 | 未公开 | 高精度 OCR，图表解析 | ⭐⭐ API 调用，延迟问题 |
+| **GPT-4o** | OpenAI | 2024.05 | ~1T | 多模态理解强，统一 Transformer 架构 | ⭐⭐ API 延迟高，不适合实时控制 |
+| **GPT-4o-mini** | OpenAI | 2024.07 | 未公开 | 轻量版 GPT-4o，成本更低 | ⭐⭐ API 调用，延迟仍较高 |
+| **Gemini 1.5 Pro** | Google | 2024.02 | 未公开 | 1M token 上下文 | ⭐⭐ API 调用，成本高 |
+| **Claude 3.5 Sonnet** | Anthropic | 2024.06 | 未公开 | 视觉理解强，性能提升 | ⭐⭐ API 调用，延迟问题 |
+
+**说明**: 闭源 API 模型虽然能力强，但存在延迟高、成本高、无法本地部署等问题，不适合直接用于 VLA 训练。可作为参考或用于数据标注、CoT 推理等辅助任务。
+
+**2025 年闭源模型趋势**:
+- **Gemini 2.5 Pro**: 目前排行榜第一，内置推理思考功能
+- **Claude 3.7**: OCR 和图表解析能力大幅提升
+
+#### 5.6.4 经典模型（历史参考）
+
+| 模型 | 机构 | 发布时间 | 特点 | VLA 影响 |
+| :--- | :--- | :--- | :--- | :--- |
+| **BLIP-2** | Salesforce | 2023.01 | Q-Former 架构创新 | ⭐ 早期 VLM，较少直接用于 VLA |
+| **Flamingo** | DeepMind | 2022.04 | Perceiver Resampler, Gated Cross-Attention | ⭐⭐ 架构创新影响深远，但未直接用于 VLA |
+
+#### 5.6.5 VLA 训练选择指南
+
+#### 快速选择
+
+```
+需要轻量级、单卡训练？
+  ├─ 是 → PaliGemma 3B (首选)
+  └─ 否 → LLaVA 7B/13B
+
+只需要 Vision Encoder？
+  └─ SigLIP (VLA 首选)
+
+需要中文支持？
+  └─ Qwen-VL 7B
+
+需要边缘部署？
+  └─ MiniCPM-V 2.4B
+
+需要高分辨率输入？
+  └─ InternVL 或 PaliGemma 896px 版本
+```
+
+#### 技术对比
+
+| 特性 | PaliGemma 3B | LLaVA 7B | Qwen-VL 7B | SigLIP (Vision) |
+| :--- | :--- | :--- | :--- | :--- |
+| **训练效率** | ⭐⭐⭐⭐⭐ 单卡可训练 | ⭐⭐⭐ 需要多卡 | ⭐⭐⭐ 需要多卡 | ⭐⭐⭐⭐⭐ 仅 Vision |
+| **推理速度** | ⭐⭐⭐⭐ 快 | ⭐⭐⭐ 中等 | ⭐⭐⭐ 中等 | ⭐⭐⭐⭐⭐ 极快 |
+| **视觉理解** | ⭐⭐⭐⭐ 强 | ⭐⭐⭐⭐ 强 | ⭐⭐⭐⭐ 强 | ⭐⭐⭐⭐⭐ 最强 |
+| **中文支持** | ⭐⭐ 一般 | ⭐⭐ 一般 | ⭐⭐⭐⭐⭐ 优秀 | - |
+| **VLA 生态** | ⭐⭐⭐⭐⭐ 最常用 | ⭐⭐⭐⭐ 成熟 | ⭐⭐⭐ 较少 | ⭐⭐⭐⭐⭐ 最常用 |
+
+#### 实际应用案例
+
+1. **π0 (Pi-Zero)**: 使用 PaliGemma 3B 作为 VLM backbone，结合 Flow Matching 实现高频控制
+2. **OpenVLA**: 使用 Llama 2 7B + SigLIP 组合，通过 LoRA 高效微调
+3. **RT-2**: 使用 PaLI-X 55B（闭源），证明了 VLM 语义能力可迁移到机器人控制
+4. **RDT**: 使用 SigLIP 作为 Vision Encoder，专注于视觉特征提取
+
+#### 5.6.6 集成建议
+
+#### 使用 PaliGemma 3B 训练 VLA
+
+```python
+from transformers import AutoProcessor, PaliGemmaForConditionalGeneration
+import torch
+
+model = PaliGemmaForConditionalGeneration.from_pretrained(
+    "google/paligemma-3b-pt-224",
+    torch_dtype=torch.bfloat16
+)
+processor = AutoProcessor.from_pretrained("google/paligemma-3b-pt-224")
+
+def get_vlm_features(images, text_instructions):
+    inputs = processor(images=images, text=text_instructions, return_tensors="pt")
+    outputs = model(**inputs, output_hidden_states=True)
+    hidden = outputs.hidden_states[-1]  # [B, L, 2048]
+    return hidden
+
+action_head = nn.Linear(2048, action_dim * chunk_size)
+actions = action_head(hidden[:, -1, :])  # 使用最后一个 token
+```
+
+#### 使用 SigLIP 作为 Vision Encoder
+
+```python
+from transformers import AutoProcessor, AutoModel
+import torch
+
+vision_encoder = AutoModel.from_pretrained("google/siglip-base-patch16-224")
+processor = AutoProcessor.from_pretrained("google/siglip-base-patch16-224")
+
+def extract_vision_features(images):
+    inputs = processor(images=images, return_tensors="pt")
+    outputs = vision_encoder(**inputs)
+    return outputs.last_hidden_state  # [B, N_patches, D]
+```
+
+#### 5.6.7 Pre-training vs Fine-tuning vs Post-training
+
+> **重要概念**: 在 VLA 训练中，这三个术语有明确的区别和顺序。
+
+#### 训练阶段对比
+
+| 阶段 | 英文 | 中文 | 数据来源 | 训练目标 | 典型方法 | VLA 应用 |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **Pre-training** | Pre-training | 预训练 | 大规模通用数据 (ImageNet, CLIP, 互联网图文) | 学习通用视觉/语言特征 | 自监督学习、对比学习 | VLM backbone (PaliGemma, SigLIP) |
+| **Fine-tuning** | Fine-tuning | 微调 | 目标任务数据 (机器人示教数据) | 适配特定任务 | 监督学习 (BC), LoRA | OpenVLA, π0 在机器人数据上微调 |
+| **Post-training** | Post-training | 后训练 | 交互收集的数据 (成功+失败轨迹) | 自我改进，超越示教 | Offline RL (Recap) | π*0.6 的 Recap 算法 |
+
+#### 详细说明
+
+**1. Pre-training (预训练)**
+
+```
+大规模数据 (ImageNet/CLIP/互联网图文)
+        │
+        ▼
+  学习通用特征
+        │
+        ▼
+  预训练模型 (如 PaliGemma 3B)
+```
+
+- **目标**: 在大规模数据上学习通用的视觉和语言理解能力
+- **数据**: 通常不需要标注，使用自监督或对比学习
+- **结果**: 得到一个具备基础能力的模型
+- **VLA 应用**: 
+  - PaliGemma 3B 在互联网图文数据上预训练
+  - SigLIP 在图像-文本对上进行对比学习预训练
+
+**2. Fine-tuning (微调)**
+
+```
+预训练模型 (PaliGemma 3B)
+        │
+        ▼
+  目标任务数据 (机器人示教)
+        │
+        ▼
+  微调后模型 (适配机器人控制)
+```
+
+- **目标**: 在预训练模型基础上，用目标任务数据微调，使其适配特定任务
+- **数据**: 需要标注的示教数据 (observation-action pairs)
+- **方法**: 
+  - **Full Fine-tuning**: 更新所有参数（显存需求大）
+  - **LoRA/QLoRA**: 只训练少量参数（推荐）
+- **VLA 应用**:
+  - OpenVLA: 在机器人数据上 LoRA 微调
+  - π0: 在机器人数据上微调 PaliGemma
+
+**3. Post-training (后训练)**
+
+```
+微调后模型 (π0.6)
+        │
+        ▼
+  机器人交互收集数据 (成功+失败)
+        │
+        ▼
+  Offline RL (Recap 算法)
+        │
+        ▼
+  改进后模型 (π*0.6, 超越示教)
+```
+
+- **目标**: 通过分析成功和失败轨迹，自我改进，超越人类示教水平
+- **数据**: 机器人实际运行收集的数据（包含成功和失败案例）
+- **方法**: Offline RL (如 Recap 算法)
+- **特点**: 
+  - 不仅学习"怎么做"，还学习"怎么做得更好"
+  - 可以超越人类示教者的水平
+- **VLA 应用**: π*0.6 的 Recap 算法
+
+#### 完整训练流程示例 (π0.6 → π*0.6)
+
+```python
+pretrained_vlm = load_pretrained("google/paligemma-3b-pt-224")
+
+robot_demos = load_robot_demonstrations()  # 人类示教数据
+finetuned_model = fine_tune(pretrained_vlm, robot_demos, method="LoRA")
+
+interaction_data = robot.collect_data()  # 包含成功和失败轨迹
+
+improved_model = recap_algorithm(finetuned_model, interaction_data)
+```
+
+#### 关键区别总结
+
+| 特性 | Pre-training | Fine-tuning | Post-training |
+| :--- | :--- | :--- | :--- |
+| **数据来源** | 通用大规模数据 | 目标任务示教数据 | 交互收集的成功+失败数据 |
+| **训练目标** | 学习通用特征 | 适配特定任务 | 自我改进，超越示教 |
+| **学习方式** | 自监督/对比学习 | 监督学习 (BC) | Offline RL |
+| **是否必需** | ✅ 是 (模型基础) | ✅ 是 (任务适配) | ⚠️ 可选 (性能提升) |
+| **典型时间** | 数周/月 (大规模) | 数小时/天 | 数天/周 (持续改进) |
+
+#### 面试常见问题
+
+**Q: Pre-training 和 Fine-tuning 的区别是什么？**
+
+A:
+- **Pre-training**: 在大规模通用数据上学习基础能力（如视觉理解、语言理解）
+- **Fine-tuning**: 在预训练模型基础上，用目标任务数据微调，使其适配特定任务（如机器人控制）
+
+**Q: Post-training 和 Fine-tuning 的区别是什么？**
+
+A:
+- **Fine-tuning**: 使用人类示教数据，学习"怎么做"（模仿学习）
+- **Post-training**: 使用交互收集的成功+失败数据，学习"怎么做得更好"（强化学习），可以超越人类示教水平
+
+**Q: 为什么需要 Pre-training？**
+
+A: 
+- 机器人数据稀缺且昂贵，从头训练需要大量数据
+- Pre-training 让模型具备通用能力，只需少量机器人数据即可适配
+- 类似人类先学基础知识，再学专业技能
+
+#### 5.6.8 常见问题
+
+**Q: 为什么 VLA 首选 PaliGemma 3B 而不是更大的 LLaVA?**
+
+A: 三个原因:
+1. **效率**: 3B 参数可在单卡 (24GB) 训练/推理，满足机器人实时性要求
+2. **SigLIP**: 比 CLIP 更好的细粒度视觉理解
+3. **模块化**: Vision/Language 解耦，方便接 Action Head
+
+**Q: SigLIP 和 CLIP 的区别是什么？**
+
+A: 
+- **损失函数**: CLIP 使用 Softmax + Cross-Entropy (InfoNCE)，SigLIP 使用 Sigmoid + Binary CE
+- **Batch 依赖**: CLIP 的 Softmax 需要对比 batch 内所有样本，SigLIP 的 Sigmoid 每对独立计算
+- **扩展性**: SigLIP 更适合大 batch 训练，负样本利用更高效
+
+**Q: 如何选择 Vision Encoder 和 LLM 的组合？**
+
+A:
+- **轻量级**: PaliGemma 3B (SigLIP + Gemma 2B)
+- **平衡**: LLaVA (CLIP/ViT + Llama 2 7B)
+- **自定义**: SigLIP (Vision) + 任意 LLM (Language)
+
+**Q: 中文 VLA 任务应该选择哪个 VLM？**
+
+A: 推荐 **Qwen2.5-VL 7B**（🆕 2025.03），中文支持最好，数学推理能力强，支持任意分辨率和长视频。如果资源受限，可选择 **Qwen2.5-VL 3B** 版本。
+
+**Q: 有哪些 2025 年最新的 VLM 更新值得关注？**
+
+A: 
+- **Qwen2.5-VL** (2025.03): 阿里巴巴最新版本，**2025 SOTA**，数学推理强，支持任意分辨率
+- **Eagle 2.5** (2025.04): NVIDIA 发布，长上下文多模态，Video-MME 72.4%
+- **Seed 1.5-VL** (2025.05): 字节跳动发布，媲美 Gemini 2.5 Pro，GUI 交互强
+- **GLM-4.5V** (2025): 智谱AI，MoE 架构，3D 空间推理
+- **Llama 4** (2025.04): Meta 发布，10M token 上下文，多模态 MoE 架构
+- **PLM** (2025.05): Meta 开源视觉语言模型
+
+**Q: 2025年闭源 API 模型有哪些更新？**
+
+A:
+- **Gemini 2.5 Pro** (2025.03): Google 发布，排行榜第一，内置思考功能
+- **Claude 3.7 Vision** (2025.02): Anthropic 发布，高精度 OCR 和图表解析
+
+---
+
+### 6. 投影层设计 (Projector Design)
 
 将视觉特征映射到语言空间是 VLA 的关键。
 
-### 6.1 简单 MLP
+#### 6.1 简单 MLP
 
 ```python
 class MLPProjector(nn.Module):
@@ -761,7 +1326,7 @@ class MLPProjector(nn.Module):
         return self.proj(vision_feat)
 ```
 
-### 6.2 Perceiver Resampler (Flamingo)
+#### 6.2 Perceiver Resampler (Flamingo)
 
 ```python
 class PerceiverResampler(nn.Module):
@@ -785,11 +1350,11 @@ class PerceiverResampler(nn.Module):
 
 **优势**: 控制视觉 Token 数量，减少 LLM 的计算负担
 
-### 6.3 Q-Former (BLIP-2)
+#### 6.3 Q-Former (BLIP-2)
 
 使用可学习的 Query 从视觉编码器中提取与任务相关的特征。
 
-## 7. 实战：构建简单的多模态 VLA
+### 7. 实战：构建简单的多模态 VLA
 
 ```python
 import torch
@@ -874,7 +1439,7 @@ class SimpleMultimodalVLA(nn.Module):
         return actions
 ```
 
-## 8. 面试高频问题 (Q&A)
+### 8. 面试高频问题 (Q&A)
 
 **Q1: CLIP 和 SigLIP 的区别是什么？**
 
@@ -957,7 +1522,7 @@ A: 这是多模态 VLA 的核心优势之一，有以下几种机制：
 3. **多轮对话**: VLA 需要支持多轮交互，而非单次指令执行
 4. **CoT 推理**: 显式输出推理过程，便于发现矛盾 (参见 [chain_of_thought.md](./chain_of_thought.md))
 
-## 9. 参考资源 (References)
+### 9. 参考资源 (References)
 
 - **CLIP**: [Learning Transferable Visual Models From Natural Language Supervision](https://arxiv.org/abs/2103.00020)
 - **LLaVA**: [Visual Instruction Tuning](https://arxiv.org/abs/2304.08485)
@@ -967,9 +1532,10 @@ A: 这是多模态 VLA 的核心优势之一，有以下几种机制：
 ---
 
 
-\newpage
 
-# 第4章 VLA 架构总览
+---
+
+## 第4章 VLA 架构总览
 
 
 本章节深入解析 Vision-Language-Action (VLA) 模型的核心架构演进，从 Google 的 RT 系列到开源的 OpenVLA，再到最新的 Physical Intelligence (Pi) 模型。
@@ -1020,7 +1586,7 @@ A: 这是多模态 VLA 的核心优势之一，有以下几种机制：
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-## 1. RT-1 (Robotics Transformer 1)
+### 1. RT-1 (Robotics Transformer 1)
 > **核心思想**: 将机器人控制建模为 Token 生成问题，使用 Transformer 处理多模态输入。
 
 - **架构**: EfficientNet (Vision) + FiLM (Language conditioning) + TokenLearner + Transformer.
@@ -1032,7 +1598,7 @@ A: 这是多模态 VLA 的核心优势之一，有以下几种机制：
     - **数据规模**: 130k episodes (17 months of data).
     - **局限性**: 泛化能力有限，主要依赖于大规模收集的机器人数据，缺乏互联网知识的迁移。
 
-## 2. RT-2 (Robotics Transformer 2)
+### 2. RT-2 (Robotics Transformer 2)
 > **核心思想**: VLA = VLM + Action Tokens. 直接微调预训练的 VLM (如 PaLI-X, PaLM-E) 用于机器人控制。
 
 - **架构**: 基于大规模 VLM (Vision-Language Model) 微调。
@@ -1044,32 +1610,32 @@ A: 这是多模态 VLA 的核心优势之一，有以下几种机制：
     - **Chain-of-Thought**: 支持简单的推理步骤。
     - **局限性**: 推理速度慢 (大模型)，难以在边缘端实时运行。
 
-## 3. OpenVLA / Octo
+### 3. OpenVLA / Octo
 > **核心思想**: 开源、高效、基于 Diffusion 或 Llama 的 VLA 策略。
 
-### Octo
+#### Octo
 - **架构**: 基于 Diffusion Policy 的 Transformer 架构。
 - **特点**: 支持多种观察空间 (Proprioception, Images) 和动作空间。
 - **训练**: 在 Open X-Embodiment (OXE) 数据集上训练。
 
-### OpenVLA
+#### OpenVLA
 - **架构**: 基于 Llama 2 (7B) + DINOv2 / SigLIP (Vision Encoder)。
 - **Action Head**:
     - 并没有直接输出文本 Token，而是使用专门的 Action Head (Linear Layer) 预测去离散化的动作 Token。
     - 使用 **Action Detokenization** 还原为连续动作。
 - **优化**: 支持 4-bit 量化 (QLoRA) 训练和推理，适合消费级显卡。
 
-## 4. Physical Intelligence (Pi) Models
+### 4. Physical Intelligence (Pi) Models
 > **核心思想**: 通用机器人基础模型 (Generalist Robot Foundation Models)，强调跨形态 (Cross-Embodiment) 和物理世界的理解。
 
-### π0 (Pi-Zero)
+#### π0 (Pi-Zero)
 - **定位**: 基础 VLA 模型，旨在解决通用的物理操作问题。**已开源 (Open Weights)**。
 - **架构特点**:
     - 类似于 RT 系列，但更强调对物理动力学的理解。
     - 可能采用了更高效的 Action Tokenizer，以适应高频控制需求。
 - **数据**: 混合了多种机器人的数据 (Arms, Quadrupeds, Humanoids)。
 
-### π0.5 (Pi-Zero-Point-Five) - April 2025
+#### π0.5 (Pi-Zero-Point-Five) - April 2025
 > **[Deep Dive: Pi0.5 模型解剖](./pi0_5_dissection.md)**
 
 - **核心升级**: **Open-world Generalization** (开放世界泛化) 与 **Hierarchical Inference** (分层推理)。
@@ -1078,7 +1644,7 @@ A: 这是多模态 VLA 的核心优势之一，有以下几种机制：
     - **异构数据训练**: 引入了大量的互联网视频数据 (YouTube) 和模拟数据，通过 Co-training 实现对新环境 (如从未见过的厨房) 的适应。
     - **混合架构**: 预训练阶段可能使用离散 Token (FAST tokenizer) 以提高效率，推理阶段使用 Flow Matching 生成连续动作。
 
-### π0.6 & π*0.6 (Pi-Star) - November 2025
+#### π0.6 & π*0.6 (Pi-Star) - November 2025
 > **[Deep Dive: Pi0.6 模型解剖](./pi0_6_dissection.md)**
 
 - **核心升级**: **RL (Reinforcement Learning) 强化** 与 **Recap 算法**。
@@ -1089,7 +1655,7 @@ A: 这是多模态 VLA 的核心优势之一，有以下几种机制：
     - **Self-Improvement**: 具备在真机运行中持续学习的能力。
 - **Action Expert**: 引入了专门的动作专家模块，专门处理精细操作，解决了大语言模型在精细运动控制上的"手笨"问题。
 
-## 5. 模型对比总结 (Model Comparison)
+### 5. 模型对比总结 (Model Comparison)
 
 | 模型 | 基础架构 | Action 输出 | 训练数据 | 优势 | 劣势 |
 | :--- | :--- | :--- | :--- | :--- | :--- |
@@ -1099,7 +1665,7 @@ A: 这是多模态 VLA 的核心优势之一，有以下几种机制：
 | **WALL-OSS** | Qwen2.5 VLMoE | **Dual Branches** (Flow + FAST) | Cross-Embodiment | **COT 推理**，双分支，**已开源** | 训练资源需求高 |
 | **π0.6** | Gemma 3 + Action Expert | Specialized | Cross-Embodiment + RL | 泛化强，精细操作好，**已开源** | 训练极其昂贵 |
 
-## 面试高频考点
+### 面试高频考点
 1. **Action Tokenization**: 为什么要离散化？连续回归 (Regression) 有什么问题？(答: 多模态分布处理能力)
 2. **Co-fine-tuning**: 为什么要混合互联网数据？(答: 保持 VLM 的语义能力，防止灾难性遗忘)
 3. **Sim-to-Real**: OpenVLA 如何在真机上部署？(答: 量化，VLM 蒸馏)
@@ -1107,14 +1673,15 @@ A: 这是多模态 VLA 的核心优势之一，有以下几种机制：
 
 ---
 
-\newpage
+
+---
 
 # 第二部分：策略生成与动作表示
 
 
-\newpage
+---
 
-# 第5章 动作表示方法
+## 第5章 动作表示方法
 
 
 在 VLA 模型中，"如何输出动作" 是一个核心设计选择。本章详细对比三种主流的动作生成范式：**离散化 (Discrete Tokenization)**、**扩散策略 (Diffusion Policy)** 和 **流匹配 (Flow Matching)**。
@@ -1148,24 +1715,28 @@ A: 这是多模态 VLA 的核心优势之一，有以下几种机制：
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-## 1. 离散化 (Discrete Tokenization)
+### 1. 离散化 (Discrete Tokenization)
 > **代表模型**: **RT-1**, **RT-2**, **Gato**
 
-### 核心思想
+#### 核心思想
 将连续的物理动作 (如关节角度、末端坐标) 离散化为整数 Token，从而可以使用标准的 Transformer (分类任务) 进行预测。
 
-### 数学公式
+#### 数学公式
 假设动作 $a \in [min, max]$，我们将其划分为 $N$ 个区间 (Bins)。
-```math
+
+$$
 Token = \text{round}\left( \frac{a - min}{max - min} \times (N - 1) \right)
-```
+$$
+
 - **RT-1**: 使用 $N=256$。
 - **预测**: 模型输出一个 Logits 向量 $z \in \mathbb{R}^N$，通过 Softmax 得到概率分布：
-```math
-P(Token = i) = \frac{e^{z_i}}{\sum_{j=0}^{N-1} e^{z_j}}
-```
 
-### 优缺点
+$$
+P(Token = i) = \frac{e^{z_i}}{\sum_{j=0}^{N-1} e^{z_j}}
+$$
+
+
+#### 优缺点
 - **优点**:
     - **多模态分布 (Multimodal)**: 可以很好地建模"向左走或向右走" (双峰分布)，而不会输出中间的平均值 (撞墙)。
     - **架构统一**: 可以直接复用 LLM 的 Cross-Entropy Loss。
@@ -1175,24 +1746,30 @@ P(Token = i) = \frac{e^{z_i}}{\sum_{j=0}^{N-1} e^{z_j}}
 
 ---
 
-## 2. 扩散策略 (Diffusion Policy)
+### 2. 扩散策略 (Diffusion Policy)
+> **前置阅读**: [传统动作生成方法 (MSE/GMM)](./traditional_action_generation.md) - 了解为什么 MSE 会导致"撞墙"，以及 GMM 的局限性。
+
 > **代表模型**: **Octo**, **MimicGen**, **Toyota HPT**
 
-### 核心思想
+#### 核心思想
 将动作生成建模为从高斯噪声中 **去噪 (Denoising)** 的过程。
 
-### 数学公式
+#### 数学公式
 - **前向过程 (加噪)**:
-```math
+
+$$
 q(x_t | x_0) = \mathcal{N}(x_t; \sqrt{\bar{\alpha}_t} x_0, (1 - \bar{\alpha}_t) I)
-```
+$$
+
 - **逆向过程 (去噪)**:
 模型 $\epsilon_\theta(x_t, t, \text{cond})$ 预测噪声，从而逐步还原动作：
-```math
-x_{t-1} = \frac{1}{\sqrt{\alpha_t}} \left( x_t - \frac{1 - \alpha_t}{\sqrt{1 - \bar{\alpha}_t}} \epsilon_\theta(x_t, t, \text{cond}) \right) + \sigma_t z
-```
 
-### 优缺点
+$$
+x_{t-1} = \frac{1}{\sqrt{\alpha_t}} \left( x_t - \frac{1 - \alpha_t}{\sqrt{1 - \bar{\alpha}_t}} \epsilon_\theta(x_t, t, \text{cond}) \right) + \sigma_t z
+$$
+
+
+#### 优缺点
 - **优点**:
     - **高精度**: 输出是连续值，没有离散化误差。
     - **多模态**: 天然支持多解分布 (Multimodal Distribution)。
@@ -1202,17 +1779,17 @@ x_{t-1} = \frac{1}{\sqrt{\alpha_t}} \left( x_t - \frac{1 - \alpha_t}{\sqrt{1 - \
 
 ---
 
-## 3. 流匹配 (Flow Matching)
+### 3. 流匹配 (Flow Matching)
 > **代表模型**: **Pi0 (Physical Intelligence)**
 
-### 核心思想
+#### 核心思想
 学习一个 **确定性的向量场 (Vector Field)**，将噪声分布平滑地变换为数据分布。
 
-### 与 Diffusion 的对比
+#### 与 Diffusion 的对比
 - **Diffusion**: 走的是随机游走 (Stochastic) 的去噪路径。
 - **Flow Matching**: 走的是 **直线 (Straight)** 路径 (Optimal Transport)。
 
-### 优缺点
+#### 优缺点
 - **优点**:
     - **极速推理**: 由于轨迹是直的，ODE 求解器只需要很少的步数 (e.g., 1-10 步) 就能得到高质量结果。
     - **高频控制**: 使得大模型也能跑在 50Hz+ 的控制频率上。
@@ -1221,7 +1798,7 @@ x_{t-1} = \frac{1}{\sqrt{\alpha_t}} \left( x_t - \frac{1 - \alpha_t}{\sqrt{1 - \
 
 ---
 
-## 总结对比 (Comparison)
+### 总结对比 (Comparison)
 
 | 范式 | 代表模型 | 输出类型 | 推理速度 | 精度 | 多模态支持 |
 | :--- | :--- | :--- | :--- | :--- | :--- |
@@ -1235,19 +1812,32 @@ x_{t-1} = \frac{1}{\sqrt{\alpha_t}} \left( x_t - \frac{1 - \alpha_t}{\sqrt{1 - \
 
 ---
 
-\newpage
 
-# 第6章 Diffusion Policy
+---
+
+## 第6章 Diffusion Policy
 
 
 > **核心论文**: [Diffusion Policy: Visuomotor Policy Learning via Action Diffusion](https://arxiv.org/abs/2303.04137) (Cheng Chi et al., RSS 2023)
 > **代表模型**: **Octo**, **MimicGen**, **Toyota HPT**
 
-## 1. 为什么需要 Diffusion Policy? (Why?)
+### 0. 主要數學思想 (Main Mathematical Idea)
+
+> **第一性原理**: **Constructing Structure from Chaos (从混沌中构建秩序)**
+
+物理世界中，熵增（有序变无序）是自然趋势，如墨水在水中扩散。Diffusion Model 试图在数学上**逆转**这一时间过程。
+
+- **核心数学工具**: **Langevin Dynamics (朗之万动力学)** 与 **Score Matching**。
+- **解题逻辑**:
+    1.  **逆向思维**: 如果我们知道数据是如何一步步变成噪声的（前向过程），那么只要学会每一步的"逆操作"（去噪），就能从纯噪声中恢复出数据。
+    2.  **梯度指引**: 学习数据分布的梯度场（Score Function，$\nabla_x \log p(x)$）。这就像在迷雾（噪声）中，每一步都沿着"数据密度更高"的方向走一小步，最终必然会走到数据流形上（生成合理的动作）。
+    3.  **多模态**: 不像回归模型寻找"平均值"，扩散模型学习的是整个地形（Landscape），因此可以从同一个噪声起点走到不同的终点（解决多解问题）。
+
+### 1. 为什么需要 Diffusion Policy? (Why?)
 
 在 VLA 出现之前，主流的动作生成方式是 **MSE Regression** (均方误差回归) 或 **GMM** (高斯混合模型)。
 
-### 1.1 多模态分布问题 (The Multimodality Problem)
+#### 1.1 多模态分布问题 (The Multimodality Problem)
 机器人经常面临"多解"情况。例如，绕过障碍物可以**从左绕**也可以**从右绕**。
 - **MSE (均值回归)**: 会预测出左和右的平均值 -> **直直撞向障碍物**。
 - **Diffusion**: 可以完美拟合双峰分布，随机采样出"左"或"右"的一条完整轨迹，而不会取平均。
@@ -1255,28 +1845,28 @@ x_{t-1} = \frac{1}{\sqrt{\alpha_t}} \left( x_t - \frac{1 - \alpha_t}{\sqrt{1 - \
     - MSE 试图最小化单一模态的误差，相当于在两个低谷之间强行找一个"平均低谷" (往往是能量很高的高地)。
     - Diffusion 则是学习整个地貌 (Landscape)，允许存在多个分离的低谷 (Modes)。
 
-### 1.2 连续空间的高精度 (High Precision)
+#### 1.2 连续空间的高精度 (High Precision)
 相比于 Tokenization (RT-1) 将动作离散化为 256 个桶，Diffusion 直接在连续空间生成浮点数，精度理论上无限，非常适合**穿针引线、精密装配**等任务。
 
-## 2. 数学原理 (Mathematical Formulation)
+### 2. 数学原理 (Mathematical Formulation)
 
 Diffusion Policy 将动作生成建模为一个 **条件去噪过程 (Conditional Denoising Process)**。
 
-### 2.1 前向过程 (Forward Process / Diffusion)
+#### 2.1 前向过程 (Forward Process / Diffusion)
 将真实的动作轨迹 $x_0$ 逐步加噪，变成纯高斯噪声 $x_T$。
 
-```math
+$$
 q(x_t | x_{t-1}) = \mathcal{N}(x_t; \sqrt{1 - \beta_t} x_{t-1}, \beta_t I)
-```
+$$
 
 经过 $t$ 步后，可以直接写出 $x_t$ 与 $x_0$ 的关系：
-```math
+$$
 q(x_t | x_0) = \mathcal{N}(x_t; \sqrt{\bar{\alpha}_t} x_0, (1 - \bar{\alpha}_t) I)
-```
+$$
 
 其中 $\alpha_t = 1 - \beta_t$, $\bar{\alpha}_t = \prod_{i=1}^t \alpha_i$。
 
-### 2.2 噪声调度器 (Noise Scheduler)
+#### 2.2 噪声调度器 (Noise Scheduler)
 $\beta_t$ 的选择至关重要，通常有两种策略：
 - **Linear Schedule**: $\beta_t$ 从 $\beta_{min}=10^{-4}$ 线性增加到 $\beta_{max}=0.02$。
     - $\beta_t = \beta_{min} + \frac{t}{T}(\beta_{max} - \beta_{min})$
@@ -1284,31 +1874,32 @@ $\beta_t$ 的选择至关重要，通常有两种策略：
     - $\bar{\alpha}_t = \frac{f(t)}{f(0)}, \quad f(t) = \cos^2 \left( \frac{t/T + s}{1+s} \cdot \frac{\pi}{2} \right)$
     - 这种调度在 $t$ 较小时噪声增加得很慢，保留了更多原始信号，对微小动作的生成更有利。
 
-### 2.3 逆向过程 (Reverse Process / Denoising)
+#### 2.3 逆向过程 (Reverse Process / Denoising)
 训练一个神经网络 $\epsilon_\theta(x_t, t, \text{Obs})$ 来预测噪声。
 - **输入**: 当前带噪动作 $x_t$，时间步 $t$，观测条件 $\text{Obs}$ (图像/语言)。
 - **输出**: 预测的噪声 $\hat{\epsilon}$。
 
 去噪公式 (DDPM):
 
-```math
+$$
 x_{t-1} = \frac{1}{\sqrt{\alpha_t}} \left( x_t - \frac{1 - \alpha_t}{\sqrt{1 - \bar{\alpha}_t}} \epsilon_\theta(x_t, t, \text{Obs}) \right) + \sigma_t z
-```
+$$
 
 其中 $z \sim \mathcal{N}(0, I)$ 是随机噪声 (但在最后一步 $t=0$ 时设为 0)。$\sigma_t$ 是方差项，通常取 $\sqrt{\beta_t}$ 或 $\tilde{\beta}_t$。
 
-### 2.4 损失函数 (Loss Function)
+#### 2.4 损失函数 (Loss Function)
 非常简单，就是预测噪声与真实噪声的 MSE：
 
-```math
+$$
 \mathcal{L} = \mathbb{E}_{t, x_0, \epsilon} \left[ \| \epsilon - \epsilon_\theta(\sqrt{\bar{\alpha}_t} x_0 + \sqrt{1 - \bar{\alpha}_t} \epsilon, t, \text{Obs}) \|^2 \right]
-```
+$$
 
-## 3. 网络架构 (Network Architecture)
+
+### 3. 网络架构 (Network Architecture)
 
 Diffusion Policy 的核心是那个预测噪声的网络 $\epsilon_\theta$。主要有两种流派：
 
-### 3.1 CNN-based (1D Temporal CNN / U-Net)
+#### 3.1 CNN-based (1D Temporal CNN / U-Net)
 - **原理**: 将动作轨迹看作是一个 1D 的时间序列 (Sequence Length = $T_p$, Action Dim = $D_a$)。
 - **结构**: 使用类似于 U-Net 的结构，但在时间维度上进行下采样和上采样 (Downsample/Upsample)。
     - **Conditioning**: 图像特征 (ResNet/ViT) 和 语言特征 (CLIP) 通常通过 **FiLM (Feature-wise Linear Modulation)** 层注入到 U-Net 的每个 Residual Block 中。
@@ -1317,7 +1908,7 @@ Diffusion Policy 的核心是那个预测噪声的网络 $\epsilon_\theta$。主
     - **Skip Connection**: 将 Encoder 的特征拼接到 Decoder，保留高频细节。
 - **特点**: 计算效率高，适合处理短时序依赖，是 Diffusion Policy 论文中的默认选择。
 
-### 3.2 Transformer-based (DiT / Octo)
+#### 3.2 Transformer-based (DiT / Octo)
 - **原理**: 将动作轨迹切成 Patch，或者直接作为 Token 输入 Transformer。
 - **结构**: 标准的 Transformer Encoder/Decoder (如 DiT - Diffusion Transformer)。
 - **特点**: 
@@ -1325,25 +1916,25 @@ Diffusion Policy 的核心是那个预测噪声的网络 $\epsilon_\theta$。主
     - **多模态融合**: 可以直接 Cross-Attention 图像 Patch 和 语言 Token。
     - **Scalability**: 参数量可以做得很大 (e.g., Octo-Base 93M, Octo-Small 27M)，适合作为 Foundation Model。
 
-## 4. 推理加速 (Inference Acceleration)
+### 4. 推理加速 (Inference Acceleration)
 
 Diffusion 的最大缺点是慢。DDPM 需要 100 步去噪，推理一次可能要几百毫秒，无法满足机器人 50Hz 的控制要求。
 
-### 4.1 DDIM (Denoising Diffusion Implicit Models)
+#### 4.1 DDIM (Denoising Diffusion Implicit Models)
 - **原理**: 将随机游走过程变为确定性过程 (Deterministic)，跳过中间步骤。DDIM 重新定义了前向过程，使得它是一个非马尔可夫过程，从而允许更大的步长。
 - **公式**:
 
-```math
+$$
 x_{t-1} = \sqrt{\bar{\alpha}_{t-1}} \underbrace{\left( \frac{x_t - \sqrt{1 - \bar{\alpha}_t} \epsilon_\theta}{\sqrt{\bar{\alpha}_t}} \right)}_{\text{predicted } x_0} + \underbrace{\sqrt{1 - \bar{\alpha}_{t-1} - \sigma_t^2} \epsilon_\theta}_{\text{direction pointing to } x_t} + \sigma_t \epsilon_t
-```
+$$
 
 - **效果**: 可以将步数从 100 步压缩到 **10-15 步**，同时保持较高的生成质量。
 
-### 4.2 Receding Horizon Control (RHC)
+#### 4.2 Receding Horizon Control (RHC)
 - **原理**: 模型一次预测未来 $H$ 步的动作 (Action Chunk)，但机器人只执行前 $M$ 步 (例如 $M=8$)，然后重新推理。
 - **优势**: 掩盖了推理延迟，保证动作的连贯性。
 
-## 5. 面试常见问题 (Q&A)
+### 5. 面试常见问题 (Q&A)
 
 **Q: Diffusion Policy 和 GAN 有什么区别?**
 A: GAN 容易模式坍塌 (Mode Collapse)，即只学会一种解；Diffusion 训练更稳定，能覆盖所有模态 (Mode Coverage)。
@@ -1357,19 +1948,34 @@ A: 一次预测一段未来的动作序列，而不是只预测下一步。这�
 
 ---
 
-\newpage
 
-# 第7章 Action Chunking Transformer (ACT)
+---
+
+## 第7章 Action Chunking Transformer (ACT)
 
 
 > **核心论文**: [Learning Fine-Grained Bimanual Manipulation with Low-Cost Hardware](https://arxiv.org/abs/2304.13705) (Tony Z. Zhao et al., RSS 2023)
 > **代表项目**: **ALOHA**, **Mobile ALOHA**, **ACT++**
 
-## 1. 为什么需要 ACT? (Why?)
+### 0. 主要數學思想 (Main Mathematical Idea)
+
+> **第一性原理**: **Compression of Intent (意图的压缩)**
+
+高维的动作空间（肌肉纤维/电机控制）往往是由低维的"意图"（Grab cup）驱动的。
+
+- **核心数学工具**: **Variational Inference (变分推断 / CVAE)**。
+- **解题逻辑**:
+    1.  **隐变量假设**: 假设复杂的动作序列 $a$ 是由一个不可观测的低维变量 $z$（意图/风格）生成的。
+    2.  **平衡**: 我们希望找到这个 $z$。ELBO (Evidence Lower Bound) 损失函数在两件事之间寻找平衡：
+        - **重建 (Reconstruction)**: $z$ 必须包含足够的信息来还原出精确的动作（要把活干好）。
+        - **正则 (Regularization)**: $z$ 的分布应该尽可能简单（如标准正态分布），以便于我们在推理时可以随意采样（通用性/生成能力）。
+    3.  **多模态**: 不同的 $z$ 代表不同的意图，从而生成不同的合理动作序列，解决了"平均化"问题。
+
+### 1. 为什么需要 ACT? (Why?)
 
 传统的行为克隆 (Behavior Cloning, BC) 方法通常采用**单步预测**：每次只预测下一时刻的动作。这种方式存在严重的**误差累积 (Compounding Error)** 问题。
 
-### 1.1 单步预测的致命缺陷
+#### 1.1 单步预测的致命缺陷
 
 ```
 单步预测流程:
@@ -1381,26 +1987,30 @@ A: 一次预测一段未来的动作序列，而不是只预测下一步。这�
 - **分布偏移 (Distribution Shift)**: 训练数据来自专家轨迹，但执行时的状态分布可能偏离专家，导致"越错越离谱"。
 - **高频闭环压力**: 需要每一帧都精确预测，对模型要求极高。
 
-### 1.2 ACT 的解决思路
+#### 1.2 ACT 的解决思路
 
 ACT 提出了一个简单而有效的想法：**一次预测一段未来的动作序列 (Action Chunk)**，而不是只预测下一步。
 
-```math
-\text{单步 BC}: \pi(o_t) \rightarrow a_t
-```
 
-```math
+$$
+\text{单步 BC}: \pi(o_t) \rightarrow a_t
+$$
+
+
+
+$$
 \text{ACT}: \pi(o_t) \rightarrow [a_t, a_{t+1}, ..., a_{t+k-1}]
-```
+$$
+
 
 **核心优势**:
 - **减少决策点**: 如果 chunk 大小 $k=100$，决策频率从 50Hz 降到 0.5Hz，大大降低了误差累积的机会。
 - **隐式任务分解**: 预测一整段动作，模型需要"理解"整个子任务的结构 (如"伸手→抓握→抬起")，而不只是盲目模仿下一帧。
 - **平滑轨迹**: 一次生成的轨迹天然连贯，避免了单步预测的抖动。
 
-## 2. 核心技术 (Core Techniques)
+### 2. 核心技术 (Core Techniques)
 
-### 2.1 动作分块 (Action Chunking)
+#### 2.1 动作分块 (Action Chunking)
 
 **定义**: 将连续的动作序列分成固定长度 $k$ 的"块"，模型一次预测一整个块。
 
@@ -1413,7 +2023,7 @@ ACT 提出了一个简单而有效的想法：**一次预测一段未来的动�
 - **ALOHA**: $k = 100$ (在 50Hz 控制下，对应 2 秒的动作)
 - **Mobile ALOHA**: $k = 50$ (对应 1 秒)
 
-### 2.2 时间集成 (Temporal Ensemble)
+#### 2.2 时间集成 (Temporal Ensemble)
 
 仅用 Action Chunking 还不够。如果在 $t=0$ 时预测了 $[a_0, ..., a_{99}]$，然后在 $t=100$ 时再预测 $[a_{100}, ..., a_{199}]$，两段轨迹的交界处可能不连续。
 
@@ -1430,9 +2040,11 @@ a_t^{final} = Σ w_i * a_t^{(i)}
 ```
 
 **指数加权公式**:
-```math
+
+$$
 w_i = \exp(-m \cdot i)
-```
+$$
+
 
 其中 $m$ 是衰减系数 (通常 $m=0.01$)，$i$ 是预测的"年龄"(越新的预测权重越大)。
 
@@ -1440,7 +2052,7 @@ w_i = \exp(-m \cdot i)
 - **平滑过渡**: 新旧预测的融合消除了不连续。
 - **鲁棒性**: 即使某次预测有误，也会被其他预测"稀释"。
 
-### 2.3 CVAE 架构 (Conditional Variational Autoencoder)
+#### 2.3 CVAE 架构 (Conditional Variational Autoencoder)
 
 ACT 的另一个核心创新是使用 **CVAE** 来处理动作的**多模态分布**。
 
@@ -1458,9 +2070,11 @@ ACT 的另一个核心创新是使用 **CVAE** 来处理动作的**多模态分�
 2. **解码器 (Decoder)** $p_\theta(a | o, z)$: 从隐变量 $z$ 和观测 $o$ 重建动作序列。
 
 **损失函数**:
-```math
+
+$$
 \mathcal{L} = \underbrace{\| a - \hat{a} \|^2}_{\text{重建损失}} + \beta \cdot \underbrace{D_{KL}(q_\phi(z|o,a) \| \mathcal{N}(0, I))}_{\text{KL 散度}}
-```
+$$
+
 
 - **重建损失**: 让解码器输出接近真实动作。
 - **KL 散度**: 让隐变量分布接近标准正态分布，便于推理时采样。
@@ -1471,7 +2085,6 @@ ACT 的另一个核心创新是使用 **CVAE** 来处理动作的**多模态分�
 2. 解码器根据 $o$ 和 $z$ 生成动作序列。
 
 ```python
-## 训练时
 z_mu, z_logvar = encoder(obs, gt_actions)  # 编码真实动作
 z = reparameterize(z_mu, z_logvar)         # 重参数化采样
 pred_actions = decoder(obs, z)             # 解码
@@ -1480,16 +2093,15 @@ recon_loss = mse(pred_actions, gt_actions)
 kl_loss = -0.5 * (1 + z_logvar - z_mu**2 - z_logvar.exp()).sum()
 loss = recon_loss + beta * kl_loss
 
-## 推理时
 z = torch.randn(batch_size, z_dim)         # 直接从标准正态采样
 pred_actions = decoder(obs, z)             # 解码
 ```
 
-## 3. 网络架构 (Network Architecture)
+### 3. 网络架构 (Network Architecture)
 
 ACT 使用 **Transformer** 作为骨干网络，具体包括:
 
-### 3.1 观测编码器 (Observation Encoder)
+#### 3.1 观测编码器 (Observation Encoder)
 
 ```
 输入:
@@ -1502,7 +2114,7 @@ ACT 使用 **Transformer** 作为骨干网络，具体包括:
 - 拼接 → [B, T+1, D]
 ```
 
-### 3.2 CVAE 编码器 (仅训练时)
+#### 3.2 CVAE 编码器 (仅训练时)
 
 ```
 输入:
@@ -1514,7 +2126,7 @@ ACT 使用 **Transformer** 作为骨干网络，具体包括:
 - 输出: z_mu, z_logvar ∈ R^{D_z} (通常 D_z = 32)
 ```
 
-### 3.3 动作解码器 (Action Decoder)
+#### 3.3 动作解码器 (Action Decoder)
 
 ```
 输入:
@@ -1528,7 +2140,7 @@ ACT 使用 **Transformer** 作为骨干网络，具体包括:
 - 输出: [B, k, D_a] (k 步动作)
 ```
 
-### 3.4 完整架构图
+#### 3.4 完整架构图
 
 ```
                     ┌─────────────────────────────────────────┐
@@ -1555,7 +2167,7 @@ ACT 使用 **Transformer** 作为骨干网络，具体包括:
                               Action Chunk [B, k, D_a]
 ```
 
-## 4. 与其他方法的对比 (Comparison)
+### 4. 与其他方法的对比 (Comparison)
 
 | 方法 | 预测方式 | 多模态处理 | 推理速度 | 适用场景 |
 | :--- | :--- | :--- | :--- | :--- |
@@ -1573,7 +2185,7 @@ ACT 使用 **Transformer** 作为骨干网络，具体包括:
 - **分布覆盖有限**: CVAE 的隐空间容量有限，可能无法覆盖所有动作模态。
 - **KL 坍塌风险**: 如果 $\beta$ 设置不当，模型可能忽略隐变量 $z$。
 
-## 5. 实战代码示例 (Code Example)
+### 5. 实战代码示例 (Code Example)
 
 ```python
 import torch
@@ -1680,7 +2292,7 @@ def compute_loss(pred_actions, gt_actions, z_mu, z_logvar, beta=10.0):
     return recon_loss + beta * kl_loss, recon_loss, kl_loss
 ```
 
-## 6. 时间集成的实现 (Temporal Ensemble)
+### 6. 时间集成的实现 (Temporal Ensemble)
 
 ```python
 class TemporalEnsemble:
@@ -1721,7 +2333,7 @@ class TemporalEnsemble:
         return weighted_sum / total_weight if total_weight > 0 else None
 ```
 
-## 7. 面试常见问题 (Q&A)
+### 7. 面试常见问题 (Q&A)
 
 **Q1: ACT 和 Diffusion Policy 的核心区别是什么?**
 
@@ -1758,7 +2370,7 @@ A:
 - **数据效率**: CVAE 的隐空间提供了良好的归纳偏置，50 条演示即可泛化。
 - **硬件友好**: 简单架构易于部署到边缘设备。
 
-## 8. 参考资源 (References)
+### 8. 参考资源 (References)
 
 - **论文**: [Learning Fine-Grained Bimanual Manipulation with Low-Cost Hardware](https://arxiv.org/abs/2304.13705)
 - **GitHub**: [ALOHA](https://github.com/tonyzhaozh/aloha)
@@ -1768,31 +2380,44 @@ A:
 ---
 
 
-\newpage
 
-# 第8章 Flow Matching
+---
 
+## 第8章 Flow Matching
 
-Physical Intelligence 的 π0 模型核心在于引入了 **Flow Matching** 来生成连续的动作序列，替代了传统的 Diffusion Policy 或离散 Tokenization。
 
 > **注意**: Pi0 已于 2025 年 2 月开源 (OpenPI / LeRobot)。以下代码基于 Flow Matching 原理和 VLA 架构通识进行的 **核心逻辑解构**，方便理解其数学过程。
 
-## 1. 核心思想：从噪声流向动作 (The Math behind Flow)
+### 0. 主要數學思想 (Main Mathematical Idea)
 
-### 1.1 什么是 Flow Matching?
+> **第一性原理**: **The Shortest Path (最短路径 / Optimal Transport)**
+
+Diffusion 就像一个醉汉（随机游走）跌跌撞撞地从噪声走回数据，路径曲折且低效。Flow Matching 试图构建一条**直达**的路径。
+
+- **核心数学工具**: **ODE (常微分方程)** 与 **Optimal Transport (最优传输)**。
+- **解题逻辑**:
+    1.  **拉直**: 在概率分布空间中，两点之间（噪声分布 vs 数据分布）最短的路径是直线（Geodesic）。
+    2.  **向量场**: 如果我们能直接学习到这条直线上的"速度向量"（Vector Field），那么推理时只需要沿着速度方向走几步（Euler积分）就能到达终点。
+    3.  **确定性**: 从随机的布朗运动（Diffusion）转变为确定性的流体运动（Flow），极大地减少了推理步数（100步 -> 10步）。
+
+### 1. 核心思想：从噪声流向动作 (The Math behind Flow)
+
+#### 1.1 什么是 Flow Matching?
 不同于 Diffusion Model 学习去噪过程 (Denoising Score Matching)，Flow Matching 直接学习一个 **确定性的常微分方程 (ODE)**，定义了概率密度路径 $p_t(x)$ 如何随时间 $t$ 演变。
 
 我们定义一个 **向量场 (Vector Field)** $v_t(x)$，它描述了样本在时间 $t$ 的移动速度和方向。
 
-```math
+
+$$
 \frac{dx}{dt} = v_t(x)
-```
+$$
+
 
 - $x_0$: 真实数据分布 (Real Data, e.g., 机器人的正确动作)。
 - $x_1$: 标准高斯噪声分布 (Noise, $\mathcal{N}(0, I)$)。
 - **目标**: 找到一个向量场 $v_t$，使得当我们从噪声 $x_1$ 出发，沿着这个场逆流而上 (或顺流而下，取决于定义) 积分到 $t=0$ 时，能够精确地变回 $x_0$。
 
-### 1.2 为什么比 Diffusion 好?
+#### 1.2 为什么比 Diffusion 好?
 - **Diffusion**: 轨迹是随机的 (Stochastic)，像布朗运动一样跌跌撞撞地去噪。推理步数多 (50-100步)。
 - **Flow Matching**: 我们可以强制模型学习一条 **"直的" (Straight)** 轨迹。
     - **Optimal Transport (最优传输)**: 点对点之间直线最短。Flow Matching 可以学习这种直线路径，使得推理极其高效 (10步以内)。
@@ -1801,33 +2426,39 @@ Physical Intelligence 的 π0 模型核心在于引入了 **Flow Matching** 来�
 ![Flow Matching vs Diffusion](../assets/flow_matching_vs_diffusion.png)
 *图示: Diffusion 的随机轨迹 (左) vs Flow Matching 的直线轨迹 (右)*
 
-## 2. 核心公式详解 (Key Formulas)
+### 2. 核心公式详解 (Key Formulas)
 
-### 2.1 线性插值路径 (Conditional Flow)
+#### 2.1 线性插值路径 (Conditional Flow)
 为了训练模型，我们需要构造一个"正确答案"。假设我们已知一个真实样本 $x_0$ 和一个采样噪声 $x_1$，我们定义一条连接它们的直线路径：
 
-```math
+
+$$
 x_t = (1 - t)x_0 + t x_1, \quad t \in [0, 1]
-```
+$$
+
 
 - 当 $t=0$ 时， $x_t = x_0$ (数据)。
 - 当 $t=1$ 时， $x_t = x_1$ (噪声)。
 
-### 2.2 目标速度 (Target Velocity)
+#### 2.2 目标速度 (Target Velocity)
 对上面的路径 $x_t$ 对时间 $t$ 求导，得到该路径上的理想速度 $u_t(x|x_1)$：
 
-```math
+
+$$
 \frac{d}{dt} x_t = \frac{d}{dt} \left( (1 - t)x_0 + t x_1 \right) = x_1 - x_0
-```
+$$
+
 
 - **物理含义**: 目标速度是一个恒定向量，方向从 $x_0$ 指向 $x_1$。这非常直观：要从数据变到噪声，就一直往噪声方向走；反之亦然。
 
-### 2.3 损失函数 (Loss Function)
+#### 2.3 损失函数 (Loss Function)
 我们训练一个神经网络 $v_\theta(x_t, t, \text{cond})$ 来拟合这个目标速度。这就是 **Conditional Flow Matching (CFM)** loss：
 
-```math
+
+$$
 \mathcal{L}(\theta) = \mathbb{E}_{t, x_0, x_1} \left[ \Vert v_\theta(x_t, t, \text{cond}) - (x_1 - x_0) \Vert^2 \right]
-```
+$$
+
 
 - **输入**:
     - $x_t$: 当前时刻的插值状态 (混合了数据和噪声)。
@@ -1836,9 +2467,9 @@ x_t = (1 - t)x_0 + t x_1, \quad t \in [0, 1]
 - **标签 (Target)**: $x_1 - x_0$ (常数向量)。
 - **直观解释**: 无论你在路径的哪个位置，网络都应该告诉你："往那个方向走，就能到达终点"。
 
-## 3. 模型架构 (Pseudo-Code)
+### 3. 模型架构 (Pseudo-Code)
 
-### 2.1 VLM Backbone (Conditioning)
+#### 2.1 VLM Backbone (Conditioning)
 使用 PaliGemma 或类似 VLM 提取多模态特征。
 
 ```python
@@ -1858,7 +2489,7 @@ class Pi0VLMBackbone(nn.Module):
         return global_cond
 ```
 
-### 2.2 Flow Matching Policy Head
+#### 2.2 Flow Matching Policy Head
 这是一个 MLP 或 Transformer，预测“速度场”。
 
 ```python
@@ -1897,7 +2528,7 @@ class FlowMatchingPolicy(nn.Module):
         return velocity
 ```
 
-## 3. 推理过程 (Inference / Sampling)
+### 3. 推理过程 (Inference / Sampling)
 使用 ODE Solver (如 Euler 方法) 从噪声生成动作。
 
 ```python
@@ -1942,7 +2573,7 @@ def generate_action(policy, vlm_cond, action_dim, steps=10, cfg_scale=1.0):
     return x_t
 ```
 
-## 4. 训练过程 (Training)
+### 4. 训练过程 (Training)
 Flow Matching 的 Loss 非常直观：**回归目标速度**。
 目标速度就是从噪声 $x_1$ 指向真实数据 $x_0$ 的方向。
 
@@ -1974,27 +2605,27 @@ def compute_loss(policy, vlm_cond, real_action):
     return loss
 ```
 
-## 6. 为什么 Pi0 选择 Flow Matching? (Deep Dive)
+### 6. 为什么 Pi0 选择 Flow Matching? (Deep Dive)
 
-### 6.1 连续性 vs 离散性 (Continuous vs Discrete)
+#### 6.1 连续性 vs 离散性 (Continuous vs Discrete)
 - **RT-1/RT-2 (Discrete)**: 将动作空间切分为 256 个格子。
     - *问题*: 丢失精度。对于灵巧手这种需要微米级控制的任务，离散化会导致动作"一卡一卡的" (Jitter)。
 - **Pi0 (Continuous)**: 直接输出浮点数速度向量。
     - *优势*: 理论上精度无限，动作平滑，更符合物理世界的本质。
 
-### 6.2 高频控制的数学基础
+#### 6.2 高频控制的数学基础
 - 机器人控制回路通常是 500Hz。如果模型推理需要 100ms (10Hz)，中间 490ms 都在"盲跑"。
 - Flow Matching 的 **ODE 求解器** 特性允许我们在推理时进行 **时间步缩放 (Time-step Scaling)**。
     - 我们可以只跑 ODE 的 1 步 (Euler Step)，虽然精度略低，但速度极快，可以实现高频响应。
     - 也可以跑 10 步，获得高精度动作。
     - 这种 **Compute-Accuracy Trade-off** 是 Transformer 做不到的。
 
-### 6.3 为什么是直线? (Optimal Transport)
+#### 6.3 为什么是直线? (Optimal Transport)
 - **Wasserstein Distance**: 在概率分布空间中，将一个分布搬运到另一个分布的"最小代价"路径就是直线 (Geodesic)。
 - **OT-CFM**: 我们构造的 $x_t = (1-t)x_0 + t x_1$ 正是 Optimal Transport 的位移插值 (Displacement Interpolation)。
 - **Rectified Flow**: 这与 Stable Diffusion 3 使用的 Rectified Flow 思想一致，旨在将弯曲的扩散路径"拉直"，从而允许极少步数的推理 (1-step generation)。
 
-### 6.4 ODE Solver 的选择
+#### 6.4 ODE Solver 的选择
 - **Euler (1st order)**: 最简单，一步走到底。$x_{t+dt} = x_t + v_t dt$。速度最快，但误差最大。
 - **Midpoint / Heun (2nd order)**: 先试探性走半步，看斜率，再修正。精度更高，但需要 2 倍的 NFE (Number of Function Evaluations)。
 - **RK4 (4th order)**: 经典的高精度求解器，需要 4 倍 NFE。
@@ -2004,15 +2635,16 @@ def compute_loss(policy, vlm_cond, real_action):
 
 ---
 
-\newpage
 
-# 第9章 FAST 动作序列编码
+---
+
+## 第9章 FAST 动作序列编码
 
 
 > [!IMPORTANT]
 > **FAST** (Frequency-space Action Sequence Tokenization，频域动作序列 Token 化) 是 **Physical Intelligence** 开发的一种高效动作 Token 化方法，专为解决 VLA 模型中连续动作转换为离散 token 的难题而设计。
 
-## 1. 概述
+### 1. 概述
 在 VLA 模型中，动作的表示方式至关重要。传统的离散化方法（如简单分桶）在处理高频、灵巧的机器人操作时效果不佳。FAST 通过**离散余弦变换 (DCT)** 和**字节对编码 (BPE)** 的组合，实现了高效的动作压缩和 token 化。
 
 -   **开发者**: Physical Intelligence
@@ -2020,22 +2652,22 @@ def compute_loss(policy, vlm_cond, real_action):
 -   **核心目标**: 将连续的机器人动作序列压缩为紧凑的离散 token，同时保持高频动作的精度。
 -   **应用**: 已成功集成到 **OpenVLA** 中，显著提升训练速度（**最高 5 倍加速**）。
 
-## 2. 核心问题：为什么需要 FAST？
+### 2. 核心问题：为什么需要 FAST？
 传统 VLA 模型中的动作 Token 化面临几个挑战：
 
-### 2.1. 简单分桶的局限性
+#### 2.1. 简单分桶的局限性
 -   **Token 数量爆炸**: 对于 7-DoF 机械臂，如果每个关节分成 256 个 bin，总 token 数可达 256^7，导致难以学习。
 -   **高频动作丢失**: 简单分桶无法捕捉平滑、高频的轨迹变化（如快速折叠衣物、精细抓取）。
 
-### 2.2. 连续动作的自相关性
+#### 2.2. 连续动作的自相关性
 -   机器人动作在时间上高度自相关（t 和 t+1 的动作非常相似）。
 -   自回归模型（如 Transformer）在处理这种高相关性数据时效率低下。
 
 FAST 通过**频域变换**解决了这些问题。
 
-## 3. FAST 的核心技术
+### 3. FAST 的核心技术
 
-### 3.1. 离散余弦变换 (DCT)
+#### 3.1. 离散余弦变换 (DCT)
 FAST 借鉴了 **JPEG 图像压缩**的思想，使用 DCT 将时域的动作序列转换到频域。
 
 #### 3.1.1. 为什么需要 DCT？
@@ -2083,7 +2715,7 @@ FAST 借鉴了 **JPEG 图像压缩**的思想，使用 DCT 将时域的动作序
 -   **边界友好**: DCT 假设信号对称延拓，避免边界不连续导致的高频伪影。
 -   **压缩效率**: DCT 的能量集中性比 FFT 更好（这也是 JPEG 选择 DCT 的原因）。
 
-### 3.2. 字节对编码 (BPE)
+#### 3.2. 字节对编码 (BPE)
 经过 DCT 量化后，我们得到一个整数序列，例如：
 ```
 [42, 15, 3, 1, 0, 0, 0]  # 7-DoF，每个关节的前 K=4 个 DCT 系数
@@ -2122,13 +2754,13 @@ FAST 借鉴了 **JPEG 图像压缩**的思想，使用 DCT 将时域的动作序
 -   **减少冗余**: BPE 能自动发现这些模式，并用单个 token 表示，**避免重复编码**。
 -   **保持语义**: 高频的系数组合通常对应有意义的动作片段，BPE 保留了这种语义结构。
 
-### 3.3. FAST+ (Universal Tokenizer)
+#### 3.3. FAST+ (Universal Tokenizer)
 FAST+ 是在 **100 万+真实机器人动作序列**上预训练的通用 token 化器。
 -   **跨平台**: 适用于不同的机器人（机械臂、人形机器人、移动机器人）。
 -   **跨频率**: 适应不同的控制频率（10Hz 到 100Hz）。
 -   **开箱即用**: 无需为每个新任务重新训练 tokenizer。
 
-## 4. FAST 的优势
+### 4. FAST 的优势
 | 特性 | 简单分桶 | FAST (DCT + BPE) |
 | :--- | :--- | :--- |
 | **Token 数量** | 高（256^7）| **低（2-3 个 token/序列）** |
@@ -2136,13 +2768,13 @@ FAST+ 是在 **100 万+真实机器人动作序列**上预训练的通用 token 
 | **训练速度** | 慢 | **快（5 倍加速）** |
 | **泛化能力** | 弱 | **强（FAST+ 跨任务泛化）** |
 
-## 5. 在 OpenVLA 中的应用
+### 5. 在 OpenVLA 中的应用
 FAST 已被集成到 **OpenVLA** 框架中：
 -   **训练**: 使用 FAST tokenizer 将 Open X-Embodiment 数据集中的动作序列 token 化。
 -   **推理**: 生成的 token 通过逆 DCT 转换回连续动作。
 -   **效果**: 在折叠衣物、清理桌子等高频任务上，成功率提升 **30-50%**。
 
-## 6. 与其他动作表示的对比
+### 6. 与其他动作表示的对比
 | 方法 | 原理 | 优点 | 缺点 |
 | :--- | :--- | :--- | :--- |
 | **分桶 (Binning)** | 将连续值分成离散区间 | 简单 | Token 爆炸，精度差 |
@@ -2150,33 +2782,46 @@ FAST 已被集成到 **OpenVLA** 框架中：
 | **流匹配 (Flow Matching)** | ODE 求解器生成轨迹 | 快速，高质量 | 需要额外训练头 |
 | **FAST (DCT + BPE)** | 频域压缩 + Token 化 | **快速，兼容自回归模型** | 需要预训练 tokenizer |
 
-## 7. 面试要点
+### 7. 面试要点
 -   **DCT 是核心**: 记住 "像 JPEG 压缩图片一样压缩动作轨迹"。
 -   **BPE 进一步压缩**: 类似 GPT 的 token 化，将 DCT 系数压缩为少量 token。
 -   **5 倍加速**: FAST 使 OpenVLA 的训练速度提升 5 倍。
 -   **FAST+ 是通用 tokenizer**: 在 100 万+真实机器人数据上预训练，跨平台泛化。
 -   **适合自回归模型**: FAST 的 token 输出可以直接喂给 Transformer，无需修改架构。
 
-## 8. 参考资源
+### 8. 参考资源
 -   **论文**: [FAST: Efficient Action Tokenization for VLA Models (arXiv:2501.09747)](https://arxiv.org/abs/2501.09747)
 -   **官方博客**: [Physical Intelligence - FAST](https://physicalintelligence.company/blog/fast)
 -   **GitHub**: [OpenVLA](https://github.com/openvla/openvla)
 -   **Hugging Face**: [FAST+ Tokenizer](https://huggingface.co/pi0/FAST-plus)
 
 
-\newpage
+
+---
 
 # 第三部分：训练技术与优化
 
 
-\newpage
+---
 
-# 第10章 参数高效微调 (PEFT/LoRA)
+## 第10章 参数高效微调 (PEFT/LoRA)
 
 
 在 VLA 时代，我们通常基于 7B+ 的大模型进行微调。全量微调 (Full Fine-tuning) 极其昂贵，因此参数高效微调 (PEFT) 成为了必修课。
 
-## 1. LoRA (Low-Rank Adaptation)
+### 0. 主要數學思想 (Main Mathematical Idea)
+
+> **第一性原理**: **Redundancy of Information (信息的冗余 / Intrinsic Dimension)**
+
+一个拥有 70 亿参数的通用模型，在学习一个特定技能（如"拿起杯子"）时，并不需要改变所有 70 亿个自由度。任务的本质变化通常发生在极低维的子空间中。
+
+- **核心数学工具**: **Low-Rank Matrix Decomposition (低秩矩阵分解 / SVD)**。
+- **解题逻辑**:
+    1.  **假设**: 权重矩阵的变化量 $\Delta W$ 是低秩的 (Low Rank)。即 $\text{rank}(\Delta W) \ll \min(d, k)$。
+    2.  **分解**: 任何低秩矩阵都可以分解为两个小矩阵的乘积 ($B \times A$)。
+    3.  **高效**: 我们不直接训练巨大的 $\Delta W$ ($d \times k$)，而是训练微小的 $A$ 和 $B$ ($r \times (d+k)$)。这就像用几个主成分（Principal Components）来近似复杂的变换。
+
+### 1. LoRA (Low-Rank Adaptation)
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -2210,72 +2855,76 @@ FAST 已被集成到 **OpenVLA** 框架中：
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-### 1.1. 核心思想
+#### 1.1. 核心思想
 大模型的权重矩阵 $W \in \mathbb{R}^{d \times k}$ 虽然参数很多，但在特定任务 (如机器人控制) 上，其**内在维度 (Intrinsic Dimension)** 其实很低。
 我们不需要更新整个 $W$，只需要学习一个低秩的增量矩阵 $\Delta W$。
 
-### 1.2. 数学原理
+#### 1.2. 数学原理
 假设预训练权重为 $W_0$，微调后的权重为 $W_0 + \Delta W$。
 我们将 $\Delta W$ 分解为两个低秩矩阵 $A$ 和 $B$ 的乘积：
 
-```math
+
+$$
 W = W_0 + \Delta W = W_0 + B A
-```
+$$
+
 其中：
 - $B \in \mathbb{R}^{d \times r}, A \in \mathbb{R}^{r \times k}$
 - $r \ll \min(d, k)$ 是秩 (Rank)，通常取 8, 16, 32。
 - **参数量对比**: $d \times k$ (全量) vs $r \times (d + k)$ (LoRA)。对于 7B 模型，LoRA 参数量通常不到 1%。
 
-### 1.3. 训练与推理
+#### 1.3. 训练与推理
 - **初始化**: $A$ 使用高斯初始化，$B$ 初始化为 0。这样初始状态下 $\Delta W = 0$，模型输出与预训练模型一致。
 - **训练**: 冻结 $W_0$，只更新 $A$ 和 $B$。
 - **推理**: 可以将 $BA$ 加回到 $W_0$ 中 (Merge)，推理速度与原模型完全一致，无额外延迟。
 
-```math
-  W_{merged} = W_0 + \alpha \cdot BA
-```
+
+$$
+W_{merged} = W_0 + \alpha \cdot BA
+$$
+
 
   ($\alpha$ 是缩放系数，通常 $\alpha/r$ 用于归一化)。
 
 ---
 
-## 2. QLoRA (Quantized LoRA)
+### 2. QLoRA (Quantized LoRA)
 
-### 2.1. 痛点
+#### 2.1. 痛点
 LoRA 虽然减少了可训练参数，但**基础模型 $W_0$ 依然需要以 FP16 加载到显存中**。对于 65B 的模型，光加载就需要 130GB 显存，单卡 4090 根本跑不动。
 
-### 2.2. 核心创新
+#### 2.2. 核心创新
 QLoRA 结合了 **4-bit 量化** 和 **LoRA**，使得 65B 模型可以在 48GB 显存上微调。
 
 1.  **4-bit NormalFloat (NF4)**: 一种理论最优的 4-bit 量化数据类型，专门针对正态分布的权重设计。
 2.  **Double Quantization**: 对量化常数 (Quantization Constants) 再进行一次量化，进一步节省显存 (每参数平均节省 0.37 bit)。
 3.  **Paged Optimizers**: 利用 CPU 内存来缓存优化器状态 (Optimizer States)，防止显存 OOM。
 
-### 2.3. 显存计算 (7B Model)
+#### 2.3. 显存计算 (7B Model)
 - **Full Fine-tuning (Adam)**: ~112 GB (权重+梯度+优化器状态)
 - **LoRA (FP16)**: ~16 GB (权重) + ~1 GB (LoRA) = ~17 GB
 - **QLoRA (4-bit)**: ~4 GB (权重) + ~1 GB (LoRA) = ~5 GB (可以在 RTX 3060 上跑！)
 
 ---
 
-## 3. 其他 PEFT 方法
+### 3. 其他 PEFT 方法
 
-### 3.1. Adapters (Houlsby et al.)
+#### 3.1. Adapters (Houlsby et al.)
 - 在 Transformer 的每一层中插入小的全连接网络 (Adapter Layers)。
 - **缺点**: 增加了推理延迟 (因为是串行的层)，无法像 LoRA 那样合并权重。
 
-### 3.2. Prefix Tuning / P-Tuning
+#### 3.2. Prefix Tuning / P-Tuning
 - 在 Input Token 前面拼接一组可学习的 Virtual Tokens。
 - **缺点**: 占用了宝贵的 Context Window 长度。
 
-### 3.3. P-Tuning v2
+#### 3.3. P-Tuning v2
 - 在每一层都加入可学习的 Prefix，而不仅仅是输入层。
 - **优点**: 比 P-Tuning v1 效果更好，接近全量微调。
 - **缺点**: 仍然占用 Context Window。
 
 ---
 
-## 4. PEFT 方法对比 (Comparison)
+### 4. PEFT 方法对比 (Comparison)
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -2302,7 +2951,7 @@ QLoRA 结合了 **4-bit 量化** 和 **LoRA**，使得 65B 模型可以在 48GB 
 | **Prefix-Tuning** | 可学习 KV 前缀 | 占 Context | ❌ | ~0.1% | ⭐⭐⭐ |
 | **P-Tuning v2** | 每层 Prefix | 占 Context | ❌ | ~0.1-1% | ⭐⭐⭐⭐ |
 
-### LoRA vs P-Tuning vs Adapter 核心差异
+#### LoRA vs P-Tuning vs Adapter 核心差异
 
 | 对比维度 | LoRA | P-Tuning | Adapter |
 | :--- | :--- | :--- | :--- |
@@ -2313,9 +2962,9 @@ QLoRA 结合了 **4-bit 量化** 和 **LoRA**，使得 65B 模型可以在 48GB 
 
 ---
 
-## 5. LoRA 参数选择指南 (Hyperparameter Guide)
+### 5. LoRA 参数选择指南 (Hyperparameter Guide)
 
-### 5.1 Rank (秩 $r$) 的影响
+#### 5.1 Rank (秩 $r$) 的影响
 
 | $r$ 值 | 参数量 | 适用场景 | 风险 |
 | :--- | :--- | :--- | :--- |
@@ -2324,18 +2973,20 @@ QLoRA 结合了 **4-bit 量化** 和 **LoRA**，使得 65B 模型可以在 48GB 
 | **64-128** | 较多 | 复杂推理、知识注入 | 过拟合 |
 | **256+** | 接近全量 | 几乎等价于全量微调 | 失去 LoRA 优势 |
 
-### 5.2 Alpha ($\alpha$) 的影响
+#### 5.2 Alpha ($\alpha$) 的影响
 
-```math
+
+$$
 W = W_0 + \frac{\alpha}{r} \cdot BA
-```
+$$
+
 
 - **$\alpha / r$ 比值**: 控制 LoRA 更新的"强度"
 - **常见设置**: $\alpha = 2r$ (即 $\alpha/r = 2$)
 - **$\alpha$ 大**: 更激进的更新，收敛快但可能不稳定
 - **$\alpha$ 小**: 更保守的更新，稳定但收敛慢
 
-### 5.3 目标层选择
+#### 5.3 目标层选择
 
 | 配置 | 目标层 | 参数量 | 效果 |
 | :--- | :--- | :--- | :--- |
@@ -2344,7 +2995,6 @@ W = W_0 + \frac{\alpha}{r} \cdot BA
 | **完整配置** | Attention + MLP 全部 | ~1% | 最佳效果 |
 
 ```python
-## PEFT 配置示例
 from peft import LoraConfig
 
 lora_config = LoraConfig(
@@ -2362,7 +3012,7 @@ lora_config = LoraConfig(
 
 ---
 
-## 6. 面试高频考点
+### 6. 面试高频考点
 
 **Q: LoRA 的原理是什么？与 P-Tuning、Adapter 的异同点？**
 A: 
@@ -2386,16 +3036,29 @@ A: 因为 QLoRA 在计算梯度时，需要将 4-bit 权重**反量化 (Dequanti
 **Q: VLA 模型微调应该微调哪些层？**
 A: 通常微调 **Attention (q_proj, v_proj)** 和 **MLP (gate_proj, up_proj, down_proj)** 效果最好。只微调 Attention 有时不够。
 
-\newpage
 
-# 第11章 强化学习基础与 RLHF
+---
+
+## 第11章 强化学习基础与 RLHF
 
 
 > **核心概念**: 强化学习 (Reinforcement Learning, RL) 是一种通过与环境交互来学习最优策略的方法。智能体通过**试错** (Trial-and-Error) 和**奖励反馈** (Reward Feedback) 不断改进行为。
 
-## 1. 为什么 VLA 需要强化学习? (Why RL for VLA?)
+### 0. 主要數學思想 (Main Mathematical Idea)
 
-### 1.1 行为克隆 (BC) 的局限
+> **第一性原理**: **Trial and Error with Feedback (试错与反馈)**
+
+在现实世界中，智能体（无论是生物还是机器）往往无法获得"正确答案"的直接指导，只能通过体验行为的**后果**（奖励或惩罚）来学习。
+
+- **核心数学工具**: **动态规划 (Dynamic Programming)** 与 **Bellman 最优性原理**。
+- **解题逻辑**:
+    1.  **分解**: 将复杂的长期决策问题分解为递归的单步决策子问题。
+    2.  **前瞻**: 当前的最优选择不仅仅取决于眼前的收益，还必须包含对未来所有可能收益的期望（即价值函数 $V$ 或 $Q$）。
+    3.  **迭代**: 通过不断更新价值估计，最终收敛到最优策略。
+
+### 1. 为什么 VLA 需要强化学习? (Why RL for VLA?)
+
+#### 1.1 行为克隆 (BC) 的局限
 
 传统 VLA 主要依赖 **行为克隆 (Behavior Cloning)**：模仿人类演示。
 
@@ -2404,22 +3067,22 @@ A: 通常微调 **Attention (q_proj, v_proj)** 和 **MLP (gate_proj, up_proj, do
 | **BC** | 简单，数据效率高 | 上限是人类水平，无法超越演示者 |
 | **RL** | 可以超越人类，自我进化 | 需要大量交互，稀疏奖励难优化 |
 
-### 1.2 RL 在 VLA 中的价值
+#### 1.2 RL 在 VLA 中的价值
 
 - **超越人类示教**: 通过自我博弈/探索发现更优策略
 - **长序列优化**: BC 只模仿每步动作，RL 优化整个轨迹的累积回报
 - **适应性学习**: 在真机部署时持续自我改进
 - **稀疏奖励任务**: 只有任务成功时给奖励的场景（如组装）
 
-### 1.3 VLA 中的 RL 应用案例
+#### 1.3 VLA 中的 RL 应用案例
 
 - **π*0.6 (Pi-Star)**: 使用 Recap 算法（Offline RL）超越人类示教
 - **RT-2**: 使用 RL from Human Feedback (RLHF) 改进语义推理
 - **RoboCasa**: 使用 PPO 训练家庭操作策略
 
-## 2. RL 基础概念 (RL Fundamentals)
+### 2. RL 基础概念 (RL Fundamentals)
 
-### 2.1 马尔可夫决策过程 (MDP)
+#### 2.1 马尔可夫决策过程 (MDP)
 
 ```
 MDP = (S, A, P, R, γ)
@@ -2431,7 +3094,7 @@ MDP = (S, A, P, R, γ)
 - **R(s,a)**: 奖励函数 - 行为好坏的反馈
 - **γ**: 折扣因子 - 未来奖励的权重 (通常 0.99)
 
-### 2.2 马尔可夫性 (Markov Property)
+#### 2.2 马尔可夫性 (Markov Property)
 
 **定义**: 下一状态只依赖于当前状态和动作，与历史无关。
 
@@ -2461,7 +3124,7 @@ P(s_{t+1} | s_t, a_t, s_{t-1}, a_{t-1}, ...) = P(s_{t+1} | s_t, a_t)
 - **Bellman 方程成立**: 价值函数可以递归定义
 - **实际应用**: 机器人状态通常包含位置+速度，满足马尔可夫性；若只有位置则不满足
 
-### 2.3 核心目标
+#### 2.3 核心目标
 
 最大化**累积折扣回报 (Cumulative Discounted Return)**:
 
@@ -2469,7 +3132,7 @@ P(s_{t+1} | s_t, a_t, s_{t-1}, a_{t-1}, ...) = P(s_{t+1} | s_t, a_t)
 G_t = Σ_{k=0}^{∞} γ^k × R_{t+k+1}
 ```
 
-### 2.4 价值函数 (Value Functions)
+#### 2.4 价值函数 (Value Functions)
 
 **状态价值函数 (State Value)**:
 
@@ -2489,7 +3152,7 @@ Q^π(s, a) = E_π[ G_t | S_t = s, A_t = a ]
 Q^π(s, a) = R(s, a) + γ × E_{s' ~ P}[ V^π(s') ]
 ```
 
-### 2.5 最优价值函数与最优策略
+#### 2.5 最优价值函数与最优策略
 
 **最优价值函数**:
 
@@ -2532,14 +3195,14 @@ Q*(s, a) = max_π Q^π(s, a)
 2. 如果我们知道 `V*`，则最优动作是使上式取最大值的 `a`
 3. 这等价于 `π*(s) = argmax_a Q*(s,a)`
 
-### 2.6 策略 (Policy)
+#### 2.6 策略 (Policy)
 
 策略 `π(a|s)` 定义了在状态 `s` 下采取动作 `a` 的概率。
 
 - **确定性策略**: `a = π(s)`
 - **随机策略**: `a ~ π(·|s)`
 
-## 3. RL 算法分类 (RL Algorithm Taxonomy)
+### 3. RL 算法分类 (RL Algorithm Taxonomy)
 
 ```
                         RL 算法
@@ -2555,7 +3218,7 @@ Q*(s, a) = max_π Q^π(s, a)
    DQN/SAC   PPO/TRPO   Dreamer/MBPO
 ```
 
-### 3.1 Model-Free vs Model-Based
+#### 3.1 Model-Free vs Model-Based
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -2599,7 +3262,7 @@ Q*(s, a) = max_π Q^π(s, a)
 - **Model-Free**: π0.6 的 Recap 算法（直接从数据学习策略）
 - **Model-Based**: 世界模型 (World Model) 用于预测未来状态，辅助规划
 
-### 3.2 策略迭代 vs 值迭代 (Policy Iteration vs Value Iteration)
+#### 3.2 策略迭代 vs 值迭代 (Policy Iteration vs Value Iteration)
 
 两种经典的动态规划算法，用于求解 MDP。
 
@@ -2657,16 +3320,16 @@ Q*(s, a) = max_π Q^π(s, a)
 - **策略迭代**: "先完整评估当前策略有多好，再改进"
 - **值迭代**: "直接朝最优价值函数迭代，最后再提取策略"
 
-### 3.3 On-Policy vs Off-Policy
+#### 3.3 On-Policy vs Off-Policy
 
 | 类型 | 代表算法 | 特点 |
 | :--- | :--- | :--- |
 | **On-Policy** | PPO, TRPO | 只用当前策略的数据，稳定但低效 |
 | **Off-Policy** | SAC, TD3 | 可复用历史数据，高效但不稳定 |
 
-## 4. VLA 常用 RL 算法 (RL Algorithms for VLA)
+### 4. VLA 常用 RL 算法 (RL Algorithms for VLA)
 
-### 4.1 PPO (Proximal Policy Optimization)
+#### 4.1 PPO (Proximal Policy Optimization)
 
 **核心思想**: 限制策略更新幅度，防止训练崩溃。
 
@@ -2745,7 +3408,7 @@ class PPO:
             self.optimizer.step()
 ```
 
-### 4.2 SAC (Soft Actor-Critic)
+#### 4.2 SAC (Soft Actor-Critic)
 
 **核心思想**: 最大化奖励的同时最大化策略熵（鼓励探索）。
 
@@ -2810,7 +3473,7 @@ class SAC:
             tgt_param.data.copy_(self.tau * src_param.data + (1 - self.tau) * tgt_param.data)
 ```
 
-### 4.3 Offline RL (离线强化学习)
+#### 4.3 Offline RL (离线强化学习)
 
 **核心问题**: 只有固定的历史数据集，无法与环境交互。
 
@@ -2875,16 +3538,16 @@ class RecapAlgorithm:
         return loss / len(labeled_data)
 ```
 
-## 5. 奖励设计 (Reward Engineering)
+### 5. 奖励设计 (Reward Engineering)
 
-### 5.1 稀疏奖励 vs 稠密奖励
+#### 5.1 稀疏奖励 vs 稠密奖励
 
 | 类型 | 示例 | 优点 | 缺点 |
 | :--- | :--- | :--- | :--- |
 | **稀疏** | 任务成功 +1，否则 0 | 不需要人工设计 | 难以学习 |
 | **稠密** | 距离目标越近奖励越高 | 学习容易 | 可能导致局部最优 |
 
-### 5.2 奖励设计示例
+#### 5.2 奖励设计示例
 
 ```python
 def compute_reward(state, action, next_state, task_type="pick_and_place"):
@@ -2919,7 +3582,7 @@ def compute_reward(state, action, next_state, task_type="pick_and_place"):
         return reward
 ```
 
-### 5.3 奖励塑形 (Reward Shaping)
+#### 5.3 奖励塑形 (Reward Shaping)
 
 ```python
 def shaped_reward(state, next_state, potential_func, gamma=0.99):
@@ -2933,9 +3596,9 @@ def shaped_reward(state, next_state, potential_func, gamma=0.99):
     return shaping
 ```
 
-## 6. RL + VLA 的结合 (RL + VLA Integration)
+### 6. RL + VLA 的结合 (RL + VLA Integration)
 
-### 6.1 RLHF 完整流程 (RLHF Pipeline)
+#### 6.1 RLHF 完整流程 (RLHF Pipeline)
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -2999,7 +3662,7 @@ class RLHF_VLA:
         self.ppo_update(states, actions, rewards)
 ```
 
-### 6.2 从演示初始化 RL (Demo-Guided RL)
+#### 6.2 从演示初始化 RL (Demo-Guided RL)
 
 ```python
 class DemoGuidedRL:
@@ -3030,7 +3693,217 @@ class DemoGuidedRL:
             self.rl_update()
 ```
 
-## 7. 面试高频问题 (Q&A)
+### 7. GR-RL: VLA + RL 融合框架案例 (ByteDance Seed)
+
+> **GR-RL**: 字节跳动 Seed 团队 2025 年发布的机器人学习框架，专为**长时程、灵巧、高精度操作**设计。
+> [[官网](https://seed.bytedance.com/en/gr_rl)]
+
+#### 7.1 核心洞察
+
+GR-RL 揭示了一个被行业长期忽略的事实：
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│               GR-RL 解决的三大核心问题                           │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│   问题 1: 演示数据有噪声                                        │
+│   ┌─────────────────────────────────────────────────────────┐   │
+│   │  人类演示中存在失误（鞋带滑脱、反复尝试）                  │   │
+│   │  直接喂给模型 → 学会"怎么犯错"                           │   │
+│   │  💡 解决: Offline RL Critic 筛选高质量数据                │   │
+│   └─────────────────────────────────────────────────────────┘   │
+│                                                                 │
+│   问题 2: 训练-部署不一致                                       │
+│   ┌─────────────────────────────────────────────────────────┐   │
+│   │  训练: 输出"原始动作"                                    │   │
+│   │  部署: 执行"平滑后处理动作"                              │   │
+│   │  💡 解决: 在线 RL 对齐（潜在空间探索）                    │   │
+│   └─────────────────────────────────────────────────────────┘   │
+│                                                                 │
+│   问题 3: 数据量有限                                            │
+│   ┌─────────────────────────────────────────────────────────┐   │
+│   │  高精度任务的演示数据采集成本高                           │   │
+│   │  💡 解决: 形态对称性增强（镜像翻转数据翻倍）              │   │
+│   └─────────────────────────────────────────────────────────┘   │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+#### 7.2 模型架构
+
+GR-RL 采用 **Mixture-of-Transformer (MoT)** 混合架构，总参数量 **50 亿**。
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    GR-RL 架构 (5B 参数)                          │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│   ┌─────────────────────────────────────────────────────────┐   │
+│   │              VLA Policy (π)                              │   │
+│   │                                                          │   │
+│   │   Vision Encoder ──┐                                     │   │
+│   │                    │                                     │   │
+│   │   Language Encoder ├──→ MoT Backbone ──→ Action Head     │   │
+│   │                    │                                     │   │
+│   │   State Encoder ───┘                                     │   │
+│   └─────────────────────────────────────────────────────────┘   │
+│                            │                                    │
+│                            │ 共享特征                           │
+│                            ▼                                    │
+│   ┌─────────────────────────────────────────────────────────┐   │
+│   │           Multi-task Critic (任务进度评估)               │   │
+│   │                                                          │   │
+│   │   输入: (state, action, task_embedding)                  │   │
+│   │   输出: 任务进度值 V(s) ∈ [0, 1]                         │   │
+│   │                                                          │   │
+│   │   功能:                                                  │   │
+│   │   • 评估每一步对整体任务的贡献                           │   │
+│   │   • 进展快 → 值高；出错 → 值骤降                        │   │
+│   │   • 用于筛选"非最优数据"                                │   │
+│   └─────────────────────────────────────────────────────────┘   │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+#### 7.3 多阶段训练流程
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                 GR-RL 三阶段训练流程                             │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│   阶段 1: 演示轨迹筛选 (Offline RL Critic)                      │
+│   ┌─────────────────────────────────────────────────────────┐   │
+│   │  原始演示数据 (含失误)                                   │   │
+│   │        │                                                 │   │
+│   │        ▼                                                 │   │
+│   │  Critic 评估每步进度值 V(s)                              │   │
+│   │        │                                                 │   │
+│   │        ├── V 骤降 → 标记为"失败时刻"→ 剔除              │   │
+│   │        │                                                 │   │
+│   │        └── V 稳步上升 → 保留为高质量数据                 │   │
+│   └─────────────────────────────────────────────────────────┘   │
+│                          │                                      │
+│                          ▼                                      │
+│   阶段 2: 形态对称性增强 (Data Augmentation)                    │
+│   ┌─────────────────────────────────────────────────────────┐   │
+│   │  对筛选后的数据进行镜像翻转:                             │   │
+│   │  • 图像水平翻转 + 左右手视角交换                         │   │
+│   │  • 状态/动作在世界坐标系镜像变换                         │   │
+│   │  • 语言指令空间描述调整 ("左边" → "右边")               │   │
+│   │                                                          │   │
+│   │  效果: 数据量翻倍，无需额外采集成本                      │   │
+│   └─────────────────────────────────────────────────────────┘   │
+│                          │                                      │
+│                          ▼                                      │
+│   阶段 3: 在线强化学习优化 (Online RL Alignment)                │
+│   ┌─────────────────────────────────────────────────────────┐   │
+│   │  问题: 训练时输出 ≠ 部署时执行的动作                     │   │
+│   │                                                          │   │
+│   │  方案: 在扩散模型的潜在噪声空间中进行结构化探索          │   │
+│   │        (不在原始动作空间盲目加噪声)                       │   │
+│   │                                                          │   │
+│   │  效果: 弥合训练-部署鸿沟，稳定长时程精细操作             │   │
+│   └─────────────────────────────────────────────────────────┘   │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+#### 7.4 Critic 进度评估原理
+
+```python
+class TaskProgressCritic:
+    """GR-RL 的任务进度评估器"""
+    def __init__(self, encoder, threshold=0.3):
+        self.encoder = encoder  # 共享 VLA 编码器
+        self.value_head = nn.Linear(hidden_dim, 1)
+        self.threshold = threshold  # 进度骤降阈值
+    
+    def forward(self, state, task_embedding):
+        """评估当前状态的任务进度"""
+        features = self.encoder(state, task_embedding)
+        progress = torch.sigmoid(self.value_head(features))  # [0, 1]
+        return progress
+    
+    def filter_demonstrations(self, trajectory):
+        """筛选高质量演示数据"""
+        filtered = []
+        for t in range(len(trajectory) - 1):
+            v_t = self.forward(trajectory[t]['state'], trajectory[t]['task'])
+            v_t1 = self.forward(trajectory[t+1]['state'], trajectory[t+1]['task'])
+            
+            progress_drop = v_t - v_t1
+            
+            if progress_drop > self.threshold:
+                # 进度骤降 → 失败时刻，剔除
+                print(f"⚠️ 检测到失败时刻 t={t}, drop={progress_drop:.2f}")
+                continue
+            
+            filtered.append(trajectory[t])
+        
+        return filtered
+```
+
+#### 7.5 与其他 VLA 方法对比
+
+| 方法 | 核心思路 | 数据利用 | 在线学习 | 精细操作 |
+| :--- | :--- | :--- | :--- | :--- |
+| **BC (传统 VLA)** | 纯模仿 | 不筛选 | ❌ | 受限 |
+| **π0.6 (Recap)** | Offline RL 筛选 | ✅ 筛选 | ❌ | 中等 |
+| **GR-RL** | Offline + Online RL | ✅ 筛选 + 增强 | ✅ | ✅ 高精度 |
+
+#### 7.6 GR-RL 的"通才转专家"范式
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│               GR-RL "通才转专家" 方法论                          │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│   Step 1: 通才预训练 (如 GR-3, 40B VLA)                         │
+│           泛化、新环境适应、基础操作能力                         │
+│                    │                                            │
+│                    ▼                                            │
+│   Step 2: 专家微调 (GR-RL)                                      │
+│           • RL Critic 筛选高质量专家数据                        │
+│           • 形态对称增强提升泛化                                │
+│           • 在线 RL 对齐部署差异                                │
+│                    │                                            │
+│                    ▼                                            │
+│   Step 3: 高精度任务 (如穿鞋带)                                 │
+│           长时程、灵巧、高精度操作                               │
+│                                                                 │
+│   💡 核心: RL 不是替代 BC，而是"提纯" + "对齐"                  │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+#### 7.7 面试 Q&A
+
+**Q1: GR-RL 与 π0.6 的 Recap 有什么区别？**
+
+A:
+| 对比 | π0.6 Recap | GR-RL |
+| :--- | :--- | :--- |
+| **数据筛选** | 基于成功/失败标签 | 基于进度值骤降检测 |
+| **在线学习** | ❌ 纯 Offline | ✅ Offline + Online |
+| **探索空间** | - | 扩散模型潜在空间 |
+| **数据增强** | 无 | 形态对称镜像 |
+
+**Q2: 为什么在潜在噪声空间探索而不是动作空间？**
+
+A:
+- **动作空间噪声**: 可能产生不合理动作（如关节超限）
+- **潜在空间噪声**: 结构化，保持动作语义合理性
+- **效率**: 潜在空间维度低，探索效率更高
+
+**Q3: GR-RL 的局限性是什么？**
+
+A:
+- **实验条件**: 论文中鞋孔处于"理想状态"，真实场景更复杂
+- **泛化性**: 对未见过的物体/场景仍需验证
+- **计算成本**: 50B 参数 + 在线 RL 训练成本高
+
+### 8. 面试高频问题 (Q&A)
 
 **Q1: VLA 中 BC 和 RL 如何取舍?**
 
@@ -3090,9 +3963,9 @@ L_DPO = -E[ log σ( β × log(π_θ(y_w|x) / π_ref(y_w|x)) - β × log(π_θ(y_
 | **计算量** | 高 | 低 |
 | **效果** | 略优 (理论上) | 接近 RLHF |
 
-## 8. 主流 RL 框架 (RL Frameworks)
+### 9. 主流 RL 框架 (RL Frameworks)
 
-### 8.1 框架对比
+#### 8.1 框架对比
 
 | 框架 | 定位 | 优势 | 适用场景 |
 | :--- | :--- | :--- | :--- |
@@ -3102,20 +3975,17 @@ L_DPO = -E[ log σ( β × log(π_θ(y_w|x) / π_ref(y_w|x)) - β × log(π_θ(y_
 | **TorchRL** | PyTorch 官方 | 与 PyTorch 深度集成 | 生产级应用 |
 | **SKRL** | Isaac Lab 集成 | GPU 并行，机器人专用 | 机器人 RL |
 
-### 8.2 Stable Baselines3 (SB3)
+#### 8.2 Stable Baselines3 (SB3)
 
 **特点**: 最易上手的 RL 库，API 设计优雅。
 
 ```python
-## Stable Baselines3 快速上手
 from stable_baselines3 import PPO, SAC, TD3
 from stable_baselines3.common.env_util import make_vec_env
 from stable_baselines3.common.callbacks import EvalCallback
 
-## 创建向量化环境
 env = make_vec_env("Pendulum-v1", n_envs=4)
 
-## 创建模型
 model = PPO(
     "MlpPolicy",
     env,
@@ -3128,14 +3998,11 @@ model = PPO(
     tensorboard_log="./logs/"
 )
 
-## 训练
 model.learn(total_timesteps=100_000, callback=EvalCallback(env))
 
-## 保存/加载
 model.save("ppo_pendulum")
 model = PPO.load("ppo_pendulum")
 
-## 推理
 obs = env.reset()
 for _ in range(1000):
     action, _ = model.predict(obs, deterministic=True)
@@ -3170,7 +4037,6 @@ class CustomCNN(BaseFeaturesExtractor):
     def forward(self, observations):
         return self.linear(self.cnn(observations))
 
-## 使用自定义网络
 policy_kwargs = dict(
     features_extractor_class=CustomCNN,
     features_extractor_kwargs=dict(features_dim=256),
@@ -3178,16 +4044,14 @@ policy_kwargs = dict(
 model = PPO("CnnPolicy", env, policy_kwargs=policy_kwargs)
 ```
 
-### 8.3 RLlib (Ray)
+#### 8.3 RLlib (Ray)
 
 **特点**: 分布式训练首选，支持多 GPU/多节点。
 
 ```python
-## RLlib 分布式训练
 from ray import tune
 from ray.rllib.algorithms.ppo import PPOConfig
 
-## 配置
 config = (
     PPOConfig()
     .environment("CartPole-v1")
@@ -3210,13 +4074,11 @@ config = (
     )
 )
 
-## 训练
 algo = config.build()
 for i in range(100):
     result = algo.train()
     print(f"Iter {i}: reward = {result['episode_reward_mean']:.2f}")
 
-## 或使用 Ray Tune 进行超参搜索
 tune.run(
     "PPO",
     config=config.to_dict(),
@@ -3228,7 +4090,6 @@ tune.run(
 **多智能体 RL**:
 
 ```python
-## RLlib 多智能体
 from ray.rllib.algorithms.ppo import PPOConfig
 
 config = (
@@ -3241,20 +4102,17 @@ config = (
 )
 ```
 
-### 8.4 SKRL (Isaac Lab 集成)
+#### 8.4 SKRL (Isaac Lab 集成)
 
 **特点**: 专为 Isaac Lab 设计，GPU 并行训练。
 
 ```python
-## SKRL + Isaac Lab
 from skrl.agents.torch.ppo import PPO, PPO_DEFAULT_CONFIG
 from skrl.trainers.torch import SequentialTrainer
 from skrl.envs.wrappers.torch import wrap_env
 
-## 包装 Isaac Lab 环境
 env = wrap_env(isaac_lab_env)
 
-## 配置
 cfg = PPO_DEFAULT_CONFIG.copy()
 cfg["rollouts"] = 16
 cfg["learning_epochs"] = 8
@@ -3263,7 +4121,6 @@ cfg["discount_factor"] = 0.99
 cfg["lambda"] = 0.95
 cfg["learning_rate"] = 3e-4
 
-## 创建 Agent
 agent = PPO(
     models={"policy": policy_net, "value": value_net},
     memory=memory,
@@ -3272,12 +4129,11 @@ agent = PPO(
     action_space=env.action_space,
 )
 
-## 训练
 trainer = SequentialTrainer(cfg=trainer_cfg, env=env, agents=agent)
 trainer.train()
 ```
 
-### 8.5 框架选择指南
+#### 8.5 框架选择指南
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -3305,25 +4161,17 @@ trainer.train()
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-### 8.6 TORCS 与自动驾驶 RL
+#### 8.6 TORCS 与自动驾驶 RL
 
 **TORCS** (The Open Racing Car Simulator) 是经典的自动驾驶 RL 测试平台。
 
 ```python
-## TORCS 环境使用 (gym_torcs)
 import gym
 import gym_torcs
 
 env = gym.make("Torcs-v0", vision=True, throttle=True)
 
-## 观测空间: 车辆状态 + 可选视觉
-## - speed, angle, trackPos, track sensors (19)
-## - 可选: RGB 图像 (64x64x3)
 
-## 动作空间: [steering, throttle, brake]
-## - steering: [-1, 1]
-## - throttle: [0, 1]
-## - brake: [0, 1]
 
 obs = env.reset()
 for _ in range(1000):
@@ -3335,18 +4183,18 @@ for _ in range(1000):
 
 **注**: TORCS 主要用于自动驾驶研究，VLA 机器人领域更常用 Isaac Lab/MuJoCo。
 
-## 9. LIBERO 终身学习基准 (Lifelong Learning Benchmark)
+### 10. LIBERO 终身学习基准 (Lifelong Learning Benchmark)
 
 > **LIBERO**: Benchmarking Knowledge Transfer for Lifelong Robot Learning [[GitHub](https://github.com/Lifelong-Robot-Learning/LIBERO)] [[Paper](https://arxiv.org/abs/2306.03310)]
 
-### 9.1 为什么关注 LIBERO?
+#### 9.1 为什么关注 LIBERO?
 
 - **主流基准**: 多任务 / 终身学习 / 知识迁移研究默认引用的数据与任务集
 - **任务覆盖全面**: 提供受控分布偏移 (Spatial / Object / Goal) 与 entangled 任务 (LIBERO-100)
 - **开箱即用**: 打包示范数据、评测脚本、策略网络 (BC-RNN / BC-Transformer / BC-ViLT) 与算法 (base、ER、EWC、PackNet、Multitask)
 - **可扩展**: Procedural generation pipeline 支持生成更多 manipulation 任务，方便自定义研究
 
-### 9.2 任务套件总览
+#### 9.2 任务套件总览
 
 | 套件 | 任务数 | 迁移挑战 | 说明 |
 | :--- | :--- | :--- | :--- |
@@ -3355,10 +4203,9 @@ for _ in range(1000):
 | **LIBERO-Goal** | 30 | 目标变化 | 同场景，多目标组合 |
 | **LIBERO-100** | 100 | 混合 (Entangled) | 拆成 **LIBERO-90** (预训练) + **LIBERO-10** (终身学习测试) |
 
-### 9.3 数据与环境
+#### 9.3 数据与环境
 
 ```bash
-## 环境安装
 conda create -n libero python=3.8.13
 conda activate libero
 git clone https://github.com/Lifelong-Robot-Learning/LIBERO.git
@@ -3368,14 +4215,12 @@ pip install torch==1.11.0+cu113 torchvision==0.12.0+cu113 \
             torchaudio==0.11.0 --extra-index-url https://download.pytorch.org/whl/cu113
 pip install -e .
 
-## 下载示范 (可选 --datasets 指定套件)
 python benchmark_scripts/download_libero_datasets.py --use-huggingface
 ```
 
-### 9.4 训练 / 评测入口
+#### 9.4 训练 / 评测入口
 
 ```bash
-## 终身学习训练
 export CUDA_VISIBLE_DEVICES=0
 python libero/lifelong/main.py \
     seed=0 \
@@ -3383,7 +4228,6 @@ python libero/lifelong/main.py \
     policy=bc_transformer_policy \
     lifelong=ewc
 
-## 脱机评测
 python libero/lifelong/evaluate.py \
     --benchmark LIBERO_10 \
     --task_id 0 \
@@ -3393,7 +4237,7 @@ python libero/lifelong/evaluate.py \
     --device_id 0
 ```
 
-### 9.5 与 VLA 的结合方式
+#### 9.5 与 VLA 的结合方式
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -3416,7 +4260,7 @@ python libero/lifelong/evaluate.py \
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-### 9.6 面试 Q&A
+#### 9.6 面试 Q&A
 
 **Q: 如何使用 LIBERO 评估 VLA 的终身学习能力？**
 
@@ -3427,7 +4271,7 @@ A:
 4. **对比算法**: 比较 Sequential Fine-tuning (baseline) vs EWC / PackNet / ER
 5. **关键指标**: Forward Transfer (新任务学习速度) + Backward Transfer (旧任务遗忘程度)
 
-## 10. 参考资源 (References)
+### 11. 参考资源 (References)
 
 - **PPO**: [Proximal Policy Optimization Algorithms](https://arxiv.org/abs/1707.06347)
 - **SAC**: [Soft Actor-Critic: Off-Policy Maximum Entropy Deep RL](https://arxiv.org/abs/1801.01290)
@@ -3441,16 +4285,28 @@ A:
 ---
 
 
-\newpage
+---
 
-# 第12章 知识蒸馏
+## 第12章 知识蒸馏
 
 
 > **核心概念**: 知识蒸馏 (Knowledge Distillation, KD) 是一种模型压缩技术，通过让小模型（学生）模仿大模型（教师）的行为，实现知识的迁移。在 VLA 领域，知识蒸馏是实现边缘端部署的关键技术。
 
-## 1. 为什么 VLA 需要知识蒸馏? (Why KD for VLA?)
+### 0. 主要數學思想 (Main Mathematical Idea)
 
-### 1.1 VLA 部署挑战
+> **第一性原理**: **Smoothing the Decision Boundary (决策边界的平滑 / Dark Knowledge)**
+
+一个"硬标签"（这张图是猫）只包含 1 bit 信息。但一个模型的预测分布（90%猫，9%狗，1%车）包含了极其丰富的**结构信息**（猫和狗长得像，和车不像）。
+
+- **核心数学工具**: **KL Divergence (KL 散度)** 与 **Temperature Scaling (温度缩放)**。
+- **解题逻辑**:
+    1.  **暗知识 (Dark Knowledge)**: Hinton 指出，教师模型对错误类别的预测概率并非随机噪声，而是反映了数据的流形结构。
+    2.  **软化**: 直接匹配概率分布可能太尖锐（梯度消失）。通过引入温度参数 $T$，我们"软化"了分布，放大了细微的概率差异，迫使学生模型不仅学会"是什么"，还学会"像什么"。
+    3.  **对齐**: 数学本质是最小化两个概率分布之间的距离 ($D_{KL}(P || Q)$)，使学生模型的思维方式（特征空间结构）趋近于教师。
+
+### 1. 为什么 VLA 需要知识蒸馏? (Why KD for VLA?)
+
+#### 1.1 VLA 部署挑战
 
 | 模型 | 参数量 | 推理延迟 | 显存需求 |
 | :--- | :--- | :--- | :--- |
@@ -3463,19 +4319,21 @@ A:
 - **硬件限制**: 机载计算通常只有 Jetson Orin (8-32GB)
 - **功耗**: 移动机器人对功耗敏感
 
-### 1.2 知识蒸馏的价值
+#### 1.2 知识蒸馏的价值
 
-```math
+
+$$
 \text{小模型性能} + \text{大模型知识} \approx \text{大模型性能}
-```
+$$
+
 
 - **模型压缩**: 10x 参数减少，性能损失 < 10%
 - **推理加速**: 降低延迟，满足实时控制需求
 - **降低成本**: 减少部署硬件需求
 
-## 2. 知识蒸馏基础 (KD Fundamentals)
+### 2. 知识蒸馏基础 (KD Fundamentals)
 
-### 2.1 基本框架
+#### 2.1 基本框架
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -3498,22 +4356,24 @@ A:
 └─────────────────────────────────────────────────────────────┘
 ```
 
-### 2.2 软标签 (Soft Labels)
+#### 2.2 软标签 (Soft Labels)
 
 **硬标签 (Hard Labels)**: One-hot 向量，只有正确类别为 1。
 
 **软标签 (Soft Labels)**: 教师模型的 softmax 概率分布。
 
-```math
+
+$$
 p_i^{(T)} = \frac{\exp(z_i / T)}{\sum_j \exp(z_j / T)}
-```
+$$
+
 
 其中 $T$ 是**温度参数** (Temperature)：
 - **T = 1**: 正常 softmax
 - **T > 1**: 分布更平滑，保留更多"暗知识"
 - **T → ∞**: 均匀分布
 
-### 2.3 蒸馏损失 (Distillation Loss)
+#### 2.3 蒸馏损失 (Distillation Loss)
 
 ```python
 import torch
@@ -3546,9 +4406,9 @@ class DistillationLoss(nn.Module):
         return total_loss
 ```
 
-## 3. VLA 中的知识蒸馏策略 (KD Strategies for VLA)
+### 3. VLA 中的知识蒸馏策略 (KD Strategies for VLA)
 
-### 3.1 特征蒸馏 (Feature Distillation)
+#### 3.1 特征蒸馏 (Feature Distillation)
 
 除了输出层，还蒸馏中间特征。
 
@@ -3590,7 +4450,7 @@ class FeatureDistillation(nn.Module):
         return feature_loss / len(self.feature_layers)
 ```
 
-### 3.2 注意力蒸馏 (Attention Distillation)
+#### 3.2 注意力蒸馏 (Attention Distillation)
 
 让学生模型学习教师的注意力模式。
 
@@ -3617,7 +4477,7 @@ class AttentionDistillation(nn.Module):
         return attn_loss / len(teacher_attns)
 ```
 
-### 3.3 动作轨迹蒸馏 (Action Trajectory Distillation)
+#### 3.3 动作轨迹蒸馏 (Action Trajectory Distillation)
 
 VLA 特有：蒸馏整个动作序列。
 
@@ -3653,7 +4513,7 @@ class ActionTrajectoryDistillation(nn.Module):
         return weighted_loss
 ```
 
-### 3.4 分布蒸馏 (Distribution Distillation)
+#### 3.4 分布蒸馏 (Distribution Distillation)
 
 对于 Diffusion/Flow Matching 策略，蒸馏动作分布。
 
@@ -3683,9 +4543,9 @@ class DiffusionDistillation(nn.Module):
         return loss
 ```
 
-## 4. VLA 蒸馏的特殊考虑 (Special Considerations)
+### 4. VLA 蒸馏的特殊考虑 (Special Considerations)
 
-### 4.1 视觉编码器蒸馏
+#### 4.1 视觉编码器蒸馏
 
 ```python
 class VisionEncoderDistillation:
@@ -3717,7 +4577,7 @@ class VisionEncoderDistillation:
         return cls_loss + 0.5 * patch_loss
 ```
 
-### 4.2 语言模型蒸馏
+#### 4.2 语言模型蒸馏
 
 ```python
 class LLMDistillation:
@@ -3762,7 +4622,7 @@ class LLMDistillation:
         return logit_loss + 0.1 * hidden_loss
 ```
 
-### 4.3 多阶段蒸馏 (Progressive Distillation)
+#### 4.3 多阶段蒸馏 (Progressive Distillation)
 
 ```python
 class ProgressiveDistillation:
@@ -3793,9 +4653,9 @@ class ProgressiveDistillation:
                 param.requires_grad = False
 ```
 
-## 5. 蒸馏 + 量化联合优化 (KD + Quantization)
+### 5. 蒸馏 + 量化联合优化 (KD + Quantization)
 
-### 5.1 量化感知蒸馏 (Quantization-Aware Distillation)
+#### 5.1 量化感知蒸馏 (Quantization-Aware Distillation)
 
 ```python
 class QADistillation:
@@ -3834,7 +4694,7 @@ class QADistillation:
         return model(inputs)
 ```
 
-### 5.2 蒸馏后量化 (Post-Distillation Quantization)
+#### 5.2 蒸馏后量化 (Post-Distillation Quantization)
 
 ```python
 def post_distillation_quantize(distilled_model, calibration_data, bits=4):
@@ -3857,7 +4717,7 @@ def post_distillation_quantize(distilled_model, calibration_data, bits=4):
     return quantized_model
 ```
 
-## 6. 实战：OpenVLA 蒸馏到 1B 模型
+### 6. 实战：OpenVLA 蒸馏到 1B 模型
 
 ```python
 class OpenVLADistillation:
@@ -3919,7 +4779,6 @@ class OpenVLADistillation:
         return total_loss
 
 
-## 训练脚本
 distiller = OpenVLADistillation()
 optimizer = torch.optim.AdamW(distiller.student.parameters(), lr=1e-4)
 
@@ -3931,11 +4790,10 @@ for epoch in range(10):
         loss.backward()
         optimizer.step()
 
-## 保存蒸馏后的小模型
 distiller.student.save_pretrained("./openvla-1b-distilled")
 ```
 
-## 7. 效果对比 (Performance Comparison)
+### 7. 效果对比 (Performance Comparison)
 
 | 模型 | 参数量 | 延迟 (Jetson) | CALVIN 成功率 | 显存 |
 | :--- | :--- | :--- | :--- | :--- |
@@ -3946,7 +4804,7 @@ distiller.student.save_pretrained("./openvla-1b-distilled")
 
 **结论**: 蒸馏后的 1B 模型比从头训练提升 14%！
 
-## 8. 面试高频问题 (Q&A)
+### 8. 面试高频问题 (Q&A)
 
 **Q1: 温度参数 T 的作用是什么? 如何选择?**
 
@@ -3984,7 +4842,7 @@ A:
 - **方法**: 用模型的历史 checkpoint 作为教师
 - **效果**: 提升模型的校准性 (Calibration)，常用于大模型训练后期
 
-## 9. 参考资源 (References)
+### 9. 参考资源 (References)
 
 - **Original KD**: [Distilling the Knowledge in a Neural Network](https://arxiv.org/abs/1503.02531)
 - **Feature Distillation**: [FitNets: Hints for Thin Deep Nets](https://arxiv.org/abs/1412.6550)
@@ -3994,16 +4852,28 @@ A:
 ---
 
 
-\newpage
 
-# 第13章 自监督学习
+---
+
+## 第13章 自监督学习
 
 
 > **核心概念**: 自监督学习 (Self-Supervised Learning, SSL) 是一种从无标签数据中学习有意义表示的方法。通过设计 **Pretext Task (代理任务)**，让模型从数据本身的结构中学习。
 
-## 1. 为什么 VLA 需要自监督学习? (Why SSL for VLA?)
+### 0. 主要數學思想 (Main Mathematical Idea)
 
-### 1.1 机器人数据的困境
+> **第一性原理**: **Structure is Supervision (结构即监督)**
+
+人类学习不需要每时每刻的外部标签，因为数据本身内部蕴含着丰富的**结构信息**（时空连续性、多视角一致性）。
+
+- **核心数学工具**: **Manifold Learning (流形学习)** 与 **Mutual Information Maximization (互信息最大化)**。
+- **解题逻辑**:
+    1.  **不变性 (Invariance)**: 同一个物体，无论光照、角度如何变化，其本质（语义）不变。通过拉近同一物体不同视图的距离（对比学习），模型学会了忽略无关干扰（如像素噪声），抓住核心语义。
+    2.  **预测性 (Predictability)**: 世界是有规律的。如果我知道了现在的状态，我应该能某种程度上预测未来（预测学习）或填补缺失（掩码预测）。这种预测能力迫使模型理解数据的内在逻辑和物理规律。
+
+### 1. 为什么 VLA 需要自监督学习? (Why SSL for VLA?)
+
+#### 1.1 机器人数据的困境
 
 | 数据类型 | 规模 | 标注成本 |
 | :--- | :--- | :--- |
@@ -4013,27 +4883,31 @@ A:
 
 **问题**: 有标签的机器人数据稀缺，无法支撑大模型训练。
 
-### 1.2 SSL 的价值
+#### 1.2 SSL 的价值
 
-```math
+
+$$
 \text{大量无标签数据} \xrightarrow{\text{SSL 预训练}} \text{通用表示} \xrightarrow{\text{少量标签微调}} \text{高性能策略}
-```
+$$
+
 
 - **视觉表示**: 从海量图像/视频中学习通用视觉特征
 - **动作表示**: 从人类视频中学习动作先验
 - **世界模型**: 从视频中学习物理规律
 
-## 2. 自监督学习范式 (SSL Paradigms)
+### 2. 自监督学习范式 (SSL Paradigms)
 
-### 2.1 对比学习 (Contrastive Learning)
+#### 2.1 对比学习 (Contrastive Learning)
 
 **核心思想**: 拉近相似样本，推远不同样本。
 
 #### 2.1.1 InfoNCE 损失
 
-```math
+
+$$
 \mathcal{L}_{\text{InfoNCE}} = -\log \frac{\exp(\text{sim}(z_i, z_j) / \tau)}{\sum_{k=1}^{2N} \mathbf{1}_{k \neq i} \exp(\text{sim}(z_i, z_k) / \tau)}
-```
+$$
+
 
 其中:
 - $z_i, z_j$: 同一样本的两个增强视图的表示
@@ -4144,7 +5018,7 @@ def clip_loss(image_features, text_features, temperature=0.07):
     return (loss_i2t + loss_t2i) / 2
 ```
 
-### 2.2 掩码预测 (Masked Prediction)
+#### 2.2 掩码预测 (Masked Prediction)
 
 **核心思想**: 遮住部分输入，让模型预测被遮住的部分。
 
@@ -4240,7 +5114,7 @@ class MAE(nn.Module):
 
 **对 VLA 的价值**: 从人类视频中学习动作的时序模式
 
-### 2.3 预测学习 (Predictive Learning)
+#### 2.3 预测学习 (Predictive Learning)
 
 #### 2.3.1 时间对比学习
 
@@ -4301,9 +5175,9 @@ class TemporalContrastive(nn.Module):
 通用视觉表示 (适用于机器人)
 ```
 
-## 3. VLA 中的 SSL 应用 (SSL in VLA)
+### 3. VLA 中的 SSL 应用 (SSL in VLA)
 
-### 3.1 视觉编码器预训练
+#### 3.1 视觉编码器预训练
 
 | 方法 | 数据 | 用于 VLA |
 | :--- | :--- | :--- |
@@ -4312,7 +5186,7 @@ class TemporalContrastive(nn.Module):
 | **DINOv2** | 142M 无标签图像 | 空间特征 |
 | **R3M** | Ego4D 人类视频 | 操作相关特征 |
 
-### 3.2 世界模型预训练
+#### 3.2 世界模型预训练
 
 ```python
 class WorldModelSSL(nn.Module):
@@ -4346,7 +5220,7 @@ class WorldModelSSL(nn.Module):
         return loss
 ```
 
-### 3.3 动作表示学习
+#### 3.3 动作表示学习
 
 ```python
 class ActionSSL(nn.Module):
@@ -4370,14 +5244,13 @@ class ActionSSL(nn.Module):
         return loss, pred_action
 ```
 
-## 4. 数据增强策略 (Data Augmentation)
+### 4. 数据增强策略 (Data Augmentation)
 
-### 4.1 图像增强
+#### 4.1 图像增强
 
 ```python
 import torchvision.transforms as T
 
-## VLA 常用增强
 train_transform = T.Compose([
     T.RandomResizedCrop(224, scale=(0.8, 1.0)),
     T.RandomHorizontalFlip(p=0.5),  # 注意: 机器人任务可能需要禁用
@@ -4388,7 +5261,7 @@ train_transform = T.Compose([
 ])
 ```
 
-### 4.2 机器人特定增强
+#### 4.2 机器人特定增强
 
 ```python
 class RobotAugmentation:
@@ -4417,7 +5290,7 @@ class RobotAugmentation:
         return video[start:start + crop_len]
 ```
 
-## 5. 对比学习 vs 掩码预测 (Comparison)
+### 5. 对比学习 vs 掩码预测 (Comparison)
 
 | 特性 | 对比学习 (Contrastive) | 掩码预测 (Masked) |
 | :--- | :--- | :--- |
@@ -4429,7 +5302,7 @@ class RobotAugmentation:
 | **下游任务** | 分类、检索 | 检测、分割 |
 | **VLA 适用** | 语义理解 | 空间精细任务 |
 
-## 6. 面试高频问题 (Q&A)
+### 6. 面试高频问题 (Q&A)
 
 **Q1: 对比学习中温度系数 τ 的作用是什么?**
 
@@ -4468,7 +5341,7 @@ A:
 - **空间精细任务** (如精密装配): MAE / DINOv2
 - **动作预测任务**: R3M / VideoMAE
 
-## 7. 参考资源 (References)
+### 7. 参考资源 (References)
 
 - **SimCLR**: [A Simple Framework for Contrastive Learning](https://arxiv.org/abs/2002.05709)
 - **MAE**: [Masked Autoencoders Are Scalable Vision Learners](https://arxiv.org/abs/2111.06377)
@@ -4479,16 +5352,29 @@ A:
 ---
 
 
-\newpage
 
-# 第14章 迁移学习与 Co-training
+---
 
+## 第14章 迁移学习与 Co-training
+
+
+### 主要数学思想 (Main Mathematical Idea)
+
+> **"Distribution Alignment (分布对齐) & Representation Invariance (表示不变性)"**
+
+迁移学习的核心数学问题是解决 **Domain Shift (域偏移)**，即源域分布 $P_S(X, Y)$ 与目标域分布 $P_T(X, Y)$ 不一致 ($P_S \neq P_T$)。
+
+解决这一问题的第一性原理是寻找一个映射函数 $\Phi$，使得映射后的特征分布尽可能接近：
+$$ \text{Minimize } \text{Distance}(P_S(\Phi(X)), P_T(\Phi(X))) $$
+其中 Distance 通常由 MMD (最大均值差异) 或 Adversarial Loss (对抗损失) 来衡量。本质上，这是在寻找一种**跨域不变的表示 (Invariant Representation)**，使得模型在新的环境中依然能识别出本质特征。
+
+---
 
 > **核心概念**: 迁移学习 (Transfer Learning) 是将在**源域 (Source Domain)** 学到的知识应用到**目标域 (Target Domain)** 的技术。在 VLA 领域，迁移学习是实现跨机器人、跨场景泛化的关键。
 
-## 1. 为什么 VLA 需要迁移学习? (Why Transfer Learning?)
+### 1. 为什么 VLA 需要迁移学习? (Why Transfer Learning?)
 
-### 1.1 机器人学习的迁移挑战
+#### 1.1 机器人学习的迁移挑战
 
 | 迁移类型 | 源域 | 目标域 | 挑战 |
 | :--- | :--- | :--- | :--- |
@@ -4497,19 +5383,19 @@ A:
 | **跨任务 (Cross-Task)** | 抓取物体 | 折叠衣物 | 技能差异大 |
 | **仿真到真实 (Sim-to-Real)** | 仿真环境 | 真机 | 物理差异 |
 
-### 1.2 迁移学习的价值
+#### 1.2 迁移学习的价值
 
-```math
+$$
 \text{数据收集成本} = \frac{\text{所需数据量}}{\text{数据收集效率}} \propto \frac{1}{\text{迁移能力}}
-```
+$$
 
 - **减少数据需求**: 预训练模型只需少量目标域数据微调
 - **提高泛化能力**: 学习跨域不变的特征表示
 - **加速部署**: 新机器人/场景无需从头训练
 
-## 2. 迁移学习范式 (Transfer Learning Paradigms)
+### 2. 迁移学习范式 (Transfer Learning Paradigms)
 
-### 2.1 预训练-微调 (Pre-training + Fine-tuning)
+#### 2.1 预训练-微调 (Pre-training + Fine-tuning)
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -4532,7 +5418,7 @@ A:
 └─────────────────────────────────────────────────────────────┘
 ```
 
-### 2.2 冻结特征提取 (Feature Extraction)
+#### 2.2 冻结特征提取 (Feature Extraction)
 
 只训练任务头，冻结预训练的 backbone。
 
@@ -4562,7 +5448,7 @@ class FeatureExtraction(nn.Module):
 
 **适用**: 目标域数据极少 (< 50 episodes)
 
-### 2.3 全量微调 (Full Fine-tuning)
+#### 2.3 全量微调 (Full Fine-tuning)
 
 解冻所有参数进行训练。
 
@@ -4582,7 +5468,7 @@ class FullFineTuning(nn.Module):
 
 **适用**: 目标域数据充足，且与源域差异较大
 
-### 2.4 参数高效微调 (Parameter-Efficient Fine-Tuning, PEFT)
+#### 2.4 参数高效微调 (Parameter-Efficient Fine-Tuning, PEFT)
 
 只训练少量新增参数即可适配新任务，常见工具包括 LoRA、Prompt Tuning、Adapter 等。
 
@@ -4590,9 +5476,9 @@ LoRA 通过在投影层中串接低秩增量（$W' = W_0 + BA$）来模拟微调
 
 详细的 LoRA 数学推导与实践示例请参考 **[theory/peft_lora.md](./peft_lora.md)**（该文档也是 VLA 中 PEFT 的权威参考），这里只保留高层总结和经验值。
 
-## 3. 跨形态迁移 (Cross-Embodiment Transfer)
+### 3. 跨形态迁移 (Cross-Embodiment Transfer)
 
-### 3.1 动作空间对齐
+#### 3.1 动作空间对齐
 
 不同机器人的动作空间差异是跨形态迁移的核心挑战。
 
@@ -4611,7 +5497,7 @@ class ActionSpaceAdapter(nn.Module):
         return self.adapter(source_action)
 ```
 
-### 3.2 统一动作表示
+#### 3.2 统一动作表示
 
 **RDT/OpenVLA 的方案**: 统一填充到最大维度
 
@@ -4637,7 +5523,7 @@ def unify_action_space(action, embodiment_type, max_dim=32):
     return padded_action, mask
 ```
 
-### 3.3 形态无关特征学习
+#### 3.3 形态无关特征学习
 
 ```python
 class EmbodimentInvariantEncoder(nn.Module):
@@ -4663,9 +5549,9 @@ class EmbodimentInvariantEncoder(nn.Module):
         return obs_feat, adversarial_loss
 ```
 
-## 4. 仿真到真实迁移 (Sim-to-Real Transfer)
+### 4. 仿真到真实迁移 (Sim-to-Real Transfer)
 
-### 4.1 Domain Randomization (域随机化)
+#### 4.1 Domain Randomization (域随机化)
 
 在仿真中随机化各种参数，让模型对变化鲁棒。
 
@@ -4707,7 +5593,7 @@ class DomainRandomization:
         return env
 ```
 
-### 4.2 System Identification (系统辨识)
+#### 4.2 System Identification (系统辨识)
 
 ```python
 class SystemIdentification(nn.Module):
@@ -4725,7 +5611,7 @@ class SystemIdentification(nn.Module):
         return predicted_params  # e.g., 摩擦系数、质量等
 ```
 
-### 4.3 Real-to-Sim-to-Real
+#### 4.3 Real-to-Sim-to-Real
 
 ```
 真实数据 (少量)
@@ -4741,9 +5627,9 @@ class SystemIdentification(nn.Module):
 真机部署
 ```
 
-## 5. 域适应 (Domain Adaptation)
+### 5. 域适应 (Domain Adaptation)
 
-### 5.1 对抗域适应 (Adversarial Domain Adaptation)
+#### 5.1 对抗域适应 (Adversarial Domain Adaptation)
 
 ```python
 class DANN(nn.Module):
@@ -4791,7 +5677,7 @@ class GradientReversal(torch.autograd.Function):
         return -ctx.alpha * grad_output, None
 ```
 
-### 5.2 最大均值差异 (MMD)
+#### 5.2 最大均值差异 (MMD)
 
 ```python
 def mmd_loss(source_features, target_features, kernel='rbf'):
@@ -4808,9 +5694,9 @@ def mmd_loss(source_features, target_features, kernel='rbf'):
     return mmd
 ```
 
-## 6. 零样本/少样本迁移 (Zero/Few-Shot Transfer)
+### 6. 零样本/少样本迁移 (Zero/Few-Shot Transfer)
 
-### 6.1 语言引导的零样本迁移
+#### 6.1 语言引导的零样本迁移
 
 ```python
 class LanguageGuidedTransfer(nn.Module):
@@ -4829,7 +5715,7 @@ class LanguageGuidedTransfer(nn.Module):
         return action
 ```
 
-### 6.2 少样本学习策略
+#### 6.2 少样本学习策略
 
 ```python
 class FewShotPolicy(nn.Module):
@@ -4862,16 +5748,14 @@ class FewShotPolicy(nn.Module):
         return adapted_params
 ```
 
-## 7. VLA 中的迁移学习实践 (Practical Transfer in VLA)
+### 7. VLA 中的迁移学习实践 (Practical Transfer in VLA)
 
-### 7.1 OpenVLA 的迁移流程
+#### 7.1 OpenVLA 的迁移流程
 
 ```python
-## 1. 加载预训练模型
 from transformers import AutoModelForVision2Seq
 model = AutoModelForVision2Seq.from_pretrained("openvla/openvla-7b")
 
-## 2. 配置 LoRA
 from peft import LoraConfig, get_peft_model
 
 lora_config = LoraConfig(
@@ -4882,17 +5766,15 @@ lora_config = LoraConfig(
 )
 model = get_peft_model(model, lora_config)
 
-## 3. 在目标数据上微调
 for batch in target_dataloader:
     loss = model.compute_loss(**batch)
     loss.backward()
     optimizer.step()
 
-## 4. 保存适配器
 model.save_pretrained("./openvla-adapted-myrobot")
 ```
 
-### 7.2 迁移效果对比
+#### 7.2 迁移效果对比
 
 | 方法 | 目标域数据量 | 成功率 | 训练时间 |
 | :--- | :--- | :--- | :--- |
@@ -4901,7 +5783,7 @@ model.save_pretrained("./openvla-adapted-myrobot")
 | LoRA 微调 | 50 episodes | **78%** | **30 min** |
 | 冻结+策略头 | 20 episodes | 60% | 10 min |
 
-## 8. 面试高频问题 (Q&A)
+### 8. 面试高频问题 (Q&A)
 
 **Q1: 迁移学习和域适应的区别是什么?**
 
@@ -4941,7 +5823,7 @@ A:
 - **全量微调适用**: 目标域差异大，有足够数据 (> 1000 episodes)
 - **经验法则**: 先尝试 LoRA，效果不佳再考虑全量微调
 
-## 9. 参考资源 (References)
+### 9. 参考资源 (References)
 
 - **LoRA**: [Low-Rank Adaptation of Large Language Models](https://arxiv.org/abs/2106.09685)
 - **Domain Randomization**: [Domain Randomization for Transferring Deep Neural Networks](https://arxiv.org/abs/1703.06907)
@@ -4951,9 +5833,10 @@ A:
 ---
 
 
-\newpage
 
-# 第14章附 Co-training
+---
+
+## 第14章附 Co-training 详解
 
 
 > **定义**: 在训练 VLA 模型时，同时混合 **机器人动作数据 (Robot Action Data)** 和 **互联网视觉语言数据 (Internet Vision-Language Data)**。
@@ -4992,25 +5875,25 @@ A:
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-## 1. 为什么需要 Co-training?
+### 1. 为什么需要 Co-training?
 
-### 1.1. 防止灾难性遗忘 (Catastrophic Forgetting)
+#### 1.1. 防止灾难性遗忘 (Catastrophic Forgetting)
 VLA 模型通常基于预训练的 VLM (如 LLaVA, PaLI) 微调。如果只用机器人数据 (通常只有简单的指令如 "Pick apple") 训练，模型会迅速忘记通用的视觉语义知识。
 - **现象**: 模型能抓苹果，但认不出"苹果"是"水果"，或者认不出未见过的物体。
 - **后果**: 丧失了 VLM 最宝贵的通用常识 (Common Sense)。
 
-### 1.2. 保持通用泛化能力 (Generalization)
+#### 1.2. 保持通用泛化能力 (Generalization)
 互联网数据包含了丰富的物体、场景和概念，Co-training 能让机器人利用这些知识处理未见过的指令 (Zero-shot)。
 - **举例**: 训练数据里只有 "Pick up the apple"，但用户指令是 "Pick up the red fruit"。如果模型保留了 VLM 的知识，它就能理解 "red fruit" 指的是 apple。
 
-## 2. 实施策略 (Implementation)
+### 2. 实施策略 (Implementation)
 
-### 2.1. 数据配比 (Mixing Ratio)
+#### 2.1. 数据配比 (Mixing Ratio)
 通常采用 **1:1** 或 **1:X** 的比例混合。
 - **RT-2**: 机器人数据 : 互联网数据 = **1 : 1** (Batch 内部混合)。
 - **OpenVLA**: 机器人数据 (Bridge/DROID) : LLaVA Instruct Data = **50% : 50%**。
 
-### 2.2. Loss 计算 (Loss Masking)
+#### 2.2. Loss 计算 (Loss Masking)
 由于两种数据的标签不同，计算 Loss 时需要进行 Masking：
 
 | 数据类型 | 输入 (Input) | 输出 (Output) | Loss 计算 |
@@ -5020,41 +5903,34 @@ VLA 模型通常基于预训练的 VLM (如 LLaVA, PaLI) 微调。如果只用�
 
 > **注意**: 对于互联网数据，Action Head 的输出被 Mask 掉，不产生梯度，因为这些数据没有动作标签。
 
-### 2.3. 代码逻辑 (Pseudo-code)
+#### 2.3. 代码逻辑 (Pseudo-code)
 
 ```python
-## 在一个 Batch 中混合两种数据
 batch_robot = get_robot_batch() # {image, text, action}
 batch_web = get_web_batch()     # {image, text, action=None}
 
-## 1. Forward Robot Data
 out_robot = model(batch_robot.image, batch_robot.text)
-## 计算动作损失 (e.g., MSE for diffusion, CE for tokenization)
 loss_action = mse_loss(out_robot.pred_action, batch_robot.gt_action)
 
-## 2. Forward Web Data
 out_web = model(batch_web.image, batch_web.text)
-## 计算文本损失 (Next Token Prediction)
 loss_text = cross_entropy(out_web.logits, batch_web.gt_text)
 
-## 3. Combined Loss
-## lambda 通常为 1.0，也可以根据任务调整
 total_loss = loss_action + lambda * loss_text
 
 total_loss.backward()
 ```
 
-## 3. 案例分析 (Case Studies)
+### 3. 案例分析 (Case Studies)
 
-### 3.1. RT-2 (Google DeepMind)
+#### 3.1. RT-2 (Google DeepMind)
 - **发现**: Co-training 对于保持模型的逻辑推理能力至关重要。
 - **实验**: 如果不加 Web Data，模型在"将可乐罐放到泰勒斯威夫特照片上"这种需要语义理解的任务上成功率会暴跌。因为模型忘记了"泰勒斯威夫特"是谁。
 
-### 3.2. OpenVLA (Stanford/Berkeley)
+#### 3.2. OpenVLA (Stanford/Berkeley)
 - **策略**: 使用 LLaVA 的微调数据 (COCO, GQA, ScienceQA) 进行 Co-training。
 - **效果**: 确保了模型在微调动作控制的同时，依然是一个合格的 VLM (能聊天，能描述图像)。这使得 OpenVLA 既能控制机器人，也能当 VLM 用。
 
-## 4. 面试高频问题
+### 4. 面试高频问题
 
 **Q: 为什么 Co-training 能提高 Zero-shot 能力？**
 A: 机器人数据通常是 Narrow Domain 的（特定场景、特定物体）。通过混合 Web Data，模型保持了对 Wide Domain（通用物体、复杂语义）的理解。当遇到未见过的物体（如"恐龙玩具"）时，模型可以利用 VLM 的知识识别它，并结合学到的抓取动作进行操作。
@@ -5065,17 +5941,27 @@ A:
 - **Web Data 过多**: 机器人动作学习变慢，因为 Action Loss 的权重被稀释。
 - **经验值**: 1:1 是一个稳健的起点。
 
-\newpage
 
-# 第15章 量化技术
+---
+
+## 第15章 量化技术
 
 
 量化 (Quantization) 是将高精度浮点数 (FP32/FP16) 映射到低精度整数 (INT8/INT4) 的过程。它是 VLA 模型边缘部署的核心技术。
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                    量化流程 (Quantization Flow)                  │
-├─────────────────────────────────────────────────────────────────┤
+### 0. 主要數學思想 (Main Mathematical Idea)
+
+> **第一性原理**: **Resolution vs. Range (分辨率与范围的权衡)**
+
+世界是连续的，计算机是离散的。量化就是用有限的"桶"（Buckets，如 INT8 的 256 个桶）去装无限的实数。
+
+- **核心数学工具**: **Affine Mapping (仿射映射)** 与 **Rounding Error Minimization**。
+- **解题逻辑**:
+    1.  **映射**: 将连续区间 $[min, max]$ 线性映射到整数区间 $[0, 2^{b}-1]$。公式：$q = \text{round}(x/S + Z)$。
+    2.  **权衡**: Scale ($S$) 决定了桶的大小（分辨率）。Scale 越小，分辨率越高，但能覆盖的范围（Range）越小。
+    3.  **挑战**: 如果数据中有离群值（Outliers），为了包住它，Scale 必须很大，导致大部分正常数据的分辨率极低（所有桶都空了）。量化的艺术就在于如何处理这些"捣乱"的离群值。
+
+### 1. 基础原理
 │                                                                 │
 │   FP32 权重                    INT8/INT4 权重                   │
 │   ┌─────────┐                  ┌─────────┐                      │
@@ -5094,25 +5980,29 @@ A:
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-## 1. 基础原理
+### 1. 基础原理
 
-### 1.1. 映射公式
+#### 1.1. 映射公式
 将浮点数 $x$ 映射到整数 $q$：
 
-```math
+
+$$
 q = \text{round}\left( \frac{x}{S} + Z \right)
-```
+$$
+
 
 反量化 (Dequantization)：
 
-```math
+
+$$
 \hat{x} = S(q - Z)
-```
+$$
+
 其中：
 - $S$ (Scale): 缩放因子，决定了量化的粒度。
 - $Z$ (Zero-point): 零点偏移，用于对齐零点。
 
-### 1.2. 对称 vs 非对称 (Symmetric vs Asymmetric)
+#### 1.2. 对称 vs 非对称 (Symmetric vs Asymmetric)
 
 ```
 对称量化 (Symmetric)              非对称量化 (Asymmetric)
@@ -5143,34 +6033,34 @@ q = \text{round}\left( \frac{x}{S} + Z \right)
 
 ---
 
-## 2. 粒度 (Granularity)
+### 2. 粒度 (Granularity)
 
 量化参数 $S$ 和 $Z$ 是怎么算的？取决于粒度。
 
-### 2.1. Per-Tensor (Layer-wise)
+#### 2.1. Per-Tensor (Layer-wise)
 - 整个 Tensor 共享一组 $(S, Z)$。
 - **优点**: 硬件实现简单。
 - **缺点**: 精度最差。如果 Tensor 里有一个极大的离群值 (Outlier)，整个 Tensor 的 Scale 都会被拉大，导致小数值全部变成 0。
 
-### 2.2. Per-Channel (Channel-wise)
+#### 2.2. Per-Channel (Channel-wise)
 - 每一行 (或每一列) 有一组 $(S, Z)$。
 - **优点**: 精度显著提升，是 CNN/LLM 权重量化的标准做法。
 - **缺点**: 存储 Scale 需要额外空间 (但在大模型中可忽略)。
 
-### 2.3. Per-Token / Per-Group
+#### 2.3. Per-Token / Per-Group
 - **Per-Token**: 针对激活值 (Activation)，每个 Token 动态计算 Scale。
 - **Per-Group**: 将权重每 128 个数分为一组 (Group)，每组一个 Scale。这是 **4-bit 量化 (如 AWQ, GPTQ)** 的标配，因为 4-bit 精度太低，必须用细粒度 Scale 来补。
 
 ---
 
-## 3. 进阶难题：离群值 (Outliers)
+### 3. 进阶难题：离群值 (Outliers)
 
 LLM / VLA 模型有一个特性：**激活值中存在极端的离群值** (Outliers)。这些值虽然很少，但对模型性能至关重要。
 
-### 3.1. 为什么直接量化会失败？
+#### 3.1. 为什么直接量化会失败？
 如果直接做 INT8 量化，为了包住那个巨大的 Outlier，Scale 会变得很大，导致其他 99.9% 的正常数值都被压缩到了 0，模型直接傻掉。
 
-### 3.2. 解决方案：SmoothQuant / AWQ
+#### 3.2. 解决方案：SmoothQuant / AWQ
 - **SmoothQuant**: 数学等价变换。
   $$ Y = X W = (X \cdot s^{-1}) \cdot (s \cdot W) $$
   把激活值 $X$ 里的 Outlier "平摊" (Smooth) 到权重 $W$ 上。让 $X$ 变小，让 $W$ 变大。因为权重通常比较均匀，更容易量化。
@@ -5179,7 +6069,7 @@ LLM / VLA 模型有一个特性：**激活值中存在极端的离群值** (Outl
 
 ---
 
-## 4. 面试高频考点
+### 4. 面试高频考点
 
 **Q: 为什么 4-bit 量化通常比 8-bit 量化更难？**
 A: 4-bit 只有 16 个格子。如果 Scale 稍微没选好，误差就会巨大。所以 4-bit 通常需要 **Per-Group** 量化 (Group Size=128) 和更复杂的校准算法 (如 GPTQ)。
@@ -5192,80 +6082,98 @@ A: 4-bit 只有 16 个格子。如果 Scale 稍微没选好，误差就会巨大
 - **W4A16**: 权重 4-bit，激活 FP16。省显存，推理速度受限于反量化带宽。
 - **W8A8**: 权重 8-bit，激活 8-bit。可以使用 INT8 Tensor Core 加速计算，真正的推理加速。
 
-\newpage
+
+---
 
 # 第四部分：感知与空间智能
 
 
-\newpage
+---
 
-# 第16章 空间数学基础
+## 第16章 空间数学基础
 
 
 对于 AI 背景的同学来说，机器人学最令人头大的往往不是深度学习模型，而是**坐标变换 (Coordinate Transformations)**。理解空间关系是训练 VLA 模型的基础。
 
-## 1. 核心坐标系 (Core Frames)
+### 0. 主要數學思想 (Main Mathematical Idea)
+
+> **第一性原理**: **Rigid Body Invariance (刚体不变性 / Lie Group SE(3))**
+
+物理世界中的物体是"刚性"的，移动或旋转它们不会改变它们的形状或内部距离。这意味着我们不能用普通的加法来处理旋转（$R_1 + R_2$ 没有物理意义），而必须遵循**群论 (Group Theory)** 的规则。
+
+- **核心数学工具**: **Lie Groups (李群 SE(3))** 与 **Lie Algebras (李代数 se(3))**。
+- **解题逻辑**:
+    1.  **非欧几何**: 旋转空间是弯曲的（流形）。为了在神经网络中处理它，我们需要找到合适的表示（如四元数、6D表示），以避免奇异性（万向节死锁）和不连续性。
+    2.  **相对性**: 所有的位姿都是相对的 ($T_A^B$)。数学核心是**链式法则** ($T_A^C = T_A^B \times T_B^C$)，这对应于在不同坐标系之间无损地传递信息。
+
+### 1. 核心坐标系 (Core Frames)
 
 在机器人操作中，我们必须时刻清楚数据是在哪个坐标系下定义的。
 
-### 1.1. World Frame (世界坐标系) $\{W\}$
+#### 1.1. World Frame (世界坐标系) $\{W\}$
 - **定义**: 全局固定的参考系，通常是机器人底座固定的桌子角，或者房间的某个角落。
 - **作用**: 多机器人协作时的统一基准。
 
-### 1.2. Base Frame (基座坐标系) $\{B\}$
+#### 1.2. Base Frame (基座坐标系) $\{B\}$
 - **定义**: 机器人底座 (Base Link) 的中心。
 - **作用**: **绝大多数单臂机器人的 Action 都是相对于 Base Frame 定义的**。
 - **注意**: 如果机器人是移动的 (Mobile Manipulator)，Base Frame 本身是在 World Frame 中移动的。
 
-### 1.3. End-effector Frame (末端坐标系 / TCP) $\{E\}$
+#### 1.3. End-effector Frame (末端坐标系 / TCP) $\{E\}$
 - **定义**: 机械臂末端执行器 (Gripper) 的中心点 (Tool Center Point, TCP)。通常 $Z$ 轴指向夹爪延伸方向，$X$ 轴指向夹爪闭合方向。
 - **作用**: 描述“手”的位置和朝向。
 - **Delta Action**: 很多时候模型预测的是 TCP 相对于**当前时刻 TCP** 的移动量 (即在自己的坐标系下往前走 1cm)。
 
-### 1.4. Camera Frame (相机坐标系) $\{C\}$
+#### 1.4. Camera Frame (相机坐标系) $\{C\}$
 - **定义**: 以相机光心为原点，$Z$ 轴通常指向前方，$X$ 轴向右，$Y$ 轴向下 (OpenCV 标准)。
 - **作用**: 视觉输入 (RGB/Depth) 最初都是在 Camera Frame 下的。
 
 ---
 
-## 2. 齐次变换矩阵 (Homogeneous Transformation Matrix)
+### 2. 齐次变换矩阵 (Homogeneous Transformation Matrix)
 
 为了统一描述旋转 (Rotation) 和平移 (Translation)，我们使用 $4 \times 4$ 的齐次变换矩阵 $T$。
 
-```math
+
+$$
 T_{A}^{B} = \begin{bmatrix} R_{3\times3} & t_{3\times1} \\ 0_{1\times3} & 1 \end{bmatrix} \in SE(3)
-```
+$$
+
 
 - **物理含义**: 描述了坐标系 $\{A\}$ 相对于坐标系 $\{B\}$ 的位姿。
 - **点的变换**: 如果点 $P$ 在 $\{A\}$ 中的坐标是 $P_A = [x, y, z, 1]^T$，那么它在 $\{B\}$ 中的坐标是：
   $$ P_B = T_{A}^{B} \times P_A $$
 
-### 2.1. 逆变换 (Inverse)
+#### 2.1. 逆变换 (Inverse)
 求逆矩阵对应于反向变换 $T_{B}^{A} = (T_{A}^{B})^{-1}$：
-```math
+
+$$
 (T_{A}^{B})^{-1} = \begin{bmatrix} R^T & -R^T t \\ 0 & 1 \end{bmatrix}
-```
+$$
+
 > **注意**: 旋转矩阵是正交矩阵，所以 $R^{-1} = R^T$，计算非常快。
 
-### 2.2. 链式法则 (Chain Rule)
+#### 2.2. 链式法则 (Chain Rule)
 这是机器人学中最强大的工具。例如，已知相机相对于世界的外参 $T_{C}^{W}$，以及物体相对于相机的位姿 $T_{O}^{C}$，求物体在世界系下的位姿：
-```math
+
+$$
 T_{O}^{W} = T_{C}^{W} \times T_{O}^{C}
-```
+$$
+
 
 ---
 
-## 3. 旋转表示深度解析 (Rotation Representations Deep Dive)
+### 3. 旋转表示深度解析 (Rotation Representations Deep Dive)
 
 位置 $t \in \mathbb{R}^3$ 很好表示，但旋转 $R \in SO(3)$ 是非线性的流形结构，神经网络很难直接预测。
 
-### 3.1. 欧拉角 (Euler Angles)
+#### 3.1. 欧拉角 (Euler Angles)
 - **表示**: $(roll, pitch, yaw)$ 或 $(\alpha, \beta, \gamma)$。
 - **致命缺陷**: **万向节死锁 (Gimbal Lock)**。当中间轴旋转 90 度时，第一轴和第三轴重合，丢失一个自由度。
 - **不连续性**: $\pi$ 和 $-\pi$ 是同一个角度，但数值相差巨大。这会导致 Loss 爆炸。
 - **结论**: ❌ **VLA 模型严禁直接预测欧拉角**。
 
-### 3.2. 四元数 (Quaternion)
+#### 3.2. 四元数 (Quaternion)
 - **表示**: $q = w + xi + yj + zk$，通常写为向量 $[w, x, y, z]$。
 - **性质**: 必须满足单位模约束 $\|q\|_2 = 1$。
 - **双倍覆盖 (Double Cover)**: $q$ 和 $-q$ 表示完全相同的旋转。
@@ -5273,7 +6181,7 @@ T_{O}^{W} = T_{C}^{W} \times T_{O}^{C}
     - **解决方案**: 在计算 Loss 前，如果 $\langle q_{pred}, q_{gt} \rangle < 0$，则将 $q_{gt}$ 翻转为 $-q_{gt}$。
 - **结论**: ✅ **主流选择** (如 RT-1)，但需要处理归一化和双倍覆盖。
 
-### 3.3. 6D 旋转表示 (6D Rotation Representation) [SOTA]
+#### 3.3. 6D 旋转表示 (6D Rotation Representation) [SOTA]
 - **来源**: *On the Continuity of Rotation Representations in Neural Networks* (Zhou et al., CVPR 2019).
 - **核心思想**: 神经网络预测 $3 \times 3$ 旋转矩阵的前两列 $r_1, r_2$ (共 6 个数)。
     - $r_1$ 是 $X$ 轴方向 (未归一化)。
@@ -5307,41 +6215,47 @@ def compute_rotation_matrix_from_ortho6d(ortho6d):
 
 ---
 
-## 4. 相机投影几何 (Camera Projection)
+### 4. 相机投影几何 (Camera Projection)
 
 VLA 模型如何理解 3D 世界？通过相机内参。
 
-### 4.1. 针孔相机模型 (Pinhole Model)
+#### 4.1. 针孔相机模型 (Pinhole Model)
 将 3D 点 $P_C = [X, Y, Z]^T$ 投影到 2D 像素平面 $p = [u, v]^T$：
 
-```math
+
+$$
 Z \begin{bmatrix} u \\ v \\ 1 \end{bmatrix} = K \begin{bmatrix} X \\ Y \\ Z \end{bmatrix}
-```
+$$
+
 
 其中 $K$ 是 **相机内参矩阵 (Intrinsics Matrix)**：
-```math
+
+$$
 K = \begin{bmatrix} f_x & 0 & c_x \\ 0 & f_y & c_y \\ 0 & 0 & 1 \end{bmatrix}
-```
+$$
+
 - $f_x, f_y$: 焦距 (Focal Length)，单位是像素。
 - $c_x, c_y$: 光心 (Principal Point)，通常是图像中心。
 
-### 4.2. 深度反投影 (Deprojection)
+#### 4.2. 深度反投影 (Deprojection)
 如果我们有深度图 $D(u, v) = Z$，可以将像素 $(u, v)$ 还原为 3D 点：
-```math
+
+$$
 X = \frac{(u - c_x) \cdot Z}{f_x}, \quad Y = \frac{(v - c_y) \cdot Z}{f_y}
-```
+$$
+
 这就是 **PointCloud** 生成的原理。
 
 ---
 
-## 5. 运动学 (Kinematics)
+### 5. 运动学 (Kinematics)
 
-### 5.1. 正运动学 (Forward Kinematics, FK)
+#### 5.1. 正运动学 (Forward Kinematics, FK)
 - **输入**: 关节角度 $\theta = [\theta_1, \dots, \theta_7]$。
 - **输出**: 末端位姿 $T_{E}^{B}$。
 - **计算**: 简单的矩阵连乘。$T_{E}^{B} = T_{1}^{B}(\theta_1) \times T_{2}^{1}(\theta_2) \dots$
 
-### 5.2. 逆运动学 (Inverse Kinematics, IK)
+#### 5.2. 逆运动学 (Inverse Kinematics, IK)
 - **输入**: 期望的末端位姿 $T_{target}$。
 - **输出**: 关节角度 $\theta$。
 - **难点**: 
@@ -5352,7 +6266,7 @@ X = \frac{(u - c_x) \cdot Z}{f_x}, \quad Y = \frac{(v - c_y) \cdot Z}{f_y}
 
 ---
 
-## 6. 面试高频考点
+### 6. 面试高频考点
 
 **Q: 为什么 VLA 模型通常预测 Delta Pose 而不是 Absolute Pose？**
 A: 
@@ -5365,18 +6279,31 @@ A: 旋转矩阵必须满足正交约束 $R^T R = I$ 和行列式 $\det(R)=1$。�
 **Q: 解释一下 6D Rotation 的连续性优势。**
 A: 在 3D 旋转空间 $SO(3)$ 中，欧拉角有奇异点，四元数有双倍覆盖 (拓扑上是球面的双倍覆叠)。这导致从神经网络的欧几里得空间 $\mathbb{R}^n$ 到 $SO(3)$ 的映射在某些点是不连续的。6D 表示通过舍弃冗余约束 (正交性由后处理保证)，实现了 $\mathbb{R}^6 \to SO(3)$ 的连续映射，使得训练更稳定。
 
-\newpage
 
-# 第17章 机器人控制方法
+---
+
+## 第17章 机器人控制方法
 
 
 > **面试场景**: "介绍一下机械臂的正逆运动学，以及常用的控制方法（PID、MPC、阻抗控制）的区别？"
 
 本文涵盖机械臂的运动学建模、动力学建模，以及主流控制方法的原理与应用。
 
+### 0. 主要數學思想 (Main Mathematical Idea)
+
+> **第一性原理**: **Error Correction (误差修正 / Feedback Control)**
+
+控制系统的核心目标是消除"期望状态"与"实际状态"之间的差异。
+
+- **核心数学工具**: **Differential Equations (微分方程)** 与 **Energy Shaping (能量整形)**。
+- **解题逻辑**:
+    1.  **PID**: 利用泰勒级数展开的思想。P是0阶项（当前误差），D是1阶项（变化率/趋势），I是积分项（历史累积）。通过这三项的线性组合来拟合所需的控制量。
+    2.  **MPC**: 将控制问题转化为**优化问题**。不是只看这一步怎么走，而是向后多看 $N$ 步，找到一条总代价最小的轨迹。这本质上是在用算力换性能（Solve optimization at every step）。
+    3.  **阻抗控制**: 不直接控制位置，而是控制力与位置的关系（刚度 $K$ 和阻尼 $B$）。数学上是把机器人模拟成一个物理系统（弹簧-阻尼系统），让它在接触环境时表现出顺应性。
+
 ---
 
-## 📊 控制方法全景图
+### 📊 控制方法全景图
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -5408,15 +6335,17 @@ A: 在 3D 旋转空间 $SO(3)$ 中，欧拉角有奇异点，四元数有双倍�
 
 ---
 
-## 1. 运动学 (Kinematics)
+### 1. 运动学 (Kinematics)
 
-### 1.1 正运动学 (Forward Kinematics, FK)
+#### 1.1 正运动学 (Forward Kinematics, FK)
 
 **定义**: 给定关节角度 $\mathbf{q}$，求末端执行器位姿 $\mathbf{T}_{ee}$。
 
-```math
+
+$$
 \mathbf{T}_{ee} = FK(\mathbf{q}) = \mathbf{T}_1(\theta_1) \cdot \mathbf{T}_2(\theta_2) \cdots \mathbf{T}_n(\theta_n)
-```
+$$
+
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -5472,7 +6401,6 @@ def forward_kinematics(joint_angles, dh_params):
         T = T @ dh_transform(theta, d, a, alpha)
     return T
 
-## Franka Panda 示例 DH 参数 (简化)
 franka_dh = [
     (0.333, 0,      0),       # Joint 1
     (0,     0,     -np.pi/2), # Joint 2
@@ -5483,20 +6411,21 @@ franka_dh = [
     (0.107, 0.088,  np.pi/2), # Joint 7 (flange)
 ]
 
-## 计算末端位姿
 q = [0, -np.pi/4, 0, -3*np.pi/4, 0, np.pi/2, np.pi/4]
 T_ee = forward_kinematics(q, franka_dh)
 position = T_ee[:3, 3]
 rotation = R.from_matrix(T_ee[:3, :3])
 ```
 
-### 1.2 逆运动学 (Inverse Kinematics, IK)
+#### 1.2 逆运动学 (Inverse Kinematics, IK)
 
 **定义**: 给定末端执行器目标位姿 $\mathbf{T}_{target}$，求关节角度 $\mathbf{q}$。
 
-```math
+
+$$
 \mathbf{q} = IK(\mathbf{T}_{target})
-```
+$$
+
 
 **方法对比**:
 
@@ -5584,13 +6513,15 @@ def rotation_error(R_current, R_target):
     return axis_angle
 ```
 
-### 1.3 雅可比矩阵 (Jacobian)
+#### 1.3 雅可比矩阵 (Jacobian)
 
 **定义**: 关节速度到末端速度的映射。
 
-```math
+
+$$
 \dot{\mathbf{x}} = \mathbf{J}(\mathbf{q}) \cdot \dot{\mathbf{q}}
-```
+$$
+
 
 其中 $\dot{\mathbf{x}} = [v_x, v_y, v_z, \omega_x, \omega_y, \omega_z]^T$
 
@@ -5601,15 +6532,17 @@ def rotation_error(R_current, R_target):
 
 ---
 
-## 2. 动力学 (Dynamics)
+### 2. 动力学 (Dynamics)
 
-### 2.1 动力学方程
+#### 2.1 动力学方程
 
 **拉格朗日方程**:
 
-```math
+
+$$
 \mathbf{M}(\mathbf{q})\ddot{\mathbf{q}} + \mathbf{C}(\mathbf{q}, \dot{\mathbf{q}})\dot{\mathbf{q}} + \mathbf{g}(\mathbf{q}) = \boldsymbol{\tau}
-```
+$$
+
 
 - $\mathbf{M}(\mathbf{q})$: 惯性矩阵 (Mass Matrix)
 - $\mathbf{C}(\mathbf{q}, \dot{\mathbf{q}})$: 科氏力/离心力矩阵
@@ -5638,56 +6571,210 @@ def rotation_error(R_current, R_target):
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### 2.2 动力学库使用 (Pinocchio)
+#### 2.2 动力学库使用 (Pinocchio)
 
 ```python
 import pinocchio as pin
 import numpy as np
 
-## 加载机器人模型
 model = pin.buildModelFromUrdf("panda.urdf")
 data = model.createData()
 
-## 当前状态
 q = np.array([0, -np.pi/4, 0, -3*np.pi/4, 0, np.pi/2, np.pi/4])
 dq = np.zeros(7)
 ddq = np.zeros(7)
 
-## 正运动学
 pin.forwardKinematics(model, data, q)
 ee_pose = data.oMi[-1]  # 末端位姿
 
-## 动力学计算
-## 惯性矩阵 M(q)
 M = pin.crba(model, data, q)
 
-## 科氏力 + 离心力 C(q, dq) * dq
 C_dq = pin.nle(model, data, q, dq) - pin.computeGeneralizedGravity(model, data, q)
 
-## 重力 g(q)
 g = pin.computeGeneralizedGravity(model, data, q)
 
-## 逆动力学: τ = M * ddq + C * dq + g
 tau = pin.rnea(model, data, q, dq, ddq)
 
-## 正动力学: ddq = M^(-1) * (τ - C * dq - g)
 ddq = pin.aba(model, data, q, dq, tau)
 
-## Jacobian
 J = pin.computeFrameJacobian(model, data, q, frame_id, pin.ReferenceFrame.LOCAL_WORLD_ALIGNED)
 ```
 
 ---
 
-## 3. 控制方法 (Control Methods)
+### 3. 控制方法 (Control Methods)
 
-### 3.1 PID 控制
+#### 3.0 经典反馈控制入门 (Control 101)
+
+> **面试场景**: "解释一下 PID 控制器的原理，P/I/D 各项有什么作用？"
+
+#### 什么是反馈控制？
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                       反馈控制基本框图                                        │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│   目标值         误差           控制器          执行器          实际输出      │
+│     r    ──▶ ⊕ ──▶ e ──▶ ┌─────────┐ ──▶ ┌─────────┐ ──▶ y            │
+│            -│            │ PID/MPC │     │ 电机/阀门│                     │
+│             │            └─────────┘     └─────────┘                     │
+│             │                                   │                         │
+│             └───────────────────────────────────┘                         │
+│                          反馈 (传感器测量)                                  │
+│                                                                             │
+│   核心思想: 测量误差 → 调整输出 → 减小误差 → 达到目标                        │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+#### PID = P + I + D
+
+**PID** = **P**roportional（比例）+ **I**ntegral（积分）+ **D**erivative（微分）
+
+```
+u(t) = Kp × e(t) + Ki × ∫e(t)dt + Kd × de(t)/dt
+       ─────────   ──────────   ─────────────
+          P            I              D
+
+其中 e(t) = 目标值 - 当前值 (误差)
+```
+
+#### 直观类比：开车到目标位置
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    开车类比理解 P/I/D                                        │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│   目标: 停在 100 米处                                                        │
+│   当前: 在 0 米处                                                            │
+│                                                                             │
+│   ┌─────────────────────────────────────────────────────────────────────┐   │
+│   │ P (比例): 离目标越远，踩油门越猛                                     │   │
+│   │                                                                     │   │
+│   │   90米处 → 轻踩油门     │    10米处 → 猛踩油门                       │   │
+│   │   "差得多就用力推"                                                  │   │
+│   │                                                                     │   │
+│   │   ⚠️ 问题: 只有 P 会震荡 (冲过头→退回来→又冲过头...)                │   │
+│   └─────────────────────────────────────────────────────────────────────┘   │
+│                                                                             │
+│   ┌─────────────────────────────────────────────────────────────────────┐   │
+│   │ I (积分): 消除累积误差 (上坡时慢慢加力)                              │   │
+│   │                                                                     │   │
+│   │   "我已经差了 5 秒了，累积误差太多，再加点油！"                      │   │
+│   │                                                                     │   │
+│   │   ⚠️ 问题: I 太大会导致"积分饱和"，响应变慢                        │   │
+│   └─────────────────────────────────────────────────────────────────────┘   │
+│                                                                             │
+│   ┌─────────────────────────────────────────────────────────────────────┐   │
+│   │ D (微分): 预测趋势，防止过冲 (快到了就踩刹车)                        │   │
+│   │                                                                     │   │
+│   │   "速度太快了，快到目标了，踩刹车！"                                 │   │
+│   │                                                                     │   │
+│   │   ⚠️ 问题: D 对噪声敏感，需要滤波                                  │   │
+│   └─────────────────────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+#### P/I/D 各项作用总结
+
+| 项 | 公式 | 作用 | 调大了会怎样 | 调小了会怎样 |
+| :--- | :--- | :--- | :--- | :--- |
+| **P** | `Kp × e` | 减小当前误差 | 响应快，但震荡 | 响应慢，稳态误差大 |
+| **I** | `Ki × ∫e` | 消除累积误差 | 消除稳态误差，但过冲 | 稳态误差消不掉 |
+| **D** | `Kd × ė` | 抑制变化，防过冲 | 响应慢，对噪声敏感 | 过冲严重 |
+
+#### 调参口诀
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                       PID 调参口诀                                           │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│   Step 1: 先调 P                                                            │
+│   ─────────────────                                                         │
+│   从小到大，直到系统快速响应但不剧烈震荡                                      │
+│   "宁欠勿过，慢慢加"                                                         │
+│                                                                             │
+│   Step 2: 再调 D                                                            │
+│   ─────────────────                                                         │
+│   加入 D 抑制过冲和震荡                                                      │
+│   "看到要过头了就踩刹车"                                                     │
+│                                                                             │
+│   Step 3: 最后调 I                                                          │
+│   ─────────────────                                                         │
+│   如果有稳态误差，慢慢加 I                                                   │
+│   "小心积分饱和，设上下限！"                                                 │
+│                                                                             │
+│   经验值 (仅供参考):                                                        │
+│   • 关节伺服: Kp=100~500, Kd=10~50, Ki=0~10                                │
+│   • 需要根据实际系统调整                                                    │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+#### 为什么 VLA 还需要底层 PID？
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    VLA 控制层级                                              │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│   ┌─────────────────────────────────────────────────────────────────────┐   │
+│   │                    VLA 模型 (高层)                                   │   │
+│   │        输入: 图像 + 语言指令                                         │   │
+│   │        输出: 末端目标位姿 (x, y, z, rx, ry, rz)                     │   │
+│   │        频率: 1-50 Hz                                                │   │
+│   └─────────────────────────────────────────────────────────────────────┘   │
+│                                    │                                        │
+│                                    ▼                                        │
+│   ┌─────────────────────────────────────────────────────────────────────┐   │
+│   │                   逆运动学 (IK)                                      │   │
+│   │        输入: 末端目标位姿                                            │   │
+│   │        输出: 关节目标角度 (θ1, θ2, ..., θn)                         │   │
+│   └─────────────────────────────────────────────────────────────────────┘   │
+│                                    │                                        │
+│                                    ▼                                        │
+│   ┌─────────────────────────────────────────────────────────────────────┐   │
+│   │                   PID 控制器 (底层)                                  │   │
+│   │        输入: 关节目标角度 + 当前角度                                 │   │
+│   │        输出: 电机力矩/电流                                          │   │
+│   │        频率: 1000 Hz (实时!)                                        │   │
+│   └─────────────────────────────────────────────────────────────────────┘   │
+│                                    │                                        │
+│                                    ▼                                        │
+│                               🦾 电机运动                                   │
+│                                                                             │
+│   💡 VLA 负责"想做什么"，PID 负责"怎么做到"                                 │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+#### 常见面试问题
+
+**Q1: 只用 P 控制会有什么问题？**
+
+A: 两个问题：
+1. **震荡**: P 太大会冲过目标，然后退回来，反复震荡
+2. **稳态误差**: P 控制需要误差才能产生输出，所以永远有一点误差
+
+**Q2: I 项的"积分饱和"是什么？**
+
+A: 当误差长时间存在（如电机堵转），积分项会累积得很大。即使误差消失了，积分项仍然很大，导致过冲。解决方法：设置积分上下限（Anti-windup）。
+
+**Q3: D 项为什么对噪声敏感？**
+
+A: D 项是误差的微分（变化率）。噪声变化很快，微分后会被放大。解决方法：对误差或 D 项输出做低通滤波。
+
+---
+
+#### 3.1 PID 控制
 
 **最基础的关节空间控制**:
 
-```math
+
+$$
 \tau = K_p (q_d - q) + K_d (\dot{q}_d - \dot{q}) + K_i \int (q_d - q) dt
-```
+$$
+
 
 ```python
 class PIDController:
@@ -5729,7 +6816,6 @@ class PIDController:
         
         return p_term + i_term + d_term
 
-## 多关节 PID
 class JointPIDController:
     def __init__(self, n_joints, kp, ki, kd, dt=0.001):
         self.controllers = [
@@ -5752,13 +6838,15 @@ class JointPIDController:
 | 调参直观 | 耦合系统性能差 |
 | 计算快 | 无法处理约束 |
 
-### 3.2 阻抗控制 (Impedance Control)
+#### 3.2 阻抗控制 (Impedance Control)
 
 **核心思想**: 让机器人表现得像弹簧-阻尼系统。
 
-```math
+
+$$
 \mathbf{F} = \mathbf{M}_d (\ddot{\mathbf{x}}_d - \ddot{\mathbf{x}}) + \mathbf{B}_d (\dot{\mathbf{x}}_d - \dot{\mathbf{x}}) + \mathbf{K}_d (\mathbf{x}_d - \mathbf{x})
-```
+$$
+
 
 - $\mathbf{M}_d$: 期望惯性
 - $\mathbf{B}_d$: 期望阻尼
@@ -5847,7 +6935,6 @@ class ImpedanceController:
         """转换为关节力矩"""
         return J.T @ F
 
-## 使用示例
 impedance = ImpedanceController(
     K=[1000, 1000, 1000, 50, 50, 50],  # 平移刚度高，旋转刚度低
     B=[100, 100, 100, 10, 10, 10],
@@ -5862,7 +6949,7 @@ tau = impedance.to_joint_torque(F_desired, J)
 - **人机协作**: 碰到人时表现柔软
 - **装配任务**: 插入时需要柔顺
 
-### 3.3 MPC (Model Predictive Control)
+#### 3.3 MPC (Model Predictive Control)
 
 **核心思想**: 在线滚动优化，预测未来轨迹并优化。
 
@@ -5959,7 +7046,6 @@ class LinearMPC:
         
         return u[0].value
 
-## 使用示例
 dt = 0.01
 A = np.array([[1, dt], [0, 1]])  # 双积分系统
 B = np.array([[0.5*dt**2], [dt]])
@@ -5985,7 +7071,7 @@ u_opt = mpc.solve(x_current, x_ref)
 | **调参** | Q, R 矩阵 | Kp, Ki, Kd |
 | **适用** | 复杂约束、最优控制 | 简单跟踪 |
 
-### 3.4 控制方法对比总结
+#### 3.4 控制方法对比总结
 
 | 方法 | 原理 | 优点 | 缺点 | VLA 应用场景 |
 | :--- | :--- | :--- | :--- | :--- |
@@ -5997,7 +7083,7 @@ u_opt = mpc.solve(x_current, x_ref)
 
 ---
 
-## 4. VLA 中的控制流程
+### 4. VLA 中的控制流程
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -6031,9 +7117,9 @@ u_opt = mpc.solve(x_current, x_ref)
 
 ---
 
-## 5. 面试 Q&A
+### 5. 面试 Q&A
 
-### Q1: 正运动学和逆运动学的区别？
+#### Q1: 正运动学和逆运动学的区别？
 
 | 维度 | 正运动学 (FK) | 逆运动学 (IK) |
 | :--- | :--- | :--- |
@@ -6043,24 +7129,24 @@ u_opt = mpc.solve(x_current, x_ref)
 | **计算复杂度** | 低 (矩阵乘法) | 高 (优化/迭代) |
 | **难度** | 简单 | 复杂 |
 
-### Q2: PID 和 MPC 的适用场景？
+#### Q2: PID 和 MPC 的适用场景？
 
 - **PID**: 简单关节伺服、低延迟要求、单输入单输出
 - **MPC**: 需要处理约束 (关节限位、速度限制)、需要预测 (避障)、多目标优化
 
-### Q3: 阻抗控制的刚度参数如何选择？
+#### Q3: 阻抗控制的刚度参数如何选择？
 
 - **高刚度 (K 大)**: 精确位置跟踪，适合自由空间运动
 - **低刚度 (K 小)**: 柔顺行为，适合接触任务、装配
 - **动态切换**: VLA 抓取流程中，接近阶段高刚度，接触后低刚度
 
-### Q4: 为什么 VLA 底层不用 RL 控制？
+#### Q4: 为什么 VLA 底层不用 RL 控制？
 
 1. **安全性**: 传统控制稳定性有保证，RL 可能出现意外动作
 2. **频率**: 底层控制需要 1kHz，RL 推理太慢
 3. **分工**: VLA 负责高层决策 (什么动作)，底层控制负责精确执行 (怎么执行)
 
-### Q5: 动力学模型在 VLA 中的作用？
+#### Q5: 动力学模型在 VLA 中的作用？
 
 - **仿真训练**: Sim-to-Real 需要准确的动力学仿真
 - **重力补偿**: 计算 $\mathbf{g}(\mathbf{q})$ 补偿重力
@@ -6069,18 +7155,18 @@ u_opt = mpc.solve(x_current, x_ref)
 
 ---
 
-## 📚 推荐资源
+### 📚 推荐资源
 
-### 书籍
+#### 书籍
 - **[Modern Robotics](http://hades.mech.northwestern.edu/index.php/Modern_Robotics)**: 运动学/动力学经典教材
 - **[Robotics: Modelling, Planning and Control](https://link.springer.com/book/10.1007/978-1-84628-642-1)**: Siciliano 的控制圣经
 
-### 代码库
+#### 代码库
 - **[Pinocchio](https://github.com/stack-of-tasks/pinocchio)**: 高效动力学计算
 - **[Drake](https://github.com/RobotLocomotion/drake)**: 多体动力学
 - **[PyBullet](https://pybullet.org/)**: 仿真 + IK
 
-### 课程
+#### 课程
 - **[Stanford CS223A](https://cs.stanford.edu/groups/manips/teaching/cs223a/)**: Introduction to Robotics
 - **[ETH Robot Dynamics](https://rsl.ethz.ch/education-students/lectures.html)**: 动力学与控制
 
@@ -6088,9 +7174,10 @@ u_opt = mpc.solve(x_current, x_ref)
 
 
 
-\newpage
 
-# 第18章 感知技术
+---
+
+## 第18章 感知技术
 
 
 > **面试场景**: "请介绍你熟悉的视觉感知技术方案，以及在机器人系统中的应用。"
@@ -6099,7 +7186,7 @@ u_opt = mpc.solve(x_current, x_ref)
 
 ---
 
-## 📊 感知技术全景图 (Perception Landscape)
+### 📊 感知技术全景图 (Perception Landscape)
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -6151,9 +7238,9 @@ u_opt = mpc.solve(x_current, x_ref)
 
 ---
 
-## 1. 目标检测 (Object Detection)
+### 1. 目标检测 (Object Detection)
 
-### 1.1 2D 目标检测演进
+#### 1.1 2D 目标检测演进
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -6188,7 +7275,7 @@ u_opt = mpc.solve(x_current, x_ref)
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### 1.2 主流检测器对比
+#### 1.2 主流检测器对比
 
 | 模型 | Backbone | COCO mAP | 速度 (FPS) | 特点 | 适用场景 |
 | :--- | :--- | :--- | :--- | :--- | :--- |
@@ -6199,7 +7286,7 @@ u_opt = mpc.solve(x_current, x_ref)
 | **Grounding DINO** | Swin-T | 52.5 | 15 | 开放词汇 | 零样本检测 |
 | **YOLO-World** | YOLOv8 | 45.7 | 52 | 开放词汇+快 | 机器人抓取 |
 
-### 1.3 开放词汇检测 (Open-Vocabulary Detection)
+#### 1.3 开放词汇检测 (Open-Vocabulary Detection)
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -6244,19 +7331,15 @@ u_opt = mpc.solve(x_current, x_ref)
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### 1.4 检测代码示例
+#### 1.4 检测代码示例
 
 ```python
-## 使用 YOLO-World 进行开放词汇检测
 from ultralytics import YOLOWorld
 
-## 加载模型
 model = YOLOWorld('yolov8x-worldv2.pt')
 
-## 设置要检测的类别 (可以是任意文本)
 model.set_classes(["red cup", "blue bottle", "keyboard", "mouse"])
 
-## 推理
 results = model.predict(
     source='robot_view.jpg',
     conf=0.25,
@@ -6264,7 +7347,6 @@ results = model.predict(
     device='cuda:0'
 )
 
-## 解析结果
 for result in results:
     boxes = result.boxes
     for box in boxes:
@@ -6275,15 +7357,12 @@ for result in results:
         print(f"检测到 {class_name}: {conf:.2f}, 位置: {xyxy}")
 
 
-## 使用 Grounding DINO 进行零样本检测
 from groundingdino.util.inference import load_model, predict
 
 model = load_model("groundingdino_swinb_cogcoor.pth")
 
-## 文本 prompt
 text_prompt = "red cup . blue bottle . person"
 
-## 检测
 boxes, logits, phrases = predict(
     model=model,
     image=image,
@@ -6295,9 +7374,9 @@ boxes, logits, phrases = predict(
 
 ---
 
-## 2. 语义/实例分割 (Segmentation)
+### 2. 语义/实例分割 (Segmentation)
 
-### 2.1 分割任务类型
+#### 2.1 分割任务类型
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -6323,7 +7402,7 @@ boxes, logits, phrases = predict(
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### 2.2 主流分割模型
+#### 2.2 主流分割模型
 
 | 模型 | 类型 | 特点 | 速度 | 应用 |
 | :--- | :--- | :--- | :--- | :--- |
@@ -6335,7 +7414,7 @@ boxes, logits, phrases = predict(
 | **MobileSAM** | 实例分割 | 轻量化 SAM | 快 | 边缘部署 |
 | **Grounded SAM** | 开放词汇分割 | 文本驱动分割 | 中 | 机器人抓取 |
 
-### 2.3 SAM (Segment Anything Model)
+#### 2.3 SAM (Segment Anything Model)
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -6376,10 +7455,9 @@ boxes, logits, phrases = predict(
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### 2.4 分割代码示例
+#### 2.4 分割代码示例
 
 ```python
-## SAM 2 视频分割
 from sam2.build_sam import build_sam2_video_predictor
 
 predictor = build_sam2_video_predictor(
@@ -6387,7 +7465,6 @@ predictor = build_sam2_video_predictor(
     device="cuda"
 )
 
-## 初始化视频
 with torch.inference_mode():
     state = predictor.init_state(video_path="robot_video.mp4")
     
@@ -6406,11 +7483,9 @@ with torch.inference_mode():
         process_mask(frame_idx, masks)
 
 
-## Grounded SAM: 文本驱动分割
 from groundingdino.util.inference import predict as gd_predict
 from segment_anything import sam_model_registry, SamPredictor
 
-## 1. Grounding DINO 检测
 boxes, logits, phrases = gd_predict(
     model=gd_model,
     image=image,
@@ -6418,12 +7493,10 @@ boxes, logits, phrases = gd_predict(
     box_threshold=0.3
 )
 
-## 2. SAM 分割
 sam = sam_model_registry["vit_h"](checkpoint="sam_vit_h.pth")
 predictor = SamPredictor(sam)
 predictor.set_image(image)
 
-## 用检测框作为 SAM 的 prompt
 masks, scores, _ = predictor.predict(
     box=boxes[0],  # 第一个检测框
     multimask_output=False
@@ -6432,9 +7505,9 @@ masks, scores, _ = predictor.predict(
 
 ---
 
-## 3. 目标跟踪 (Object Tracking)
+### 3. 目标跟踪 (Object Tracking)
 
-### 3.1 跟踪任务分类
+#### 3.1 跟踪任务分类
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -6474,7 +7547,7 @@ masks, scores, _ = predictor.predict(
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### 3.2 多目标跟踪 (MOT) 范式
+#### 3.2 多目标跟踪 (MOT) 范式
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -6514,7 +7587,7 @@ masks, scores, _ = predictor.predict(
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### 3.3 ByteTrack 算法详解
+#### 3.3 ByteTrack 算法详解
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -6563,16 +7636,13 @@ masks, scores, _ = predictor.predict(
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### 3.4 跟踪代码示例
+#### 3.4 跟踪代码示例
 
 ```python
-## ByteTrack 使用示例
 from ultralytics import YOLO
 
-## YOLOv8 内置 ByteTrack
 model = YOLO('yolov8x.pt')
 
-## 视频跟踪
 results = model.track(
     source='robot_video.mp4',
     tracker='bytetrack.yaml',  # 使用 ByteTrack
@@ -6582,7 +7652,6 @@ results = model.track(
     device='cuda:0'
 )
 
-## 解析跟踪结果
 for result in results:
     boxes = result.boxes
     if boxes.id is not None:
@@ -6593,21 +7662,17 @@ for result in results:
             print(f"ID {track_id}: {model.names[cls]} at {bbox}")
 
 
-## SAM 2 + 跟踪: 分割级跟踪
 from sam2.build_sam import build_sam2_video_predictor
 
 predictor = build_sam2_video_predictor("sam2_hiera_large.pt")
 
-## 初始化
 state = predictor.init_state(video_path="video.mp4")
 
-## 第一帧点击目标
 predictor.add_new_points_or_box(
     state, frame_idx=0, obj_id=1,
     points=[[300, 200]], labels=[1]
 )
 
-## 传播跟踪
 for frame_idx, obj_ids, masks in predictor.propagate_in_video(state):
     # masks: 像素级分割掩码
     # 比 bbox 跟踪更精确
@@ -6616,9 +7681,9 @@ for frame_idx, obj_ids, masks in predictor.propagate_in_video(state):
 
 ---
 
-## 4. 3D 感知 (3D Perception)
+### 4. 3D 感知 (3D Perception)
 
-### 4.1 3D 目标检测
+#### 4.1 3D 目标检测
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -6646,7 +7711,7 @@ for frame_idx, obj_ids, masks in predictor.propagate_in_video(state):
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### 4.2 BEV (Bird's Eye View) 感知
+#### 4.2 BEV (Bird's Eye View) 感知
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -6701,7 +7766,7 @@ for frame_idx, obj_ids, masks in predictor.propagate_in_video(state):
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### 4.3 深度估计 (Depth Estimation)
+#### 4.3 深度估计 (Depth Estimation)
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -6729,7 +7794,7 @@ for frame_idx, obj_ids, masks in predictor.propagate_in_video(state):
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### 4.4 单目深度估计模型
+#### 4.4 单目深度估计模型
 
 | 模型 | 特点 | 输出 | 适用场景 |
 | :--- | :--- | :--- | :--- |
@@ -6740,7 +7805,6 @@ for frame_idx, obj_ids, masks in predictor.propagate_in_video(state):
 | **UniDepth** | 统一架构 | 相对/绝对 | 研究用途 |
 
 ```python
-## Depth Anything V2 使用示例
 from depth_anything_v2.dpt import DepthAnythingV2
 
 model = DepthAnythingV2(
@@ -6751,11 +7815,9 @@ model = DepthAnythingV2(
 model.load_state_dict(torch.load('depth_anything_v2_vitl.pth'))
 model.eval()
 
-## 推理
 image = cv2.imread('robot_view.jpg')
 depth = model.infer_image(image)  # 相对深度图
 
-## 可视化
 depth_colored = cv2.applyColorMap(
     (depth * 255).astype(np.uint8), 
     cv2.COLORMAP_INFERNO
@@ -6764,9 +7826,9 @@ depth_colored = cv2.applyColorMap(
 
 ---
 
-## 5. Occupancy 感知 (Occupancy Perception)
+### 5. Occupancy 感知 (Occupancy Perception)
 
-### 5.1 Occupancy 概念
+#### 5.1 Occupancy 概念
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -6800,7 +7862,7 @@ depth_colored = cv2.applyColorMap(
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### 5.2 Occupancy 网络架构
+#### 5.2 Occupancy 网络架构
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -6851,7 +7913,7 @@ depth_colored = cv2.applyColorMap(
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### 5.3 Occupancy 在机器人中的应用
+#### 5.3 Occupancy 在机器人中的应用
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -6900,9 +7962,9 @@ depth_colored = cv2.applyColorMap(
 
 ---
 
-## 6. 多模态融合 (Multimodal Fusion)
+### 6. 多模态融合 (Multimodal Fusion)
 
-### 6.1 融合策略
+#### 6.1 融合策略
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -6976,7 +8038,7 @@ depth_colored = cv2.applyColorMap(
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### 6.2 BEVFusion 架构
+#### 6.2 BEVFusion 架构
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -7032,9 +8094,9 @@ depth_colored = cv2.applyColorMap(
 
 ---
 
-## 7. 位姿估计 (Pose Estimation)
+### 7. 位姿估计 (Pose Estimation)
 
-### 7.1 物体 6-DoF 位姿估计
+#### 7.1 物体 6-DoF 位姿估计
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -7065,7 +8127,7 @@ depth_colored = cv2.applyColorMap(
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### 7.2 FoundationPose 架构
+#### 7.2 FoundationPose 架构
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -7119,25 +8181,21 @@ depth_colored = cv2.applyColorMap(
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### 7.3 位姿估计代码示例
+#### 7.3 位姿估计代码示例
 
 ```python
-## FoundationPose 使用示例
 from foundationpose import FoundationPose
 
-## 初始化
 model = FoundationPose(
     model_path='foundation_pose.pth',
     device='cuda'
 )
 
-## 输入: RGB-D + 物体掩码 + CAD 模型
 rgb = cv2.imread('scene.png')
 depth = np.load('depth.npy')
 mask = get_object_mask(rgb)  # SAM 或其他分割
 mesh = trimesh.load('object.obj')
 
-## 估计位姿
 pose = model.estimate_pose(
     rgb=rgb,
     depth=depth,
@@ -7145,20 +8203,18 @@ pose = model.estimate_pose(
     mesh=mesh
 )
 
-## pose: 4x4 变换矩阵 (相机坐标系 → 物体坐标系)
 print(f"位置: {pose[:3, 3]}")
 print(f"旋转: {pose[:3, :3]}")
 
-## 可视化
 rendered = model.render_pose(mesh, pose, intrinsics)
 overlay = cv2.addWeighted(rgb, 0.5, rendered, 0.5, 0)
 ```
 
 ---
 
-## 8. 面试高频 Q&A
+### 8. 面试高频 Q&A
 
-### Q1: 目标检测中 Anchor-Based 和 Anchor-Free 的区别？
+#### Q1: 目标检测中 Anchor-Based 和 Anchor-Free 的区别？
 
 | 维度 | Anchor-Based | Anchor-Free |
 | :--- | :--- | :--- |
@@ -7169,7 +8225,7 @@ overlay = cv2.addWeighted(rgb, 0.5, rendered, 0.5, 0)
 | **训练** | 需要正负样本匹配 | 更简单直接 |
 | **趋势** | 逐渐被取代 | 主流方向 |
 
-### Q2: NMS 的作用和改进方法？
+#### Q2: NMS 的作用和改进方法？
 
 **NMS (Non-Maximum Suppression)**:
 - **作用**: 去除重叠的冗余检测框
@@ -7180,7 +8236,7 @@ overlay = cv2.addWeighted(rgb, 0.5, rendered, 0.5, 0)
 - **DIoU-NMS**: 考虑中心点距离, 不只是 IoU
 - **无 NMS**: DETR 系列直接输出去重结果
 
-### Q3: 如何处理小目标检测？
+#### Q3: 如何处理小目标检测？
 
 1. **多尺度特征**: FPN (Feature Pyramid Network) 融合多层特征
 2. **高分辨率输入**: 增大输入图像尺寸
@@ -7189,7 +8245,7 @@ overlay = cv2.addWeighted(rgb, 0.5, rendered, 0.5, 0)
 5. **注意力机制**: 增强小目标区域特征
 6. **SAHI**: 滑动窗口切图检测, 再合并结果
 
-### Q4: BEV 感知相比传统 3D 检测的优势？
+#### Q4: BEV 感知相比传统 3D 检测的优势？
 
 1. **统一表示**: 不同传感器特征在同一坐标系融合
 2. **尺度一致**: 无透视畸变, 远近物体尺度相同
@@ -7197,7 +8253,7 @@ overlay = cv2.addWeighted(rgb, 0.5, rendered, 0.5, 0)
 4. **多任务**: 检测、分割、预测共享 BEV 特征
 5. **时序建模**: 方便融合历史帧信息
 
-### Q5: 机器人抓取中常用的感知 Pipeline？
+#### Q5: 机器人抓取中常用的感知 Pipeline？
 
 ```
 1. 场景感知
@@ -7215,16 +8271,16 @@ overlay = cv2.addWeighted(rgb, 0.5, rendered, 0.5, 0)
 
 ---
 
-## 📚 推荐资源
+### 📚 推荐资源
 
-### 论文
+#### 论文
 - [YOLO-World: Real-Time Open-Vocabulary Object Detection](https://arxiv.org/abs/2401.17270)
 - [Segment Anything](https://arxiv.org/abs/2304.02643)
 - [ByteTrack: Multi-Object Tracking by Associating Every Detection Box](https://arxiv.org/abs/2110.06864)
 - [BEVFormer: Learning Bird's-Eye-View Representation](https://arxiv.org/abs/2203.17270)
 - [FoundationPose: Unified 6D Pose Estimation](https://arxiv.org/abs/2312.08344)
 
-### 代码库
+#### 代码库
 - [Ultralytics YOLO](https://github.com/ultralytics/ultralytics)
 - [Segment Anything (SAM)](https://github.com/facebookresearch/segment-anything)
 - [MMDetection3D](https://github.com/open-mmlab/mmdetection3d)
@@ -7234,16 +8290,28 @@ overlay = cv2.addWeighted(rgb, 0.5, rendered, 0.5, 0)
 
 
 
-\newpage
 
-# 第19章 点云与 SLAM
+---
+
+## 第19章 点云与 SLAM
 
 
 > **面试场景**: “请比较 Visual SLAM 与 LiDAR SLAM 的区别；点云特征网络有哪些？实际工程如何选择？”
 
 ---
 
-## 🌐 感知任务视角
+### 0. 主要數學思想 (Main Mathematical Idea)
+
+> **第一性原理**: **Consistency Maximization (一致性最大化)**
+
+如果世界是静止的，那么无论机器人怎么动，观测到的环境特征之间的相对几何关系应该保持不变。SLAM 的本质就是寻找一条轨迹，使得所有观测数据在几何上**最自洽**。
+
+- **核心数学工具**: **Least Squares Optimization (最小二乘优化)** 与 **Graph Theory (因子图)**。
+- **解题逻辑**:
+    1.  **配准 (Registration)**: 寻找一个变换矩阵 $T$，使得两个点云重合度最高。数学上通常最小化点到点的距离平方和 (ICP)。
+    2.  **图优化 (Graph Optimization)**: 将机器人位姿作为节点，观测约束作为边。构建一个巨大的非线性最小二乘问题 $\min \sum \|z_i - f(x_i)\|^2$，通过迭代求解（如 Gauss-Newton）来消除累积误差（闭环检测）。
+
+### 🌐 感知任务视角
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────┐
@@ -7267,9 +8335,9 @@ overlay = cv2.addWeighted(rgb, 0.5, rendered, 0.5, 0)
 
 ---
 
-## 1. 点云处理基础
+### 1. 点云处理基础
 
-### 1.1 常用表示
+#### 1.1 常用表示
 
 | 表示方式 | 描述 | 优势 | 劣势 | 典型网络 |
 |:---------|:-----|:-----|:-----|:---------|
@@ -7279,7 +8347,7 @@ overlay = cv2.addWeighted(rgb, 0.5, rendered, 0.5, 0)
 | 切片 (Range Image) | 极坐标投影 | 适合 LiDAR | 失真 | RangeNet++ |
 | BEV | 鸟瞰投影 | 规划友好 | 精度受高度影响 | BEVFusion |
 
-### 1.2 特征提取网络
+#### 1.2 特征提取网络
 
 | 类型 | 代表网络 | 核心思想 | 适用 |
 |:-----|:---------|:---------|:-----|
@@ -7291,9 +8359,9 @@ overlay = cv2.addWeighted(rgb, 0.5, rendered, 0.5, 0)
 
 ---
 
-## 2. 点云语义理解
+### 2. 点云语义理解
 
-### 2.1 检测
+#### 2.1 检测
 
 | 算法 | 输入 | 特点 |
 |:-----|:-----|:-----|
@@ -7302,22 +8370,22 @@ overlay = cv2.addWeighted(rgb, 0.5, rendered, 0.5, 0)
 | SECOND | 体素 | SparseConv, 快速 |
 | CenterPoint | BEV | Anchor-free，检测中心点 |
 
-### 2.2 分割
+#### 2.2 分割
 
 - **RangeNet++**: 将 LiDAR 投影到 range image，使用 2D CNN。
 - **MinkowskiNet**: 稀疏卷积，多任务 (语义 + 实例)。
 - **PolarNet**: 在极坐标中分割，兼顾速度与精度。
 
-### 2.3 场景流 / 动态理解
+#### 2.3 场景流 / 动态理解
 
 - FlowNet3D, HPLFlowNet: 学习帧间点云的速度场。
 - BEVFlow: 在 BEV 中估计场景流，适合自动驾驶。
 
 ---
 
-## 3. 点云配准 (Registration)
+### 3. 点云配准 (Registration)
 
-### 3.1 经典算法
+#### 3.1 经典算法
 
 | 算法 | 思路 | 优点 | 缺点 |
 |:-----|:-----|:-----|:-----|
@@ -7326,7 +8394,7 @@ overlay = cv2.addWeighted(rgb, 0.5, rendered, 0.5, 0)
 | NDT | 将点云建模为高斯体素 | 收敛范围大 | 需要调分辨率 |
 | TEASER++ | 鲁棒估计 | 可抗离群点 | 计算开销大 |
 
-### 3.2 学习型配准
+#### 3.2 学习型配准
 
 - DCP / Deep Closest Point
 - Predator
@@ -7334,7 +8402,7 @@ overlay = cv2.addWeighted(rgb, 0.5, rendered, 0.5, 0)
 
 ---
 
-## 4. SLAM 技术谱系
+### 4. SLAM 技术谱系
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────┐
@@ -7361,7 +8429,7 @@ overlay = cv2.addWeighted(rgb, 0.5, rendered, 0.5, 0)
 └──────────────────────────────────────────────────────────────────────────┘
 ```
 
-### 4.1 视觉 SLAM 流程
+#### 4.1 视觉 SLAM 流程
 
 ```
 图像 → 特征提取 (ORB/SIFT) → 匹配 → 位姿估计 (PnP + RANSAC) →
@@ -7375,7 +8443,7 @@ overlay = cv2.addWeighted(rgb, 0.5, rendered, 0.5, 0)
 | 回环 | Bag-of-Words, Place Recognition |
 | 地图 | 稀疏路标 (Landmarks) |
 
-### 4.2 LiDAR SLAM
+#### 4.2 LiDAR SLAM
 
 - **LOAM**: 分离扫描匹配和运动补偿，特征点 (Edge/Plane)。
 - **LeGO-LOAM**: 针对地面车辆，分割地面与障碍。
@@ -7384,7 +8452,7 @@ overlay = cv2.addWeighted(rgb, 0.5, rendered, 0.5, 0)
   - 后端：因子图 (GTSAM)
   - 回环检测 + Pose Graph
 
-### 4.3 多传感器 (VIO / LIO)
+#### 4.3 多传感器 (VIO / LIO)
 
 | 系统 | 传感器 | 特点 |
 |:-----|:-------|:-----|
@@ -7395,7 +8463,7 @@ overlay = cv2.addWeighted(rgb, 0.5, rendered, 0.5, 0)
 
 ---
 
-## 5. 多模态融合策略
+### 5. 多模态融合策略
 
 | 融合方式 | 描述 | 代表系统 |
 |:---------|:-----|:---------|
@@ -7410,7 +8478,7 @@ overlay = cv2.addWeighted(rgb, 0.5, rendered, 0.5, 0)
 
 ---
 
-## 6. 工程落地 Checklist
+### 6. 工程落地 Checklist
 
 - [ ] 时间同步：硬件触发 / PTP / 时戳对齐
 - [ ] 传感器标定：外参 (Hand-eye)，内参 (LiDAR-to-Camera)
@@ -7421,9 +8489,9 @@ overlay = cv2.addWeighted(rgb, 0.5, rendered, 0.5, 0)
 
 ---
 
-## 7. 代码片段
+### 7. 代码片段
 
-### 7.1 Open3D ICP
+#### 7.1 Open3D ICP
 
 ```python
 import open3d as o3d
@@ -7441,7 +8509,7 @@ reg_p2p = o3d.pipelines.registration.registration_icp(
 print(reg_p2p.transformation)
 ```
 
-### 7.2 LIO-SAM Launch (ROS)
+#### 7.2 LIO-SAM Launch (ROS)
 
 ```xml
 <launch>
@@ -7456,28 +8524,28 @@ print(reg_p2p.transformation)
 
 ---
 
-## 8. 面试 Q&A
+### 8. 面试 Q&A
 
-### Q1: Visual SLAM vs LiDAR SLAM？
+#### Q1: Visual SLAM vs LiDAR SLAM？
 
 - 视觉：信息丰富、成本低，但易受光照/纹理影响。
 - LiDAR：几何精确、鲁棒，但成本高、分辨率有限。
 - 融合：使用 LiDAR 提供全局几何，视觉提供语义和精细结构。
 
-### Q2: 如何处理点云中的动态物体？
+#### Q2: 如何处理点云中的动态物体？
 
 1. 语义分割剔除动态类别 (车/人)。
 2. 基于 RANSAC/运动一致性检测异常速度。
 3. 使用多传感器 (IMU) 区分静态 vs 动态。
 
-### Q3: 回环检测的关键步骤？
+#### Q3: 回环检测的关键步骤？
 
 - 选择候选关键帧（时间/空间最近）。
 - 构建描述子 (BoW / Scan Context)。
 - 匹配验证 (几何对齐)。
 - 添加回环约束，优化 Pose Graph。
 
-### Q4: ICP 何时会失败？如何改善？
+#### Q4: ICP 何时会失败？如何改善？
 
 - 初始估计差 → 使用全局配准 / NDT 先粗对齐。
 - 动态物体多 → 预处理剔除异常点。
@@ -7485,7 +8553,7 @@ print(reg_p2p.transformation)
 
 ---
 
-## 📚 推荐资源
+### 📚 推荐资源
 
 - *3D Point Cloud Processing* — T.-Y. Lin
 - *SLAM for Dummies* (Online)
@@ -7497,18 +8565,33 @@ print(reg_p2p.transformation)
 
 
 
-\newpage
 
-# 第20章 状态估计
+---
+
+## 第20章 状态估计
 
 
 > **面试场景**: “如何利用 IMU + 相机做状态估计？Kalman Filter 与 Particle Filter 有哪些区别？”
 
 本章整理 Kalman/EKF/UKF、Particle Filter 以及多传感器融合的工程实践，帮助在面试中自信回答状态估计相关问题。
 
+### 0. 主要數學思想 (Main Mathematical Idea)
+
+> **第一性原理**: **Belief Update (信念更新 / Bayesian Inference)**
+
+我们永远无法直接"知道"机器人的真实状态（上帝视角），我们只能根据传感器数据去"猜测"（推断）。
+
+- **核心数学工具**: **Bayesian Filtering (贝叶斯滤波)** 与 **Recursive Least Squares (递归最小二乘)**。
+- **解题逻辑**:
+    1.  **不确定性**: 将状态视为一个概率分布 $P(x)$ 而非单点值。
+    2.  **融合**: 所有的状态估计都是在做两件事的加权平均：
+        -   **预测 (Prediction)**: "根据上一步和运动模型，我觉得我在哪" (先验)。
+        -   **观测 (Correction)**: "根据传感器现在的读数，我觉得我在哪" (似然)。
+    3.  **卡尔曼增益 ($K$)**: 这是一个动态权重，取决于谁更可信（谁的方差小）。如果传感器很准 ($R$ 小)，$K$ 就大，多听传感器的；如果预测很准 ($Q$ 小)，$K$ 就小，多信模型。
+
 ---
 
-## 🧭 状态估计任务分层
+### 🧭 状态估计任务分层
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────┐
@@ -7534,9 +8617,9 @@ print(reg_p2p.transformation)
 
 ---
 
-## 1. Kalman Filter 家族
+### 1. Kalman Filter 家族
 
-### 1.1 线性 KF
+#### 1.1 线性 KF
 
 系统模型 (离散):
 \[
@@ -7566,7 +8649,7 @@ z_k = H x_k + v_k,\quad v_k \sim \mathcal{N}(0, R)
 └──────────────────────────────────────────────────────────────────────────┘
 ```
 
-### 1.2 扩展 Kalman Filter (EKF)
+#### 1.2 扩展 Kalman Filter (EKF)
 
 - 适用于非线性系统：\( x_k = f(x_{k-1}, u_k) + w_k \), \( z_k = h(x_k) + v_k \)
 - 用雅可比矩阵线性化：
@@ -7574,7 +8657,7 @@ z_k = H x_k + v_k,\quad v_k \sim \mathcal{N}(0, R)
   - \( H_k = \frac{\partial h}{\partial x} \big|_{x=\hat{x}_{k}^{-}} \)
 - 缺点：线性化误差大时会发散，需要保持小时间步或使用重线性化。
 
-### 1.3 无迹 Kalman Filter (UKF)
+#### 1.3 无迹 Kalman Filter (UKF)
 
 - 不再线性化，而是用 **Sigma Points** 捕获均值/协方差传播。
 - 步骤：
@@ -7584,7 +8667,7 @@ z_k = H x_k + v_k,\quad v_k \sim \mathcal{N}(0, R)
 - 优点：对高度非线性的系统更稳健，不需要求雅可比。
 - 缺点：计算量稍高，参数 (α, β, κ) 需调节。
 
-### 1.4 选择指南
+#### 1.4 选择指南
 
 | 场景 | 推荐滤波器 | 备注 |
 |:-----|:-----------|:-----|
@@ -7594,9 +8677,9 @@ z_k = H x_k + v_k,\quad v_k \sim \mathcal{N}(0, R)
 
 ---
 
-## 2. 粒子滤波 (Particle Filter)
+### 2. 粒子滤波 (Particle Filter)
 
-### 2.1 原理
+#### 2.1 原理
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────┐
@@ -7616,7 +8699,7 @@ z_k = H x_k + v_k,\quad v_k \sim \mathcal{N}(0, R)
 └──────────────────────────────────────────────────────────────────────────┘
 ```
 
-### 2.2 KF vs Particle Filter
+#### 2.2 KF vs Particle Filter
 
 | 对比项 | Kalman 系列 | Particle Filter |
 |:-------|:------------|:----------------|
@@ -7628,9 +8711,9 @@ z_k = H x_k + v_k,\quad v_k \sim \mathcal{N}(0, R)
 
 ---
 
-## 3. 传感器融合模式
+### 3. 传感器融合模式
 
-### 3.1 常见组合
+#### 3.1 常见组合
 
 | 组合 | 说明 | 典型系统 |
 |:-----|:-----|:---------|
@@ -7640,7 +8723,7 @@ z_k = H x_k + v_k,\quad v_k \sim \mathcal{N}(0, R)
 | Wheel + GNSS + IMU | 车辆定位 | 自动驾驶 |
 | Vision + Tactile | 末端执行器状态估计 | 触觉闭环控制 |
 
-### 3.2 融合架构
+#### 3.2 融合架构
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────┐
@@ -7663,7 +8746,7 @@ z_k = H x_k + v_k,\quad v_k \sim \mathcal{N}(0, R)
 └──────────────────────────────────────────────────────────────────────────┘
 ```
 
-### 3.3 Graph-based 融合
+#### 3.3 Graph-based 融合
 
 - 使用因子图 (Factor Graph) 或 Bundle Adjustment 表述状态估计。
 - 节点: 机器人状态 (姿态、速度、偏置)。
@@ -7672,9 +8755,9 @@ z_k = H x_k + v_k,\quad v_k \sim \mathcal{N}(0, R)
 
 ---
 
-## 4. 代码实现片段
+### 4. 代码实现片段
 
-### 4.1 PyTorch EKF 结构
+#### 4.1 PyTorch EKF 结构
 
 ```python
 import torch
@@ -7701,7 +8784,7 @@ class ExtendedKalmanFilter:
         self.P = (torch.eye(self.state_dim) - K @ H(self.x)) @ self.P
 ```
 
-### 4.2 粒子滤波 Python 原型
+#### 4.2 粒子滤波 Python 原型
 
 ```python
 import numpy as np
@@ -7736,15 +8819,15 @@ class ParticleFilter:
 
 ---
 
-## 5. 工程实践
+### 5. 工程实践
 
-### 5.1 预积分 (IMU Pre-integration)
+#### 5.1 预积分 (IMU Pre-integration)
 
 - Avoid integrating IMU between every pair of frames.
 - 在 VIO 中预计算 IMU 约束，使优化只跟状态增量相关。
 - 使用 `gtsam::PreintegratedImuMeasurements` 等工具。
 
-### 5.2 零偏估计 (Bias Estimation)
+#### 5.2 零偏估计 (Bias Estimation)
 
 - IMU 零偏随时间漂移，必须纳入状态向量：
   \[
@@ -7755,7 +8838,7 @@ class ParticleFilter:
   b_{k} = b_{k-1} + w_b
   \]
 
-### 5.3 观测异常检测
+#### 5.3 观测异常检测
 
 - **Mahalanobis Distance**: 判断测量是否异常：
   \[
@@ -7764,7 +8847,7 @@ class ParticleFilter:
   若 \( d^2 > \chi^2_{n,\alpha} \)，则拒绝该观测。
 - **Innovation Gating**: 只在创新位于阈值内时更新。
 
-### 5.4 ROS2 / robot_localization
+#### 5.4 ROS2 / robot_localization
 
 - `ekf_node`: 融合 IMU + Wheel + GPS。
 - `ukf_node`: 支持 UKF。
@@ -7772,27 +8855,27 @@ class ParticleFilter:
 
 ---
 
-## 6. 面试 Q&A
+### 6. 面试 Q&A
 
-### Q1: EKF 为什么可能会发散？如何缓解？
+#### Q1: EKF 为什么可能会发散？如何缓解？
 
 - 线性化误差大：使用小时间步、重复线性化或改用 UKF。
 - 噪声协方差设定不合理：增大 Q/R 使滤波更保守。
 - 初始协方差过小：导致信任预测过度，建议放大 \(P_0\)。
 
-### Q2: Particle Filter 如何选择粒子数？
+#### Q2: Particle Filter 如何选择粒子数？
 
 - 经验：每维 50~100 个粒子。
 - 可用 **自适应粒子数**：当 ESS (effective sample size) 高于阈值时减少粒子，低于时增加。
 
-### Q3: IMU + 相机融合的关键难点？
+#### Q3: IMU + 相机融合的关键难点？
 
 1. 时间同步 (时间戳对齐，PTP/触发)。
 2. IMU 到相机的外参标定 (手眼标定)。
 3. IMU 噪声模型 (加速度/陀螺零偏、随机游走)。
 4. 滑动窗口优化的准实时实现 (Ceres / GTSAM)。
 
-### Q4: 如何检测传感器失效？
+#### Q4: 如何检测传感器失效？
 
 - 监控创新 (Innovation) 大小。
 - 监控输出方差是否异常增大。
@@ -7800,7 +8883,7 @@ class ParticleFilter:
 
 ---
 
-## 📚 推荐资源
+### 📚 推荐资源
 
 - *Probabilistic Robotics* — Thrun et al.
 - *State Estimation for Robotics* — Timothy D. Barfoot
@@ -7812,14 +8895,166 @@ class ParticleFilter:
 
 
 
-\newpage
+
+---
+
+## 第21章 具身导航 (VLN) / DualVLN 快慢系统
+
+
+> 本文是手册中 **VLN（Vision-and-Language Navigation，视觉语言导航）** 的首篇专题。内容基于公开介绍与论文信息整理，重点抽象其 **工程可落地的快慢系统协同范式**，便于面试与系统设计复用。
+
+---
+
+### 1) VLN 的长期矛盾：慢思考 vs 快反应
+
+VLN 的核心任务是：给定 **第一视角视觉** + **自然语言指令**，输出能在真实环境中持续执行的 **导航行为**。
+
+行业里长期存在的基本矛盾是：
+
+- **强语义理解/泛化** 通常依赖大模型的“慢思考”（推理重、频率低）
+- **平滑连续/动态避障** 则需要“快反应”（控制频率高、延迟低）
+
+传统端到端紧耦合方案（图像+语言 → 每一步离散动作）在落地中常见三类瓶颈：
+
+- **动作碎片化**：每一步都要调用大模型，轨迹不连贯，像“走一步想一步”
+- **响应延迟高**：大模型推理慢，难以支撑高频控制
+- **层次耦合**：语义理解、全局规划、局部避障绑在一起，难以处理动态变化
+
+---
+
+### 2) DualVLN 的核心：异步双系统（慢规划 / 快执行）
+
+DualVLN 的关键思想是 **解耦 + 异步**：把“高层语义与中期路标”交给慢系统，把“高频轨迹与避障”交给快系统。
+
+```text
+                 (≈ 2 Hz)                           (≈ 30 Hz)
+  ┌──────────────────────────┐        ┌──────────────────────────────────┐
+  │ System 2：慢思考（大脑）  │        │ System 1：快行动（小脑）          │
+  │  - 理解指令/看环境         │  --->  │  - 高频轨迹生成/动态避障           │
+  │  - 预测中期像素路标 (u,v)  │        │  - 输出连续轨迹（密集路径点）       │
+  │  - 必要时决定“转头/低头”   │        │  - 利用实时图像修正像素目标误差     │
+  └──────────────────────────┘        └──────────────────────────────────┘
+```
+
+#### System 2（慢系统 / 大脑）：像素级路标 + 视角调整
+
+- **模型形态**：基于 VLM（文中提到基座为 **Qwen-VL-2.5**）的全局/中期规划器  
+- **运行频率**：约 **2 Hz**（每 0.5s 更新一次）
+- **输出**：
+  - **像素级目标点**（2D 像素坐标 `(u, v)`），作为中期导航路标
+  - **视角调整动作**（例如左/右转 15°、抬头/低头 15°），在“目标不在视野/视野不佳”时主动找视野
+
+这等价于把“3D 路径规划”转化为“在当前画面上指一个你应该走向的最远可见点”。
+
+#### System 1（快系统 / 小脑）：条件扩散策略生成连续轨迹
+
+- **模型形态**：轻量级 **Diffusion Transformer Policy**
+- **运行频率**：最高约 **30 Hz**
+- **输入**：
+  - System 2 给出的 **像素目标** +（隐含的）**语义目标特征**
+  - **当前高频 RGB**（实时画面）
+- **输出**：可执行的 **平滑连续轨迹**（例如 32 个密集路径点）
+
+它的职责是：在语义目标“低频更新”时，仍能根据实时画面“快修正、快避障”。
+
+---
+
+### 3) 关键训练构造：把 3D 导航变成 “最远像素目标 Grounding”
+
+DualVLN 的一个核心工程点是：**不靠人工逐帧标注路标**，而是用仿真数据自动生成训练监督。
+
+典型做法（论文描述思路）：
+
+- 已知仿真中机器人的 **3D 未来轨迹**
+- 将未来一段轨迹上的点 **投影** 到当前第一视角图像平面
+- 用深度/遮挡信息过滤：只保留 **当前视角真实可见** 的点
+- 从可见点里选 **最远** 的一个作为当前时刻的“像素路标”
+
+这使得 System 2 的学习目标变成：  
+**给你图像序列+指令，在图里指出下一步应该走向哪个像素位置**（必要时先做视角搜索）。
+
+---
+
+### 4) 跨层对齐：把“慢系统语义”传给“快系统控制”
+
+快慢系统要协同，关键在于：System 1 不能只拿一个 \((u,v)\)——它还需要“为什么去那儿”的语义。
+
+文中提到一种抽取方式：
+
+- 在 System 2 产生像素目标的同时，其隐藏状态包含任务语义
+- 用少量 **可学习的查询向量（如 4 个 latent queries）** 从隐藏状态里抽取“与当前任务最相关”的语义特征
+- 将该特征作为 **低频语义条件** 传给 System 1
+
+同时，System 1 以高频实时图像作为 **高频视觉条件**，并可融合“System 2 输出目标时的旧图像特征”与“当前新图像特征”，缓解语义条件的“过时”问题。
+
+---
+
+### 5) 评测与基准：从静态到动态社交环境
+
+文中提到 DualVLN 在 VLN-CE、VLN-PE 等基准上取得领先，并提出更贴近真实动态场景的 **Social-VLN**：
+
+- 在环境中加入动态行走的人形机器人
+- 在传统指标之外，引入 **Human Collision Rate** 衡量与行人的不安全交互
+
+这类指标对“快系统”的局部避障能力更敏感，也更能体现双系统异步控制的价值。
+
+---
+
+### 6) 真机部署视角：为什么“异步解耦”更像工程正确答案
+
+从工程落地（尤其是移动平台）角度，双系统带来几个直接收益：
+
+- **延迟预算可控**：慢系统偶尔慢一点不致命，快系统继续以 20~30Hz 输出轨迹
+- **动作连续性更好**：轨迹由快系统连续生成，不再“离散跳步”
+- **安全性更可控**：快系统可以做局部避障/速度限制/紧急制动，避免把安全逻辑塞进大模型
+
+文中描述的真机平台包括轮式（Turtlebot4）、四足（Unitree Go2）、人形（Unitree G1），传感器为 Intel RealSense D455（RGB）。
+
+> 面试/工程建议：你可以把 DualVLN 抽象成“低频语义路标（2Hz） + 高频局部控制（30Hz）”的通用模板，迁移到操作（manipulation）同样成立：低频产出子目标/接触意图，高频产出控制量并做安全约束。
+
+---
+
+### 7) 面试高频问法（建议背诵的回答骨架）
+
+- **为什么端到端紧耦合在真机上容易失败？**  
+  因为它把语义理解、规划、控制绑在同一个低频/高延迟链路里，导致动作碎片化、延迟高、难以处理动态变化。
+
+- **DualVLN 的本质贡献是什么？**  
+  用异步双系统解耦“慢语义/中期路标”和“快轨迹/避障”，在系统层面解决延迟与连续性的矛盾。
+
+- **为什么用 2D 像素路标而不是直接 3D 路径？**  
+  像素路标更贴合 VLM 的强项（grounding），且可以从仿真轨迹自动生成监督，降低标注成本。
+
+- **快系统为什么选扩散策略？**  
+  轨迹/动作天然多模态，扩散类生成更擅长输出平滑、分布覆盖更好的连续轨迹，并能用实时视觉条件进行修正。
+
+---
+
+### 参考链接
+
+- **论文**：[*GROUND SLOW, MOVE FAST: A DUAL-SYSTEM FOUNDATION MODEL FOR GENERALIZABLE VISION-AND-LANGUAGE NAVIGATION*](https://arxiv.org/abs/2512.08186)（可在页面内下载 PDF）
+- **项目主页**：[internvla-n1-dualvln](https://internrobotics.github.io/internvla-n1-dualvln.github.io/)
+- **代码**：[InternRobotics/InternNav](https://github.com/InternRobotics/InternNav)
+
+---
+
+### 关联阅读（本手册内）
+
+- [Diffusion Policy](./diffusion_policy.md)（为什么扩散适合多模态轨迹/动作）
+- [动作表示方法](./action_representations.md)（动作空间与轨迹生成范式）
+- [VLA 架构总览](./vla_arch.md)（如何把 VLM 与控制头解耦）
+
+
+
+
+---
 
 # 第五部分：抓取与运动规划
 
 
-\newpage
+---
 
-# 第21章 抓取算法
+## 第22章 抓取算法
 
 
 > **面试场景**: "介绍一下你用过的抓取算法库，DexGraspNet 和 Contact-GraspNet 有什么区别？"
@@ -7828,7 +9063,7 @@ class ParticleFilter:
 
 ---
 
-## 📊 抓取算法全景图
+### 📊 抓取算法全景图
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -7859,9 +9094,9 @@ class ParticleFilter:
 
 ---
 
-## 1. 平行夹爪抓取算法 (Parallel-Jaw Grasp)
+### 1. 平行夹爪抓取算法 (Parallel-Jaw Grasp)
 
-### 1.1 算法对比
+#### 1.1 算法对比
 
 | 算法 | 输入 | 方法 | 特点 | 代码 |
 |:-----|:-----|:-----|:-----|:-----|
@@ -7873,7 +9108,7 @@ class ParticleFilter:
 | **GraspGF** | 点云 | Score-based 生成 | 多样性好 | github/graspgf |
 | **VGN** | TSDF | 3D CNN | 体素表示 | github/ethz-asl |
 
-### 1.2 Dex-Net 系列
+#### 1.2 Dex-Net 系列
 
 > **Dex-Net** (Dexterity Network) 是 UC Berkeley AUTOLAB 开发的数据驱动抓取系统，通过大规模合成数据训练抓取质量预测网络。
 
@@ -7922,7 +9157,6 @@ class ParticleFilter:
 **GQ-CNN 架构**:
 
 ```python
-## GQ-CNN 网络结构 (简化)
 import torch
 import torch.nn as nn
 
@@ -7966,7 +9200,6 @@ class GQCNN(nn.Module):
         
         return F.softmax(x, dim=1)
 
-## 推理
 def predict_grasp_quality(model, depth_image, grasp_candidates):
     """评估候选抓取的质量"""
     scores = []
@@ -7986,18 +9219,14 @@ def predict_grasp_quality(model, depth_image, grasp_candidates):
 **Dex-Net 完整使用流程**:
 
 ```python
-## Dex-Net 抓取规划
 from autolab_core import RigidTransform, DepthImage
 from gqcnn import GQCNN, GraspPlanner
 
-## 1. 加载模型
 model = GQCNN.load('models/gqcnn_pj.model')
 planner = GraspPlanner(model)
 
-## 2. 获取深度图
 depth_image = DepthImage.from_sensor(camera)
 
-## 3. 抓取规划
 grasps = planner.plan(
     depth_image,
     camera_intrinsics,
@@ -8006,13 +9235,11 @@ grasps = planner.plan(
     top_k=5,               # 返回 top-k
 )
 
-## 4. 选择最佳抓取
 best_grasp = grasps[0]
 print(f"抓取位置: {best_grasp.pose.position}")
 print(f"抓取角度: {best_grasp.angle}")
 print(f"成功概率: {best_grasp.quality:.3f}")
 
-## 5. 转换到机器人坐标系
 grasp_in_robot = camera_to_robot_transform * best_grasp.pose
 ```
 
@@ -8027,7 +9254,7 @@ grasp_in_robot = camera_to_robot_transform * best_grasp.pose
 | **多样性** | 取决于采样 | 固定输出数 | 可控 |
 | **开源** | ✅ 完整 | ✅ | ✅ |
 
-### 1.3 Contact-GraspNet 架构
+#### 1.3 Contact-GraspNet 架构
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -8066,7 +9293,7 @@ grasp_in_robot = camera_to_robot_transform * best_grasp.pose
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### 1.4 GraspGF (Grasp Generative Flow)
+#### 1.4 GraspGF (Grasp Generative Flow)
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -8098,9 +9325,9 @@ grasp_in_robot = camera_to_robot_transform * best_grasp.pose
 
 ---
 
-## 2. 灵巧手抓取算法 (Dexterous Grasp)
+### 2. 灵巧手抓取算法 (Dexterous Grasp)
 
-### 2.1 算法对比
+#### 2.1 算法对比
 
 | 算法 | 手型 | 方法 | 特点 |
 |:-----|:-----|:-----|:-----|
@@ -8110,7 +9337,7 @@ grasp_in_robot = camera_to_robot_transform * best_grasp.pose
 | **DexGraspNet 2.0** | 多种手型 | 改进数据生成 | 更多物体 |
 | **GenDexGrasp** | 通用 | 生成式 | 零样本泛化 |
 
-### 2.2 DexGraspNet 数据集
+#### 2.2 DexGraspNet 数据集
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -8150,7 +9377,7 @@ grasp_in_robot = camera_to_robot_transform * best_grasp.pose
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### 2.3 UniDexGrasp 统一框架
+#### 2.3 UniDexGrasp 统一框架
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -8190,9 +9417,9 @@ grasp_in_robot = camera_to_robot_transform * best_grasp.pose
 
 ---
 
-## 3. Isaac Sim/Gym 深度使用
+### 3. Isaac Sim/Gym 深度使用
 
-### 3.1 Isaac 生态系统
+#### 3.1 Isaac 生态系统
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -8234,10 +9461,9 @@ grasp_in_robot = camera_to_robot_transform * best_grasp.pose
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### 3.2 Isaac Lab 任务定义
+#### 3.2 Isaac Lab 任务定义
 
 ```python
-## Isaac Lab 自定义任务示例
 import omni.isaac.lab as lab
 from omni.isaac.lab.envs import ManagerBasedRLEnv, ManagerBasedRLEnvCfg
 
@@ -8291,7 +9517,6 @@ class GraspEnv(ManagerBasedRLEnv):
         self.ground = GroundPlane()
 
 
-## 训练
 from omni.isaac.lab_tasks.utils import parse_env_cfg
 from rsl_rl.runners import OnPolicyRunner
 
@@ -8301,14 +9526,12 @@ runner = OnPolicyRunner(env, train_cfg, log_dir="logs")
 runner.learn(num_learning_iterations=1000)
 ```
 
-### 3.3 Isaac Gym 并行仿真
+#### 3.3 Isaac Gym 并行仿真
 
 ```python
-## Isaac Gym 大规模并行训练
 from isaacgym import gymapi, gymtorch
 import torch
 
-## 创建仿真
 gym = gymapi.acquire_gym()
 sim_params = gymapi.SimParams()
 sim_params.physx.num_threads = 4
@@ -8317,7 +9540,6 @@ sim_params.use_gpu_pipeline = True
 
 sim = gym.create_sim(0, 0, gymapi.SIM_PHYSX, sim_params)
 
-## 创建多个环境
 num_envs = 4096
 envs = []
 for i in range(num_envs):
@@ -8327,12 +9549,10 @@ for i in range(num_envs):
     object = gym.create_actor(env, object_asset, obj_pose, "object", i, 1)
     envs.append(env)
 
-## 获取 GPU tensor
 gym.prepare_sim(sim)
 root_tensor = gym.acquire_actor_root_state_tensor(sim)
 root_states = gymtorch.wrap_tensor(root_tensor)
 
-## 训练循环
 for iter in range(max_iters):
     # 并行 step
     gym.simulate(sim)
@@ -8350,9 +9570,9 @@ for iter in range(max_iters):
 
 ---
 
-## 4. SAPIEN / ManiSkill 使用
+### 4. SAPIEN / ManiSkill 使用
 
-### 4.1 SAPIEN 特点
+#### 4.1 SAPIEN 特点
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -8386,14 +9606,12 @@ for iter in range(max_iters):
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### 4.2 ManiSkill Benchmark
+#### 4.2 ManiSkill Benchmark
 
 ```python
-## ManiSkill3 使用示例
 import gymnasium as gym
 import mani_skill.envs
 
-## 创建环境
 env = gym.make(
     "PickCube-v1",
     num_envs=256,  # GPU 并行
@@ -8402,10 +9620,8 @@ env = gym.make(
     render_mode="rgb_array",
 )
 
-## 重置
 obs, info = env.reset()
 
-## 交互
 for _ in range(1000):
     action = env.action_space.sample()  # 随机动作
     obs, reward, terminated, truncated, info = env.step(action)
@@ -8413,7 +9629,6 @@ for _ in range(1000):
     if terminated.any() or truncated.any():
         obs, info = env.reset()
 
-## ManiSkill 任务列表
 tasks = [
     "PickCube-v1",           # 抓取立方体
     "StackCube-v1",          # 堆叠立方体
@@ -8425,13 +9640,12 @@ tasks = [
 ]
 ```
 
-### 4.3 SAPIEN 自定义场景
+#### 4.3 SAPIEN 自定义场景
 
 ```python
 import sapien.core as sapien
 from sapien.utils import Viewer
 
-## 创建引擎和场景
 engine = sapien.Engine()
 renderer = sapien.SapienRenderer()
 engine.set_renderer(renderer)
@@ -8439,23 +9653,18 @@ engine.set_renderer(renderer)
 scene = engine.create_scene()
 scene.set_timestep(1/240)
 
-## 添加地面
 scene.add_ground(altitude=0)
 
-## 加载机器人
 loader = scene.create_urdf_loader()
 robot = loader.load("franka_panda/panda.urdf")
 robot.set_root_pose(sapien.Pose([0, 0, 0]))
 
-## 加载可交互物体 (PartNet-Mobility)
 articulation_loader = scene.create_urdf_loader()
 cabinet = articulation_loader.load("partnet_mobility/cabinet.urdf")
 
-## 获取关节
 drawer_joint = cabinet.get_active_joints()[0]
 drawer_joint.set_drive_property(stiffness=100, damping=10)
 
-## 仿真循环
 viewer = Viewer(renderer)
 viewer.set_scene(scene)
 
@@ -8473,51 +9682,41 @@ while not viewer.closed:
 
 ---
 
-## 5. 抓取算法代码示例
+### 5. 抓取算法代码示例
 
-### 5.1 Contact-GraspNet 推理
+#### 5.1 Contact-GraspNet 推理
 
 ```python
-## Contact-GraspNet 使用
 import numpy as np
 from contact_graspnet.inference import GraspEstimator
 
-## 加载模型
 grasp_estimator = GraspEstimator(
     checkpoint_path='checkpoints/contact_graspnet.pth',
     device='cuda'
 )
 
-## 输入点云
 point_cloud = np.load('scene_pointcloud.npy')  # (N, 3)
 colors = np.load('scene_colors.npy')  # (N, 3), 可选
 
-## 推理
 grasps, scores, contacts = grasp_estimator.predict(
     point_cloud,
     colors=colors,
     forward_passes=5,  # 多次前向取平均
 )
 
-## grasps: (M, 4, 4) - M 个抓取的变换矩阵
-## scores: (M,) - 每个抓取的置信度
-## contacts: (M, 3) - 接触点位置
 
-## 选择最佳抓取
 best_idx = np.argmax(scores)
 best_grasp = grasps[best_idx]
 print(f"最佳抓取位置: {best_grasp[:3, 3]}")
 print(f"置信度: {scores[best_idx]:.3f}")
 ```
 
-### 5.2 DexGraspNet 数据加载
+#### 5.2 DexGraspNet 数据加载
 
 ```python
-## DexGraspNet 数据集使用
 import h5py
 import numpy as np
 
-## 加载数据
 with h5py.File('dexgraspnet/grasps.h5', 'r') as f:
     # 物体信息
     object_code = f['object_code'][()]
@@ -8531,34 +9730,26 @@ with h5py.File('dexgraspnet/grasps.h5', 'r') as f:
     # 抓取质量
     grasp_quality = f['grasp_quality'][()]  # (N,)
 
-## 筛选高质量抓取
 good_grasps = grasp_quality > 0.5
 selected_qpos = hand_qpos[good_grasps]
 
-## 在 Isaac Gym 中验证
 from isaacgym import gymapi
-## ... 加载 Shadow Hand 并设置关节角度
 ```
 
-### 5.3 GraspGF 生成抓取
+#### 5.3 GraspGF 生成抓取
 
 ```python
-## GraspGF 生成式抓取
 from graspgf.model import GraspGFModel
 from graspgf.sampling import langevin_dynamics
 
-## 加载模型
 model = GraspGFModel.load_from_checkpoint('graspgf.ckpt')
 model.eval()
 
-## 输入场景点云
 scene_pc = torch.from_numpy(point_cloud).float().cuda()
 
-## 初始化随机抓取
 num_samples = 100
 init_grasps = torch.randn(num_samples, 9).cuda()  # 6D pose + 3D approach
 
-## Langevin 采样
 with torch.no_grad():
     for t in reversed(range(1000)):
         # 预测 score
@@ -8568,15 +9759,14 @@ with torch.no_grad():
         noise_scale = get_noise_scale(t)
         init_grasps = init_grasps + 0.5 * score + noise_scale * torch.randn_like(init_grasps)
 
-## 转换为 SE(3)
 final_grasps = convert_to_se3(init_grasps)
 ```
 
 ---
 
-## 6. 面试 Q&A
+### 6. 面试 Q&A
 
-### Q1: Dex-Net 的核心原理是什么？
+#### Q1: Dex-Net 的核心原理是什么？
 
 **Dex-Net 三大核心**:
 1. **大规模合成数据**: 在仿真中生成数百万抓取样本，解决真机数据稀缺问题
@@ -8588,7 +9778,7 @@ final_grasps = convert_to_se3(init_grasps)
 - Ferrari-Canny Metric 提供物理可靠的标签
 - 端到端学习避免手工特征设计
 
-### Q2: Contact-GraspNet vs GraspGF 区别？
+#### Q2: Contact-GraspNet vs GraspGF 区别？
 
 | 维度 | Contact-GraspNet | GraspGF |
 |:-----|:-----------------|:--------|
@@ -8598,25 +9788,25 @@ final_grasps = convert_to_se3(init_grasps)
 | **多模态** | 较弱 | 强 (天然处理多模态) |
 | **适用** | 实时应用 | 需要多样抓取的场景 |
 
-### Q3: DexGraspNet 数据是怎么生成的？
+#### Q3: DexGraspNet 数据是怎么生成的？
 
 1. **初始化**: 在物体周围随机采样手腕位姿
 2. **优化**: 最小化接触距离 + 穿透惩罚 + 力闭合约束
 3. **验证**: 在 Isaac Gym 中仿真，检查是否能成功抬起物体
 4. **筛选**: 保留成功率 > 50% 的抓取
 
-### Q4: Isaac Gym vs Isaac Lab 怎么选？
+#### Q4: Isaac Gym vs Isaac Lab 怎么选？
 
 - **Isaac Gym**: 老项目、需要最大并行度、不需要 GUI
 - **Isaac Lab**: 新项目、需要模块化、需要与 Isaac Sim 互通
 
-### Q5: SAPIEN 的优势是什么？
+#### Q5: SAPIEN 的优势是什么？
 
 - **Part-level 交互**: 专门为可交互物体设计 (开门、开抽屉)
 - **PartNet-Mobility**: 大规模关节物体数据集
 - **轻量**: 比 Isaac Sim 更轻量，适合快速实验
 
-### Q6: 如何评估抓取算法？
+#### Q6: 如何评估抓取算法？
 
 | 指标 | 描述 |
 |:-----|:-----|
@@ -8628,15 +9818,15 @@ final_grasps = convert_to_se3(init_grasps)
 
 ---
 
-## 📚 推荐资源
+### 📚 推荐资源
 
-### 论文
+#### 论文
 - [Contact-GraspNet: Efficient 6-DoF Grasp Generation](https://arxiv.org/abs/2103.14127)
 - [DexGraspNet: A Large-Scale Robotic Dexterous Grasp Dataset](https://arxiv.org/abs/2210.02697)
 - [GraspGF: Learning Score-based Grasping](https://arxiv.org/abs/2309.06038)
 - [UniDexGrasp: Universal Robotic Dexterous Grasping](https://arxiv.org/abs/2303.00938)
 
-### 代码库
+#### 代码库
 - [Contact-GraspNet](https://github.com/NVlabs/contact_graspnet)
 - [DexGraspNet](https://github.com/PKU-EPIC/DexGraspNet)
 - [GraspGF](https://github.com/graspgf/graspgf)
@@ -8647,18 +9837,30 @@ final_grasps = convert_to_se3(init_grasps)
 
 
 
-\newpage
 
-# 第22章 运动规划
+---
+
+## 第23章 运动规划
 
 
 > **面试场景**: “请你介绍一下机器人运动规划的常见方法，并说明在实际工程中如何选择？”
 
 本文总结采样式规划、轨迹优化、混合范式以及工程落地 (MoveIt / cuRobo) 的要点，帮助快速回答机器人运动规划相关问题。
 
+### 0. 主要數學思想 (Main Mathematical Idea)
+
+> **第一性原理**: **Connectivity and Smoothness (连通性与平滑性)**
+
+规划问题本质上是在高维空间中寻找一条"连接起点和终点"且"无碰撞"的曲线。
+
+- **核心数学工具**: **Graph Search (离散图搜索)** vs **Functional Optimization (连续泛函优化)**。
+- **解题逻辑**:
+    1.  **采样式 (Sampling-based)**: 将连续的几何空间**离散化**为图 (Graph)。利用概率论中的"稠密性" (当采样点足够多时，一定会覆盖可行解)，将几何问题转化为图论中的连通性问题 (如 DFS/BFS)。
+    2.  **优化式 (Optimization-based)**: 将路径视为一根有弹性的"橡皮筋"。通过最小化能量函数 (Energy Functional = 平滑度代价 + 障碍物斥力)，让路径在物理约束下自然收敛到最优形状。
+
 ---
 
-## 🧭 运动规划全景
+### 🧭 运动规划全景
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────┐
@@ -8686,15 +9888,25 @@ final_grasps = convert_to_se3(init_grasps)
 ```
 
 --- 
-## 运动规划 (Motion Planning)
 
 > **面试场景**: “请你介绍一下机器人运动规划的常见方法，并说明在实际工程中如何选择？”
 
 本文总结采样式规划、轨迹优化、混合范式以及工程落地 (MoveIt / cuRobo) 的要点，帮助快速回答机器人运动规划相关问题。
 
+### 0. 主要數學思想 (Main Mathematical Idea)
+
+> **第一性原理**: **Connectivity and Smoothness (连通性与平滑性)**
+
+规划问题本质上是在高维空间中寻找一条"连接起点和终点"且"无碰撞"的曲线。
+
+- **核心数学工具**: **Graph Search (离散图搜索)** vs **Functional Optimization (连续泛函优化)**。
+- **解题逻辑**:
+    1.  **采样式 (Sampling-based)**: 将连续的几何空间**离散化**为图 (Graph)。利用概率论中的"稠密性" (当采样点足够多时，一定会覆盖可行解)，将几何问题转化为图论中的连通性问题 (如 DFS/BFS)。
+    2.  **优化式 (Optimization-based)**: 将路径视为一根有弹性的"橡皮筋"。通过最小化能量函数 (Energy Functional = 平滑度代价 + 障碍物斥力)，让路径在物理约束下自然收敛到最优形状。
+
 ---
 
-## 🧭 运动规划全景
+### 🧭 运动规划全景
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────┐
@@ -8723,15 +9935,15 @@ final_grasps = convert_to_se3(init_grasps)
 
 ---
 
-## 1. 采样式规划 (Sampling-Based Planning)
+### 1. 采样式规划 (Sampling-Based Planning)
 
-### 1.1 核心理念
+#### 1.1 核心理念
 
 - 直接在配置空间 \( \mathcal{C} \) 中随机采样节点，避免显式离散化高维空间。
 - 避免对障碍物几何进行显式建模，只需要碰撞检测函数 `collisionFree(q)`。
 - 随采样次数增加，算法趋近于找到可行路径；带有 *-star* 的算法还能保证渐进最优 (asymptotically optimal)。
 
-### 1.2 RRT / RRT*
+#### 1.2 RRT / RRT*
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────┐
@@ -8766,7 +9978,7 @@ final_grasps = convert_to_se3(init_grasps)
 | **Informed RRT\*** | 采样限制在椭球区域，加速收敛 | 需要启发式 | 起止点已知、需加速 |
 | **BIT\*** | 批量采样 + 最优 | 实现复杂 | 需要兼顾速度和最优性 |
 
-### 1.3 PRM / PRM\*
+#### 1.3 PRM / PRM\*
 
 - **PRM (Probabilistic Roadmap)**: 先离线采样大量节点并构建无向图，在线阶段只需连接起点/终点。
 - 适用于多次查询的场景 (同一空间多次规划)。
@@ -8774,15 +9986,15 @@ final_grasps = convert_to_se3(init_grasps)
 
 ---
 
-## 2. 轨迹优化 (Trajectory Optimization)
+### 2. 轨迹优化 (Trajectory Optimization)
 
-### 2.1 思路
+#### 2.1 思路
 
 - 将轨迹离散化为 \( \mathbf{x}_{0:T} \)，定义优化目标 + 约束，转化为非线性优化问题。
 - 典型目标：路径长度、速度/加速度正则、与障碍物距离惩罚。
 - 约束：动力学约束、接触约束、关节限制、终端姿态等。
 
-### 2.2 典型算法
+#### 2.2 典型算法
 
 | 算法 | 核心思想 | 优势 | 局限 |
 |:-----|:---------|:-----|:-----|
@@ -8792,7 +10004,7 @@ final_grasps = convert_to_se3(init_grasps)
 | **GPMP2** | 将轨迹建模为高斯过程，使用因子图优化 | 与 SLAM/估计工具链一致 | 实现复杂 |
 | **MPC (Short-horizon)** | 在线滚动优化局部轨迹 | 能处理动态障碍 | 需要实时算力 |
 
-### 2.3 TrajOpt 代价函数示例
+#### 2.3 TrajOpt 代价函数示例
 
 ```
 J(x) = w_smooth * Σ ||x_{t+1} - 2x_t + x_{t-1}||²    (平滑项)
@@ -8804,15 +10016,15 @@ subject to: joint_limits, velocity_limits, etc.
 
 ---
 
-## 3. 混合方法与工程实践
+### 3. 混合方法与工程实践
 
-### 3.1 采样 + 优化 (Warm-Start)
+#### 3.1 采样 + 优化 (Warm-Start)
 
 1. **RRT 找到可行路径**，保证碰撞自由。
 2. **TrajOpt/CHOMP** 以 RRT 结果作为初始轨迹，进一步平滑并满足动力学约束。
 3. 工程中常结合 MoveIt “OMPL (采样) + TrajOpt (优化)” Pipeline。
 
-### 3.2 学习辅助规划
+#### 3.2 学习辅助规划
 
 - **策略热启动**: 用模仿/强化学习模型预测初始轨迹，再交给 TrajOpt 优化。
 - **价值函数引导采样**: 训练一个 value network 评估节点好坏，提高采样效率 (Learning-RRT)。
@@ -8820,9 +10032,9 @@ subject to: joint_limits, velocity_limits, etc.
 
 ---
 
-## 4. MoveIt & cuRobo 实战
+### 4. MoveIt & cuRobo 实战
 
-### 4.1 MoveIt 规划流水线
+#### 4.1 MoveIt 规划流水线
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────┐
@@ -8847,17 +10059,16 @@ subject to: joint_limits, velocity_limits, etc.
 - **Pilz**: MoveIt 内置的笛卡尔规划器，适合直线/插补。
 - **TrajOpt / STOMP 插件**: 需要额外安装，提供优化型规划。
 
-### 4.2 NVIDIA cuRobo
+#### 4.2 NVIDIA cuRobo
 
 - 基于 GPU 的运动规划库，采用并行化的 **多种规划器候选 + 轨迹优化**。
 - 可在 Jetson Orin 上实现 <100ms 的 7DoF 机械臂规划。
 
 ---
 
-## 5. 代码参考
+### 5. 代码参考
 
 ```python
-## MoveIt Python RRTConnect 示例
 import moveit_commander
 import geometry_msgs.msg as geometry_msgs
 
@@ -8865,12 +10076,10 @@ moveit_commander.roscpp_initialize([])
 robot = moveit_commander.RobotCommander()
 group = moveit_commander.MoveGroupCommander("manipulator")
 
-## 设置规划器
 group.set_planner_id("RRTConnectkConfigDefault")
 group.set_num_planning_attempts(10)
 group.set_planning_time(2.0)
 
-## 目标
 pose_goal = geometry_msgs.Pose()
 pose_goal.position.x = 0.4
 pose_goal.position.y = 0.2
@@ -8884,7 +10093,6 @@ group.clear_pose_targets()
 ```
 
 ```python
-## 使用 ompl Python API 自定义 RRT*
 import ompl.base as ob
 import ompl.geometric as og
 
@@ -8906,7 +10114,6 @@ si.setup()
 problem = ob.ProblemDefinition(si)
 start = ob.State(space)
 goal = ob.State(space)
-## ... 设置 start/goal ...
 problem.setStartAndGoalStates(start, goal)
 
 planner = og.RRTstar(si)
@@ -8921,33 +10128,33 @@ if planner.solve(5.0):
 
 ---
 
-## 6. 面试 Q&A
+### 6. 面试 Q&A
 
-### Q1: 采样式规划 vs 轨迹优化？
+#### Q1: 采样式规划 vs 轨迹优化？
 
 - 采样式：易找到可行解，适合复杂障碍空间；但路径抖动，需要后处理。
 - 轨迹优化：可直接考虑动力学和成本，但对初值敏感，可能陷入局部最优。
 - 工程实践：先采样找可行路径，再用 TrajOpt 平滑。
 
-### Q2: 如何处理动态障碍？
+#### Q2: 如何处理动态障碍？
 
 1. 使用 **在线 Re-planning** (RRT Replan) 或 **MPC**。
 2. 维护 **占据栅格** / **ESDF** 实时更新碰撞信息。
 3. 短时 MPC + 长期规划结合：全局路径 + 局部避障。
 
-### Q3: 高维机械臂如何加速规划？
+#### Q3: 高维机械臂如何加速规划？
 
 - 合理的 **joint limits** 与 **sampling bounds**。
 - 使用 **IK 解** 作为起点，减少搜索空间。
 - **Task Space RRT**: 在笛卡尔空间采样，再投影回 joint space。
 - 利用 GPU (cuRobo) 并行求解。
 
-### Q4: CHOMP 为什么需要“障碍势能”？
+#### Q4: CHOMP 为什么需要“障碍势能”？
 
 - 通过距离场定义势能 \( U(q) = \phi(d(q)) \)，在轨迹优化时通过梯度远离障碍。
 - 常用 SDF (Signed Distance Field) 或 ESDF 作为距离计算。
 
-### Q5: 如何保证规划结果可执行？
+#### Q5: 如何保证规划结果可执行？
 
 - **时间参数化**: TOTG / Iterative Parabolic Time Parameterization。
 - **速度/加速度限制**: 确保关节命令不超限。
@@ -8955,7 +10162,7 @@ if planner.solve(5.0):
 
 ---
 
-## 📚 推荐阅读
+### 📚 推荐阅读
 
 - *Principles of Robot Motion* (MIT Press)
 - OMPL: [ompl.kavrakilab.org](https://ompl.kavrakilab.org/)
@@ -8966,28 +10173,288 @@ if planner.solve(5.0):
 
 
 
-\newpage
 
-# 第23章 触觉 VLA
+---
+
+## 第24章 触觉 VLA
 
 
 在机器人操作中，视觉 (Vision) 往往不足以完成所有任务。对于接触密集型 (Contact-rich) 任务（如在黑暗中摸索物体、精密装配、判断物体材质），**触觉 (Tactile)** 是不可或缺的模态。
 
 2024-2025 年，VLA 领域开始爆发 "Vision-Tactile-Language-Action" 的研究，旨在赋予机器人"触觉语义"理解能力。
 
-## 1. 为什么需要触觉? (Why Tactile?)
+### 1. 为什么需要触觉? (Why Tactile?)
 - **视觉遮挡 (Occlusion)**: 当机械手抓取物体时，手掌会挡住摄像头视线。此时只有触觉能提供反馈。
 - **物理属性感知**: 视觉无法直接判断物体的软硬、摩擦力、重量。
 - **微米级控制**: 视觉通常有毫米级误差，而触觉传感器 (如 GelSight) 可以提供微米级的纹理信息。
 
-## 2. 核心传感器技术
-- **GelSight / Digit**: 基于光学的触觉传感器。
-    - **原理**: 内部有一个弹性体 (Elastomer) 和摄像头。当弹性体变形时，摄像头拍摄其表面的纹理变化。
-    - **优势**: 输出是高分辨率图像，可以直接喂给 CNN/ViT 处理，与 CV 技术栈完美兼容。
+### 2. 核心传感器技术
 
-## 3. 最新模型进展 (2024-2025)
+#### 2.1 GelSight
+MIT 开发的高分辨率光学触觉传感器，是触觉 VLA 研究的基石。
 
-### 3.1 VLA-Touch (2025)
+| 参数 | 规格 |
+| :--- | :--- |
+| 分辨率 | ~40 微米 |
+| 尺寸 | 约 30×30mm 感知面 |
+| 输出 | RGB 图像 + 深度图 |
+| 帧率 | 30-60 FPS |
+| 价格 | ~$500-1000 |
+
+**原理**: 内部有弹性体 (Elastomer) + LED 光源 + 摄像头。当物体接触弹性体时，表面变形改变光照分布，摄像头捕捉这些变化重建接触几何。
+
+#### 2.2 DIGIT (Meta AI)
+> **论文**: [DIGIT: A Novel Design for a Low-Cost Compact High-Resolution Tactile Sensor](https://arxiv.org/abs/2005.14679) (RSS 2020)
+> **官网**: [digit.ml](https://digit.ml)
+
+Meta AI (FAIR) 开发的**开源**紧凑型触觉传感器，专为机器人手指设计。
+
+**代码库**:
+
+| 仓库 | 说明 | 链接 |
+| :--- | :--- | :--- |
+| **digit-interface** | Python 驱动接口 | [GitHub](https://github.com/facebookresearch/digit-interface) |
+| **TACTO** | DIGIT 仿真器 (PyBullet) | [GitHub](https://github.com/facebookresearch/tacto) |
+| **PyTouch** | 触觉 ML 库 | [GitHub](https://github.com/facebookresearch/PyTouch) |
+| **Sparsh** | 预训练触觉模型 | [GitHub](https://github.com/facebookresearch/sparsh) |
+| **3DCal** | 触觉传感器标定工具 | [GitHub](https://github.com/3DCal/3DCal) |
+
+| 参数 | 规格 |
+| :--- | :--- |
+| 分辨率 | 640×480 RGB |
+| 尺寸 | **20×27×18mm** (极紧凑) |
+| 重量 | ~20g |
+| 帧率 | 60 FPS |
+| 接口 | USB-C |
+| 成本 | **~$15** (开源 BOM) |
+
+**优势**:
+- **开源硬件**: 完整 CAD 设计、制造指南公开，可自行制作
+- **紧凑设计**: 专为机器人手指优化，可安装在 Allegro Hand 等灵巧手上
+- **低成本**: 材料成本仅 $15，适合大规模部署
+- **高帧率**: 60 FPS 支持实时控制
+- **预训练模型**: Meta 提供训练好的触觉表征模型 (如 T3, Sparsh)
+- **适配接口**: 官方提供 PyTorch 接口、ROS 驱动，生态完善
+
+**局限性**:
+- **一致性差**: 每个传感器的光学特性略有不同，需要单独标定
+- **无力输出**: 只提供形变图像，**不直接输出接触力** (需算法估计)
+- **弹性体磨损**: 长时间使用后弹性体会老化
+
+**与 GelSight 对比**:
+
+| 特性 | GelSight | DIGIT |
+| :--- | :--- | :--- |
+| 分辨率 | 更高 (~40μm) | 较低 (像素级) |
+| 尺寸 | 较大 | **极紧凑** |
+| 成本 | 高 ($500+) | **极低 ($15)** |
+| 开源 | 部分 | **完全开源** |
+| 力输出 | 可估计 | **无直接输出** |
+| 一致性 | 较好 | **传感器间差异大** |
+| 生态 | 学术为主 | **Meta 预训练模型** |
+| 适用场景 | 精密检测、研究 | 灵巧手、大规模部署 |
+
+#### 2.3 千觉 GelStereo (Xense Robotics)
+> **公司**: 千觉机器人科技（上海）有限公司，成立于 2024 年 5 月
+> **官网**: [xense-robotics.com](https://www.xense-robotics.com)
+
+基于**双目立体视觉 (Binocular Stereo)** 的高分辨率多模态触觉传感器。
+
+| 参数 | 规格 |
+| :--- | :--- |
+| 感知密度 | **人类手指 800 倍** |
+| 模态 | 三维力觉 + 动觉 + 滑觉 + 形貌 |
+| 原理 | 双目相机 + 弹性体 |
+| 输出 | 3D 点云 + 力分布图 |
+
+**核心技术 - GelStereo 原理**:
+
+```
+        左相机                右相机
+           \                  /
+            \   弹性体变形   /
+             \     ↓       /
+              ┌─────────┐
+              │ 接触区域 │  ← 物体接触
+              └─────────┘
+                  ↓
+           双目视差 → 3D 重建
+```
+
+1. **双目立体匹配**: 两个相机从不同角度拍摄弹性体表面，通过视差计算深度
+2. **亚像素精度**: 相比单目 GelSight，双目可实现更精确的 3D 形貌重建
+3. **实时性**: 无需复杂的光度立体 (Photometric Stereo) 算法，速度更快
+
+**与 GelSight 对比**:
+
+| 特性 | GelSight (单目) | GelStereo (双目) |
+| :--- | :--- | :--- |
+| 3D 重建方法 | 光度立体 (需多色光) | **立体匹配** (单色即可) |
+| 计算复杂度 | 高 | **低** |
+| 光照要求 | RGB 三色光 | 单色光 |
+| 深度精度 | 依赖标定 | **几何约束更强** |
+
+---
+
+#### 2.4 戴盟 DM-Tac (DMRobot)
+> **公司**: 戴盟机器人，专注视触觉技术
+> **官网**: [dmrobot.com](https://www.dmrobot.com)
+
+全球首款**多维高分辨率高频率**视触觉传感器系列。
+
+#### DM-Tac W 传感器
+
+| 参数 | 规格 |
+| :--- | :--- |
+| 感知密度 | **4 万单元/cm²** (人类 240/cm²) |
+| 模态 | 形貌 + 纹理 + 软硬 + 滑移 + 三维力 |
+| 耐久性 | **500 万次按压测试** |
+| 厚度 | 毫米级 |
+
+**核心技术 - 单色光视触觉**:
+
+传统 GelSight 使用 **RGB 三色光** + 光度立体 (Photometric Stereo) 重建 3D 形貌。戴盟采用**单色光**方案，简化硬件设计：
+
+| 方案 | 三色光 (RGB) | 单色光 (戴盟) |
+| :--- | :--- | :--- |
+| 光源 | 红/绿/蓝 LED (多角度) | 单色 LED |
+| 3D 重建 | 光度立体 (解析解) | 数据驱动 / 学习方法 |
+| 硬件复杂度 | 需精确 LED 布局 | **更简单** |
+| 标定 | 需标定 RGB 通道 | **更简单** |
+
+**优势**:
+- **硬件简化**: 减少 LED 数量和布局要求
+- **工业级耐用**: 500 万次按压，远超学术级传感器
+- **高密度**: 4 万单元/cm² 的高密度触点
+
+> 注：单色光损失了光度立体的多方向光照信息，需依赖学习算法补偿。
+
+#### DM-Hand1 灵巧手
+集成 DM-Tac 传感器的五指灵巧手，每个指尖都有触觉感知。
+
+#### DM-EXton 遥操作系统
+穿戴式数据采集设备，用于收集高质量人类示教数据，为模仿学习提供触觉标注。
+
+---
+
+#### 2.5 其他触觉传感器
+- **TacTip**: Bristol 大学，基于生物启发的软性触觉传感器
+- **BioTac**: SynTouch 公司，多模态传感器 (压力 + 温度 + 振动)
+- **ReSkin**: Meta AI，磁性薄膜触觉传感器，可贴附于任意表面
+- **Taxim**: CMU，基于有限元仿真的触觉传感器
+
+### 3. 最新模型进展 (2024-2025)
+
+#### 3.1 Tactile-VLA / TVL (ICML 2024)
+> **论文**: [A Touch, Vision, and Language Dataset for Multimodal Alignment](https://arxiv.org/abs/2402.13232)
+> **作者**: Max Fu, Gaurav Datta, et al. (UC Berkeley)
+> **代码**: [GitHub - Max-Fu/tvl](https://github.com/Max-Fu/tvl)
+
+**核心贡献**: 首个大规模触觉-视觉-语言对齐数据集和基准模型。
+
+#### 数据集 (TVL Dataset)
+
+| 统计量 | 数值 |
+| :--- | :--- |
+| 样本数 | **44,000** 三元组 |
+| 材质种类 | 100+ 种 |
+| 传感器 | GelSight Mini |
+| 标注类型 | 自然语言描述 |
+
+**数据示例**:
+```
+触觉图像: [GelSight 压痕图]
+视觉图像: [物体 RGB 图]
+语言描述: "The surface feels rough and rigid, like sandpaper"
+```
+
+**数据采集流程**:
+1. 机器人用 GelSight 传感器接触物体表面
+2. 同时拍摄物体的 RGB 图像
+3. 人类标注员用自然语言描述触觉感受
+
+#### 模型架构详解
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                    TVL 模型架构                          │
+├─────────────────────────────────────────────────────────┤
+│                                                         │
+│   Vision Image ──→ CLIP ViT-L/14 ──→ [CLS] Token       │
+│                         ↓                               │
+│                   Vision Embedding (768d)               │
+│                         ↓                               │
+│                   ┌─────────────┐                       │
+│                   │  Projection │ (MLP)                 │
+│                   │    Layer    │                       │
+│                   └─────────────┘                       │
+│                         ↓                               │
+│                  Joint Embedding Space                  │
+│                         ↑                               │
+│                   ┌─────────────┐                       │
+│                   │  Projection │ (MLP)                 │
+│                   │    Layer    │                       │
+│                   └─────────────┘                       │
+│                         ↑                               │
+│                  Tactile Embedding (768d)               │
+│                         ↑                               │
+│  Tactile Image ──→ ViT-B/16 (MAE pretrained) ──→ [CLS] │
+│                                                         │
+│                  Joint Embedding Space                  │
+│                         ↓                               │
+│                   Cross-Attention                       │
+│                         ↓                               │
+│                  Language Decoder (GPT-2)               │
+│                         ↓                               │
+│                 "rough and cold..."                     │
+└─────────────────────────────────────────────────────────┘
+```
+
+#### 训练策略
+
+**Stage 1: Tactile Encoder 预训练 (MAE)**
+```python
+masked_patches = random_mask(tactile_image, ratio=0.75)
+reconstruction_loss = MSE(decoder(encoder(masked_patches)), original)
+```
+
+**Stage 2: 对比学习对齐 (Contrastive Alignment)**
+
+
+$$
+L_{align} = -log \frac{exp(sim(t_i, v_i) / τ)}{\sum_{j} exp(sim(t_i, v_j) / τ)}
+$$
+
+
+- `t_i`: 触觉 Embedding
+- `v_i`: 对应的视觉 Embedding
+- `τ`: 温度参数 (0.07)
+
+**Stage 3: 语言生成微调**
+```python
+loss = CrossEntropy(decoder(tactile_emb, vision_emb), text_tokens)
+```
+
+#### 下游任务与性能
+
+| 任务 | 指标 | TVL 性能 |
+| :--- | :--- | :--- |
+| 材质分类 | Accuracy | 78.3% |
+| 触觉-语言检索 | R@1 | 45.2% |
+| 触觉问答 | BLEU-4 | 32.1 |
+| Zero-shot 材质识别 | Accuracy | 61.7% |
+
+#### 核心洞察
+
+1. **触觉-视觉互补**: 视觉擅长识别物体类别，触觉擅长判断物理属性
+2. **语言作为桥梁**: 自然语言描述使触觉语义可解释、可迁移
+3. **MAE 预训练有效**: 触觉图像的纹理特征适合 Masked Autoencoder
+
+**意义**: 为 VLA 提供了触觉语义理解的基础，使机器人能够"用语言描述触觉"。
+
+---
+
+#### 3.2 VLA-Touch (2025)
 > **论文**: [VLA-Touch: Enhancing Generalist Robot Policies with Dual-Level Tactile Feedback](https://arxiv.org/abs/2502.xxxxx)
 > **核心思想**: 双层反馈机制 (Dual-level Feedback)。
 
@@ -9002,7 +10469,7 @@ if planner.solve(5.0):
         - **Action Refinement**: 触觉信号主要用于修正动作的最后几毫米 (Contact Phase)，确保接触力适中。
 - **优势**: 无需重新训练整个 VLA，即插即用。
 
-### 3.2 OmniVTLA (2025)
+#### 3.3 OmniVTLA (2025)
 > **论文**: [OmniVTLA: A Unified Vision-Tactile-Language-Action Model](https://arxiv.org/abs/2503.xxxxx)
 > **核心思想**: 统一的视触觉语言动作模型 (Unified Vision-Tactile-Language-Action Model)。
 
@@ -9017,15 +10484,280 @@ if planner.solve(5.0):
 - **训练**: 使用大规模的多模态数据集 (包含图像、触觉图、语言指令、动作)。
 - **能力**: 能够执行 "Pick up the softest object" (抓起最软的物体) 这种需要跨模态推理的任务。
 
-## 4. 挑战与未来
+---
+
+#### 3.4 🔥 SaTA: 空间锚定触觉感知 (Sharpa + 清华 + 武大, 2025)
+
+> **论文**: [SaTA: Spatially-anchored Tactile Awareness for Dexterous Manipulation](https://arxiv.org/abs/2510.14647)
+> **机构**: Sharpa (新加坡 AI 机器人公司) + 清华大学 + 武汉大学
+> **核心突破**: **首次将触觉信号锚定到机械手自身坐标系**，实现视觉遮挡下的亚毫米级精度"盲操作"
+
+#### 3.4.1 核心问题
+
+传统触觉方法将触觉处理为简单的图像或局部纹理，**缺乏空间语义**：
+- 模型不知道"接触发生在哪里"
+- 无法判断"角度偏了多少"
+- 不清楚"下一步动作应该往哪个方向做"
+
+**类比**: 人类闭眼插充电线时，能凭"手感"判断插头和插孔的位置关系，这依赖于触觉与空间方位感的结合。SaTA 首次让机器人拥有这种能力。
+
+#### 3.4.2 架构设计
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                    SaTA 架构: 空间锚定触觉感知                        │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                     │
+│   触觉图像 (320×240)      指尖 6D 位姿          时间步              │
+│   [B, 5, H, W, 3]        [B, 5, 6]             t                   │
+│   (5个指尖传感器)         (手坐标系)                                 │
+│        │                     │                  │                   │
+│        ▼                     ▼                  ▼                   │
+│   ┌─────────┐          ┌──────────────┐   ┌──────────┐             │
+│   │ViT/CNN  │          │  傅里叶编码   │   │Sinusoidal│             │
+│   │Encoder  │          │ (多尺度6D)   │   │Embedding │             │
+│   └────┬────┘          └──────┬───────┘   └────┬─────┘             │
+│        │                      │                 │                   │
+│        ▼                      ▼                 │                   │
+│   Tactile                Position              │                   │
+│   Features               Encoding              │                   │
+│   [B, 5, D]              [B, 5, D]             │                   │
+│        │                      │                 │                   │
+│        │         ┌────────────┘                 │                   │
+│        │         │                              │                   │
+│        ▼         ▼                              │                   │
+│   ┌─────────────────────────────────────────┐   │                   │
+│   │         FiLM 调制层                       │   │                   │
+│   │  ┌─────────────────────────────────┐    │   │                   │
+│   │  │ γ = MLP(pos_enc)                │    │◀──┘                   │
+│   │  │ β = MLP(pos_enc)                │    │                       │
+│   │  │                                 │    │                       │
+│   │  │ out = γ * tactile_feat + β     │    │                       │
+│   │  │       ↑                         │    │                       │
+│   │  │  空间信息调制触觉特征            │    │                       │
+│   │  └─────────────────────────────────┘    │                       │
+│   └────────────────┬────────────────────────┘                       │
+│                    │                                                │
+│                    ▼                                                │
+│            空间锚定触觉 Token                                        │
+│            (具有空间语义的触觉表示)                                   │
+│                    │                                                │
+│                    ▼                                                │
+│            Policy Network (动作预测)                                 │
+│                    │                                                │
+│                    ▼                                                │
+│              🦾 精细动作                                             │
+│                                                                     │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+#### 3.4.3 三大核心设计
+
+| 设计 | 技术细节 | 作用 |
+| :--- | :--- | :--- |
+| **1. 手坐标系锚定** | 触觉锚定到手的 **URDF 坐标系** (腕部参考系)，而非世界坐标系 | 灵巧操作的成功取决于手内的相对几何关系，无论手腕如何移动，几何约束保持不变 |
+| **2. 傅里叶位置编码** | 对完整 **6D 位姿** (3D 位置 + 3D 旋转) 进行**多尺度编码** | 模型既能进行粗粒度的对齐判断，又能实现毫米级的微调操作 |
+| **3. FiLM 调制** | 使用 **Feature-wise Linear Modulation** 让空间信息调制触觉特征处理 | 每个触觉测量都成为既包含感知信息又具有空间语义的 Token |
+
+**傅里叶位置编码公式**:
+
+
+$$
+\gamma(p) = [\sin(2^0 \pi p), \cos(2^0 \pi p), ..., \sin(2^{L-1} \pi p), \cos(2^{L-1} \pi p)]
+$$
+
+
+其中 $p$ 是 6D 位姿向量，$L$ 是频率级数。多尺度编码使得模型对不同精度的空间信息都敏感。
+
+**FiLM 调制公式**:
+
+
+$$
+\text{FiLM}(x, \gamma, \beta) = \gamma \cdot x + \beta
+$$
+
+
+其中 $\gamma, \beta$ 由位置编码通过 MLP 生成，$x$ 是触觉特征。
+
+#### 3.4.4 硬件配置
+
+| 组件 | 规格 |
+| :--- | :--- |
+| **灵巧手** | SharpaWave，**22 自由度** |
+| **触觉传感器** | 每指尖 1 个视觉触觉传感器 |
+| **触觉分辨率** | **320×240** @ 30Hz |
+| **控制频率** | 30 Hz |
+
+#### 3.4.5 实验任务与结果
+
+| 任务 | 难点 | SaTA 成功率 | 最强基线 | 提升 |
+| :--- | :--- | :--- | :--- | :--- |
+| **自由空间 USB-C 插入** | 双手协调、空中对准、视觉完全遮挡 | **35%** | ~0% | N/A |
+| **扑克牌展开** | 精确侧向力控制，防止弯折 | **95%** | 65% | +30% |
+| **灯泡安装** | 垂直对准、旋入力控制 | **100%** | 70% | +30% |
+| **平均** | - | **76.7%** | 46.7% | **+30%** |
+
+**关键指标**:
+- **首次接触成功率 (FC)**: SaTA 48.3% vs 基线 25%
+- **平均完成时间**: 缩短 **28%** (更少的反复试探)
+
+#### 3.4.6 基线对比
+
+| 方法 | 描述 | 问题 |
+| :--- | :--- | :--- |
+| **Vision Only** | 纯视觉方法 | 视觉遮挡时完全失效 |
+| **Tactile-Flat** | 触觉作为平面图像 | 无空间语义，无法推理位置关系 |
+| **Tactile-Global** | 触觉锚定到世界坐标系 | 手腕移动时几何约束改变 |
+| **SaTA** | 触觉锚定到手坐标系 + FiLM 调制 | ✅ 空间语义完整 |
+
+#### 3.4.7 触觉感知的三个层次
+
+论文提出了灵巧操作中触觉感知的渐进层次：
+
+```
+Level 1: 门控信号 (Gating Signal) - 最基础
+├── 检测力突变以触发策略阶段转换
+├── 例: USB 插入时力峰值标志"对齐→插入"阶段转换
+└── 实现: 简单阈值检测
+
+Level 2: 几何推理 (Geometric Reasoning) - SaTA 重点
+├── 提供高精度的局部几何信息
+├── 通过空间锚定组织成适合推理的空间表示
+├── 达到毫米级精度控制
+└── 实现: FiLM + 傅里叶编码
+
+Level 3: 力主导控制 (Force-Dominant Control) - 最高级
+├── 策略完全基于力/触觉反馈，视觉仅提供粗略引导
+├── 例: 笔旋转需要持续的力调制
+└── 实现: 需要真实力反馈的触觉手套 或 真实世界 RL
+```
+
+#### 3.4.8 核心洞察与意义
+
+1. **范式转变**: 从"被动触觉"到"空间锚定触觉"
+   - 传统: 触觉 = 神经末梢 (只知道"有接触")
+   - SaTA: 触觉 = 触觉大脑 (知道"在哪里接触、偏了多少、该怎么调")
+
+2. **坐标系选择至关重要**:
+   - 世界坐标系: 手腕移动时几何约束改变，模型需要重新学习
+   - **手坐标系**: 几何约束不变，策略可迁移
+
+3. **设计原则通用性**: SaTA 的空间锚定原则可迁移至其他提供局部测量的传感模态 (如接近觉、力觉)
+
+#### 3.4.9 代码实现要点
+
+```python
+import torch
+import torch.nn as nn
+
+class FourierPositionEncoding(nn.Module):
+    """6D 位姿的傅里叶位置编码"""
+    def __init__(self, d_model=256, num_frequencies=10):
+        super().__init__()
+        self.num_frequencies = num_frequencies
+        # 频率: 2^0, 2^1, ..., 2^(L-1)
+        self.frequencies = 2.0 ** torch.arange(num_frequencies)
+        self.proj = nn.Linear(6 * 2 * num_frequencies, d_model)
+    
+    def forward(self, pose_6d):
+        """
+        pose_6d: [B, 5, 6] - 5个指尖的 6D 位姿 (3D pos + 3D rot)
+        """
+        B, N, D = pose_6d.shape
+        # 多尺度编码
+        freqs = self.frequencies.to(pose_6d.device)  # [L]
+        pose_scaled = pose_6d.unsqueeze(-1) * freqs * torch.pi  # [B, N, 6, L]
+        encoding = torch.cat([
+            torch.sin(pose_scaled),
+            torch.cos(pose_scaled)
+        ], dim=-1)  # [B, N, 6, 2L]
+        encoding = encoding.flatten(-2)  # [B, N, 6*2L]
+        return self.proj(encoding)  # [B, N, d_model]
+
+
+class FiLMLayer(nn.Module):
+    """Feature-wise Linear Modulation"""
+    def __init__(self, feature_dim, condition_dim):
+        super().__init__()
+        self.gamma_net = nn.Linear(condition_dim, feature_dim)
+        self.beta_net = nn.Linear(condition_dim, feature_dim)
+    
+    def forward(self, x, condition):
+        """
+        x: [B, N, D] - 触觉特征
+        condition: [B, N, D] - 空间编码
+        """
+        gamma = self.gamma_net(condition)  # 缩放因子
+        beta = self.beta_net(condition)    # 偏移量
+        return gamma * x + beta
+
+
+class SaTAModule(nn.Module):
+    """空间锚定触觉感知模块"""
+    def __init__(self, tactile_dim=256, d_model=256):
+        super().__init__()
+        self.tactile_encoder = nn.Sequential(
+            nn.Conv2d(3, 64, 7, stride=2, padding=3),
+            nn.ReLU(),
+            nn.Conv2d(64, 128, 3, stride=2, padding=1),
+            nn.ReLU(),
+            nn.AdaptiveAvgPool2d(1),
+            nn.Flatten(),
+            nn.Linear(128, tactile_dim)
+        )
+        self.pos_encoder = FourierPositionEncoding(d_model)
+        self.film = FiLMLayer(tactile_dim, d_model)
+    
+    def forward(self, tactile_images, fingertip_poses):
+        """
+        tactile_images: [B, 5, 3, H, W] - 5个指尖触觉图像
+        fingertip_poses: [B, 5, 6] - 手坐标系下的 6D 位姿
+        """
+        B, N = tactile_images.shape[:2]
+        
+        # 1. 触觉编码
+        tactile_flat = tactile_images.flatten(0, 1)  # [B*5, 3, H, W]
+        tactile_feat = self.tactile_encoder(tactile_flat)  # [B*5, D]
+        tactile_feat = tactile_feat.view(B, N, -1)  # [B, 5, D]
+        
+        # 2. 空间编码 (锚定到手坐标系)
+        pos_enc = self.pos_encoder(fingertip_poses)  # [B, 5, D]
+        
+        # 3. FiLM 调制: 空间信息调制触觉特征
+        spatially_anchored_tactile = self.film(tactile_feat, pos_enc)
+        
+        return spatially_anchored_tactile  # [B, 5, D]
+```
+
+#### 3.4.10 面试考点
+
+**Q: SaTA 为什么选择手坐标系而不是世界坐标系?**
+
+A: 灵巧操作的成功取决于**手内的相对几何关系** (如指尖与物体的相对位置)，而非手在世界中的绝对位置。锚定到手坐标系后：
+- 无论手腕如何移动或机械臂如何摆放，完成任务的几何约束始终不变
+- 策略可在不同位姿下复用，无需针对每个位置重新学习
+
+**Q: FiLM 调制的作用是什么?**
+
+A: FiLM 让空间信息**直接调制**触觉特征的处理过程，而非简单拼接。这使得：
+- 触觉纹理、边缘方向、压力分布等每个测量都**同时具有感知信息和空间语义**
+- 相比 Concat，FiLM 的条件信息注入更深层次
+
+**Q: 傅里叶位置编码的多尺度有什么好处?**
+
+A: 低频成分捕捉粗粒度位置 (厘米级)，高频成分捕捉细粒度位置 (毫米级)。这允许模型：
+- 先做粗对准 (低频敏感)
+- 再做精细调整 (高频敏感)
+
+### 4. 挑战与未来
 1.  **数据稀缺**: 相比于图像数据，高质量的触觉-语言对 (Tactile-Language Pairs) 非常少。
 2.  **Sim-to-Real**: 触觉仿真非常困难 (涉及复杂的软体形变)，目前主要依赖真机数据收集。
 3.  **硬件成本**: 高分辨率触觉传感器 (如 GelSight) 依然昂贵且易损耗。
 
-## 5. 深度解析: ResNet vs ViT for Tactile
+### 5. 深度解析: ResNet vs ViT for Tactile
 在触觉 VLA 中，选择 ResNet 还是 ViT 作为触觉编码器 (Tactile Encoder) 是一个关键的设计决策。这不仅仅是"CNN vs Transformer"的问题，而是关乎**触觉信号的物理特性**如何被编码。
 
-### 5.1 ResNet (CNN): 纹理与几何的专家
+#### 5.1 ResNet (CNN): 纹理与几何的专家
 ResNet 在处理 GelSight 这类**基于光学 (Optical-based)** 的触觉传感器时表现出色，原因在于其**归纳偏置 (Inductive Bias)** 与触觉图像的特性高度契合。
 
 *   **技术细节**:
@@ -9033,7 +10765,7 @@ ResNet 在处理 GelSight 这类**基于光学 (Optical-based)** 的触觉传感
     *   **局部性 (Locality)**: 触觉感知的核心是**接触 (Contact)**。接触通常发生在局部区域。ResNet 的卷积核 (e.g., 3x3) 强制模型关注局部像素的梯度变化，这对于检测**边缘 (Edges)**、**纹理 (Textures)** 和 **滑移 (Slip)** 至关重要。
     *   **层级特征 (Hierarchical Features)**: ResNet 通过 Pooling 不断下采样，自然地形成了从"微观纹理"到"宏观形状"的特征金字塔。这对于判断物体材质（微观）和抓取稳定性（宏观）都很有用。
 
-### 5.2 ViT (Transformer): 全局接触与多模态统一
+#### 5.2 ViT (Transformer): 全局接触与多模态统一
 ViT 在 OmniVTLA 等最新模型中更受欢迎，主要是为了**多模态对齐**和**全局上下文**。
 
 *   **技术细节**:
@@ -9041,7 +10773,7 @@ ViT 在 OmniVTLA 等最新模型中更受欢迎，主要是为了**多模态对�
     *   **全局感受野 (Global Receptive Field)**: Self-Attention 允许每一个 Tactile Patch 在第一层就与其他所有 Patch 交互。这对于理解**多点接触 (Multi-point Contact)** 非常关键。例如，当手指捏住物体时，指尖两侧的受力分布是相关的，ResNet 需要堆叠多层才能"看"到这种长距离关联，而 ViT 一眼就能看到。
     *   **位置编码 (Positional Encoding)**: 由于 ViT 没有卷积的归纳偏置，它必须依赖可学习的位置编码来理解"哪里是上，哪里是下"。在触觉中，绝对位置往往对应着机械手的具体部位 (e.g., 指尖 vs 指腹)，这对控制很重要。
 
-### 5.3 核心差异对比表
+#### 5.3 核心差异对比表
 
 | 特性 | ResNet (Tactile) | ViT (Tactile) |
 | :--- | :--- | :--- |
@@ -9051,33 +10783,122 @@ ViT 在 OmniVTLA 等最新模型中更受欢迎，主要是为了**多模态对�
 | **多模态融合** | 需通过 Pooling 压缩成向量后融合 | **Token 级融合** (可与 Text Token 拼接) |
 | **典型应用** | 材质识别, 滑移检测 (Slip Detection) | 复杂操作策略 (Manipulation Policy), 跨模态推理 |
 
-## 6. 面试常见问题
-**Q: 触觉图像 (Tactile Image) 和普通 RGB 图像有什么区别?**
-A: 触觉图像通常反映的是**几何形状 (Geometry)** 和 **受力分布 (Force Distribution)**，对光照变化不敏感，但对接触极其敏感。处理时通常不需要复杂的颜色增强，但需要关注纹理细节。
+### 6. 面试常见问题
 
-**Q: 如何将触觉融入 VLA?**
-A: 最简单的方法是将触觉图像视为额外的视觉通道 (Concat)，或者使用 Cross-Attention 将触觉特征注入到 Policy 中。最新的趋势是像 OmniVTLA 一样进行多模态对齐。
+**Q1: 触觉图像 (Tactile Image) 和普通 RGB 图像有什么区别?**
+
+触觉图像通常反映的是**几何形状 (Geometry)** 和 **受力分布 (Force Distribution)**，对光照变化不敏感，但对接触极其敏感。处理时通常不需要复杂的颜色增强，但需要关注纹理细节。
+
+---
+
+**Q2: 如何将触觉融入 VLA?**
+
+三种主流方法：
+1. **通道拼接**: 将触觉图像作为额外视觉通道 (Concat)
+2. **Cross-Attention**: 触觉特征作为 Key/Value 注入 Policy
+3. **多模态对齐**: 像 Tactile-VLA/OmniVTLA 那样将触觉、视觉、语言对齐到统一空间
+
+---
+
+**Q3: DIGIT vs GelSight 怎么选?**
+
+| 场景 | 推荐 | 原因 |
+| :--- | :--- | :--- |
+| 灵巧手操作 | **DIGIT** | 体积小、重量轻、成本低 |
+| 精密检测/研究 | **GelSight** | 分辨率更高 |
+| 大规模数据采集 | **DIGIT** | 开源、便宜、可批量制作 |
+| 工业应用 | 看需求 | GelSight 稳定性更好 |
+
+---
+
+**Q4: 触觉 Sim-to-Real 为什么难?**
+
+1. **软体仿真复杂**: 弹性体形变涉及非线性 FEM，计算成本高
+2. **接触模型不精确**: 摩擦、滑移的物理建模困难
+3. **传感器特性**: 每个传感器的光学特性略有不同
+4. **解决方案**: 域随机化 (Domain Randomization)、真实数据微调
+
+---
+
+**Q5: GelStereo (千觉) vs GelSight 的技术差异?**
+
+| 维度 | GelSight | GelStereo |
+| :--- | :--- | :--- |
+| 3D 重建 | 光度立体 (Photometric Stereo) | **双目立体匹配** |
+| 光源 | RGB 三色 LED | 单色 LED |
+| 相机数 | 1 个 | **2 个** |
+| 原理 | 根据不同光照下的亮度变化推断法向量 | 根据双目视差直接计算深度 |
+| 优势 | 纹理细节更丰富 | **计算更快、几何约束更强** |
+
+---
+
+**Q6: DM-Tac (戴盟) 的单色光技术有什么优势?**
+
+传统 GelSight 使用 RGB 三色光从不同角度照射弹性体，通过**光度立体 (Photometric Stereo)** 算法从颜色通道分离出三个方向的光照信息，重建表面法向量。
+
+单色光方案的 trade-off：
+
+| 维度 | RGB 三色光 | 单色光 |
+| :--- | :--- | :--- |
+| 信息量 | 3 个光照方向 | 1 个光照方向 |
+| 重建精度 | 理论上更高 | 依赖算法补偿 |
+| 硬件复杂度 | 需精确 LED 布局 | **更简单** |
+| 标定难度 | 需标定每个颜色通道 | **更简单** |
+| 成本 | 较高 | **较低** |
+
+**实际考量**: 单色光损失了部分法向量信息，但可通过深度学习端到端补偿。对于抓取任务，高密度触点 (4万/cm²) 可能比精确 3D 重建更重要。
+
+> ⚠️ 注：戴盟的具体算法细节未公开，上述为基于公开信息的推测。
+
+---
+
+**Q7: 如何选择触觉传感器?**
+
+| 场景 | 推荐 | 理由 |
+| :--- | :--- | :--- |
+| 学术研究/快速原型 | **DIGIT** | 开源、便宜、**Meta 预训练模型** |
+| 需要力反馈 | **GelSight / BioTac** | DIGIT 无直接力输出 |
+| 高精度 3D 重建 | **GelSight** | 分辨率最高 |
+| 灵巧手集成 | **DM-Tac** | 超薄、耐用、高密度 |
+| 机械臂末端 | **GelStereo** | 双目 3D、实时性好 |
+| 大面积覆盖 | **ReSkin** | 磁性薄膜、可贴附 |
+| 批量部署 (一致性要求高) | **GelSight / DM-Tac** | DIGIT 传感器间差异大 |
+
+---
+
+**Q8: DIGIT 没有力输出怎么办?**
+
+两种解决方案：
+1. **基于图像的力估计**: 训练 CNN/MLP 从形变图像回归接触力
+   ```python
+   # 伪代码
+   force = ForceEstimator(tactile_image)  # 输出 Fx, Fy, Fz
+   ```
+2. **外部力传感器融合**: 在手腕处加装六维力传感器 (如 ATI)，与 DIGIT 图像融合
+
+Meta 的 **Sparsh** 模型已包含力估计预训练，可直接使用。
 
 
 ---
 
-\newpage
+
+---
 
 # 第六部分：前沿模型解析
 
 
-\newpage
+---
 
-# 第24章 RDT (Robotics Diffusion Transformer)
+## 第25章 RDT (Robotics Diffusion Transformer)
 
 
 > **核心论文**: [RDT-1B: a Diffusion Foundation Model for Bimanual Manipulation](https://arxiv.org/abs/2410.07864) (Liu et al., 2024)
 > **开发者**: 清华大学 MARS Lab & 字节跳动
 > **代表模型**: **RDT-170M**, **RDT-1B**
 
-## 1. 为什么需要 RDT? (Why?)
+### 1. 为什么需要 RDT? (Why?)
 
-### 1.1 机器人学习的 Scaling Law 困境
+#### 1.1 机器人学习的 Scaling Law 困境
 
 在 NLP 和 CV 领域，**Scaling Law** 已被充分验证：模型越大、数据越多，性能越好。然而，机器人学习领域一直缺乏类似的验证:
 
@@ -9085,7 +10906,7 @@ A: 最简单的方法是将触觉图像视为额外的视觉通道 (Concat)，�
 - **分布多样**: 不同机器人 (单臂/双臂/人形) 的状态空间、动作空间差异巨大。
 - **缺乏统一架构**: 之前的方法 (ACT, Diffusion Policy) 多为任务特定设计，难以规模化。
 
-### 1.2 RDT 的核心目标
+#### 1.2 RDT 的核心目标
 
 RDT 是首个**十亿参数级**的机器人扩散基础模型，专为解决以下问题：
 
@@ -9093,9 +10914,9 @@ RDT 是首个**十亿参数级**的机器人扩散基础模型，专为解决以
 2. **跨形态泛化 (Cross-Embodiment)**: 单一模型适配不同机器人 (单臂/双臂)。
 3. **双臂操作 (Bimanual)**: 特别优化了需要两只手协调的复杂任务。
 
-## 2. 核心技术 (Core Techniques)
+### 2. 核心技术 (Core Techniques)
 
-### 2.1 可扩展的 DiT 架构 (Scalable Diffusion Transformer)
+#### 2.1 可扩展的 DiT 架构 (Scalable Diffusion Transformer)
 
 RDT 基于 **DiT (Diffusion Transformer)** 架构，将扩散过程与 Transformer 结合。
 
@@ -9143,7 +10964,7 @@ DiT 的核心思想是将扩散模型的去噪网络从 U-Net 替换为 Transfor
    - **双臂**: 拼接两个单臂 + 可选的躯干自由度 $\in \mathbb{R}^{14+}$
    - 通过 **Padding + Masking** 统一不同形态的动作维度。
 
-### 2.2 大规模预训练数据 (Pre-training Data)
+#### 2.2 大规模预训练数据 (Pre-training Data)
 
 RDT 在多个大规模机器人数据集上预训练：
 
@@ -9159,7 +10980,7 @@ RDT 在多个大规模机器人数据集上预训练：
 - **真机数据优先**: 真机数据占 70%，模拟数据占 30%。
 - **双臂数据增强**: 对双臂数据进行上采样，弥补其稀缺性。
 
-### 2.3 条件编码 (Condition Encoding)
+#### 2.3 条件编码 (Condition Encoding)
 
 RDT 使用**多模态条件**来指导动作生成：
 
@@ -9196,15 +11017,17 @@ class RDTConditionEncoder(nn.Module):
         return self.fusion(combined)
 ```
 
-### 2.4 扩散训练与采样 (Diffusion Training & Sampling)
+#### 2.4 扩散训练与采样 (Diffusion Training & Sampling)
 
 RDT 使用 **DDPM** 框架进行训练，但采用了几个优化:
 
 #### 2.4.1 训练目标
 
-```math
+
+$$
 \mathcal{L} = \mathbb{E}_{t, a_0, \epsilon} \left[ \| \epsilon - \epsilon_\theta(a_t, t, c) \|^2 \right]
-```
+$$
+
 
 其中:
 - $a_0$: 真实动作序列 (Action Chunk)
@@ -9245,7 +11068,7 @@ def sample(self, condition, num_steps=10):
     return x_t
 ```
 
-## 3. 模型变体 (Model Variants)
+### 3. 模型变体 (Model Variants)
 
 RDT 提供了不同规模的模型以适应不同的算力需求：
 
@@ -9258,16 +11081,15 @@ RDT 提供了不同规模的模型以适应不同的算力需求：
 - RDT-1B 在所有任务上都优于 RDT-170M，验证了机器人领域的 Scaling Law。
 - 性能提升呈现**对数线性**关系：参数量翻 10 倍，性能提升约 15-20%。
 
-## 4. 关键创新点 (Key Innovations)
+### 4. 关键创新点 (Key Innovations)
 
-### 4.1 统一的跨形态表示 (Unified Cross-Embodiment Representation)
+#### 4.1 统一的跨形态表示 (Unified Cross-Embodiment Representation)
 
 **问题**: 不同机器人的动作维度不同 (单臂 7D, 双臂 14D, 人形 30+D)。
 
 **解决方案**: **Padded Action Space**
 
 ```python
-## 统一到最大维度 (例如 32D)
 MAX_ACTION_DIM = 32
 
 def pad_action(action, embodiment_type):
@@ -9285,11 +11107,13 @@ def pad_action(action, embodiment_type):
 ```
 
 训练时，只对有效维度计算损失:
-```math
-\mathcal{L} = \mathbb{E} \left[ \| m \odot (\epsilon - \hat{\epsilon}) \|^2 \right]
-```
 
-### 4.2 双臂协调优化 (Bimanual Coordination)
+$$
+\mathcal{L} = \mathbb{E} \left[ \| m \odot (\epsilon - \hat{\epsilon}) \|^2 \right]
+$$
+
+
+#### 4.2 双臂协调优化 (Bimanual Coordination)
 
 双臂操作需要两只手**协同**工作（如折衣服、搬运大物体）。RDT 通过以下设计增强双臂协调:
 
@@ -9297,7 +11121,7 @@ def pad_action(action, embodiment_type):
 2. **Cross-Arm Attention**: 在 Transformer 中，左臂的 Token 可以 Attend 到右臂。
 3. **对称性数据增强**: 随机交换左右臂的输入/输出，增加数据多样性。
 
-### 4.3 高效微调 (Efficient Fine-tuning)
+#### 4.3 高效微调 (Efficient Fine-tuning)
 
 预训练的 RDT 可以通过 **LoRA** 高效适配到新任务:
 
@@ -9312,7 +11136,6 @@ config = LoraConfig(
 )
 
 rdt_lora = get_peft_model(rdt_model, config)
-## 可训练参数: ~10M (vs 1.2B 全量)
 ```
 
 **微调数据需求**:
@@ -9320,9 +11143,9 @@ rdt_lora = get_peft_model(rdt_model, config)
 - **100-500 条演示**: 高性能微调
 - **对比**: 从头训练 Diffusion Policy 需要 1000+ 条
 
-## 5. 实验结果 (Experimental Results)
+### 5. 实验结果 (Experimental Results)
 
-### 5.1 Benchmark 性能
+#### 5.1 Benchmark 性能
 
 | 任务 | ACT | Diffusion Policy | OpenVLA | RDT-1B |
 | :--- | :--- | :--- | :--- | :--- |
@@ -9331,14 +11154,14 @@ rdt_lora = get_peft_model(rdt_model, config)
 | **Pick & Place** | 82% | 85% | 87% | **93%** |
 | **长序列任务** | 35% | 42% | 40% | **58%** |
 
-### 5.2 泛化能力
+#### 5.2 泛化能力
 
 RDT 在**未见过的场景**上也展现出良好的泛化:
 - **新物体**: 成功率下降 < 10%
 - **新背景**: 成功率下降 < 5%
 - **新机器人**: 零样本迁移成功率 40%+
 
-## 6. 与其他方法的对比 (Comparison)
+### 6. 与其他方法的对比 (Comparison)
 
 | 方法 | 架构 | 参数量 | 预训练 | 双臂支持 | 推理速度 |
 | :--- | :--- | :--- | :--- | :--- | :--- |
@@ -9353,36 +11176,31 @@ RDT 在**未见过的场景**上也展现出良好的泛化:
 - **验证 Scaling Law**: 首个证明机器人领域 "bigger is better" 的模型。
 - **开源友好**: 提供完整的预训练权重和微调代码。
 
-## 7. 实战代码示例 (Code Example)
+### 7. 实战代码示例 (Code Example)
 
 ```python
 import torch
 from transformers import AutoModel
 
-## 加载预训练的 RDT-1B
 model = AutoModel.from_pretrained("thu-ml/RDT-1B")
 
-## 准备输入
 images = torch.randn(1, 2, 3, 224, 224)  # 双相机
 language = "fold the towel in half"
 proprio = torch.randn(1, 14)  # 双臂本体感知
 
-## 推理
 with torch.no_grad():
     condition = model.encode_condition(images, language, proprio)
     actions = model.sample(condition, num_steps=10)  # [1, chunk_size, 14]
 
 print(f"Generated actions shape: {actions.shape}")
-## 输出: Generated actions shape: torch.Size([1, 64, 14])
 ```
 
-### 7.1 LoRA 微调示例
+#### 7.1 LoRA 微调示例
 
 ```python
 from peft import LoraConfig, get_peft_model
 from torch.utils.data import DataLoader
 
-## 配置 LoRA
 lora_config = LoraConfig(
     r=16,
     lora_alpha=32,
@@ -9392,9 +11210,7 @@ lora_config = LoraConfig(
 
 model_lora = get_peft_model(model, lora_config)
 print(f"Trainable params: {model_lora.num_parameters(only_trainable=True):,}")
-## 输出: Trainable params: 12,582,912
 
-## 微调循环
 optimizer = torch.optim.AdamW(model_lora.parameters(), lr=1e-4)
 
 for batch in dataloader:
@@ -9409,7 +11225,7 @@ for batch in dataloader:
     optimizer.step()
 ```
 
-## 8. 面试常见问题 (Q&A)
+### 8. 面试常见问题 (Q&A)
 
 **Q1: RDT 和 Diffusion Policy 的核心区别是什么?**
 
@@ -9447,21 +11263,21 @@ A:
 - **π0 优势**: VLM 底座更强 (语义理解)，Flow Matching 比 DDPM 更快。
 - **选择建议**: 双臂任务选 RDT；需要强语义理解选 π0。
 
-## 9. 局限性与未来方向 (Limitations & Future)
+### 9. 局限性与未来方向 (Limitations & Future)
 
-### 9.1 当前局限
+#### 9.1 当前局限
 
 - **推理速度**: 10 步 DDIM 仍需 ~100ms，难以满足某些高频控制需求。
 - **数据需求**: 预训练需要大规模数据，新形态机器人可能缺乏数据。
 - **安全性**: 扩散模型的随机性可能导致不安全动作。
 
-### 9.2 未来方向
+#### 9.2 未来方向
 
 - **一致性蒸馏 (Consistency Distillation)**: 将去噪步数压缩到 1 步。
 - **人形机器人**: 扩展到 30+ 自由度的人形机器人。
 - **在线学习**: 结合 RL 进行实时适应。
 
-## 10. 参考资源 (References)
+### 10. 参考资源 (References)
 
 - **论文**: [RDT-1B: a Diffusion Foundation Model for Bimanual Manipulation](https://arxiv.org/abs/2410.07864)
 - **GitHub**: [thu-ml/RDT-1B](https://github.com/thu-ml/RoboticsDiffusionTransformer)
@@ -9471,9 +11287,10 @@ A:
 ---
 
 
-\newpage
 
-# 第25章 π0.5 解析
+---
+
+## 第26章 π0.5 解析
 
 
 > **发布时间**: 2025年4月
@@ -9517,9 +11334,9 @@ A:
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-## 1. 核心架构：统一模型 (The Unified Model)
+### 1. 核心架构：统一模型 (The Unified Model)
 
-### 1.1 "自言自语" 的大脑
+#### 1.1 "自言自语" 的大脑
 传统的机器人系统通常是分层的：
 - High-level Planner (LLM): "去把苹果拿起来" -> 输出坐标。
 - Low-level Controller (Policy): 根据坐标执行动作。
@@ -9531,35 +11348,35 @@ A:
 
 这种机制让模型具备了**可解释性**和**长期规划能力**。它不仅仅是在模仿动作，而是在理解"意图"。
 
-### 1.2 混合架构 (Hybrid Architecture)
+#### 1.2 混合架构 (Hybrid Architecture)
 为了平衡推理效率和控制精度，π0.5 采用了一种混合策略：
 - **Pre-training (预训练)**: 使用 **FAST Tokenizer** (离散化) 进行大规模预训练。离散 Token 训练速度快，容易扩展到海量数据。
 - **Inference (推理)**: 在最后一步使用 **Flow Matching** (连续化) 进行微调和生成。
 - **优势**: 既享受了 Tokenization 的训练效率，又保留了 Flow Matching 的控制平滑度。
 
-## 2. 训练数据的艺术 (Data Strategy)
+### 2. 训练数据的艺术 (Data Strategy)
 
 π0.5 的强大泛化能力来自于其独特的训练数据配比。
 
-### 2.1 异构数据 Co-training
+#### 2.1 异构数据 Co-training
 它不再仅仅依赖机器人数据 (Robot Data)，而是混合了三种数据源：
 1.  **Robot Data (OXE + 自研)**: 高质量，含动作标签。用于学习物理控制。
 2.  **Internet Videos (YouTube)**: 海量，无动作标签。用于学习"世界模型" (World Model) —— 知道物体被推会动，水倒出来会流。
 3.  **Simulation Data**: 完美标注，但有 Reality Gap。用于学习长序列逻辑。
 
-### 2.2 Cross-Embodiment Alignment (跨形态对齐)
+#### 2.2 Cross-Embodiment Alignment (跨形态对齐)
 π0.5 能够控制双臂机器人、移动底盘、甚至四足机器人。
 - **统一动作空间**: 将不同机器人的动作映射到一个共享的 **Latent Action Space**。
 - **效果**: 你在一个单臂机器人上训练的"抓杯子"技能，可以 Zero-shot 迁移到双臂机器人上 (只需微调少量参数)。
 
-## 3. 核心能力突破 (Capabilities)
+### 3. 核心能力突破 (Capabilities)
 
-### 3.1 开放世界泛化 (Open-World Generalization)
+#### 3.1 开放世界泛化 (Open-World Generalization)
 - **场景**: 把机器人扔到一个从未见过的厨房 (Airbnb)。
 - **表现**: π0.5 能够识别出从未见过的咖啡机型号，并根据通用的"按按钮"知识尝试操作，而不是因为纹理不同而死机。
 - **原理**: 这种能力来自于 VLM Backbone (3B -> 5B) 强大的视觉语义理解能力。
 
-### 3.2 长序列任务 (Long-Horizon Tasks)
+#### 3.2 长序列任务 (Long-Horizon Tasks)
 - **任务**: "把桌子收拾干净" (Bus the table)。
 - **分解**: 
     1. 识别所有垃圾。
@@ -9567,7 +11384,7 @@ A:
     3. 执行动作。
 - **提升**: 相比 π0，π0.5 在这种多阶段任务上的成功率提升了 40% 以上。
 
-## 4. 与 π0 和 π0.6 的对比
+### 4. 与 π0 和 π0.6 的对比
 
 | 特性 | π0 (Base) | π0.5 (Explorer) | π0.6 (Master) |
 | :--- | :--- | :--- | :--- |
@@ -9581,9 +11398,10 @@ A:
 
 ---
 
-\newpage
 
-# 第26章 π0.6 解析
+---
+
+## 第27章 π0.6 解析
 
 
 > **发布时间**: 2025年11月
@@ -9631,24 +11449,213 @@ A:
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-## 1. 核心架构升级 (Architecture Upgrades)
+### 1. 核心架构升级 (Architecture Upgrades)
 
-### 1.1 5B VLM Backbone
+#### 1.1 5B VLM Backbone
 - **规模**: 从 π0 的 3B 升级到 **5B 参数**。
 - **意义**: 更大的模型意味着更强的语义理解能力，能够处理更复杂的长指令 (e.g., "把那个红色的、有点破损的盒子折叠好放进箱子里")。
 
-### 1.2 Action Expert (动作专家)
-- **问题**: 通用大模型通常"手笨"，难以处理穿针引线、精密装配等微米级操作。
-- **解决**: π0.6 引入了一个专门的 **Action Expert** 模块。
-    - 这是一个独立于 VLM 主干的小型高频网络。
-    - 专门负责将 VLM 的高层意图转化为高频、高精度的电机控制信号。
-    - 类似于人类的小脑 (负责运动控制) 与大脑 (负责思考) 的分工。
+#### 1.2 Action Expert (动作专家)
 
-## 2. π*0.6 (Pi-Star): 强化学习的引入
+> **核心创新**: Action Expert 是 π0.6 最重要的架构升级，解决了 VLM "脑子聪明但手笨" 的问题。
+
+#### 1.2.1 为什么需要 Action Expert?
+
+| 问题 | 说明 | 解决方案 |
+| :--- | :--- | :--- |
+| **VLM 手笨** | 通用大模型难以处理穿针引线、精密装配等微米级操作 | 专门的动作生成模块 |
+| **频率不匹配** | VLM 推理慢 (1-5Hz)，精细控制需要高频 (50-100Hz) | 轻量级高频网络 |
+| **职责混乱** | 语义理解和动作生成耦合，难以优化 | 大脑 (VLM) + 小脑 (Expert) 分离 |
+| **灾难性遗忘** | 训练动作生成会破坏 VLM 原有知识 | 冻结 VLM，只训练 Expert |
+
+#### 1.2.2 架构设计
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    Action Expert 详细架构                        │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│   VLM Hidden States              Noisy Actions       Timestep   │
+│   [B, L, 2048]                   [B, H, 7]           t ∈ [0,1]  │
+│   (来自 5B VLM)                  (带噪声的动作)       (ODE 时间) │
+│        │                              │                  │      │
+│        ▼                              ▼                  ▼      │
+│   ┌─────────────┐              ┌─────────────┐    ┌──────────┐ │
+│   │ Context Proj│              │ Action In   │    │Time Embed│ │
+│   │ 2048 → 512  │              │ 7 → 512     │    │Sinusoidal│ │
+│   └──────┬──────┘              └──────┬──────┘    └────┬─────┘ │
+│          │                            │                 │       │
+│          │                            ▼                 │       │
+│          │                    + Position Embed          │       │
+│          │                      (可学习位置编码)          │       │
+│          │                            │                 │       │
+│          │                            ▼                 │       │
+│          │         ┌─────────────────────────────────┐  │       │
+│          │         │     Transformer Layer × 4       │  │       │
+│          │         │  ┌───────────────────────────┐  │  │       │
+│          └────────▶│  │ 1. Self-Attention (动作内部)│  │◀─┘       │
+│                    │  │    动作序列的时序依赖       │  │          │
+│                    │  ├───────────────────────────┤  │          │
+│                    │  │ 2. Cross-Attention (VLM融合)│  │          │
+│                    │  │    动作 query VLM 理解     │  │          │
+│                    │  ├───────────────────────────┤  │          │
+│                    │  │ 3. FFN + AdaLN             │  │          │
+│                    │  │    时间信息注入            │  │          │
+│                    │  └───────────────────────────┘  │          │
+│                    └───────────────┬─────────────────┘          │
+│                                    │                            │
+│                                    ▼                            │
+│                             ┌─────────────┐                     │
+│                             │ Action Out  │                     │
+│                             │ 512 → 7     │                     │
+│                             └──────┬──────┘                     │
+│                                    │                            │
+│                                    ▼                            │
+│                           Velocity Field v(a_t, t)              │
+│                           [B, H, 7] (预测速度场)                 │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+#### 1.2.3 核心组件
+
+**1. AdaLN (Adaptive Layer Norm) - 时间注入**
+
+```python
+class AdaLayerNorm(nn.Module):
+    """用时间嵌入动态调制 LayerNorm 的 scale 和 shift"""
+    
+    def forward(self, x, t_emb):
+        # 从时间嵌入生成动态参数
+        scale, shift = self.adaln_modulation(t_emb).chunk(2, dim=-1)
+        
+        # 标准 LayerNorm
+        x = self.norm(x)
+        
+        # 动态调制: y = x * (1 + scale) + shift
+        return x * (1 + scale.unsqueeze(1)) + shift.unsqueeze(1)
+```
+
+**为什么需要 AdaLN?**
+- Flow Matching 中，不同时间步 t 的噪声水平不同
+- 模型需要知道当前在 ODE 的哪个阶段
+- AdaLN 将时间信息注入到每一层，指导去噪过程
+
+**2. Cross-Attention - VLM 融合**
+
+```python
+x_norm = self.cross_attn_norm(x, t_emb)
+x = x + self.cross_attn(
+    query=x_norm,        # 动作 (需要生成什么动作?)
+    key=context,         # VLM (理解了什么?)
+    value=context        # VLM (要做什么?)
+)[0]
+```
+
+**3. 完整单层实现**
+
+```python
+class ActionExpertLayer(nn.Module):
+    """单层 Action Expert: Self-Attn → Cross-Attn → FFN"""
+    
+    def forward(self, x, context, t_emb):
+        # 1. Self-Attention: 学习动作序列内部的时序关系
+        x_norm = self.self_attn_norm(x, t_emb)
+        x = x + self.self_attn(x_norm, x_norm, x_norm)[0]
+        
+        # 2. Cross-Attention: 动作 query VLM context
+        x_norm = self.cross_attn_norm(x, t_emb)
+        x = x + self.cross_attn(x_norm, context, context)[0]
+        
+        # 3. FFN: 非线性变换
+        x_norm = self.ffn_norm(x, t_emb)
+        x = x + self.ffn(x_norm)
+        
+        return x
+```
+
+#### 1.2.4 配置参数
+
+| 参数 | 值 | 说明 |
+| :--- | :--- | :--- |
+| `num_layers` | 4 | Transformer 层数 (轻量级) |
+| `num_heads` | 8 | 注意力头数 |
+| `hidden_dim` | 512 | 隐藏层维度 |
+| `action_dim` | 7 | 动作维度 (xyz + rotation + gripper) |
+| `action_horizon` | 50 | Action Chunk 长度 |
+| **总参数量** | **~10M** | 相比 5B VLM 非常轻量 |
+
+#### 1.2.5 与 π0 的对比
+
+| 特性 | π0 (Flow Matching) | π0.6 (Action Expert) |
+| :--- | :--- | :--- |
+| **VLM 参数** | 3B (PaliGemma) | 5B (Gemma 3) |
+| **动作生成** | VLM 直接输出 | 独立 Action Expert |
+| **Expert 参数** | - | ~10M |
+| **精细控制** | 一般 | **强** (专门优化) |
+| **训练策略** | 联合训练 | 可冻结 VLM，只训练 Expert |
+| **推理速度** | 快 | 更快 (Expert 轻量) |
+
+#### 1.2.6 类比：大脑与小脑的分工
+
+```
+人类神经系统:
+┌─────────────────┐     ┌─────────────────┐
+│     大脑        │ ──▶ │     小脑        │ ──▶ 精细动作
+│  (理解/规划)    │     │  (运动协调)     │
+│  "我要抓那个杯子" │     │  "手指张开、移动、闭合" │
+└─────────────────┘     └─────────────────┘
+
+π0.6 架构:
+┌─────────────────┐     ┌─────────────────┐
+│   5B VLM        │ ──▶ │  Action Expert  │ ──▶ 精细动作
+│  (理解/规划)    │     │  (动作生成)     │
+│  语义理解       │     │  高频控制信号   │
+└─────────────────┘     └─────────────────┘
+```
+
+#### 1.2.7 面试常见问题
+
+**Q1: Action Expert 为什么要独立出来，而不是让 VLM 直接输出动作?**
+
+A: 四个原因:
+1. **职责分离**: VLM 负责理解，Expert 负责生成，各司其职
+2. **效率**: Expert 只有 ~10M 参数，可以高频迭代 ODE 步骤 (Flow Matching 需要多步)
+3. **防止遗忘**: 训练时可冻结 VLM，只训练 Expert，保护 VLM 原有知识
+4. **灵活性**: 可以替换不同的 VLM backbone，Expert 保持不变
+
+**Q2: AdaLN 和普通 LayerNorm 有什么区别?**
+
+A:
+```
+普通 LayerNorm:  y = (x - μ) / σ * γ + β      (γ, β 是固定可学习参数)
+AdaLN:          y = (x - μ) / σ * (1 + scale(t)) + shift(t)  (由时间 t 动态生成)
+```
+AdaLN 让模型知道当前在 ODE 的哪个阶段，不同阶段有不同的去噪行为。
+
+**Q3: Cross-Attention 中，谁是 Query，谁是 Key/Value?**
+
+A:
+- **Query**: 动作序列 (需要生成什么动作?)
+- **Key/Value**: VLM context (理解了什么内容?)
+
+动作 "询问" VLM "我应该做什么?"，VLM 回答 "你应该......"
+
+**Q4: 为什么 Action Expert 只有 4 层?**
+
+A: 
+- Flow Matching 需要多步 ODE 迭代 (通常 1-10 步)
+- 每步都要过一遍 Expert，太深会很慢
+- 4 层足够将 VLM 理解转化为动作，复杂推理由 VLM 完成
+
+> **详细代码实现**: 参见 [π0 模型代码深度解析](./pi0_code_analysis.md#5-action-expert-详解)
+
+---
+
+### 2. π*0.6 (Pi-Star): 强化学习的引入
 
 π0.6 的最强形态是 **π*0.6**，它是经过 RL 强化后的版本。
 
-### 2.1 Recap 算法 (The Recap Algorithm)
+#### 2.1 Recap 算法 (The Recap Algorithm)
 这是 π*0.6 的核心秘密武器。
 - **传统方法 (BC)**: 模仿人类示教。人类怎么做，机器人就怎么做。上限是人类水平。
 - **Recap (Offline RL)**:
@@ -9659,12 +11666,12 @@ A:
         3. 在下一次训练中，抑制导致失败的动作概率，奖励导致成功的动作。
     - **效果**: 就像人类练球一样，通过不断的试错和复盘，最终超越教练 (人类示教者)。
 
-### 2.2 性能飞跃 (Performance Leap)
+#### 2.2 性能飞跃 (Performance Leap)
 - **吞吐量 (Throughput)**: 在折叠衣物、制作咖啡等任务上，π*0.6 的操作速度是 π0.5 的 **2倍**。
 - **鲁棒性**: 失败率降低了 **50%** 以上。
 - **连续工作**: 展示了连续工作 24 小时无故障的能力 (Making Espresso all day)。
 
-## 3. 训练范式的转变 (Paradigm Shift)
+### 3. 训练范式的转变 (Paradigm Shift)
 
 从 **Supervised Learning (监督学习)** 转向 **Data-Driven Self-Improvement (数据驱动的自我进化)**。
 
@@ -9672,7 +11679,7 @@ A:
 2.  **Phase 2: Interaction**: 机器人在仿真或真机中大量运行，收集经验。
 3.  **Phase 3: Post-training (Recap)**: 使用 Offline RL 算法在收集的数据上进行强化学习，得到 π*0.6。
 
-## 4. 总结：Pi 系列进化史
+### 4. 总结：Pi 系列进化史
 
 | 模型 | 核心关键词 | 解决的问题 | 类似人类阶段 |
 | :--- | :--- | :--- | :--- |
@@ -9686,15 +11693,16 @@ A:
 
 ---
 
-\newpage
 
-# 第27章 Galaxea G0
+---
+
+## 第28章 Galaxea G0
 
 
 > [!IMPORTANT]
 > **Galaxea G0** 是**星海图智能（Galaxea）** 开发的**双系统 VLA 框架**，通过分离**规划（VLM）**和**执行（VLA）**，实现了更强的泛化能力和长时域任务处理能力。
 
-## 1. 概述
+### 1. 概述
 Galaxea G0 是一个创新的双系统架构，旨在解决传统单一 VLA 模型在**长时域移动操作**（long-horizon mobile manipulation）任务中的泛化瓶颈。
 
 -   **开发者**: 星海图智能（Galaxea）
@@ -9702,15 +11710,15 @@ Galaxea G0 是一个创新的双系统架构，旨在解决传统单一 VLA 模�
 -   **核心创新**: **双系统架构** - 将高层规划和低层执行解耦
 -   **数据集**: Galaxea Open-World Dataset（500+ 小时，50 个真实场景）
 
-## 2. 核心创新：双系统架构
+### 2. 核心创新：双系统架构
 
-### 2.1. 为什么需要双系统？
+#### 2.1. 为什么需要双系统？
 传统的单一 VLA 模型面临以下挑战：
 -   **长时域任务**: 需要同时处理高层规划（"先去客厅，再去厨房"）和低层控制（"抓取杯子"）。
 -   **泛化瓶颈**: 单一模型难以同时优化语义理解和精细操作。
 -   **数据效率**: 需要大量端到端数据，但长时域数据收集成本极高。
 
-### 2.2. G0 的解决方案：分层解耦
+#### 2.2. G0 的解决方案：分层解耦
 Galaxea G0 采用**两个独立但协作的模型**：
 
 ```
@@ -9730,64 +11738,64 @@ Galaxea G0 采用**两个独立但协作的模型**：
 -   **输出**: 连续动作（关节角度、底盘速度）
 -   **优势**: 专注于精确的感知-动作映射，不被长时域任务分心
 
-## 3. 训练策略：三阶段课程学习
+### 3. 训练策略：三阶段课程学习
 
 Galaxea G0 采用**三阶段渐进式训练**：
 
-### 阶段 1: 跨具身预训练 (Cross-Embodiment Pre-training)
+#### 阶段 1: 跨具身预训练 (Cross-Embodiment Pre-training)
 -   **数据**: Open X-Embodiment 等大规模多样化数据
 -   **目标**: 学习通用的世界知识和动作先验
 -   **效果**: 模型获得广泛的任务理解能力
 
-### 阶段 2: 单具身预训练 (Single-Embodiment Pre-training)
+#### 阶段 2: 单具身预训练 (Single-Embodiment Pre-training)
 -   **数据**: **Galaxea Open-World Dataset**（同一机器人 R1 Lite，500+ 小时）
 -   **目标**: 适配特定机器人的感知-动作能力
 -   **关键**: 这是 G0 性能提升的**核心阶段**
 
-### 阶段 3: 任务后训练 (Task-Specific Post-training)
+#### 阶段 3: 任务后训练 (Task-Specific Post-training)
 -   **数据**: 高质量的特定任务演示
 -   **目标**: 精调复杂技能（如精细抓取、灵巧操作）
 -   **效果**: 最终性能优化
 
-## 4. Galaxea Open-World Dataset
+### 4. Galaxea Open-World Dataset
 
 这是 G0 的**关键数据资产**：
 
-### 4.1. 数据规模
+#### 4.1. 数据规模
 -   **时长**: 500+ 小时
 -   **场景**: 50 个真实环境（住宅、厨房、零售、办公室）
 -   **任务**: 150+ 种任务（移动、抓取、放置、导航）
 -   **具身**: 统一使用 Galaxea R1 Lite 机器人
 
-### 4.2. 数据特点
+#### 4.2. 数据特点
 -   **真实世界**: 非模拟，真实的杂乱环境
 -   **子任务标注**: 精确的层级标注（任务 → 子任务 → 动作）
 -   **语言富集**: 每个子任务都有自然语言描述
 -   **开源**: 完全公开，可用于研究
 
-### 4.3. 与其他数据集的对比
+#### 4.3. 与其他数据集的对比
 | 数据集 | 时长 | 具身一致性 | 移动操作 | 子任务标注 |
 | :--- | :--- | :--- | :--- | :--- |
 | **Galaxea Open-World** | **500+ hr** | **单一机器人** | **✓** | **✓** |
 | Open X-Embodiment | 1000+ hr | 多机器人 | 部分 | ✗ |
 | BridgeData | 100+ hr | 单一机器人 | ✗ | ✗ |
 
-## 5. 性能表现
+### 5. 性能表现
 
 G0 模型在多个基准测试中表现出色：
 
-### 5.1. 桌面操作 (Tabletop Manipulation)
+#### 5.1. 桌面操作 (Tabletop Manipulation)
 -   **成功率**: 显著优于单一 VLA 基线
 -   **泛化**: 对新物体和新场景泛化能力强
 
-### 5.2. 少样本学习 (Few-Shot Learning)
+#### 5.2. 少样本学习 (Few-Shot Learning)
 -   **优势**: 单具身预训练阶段使模型能快速适应新任务
 
-### 5.3. 长时域移动操作 (Long-Horizon Mobile Manipulation)
+#### 5.3. 长时域移动操作 (Long-Horizon Mobile Manipulation)
 -   **核心优势**: 双系统架构在多步骤任务中表现突出
 -   **示例**: "从卧室拿遥控器到客厅，然后去厨房拿杯子" - 成功率 85%+
 
-## 6. 双系统 vs 单系统
+### 6. 双系统 vs 单系统
 | 特性 | **双系统 (G0)** | 单系统 (传统 VLA) |
 | :--- | :--- | :--- |
 | **长时域任务** | **强（分层规划）** | 弱（端到端困难）|
@@ -9796,7 +11804,7 @@ G0 模型在多个基准测试中表现出色：
 | **推理速度** | 稍慢（两阶段）| 快（一次推理）|
 | **可解释性** | **强（子任务可见）** | 弱（黑盒）|
 
-## 7. 面试要点
+### 7. 面试要点
 -   **双系统架构**: 记住 G0-VLM（规划）+ G0-VLA（执行）的分工。
 -   **三阶段训练**: 跨具身 → 单具身（关键）→ 任务后训练。
 -   **Galaxea Open-World Dataset**: 500+ 小时，50 场景，统一具身，子任务标注。
@@ -9805,15 +11813,16 @@ G0 模型在多个基准测试中表现出色：
     - vs Pi0: Pi0 是单一模型，G0 是双系统。
     - vs WALL-OSS: WALL-OSS 强调 Uni-CoT，G0 强调分层解耦。
 
-## 8. 参考资源
+### 8. 参考资源
 -   **论文**: [arXiv:2509.00576](https://arxiv.org/abs/2509.00576)
 -   **数据集**: [Hugging Face - Galaxea Open-World Dataset](https://huggingface.co/datasets/Galaxea/Open-World-Dataset)
 -   **GitHub**: [Galaxea G0](https://github.com/Galaxea/G0)
 -   **官网**: [星海图智能](https://galaxea-ai.com/)
 
-\newpage
 
-# 第28章 WALL-OSS
+---
+
+## 第29章 WALL-OSS
 
 
 > [!IMPORTANT]
@@ -9861,7 +11870,7 @@ G0 模型在多个基准测试中表现出色：
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-## 1. 概述
+### 1. 概述
 WALL-OSS 是一个端到端的具身基础模型，集成了**视觉、语言和动作 (VLA)**。与传统的将感知、规划和控制分离的流水线不同，WALL-OSS 将这些统一到一个可微分系统中。
 
 -   **开发者**: X Square Robot (自变量机器人)
@@ -9869,7 +11878,7 @@ WALL-OSS 是一个端到端的具身基础模型，集成了**视觉、语言和
 -   **核心目标**: 使机器人能够理解世界 (World)、推理任务 (Language) 并执行复杂动作 (Action)，以统一的方式。
 -   **开源**: [GitHub](https://github.com/X-Square-Robot/wall-x) | [Hugging Face](https://huggingface.co/X-Square-Robot)
 
-## 2. 核心创新：Uni-CoT
+### 2. 核心创新：Uni-CoT
 WALL-OSS 的突出特点是**统一跨层思维链 (Unified Cross-Level Chain-of-Thought, Uni-CoT)**。
 
 传统 LLM 中的 CoT (思维链) 专注于语义推理。WALL-OSS 将其扩展到物理领域：
@@ -9879,18 +11888,18 @@ WALL-OSS 的突出特点是**统一跨层思维链 (Unified Cross-Level Chain-of
 
 **为什么重要**: 这将 "大脑"（推理）和 "小脑"（控制）统一到一个连续链中，减少了计划与物理现实不匹配的 "模态解耦" 问题。
 
-## 3. 架构深度解析
+### 3. 架构深度解析
 WALL-OSS 采用**紧密耦合的多模态架构**，使用**专家混合 (Mixture-of-Experts, MoE)** 设计。
 
-### 3.1. 双输出头
+#### 3.1. 双输出头
 为了处理语义规划（离散）和运动控制（连续）的不同性质，WALL-OSS 使用两个专门的头：
 -   **离散动作头**: 用于高层决策和 token 生成。
 -   **连续动作头（流匹配）**: 用于高频、平滑的运动控制。使用**流匹配 (Flow Matching)** 扩散技术生成精确的轨迹。
 
-### 3.2. 任务路由 FFN 与共享注意力
+#### 3.2. 任务路由 FFN 与共享注意力
 模型使用共享注意力机制处理多模态输入（视觉 + 文本），但根据任务阶段（推理 vs. 执行）将信息路由到不同的前馈网络 (FFN)。这允许模型专业化，同时不丢失全局上下文。
 
-## 4. 训练策略
+### 4. 训练策略
 训练过程是一个**两阶段流水线**，旨在模仿人类学习：
 
 1.  **启发阶段 (Inspiration Stage，对齐)**:
@@ -9903,14 +11912,14 @@ WALL-OSS 采用**紧密耦合的多模态架构**，使用**专家混合 (Mixtur
     -   技术: 使用**流匹配 (Flow Matching)**（比标准扩散更高效的替代方案）生成平滑、物理上可行的轨迹。
     -   目标: 确保机器人 "知道如何平滑移动"。
 
-## 5. 数据策略：Wall-80k
+### 5. 数据策略：Wall-80k
 X Square Robot 发布了 **Wall-80k**，一个对训练 WALL-OSS 至关重要的高质量数据集。
 -   **规模**: 80,000+ 条轨迹。
 -   **格式**: 与 **LeRobot**（Hugging Face 标准）兼容。
 -   **组成**: 真实世界遥操作数据和高质量模拟数据的混合。
 -   **增强**: 使用生成视频技术增强训练数据，提高对新环境的泛化能力。
 
-## 6. 性能与对比
+### 6. 性能与对比
 | 特性 | WALL-OSS | RT-2 (Google) | OpenVLA |
 | :--- | :--- | :--- | :--- |
 | **架构** | MoE + 流匹配 | VLM + Token 化动作 | VLM + L1 回归 |
@@ -9919,32 +11928,35 @@ X Square Robot 发布了 **Wall-80k**，一个对训练 WALL-OSS 至关重要的
 | **开源** | **是（全栈）** | 否 | 是 |
 | **数据** | Wall-80k（公开）| 专有 | Open X-Embodiment |
 
-## 7. 面试要点
+### 7. 面试要点
 -   **Uni-CoT 是关键**: 记住 "统一跨层思维链"。它连接了高层规划和低层控制。
 -   **流匹配控制**: 使用流匹配（而不仅仅是简单的扩散或回归）生成平滑动作。
 -   **MoE 架构**: 使用专家混合处理视觉、语言和动作处理的不同需求。
 -   **数据为中心**: 强调 Wall-80k 数据集和与 LeRobot 生态系统的兼容性。
 
-\newpage
+
+---
 
 # 第七部分：评估与推理
 
 
-\newpage
+---
 
-# 第29章 Chain-of-Thought 推理
+## 第30章 Chain-of-Thought 推理
 
 
 > **核心概念**: 思维链 (Chain-of-Thought, CoT) 是一种让大模型在给出最终答案前，先生成**中间推理步骤**的技术。在 VLA 领域，CoT 使机器人能够进行复杂任务规划和可解释的决策。
 
-## 1. 为什么 VLA 需要 CoT? (Why CoT for VLA?)
+### 1. 为什么 VLA 需要 CoT? (Why CoT for VLA?)
 
-### 1.1 传统 VLA 的局限
+#### 1.1 传统 VLA 的局限
 
 传统 VLA 模型是**端到端**的：
-```math
+
+$$
 \text{Observation} + \text{Instruction} \xrightarrow{\text{VLA}} \text{Action}
-```
+$$
+
 
 **问题**:
 - **黑箱决策**: 无法理解机器人为什么这样做
@@ -9952,18 +11964,20 @@ X Square Robot 发布了 **Wall-80k**，一个对训练 WALL-OSS 至关重要的
 - **错误难以诊断**: 出错时不知道哪步推理有问题
 - **泛化能力弱**: 缺乏显式的推理能力
 
-### 1.2 CoT 的价值
+#### 1.2 CoT 的价值
 
-```math
+
+$$
 \text{Observation} + \text{Instruction} \xrightarrow{\text{VLA}} \underbrace{\text{Reasoning Steps}}_{\text{思维链}} \xrightarrow{} \text{Action}
-```
+$$
+
 
 - **可解释性**: 可以追溯机器人的"思考过程"
 - **复杂任务分解**: 自动将长任务拆解为子任务
 - **错误纠正**: 可以在推理过程中发现并纠正错误
 - **泛化增强**: 显式推理有助于处理新场景
 
-### 1.3 VLA 中的 CoT 应用案例
+#### 1.3 VLA 中的 CoT 应用案例
 
 | 模型 | CoT 类型 | 应用 |
 | :--- | :--- | :--- |
@@ -9972,9 +11986,9 @@ X Square Robot 发布了 **Wall-80k**，一个对训练 WALL-OSS 至关重要的
 | **Galaxea G0** | 分层 CoT | VLM 规划 + VLA 执行 |
 | **π0.5** | 隐式 CoT | Latent Thought (隐空间推理) |
 
-## 2. CoT 的基本形式 (CoT Formulations)
+### 2. CoT 的基本形式 (CoT Formulations)
 
-### 2.1 显式语言 CoT (Explicit Language CoT)
+#### 2.1 显式语言 CoT (Explicit Language CoT)
 
 机器人用自然语言描述推理过程。
 
@@ -9998,7 +12012,7 @@ CoT 输出:
 动作输出: [x, y, z, roll, pitch, yaw, gripper]
 ```
 
-### 2.2 结构化 CoT (Structured CoT)
+#### 2.2 结构化 CoT (Structured CoT)
 
 用结构化格式（JSON/XML）表示推理。
 
@@ -10025,7 +12039,7 @@ class StructuredCoT:
         return cot
 ```
 
-### 2.3 隐式 CoT (Implicit/Latent CoT)
+#### 2.3 隐式 CoT (Implicit/Latent CoT)
 
 在隐空间中进行推理，不生成显式文本。
 
@@ -10054,7 +12068,7 @@ class LatentCoT(nn.Module):
         return actions
 ```
 
-### 2.4 交错 CoT (Interleaved CoT)
+#### 2.4 交错 CoT (Interleaved CoT)
 
 推理和动作生成交错进行。
 
@@ -10084,9 +12098,9 @@ class InterleavedCoT:
         return action, reasoning
 ```
 
-## 3. VLA 中的 CoT 架构 (CoT Architectures in VLA)
+### 3. VLA 中的 CoT 架构 (CoT Architectures in VLA)
 
-### 3.1 WALL-OSS 的 Uni-CoT
+#### 3.1 WALL-OSS 的 Uni-CoT
 > **延伸阅读**: WALL-OSS 的 Unified CoT 架构对应 `theory/wall_oss.md` 中的 Uni-CoT + Dual Heads 设计。
 
 ```
@@ -10117,7 +12131,7 @@ class InterleavedCoT:
 └─────────────────────────────────────────────────────────────┘
 ```
 
-### 3.2 Galaxea G0 的分层 CoT
+#### 3.2 Galaxea G0 的分层 CoT
 > **延伸阅读**: Galaxea G0 的双系统结构与 `theory/galaxea_g0.md` 中的星海图模型详解一致。
 
 ```
@@ -10158,12 +12172,11 @@ class GalaxeaG0:
         return "Task completed"
 ```
 
-## 4. CoT 训练方法 (Training CoT for VLA)
+### 4. CoT 训练方法 (Training CoT for VLA)
 
-### 4.1 人工标注 CoT
+#### 4.1 人工标注 CoT
 
 ```python
-## 数据集示例
 cot_dataset = [
     {
         "observation": "kitchen_scene_001.jpg",
@@ -10179,7 +12192,7 @@ cot_dataset = [
 ]
 ```
 
-### 4.2 自动生成 CoT (使用 GPT-4V)
+#### 4.2 自动生成 CoT (使用 GPT-4V)
 
 ```python
 def generate_cot_labels(image, instruction, action_sequence):
@@ -10205,7 +12218,7 @@ def generate_cot_labels(image, instruction, action_sequence):
     return cot
 ```
 
-### 4.3 CoT 蒸馏 (CoT Distillation)
+#### 4.3 CoT 蒸馏 (CoT Distillation)
 
 从大模型蒸馏 CoT 能力到小模型。
 
@@ -10240,9 +12253,9 @@ class CoTDistillation:
         return cot_loss + action_loss
 ```
 
-## 5. CoT 的关键技术 (Key Techniques)
+### 5. CoT 的关键技术 (Key Techniques)
 
-### 5.1 Self-Consistency (自一致性)
+#### 5.1 Self-Consistency (自一致性)
 
 生成多个 CoT，投票选择最一致的结果。
 
@@ -10267,7 +12280,7 @@ def self_consistency_cot(model, obs, instruction, num_samples=5):
     return best_action
 ```
 
-### 5.2 Tree-of-Thoughts (思维树)
+#### 5.2 Tree-of-Thoughts (思维树)
 
 探索多个推理分支，选择最优路径。
 
@@ -10317,7 +12330,7 @@ class TreeOfThoughts:
         return float(score)
 ```
 
-### 5.3 ReAct (Reasoning + Acting)
+#### 5.3 ReAct (Reasoning + Acting)
 
 交替进行推理和行动。
 
@@ -10374,9 +12387,9 @@ class ReAct:
         return parse_action(action_str)
 ```
 
-## 6. CoT 的评估 (Evaluating CoT)
+### 6. CoT 的评估 (Evaluating CoT)
 
-### 6.1 推理质量评估
+#### 6.1 推理质量评估
 
 ```python
 def evaluate_cot_quality(cot, ground_truth_steps):
@@ -10396,7 +12409,7 @@ def evaluate_cot_quality(cot, ground_truth_steps):
     return metrics
 ```
 
-### 6.2 任务成功率对比
+#### 6.2 任务成功率对比
 
 | 方法 | CALVIN 成功率 | 长序列任务 | 新场景泛化 |
 | :--- | :--- | :--- | :--- |
@@ -10405,7 +12418,7 @@ def evaluate_cot_quality(cot, ground_truth_steps):
 | **结构化 CoT** | 75% | 58% | 60% |
 | **分层 CoT (G0)** | **78%** | **65%** | **62%** |
 
-## 7. 面试高频问题 (Q&A)
+### 7. 面试高频问题 (Q&A)
 
 **Q1: CoT 会增加推理延迟，如何解决?**
 
@@ -10446,7 +12459,7 @@ A:
 - **可解释**: 可以输出推理过程供人审查
 - **泛化**: CoT 帮助处理未见过的任务
 
-## 8. 代码示例：简单的 CoT VLA
+### 8. 代码示例：简单的 CoT VLA
 
 ```python
 class CoTVLA(nn.Module):
@@ -10485,7 +12498,6 @@ class CoTVLA(nn.Module):
         return action, cot_text
 
 
-## 训练
 model = CoTVLA(vlm_backbone)
 optimizer = torch.optim.AdamW(model.parameters(), lr=1e-4)
 
@@ -10503,7 +12515,7 @@ for batch in dataloader:
     optimizer.step()
 ```
 
-## 9. 参考资源 (References)
+### 9. 参考资源 (References)
 
 - **CoT Prompting**: [Chain-of-Thought Prompting Elicits Reasoning](https://arxiv.org/abs/2201.11903)
 - **ReAct**: [ReAct: Synergizing Reasoning and Acting](https://arxiv.org/abs/2210.03629)
@@ -10514,39 +12526,44 @@ for batch in dataloader:
 ---
 
 
-\newpage
 
-# 第30章 评估方法论
+---
+
+## 第31章 评估方法论
 
 
 在 VLA 领域，"怎么算做好了"是一个极其复杂的问题。与 CV/NLP 不同，机器人没有静态的 Test Set，必须在动态环境中评估。本章深入探讨评估的数学定义、基准细节及实战协议。
 
-## 1. 核心评估指标 (Core Metrics)
+### 1. 核心评估指标 (Core Metrics)
 
-### 1.1. Success Rate (SR) - 成功率
+#### 1.1. Success Rate (SR) - 成功率
 最直观但也最粗糙的指标。
-```math
+
+$$
 SR = \frac{1}{N} \sum_{i=1}^{N} \mathbb{I}(\text{task}_i \text{ completed})
-```
+$$
+
 - **定义**: $N$ 次尝试中成功的次数。
 - **置信区间 (Confidence Interval)**: 由于 $N$ 通常较小 (真机实验昂贵)，SR 的方差很大。建议使用 **Wald Interval** 或 **Wilson Score Interval** 报告误差范围。
   $$ \hat{p} \pm z \sqrt{\frac{\hat{p}(1-\hat{p})}{N}} $$
   (当 $N=20, \hat{p}=0.5$ 时，误差范围高达 $\pm 22\%$！所以真机评估至少要跑 50 次以上才具备统计意义。)
 
-### 1.2. Mean Steps to Success (MSS) - 平均成功步数
+#### 1.2. Mean Steps to Success (MSS) - 平均成功步数
 衡量效率的指标。
 - **定义**: 在成功的 Episodes 中，平均消耗的时间步数。
 - **意义**: 两个模型 SR 都是 100%，但模型 A 用了 5 秒，模型 B 用了 10 秒，显然 A 更好 (更流畅，犹豫更少)。
 
-### 1.3. Intervention Rate (IR) - 干预率
+#### 1.3. Intervention Rate (IR) - 干预率
 适用于长程任务 (Long-horizon) 或自动驾驶。
-```math
+
+$$
 IR = \frac{\text{Total Interventions}}{\text{Total Operation Time (hours)}} \quad \text{or} \quad \frac{\text{Interventions}}{\text{Total Steps}}
-```
+$$
+
 - **定义**: 人类专家为了防止灾难性后果 (碰撞、掉落) 而接管机器人的频率。
 - **MPI (Miles Per Intervention)**: 自动驾驶常用，VLA 中对应 **Steps Per Intervention (SPI)**。
 
-### 1.4. Executable Rate (ER) - 可执行率
+#### 1.4. Executable Rate (ER) - 可执行率
 衡量模型的**安全性**和**运动学一致性**。
 - **定义**: 模型生成的 Action 能够被底层控制器 (IK Solver / Impedance Controller) 执行的比例。
 - **常见失败**:
@@ -10556,9 +12573,9 @@ IR = \frac{\text{Total Interventions}}{\text{Total Operation Time (hours)}} \qua
 
 ---
 
-## 2. 仿真基准深度解析 (Simulation Benchmarks)
+### 2. 仿真基准深度解析 (Simulation Benchmarks)
 
-### 2.1. CALVIN (Computer Vision and Language for Interaction)
+#### 2.1. CALVIN (Computer Vision and Language for Interaction)
 > **核心能力**: **Long-horizon Language Following** (长序列语义跟随)。
 
 - **任务**: 连续完成 5 个指令 (e.g., "Open drawer" -> "Pick up block" -> "Place in drawer" -> "Turn on light" -> "Close drawer")。
@@ -10567,14 +12584,14 @@ IR = \frac{\text{Total Interventions}}{\text{Total Operation Time (hours)}} \qua
     - 5-step SR: 连续完成 5 个任务的概率 (极难，SOTA 通常 < 10%)。
 - **意义**: 测试 VLA 模型的**状态保持能力** (Stateful) 和**上下文理解能力**。
 
-### 2.2. SIMPLER (Sim-to-Real Evaluation)
+#### 2.2. SIMPLER (Sim-to-Real Evaluation)
 > **核心能力**: **Sim-to-Real Correlation** (仿真与真机的相关性)。
 
 - **痛点**: 以前我们在仿真里跑分高，真机一塌糊涂。
 - **创新**: SIMPLER 使用真实视频作为纹理，并精细调节物理参数，使得仿真中的排名 (Rank) 与真机排名高度正相关 (Pearson Correlation > 0.8)。
 - **用途**: 在上真机前，先用 SIMPLER 筛选 Checkpoint，节省昂贵的真机测试时间。
 
-### 2.3. ManiSkill 2/3
+#### 2.3. ManiSkill 2/3
 > **核心能力**: **Generalizable Manipulation** (泛化抓取)。
 
 - **引擎**: SAPIEN (PhysX)。
@@ -10583,11 +12600,11 @@ IR = \frac{\text{Total Interventions}}{\text{Total Operation Time (hours)}} \qua
 
 ---
 
-## 3. 真机评估协议 (Real World Protocols)
+### 3. 真机评估协议 (Real World Protocols)
 
 真机评估是“玄学”的重灾区。为了保证公平，必须遵循严格的协议。
 
-### 3.1. 变量控制 (Variable Control)
+#### 3.1. 变量控制 (Variable Control)
 - **物体位置**:
     - **Fixed**: 每次都放在完全相同的位置 (测试记忆能力)。
     - **Randomized**: 在 $10cm \times 10cm$ 的区域内随机放置 (测试泛化能力)。
@@ -10596,31 +12613,31 @@ IR = \frac{\text{Total Interventions}}{\text{Total Operation Time (hours)}} \qua
 - **光照**:
     - 固定光源 vs 自然光变化。
 
-### 3.2. A/B Testing
+#### 3.2. A/B Testing
 在真机上对比模型 A 和 B 时，必须交替进行 (Interleaved)，以消除环境随时间变化 (e.g., 电机发热、光照变化) 的影响。
 - **错误做法**: 上午测模型 A (50次)，下午测模型 B (50次)。
 - **正确做法**: A, B, A, B, ... 交替测试。
 
-### 3.3. Reset-Free Evaluation
+#### 3.3. Reset-Free Evaluation
 - **定义**: 机器人完成任务后，自动执行“复位”动作，或者下一个任务的初始状态就是上一个任务的结束状态。
 - **意义**: 实现 24/7 无人值守的自动化评估 (Scale Up Evaluation)。
 
 ---
 
-## 4. 模型选择策略 (Checkpoint Selection)
+### 4. 模型选择策略 (Checkpoint Selection)
 
 在 VLA 训练中，Loss 不代表一切。
 
-### 4.1. 为什么 Loss 失效？
+#### 4.1. 为什么 Loss 失效？
 - **多模态分布**: 比如面对障碍物，向左走和向右走都是对的。MSE Loss 会让模型走中间 (撞墙)，Loss 可能不降反升，但策略其实变好了 (学会了多模态)。
 - **过拟合**: 模型可能记住了训练集里的特定噪声。
 
-### 4.2. EMA (Exponential Moving Average)
+#### 4.2. EMA (Exponential Moving Average)
 - **策略**: 维护一份模型权重的滑动平均版本。
   $$ \theta_{EMA} = \alpha \theta_{EMA} + (1-\alpha) \theta_{current} $$
 - **作用**: 极大地稳定了评估时的表现，平滑了训练过程中的震荡。**所有 SOTA 模型 (RT-2, Octo, Pi0) 评估时用的都是 EMA 权重，而不是当前权重**。
 
-### 4.3. 最佳实践
+#### 4.3. 最佳实践
 1. 每 5000 Steps 保存一个 Checkpoint。
 2. 使用 SIMPLER 或 CALVIN 进行并行评估。
 3. 选取仿真 SR 最高的 Top-3 Checkpoint。
@@ -10629,9 +12646,9 @@ IR = \frac{\text{Total Interventions}}{\text{Total Operation Time (hours)}} \qua
 
 ---
 
-## 5. Evaluation Pipeline 构建 (Building Evaluation Pipeline)
+### 5. Evaluation Pipeline 构建 (Building Evaluation Pipeline)
 
-### 5.1 整体架构
+#### 5.1 整体架构
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -10650,7 +12667,7 @@ IR = \frac{\text{Total Interventions}}{\text{Total Operation Time (hours)}} \qua
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-### 5.2 关键组件
+#### 5.2 关键组件
 
 ```python
 class EvaluationPipeline:
@@ -10724,10 +12741,9 @@ class EvaluationPipeline:
         return (center - spread, center + spread)
 ```
 
-### 5.3 CI/CD 集成
+#### 5.3 CI/CD 集成
 
 ```yaml
-## .github/workflows/eval.yml
 name: Model Evaluation
 
 on:
@@ -10753,7 +12769,7 @@ jobs:
           path: results/
 ```
 
-### 5.4 失败案例分析
+#### 5.4 失败案例分析
 
 ```python
 class FailureAnalyzer:
@@ -10781,7 +12797,7 @@ class FailureAnalyzer:
 
 ---
 
-## 6. 面试高频考点
+### 6. 面试高频考点
 
 **Q: 具体讲讲怎么构建 Evaluation Pipeline 的？**
 A: 核心组件包括：
@@ -10806,53 +12822,49 @@ L3: **Semantic Extrapolation** (未见过的物体类别/新指令)。
 
 ---
 
-\newpage
 
-# 第31章 知识隔离
+---
+
+## 第32章 知识隔离
 
 
 > [!IMPORTANT]
 > **Knowledge Insulation** (知识绝缘) 是 **Physical Intelligence** 在 Pi0 模型中提出的一种训练技术，通过**梯度隔离**防止 VLM 在学习机器人控制时发生**灾难性遗忘 (Catastrophic Forgetting)**。
 
-## 1. 核心问题：灾难性遗忘
+### 1. 核心问题：灾难性遗忘
 当我们将预训练的 **Vision-Language Model (VLM)** 微调为 **Vision-Language-Action (VLA)** 模型时，会遇到一个致命问题：
 
-### 1.1. 什么是灾难性遗忘？
+#### 1.1. 什么是灾难性遗忘？
 -   **定义**: 神经网络在学习新任务时，会**覆盖**之前学到的知识。
 -   **在 VLA 中的表现**: 
     -   VLM 原本拥有强大的**语义理解**（从互联网规模数据学到）。
     -   当我们添加**连续动作专家**（Action Expert）进行机器人控制训练时，VLM 会**忘记**其原有的语言和视觉知识。
     -   结果：机器人学会了动作，但**丢失了泛化能力**和**指令理解能力**。
 
-### 1.2. 为什么会发生？
+#### 1.2. 为什么会发生？
 -   **分布不匹配**: 机器人数据（如 10Hz 的关节角度）与 VLM 预训练数据（互联网图文）分布差异巨大。
 -   **新参数的干扰**: 新增的**连续动作头**（未经训练）的梯度会**污染** VLM 主干的参数。
 -   **训练目标冲突**: VLM 原本优化语言 token，现在要同时优化连续动作，导致混乱。
 
-## 2. Knowledge Insulation 的解决方案
+### 2. Knowledge Insulation 的解决方案
 
-### 2.1. 核心思想：梯度隔离
+#### 2.1. 核心思想：梯度隔离
 **关键操作**: 在训练时**阻止**连续动作专家的梯度回传到 VLM 主干。
 
 ```python
-## 伪代码示例
 vlm_features = vlm_backbone(image, text)  # VLM 提取特征
 
-## 离散动作分支 (用于 VLM 更新)
 discrete_actions = vlm_head(vlm_features)
 loss_discrete = cross_entropy(discrete_actions, discrete_targets)
 
-## 连续动作分支 (梯度隔离)
 vlm_features_detached = vlm_features.detach()  # 🔑 关键！阻止梯度回传
 continuous_actions = action_expert(vlm_features_detached)
 loss_continuous = mse(continuous_actions, continuous_targets)
 
-## 只有离散损失会更新 VLM
 loss_discrete.backward()  # ✅ VLM 被更新
-## loss_continuous 不会影响 VLM  # ✅ VLM 被保护
 ```
 
-### 2.2. 双轨训练
+#### 2.2. 双轨训练
 Knowledge Insulation 采用**双轨并行**训练策略：
 
 | 分支 | 输入 | 输出 | 梯度去向 | 目的 |
@@ -10860,21 +12872,21 @@ Knowledge Insulation 采用**双轨并行**训练策略：
 | **离散动作分支** | VLM 特征 | 离散 Token（如 FAST） | **→ VLM 主干** | 保持 VLM 语义能力 |
 | **连续动作分支** | VLM 特征（detached） | 连续动作（关节角度）| **→ 仅动作专家** | 学习精确控制 |
 
-## 3. 为什么这样有效？
+### 3. 为什么这样有效？
 
-### 3.1. 保护 VLM 的语义知识
+#### 3.1. 保护 VLM 的语义知识
 -   **VLM 只看到离散 token**: 类似于它预训练时的语言 token，**分布对齐**。
 -   **避免未训练参数的污染**: 连续动作专家初始时是随机的，其梯度会破坏 VLM，隔离后就安全了。
 
-### 3.2. 连续动作专家独立学习
+#### 3.2. 连续动作专家独立学习
 -   **专家专注**: 动作专家只需学习从 VLM 特征到连续动作的映射，不用担心破坏 VLM。
 -   **高效收敛**: 可以使用**流匹配 (Flow Matching)** 或**扩散 (Diffusion)** 等复杂技术，训练更快。
 
-### 3.3. 推理时无缝切换
+#### 3.3. 推理时无缝切换
 -   **训练时**: VLM 学离散，专家学连续。
 -   **推理时**: VLM 提取特征 → 动作专家生成连续动作 → 机器人执行。
 
-## 4. 实验效果对比
+### 4. 实验效果对比
 | 指标 | **无 Knowledge Insulation** | **有 Knowledge Insulation** |
 | :--- | :--- | :--- |
 | **训练速度** | 慢（VLM 被破坏后需重新学习）| **快（VLM 稳定，专家快速收敛）** |
@@ -10882,7 +12894,7 @@ Knowledge Insulation 采用**双轨并行**训练策略：
 | **新任务泛化** | 弱（过拟合机器人数据）| **强（利用 VLM 的网络知识）** |
 | **指令跟随** | 退化（特别是多语言）| **保持（零样本多语言）** |
 
-## 5. 与其他技术的结合
+### 5. 与其他技术的结合
 Knowledge Insulation 通常与以下技术配合使用：
 
 -   **FAST Tokenizer**: 提供高效的离散动作 token（DCT + BPE）。
@@ -10890,41 +12902,42 @@ Knowledge Insulation 通常与以下技术配合使用：
 -   **Co-Training**: 同时训练 VLM 分支（语言理解）和动作分支（物理控制）。
 -   **LoRA**: 使用低秩适应进一步减少对 VLM 的修改。
 
-## 6. 面试要点
+### 6. 面试要点
 -   **核心**: 记住 "梯度隔离 (Gradient Isolation)" 和 ".detach()" 操作。
 -   **问题**: 灾难性遗忘 - VLM 学机器人控制时会忘记语义知识。
 -   **解决**: 双轨训练 - VLM 学离散 token，动作专家学连续控制，梯度不回传。
 -   **效果**: 保护 VLM 知识，加速训练，提升泛化。
 -   **来源**: Physical Intelligence 的 Pi0 模型首次系统性应用这一技术。
 
-## 7. 延伸：持续学习 (Continual Learning)
+### 7. 延伸：持续学习 (Continual Learning)
 Knowledge Insulation 是**持续学习**领域的一个应用案例：
 -   **持续学习目标**: 机器人能不断学习新技能，而不忘记旧技能。
 -   **Knowledge Insulation 的贡献**: 在 VLA 适配阶段就防止遗忘，为后续持续学习打好基础。
 -   **其他技术**: EWC (弹性权重巩固)、Memory Replay（经验回放）、Progressive Networks（渐进网络）。
 
-## 8. 参考资源
+### 8. 参考资源
 -   **Pi0 Technical Report**: [Physical Intelligence](https://physicalintelligence.company/)
 -   **相关论文**: VLM2VLA, ReVLA (视觉灾难性遗忘恢复)
 -   **代码示例**: 查看 Pi0 的 GitHub（如开源）中的梯度隔离实现
 
-\newpage
+
+---
 
 # 附录
 
 
-\newpage
+---
 
-# 附录A 数据格式与处理
+## 附录A 数据格式与处理
 
 
 在 VLA 模型的训练中，数据是核心壁垒。本章介绍机器人学习中通用的数据格式和处理策略。
 
-## 1. 主流数据格式对比 (Mainstream Data Formats)
+### 1. 主流数据格式对比 (Mainstream Data Formats)
 
 在 VLA 领域，数据格式的选择直接影响训练效率和生态兼容性。目前主要有三种主流格式：
 
-### 1.1. RLDS (Robotics Language-Image Datasets)
+#### 1.1. RLDS (Robotics Language-Image Datasets)
 - **生态位**: **Google / Open X-Embodiment 标准**。
 - **底层**: 基于 `TensorFlow Datasets (TFDS)` 和 `ProtoBuf`。
 - **物理格式**: **`.tfrecord`** 文件。
@@ -10935,7 +12948,7 @@ Knowledge Insulation 是**持续学习**领域的一个应用案例：
     - **流式读取**: 支持云端存储 (GCS) 的流式训练，无需下载整个数据集。
 - **适用场景**: 使用 TPU 训练，或基于 RT-1/RT-2/Octo 架构开发时。
 
-### 1.2. LeRobot Dataset (Hugging Face)
+#### 1.2. LeRobot Dataset (Hugging Face)
 - **生态位**: **PyTorch / Open Source 社区新标准**。
 - **底层**: 基于 `Parquet` (列式存储) 和 `Hugging Face Datasets` (Apache Arrow)。
 - **物理格式**: **`.parquet`** 文件。
@@ -10946,7 +12959,7 @@ Knowledge Insulation 是**持续学习**领域的一个应用案例：
     - **PyTorch 原生**: 数据加载器直接输出 PyTorch Tensors。
 - **适用场景**: 使用 GPU 训练，基于 OpenVLA/ACT/Diffusion Policy 开发新项目时。
 
-### 1.3. HDF5 / Robomimic
+#### 1.3. HDF5 / Robomimic
 - **生态位**: **传统科研 / 仿真数据标准**。
 - **底层**: `HDF5` (Hierarchical Data Format)。
 - **物理格式**: **`.hdf5`** 或 **`.h5`** 文件。
@@ -10958,7 +12971,7 @@ Knowledge Insulation 是**持续学习**领域的一个应用案例：
 - **缺点**: 不适合超大规模数据集 (TB 级别)，难以流式读取。
 - **适用场景**: 仿真环境 (MuJoCo) 数据收集，小规模真机实验。
 
-### 📊 格式对比表
+#### 📊 格式对比表
 
 | 特性 | RLDS | LeRobot | HDF5 |
 | :--- | :--- | :--- | :--- |
@@ -10971,13 +12984,12 @@ Knowledge Insulation 是**持续学习**领域的一个应用案例：
 
 ---
 
-## 2. 代码示例：如何加载数据
+### 2. 代码示例：如何加载数据
 
-### 2.1. Loading RLDS (TensorFlow)
+#### 2.1. Loading RLDS (TensorFlow)
 ```python
 import tensorflow_datasets as tfds
 
-## 加载 Open X-Embodiment 中的 fractal 数据
 ds = tfds.load('fractal20220817_data', split='train')
 
 for episode in ds.take(1):
@@ -10988,25 +13000,23 @@ for episode in ds.take(1):
         # 需要手动转换为 PyTorch Tensor 如果不用 TF
 ```
 
-### 2.2. Loading LeRobot (PyTorch)
+#### 2.2. Loading LeRobot (PyTorch)
 ```python
 from lerobot.common.datasets.lerobot_dataset import LeRobotDataset
 
-## 直接从 Hugging Face Hub 加载
 dataset = LeRobotDataset("lerobot/pusht")
 
-## 像标准的 PyTorch Dataset 一样使用
 item = dataset[0]
 image = item['observation.image']  # 自动归一化并转为 Tensor (C, H, W)
 action = item['action']
 print(f"Action shape: {action.shape}")
 ```
 
-## 3. PyTorch 完整训练流程 (PyTorch Training Pipeline)
+### 3. PyTorch 完整训练流程 (PyTorch Training Pipeline)
 
 在 PyTorch 中训练 VLA 模型，数据流通常遵循以下模式：`Dataset` -> `DataLoader` -> `Model`。
 
-### 3.1. 核心组件
+#### 3.1. 核心组件
 1.  **Dataset**: 负责读取磁盘上的数据 (RLDS/Parquet)，并进行预处理 (Resize, Normalize)。
 2.  **Processor/Transform**: 处理多模态数据。
     -   **Image**: `Resize((224, 224))`, `Normalize(mean, std)`.
@@ -11014,7 +13024,7 @@ print(f"Action shape: {action.shape}")
     -   **Action**: 归一化到 [-1, 1].
 3.  **DataLoader**: 将多个样本打包成 Batch。需要自定义 `collate_fn` 来处理变长序列 (Padding)。
 
-### 3.2. 代码实战 (Pseudo-code)
+#### 3.2. 代码实战 (Pseudo-code)
 
 ```python
 import torch
@@ -11051,7 +13061,6 @@ class VLADataset(Dataset):
             "labels": action # 动作作为监督信号
         }
 
-## 4. 训练循环
 dataset = VLADataset(path, processor)
 dataloader = DataLoader(dataset, batch_size=32, shuffle=True)
 model = OpenVLAModel.from_pretrained("openvla/openvla-7b")
@@ -11074,17 +13083,17 @@ for batch in dataloader:
     optimizer.step()
 ```
 
-### 3.3. 常见坑点 (Pitfalls)
+#### 3.3. 常见坑点 (Pitfalls)
 -   **数据类型**: 确保 Action 是 `float32` (对于 Diffusion/Regression) 或 `long` (对于 Tokenization)。
 -   **图像通道**: PyTorch 默认是 `(C, H, W)`，而有些读取库 (如 OpenCV/PIL) 可能是 `(H, W, C)`，务必检查 `permute`。
 -   **归一化**: 动作必须使用**统计数据 (Statistics)** 进行归一化 (e.g., min-max 或 mean-std)。**推理时必须使用相同的统计数据反归一化**。
 
 ---
 
-## 4. 数据加权与平衡 (Data Weighting & Balancing)
+### 4. 数据加权与平衡 (Data Weighting & Balancing)
 在训练通用 VLA 模型时，通常会混合多种数据集。不同数据集的质量、规模和难度差异巨大，直接混合训练效果往往不佳。
 
-### 常见策略
+#### 常见策略
 1. **按数据集规模加权**:
     - 简单的按比例采样，但这会导致大规模数据集 (通常是简单的重复任务) 主导训练，模型学不到复杂任务。
 2. **按任务难度加权**:
@@ -11092,15 +13101,15 @@ for batch in dataloader:
 3. **成功率过滤 (Success Filtering)**:
     - 仅使用 `is_terminal=True` 且 `reward=1` 的成功轨迹进行 BC (Behavior Cloning) 训练。
     - 对于失败轨迹，可以用于对比学习 (Contrastive Learning) 或作为负样本。
-### 4.4. 联合训练 (Co-training)
+#### 4.4. 联合训练 (Co-training)
 为了防止灾难性遗忘并保持通用泛化能力，VLA 训练通常会混合互联网数据。
 > 详见独立章节：**[联合训练详解 (Co-training)](./co_training.md)**
 
-## 4. 数据收集工具链 (Data Collection Tools)
+### 4. 数据收集工具链 (Data Collection Tools)
 
 高质量的数据源于高效的收集工具。
 
-### 4.1. 遥操作 (Teleoperation)
+#### 4.1. 遥操作 (Teleoperation)
 - **VR 头显 (Vision Pro / Quest 3)**:
     - **优势**: 沉浸感强，能收集 6-DoF 姿态，适合灵巧手操作。
     - **方案**: ALOHA (VR版), AnyTeleop。
@@ -11111,11 +13120,11 @@ for batch in dataloader:
     - **优势**: 成本低，易获取。
     - **劣势**: 难以控制高自由度 (如灵巧手)。
 
-### 4.2. 自动化收集 (Autonomous Collection)
+#### 4.2. 自动化收集 (Autonomous Collection)
 - **Scripted Policy**: 在仿真或简单场景中，用硬编码脚本生成数据。
 - **Self-Replay**: 机器人回放成功的轨迹，并添加噪声进行数据增强。
 
-## 5. 动作空间对齐 (Action Space Alignment)
+### 5. 动作空间对齐 (Action Space Alignment)
 不同机器人的动作空间不同 (e.g., 7-DoF 机械臂 vs 14-DoF 双臂 vs 四足)。
 
 - **归一化 (Normalization)**: 将所有动作维度归一化到 [-1, 1] 或 [0, 1]。
@@ -11125,7 +13134,7 @@ for batch in dataloader:
     - **Absolute Action**: 预测绝对坐标。精度更高，但依赖标定。
     - **趋势**: VLA 模型通常偏向于使用 **Delta Action (End-effector velocity/pose delta)**。
 
-## 7. 面试高频考点
+### 7. 面试高频考点
 1.  **数据格式**: RLDS 和 LeRobot 格式有什么区别？为什么 PyTorch 用户现在倾向于 LeRobot？(答: LeRobot 去除了 TF 依赖，原生支持 PyTorch，且基于 Parquet 存储效率高)
 2.  **数据流**: 在 VLA 训练中，Processor 的作用是什么？(答: 同时处理图像归一化和文本 Tokenization，确保多模态对齐)
 3.  **数据平衡**: 如果我有 1000 条简单的 Pick-Place 数据和 100 条复杂的 Assembly 数据，应该怎么训练？(答: 重采样 Assembly 数据，提高其在 Batch 中的比例)
@@ -11136,15 +13145,40 @@ for batch in dataloader:
 
 ---
 
-\newpage
 
-# 附录B 文献综述
+---
+
+## 附录B 文献综述
 
 
-本章节对 VLA 领域的核心文献进行**深度技术归纳**，适合面试前快速复习模型细节。
+> **快速索引**: [论文索引 (Paper Index)](./paper_index.md) - 多维度查找系统
+> **最后更新**: 2025-12-06
 
-## 1. Diffusion Policy (Chi et al., RSS 2023)
+本章节对 VLA 领域的核心文献进行**深度技术归纳**，按技术分类组织，适合面试前快速复习模型细节。
+
+---
+
+### 📑 快速导航
+
+| 分类方式 | 跳转链接 |
+|:---|:---|
+| 📊 [论文索引](./paper_index.md) | 多维度索引（技术/公司/时间） |
+| 🎯 [按技术分类](#按技术分类) | 动作生成/训练方法/架构/应用 |
+| 🏢 [按公司分类](#按公司机构分类) | Google/Physical Intelligence/ByteDance 等 |
+| 📅 [按时间线](#按时间线) | 2023/2024/2025 |
+| 📊 [总结对比表](#总结对比表) | 所有模型快速对比 |
+
+---
+
+### 🎯 按技术分类
+
+#### 1. 动作生成策略 (Action Generation)
+
+#### 1.1 Diffusion 系列
+
+##### Diffusion Policy (Chi et al., RSS 2023)
 > **论文**: [Diffusion Policy: Visuomotor Policy Learning via Action Diffusion](https://arxiv.org/abs/2303.04137)
+> **机构**: Columbia University
 
 - **核心问题**: 解决传统 MSE 回归在多模态分布 (Multimodal Distribution) 下的平均值问题 (即"撞墙"问题)。
 - **核心技术**: **DDPM (Denoising Diffusion Probabilistic Models)**。将动作生成建模为从高斯噪声中逐步去噪的过程。
@@ -11158,7 +13192,67 @@ for batch in dataloader:
     - **Conditioning**: 通过 **FiLM** 层将语言/图像特征注入 U-Net。
 - **Key Contribution**: 首次将生成式 AI (Generative AI) 引入机器人控制，完美解决了多解问题，并在高精度任务 (如穿针) 上表现卓越。
 
-## 2. RT-2 (Google DeepMind, 2023)
+##### RDT-1B (Liu et al., 2024)
+> **论文**: [RDT-1B: a Diffusion Foundation Model for Bimanual Manipulation](https://arxiv.org/abs/2410.07864)
+> **机构**: 清华大学 MARS Lab & ByteDance
+> **详细解析**: [rdt.md](./rdt.md)
+
+- **核心问题**: 证明机器人学习也存在 Scaling Law，大模型+大数据有效。
+- **核心技术**: **DiT (Diffusion Transformer)**，十亿参数级扩散模型。
+- **Backbone**: DiT 架构，可扩展到数十亿参数。
+- **Action Space**: **连续空间**。
+- **Key Contribution**: 首个十亿参数级机器人扩散基础模型，专为双臂操作优化，证明 Scaling Law 在机器人领域也成立。
+
+---
+
+#### 1.2 Flow Matching 系列
+
+##### π0 (Physical Intelligence, 2024)
+> **论文**: [π0: A Generalist Robot Foundation Model](https://www.physicalintelligence.company/blog/pi0)
+> **详细解析**: [pi0_flow_matching.md](./pi0_flow_matching.md) | [代码解析](./pi0_code_analysis.md)
+
+- **核心问题**: 解决 VLM 推理速度慢、难以进行高频 (50Hz) 连续控制的问题。
+- **核心技术**: **Flow Matching (流匹配)**。
+- **Backbone**: **PaliGemma 3B** (Google 的轻量级 VLM)。
+- **Action Space**: **连续空间 (Continuous)**。
+    - 不同于 RT-2/OpenVLA 的离散 Token，Pi0 输出连续动作，避免了量化误差。
+- **Inference**: 使用 ODE Solver (常微分方程求解器)。相比 Diffusion 的随机游走，Flow Matching 走直线，**1-10 步**即可生成高质量动作。
+- **Deep Dive**:
+    - **OT-CFM**: 基于 Optimal Transport 构造直线路径 (Wasserstein Geodesic)。
+    - **ODE Solver**: 训练时学习向量场，推理时使用 **Euler** (极速) 或 **Heun** (高精) 求解。
+- **Key Contribution**: 结合了 VLM 的语义理解和 Flow Matching 的高频精细控制，实现了"大脑"与"小脑"的统一。
+
+##### π0.5 (Physical Intelligence, 2025)
+> **核心定位**: **Open-World Explorer (开放世界探险家)**
+> **详细解析**: [pi0_5_dissection.md](./pi0_5_dissection.md)
+
+- **核心问题**: 解决机器人无法在从未见过的环境 (Open World) 中泛化的问题。
+- **核心技术**: **Unified Model with Hierarchical Inference**。
+- **架构创新**:
+    - **Latent Thought**: 模型内部生成隐式的高层语义子任务 (Semantic Subtask)，再解码为底层动作。
+    - **Hybrid Architecture**: 训练时使用 **FAST Tokenizer** (离散) 加速，推理时使用 **Flow Matching** (连续) 微调。
+- **Data Strategy**: **Co-training**。混合 Robot Data (高质量) + Internet Videos (世界模型) + Simulation Data (长序列逻辑)。
+- **Key Contribution**: 实现了跨形态 (Cross-Embodiment) 的 Zero-shot 迁移，并显著提升了长序列任务的成功率。
+
+##### π0.6 (Physical Intelligence, 2025)
+> **核心定位**: **Self-Improving Master (自我进化大师)**
+> **详细解析**: [pi0_6_dissection.md](./pi0_6_dissection.md)
+
+- **核心问题**: 如何超越人类示教的上限，实现极致的熟练度 (Proficiency)。
+- **核心技术**: **Recap Algorithm (Offline RL)**。
+- **架构升级**:
+    - **5B Backbone**: 更强的语义理解。
+    - **Action Expert**: 独立的高频动作生成模块 (小脑)，专门负责精细操作。
+- **Recap 机制**:
+    - 学习失败轨迹 (Failure Cases)，通过 Offline RL 抑制错误动作，奖励成功动作。
+    - 实现了 **Data-Driven Self-Improvement**。
+- **Key Contribution**: 证明了机器人可以通过自我复盘 (Recap) 在操作速度和鲁棒性上超越人类专家。
+
+---
+
+#### 1.3 Tokenization 系列
+
+##### RT-2 (Google DeepMind, 2023)
 > **论文**: [RT-2: Vision-Language-Action Models Transfer Web Knowledge to Robotic Control](https://arxiv.org/abs/2307.15818)
 
 - **核心问题**: 如何让机器人拥有互联网级别的语义理解能力 (泛化到未见过的物体/指令)。
@@ -11170,7 +13264,7 @@ for batch in dataloader:
 - **Training**: **Co-fine-tuning** (混合微调)。同时训练互联网 VQA 数据 (保持语义) 和机器人操作数据 (学习控制)。
 - **Key Contribution**: 涌现出 **Semantic Reasoning** (语义推理) 能力。例如听到 "pick up the extinct animal" 能抓起恐龙玩具，尽管训练数据里只有 "pick up dinosaur"。
 
-## 3. OpenVLA (Stanford, 2024)
+##### OpenVLA (Stanford, 2024)
 > **论文**: [OpenVLA: An Open-Source Vision-Language-Action Model](https://arxiv.org/abs/2406.09246)
 
 - **核心问题**: 复现 RT-2 的能力，但完全开源且高效。
@@ -11185,46 +13279,9 @@ for batch in dataloader:
 - **Optimization**: 支持 **4-bit Quantization (QLoRA)**，使得 7B 模型可以在消费级显卡 (如 RTX 3090/4090) 上运行。
 - **Key Contribution**: 提供了第一个性能接近闭源 SOTA 的开源 VLA 模型，并构建了完整的开源训练/部署生态。
 
-## 4. Pi0 (Physical Intelligence, 2024)
-> **论文**: [π0: A Generalist Robot Foundation Model](https://www.physicalintelligence.company/blog/pi0)
-
-- **核心问题**: 解决 VLM 推理速度慢、难以进行高频 (50Hz) 连续控制的问题。
-- **核心技术**: **Flow Matching (流匹配)**。
-- **Backbone**: **PaliGemma 3B** (Google 的轻量级 VLM)。
-- **Action Space**: **连续空间 (Continuous)**。
-    - 不同于 RT-2/OpenVLA 的离散 Token，Pi0 输出连续动作，避免了量化误差。
-- **Inference**: 使用 ODE Solver (常微分方程求解器)。相比 Diffusion 的随机游走，Flow Matching 走直线，**1-10 步**即可生成高质量动作。
-- **Deep Dive**:
-    - **OT-CFM**: 基于 Optimal Transport 构造直线路径 (Wasserstein Geodesic)。
-    - **ODE Solver**: 训练时学习向量场，推理时使用 **Euler** (极速) 或 **Heun** (高精) 求解。
-- **Key Contribution**: 结合了 VLM 的语义理解和 Flow Matching 的高频精细控制，实现了"大脑"与"小脑"的统一。
-
-## 5. Pi0.5 (Physical Intelligence, 2025)
-> **核心定位**: **Open-World Explorer (开放世界探险家)**
-
-- **核心问题**: 解决机器人无法在从未见过的环境 (Open World) 中泛化的问题。
-- **核心技术**: **Unified Model with Hierarchical Inference**。
-- **架构创新**:
-    - **Latent Thought**: 模型内部生成隐式的高层语义子任务 (Semantic Subtask)，再解码为底层动作。
-    - **Hybrid Architecture**: 训练时使用 **FAST Tokenizer** (离散) 加速，推理时使用 **Flow Matching** (连续) 微调。
-- **Data Strategy**: **Co-training**。混合 Robot Data (高质量) + Internet Videos (世界模型) + Simulation Data (长序列逻辑)。
-- **Key Contribution**: 实现了跨形态 (Cross-Embodiment) 的 Zero-shot 迁移，并显著提升了长序列任务的成功率。
-
-## 6. Pi0.6 (Physical Intelligence, 2025)
-> **核心定位**: **Self-Improving Master (自我进化大师)**
-
-- **核心问题**: 如何超越人类示教的上限，实现极致的熟练度 (Proficiency)。
-- **核心技术**: **Recap Algorithm (Offline RL)**。
-- **架构升级**:
-    - **5B Backbone**: 更强的语义理解。
-    - **Action Expert**: 独立的高频动作生成模块 (小脑)，专门负责精细操作。
-- **Recap 机制**:
-    - 学习失败轨迹 (Failure Cases)，通过 Offline RL 抑制错误动作，奖励成功动作。
-    - 实现了 **Data-Driven Self-Improvement**。
-- **Key Contribution**: 证明了机器人可以通过自我复盘 (Recap) 在操作速度和鲁棒性上超越人类专家。
-
-## 8. FAST (Physical Intelligence, 2025)
+##### FAST (Physical Intelligence, 2025)
 > **论文**: [FAST: Efficient Action Tokenization for VLA Models (arXiv:2501.09747)](https://arxiv.org/abs/2501.09747)
+> **详细解析**: [fast.md](./fast.md)
 
 - **核心问题**: 传统动作 token 化方法（简单分桶）无法处理高频、灵巧的机器人操作。
 - **核心技术**: **Frequency-space Action Sequence Tokenization (DCT + BPE)**。
@@ -11235,8 +13292,159 @@ for batch in dataloader:
 - **FAST+**: 在 100 万+真实机器人数据上预训练的通用 tokenizer，跨平台泛化。
 - **Key Contribution**: 使 OpenVLA 训练速度提升 **5 倍**，同时保持高频动作精度。
 
-## 9. Galaxea G0 (星海图智能, 2024)
+---
+
+#### 1.4 其他动作生成方法
+
+##### ACT (Zeng et al., 2023)
+> **论文**: [ACT: Learning Fine-Grained Bimanual Manipulation with Low-Cost Hardware](https://arxiv.org/abs/2304.13705)
+> **详细解析**: [act.md](./act.md)
+
+- **核心问题**: 如何用低成本硬件实现精细双臂操作。
+- **核心技术**: **CVAE (Conditional Variational Autoencoder)** + **Action Chunking**。
+- **Backbone**: CNN-based encoder-decoder。
+- **Action Space**: **连续空间**。
+- **Key Contribution**: ALOHA 系统的核心算法，证明了 CVAE + 动作分块的有效性。
+
+---
+
+#### 1.5 Latent Action 系列 (潜在动作学习) 🆕
+
+> **核心思想**: 从视频中学习"任务中心"的潜在动作表示，实现跨机器人泛化
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│              传统 VLA vs Latent Action VLA                       │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│   传统 VLA:                                                      │
+│   Image + Language ──→ Specific Robot Action (7-DoF)            │
+│                        └── 绑定特定机器人                        │
+│                                                                 │
+│   Latent Action VLA:                                            │
+│   Video ──→ Latent Action ──→ Decoder ──→ Any Robot Action      │
+│             (任务中心表示)      (可插拔)    (不同机器人)          │
+│             └── 机器人无关 ─────┘                                │
+│                                                                 │
+│   优势:                                                         │
+│   • 可利用海量互联网视频                                         │
+│   • 潜在动作空间更易泛化                                         │
+│   • 换机器人只需换 Decoder                                       │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+##### UniVLA (IJRR 2024)
+> **论文**: [UniVLA: Learning to Act Anywhere with Task-centric Latent Actions](https://journals.sagepub.com/doi/full/10.1177/02783649241227559)
+> **arXiv**: [2505.06111](https://arxiv.org/abs/2505.06111)
+
+- **核心问题**: 如何利用视频数据训练跨机器人泛化的 VLA 策略。
+- **核心技术**: **Task-centric Latent Actions (任务中心潜在动作)**。
+- **架构设计**:
+    - **Video Encoder**: 从视频序列提取视觉特征
+    - **Latent Action Model**: 学习与机器人无关的"任务意图"表示
+    - **Robot-specific Decoder**: 将潜在动作解码为具体机器人动作
+- **训练数据**: 互联网视频 + 机器人演示数据
+- **Key Contribution**: 
+    - 首次在 IJRR 顶刊发表的潜在动作 VLA 框架
+    - 在操作和导航任务上实现 SOTA
+    - 有效的 Sim-to-Real 迁移
+
+##### EvoVLA (2025)
+> **论文**: [EvoVLA: Self-Evolving Vision-Language-Action Model](https://arxiv.org/abs/2511.16166)
+
+- **核心问题**: 解决长时程任务中的"阶段幻觉"问题（模型报告进度 > 实际进度）。
+- **核心技术**: **自进化框架 (Self-Evolving Framework)**。
+- **三大创新**:
+    - **SAR (Stage-Aligned Reward)**: 阶段对齐奖励，三元对比学习
+    - **POE (Pose-Based Object Exploration)**: 基于姿态的探索（非原始像素）
+    - **Long-Horizon Memory**: 选择性上下文保留 + 门控融合
+- **性能**: Discoverse-L 基准上平均成功率 **69.2%** (+10.2%)，真机 **54.6%** (+11%)
+- **Key Contribution**: 解决长时程操作中的阶段幻觉，自监督持续进化
+
+##### MemoryVLA (2025)
+> **论文**: [MemoryVLA: Memory-Augmented VLA for Long-Horizon Manipulation](https://arxiv.org/abs/2508.19236)
+
+- **核心问题**: 长时程任务中的非马尔可夫性问题。
+- **核心技术**: **感知-认知记忆系统 (Perception-Cognition Memory)**。
+- **架构设计**:
+    - **工作记忆**: 短期任务上下文
+    - **感知记忆**: 历史视觉观测
+    - **认知记忆**: 高层任务语义
+- **Key Contribution**: 通过显式记忆机制处理长序列依赖
+
+##### 其他 2025 相关工作
+
+| 模型 | 核心创新 | 论文链接 |
+|:---|:---|:---|
+| **TTF-VLA** | Temporal Token Fusion，训练无关的多帧融合 | [arXiv:2508.19257](https://arxiv.org/abs/2508.19257) |
+| **OmniVLA** | 多传感器感知（红外/雷达/麦克风） | [arXiv:2511.01210](https://arxiv.org/abs/2511.01210) |
+| **MergeVLA** | 跨技能模型合并，知识迁移 | [arXiv:2511.18810](https://arxiv.org/abs/2511.18810) |
+| **ContextVLA** | 多帧上下文压缩 | 2025 |
+| **ReconVLA** | 隐式视觉注意力引导 | [arXiv:2508.10333](https://arxiv.org/abs/2508.10333) |
+
+---
+
+#### 2. 训练方法 (Training Methods)
+
+#### 2.1 BC (Behavior Cloning)
+
+##### RT-2 - Co-fine-tuning
+- 同时训练互联网 VQA 数据和机器人操作数据
+- 保持 VLM 的语义能力，同时学习控制
+
+##### OpenVLA - LoRA Fine-tuning
+- 参数高效微调，降低计算成本
+- 支持 4-bit 量化部署
+
+##### π0 - Flow Matching Training
+- 端到端训练，学习连续动作分布
+- 结合 VLM 预训练和 Flow Matching
+
+---
+
+#### 2.2 RL (Reinforcement Learning)
+
+##### GR-RL (ByteDance Seed, 2025)
+> **详细解析**: [gr_rl_dissection.md](./gr_rl_dissection.md)
+
+- **核心技术**: **Offline RL + Online RL** 三阶段训练
+- **阶段 1**: Critic 筛选高质量演示数据
+- **阶段 2**: 形态对称性增强（数据翻倍）
+- **阶段 3**: 在线 RL 潜在空间探索（对齐训练-部署差异）
+- **Key Contribution**: 首个完成真机穿鞋带任务的 VLA，78% 成功率
+
+##### π*0.6 Recap (Physical Intelligence, 2025)
+> **详细解析**: [pi0_6_dissection.md](./pi0_6_dissection.md#recap)
+
+- **核心技术**: **Recap Algorithm (Offline RL)**
+- **机制**: 从成功和失败轨迹中学习，抑制错误动作，奖励成功动作
+- **Key Contribution**: 超越人类示教水平，实现自我进化
+
+---
+
+#### 2.3 混合训练方法
+
+##### π0.5 - Co-training
+- **数据混合**: Robot Data (高质量) + Internet Videos (世界模型) + Simulation Data (长序列逻辑)
+- **效果**: 提升跨形态泛化和长序列任务成功率
+
+---
+
+#### 3. 架构创新 (Architecture Innovations)
+
+#### 3.1 单模型架构
+
+##### RT-2 / OpenVLA / π0
+- VLM Backbone + Action Head
+- 统一架构，端到端训练
+
+---
+
+#### 3.2 双系统架构
+
+##### Galaxea G0 (星海图智能, 2024)
 > **论文**: [Galaxea Open-World Dataset and G0 Dual-System VLA Model (arXiv:2509.00576)](https://arxiv.org/abs/2509.00576)
+> **详细解析**: [galaxea_g0.md](./galaxea_g0.md)
 
 - **核心问题**: 单一 VLA 模型难以同时处理长时域任务的高层规划和低层控制。
 - **核心技术**: **Dual-System Architecture (双系统架构)**。
@@ -11250,7 +13458,135 @@ for batch in dataloader:
 - **Galaxea Open-World Dataset**: 500+ 小时，50 个真实场景，统一具身（R1 Lite），精确子任务标注。
 - **Key Contribution**: 在长时域移动操作任务上表现突出，泛化能力强，可解释性高（子任务可见）。
 
-## 10. Knowledge Insulation (Physical Intelligence, 2024)
+##### π0.6 - VLM + Action Expert
+- **VLM (大脑)**: 5B 参数，负责语义理解
+- **Action Expert (小脑)**: 轻量级 Transformer，负责高频精细控制
+- **详细解析**: [pi0_6_dissection.md](./pi0_6_dissection.md#action-expert)
+
+---
+
+#### 3.3 层级架构
+
+##### WALL-OSS (X², 2025)
+> **详细解析**: [wall_oss.md](./wall_oss.md)
+
+- **核心技术**: **Uni-CoT (统一思维链)** + **Dual Heads (Flow + FAST)**
+- **架构**: 统一模型内部生成 CoT，双头输出连续和离散动作
+- **Key Contribution**: 边想边动，长序列推理能力强
+
+---
+
+#### 4. 应用场景 (Application Domains)
+
+#### 4.1 操作任务 (Manipulation)
+- RT-2, OpenVLA, π0, GR-RL, ACT
+
+#### 4.2 导航任务 (Navigation)
+- (待补充)
+
+#### 4.3 灵巧手 (Dexterous Manipulation)
+- GR-RL (穿鞋带), RDT-1B (双臂操作)
+
+---
+
+### 🏢 按公司/机构分类
+
+#### Google DeepMind
+- **RT-2** (2023)
+- **RT-1** (2022)
+
+#### Physical Intelligence
+- **π0** (2024)
+- **π0.5** (2025)
+- **π0.6** (2025)
+- **FAST** (2025)
+- **Knowledge Insulation** (2024)
+
+#### ByteDance Seed
+- **GR-RL** (2025)
+- **RDT-1B** (2024) (与清华合作)
+
+#### Stanford
+- **OpenVLA** (2024)
+- **ACT** (2023)
+
+#### X² (自变量)
+- **WALL-OSS** (2025)
+
+#### Galaxea AI
+- **G0** (2024)
+
+---
+
+### 📅 按时间线
+
+#### 2023（早期探索）
+
+#### Diffusion Policy (RSS 2023)
+- 首次将生成式 AI 引入机器人控制
+- [详细内容](#diffusion-policy-chi-et-al-rss-2023---a级)
+
+#### RT-2 (ICRA 2023)
+- VLA 范式确立
+- [详细内容](#rt-2-google-deepmind-2023---s级)
+
+#### ACT (2023)
+- CVAE + 动作分块
+- [详细内容](#act-zeng-et-al-2023---a级)
+
+---
+
+#### 2024（爆发期）
+
+#### OpenVLA (2024.06)
+- 首个开源 SOTA VLA
+- [详细内容](#openvla-stanford-2024---s级)
+
+#### π0 (2024.10)
+- Flow Matching + VLM
+- [深度解析](./pi0_flow_matching.md)
+
+#### RDT-1B (2024.10)
+- 十亿参数扩散模型
+- [详细解析](./rdt.md)
+
+#### Galaxea G0 (2024.09)
+- 双系统架构
+- [详细解析](./galaxea_g0.md)
+
+#### Knowledge Insulation (2024)
+- 梯度隔离防遗忘
+- [详细内容](#knowledge-insulation-physical-intelligence-2024---b级)
+
+---
+
+#### 2025（最新进展）
+
+#### π0.5 (2025.01)
+- 开放世界泛化
+- [深度解析](./pi0_5_dissection.md)
+
+#### π0.6 (2025.11)
+- 自我进化 (Recap)
+- [深度解析](./pi0_6_dissection.md)
+
+#### FAST (2025.01)
+- DCT + BPE Tokenization
+- [详细解析](./fast.md)
+
+#### GR-RL (2025)
+- 三阶段 RL 训练
+- [深度解析](./gr_rl_dissection.md)
+
+#### WALL-OSS (2025)
+- Uni-CoT + 双头架构
+- [详细解析](./wall_oss.md)
+
+---
+
+### 🔧 训练技术 (Training Techniques)
+
+#### Knowledge Insulation (Physical Intelligence, 2024)
 > **技术**: Pi0 的梯度隔离训练方法
 
 - **核心问题**: VLA 微调时，新增的连续动作专家会破坏 VLM 的预训练语义知识（灾难性遗忘）。
@@ -11261,23 +13597,43 @@ for batch in dataloader:
 - **效果**: VLM 的语义知识被"绝缘"保护，同时动作专家独立学习连续控制。
 - **Key Contribution**: 防止灾难性遗忘，加速训练，提升泛化能力，为持续学习打好基础。
 
-## 总结对比表 (Summary Table)
+---
 
-| 特性 | Diffusion Policy | RT-2 | OpenVLA | Pi0 | WALL-OSS | Galaxea G0 | FAST |\n| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |\n| **核心机制** | Denoising | Token Prediction | Token + LoRA | Flow Matching | **Uni-CoT + Dual Heads** | **Dual-System** | **DCT + BPE** |\n| **动作空间** | 连续 | 离散 (256) | 离散 (256) | 连续 | 连续 + 离散 | 连续 | **离散 (极度压缩)** |\n| **Backbone** | CNN/ViT | PaLI-X (55B) | Llama 2 (7B) | PaliGemma (3B) | VLM | **VLM + VLA** | **Tokenizer** |\n| **推理速度** | 慢 (100 步) | 极慢 | 中等 | 快 (1-10 步) | 快/精 | 稍慢 (两阶段) | **极快 (5x)** |\n| **语义能力** | 弱 | 极强 | 强 | 强 | **强 (CoT)** | **强 (分离 VLM)** | N/A |\n| **适用场景** | 精细操作 | 高层规划 | 通用操作 | 通用控制 | 长序列推理 | **长时域移动操作** | **高频 Token 化** |\n| **核心优势** | 多模态分布 | 语义涌现 | 开源生态 | 高效推理 | **统一思维链** | **分层解耦** | **压缩效率** |
+### 📊 总结对比表 (Summary Table)
+
+| 特性 | Diffusion Policy | RT-2 | OpenVLA | π0 | π0.6 | GR-RL | WALL-OSS | Galaxea G0 | FAST |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **核心机制** | Denoising | Token Prediction | Token + LoRA | Flow Matching | Flow + Recap | **MoT + RL** | **Uni-CoT + Dual Heads** | **Dual-System** | **DCT + BPE** |
+| **动作空间** | 连续 | 离散 (256) | 离散 (256) | 连续 | 连续 | 连续 | 连续 + 离散 | 连续 | **离散 (压缩)** |
+| **Backbone** | CNN/ViT | PaLI-X (55B) | Llama 2 (7B) | PaliGemma (3B) | 5B VLM | **MoT (5B)** | VLM | **VLM + VLA** | **Tokenizer** |
+| **推理速度** | 慢 (100 步) | 极慢 | 中等 | 快 (1-10 步) | 快 (1-10 步) | 中等 | 快/精 | 稍慢 (两阶段) | **极快 (5x)** |
+| **语义能力** | 弱 | 极强 | 强 | 强 | 强 | 强 | **强 (CoT)** | **强 (分离 VLM)** | N/A |
+| **训练方法** | BC | Co-fine-tuning | LoRA | Flow Training | **BC + Recap** | **BC + RL** | BC | Co-training | Tokenizer |
+| **适用场景** | 精细操作 | 高层规划 | 通用操作 | 通用控制 | 通用+精细 | **高精度长时程** | 长序列推理 | **长时域移动操作** | **高频 Token 化** |
+| **核心优势** | 多模态分布 | 语义涌现 | 开源生态 | 高效推理 | **自我进化** | **三阶段训练** | **统一思维链** | **分层解耦** | **压缩效率** |
+
+---
+
+### 📚 相关资源
+
+- [📊 论文索引](./paper_index.md) - 多维度快速查找
+- [🔬 模型深度解析](./README.md#-part-5-模型详解-model-zoo) - 独立深度解析文档
+- [📖 理论总览](./README.md) - 返回理论目录
+
+---
+
+**最后更新**: 2025-12-06
 
 
 ---
 
+## 附录C ASCII 图表速查
 
-\newpage
-
-# 附录C ASCII 图表速查
-
-## ASCII Diagram Cheat Sheet
+### ASCII Diagram Cheat Sheet
 
 集中提炼 `theory/` 中所有关键的 ASCII 结构图，便于记忆核心架构、流程与对比。
 
-### 1. Quantization Flow
+#### 1. Quantization Flow
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │                    量化流程 (Quantization Flow)                  │
@@ -11300,7 +13656,7 @@ for batch in dataloader:
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-### 2. Symmetric vs Asymmetric Quantization
+#### 2. Symmetric vs Asymmetric Quantization
 ```
 对称量化 (Symmetric)              非对称量化 (Asymmetric)
         Z = 0                           Z ≠ 0
@@ -11317,7 +13673,7 @@ for batch in dataloader:
      (适合权重 weights)           (适合激活值 activations)
 ```
 
-### 3. LoRA Architecture
+#### 3. LoRA Architecture
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │                    LoRA 架构示意图                               │
@@ -11350,7 +13706,7 @@ for batch in dataloader:
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-### 4. Co-training Mix
+#### 4. Co-training Mix
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │                   Co-training 数据混合策略                       │
@@ -11385,7 +13741,7 @@ for batch in dataloader:
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-### 5. Action Generation Matrix
+#### 5. Action Generation Matrix
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │              三种动作生成范式对比 (Action Generation)            │
@@ -11411,7 +13767,7 @@ for batch in dataloader:
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-### 6. π0.5 Unified Flow
+#### 6. π0.5 Unified Flow
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │                    π0.5 统一架构 (Unified Model)                 │
@@ -11440,7 +13796,7 @@ for batch in dataloader:
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-### 7. π0.6 + Recap Flow
+#### 7. π0.6 + Recap Flow
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │                π0.6 / π*0.6 架构与训练流程                       │
@@ -11469,7 +13825,7 @@ for batch in dataloader:
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-### 8. VLA Architecture Evolution
+#### 8. VLA Architecture Evolution
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │                    VLA 架构演进路线图                            │
@@ -11514,7 +13870,7 @@ for batch in dataloader:
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-### 9. Flash Attention vs Standard
+#### 9. Flash Attention vs Standard
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │              Flash Attention vs 标准 Attention                  │
@@ -11550,7 +13906,7 @@ for batch in dataloader:
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-### 10. WALL-OSS Uni-CoT
+#### 10. WALL-OSS Uni-CoT
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │                    WALL-OSS 架构 (Uni-CoT)                      │
@@ -11584,4 +13940,5 @@ for batch in dataloader:
 │              🦾 双头动作输出                                     │
 └─────────────────────────────────────────────────────────────────┘
 ```
+
 

@@ -1,4 +1,4 @@
-# 📚 VLA 面试手册 - 电子书版本
+# 📚 VLA Handbook - 电子书版本
 
 将 `theory/` 目录下的所有 Markdown 文件合并成一本完整的电子书，支持 PDF 和 HTML 格式输出。
 
@@ -11,7 +11,7 @@ cd book
 python build_book.py
 ```
 
-输出文件：`book/output/VLA_Interview_Handbook.md`
+输出文件：`book/output/VLA_Handbook.md`
 
 ### 2. 生成 PDF（需要安装依赖）
 
@@ -24,7 +24,7 @@ sudo apt install -y pandoc texlive-xetex texlive-lang-chinese fonts-noto-cjk
 python build_book.py --pdf
 ```
 
-输出文件：`book/output/VLA_Interview_Handbook.pdf`
+输出文件：`book/output/VLA_Handbook.pdf`
 
 ### 3. 生成 HTML
 
@@ -32,7 +32,7 @@ python build_book.py --pdf
 python build_book.py --html
 ```
 
-输出文件：`book/output/VLA_Interview_Handbook.html`
+输出文件：`book/output/VLA_Handbook.html`
 
 ## 书籍结构
 
@@ -86,7 +86,7 @@ mdbook build
 
 ### 使用 Typora 导出
 
-1. 打开 `output/VLA_Interview_Handbook.md`
+1. 打开 `output/VLA_Handbook.md`
 2. 文件 → 导出 → PDF
 
 ### 使用 VS Code 插件

@@ -1,10 +1,10 @@
-# VLA (Vision-Language-Action) 算法岗面试手册
+# VLA Handbook（Vision-Language-Action）
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
 
-> **专注机器 VLA (Vision-Language-Action) 算法岗位的面试准备指南。**
-> 从理论基础到真机部署，从灵巧手选型到 Sim-to-Real 实战。
+> **面向 VLA（Vision-Language-Action）的学习与工程实战手册（含面试准备）。**
+> 覆盖理论基础、训练/推理优化、真机部署、题库与系统设计。
 
 ## 📖 项目简介 (Introduction)
 
@@ -53,7 +53,7 @@
 ## 📂 项目结构 (Project Structure)
 
 ```
-/opt/vla-interview-handbook/
+/opt/VLA-Handbook/
 ├── README.md                   # 项目主页 (Introduction & Roadmap)
 ├── theory/                     # 理论基础
 │   ├── README.md               # 索引

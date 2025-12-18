@@ -131,17 +131,17 @@ def main():
     book_dir = Path(__file__).resolve().parent
     output_dir = book_dir / "output"
     
-    md_path = output_dir / "VLA_Interview_Handbook_Full.md"
-    html_path = output_dir / "VLA_Interview_Handbook.html"
+    md_path = output_dir / "VLA_Handbook_Full.md"
+    html_path = output_dir / "VLA_Handbook.html"
     
     if not md_path.exists():
-        print("❌ 请先运行 build_book_simple.py")
+        print("[ERR] 请先运行 build_book_simple.py")
         return
     
-    print("📖 读取 Markdown...")
+    print("[INFO] 读取 Markdown...")
     md_content = md_path.read_text(encoding='utf-8')
     
-    print("🔄 转换为 HTML...")
+    print("[INFO] 转换为 HTML...")
     html_body = simple_md_to_html(md_content)
     
     # 完整 HTML
@@ -149,7 +149,7 @@ def main():
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>VLA 面试手册：从理论到实践</title>
+    <title>VLA Handbook：从理论到实践</title>
     <style>
         * {{
             box-sizing: border-box;
@@ -284,16 +284,16 @@ def main():
 {html_body}
 <hr>
 <p style="text-align: center; color: #666; font-size: 12px;">
-    VLA 面试手册 | <a href="https://github.com/sou350121/vla-interview-handbook">GitHub</a>
+    VLA Handbook | <a href="https://github.com/sou350121/VLA-Handbook">GitHub</a>
 </p>
 </body>
 </html>
 """
     
     html_path.write_text(full_html, encoding='utf-8')
-    print(f"✅ HTML 生成完成: {html_path}")
+    print(f"[OK] HTML 生成完成: {html_path}")
     print(f"   文件大小: {html_path.stat().st_size / 1024:.1f} KB")
-    print("\n📄 转换为 PDF:")
+    print("\n[INFO] 转换为 PDF:")
     print("   1. 用浏览器打开 HTML 文件")
     print("   2. Ctrl+P (或 Cmd+P) 打印")
     print("   3. 选择 '另存为 PDF'")

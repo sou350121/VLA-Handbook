@@ -1,6 +1,6 @@
 # 贡献指南 (Contributing Guide)
 
-感谢你对 VLA 面试手册的关注！我们需要社区的力量来保持这份文档的实效性和深度。
+感谢你对 VLA Handbook 的关注！我们需要社区的力量来保持这份文档的实效性和深度。
 
 ## 如何贡献 (How to Contribute)
 

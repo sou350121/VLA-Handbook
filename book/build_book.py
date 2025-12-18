@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-VLA Interview Handbook - Book Builder
+VLA Handbook - Book Builder
 将 theory/ 目录下的 Markdown 文件合并成一本完整的电子书
 
 使用方法:
@@ -46,23 +46,24 @@ CHAPTERS = [
     ("第18章 感知技术", "perception_techniques.md"),
     ("第19章 点云与 SLAM", "pointcloud_slam.md"),
     ("第20章 状态估计", "state_estimation.md"),
+    ("第21章 具身导航 (VLN) / DualVLN 快慢系统", "vln_dualvln.md"),
     
     # 第五部分：抓取与运动规划
-    ("第21章 抓取算法", "grasp_algorithms.md"),
-    ("第22章 运动规划", "motion_planning.md"),
-    ("第23章 触觉 VLA", "tactile_vla.md"),
+    ("第22章 抓取算法", "grasp_algorithms.md"),
+    ("第23章 运动规划", "motion_planning.md"),
+    ("第24章 触觉 VLA", "tactile_vla.md"),
     
     # 第六部分：前沿模型解析
-    ("第24章 RDT (Robotics Diffusion Transformer)", "rdt.md"),
-    ("第25章 π0.5 解析", "pi0_5_dissection.md"),
-    ("第26章 π0.6 解析", "pi0_6_dissection.md"),
-    ("第27章 Galaxea G0", "galaxea_g0.md"),
-    ("第28章 WALL-OSS", "wall_oss.md"),
+    ("第25章 RDT (Robotics Diffusion Transformer)", "rdt.md"),
+    ("第26章 π0.5 解析", "pi0_5_dissection.md"),
+    ("第27章 π0.6 解析", "pi0_6_dissection.md"),
+    ("第28章 Galaxea G0", "galaxea_g0.md"),
+    ("第29章 WALL-OSS", "wall_oss.md"),
     
     # 第七部分：评估与推理
-    ("第29章 Chain-of-Thought 推理", "chain_of_thought.md"),
-    ("第30章 评估方法论", "evaluation.md"),
-    ("第31章 知识隔离", "knowledge_insulation.md"),
+    ("第30章 Chain-of-Thought 推理", "chain_of_thought.md"),
+    ("第31章 评估方法论", "evaluation.md"),
+    ("第32章 知识隔离", "knowledge_insulation.md"),
     
     # 附录
     ("附录A 数据格式与处理", "data.md"),
@@ -71,9 +72,9 @@ CHAPTERS = [
 ]
 
 BOOK_HEADER = """---
-title: "VLA 面试手册：从理论到实践"
+title: "VLA Handbook：从理论到实践"
 subtitle: "Vision-Language-Action 完全指南"
-author: "VLA Interview Handbook Contributors"
+author: "VLA Handbook Contributors"
 date: "{date}"
 documentclass: report
 geometry: margin=2.5cm
@@ -88,7 +89,7 @@ header-includes:
   - \\usepackage{{ctex}}
   - \\usepackage{{fancyhdr}}
   - \\pagestyle{{fancy}}
-  - \\fancyhead[L]{{VLA 面试手册}}
+  - \\fancyhead[L]{{VLA Handbook}}
   - \\fancyhead[R]{{\\thepage}}
   - \\fancyfoot[C]{{}}
 ---
@@ -97,7 +98,7 @@ header-includes:
 
 # 前言
 
-本书是 **VLA Interview Handbook** 项目的完整理论部分，系统性地介绍了视觉-语言-动作 (Vision-Language-Action) 模型的核心概念、关键技术与工程实践。
+本书是 **VLA Handbook** 项目的完整理论部分，系统性地介绍了视觉-语言-动作 (Vision-Language-Action) 模型的核心概念、关键技术与工程实践。
 
 **适用读者**：
 - 准备机器人/具身智能方向面试的工程师
@@ -109,7 +110,7 @@ header-includes:
 2. **面试准备**：重点关注每章末尾的 Q&A 部分
 3. **查阅参考**：使用目录快速定位特定主题
 
-**在线版本**：https://github.com/sou350121/vla-interview-handbook
+**在线版本**：https://github.com/sou350121/VLA-Handbook
 
 \\newpage
 
@@ -174,16 +175,16 @@ def build_combined_markdown(theory_dir: Path, output_path: Path):
         
         filepath = theory_dir / filename
         if not filepath.exists():
-            print(f"⚠️  跳过不存在的文件: {filename}")
+            print(f"[WARN] 跳过不存在的文件: {filename}")
             continue
             
-        print(f"📖 处理: {chapter_title}")
+        print(f"[CHAPTER] 处理: {chapter_title}")
         chapter_content = filepath.read_text(encoding='utf-8')
         content += clean_markdown(chapter_content, chapter_title)
     
     # 写入合并文件
     output_path.write_text(content, encoding='utf-8')
-    print(f"\n✅ 合并完成: {output_path}")
+    print(f"\n[OK] 合并完成: {output_path}")
     print(f"   文件大小: {output_path.stat().st_size / 1024:.1f} KB")
     
     return output_path
@@ -191,7 +192,7 @@ def build_combined_markdown(theory_dir: Path, output_path: Path):
 
 def build_pdf(markdown_path: Path, output_path: Path):
     """使用 pandoc 生成 PDF"""
-    print("\n📄 生成 PDF...")
+    print("\n[INFO] 生成 PDF...")
     
     cmd = [
         "pandoc",
@@ -207,14 +208,14 @@ def build_pdf(markdown_path: Path, output_path: Path):
     
     try:
         subprocess.run(cmd, check=True)
-        print(f"✅ PDF 生成完成: {output_path}")
+        print(f"[OK] PDF 生成完成: {output_path}")
         print(f"   文件大小: {output_path.stat().st_size / 1024 / 1024:.1f} MB")
     except subprocess.CalledProcessError as e:
-        print(f"❌ PDF 生成失败: {e}")
+        print(f"[ERR] PDF 生成失败: {e}")
         print("   请确保已安装 pandoc 和 texlive-xetex")
         print("   Ubuntu: sudo apt install pandoc texlive-xetex texlive-lang-chinese fonts-noto-cjk")
     except FileNotFoundError:
-        print("❌ 未找到 pandoc，请先安装")
+        print("[ERR] 未找到 pandoc，请先安装")
         print("   Ubuntu: sudo apt install pandoc")
 
 
@@ -230,18 +231,18 @@ def build_html(markdown_path: Path, output_path: Path):
         "--toc",
         "--toc-depth=3",
         "-c", "https://cdn.jsdelivr.net/npm/github-markdown-css/github-markdown.min.css",
-        "--metadata", "title=VLA 面试手册",
+        "--metadata", "title=VLA Handbook",
     ]
     
     try:
         subprocess.run(cmd, check=True)
-        print(f"✅ HTML 生成完成: {output_path}")
+        print(f"[OK] HTML 生成完成: {output_path}")
     except (subprocess.CalledProcessError, FileNotFoundError) as e:
-        print(f"❌ HTML 生成失败: {e}")
+        print(f"[ERR] HTML 生成失败: {e}")
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Build VLA Interview Handbook Book")
+    parser = argparse.ArgumentParser(description="Build VLA Handbook Book")
     parser.add_argument("--pdf", action="store_true", help="Generate PDF")
     parser.add_argument("--html", action="store_true", help="Generate HTML")
     args = parser.parse_args()
@@ -252,24 +253,24 @@ def main():
     output_dir = script_dir / "output"
     output_dir.mkdir(exist_ok=True)
     
-    print(f"📁 Theory 目录: {theory_dir}")
-    print(f"📁 输出目录: {output_dir}")
+    print(f"[INFO] Theory 目录: {theory_dir}")
+    print(f"[INFO] 输出目录: {output_dir}")
     
     # 生成合并的 Markdown
-    md_path = output_dir / "VLA_Interview_Handbook.md"
+    md_path = output_dir / "VLA_Handbook.md"
     build_combined_markdown(theory_dir, md_path)
     
     # 生成 PDF
     if args.pdf:
-        pdf_path = output_dir / "VLA_Interview_Handbook.pdf"
+        pdf_path = output_dir / "VLA_Handbook.pdf"
         build_pdf(md_path, pdf_path)
     
     # 生成 HTML
     if args.html:
-        html_path = output_dir / "VLA_Interview_Handbook.html"
+        html_path = output_dir / "VLA_Handbook.html"
         build_html(md_path, html_path)
     
-    print("\n📚 构建完成!")
+    print("\n[OK] 构建完成!")
     print(f"   输出目录: {output_dir}")
 
 
