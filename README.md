@@ -79,6 +79,7 @@
 │   ├── co_training.md          # 联合训练 (Co-training) 详解
 │   ├── tactile_vla.md          # 触觉感知与 VLA
 │   ├── motion_planning.md      # 运动规划 (RRT/TrajOpt/MoveIt)
+│   ├── vln_dualvln.md          # 🆕 视觉语言导航 (VLN): DualVLN 快慢系统
 │   ├── state_estimation.md     # 状态估计与融合 (Kalman/Particle/VIO)
 │   ├── pointcloud_slam.md      # 点云理解 & SLAM (LOAM/LIO-SAM)
 │   ├── grasp_algorithms.md     # 抓取算法 & 仿真 (DexGraspNet/Isaac)

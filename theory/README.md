@@ -100,6 +100,7 @@
 |:-----|:-----|:---------|
 | 👁️ **视觉感知技术** | [`perception_techniques.md`](./perception_techniques.md) | 检测/跟踪/Occupancy/BEV/位姿估计 |
 | 🧭 **运动规划** | [`motion_planning.md`](./motion_planning.md) | RRT/PRM、TrajOpt、MoveIt & cuRobo |
+| 🗺️ **具身导航 (VLN)** | [`vln_dualvln.md`](./vln_dualvln.md) | 🆕 DualVLN：慢规划/快执行的异步双系统 |
 | 📡 **状态估计** | [`state_estimation.md`](./state_estimation.md) | EKF/UKF、粒子滤波、IMU+视觉融合 |
 | 🛰️ **点云 & SLAM** | [`pointcloud_slam.md`](./pointcloud_slam.md) | 点云语义、配准、Visual/LiDAR SLAM |
 | 🤖 **抓取算法 & 仿真** | [`grasp_algorithms.md`](./grasp_algorithms.md) | DexGraspNet/GraspGF、Isaac Sim/SAPIEN 🆕 |
