@@ -5,7 +5,15 @@
 """
 
 import markdown
+import sys
+import io
 from pathlib import Path
+
+# 设置控制台输出为 UTF-8，解决 Windows 上的编码问题
+if sys.platform.startswith('win'):
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
+
 
 def convert_md_to_html(md_path: Path, html_path: Path):
     """Markdown -> HTML"""
