@@ -8,6 +8,30 @@
 
 ---
 
+<details open>
+<summary><b>🚀 建议阅读路线 (Suggested Reading Path)</b></summary>
+
+### 新手入门
+1. [Theory 总索引](./theory/README.md) → **Part 1: Foundations**（数据格式、动作空间、评估体系）
+2. **Part 2: Architecture & Algorithms**（VLA 核心架构、Diffusion Policy、Flow Matching）
+3. [真机部署索引](./deployment/README.md)（硬件选型、模型优化）
+
+### 研究导向
+1. [论文索引](./theory/paper_index.md) + [文献综述](./theory/literature_review.md)（快速定位相关论文）
+2. [Theory 总索引](./theory/README.md) → **Part 5: Model Zoo**（π0、GR-RL、WALL-OSS 深度解析）
+3. [VLA 十大挑战](./theory/vla_challenges.md)（NTU/Stanford 2025 研究方向）
+
+### 工程落地
+1. [真机部署索引](./deployment/README.md)（UR5 控制、ROS、优化）
+2. [Theory 总索引](./theory/README.md) → **效率优化**（Flash Attention、LoRA、量化）
+3. [题库与实战](./question-bank/README.md)（代码实战、微调指南）
+
+> 💡 **详细路线**：查看 [Theory 总索引](./theory/README.md) 获取完整学习路径
+
+</details>
+
+---
+
 ## 🎯 核心入口
 
 | 模块 | 链接 | 说明 |
@@ -51,30 +75,6 @@
 4. **论文索引系统**：多维度查找（技术/公司/时间），按分类组织的文献综述
 5. **2025 最新进展**：Evo-1、SmolVLA、DualVLN、GR-RL、NeurIPS 2025 解读等
 6. **全中文 + 工程导向**：专业术语保留英文对照，聚焦 Robotics 特有挑战
-
-</details>
-
----
-
-<details>
-<summary><b>🚀 建议阅读路线</b></summary>
-
-### 新手入门
-1. [Theory 总索引](./theory/README.md) → **Part 1: Foundations**（数据格式、动作空间、评估体系）
-2. **Part 2: Architecture & Algorithms**（VLA 核心架构、Diffusion Policy、Flow Matching）
-3. [真机部署索引](./deployment/README.md)（硬件选型、模型优化）
-
-### 研究导向
-1. [论文索引](./theory/paper_index.md) + [文献综述](./theory/literature_review.md)（快速定位相关论文）
-2. [Theory 总索引](./theory/README.md) → **Part 5: Model Zoo**（π0、GR-RL、WALL-OSS 深度解析）
-3. [VLA 十大挑战](./theory/vla_challenges.md)（NTU/Stanford 2025 研究方向）
-
-### 工程落地
-1. [真机部署索引](./deployment/README.md)（UR5 控制、ROS、优化）
-2. [Theory 总索引](./theory/README.md) → **效率优化**（Flash Attention、LoRA、量化）
-3. [题库与实战](./question-bank/README.md)（代码实战、微调指南）
-
-> 💡 **详细路线**：查看 [Theory 总索引](./theory/README.md) 获取完整学习路径
 
 </details>
 
