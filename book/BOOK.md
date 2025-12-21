@@ -40,13 +40,14 @@
 ## 第五部分：抓取与运动规划
 22. [抓取算法](#第22章-抓取算法)
 23. [运动规划](#第23章-运动规划)
-24. [触觉 VLA](#第24章-触觉-vla)
+24. [全模态共享 Token 空间 (MM-ACT)](#第24章-全模态共享-token-空间-mm-act)
+25. [触觉 VLA](#第25章-触觉-vla)
 
 ## 第六部分：前沿模型解析
-25. [RDT (Robotics Diffusion Transformer)](#第25章-rdt-robotics-diffusion-transformer)
-26. [π0 系列解析](#第26章-π0-系列解析)
-27. [Galaxea G0](#第27章-galaxea-g0)
-28. [WALL-OSS](#第28章-wall-oss)
+26. [RDT (Robotics Diffusion Transformer)](#第26章-rdt-robotics-diffusion-transformer)
+27. [π0 系列解析](#第26章-π0-系列解析)
+28. [Galaxea G0](#第27章-galaxea-g0)
+29. [WALL-OSS](#第29章-wall-oss)
 
 ## 第七部分：评估与推理
 29. [Chain-of-Thought 推理](#第29章-chain-of-thought-推理)
