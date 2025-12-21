@@ -145,6 +145,7 @@
 | 🛡️ **本质安全 (SGTM)** | [`vla_intrinsic_safety.md`](./vla_intrinsic_safety.md) | 🆕 参数级“脑切除”，平衡安全与学习能力 |
 | ⚖️ **对齐技术** | [`alignment_vla.md`](./alignment_vla.md) | 具身 RLHF、受限马尔可夫决策过程 (CMDP) |
 | 🛡️ **知识绝缘** | [`knowledge_insulation.md`](./knowledge_insulation.md) | 微调时保护 VLM 通用常识 |
+| 🖐️ **灵巧手案例 (Wuji)** | [`../deployment/dexterous_hand_wuji.md`](../deployment/dexterous_hand_wuji.md) | 🆕 20-DOF 独立驱动手硬件解析 |
 
 ---
 
