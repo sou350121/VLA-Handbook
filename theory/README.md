@@ -136,6 +136,18 @@
 
 ---
 
+## 🛡️ Part 6: 安全、对齐与本质安全 (Safety & Alignment)
+
+> *不仅要动得准，更要动得稳。探讨 VLA 在物理世界的最后一道防线。*
+
+| 主题 | 文件 | 核心内容 |
+|:-----|:-----|:---------|
+| 🛡️ **本质安全 (SGTM)** | [`vla_intrinsic_safety.md`](./vla_intrinsic_safety.md) | 🆕 参数级“脑切除”，平衡安全与学习能力 |
+| ⚖️ **对齐技术** | [`alignment_vla.md`](./alignment_vla.md) | 具身 RLHF、受限马尔可夫决策过程 (CMDP) |
+| 🛡️ **知识绝缘** | [`knowledge_insulation.md`](./knowledge_insulation.md) | 微调时保护 VLM 通用常识 |
+
+---
+
 ## 🎯 学习建议
 
 ```
