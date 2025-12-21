@@ -57,7 +57,9 @@
 31. [UR5 Python 控制实战](#第31章-ur5-python-控制实战)
 32. [ROS 集成与算法优化](#第32章-ros-集成与算法优化)
 33. [Sim-to-Real 技术](#第33章-sim-to-real-技术)
-34. [灵巧手硬件与部署：Wuji 手深度解析](#第34章-灵巧手硬件与部署-wuji-手深度解析)
+34. 灵巧手硬件与部署
+    *   [34.1 Wuji 手深度解析 (独立驱动)](../deployment/dexterous_hand_wuji.md)
+    *   [34.2 Tesla Optimus V2 手解析 (肌腱驱动)](../deployment/optimus_hand_v2.md)
 35. [模型量化与边缘部署](#第35章-模型量化与边缘部署)
 
 ## 第九部分：安全与对齐
