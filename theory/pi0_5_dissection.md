@@ -61,37 +61,205 @@
 - **Inference (推理)**: 在最后一步使用 **Flow Matching** (连续化) 进行微调和生成。
 - **优势**: 既享受了 Tokenization 的训练效率，又保留了 Flow Matching 的控制平滑度。
 
-## 2. 训练数据的艺术 (Data Strategy)
+### 1.3 分层推理到底“长什么样”？(Hierarchical Inference, in practice)
+很多文章会把 π0.5 的 “Latent Thought” 说得很玄，但把它落到工程上，其实就是：**把“高层语义子任务”当作一个中间变量**，让它参与到动作生成的条件里，而不是让模型直接从视觉/语言一步跳到关节控制信号。
+
+- **输入**：图像序列 \(o_{t-k:t}\) + 语言指令 \(l\)
+- **隐式推理**：生成（或隐式形成）子任务表示 \(z\)，例如“对准把手”“调整夹爪姿态”“施加夹持力”
+- **控制输出**：在条件 \((o,l,z)\) 下生成连续动作 \(a_t\)（下文用 Flow Matching 给出数学形式）
+
+下面这张图把“分层推理 + 混合架构（FAST 训练 / Flow 推理）”连起来：
+
+```mermaid
+flowchart TD
+  Input["ImageSequence+Instruction"] --> VLMBackbone
+  VLMBackbone --> LatentThought
+  LatentThought --> ActionPolicy
+
+  ActionPolicy -->|"Training: FAST_tokenize"| FASTTokens
+  ActionPolicy -->|"Inference: FlowMatching_ODE"| FlowODE
+  FlowODE --> Action50Hz
+```
+
+---
+
+## 2. 数学核心：Flow Matching 如何把“噪声”变成“动作”
+
+> 本节的符号与 `pi0_flow_matching.md` 保持一致：\(t=0\) 是数据（真实动作），\(t=1\) 是噪声。
+
+### 2.1 目标：学习一个速度场（向量场）
+Flow Matching 不直接预测动作 \(a\)，而是学习一个 **速度场** \(v_\theta(x,t,\text{cond})\)，满足常微分方程：
+
+$$
+\frac{dx}{dt}=v_\theta(x,t,\text{cond})
+$$
+
+- \(x\)：这里可以理解为“动作变量”（比如关节角/末端位姿/夹爪开合等的向量）
+- \(t\in[0,1]\)：时间参数
+- \(\text{cond}\)：条件（视觉/语言特征 + 可能的 latent thought）
+
+### 2.2 构造训练路径：线性插值（OT/Rectified Flow 的直线路径）
+对一条真实动作样本 \(x_0\)（来自数据集）和一个噪声样本 \(x_1\sim\mathcal{N}(0,I)\)，构造直线路径：
+
+$$
+x_t=(1-t)x_0+t x_1
+$$
+
+这条路径的好处是：**它在分布空间里近似一条“拉直”的搬运路径**，能让推理只需少量步数就从噪声走回数据。
+
+### 2.3 训练信号：目标速度是常量 \(x_1-x_0\)
+对 \(x_t\) 求导得到目标速度（理想向量场）：
+
+$$
+\frac{d}{dt}x_t=x_1-x_0
+$$
+
+于是训练损失就是回归这个目标速度：
+
+$$
+\mathcal{L}(\theta)=\mathbb{E}_{t,x_0,x_1}\left[\lVert v_\theta(x_t,t,\text{cond})-(x_1-x_0)\rVert^2\right]
+$$
+
+你可以把它理解为：无论走到路径上的哪一点 \(x_t\)，网络都要告诉你“沿着哪个方向走”，才能沿着那条直线把噪声/数据连起来。
+
+---
+
+## 3. 带数字的“走一遍”：从噪声到动作（一个 2D 玩具例子）
+
+为了让数学不悬空，我们用一个极简的 2D “动作向量”做示例。假设动作空间只有两维：
+- \(x[0]\)：末端沿 x 方向的速度（归一化）
+- \(x[1]\)：夹爪开合速度（归一化）
+
+### 3.1 给定一条数据样本与噪声样本
+假设数据集里某时刻的真实动作是：
+
+$$
+x_0=\begin{bmatrix}0.20\\-0.60\end{bmatrix}
+$$
+
+采样一个噪声：
+
+$$
+x_1=\begin{bmatrix}-0.40\\0.10\end{bmatrix}
+$$
+
+那么目标速度（常量向量）就是：
+
+$$
+u=x_1-x_0=\begin{bmatrix}-0.60\\0.70\end{bmatrix}
+$$
+
+### 3.2 随机采样一个时间 \(t\)，构造 \(x_t\)
+取 \(t=0.70\)：
+
+$$
+x_t=(1-0.70)x_0+0.70 x_1
+=0.30\begin{bmatrix}0.20\\-0.60\end{bmatrix}+0.70\begin{bmatrix}-0.40\\0.10\end{bmatrix}
+=\begin{bmatrix}-0.22\\-0.11\end{bmatrix}
+$$
+
+训练时网络看到的是 \((x_t,t,\text{cond})\)，标签是 \(u=x_1-x_0\)。
+
+### 3.3 一步 MSE：把“预测速度”和“目标速度”对齐
+假设模型当前预测：
+
+$$
+v_\theta(x_t,t,\text{cond})=\begin{bmatrix}-0.50\\0.80\end{bmatrix}
+$$
+
+那么误差就是：
+
+$$
+v_\theta-u=
+\begin{bmatrix}-0.50\\0.80\end{bmatrix}-\begin{bmatrix}-0.60\\0.70\end{bmatrix}
+=\begin{bmatrix}0.10\\0.10\end{bmatrix}
+$$
+
+对应的平方误差（2 维平均）：
+
+$$
+\text{MSE}=\frac{0.10^2+0.10^2}{2}=0.01
+$$
+
+这就是 Flow Matching 的“数学部分结合数据例子”的最小闭环：**用可计算的数值把公式落地**。
+
+### 3.4 推理时怎么从噪声走回数据？（时间反向积分）
+训练学到的是“沿着路径增加 \(t\) 的速度”，而生成动作时我们从噪声 \(x_{t=1}\) 出发，要走回 \(t=0\)。
+
+用最简单的 Euler 积分，取 \(N=5\) 步，\(\Delta t=-\frac{1}{N}=-0.2\)，从 \(x^{(0)}=x_1\) 开始：
+
+$$
+x^{(k+1)}=x^{(k)}+v_\theta(x^{(k)},t_k,\text{cond})\Delta t
+$$
+
+如果此处把向量场近似当作常量 \(u=x_1-x_0\)（玩具近似，仅用于直觉），那么第一步就是：
+
+$$
+x^{(1)}=x_1+u\cdot(-0.2)
+=\begin{bmatrix}-0.40\\0.10\end{bmatrix}+\begin{bmatrix}-0.60\\0.70\end{bmatrix}\cdot(-0.2)
+=\begin{bmatrix}-0.28\\-0.04\end{bmatrix}
+$$
+
+继续 5 步会逐渐靠近 \(x_0\)。真实模型里 \(v_\theta\) 不是常量，会随 \((x,t,\text{cond})\) 变化，但**“少步数的确定性 ODE 走回数据”**这一直觉成立，这也是 Flow Matching 相对 Diffusion 更适合高频控制的原因之一。
+
+---
+
+## 4. FAST 训练 / Flow 推理：为什么这种混合是“工程最优解”
+
+π0.5 的关键不是“同时用 FAST 和 Flow”这么一句话，而是 **两者分别解决了两个尺度问题**：
+
+### 4.1 FAST 解决“规模”：让预训练像训练语言模型一样吃海量数据
+FAST 的核心是 **DCT + BPE**（详见 `fast.md`）：
+- **DCT**：把平滑动作序列从时域变到频域，只保留少量低频系数（像 JPEG 压缩一样）
+- **BPE**：把高频出现的系数组合压成更短 token 序列
+
+这带来的直接收益是：**动作序列长度显著缩短**，Transformer 预训练可以更像“读文本”一样高吞吐地学习行为模式。
+
+### 4.2 Flow Matching 解决“精度”：把最终控制变回连续空间，减少抖动与量化误差
+FAST 适合训练，但离散 token 天生存在量化误差；而机械臂/灵巧手控制往往需要连续、平滑、可微的输出。
+
+Flow Matching 通过 ODE 积分直接输出连续动作：
+- 推理步数可以很少（通常远少于 Diffusion 的 50-100 步）
+- 输出轨迹更平滑，抖动更小，更贴近控制回路的需求
+
+### 4.3 50Hz 输出意味着什么？（动作频率与“分层推理”的耦合）
+文档里写的“50Hz 连续动作输出”可以这样理解：
+- **控制层**：每 20ms 输出一次 \(a_t\)，要求稳定、连续、低延迟
+- **推理层**：latent thought \(z\) 不需要 50Hz 更新，它可以更低频（例如每 200ms 更新一次“子任务阶段”），但必须在条件里持续约束低层控制
+
+这就是分层推理的工程含义：**高层慢变、低层快控**，而不是“让大模型每 20ms 重新想一次人生”。
+
+## 5. 训练数据的艺术 (Data Strategy)
 
 π0.5 的强大泛化能力来自于其独特的训练数据配比。
 
-### 2.1 异构数据 Co-training
+### 5.1 异构数据 Co-training
 它不再仅仅依赖机器人数据 (Robot Data)，而是混合了三种数据源：
 1.  **Robot Data (OXE + 自研)**: 高质量，含动作标签。用于学习物理控制。
 2.  **Internet Videos (YouTube)**: 海量，无动作标签。用于学习"世界模型" (World Model) —— 知道物体被推会动，水倒出来会流。
 3.  **Simulation Data**: 完美标注，但有 Reality Gap。用于学习长序列逻辑。
 
-### 2.2 Cross-Embodiment Alignment (跨形态对齐)
+### 5.2 Cross-Embodiment Alignment (跨形态对齐)
 π0.5 能够控制双臂机器人、移动底盘、甚至四足机器人。
 - **统一动作空间**: 将不同机器人的动作映射到一个共享的 **Latent Action Space**。
 - **效果**: 你在一个单臂机器人上训练的"抓杯子"技能，可以 Zero-shot 迁移到双臂机器人上 (只需微调少量参数)。
 
-## 3. 核心能力突破 (Capabilities)
+## 6. 核心能力突破 (Capabilities)
 
-### 3.1 开放世界泛化 (Open-World Generalization)
+### 6.1 开放世界泛化 (Open-World Generalization)
 - **场景**: 把机器人扔到一个从未见过的厨房 (Airbnb)。
 - **表现**: π0.5 能够识别出从未见过的咖啡机型号，并根据通用的"按按钮"知识尝试操作，而不是因为纹理不同而死机。
 - **原理**: 这种能力来自于 VLM Backbone (3B -> 5B) 强大的视觉语义理解能力。
 
-### 3.2 长序列任务 (Long-Horizon Tasks)
+### 6.2 长序列任务 (Long-Horizon Tasks)
 - **任务**: "把桌子收拾干净" (Bus the table)。
 - **分解**: 
     1. 识别所有垃圾。
     2. 规划顺序 (先拿大的，再擦水的)。
     3. 执行动作。
-- **提升**: 相比 π0，π0.5 在这种多阶段任务上的成功率提升了 40% 以上。
+- **提升**: 相比 π0，π0.5 在这种多阶段任务上的成功率通常被描述为**显著提升**（取决于任务集与评测设置）。
 
-## 4. 与 π0 和 π0.6 的对比
+## 7. 与 π0 和 π0.6 的对比
 
 | 特性 | π0 (Base) | π0.5 (Explorer) | π0.6 (Master) |
 | :--- | :--- | :--- | :--- |
