@@ -70,15 +70,30 @@
 
 下面这张图把“分层推理 + 混合架构（FAST 训练 / Flow 推理）”连起来：
 
-```mermaid
-flowchart TD
-  Input["ImageSequence+Instruction"] --> VLMBackbone
-  VLMBackbone --> LatentThought
-  LatentThought --> ActionPolicy
-
-  ActionPolicy -->|"Training: FAST_tokenize"| FASTTokens
-  ActionPolicy -->|"Inference: FlowMatching_ODE"| FlowODE
-  FlowODE --> Action50Hz
+```
+        ┌─────────────────────────────────────────┐
+        │       Image Sequence + Instruction      │
+        └────────────────────┬────────────────────┘
+                             ▼
+                ┌──────────────────────────┐
+                │       VLM Backbone       │
+                └────────────┬─────────────┘
+                             ▼
+                ┌──────────────────────────┐
+                │      Latent Thought      │
+                └────────────┬─────────────┘
+                             ▼
+                ┌──────────────────────────┐
+                │      Action Policy       │
+                └────────────┬─────────────┘
+                  /                    \
+                 ▼                      ▼
+        ┌──────────────────┐  ┌───────────────────────┐
+        │Training:         │  │Inference:             │
+        │FAST Tokenizer    │  │Flow Matching (ODE)    │
+        └──────────────────┘  └──────────┬────────────┘
+                                         ▼
+                                Action Output (50Hz)
 ```
 
 ---
