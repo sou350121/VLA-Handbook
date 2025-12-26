@@ -192,6 +192,7 @@ def try_recover():
 ---
 
 ## 5. 进阶：结合 VLA 模型
+
 在 VLA 系统中，通常架构如下：
 
 1. **Inference 线程**: GPU 推理，输出 `target_q` 写入队列。
@@ -226,7 +227,20 @@ while True:
 
 ---
 
-## 6. 进阶阅读
+## 6. SOTA 模型迁移实战 (Case Study: OneTwoVLA)
+
+将这类在 7-DOF Franka 上开发的模型迁移到 UR5 时，需注意：
+
+1.  **动作映射 (Action Remapping)**:
+    *   模型输出通常为 7 维。需剥离 Franka 的“肘部”关节（A4 或 A7 冗余项），或者只使用末端位姿（Pose）进行映射。
+2.  **奇异点处理 (Singularity Management)**:
+    *   UR5 的腕部奇异点比 Franka 更多。建议在模型输出后加一个“安全围栏”逻辑：如果计算出的 IK 接近奇异点（Manipulability < 0.01），强制中断并触发模型的推理模式（如 OneTwoVLA 的 `[BOR]`）。
+3.  **反馈补偿**:
+    *   Franka 拥有高频力矩反馈，而 UR5 默认反馈较慢。在推理时，建议将 UR5 的电流（Current）或 TCP 估算力（TCP Wrench）进行标准化后喂给模型，以补偿物理感知的缺失。
+
+---
+
+## 7. 进阶阅读
 关于 ROS 集成、OOP 架构设计以及高频控制的性能优化技巧，请参考：
 👉 **[ROS 集成与算法优化 (ROS Integration & Algorithm Optimization)](./ros_and_optimization.md)**
 
