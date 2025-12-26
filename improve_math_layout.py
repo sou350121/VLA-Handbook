@@ -2,23 +2,38 @@ import os
 import re
 
 def improve_math(content):
-    # 1. Ensure block math $$ is on its own line and has blank lines around it
-    content = re.sub(r'\n?\s*\$\$\s*\n?(.*?)\n?\s*\$\$\s*\n?', r'\n\n$$\n\1\n$$\n\n', content, flags=re.DOTALL)
+    # 1. 处理块公式 $$ ... $$
+    # 先把所有形式的 $$ 统一拉出来，前后各留一空行，$$ 符号各占一行
+    # 匹配可能跨行的 $$ ... $$，允许中间有空行
+    content = re.sub(r'\n*\s*\$\$(.*?)\$\$\s*\n*', r'\n\n$$\n\1\n$$\n\n', content, flags=re.DOTALL)
     
-    # 2. Fix inline math - ensure spaces around $ if adjacent to CJK or other non-space chars
+    # 清理公式内部多余的空行（如果有的话）
+    def clean_block(match):
+        inner = match.group(1).strip()
+        # 移除内部连续的空行，防止渲染失败
+        inner = re.sub(r'\n\s*\n', r'\n', inner)
+        return f"\n\n$$\n{inner}\n$$\n\n"
+    
+    content = re.sub(r'\n\n\$\$\n(.*?)\n\$\$\n\n', clean_block, content, flags=re.DOTALL)
+
+    # 2. 处理行内公式 $...$
+    # 确保中文和 $ 之间有空格
+    # 中文 + $ -> 中文 + 空格 + $
     content = re.sub(r'([\u4e00-\u9fa5])\$', r'\1 $', content)
+    # $ + 中文 -> $ + 空格 + 中文
     content = re.sub(r'\$([\u4e00-\u9fa5])', r'$ \1', content)
     
-    # 3. Ensure blank lines around $$
-    content = re.sub(r'\n\s*\$\$\s*\n', r'\n\n$$\n', content)
+    # 3. 修复常见的渲染字符冲突
+    # 在 GitHub 列表项中，公式最好不要紧跟在冒号后面，确保上方有空行
+    # (这一步在第一步已经通过全局替换 $$ 块大致解决了)
     
-    # 4. Final cleanup of multiple blank lines
+    # 4. 连续空行压缩
     content = re.sub(r'\n{3,}', r'\n\n', content)
     
     return content
 
-# Determine directories to process
-base_dir = '.'
+# 目标目录
+base_dir = 'vla-interview-handbook'
 dirs_to_process = ['theory', 'deployment']
 
 for d in dirs_to_process:
@@ -41,7 +56,5 @@ for d in dirs_to_process:
                     print(f"Improving math in {filepath}...")
                     with open(filepath, 'w', encoding='utf-8') as f:
                         f.write(new_content)
-                else:
-                    # print(f"No changes for {filepath}")
-                    pass
 
+print("Optimization complete!")
