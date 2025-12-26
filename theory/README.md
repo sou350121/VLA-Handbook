@@ -135,6 +135,12 @@
 | **X² (自变量)** | WALL-OSS | [`wall_oss.md`](./wall_oss.md) | Uni-CoT 边想边动 |
 | **Galaxea AI** | G0 | [`galaxea_g0.md`](./galaxea_g0.md) | 大脑+小脑双系统 |
 
+### 🧪 研究前沿与特定案例 (Research Frontier)
+
+| 模型 | 文件 | 核心亮点 |
+|:-----|:-----|:---------|
+| **OneTwoVLA** | [`onetwovla.md`](./onetwovla.md) | 🆕 统一模型 + 自适应推理切换 |
+
 ---
 
 ## 🛡️ Part 6: 安全、对齐与本质安全 (Safety & Alignment)

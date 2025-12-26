@@ -68,6 +68,7 @@ VLA-Handbook/
 │   ├── gr00t_n1_6.md           # NVIDIA GR00T-N1.6 人形模型
 │   ├── pi0_5_dissection.md     # π0.5：开放世界泛化
 │   ├── pi0_6_dissection.md     # π0.6：Recap 自我进化
+│   ├── onetwovla.md            # OneTwoVLA：自适应切换统一模型
 │   ├── gr_rl_dissection.md     # ByteDance GR-RL 详解
 │   ├── wall_oss.md             # WALL-OSS：Uni-CoT 端到端
 │   ├── vla_unified_token_space.md # MM-ACT：共享 Token 空间
