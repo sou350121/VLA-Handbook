@@ -6,13 +6,13 @@
 
 > **第一性原理**: **The Shortest Path (最短路径 / Optimal Transport)**
 
-Diffusion 就像一个醉汉（随机游走）跌跌撞撞地从噪声走回数据，路径曲折且低效。Flow Matching 试图构建一条**直达**的路径。
+Diffusion 就像一个醉汉（随机游走）跌跌撞撞地从噪声走回数据，路径曲折且低效。Flow Matching 试图构建一条 **直达** 的路径。
 
 - **核心数学工具**: **ODE (常微分方程)** 与 **Optimal Transport (最优传输)**。
 - **解题逻辑**:
-    1.  **拉直**: 在概率分布空间中，两点之间（噪声分布 vs 数据分布）最短的路径是直线（Geodesic）。
-    2.  **向量场**: 如果我们能直接学习到这条直线上的"速度向量"（Vector Field），那么推理时只需要沿着速度方向走几步（Euler积分）就能到达终点。
-    3.  **确定性**: 从随机的布朗运动（Diffusion）转变为确定性的流体运动（Flow），极大地减少了推理步数（100步 -> 10步）。
+    1.  **拉直**: 在概率分布空间中，两点之间（噪声分布 vs 数据分布）最短的路径是直线 (Geodesic)。
+    2.  **向量场**: 如果我们能直接学习到这条直线上的"速度向量" (Vector Field)，那么推理时只需要沿着速度方向走几步 (Euler 积分) 就能到达终点。
+    3.  **确定性**: 从随机的布朗运动 (Diffusion) 转变为确定性的流体运动 (Flow)，极大地减少了推理步数 (100 步 -> 10 步)。
 
 ## 1. 核心架构：多模态 Flow 策略 (Architecture)
 
@@ -23,9 +23,9 @@ Diffusion 就像一个醉汉（随机游走）跌跌撞撞地从噪声走回数�
 | 组件 | VLM Backbone (大脑) | Flow Matching Head (小脑) |
 | :--- | :--- | :--- |
 | **功能定位** | 提取语义特征、理解任务意图 | 动作序列生成、轨迹细化 |
-| **模型基础** | PaliGemma / SigLIP (视觉语言对齐) | Transformer / MLP (向量场预测) |
+| **基础模型** | PaliGemma / SigLIP (视觉语言对齐) | Transformer / MLP (向量场预测) |
 | **输入模态** | RGB 图像 + 自然语言指令 | VLM 特征 + 噪声动作 + 时间步 $t$ |
-| **输出结果** | 任务相关的特征向量 (Conditioning) | 速度向量场 $v_\theta$ (dx/dt) |
+| **输出结果** | 任务相关的特征向量 (Conditioning) | 速度向量场 $v_{\theta}$ (dx/dt) |
 | **频率/步数** | 低频提取 (按需或 1-5Hz) | 高频积分 (通过 ODE 求解，1-10 步) |
 
 ### 1.2 整体架构流图 (Architecture Flow)
@@ -39,14 +39,14 @@ Diffusion 就像一个醉汉（随机游走）跌跌撞撞地从噪声走回数�
 └───────────────┬─────────────────────────────────────────────┘
                 │
                 ▼
-┌──────────────────────────────────────┐  [语义编码: Backbone]
+┌──────────────────────────────────────┐  [语义编码层: Backbone]
 │         Pre-trained VLM              │  (Vision-Language Encoder)
 │   (提取任务意图：如“把杯子放到托盘上”)    │
 └───────────────┬──────────────────────┘
                 │
                 │ global_condition (语义引导)
                 ▼
-┌──────────────────────────────────────┐  [动作生成: Policy Head]
+┌──────────────────────────────────────┐  [动作生成层: Policy Head]
 │     Flow Matching Network (MLP/DiT)  │
 │ ┌──────────────────────────────────┐ │
 │ │  x_t (当前带噪动作/中间状态)      │ │
@@ -58,7 +58,7 @@ Diffusion 就像一个醉汉（随机游走）跌跌撞撞地从噪声走回数�
 └───────────────┬──────────────────────┘
                 │
                 ▼
-┌──────────────────────────────────────┐  [执行端]
+┌──────────────────────────────────────┐  [执行层]
 │        ODE Solver (Euler/Heun)       │
 │  (通过 1-10 步积分得到最终动作序列)     │
 └──────────────────────────────────────┘
@@ -69,45 +69,51 @@ Diffusion 就像一个醉汉（随机游走）跌跌撞撞地从噪声走回数�
 ## 2. 核心思想：从噪声流向动作 (The Math behind Flow)
 
 ### 2.1 什么是 Flow Matching?
+
 不同于 Diffusion Model 学习去噪过程 (Denoising Score Matching)，Flow Matching 直接学习一个 **确定性的常微分方程 (ODE)**，定义了概率密度路径 $p_t(x)$ 如何随时间 $t$ 演变。
 
 我们定义一个 **向量场 (Vector Field)** $v_t(x)$，它描述了样本在时间 $t$ 的移动速度和方向。
 
 $$
 \frac{dx}{dt} = v_t(x)
-
 $$
-- $x_0$: 真实数据分布 (Real Data, e.g., 机器人的正确动作)。
-- $x_1$: 标准高斯噪声分布 (Noise, $\mathcal{N}(0, I)$)。
-- **目标**: 找到一个向量场 $v_t$，使得当我们从噪声 $x_1$ 出发，沿着这个场逆流而上 (或顺流而下，取决于定义) 积分到 $t=0$ 时，能够精确地变回 $x_0$。
 
-### 1.2 为什么比 Diffusion 好?
-- **Diffusion**: 轨迹是随机的 (Stochastic)，像布朗运动一样跌跌撞撞地去噪。推理步数多 (50-100步)。
+- $x_0$ ：真实数据分布 (Real Data, e.g., 机器人的正确动作)。
+- $x_1$ ：标准高斯噪声分布 (Noise, $\mathcal{N}(0, I)$)。
+- **目标** ：找到一个向量场 $v_t$，使得当我们从噪声 $x_1$ 出发，沿着这个场逆流而上 (或顺流而下，取决于定义) 积分到 $t=0$ 时，能够精确地变回 $x_0$。
+
+### 2.2 为什么比 Diffusion 好?
+
+- **Diffusion**: 轨迹是随机的 (Stochastic)，像布朗运动一样跌跌撞撞地去噪。推理步数多 (50-100 步)。
 - **Flow Matching**: 我们可以强制模型学习一条 **"直的" (Straight)** 轨迹。
-    - **Optimal Transport (最优传输)**: 点对点之间直线最短。Flow Matching 可以学习这种直线路径，使得推理极其高效 (10步以内)。
+    - **Optimal Transport (最优传输)**: 点对点之间直线最短。Flow Matching 可以学习这种直线路径，使得推理极其高效 (10 步以内)。
     - **确定性与稳定性**: 相比于随机采样，ODE 的确定性使得动作生成更加平滑，减少了高频抖动 (Jitter)，这对机械臂控制至关重要。
 
 ![Flow Matching vs Diffusion](../assets/flow_matching_vs_diffusion.png)
 *图示: Diffusion 的随机轨迹 (左) vs Flow Matching 的直线轨迹 (右)*
 
-## 2. 核心公式详解 (Key Formulas)
+## 3. 核心公式详解 (Key Formulas)
 
-### 0. 核心数学思想：两点之间，直线最短
+### 3.1 核心数学思想：两点之间，直线最短
+
 如果你觉得 Flow Matching 比 Diffusion 还难懂，先看这个逻辑：
+
 1.  **路径 (Path)**：想象噪声在左边，动作在右边。Diffusion 像个醉汉，走一步退两步，最后才晃到终点；Flow Matching 则在地上画了一根直线。
 2.  **速度 (Velocity)**：网络不再学习“怎么去噪”，而是学习“在这根直线上该跑多快、往哪跑”。
 3.  **效率**：因为是直线，所以推理时只需要跑 5-10 步就到了，比 Diffusion 的 50 步快得多。
 
 ---
 
-### 2.1 线性插值路径 (Conditional Flow)
+### 3.2 线性插值路径 (Conditional Flow)
+
 为了训练模型，我们需要构造一个"正确答案"。假设我们已知一个真实样本 $x_0$ 和一个采样噪声 $x_1$，我们定义一条连接它们的直线路径：
 
 $$
 x_t = (1 - t)x_0 + t x_1, \quad t \in [0, 1]
-
 $$
+
 #### 深度补课：带数字的“直线”插值
+
 假设真实动作 $x_0 = [0, 0]$（原点），采样噪声 $x_1 = [10, 10]$。
 
 1.  **开始 ($t=0$)**: $x_0 = [0, 0]$。
@@ -118,14 +124,16 @@ $$
 
 ---
 
-### 2.2 目标速度 (Target Velocity)
+### 3.3 目标速度 (Target Velocity)
+
 对上面的路径 $x_t$ 对时间 $t$ 求导，得到该路径上的理想速度 $u_t(x|x_1)$：
 
 $$
 \frac{d}{dt} x_t = \frac{d}{dt} \left( (1 - t)x_0 + t x_1 \right) = x_1 - x_0
-
 $$
+
 #### 深度补课：为什么速度是常数？
+
 继续上面的例子 $x_0 = [0, 0], x_1 = [10, 10]$：
 *   目标速度 $v = x_1 - x_0 = [10, 10]$。
 *   这说明：无论你在路径的哪个位置（无论是 $t=0.1$ 还是 $t=0.9$），只要你以每秒 $[10, 10]$ 的速度前进，你就能在 1 秒内从起点走到终点。
@@ -134,26 +142,28 @@ $$
 
 ---
 
-### 2.3 损失函数 (Loss Function)
-我们训练一个神经网络 $v_\theta(x_t, t, \text{cond})$ 来拟合这个目标速度。这就是 **Conditional Flow Matching (CFM)** loss：
+### 3.4 损失函数 (Loss Function)
+
+我们训练一个神经网络 $v_{\theta}(x_t, t, \text{cond})$ 来拟合这个目标速度。这就是 **Conditional Flow Matching (CFM)** loss：
 
 $$
-\mathcal{L}(\theta) = \mathbb{E}_{t, x_0, x_1} \left[ \left\| v_\theta(x_t, t, \text{cond}) - (x_1 - x_0) \right\| ^2 \right]
-
+\mathcal{L}(\theta) = \mathbb{E}_{t, x_0, x_1} \left[ \lVert v_{\theta}(x_t, t, \text{cond}) - (x_1 - x_0) \rVert^2 \right]
 $$
+
 #### 数学符号“大白话”翻译：
+
 *   **$x_1 - x_0$ (目标速度)**：这是我们的“标准答案”。它告诉模型：“从起点到终点，你就得往这个方向跑，速度就是这么多”。
-*   **$v_\theta(x_t, t, \text{cond})$ (预测速度)**：模型根据当前位置 $x_t$（在直线上的进度）和图像指令，给出的速度建议。
+*   **$v_{\theta}(x_t, t, \text{cond})$ (预测速度)**：模型根据当前位置 $x_t$（在直线上的进度）和图像指令，给出的速度建议。
 *   **$\text{cond}$**：这非常关键！它包含了“我要抓杯子”这个任务信息。如果没有它，模型就不知道该往哪个终点跑。
-*   **$\|\dots\|^2$**：如果模型建议的速度和标准答案不一致，误差平方就会变大。
+*   **$\lVert \dots \rVert^2$**：如果模型建议的速度和标准答案不一致，误差平方就会变大。
 
 ---
 
-### 2.4 深度补课：Pi0 中的 Flow Matching 数学知识点
+### 3.5 深度补课：Pi0 中的 Flow Matching 数学知识点
 
 如果你对 π0 的 Flow Matching 公式感到陌生，这里是为你准备的数学补丁包：
 
-#### 1. 向量场 $v_\theta$ ：流动的指令
+#### 1. 速度场 $v_{\theta}$ ：流动的指令
 *   **直观理解**：想象你在一根水管里放了一个乒乓球。水管里的每一个水流方向（速度）就构成了一个向量场。
 *   **数学含义**：它是一个函数，输入当前动作状态 $x$ 和时间 $t$，输出一个速度向量。它定义了动作如何随时间平滑地“流动”到目的地。
 
@@ -161,7 +171,7 @@ $$
 *   **直观理解**：这就是“跟着箭头走”。
 *   **为什么要它**：在控制机器人时，我们需要极高的实时性。ODE 允许我们通过简单的累加（积分）来计算出下一时刻的精确位置，这种确定性比扩散模型的随机采样要稳得多。
 
-#### 3. 线性路径 (Linear Path) $x_t = (1-t)x_0 + tx_1$ ：最简单的一条线
+#### 3. 线性路径 (Linear Path) $x_t = (1-t)x_0 + tx_1$ ：两点之间直线最短
 *   **直观理解**：这就是在两点之间拉了一根直线。
 *   **为什么用它**：在所有可能的路径中，直线是最容易预测的。Flow Matching 强迫模型学习这条直线路径，这样推理时就不需要弯弯绕绕，几步就能走完。
 
@@ -171,9 +181,10 @@ $$
 
 ---
 
-## 3. 模型架构 (Pseudo-Code)
+## 4. 模型架构 (Pseudo-Code)
 
-### 2.1 VLM Backbone (Conditioning)
+### 4.1 VLM Backbone (Conditioning)
+
 使用 PaliGemma 或类似 VLM 提取多模态特征。
 
 ```python
@@ -193,7 +204,8 @@ class Pi0VLMBackbone(nn.Module):
         return global_cond
 ```
 
-### 2.2 Flow Matching Policy Head
+### 4.2 Flow Matching Policy Head
+
 这是一个 MLP 或 Transformer，预测“速度场”。
 
 ```python
@@ -232,7 +244,8 @@ class FlowMatchingPolicy(nn.Module):
         return velocity
 ```
 
-## 3. 推理过程 (Inference / Sampling)
+## 5. 推理过程 (Inference / Sampling)
+
 使用 ODE Solver (如 Euler 方法) 从噪声生成动作。
 
 ```python
@@ -277,7 +290,8 @@ def generate_action(policy, vlm_cond, action_dim, steps=10, cfg_scale=1.0):
     return x_t
 ```
 
-## 4. 训练过程 (Training)
+## 6. 训练过程 (Training)
+
 Flow Matching 的 Loss 非常直观：**回归目标速度**。
 目标速度就是从噪声 $x_1$ 指向真实数据 $x_0$ 的方向。
 
@@ -309,31 +323,35 @@ def compute_loss(policy, vlm_cond, real_action):
     return loss
 ```
 
-## 6. 为什么 Pi0 选择 Flow Matching? (Deep Dive)
+## 7. 为什么 Pi0 选择 Flow Matching? (Deep Dive)
 
-### 6.1 连续性 vs 离散性 (Continuous vs Discrete)
+### 7.1 连续性 vs 离散性 (Continuous vs Discrete)
+
 - **RT-1/RT-2 (Discrete)**: 将动作空间切分为 256 个格子。
     - *问题*: 丢失精度。对于灵巧手这种需要微米级控制的任务，离散化会导致动作"一卡一卡的" (Jitter)。
 - **Pi0 (Continuous)**: 直接输出浮点数速度向量。
     - *优势*: 理论上精度无限，动作平滑，更符合物理世界的本质。
 
-### 6.2 高频控制的数学基础
+### 7.2 高频控制的数学基础
+
 - 机器人控制回路通常是 500Hz。如果模型推理需要 100ms (10Hz)，中间 490ms 都在"盲跑"。
 - Flow Matching 的 **ODE 求解器** 特性允许我们在推理时进行 **时间步缩放 (Time-step Scaling)**。
     - 我们可以只跑 ODE 的 1 步 (Euler Step)，虽然精度略低，但速度极快，可以实现高频响应。
     - 也可以跑 10 步，获得高精度动作。
     - 这种 **Compute-Accuracy Trade-off** 是 Transformer 做不到的。
 
-### 6.3 为什么是直线? (Optimal Transport)
+### 7.3 为什么是直线? (Optimal Transport)
+
 - **Wasserstein Distance**: 在概率分布空间中，将一个分布搬运到另一个分布的"最小代价"路径就是直线 (Geodesic)。
 - **OT-CFM**: 我们构造的 $x_t = (1-t)x_0 + t x_1$ 正是 Optimal Transport 的位移插值 (Displacement Interpolation)。
 - **Rectified Flow**: 这与 Stable Diffusion 3 使用的 Rectified Flow 思想一致，旨在将弯曲的扩散路径"拉直"，从而允许极少步数的推理 (1-step generation)。
 
-### 6.4 ODE Solver 的选择
+### 7.4 ODE Solver 的选择
+
 - **Euler (1st order)**: 最简单，一步走到底。$x_{t+dt} = x_t + v_t dt$。速度最快，但误差最大。
 - **Midpoint / Heun (2nd order)**: 先试探性走半步，看斜率，再修正。精度更高，但需要 2 倍的 NFE (Number of Function Evaluations)。
 - **RK4 (4th order)**: 经典的高精度求解器，需要 4 倍 NFE。
-- **结论**: 在机器人控制中，通常使用 **Euler** (追求极速) 或 **Heun** (追求平衡)。由于 Flow Matching 训练出的向量场非常平滑 (直线)，Euler 方法通常已经足够好用。
+- **结论**: 在机器人控制中，通常使用 **Euler** (追求极速) 或 **Heun** (追求平衡)。由于 Flow Matching 训练出的向量场非常平滑 (直线)， Euler 方法通常已经足够好用。
 
 ---
 [← Back to Theory](./README.md)
