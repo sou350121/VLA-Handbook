@@ -65,10 +65,22 @@ VLA-Handbook/
 │   ├── flash_attention.md      # Flash Attention
 │   ├── peft_lora.md            # LoRA/QLoRA 原理
 │   ├── vln_dualvln.md          # 视觉语言导航（VLN）
+│   ├── gr00t_n1_6.md           # NVIDIA GR00T-N1.6 人形模型
+│   ├── pi0_5_dissection.md     # π0.5：开放世界泛化
+│   ├── pi0_6_dissection.md     # π0.6：Recap 自我进化
+│   ├── gr_rl_dissection.md     # ByteDance GR-RL 详解
+│   ├── wall_oss.md             # WALL-OSS：Uni-CoT 端到端
+│   ├── vla_unified_token_space.md # MM-ACT：共享 Token 空间
+│   ├── tokenization.md         # 具身智能中的 Tokenization
+│   ├── vla_intrinsic_safety.md  # SGTM 与 VLA 本质安全
+│   ├── fast.md                 # FAST：频域动作 Token 化
+│   ├── traditional_action_generation.md # 传统 MSE/GMM 生成
 │   └── ...                     # 更多文档见 theory/README.md
 ├── deployment/                 # 真机与部署
 │   ├── README.md               # 索引
 │   ├── ur5_control_guide.md    # UR5 Python 控制实战
+│   ├── dexterous_hand_wuji.md  # 舞肌手（Wuji Hand）深度拆解
+│   ├── optimus_hand_v2.md      # 特斯拉 Optimus V2 灵巧手拆解
 │   ├── ros_and_optimization.md # ROS 集成与性能优化
 │   └── ...                     # 更多文档见 deployment/README.md
 ├── book/                       # 电子书版本
@@ -105,15 +117,16 @@ VLA-Handbook/
 
 | 主题 | 文档 | 一句话总结 |
 |:-----|:-----|:---------|
-| **架构总览** | [`vla_arch.md`](./theory/vla_arch.md) | VLM Backbone + Action Head 设计范式 |
-| **动作生成** | [`diffusion_policy.md`](./theory/diffusion_policy.md) | 扩散去噪，解决多模态分布 |
+| **前沿模型** | [`pi0_5_dissection.md`](./theory/pi0_5_dissection.md) | π0.5 开放世界泛化，分层推理机制 |
+| | [`gr00t_n1_6.md`](./theory/gr00t_n1_6.md) | NVIDIA 人形基础模型，DiT 异步双系统 |
+| | [`wall_oss.md`](./theory/wall_oss.md) | Uni-CoT 边想边动，离散+连续双输出 |
+| | [`vla_unified_token_space.md`](./theory/vla_unified_token_space.md) | MM-ACT：全模态共享 Token 空间 |
+| **动作生成** | [`tokenization.md`](./theory/tokenization.md) | 详解均匀分桶、FAST 频域压缩与 VQ-VAE |
+| | [`diffusion_policy.md`](./theory/diffusion_policy.md) | 扩散去噪，解决多模态分布 |
 | | [`pi0_flow_matching.md`](./theory/pi0_flow_matching.md) | Flow Matching（比 Diffusion 快 5x） |
-| | [`act.md`](./theory/act.md) | CVAE + 动作分块，ALOHA 核心 |
+| **导航专题** | [`vln_dualvln.md`](./theory/vln_dualvln.md) | DualVLN：慢规划/快执行的异步双系统 |
 | **效率优化** | [`flash_attention.md`](./theory/flash_attention.md) | Tiling + 重计算，显存 O(N²)→O(N) |
 | | [`peft_lora.md`](./theory/peft_lora.md) | 低秩分解，QLoRA ~6GB 微调 7B |
-| **前沿模型** | [`pi0_6_dissection.md`](./theory/pi0_6_dissection.md) | Recap 自我进化 + Action Expert |
-| | [`gr_rl_dissection.md`](./theory/gr_rl_dissection.md) | ByteDance 三阶段 RL，真机穿鞋带 |
-| **导航专题** | [`vln_dualvln.md`](./theory/vln_dualvln.md) | DualVLN：慢规划/快执行的异步双系统 |
 
 > 💡 **更多推荐**：查看 [Theory 总索引](./theory/README.md) 获取完整学习路线图
 
@@ -283,7 +296,15 @@ action = policy.select_action(observation)
 <details>
 <summary><b>📝 更新日志（最近更新）</b></summary>
 
-### 2025-12-18 🆕
+### 2025-12-26 🆕
+- **数学与架构强化**: 深度补全了 Diffusion Policy、Flow Matching (π0)、FAST Tokenizer 的数学推导与数值演练。
+- **SOTA 模型详解**: 新增 [`gr00t_n1_6.md`](./theory/gr00t_n1_6.md) (NVIDIA 人形模型)、[`pi0_5_dissection.md`](./theory/pi0_5_dissection.md) (π0.5 开放世界泛化)、[`vla_unified_token_space.md`](./theory/vla_unified_token_space.md) (MM-ACT)。
+- **Tokenization 专题**: 新增 [`tokenization.md`](./theory/tokenization.md) 详解均匀分桶、FAST 频域压缩与 VQ-Codebook。
+- **本质安全专题**: 新增 [`vla_intrinsic_safety.md`](./theory/vla_intrinsic_safety.md) 详解 SGTM 知识屏蔽技术。
+- **硬件深度拆解**: 新增舞肌手 (Wuji Hand) 与特斯拉 Optimus V2 灵巧手的机械与控制原理分析。
+- **批判性思维**: 为所有核心模型文档增加了“独立思考与批判性疑问”章节，提升面试竞争力。
+
+### 2025-12-18
 - **VLN 专题**: 新增 [`vln_dualvln.md`](./theory/vln_dualvln.md) - DualVLN 快慢系统（首个 VLN 基础模型）
 - **首页优化**: 重构为研究型 landing page，Theory 优先，长内容折叠收纳
 
