@@ -79,6 +79,5 @@
 真实的灵巧手落地，70% 时间在和硬件 bug 搏斗，20% 在写驱动和通信，只有 10% 在调 VLA 模型。
 **Respect the Physics.**
 
-
 ---
 [← Back to Deployment](./README.md)

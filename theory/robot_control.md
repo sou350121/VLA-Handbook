@@ -56,12 +56,10 @@
 
 **定义**: 给定关节角度 $\mathbf{q}$，求末端执行器位姿 $\mathbf{T}_{ee}$。
 
-
 $$
 \mathbf{T}_{ee} = FK(\mathbf{q}) = \mathbf{T}_1(\theta_1) \cdot \mathbf{T}_2(\theta_2) \cdots \mathbf{T}_n(\theta_n)
+
 $$
-
-
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                     正运动学示意图                                           │
@@ -138,12 +136,10 @@ rotation = R.from_matrix(T_ee[:3, :3])
 
 **定义**: 给定末端执行器目标位姿 $\mathbf{T}_{target}$，求关节角度 $\mathbf{q}$。
 
-
 $$
 \mathbf{q} = IK(\mathbf{T}_{target})
+
 $$
-
-
 **方法对比**:
 
 | 方法 | 优点 | 缺点 | 适用场景 |
@@ -234,12 +230,10 @@ def rotation_error(R_current, R_target):
 
 **定义**: 关节速度到末端速度的映射。
 
-
 $$
 \dot{\mathbf{x}} = \mathbf{J}(\mathbf{q}) \cdot \dot{\mathbf{q}}
+
 $$
-
-
 其中 $\dot{\mathbf{x}} = [v_x, v_y, v_z, \omega_x, \omega_y, \omega_z]^T$
 
 **应用**:
@@ -255,12 +249,10 @@ $$
 
 **拉格朗日方程**:
 
-
 $$
 \mathbf{M}(\mathbf{q})\ddot{\mathbf{q}} + \mathbf{C}(\mathbf{q}, \dot{\mathbf{q}})\dot{\mathbf{q}} + \mathbf{g}(\mathbf{q}) = \boldsymbol{\tau}
+
 $$
-
-
 - $\mathbf{M}(\mathbf{q})$: 惯性矩阵 (Mass Matrix)
 - $\mathbf{C}(\mathbf{q}, \dot{\mathbf{q}})$: 科氏力/离心力矩阵
 - $\mathbf{g}(\mathbf{q})$: 重力向量
@@ -497,12 +489,10 @@ A: D 项是误差的微分（变化率）。噪声变化很快，微分后会被
 
 **最基础的关节空间控制**:
 
-
 $$
 \tau = K_p (q_d - q) + K_d (\dot{q}_d - \dot{q}) + K_i \int (q_d - q) dt
+
 $$
-
-
 ```python
 class PIDController:
     """单关节 PID 控制器"""
@@ -570,12 +560,10 @@ class JointPIDController:
 
 **核心思想**: 让机器人表现得像弹簧-阻尼系统。
 
-
 $$
 \mathbf{F} = \mathbf{M}_d (\ddot{\mathbf{x}}_d - \ddot{\mathbf{x}}) + \mathbf{B}_d (\dot{\mathbf{x}}_d - \dot{\mathbf{x}}) + \mathbf{K}_d (\mathbf{x}_d - \mathbf{x})
+
 $$
-
-
 - $\mathbf{M}_d$: 期望惯性
 - $\mathbf{B}_d$: 期望阻尼
 - $\mathbf{K}_d$: 期望刚度

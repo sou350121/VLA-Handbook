@@ -27,12 +27,10 @@
 
 ### 1.2 SSL 的价值
 
-
 $$
 \text{大量无标签数据} \xrightarrow{\text{SSL 预训练}} \text{通用表示} \xrightarrow{\text{少量标签微调}} \text{高性能策略}
+
 $$
-
-
 - **视觉表示**: 从海量图像/视频中学习通用视觉特征
 - **动作表示**: 从人类视频中学习动作先验
 - **世界模型**: 从视频中学习物理规律
@@ -45,12 +43,10 @@ $$
 
 #### 2.1.1 InfoNCE 损失
 
-
 $$
 \mathcal{L}_{\text{InfoNCE}} = -\log \frac{\exp(\text{sim}(z_i, z_j) / \tau)}{\sum_{k=1}^{2N} \mathbf{1}_{k \neq i} \exp(\text{sim}(z_i, z_k) / \tau)}
+
 $$
-
-
 其中:
 - $z_i, z_j$: 同一样本的两个增强视图的表示
 - $\tau$: 温度系数 (通常 0.07)

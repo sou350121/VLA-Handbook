@@ -12,8 +12,8 @@
 - **核心数学工具**: **Langevin Dynamics (朗之万动力学)** 与 **Score Matching**。
 - **解题逻辑**:
     1.  **逆向思维**: 如果我们知道数据是如何一步步变成噪声的（前向过程），那么只要学会每一步的"逆操作"（去噪），就能从纯噪声中恢复出数据。
-    2.  **梯度指引**: 学习数据分布的梯度场（Score Function，$\nabla_x \log p(x)$）。这就像在迷雾（噪声）中，每一步都沿着"数据密度更高"的方向走一小步，最终必然会走到数据流形上（生成合理的动作）。
-    3.  **多模态**: 不像回归模型寻找"平均值"，扩散模型学习的是整个地形（Landscape），因此可以从同一个噪声起点走到不同的终点（解决多解问题）。
+15. **梯度指引**: 学习数据分布的梯度场 (Score Function, $ \nabla_x \log p(x) $ )。这就像在迷雾（噪声）中，每一步都沿着"数据密度更高"的方向走一小步，最终必然会走到数据流形上（生成合理的动作）。
+16. **多模态**: 不像回归模型寻找"平均值"，扩散模型学习的是整个地形 (Landscape)，因此可以从同一个噪声起点走到不同的终点（解决多解问题）。
 
 ## 1. 为什么需要 Diffusion Policy? (Why?)
 
@@ -41,12 +41,12 @@
 ---
 
 ### 2.1 前向过程 (Forward Process / Diffusion)
-将真实的动作轨迹 $x_0$ 逐步加噪，变成纯高斯噪声 $x_T$。
+将真实的动作轨迹 $x_0$ 逐步加噪，变成纯高斯噪声 $x_T$ 。
 
 $$
 q(x_t | x_{t-1}) = \mathcal{N}(x_t; \sqrt{1 - \beta_t} x_{t-1}, \beta_t I)
-$$
 
+$$
 #### 深度补课：带数字的“加盐”过程
 假设机器人原本的动作是一个 2D 向量 $x_0 = [1.0, -0.5]$（比如：向右移动 1 米，向后移动 0.5 米）。
 
@@ -62,11 +62,12 @@ $$
     *   **结果 $x_T$**: 最终可能变成 $[-1.2, 0.8]$ 这种完全看不出规律的随机点。
 
 经过 $t$ 步后，可以直接写出 $x_t$ 与 $x_0$ 的关系：
+
 $$
 q(x_t | x_0) = \mathcal{N}(x_t; \sqrt{\bar{\alpha}_t} x_0, (1 - \bar{\alpha}_t) I)
-$$
 
-其中 $\alpha_t = 1 - \beta_t$, $\bar{\alpha}_t = \prod_{i=1}^t \alpha_i$。
+$$
+其中 $\alpha_t = 1 - \beta_t$ , $\bar{\alpha}_t = \prod_{i=1}^t \alpha_i$ 。
 
 ### 2.2 噪声调度器 (Noise Scheduler)
 $\beta_t$ 的选择至关重要，通常有两种策略：
@@ -100,8 +101,8 @@ $\beta_t$ 的选择至关重要，通常有两种策略：
 
 $$
 x_{t-1} = \frac{1}{\sqrt{\alpha_t}} \left( x_t - \frac{1 - \alpha_t}{\sqrt{1 - \bar{\alpha}_t}} \epsilon_\theta(x_t, t, \text{Obs}) \right) + \sigma_t z
-$$
 
+$$
 其中 $z \sim \mathcal{N}(0, I)$ 是随机噪声 (但在最后一步 $t=0$ 时设为 0)。 $\sigma_t$ 是方差项，通常取 $\sqrt{\beta_t}$ 或 $\tilde{\beta}_t$。
 
 ---
@@ -128,10 +129,12 @@ $$
     1.  **坡度（确定性）**：脚下的坡度会告诉你哪里更低，指引你向下走。
     2.  **微风（随机性）**：一阵阵乱风会随机推你一下。这看似多余，其实非常重要——它能防止你被卡在半山腰的一个小坑（局部最优解）里，帮你越过障碍到达真正的谷底。
 *   **数学公式**（采样迭代）：
-    $$
-    x_{k+1} = x_k + \eta \nabla_x \log p(x) + \sqrt{2\eta} \epsilon
-    $$
-    *   $\nabla_x \log p(x)$ ：这就是“分数”（Score），指引你走向概率最高（动作最合理）的方向。
+
+$$
+x_{k+1} = x_k + \eta \nabla_x \log p(x) + \sqrt{2\eta} \epsilon
+
+$$
+*   $\nabla_x \log p(x)$ ：这就是“分数”（Score），指引你走向概率最高（动作最合理）的方向。
     *   $\epsilon$ ：注入的随机噪声，给系统增加“活性”，确保探索。
 *   **机器人视角**：在推理时，模型从纯噪声出发，通过朗之万动力学的迭代，不断修正动作。这确保了生成的轨迹不仅符合人类指令，而且在物理上是“顺滑”且“符合逻辑”的（即处于训练集动作的分布流形上）。
 
@@ -142,8 +145,8 @@ $$
 
 $$
 \mathcal{L} = \mathbb{E}_{t, x_0, \epsilon} \left[ \| \epsilon - \epsilon_\theta(x_t, t, \text{Obs}) \|^2 \right]
-$$
 
+$$
 #### 数学符号“大白话”翻译：
 *   **$\epsilon$ (真实噪声)**：我们亲手撒进动作序列里的“盐”。
 *   **$\epsilon_\theta(\dots)$ (预测噪声)**：模型盯着带噪声的动作 $x_t$（加了盐的肉）和图像指令，猜出来的“盐”。
@@ -182,8 +185,8 @@ Diffusion 的最大缺点是慢。DDPM 需要 100 步去噪，推理一次可能
 
 $$
 x_{t-1} = \sqrt{\bar{\alpha}_{t-1}} \underbrace{\left( \frac{x_t - \sqrt{1 - \bar{\alpha}_t} \epsilon_\theta}{\sqrt{\bar{\alpha}_t}} \right)}_{\text{predicted } x_0} + \underbrace{\sqrt{1 - \bar{\alpha}_{t-1} - \sigma_t^2} \epsilon_\theta}_{\text{direction pointing to } x_t} + \sigma_t \epsilon_t
-$$
 
+$$
 - **效果**: 可以将步数从 100 步压缩到 **10-15 步**，同时保持较高的生成质量。
 
 ### 4.2 Receding Horizon Control (RHC)
@@ -200,7 +203,6 @@ A: 因为它是迭代去噪。解决方法包括使用 DDIM 减少步数，或�
 
 **Q: 什么是 Action Chunking?**
 A: 一次预测一段未来的动作序列，而不是只预测下一步。这利用了动作的时间相关性，提高了平滑度。
-
 
 ---
 [← Back to Theory](./README.md)

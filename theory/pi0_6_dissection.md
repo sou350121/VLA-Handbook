@@ -287,6 +287,5 @@ A:
 
 > **面试 Tip**: 重点强调 **Recap 算法** 和 **Offline RL**。这是目前 Embodied AI 领域从"能用"走向"好用"的关键技术路径。
 
-
 ---
 [← Back to Theory](./README.md)

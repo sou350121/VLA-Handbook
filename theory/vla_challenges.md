@@ -499,4 +499,3 @@ A: 更像"手脚"。高层规划由 LLM/VLM 负责，VLA 作为 executor 执行�
 ---
 [← Back to Theory](./README.md)
 
-

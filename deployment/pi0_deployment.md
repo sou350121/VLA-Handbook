@@ -262,7 +262,5 @@ torchrun --nproc_per_node=8 -m openpi.training.train \
 - **Eye-in-Hand** (Wrist Cam)
 - **Aruco 标定流程**
 
-
-
 ---
 [← Back to Deployment](./README.md)

@@ -461,7 +461,6 @@ class ActionExpert(nn.Module):
         
         return velocity
 
-
 class ActionExpertLayer(nn.Module):
     """单层 Action Expert: Self-Attn → Cross-Attn → FFN"""
     
@@ -502,7 +501,6 @@ class ActionExpertLayer(nn.Module):
         x = x + self.ffn(x_norm)
         
         return x
-
 
 class AdaLayerNorm(nn.Module):
     """Adaptive Layer Norm: 用时间嵌入调制 scale 和 shift"""

@@ -243,7 +243,6 @@ class TactileReading:
     slip_detected: bool           # 是否检测到滑动
     raw_image: Optional[np.ndarray] = None  # 视触觉原始图像
 
-
 class TactileFeedbackProcessor:
     """触觉反馈处理器"""
     
@@ -302,7 +301,6 @@ class TactileFeedbackProcessor:
             return -0.2  # 减少
         
         return 0.0  # 保持
-
 
 class SlipDetector:
     """基于视触觉的滑动检测器"""
@@ -510,7 +508,6 @@ from dataclasses import dataclass, field
 from typing import Dict, Any, List
 from concurrent.futures import ThreadPoolExecutor
 
-
 @dataclass
 class SensorFrame:
     """传感器帧数据"""
@@ -518,7 +515,6 @@ class SensorFrame:
     sensor_id: str
     data: Any
     metadata: Dict = field(default_factory=dict)
-
 
 class SynchronizedDataCollector:
     """同步多模态数据采集器"""
@@ -664,7 +660,6 @@ class SynchronizedDataCollector:
                     
         print(f"Saved {len(self.episode_data)} frames to {filepath}")
         self.episode_data = []
-
 
 # 使用示例
 if __name__ == "__main__":
@@ -875,7 +870,6 @@ import numpy as np
 from src.control.force_controller import ForceController
 from src.control.slip_controller import SlipController
 
-
 class TestForceController:
     """力控制器单元测试"""
     
@@ -922,7 +916,6 @@ class TestForceController:
         # 积分项应被限制
         assert abs(controller.integral_error) < 100.0
 
-
 class TestSlipController:
     """滑动控制器测试"""
     
@@ -957,7 +950,6 @@ class TestSlipController:
         
         result = controller.update(tactile_data)
         assert result['grip_adjustment'] > 0
-
 
 # 集成测试
 class TestIntegration:

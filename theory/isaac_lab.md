@@ -729,4 +729,3 @@ tactile_cfg = TactileSensorCfg(
 
 [← Back to Theory](./README.md)
 
-

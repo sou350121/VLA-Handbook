@@ -107,8 +107,8 @@ Flow Matching 不直接预测动作 \(a\)，而是学习一个 **速度场** \(v
 
 $$
 \frac{dx}{dt}=v_\theta(x,t,\text{cond})
-$$
 
+$$
 - \(x\)：这里可以理解为“动作变量”（比如关节角/末端位姿/夹爪开合等的向量）
 - \(t\in[0,1]\)：时间参数
 - \(\text{cond}\)：条件（视觉/语言特征 + 可能的 latent thought）
@@ -118,8 +118,8 @@ $$
 
 $$
 x_t=(1-t)x_0+t x_1
-$$
 
+$$
 这条路径的好处是：**它在分布空间里近似一条“拉直”的搬运路径**，能让推理只需少量步数就从噪声走回数据。
 
 ### 2.3 训练信号：目标速度是常量 \(x_1-x_0\)
@@ -127,14 +127,14 @@ $$
 
 $$
 \frac{d}{dt}x_t=x_1-x_0
-$$
 
+$$
 于是训练损失就是回归这个目标速度：
 
 $$
 \mathcal{L}(\theta) = \mathbb{E}_{t,x_0,x_1} \left[ \lVert v_\theta(x_t, t, \text{cond}) - (x_1 - x_0) \rVert ^2 \right]
-$$
 
+$$
 你可以把它理解为：无论走到路径上的哪一点 $x_t$，网络都要告诉你“沿着哪个方向走”，才能沿着那条直线把噪声/数据连起来。
 
 ---
@@ -176,20 +176,20 @@ $$
 
 $$
 x_0=\begin{bmatrix}0.20\\-0.60\end{bmatrix}
-$$
 
+$$
 采样一个噪声：
 
 $$
 x_1=\begin{bmatrix}-0.40\\0.10\end{bmatrix}
-$$
 
+$$
 那么目标速度（常量向量）就是：
 
 $$
 u=x_1-x_0=\begin{bmatrix}-0.60\\0.70\end{bmatrix}
-$$
 
+$$
 ### 3.2 随机采样一个时间 \(t\)，构造 \(x_t\)
 取 \(t=0.70\)：
 
@@ -197,8 +197,8 @@ $$
 x_t=(1-0.70)x_0+0.70 x_1
 =0.30\begin{bmatrix}0.20\\-0.60\end{bmatrix}+0.70\begin{bmatrix}-0.40\\0.10\end{bmatrix}
 =\begin{bmatrix}-0.22\\-0.11\end{bmatrix}
-$$
 
+$$
 训练时网络看到的是 \((x_t,t,\text{cond})\)，标签是 \(u=x_1-x_0\)。
 
 ### 3.3 一步 MSE：把“预测速度”和“目标速度”对齐
@@ -206,22 +206,22 @@ $$
 
 $$
 v_\theta(x_t,t,\text{cond})=\begin{bmatrix}-0.50\\0.80\end{bmatrix}
-$$
 
+$$
 那么误差就是：
 
 $$
 v_\theta-u=
 \begin{bmatrix}-0.50\\0.80\end{bmatrix}-\begin{bmatrix}-0.60\\0.70\end{bmatrix}
 =\begin{bmatrix}0.10\\0.10\end{bmatrix}
-$$
 
+$$
 对应的平方误差（2 维平均）：
 
 $$
 \text{MSE}=\frac{0.10^2+0.10^2}{2}=0.01
-$$
 
+$$
 这就是 Flow Matching 的“数学部分结合数据例子”的最小闭环：**用可计算的数值把公式落地**。
 
 ### 3.4 推理时怎么从噪声走回数据？（时间反向积分）
@@ -231,16 +231,16 @@ $$
 
 $$
 x^{(k+1)}=x^{(k)}+v_\theta(x^{(k)},t_k,\text{cond})\Delta t
-$$
 
+$$
 如果此处把向量场近似当作常量 \(u=x_1-x_0\)（玩具近似，仅用于直觉），那么第一步就是：
 
 $$
 x^{(1)}=x_1+u\cdot(-0.2)
 =\begin{bmatrix}-0.40\\0.10\end{bmatrix}+\begin{bmatrix}-0.60\\0.70\end{bmatrix}\cdot(-0.2)
 =\begin{bmatrix}-0.28\\-0.04\end{bmatrix}
-$$
 
+$$
 继续 5 步会逐渐靠近 \(x_0\)。真实模型里 \(v_\theta\) 不是常量，会随 \((x,t,\text{cond})\) 变化，但**“少步数的确定性 ODE 走回数据”**这一直觉成立，这也是 Flow Matching 相对 Diffusion 更适合高频控制的原因之一。
 
 ---
@@ -310,7 +310,6 @@ Flow Matching 通过 ODE 积分直接输出连续动作：
 | **适用场景** | 固定环境重复操作 | **新环境探索，家务** | 工厂流水线，高精度装配 |
 
 > **面试 Tip**: 如果被问到 π0.5 的创新点，重点答 **"Hierarchical Inference" (分层推理)** 和 **"Open-world Generalization" (开放世界泛化)**。它是连接"通识大模型"和"物理执行器"的关键桥梁。
-
 
 ---
 [← Back to Theory](./README.md)

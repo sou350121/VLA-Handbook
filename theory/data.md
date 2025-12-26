@@ -215,6 +215,5 @@ for batch in dataloader:
 5.  **数据收集**: 相比于 VR 遥操作，主从臂 (Leader-Follower) 有什么优缺点？(答: 主从臂有力反馈，精度高，但成本高且不仅限于异构机器人映射)
 6.  **Co-training**: 为什么在训练 VLA 时要混合互联网 VQA 数据？(答: 防止灾难性遗忘，保持 VLM Backbone 的通用语义理解和泛化能力)
 
-
 ---
 [← Back to Theory](./README.md)

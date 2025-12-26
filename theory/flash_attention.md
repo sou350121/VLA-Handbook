@@ -227,15 +227,13 @@ Flash Attention 的核心洞察是：**Transformer 的瓶颈不在计算 (FLOPs)
 
 KV-Cache 需要额外显存存储历史 K 和 V：
 
+$$
+\text{KV-Cache Memory} = 2 \times L \times N \times d \times \text{batch\_size} \times \text{bytes}
 
 $$
-\text{KV-Cache 显存} = 2 \times L \times N \times d \times \text{batch\_size} \times \text{bytes}
-$$
-
-
-- $L$: Transformer 层数
-- $N$: 序列长度
-- $d$: 隐藏维度
+- $L$ : Transformer 层数
+- $N$ : 序列长度
+- $d$ : 隐藏维度
 - Factor 2: K 和 V 各一份
 
 **示例 (Llama-7B, FP16)**:
@@ -273,7 +271,6 @@ A: VLA 的注意力模式通常是密集的（视觉 Patch 之间关系紧密）
 
 **Q: Flash Attention 对训练和推理都有效吗？**
 A: 是的。训练时通过 Recomputation 节省显存，推理时通过 Kernel Fusion 加速。Wall-X 等模型在两者都使用。
-
 
 ## 7. 独立思考与批判性疑问 (Critical Thinking)
 

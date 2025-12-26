@@ -7,7 +7,11 @@
 迁移学习的核心数学问题是解决 **Domain Shift (域偏移)**，即源域分布 $P_S(X, Y)$ 与目标域分布 $P_T(X, Y)$ 不一致 ($P_S \neq P_T$)。
 
 解决这一问题的第一性原理是寻找一个映射函数 $\Phi$，使得映射后的特征分布尽可能接近：
-$$ \text{Minimize } \text{Distance}(P_S(\Phi(X)), P_T(\Phi(X))) $$
+
+$$
+\text{Minimize } \text{Distance}(P_S(\Phi(X)), P_T(\Phi(X)))
+
+$$
 其中 Distance 通常由 MMD (最大均值差异) 或 Adversarial Loss (对抗损失) 来衡量。本质上，这是在寻找一种**跨域不变的表示 (Invariant Representation)**，使得模型在新的环境中依然能识别出本质特征。
 
 ---
@@ -29,8 +33,8 @@ $$ \text{Minimize } \text{Distance}(P_S(\Phi(X)), P_T(\Phi(X))) $$
 
 $$
 \text{数据收集成本} = \frac{\text{所需数据量}}{\text{数据收集效率}} \propto \frac{1}{\text{迁移能力}}
-$$
 
+$$
 - **减少数据需求**: 预训练模型只需少量目标域数据微调
 - **提高泛化能力**: 学习跨域不变的特征表示
 - **加速部署**: 新机器人/场景无需从头训练
@@ -305,7 +309,6 @@ class DANN(nn.Module):
         )
         
         return source_task_pred, domain_loss
-
 
 class GradientReversal(torch.autograd.Function):
     @staticmethod

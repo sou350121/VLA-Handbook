@@ -61,6 +61,5 @@ VLA 模型通常参数量巨大 (7B+)，而机器人端的计算资源 (如 Jets
 2. **延迟 (Latency)**: 机器人控制对延迟的要求是多少？(答: 通常 < 100ms，理想 < 30ms。大模型推理通常是瓶颈)
 3. **KV Cache**: 什么是 KV Cache？在机器人连续控制中如何管理？(答: 缓存历史 Token 的 Key/Value，避免重复计算。但在 VLA 中，通常只关注当前帧或短历史，Context Window 不会无限增长)
 
-
 ---
 [← Back to Deployment](./README.md)

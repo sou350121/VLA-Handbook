@@ -181,7 +181,6 @@ for result in results:
         class_name = model.names[cls_id]
         print(f"检测到 {class_name}: {conf:.2f}, 位置: {xyxy}")
 
-
 # 使用 Grounding DINO 进行零样本检测
 from groundingdino.util.inference import load_model, predict
 
@@ -311,7 +310,6 @@ with torch.inference_mode():
     for frame_idx, obj_ids, masks in predictor.propagate_in_video(state):
         # masks: 每帧的分割掩码
         process_mask(frame_idx, masks)
-
 
 # Grounded SAM: 文本驱动分割
 from groundingdino.util.inference import predict as gd_predict
@@ -498,7 +496,6 @@ for result in results:
             bbox = boxes.xyxy[i].tolist()
             cls = int(boxes.cls[i])
             print(f"ID {track_id}: {model.names[cls]} at {bbox}")
-
 
 # SAM 2 + 跟踪: 分割级跟踪
 from sam2.build_sam import build_sam2_video_predictor

@@ -68,10 +68,12 @@ ViT 将图像视为一系列 Patch 的序列，完全摒弃了卷积。
 1.  **Patchify & Linear Projection (切片与线性映射)**:
     - 输入图像 $x \in \mathbb{R}^{H \times W \times C}$ 被切分为 $N$ 个 $P \times P$ 的 Patch $x_p \in \mathbb{R}^{N \times (P^2 \cdot C)}$。
     - **公式**:
-      $$
-      z_0 = [x_p^1 E; x_p^2 E; \cdots; x_p^N E] + E_{pos}
-      $$
-      其中 $E \in \mathbb{R}^{(P^2 \cdot C) \times D}$ 是可学习的线性投影矩阵，$E_{pos} \in \mathbb{R}^{(N+1) \times D}$ 是位置编码。
+
+$$
+z_0 = [x_p^1 E; x_p^2 E; \cdots; x_p^N E] + E_{pos}
+
+$$
+其中 $E \in \mathbb{R}^{(P^2 \cdot C) \times D}$ 是可学习的线性投影矩阵，$E_{pos} \in \mathbb{R}^{(N+1) \times D}$ 是位置编码。
     - **关键细节**: 这一步等价于一个 `Conv2d(in_channels=3, out_channels=D, kernel_size=P, stride=P)` 操作。
 
 2.  **Positional Embedding Interpolation (位置编码插值)**:
@@ -88,15 +90,19 @@ OpenVLA 的视觉编码器使用的是 **SigLIP** (来自 Google DeepMind)，而
 
 #### 1. 为什么不用 CLIP (Softmax Loss)?
 传统的 CLIP 使用 **InfoNCE Loss** (基于 Softmax)，需要维护巨大的负样本对 (Negative Pairs)。
+
 $$
 L_{CLIP} = -\frac{1}{N} \sum_{i=1}^N \log \frac{e^{x_i \cdot y_i / \tau}}{\sum_{j=1}^N e^{x_i \cdot y_j / \tau}}
+
 $$
 - **通信瓶颈**: 分母 $\sum e^{...}$ 需要聚合所有 GPU 上的所有样本 (Global Reduction)。在分布式训练中，这会导致巨大的通信开销。
 
 #### 2. SigLIP 的创新 (Sigmoid Loss)
 SigLIP 将 $N \times N$ 的匹配问题转化为 **$N^2$ 个独立的二分类问题**。
+
 $$
 L_{SigLIP} = - \frac{1}{N} \sum_{i=1}^N \sum_{j=1}^N \left[ \mathbb{I}_{i=j} \log \sigma(x_i \cdot y_j / \tau + b) + \mathbb{I}_{i \neq j} \log (1 - \sigma(x_i \cdot y_j / \tau + b)) \right]
+
 $$
 - **$\mathbb{I}_{i=j}$**: 正样本对 (对角线)，标签为 1。
 - **$\mathbb{I}_{i \neq j}$**: 负样本对 (非对角线)，标签为 0。
@@ -106,7 +112,7 @@ $$
 
 #### 3. 关键实现细节: Bias Initialization
 SigLIP 引入了一个可学习的 Bias $b$ (通常初始化为 $- \log N$)。
-- **原因**: 在训练初期，正样本极少 (1个)，负样本极多 ($N-1$个)。如果 Bias 为 0，Sigmoid 输出 0.5，会导致巨大的初始 Loss (因为大部分应该是 0)。
+- **原因**: 在训练初期，正样本极少 (1个)，负样本极多 ($N-1$ 个)。如果 Bias 为 0，Sigmoid 输出 0.5，会导致巨大的初始 Loss (因为大部分应该是 0)。
 - **Trick**: 初始化 $b = -10$ 或 $- \log N$，强制初始概率接近 0，匹配负样本占主导的先验分布，极大地稳定了训练。
 
 ## 6. 自注意力机制详解 (Self-Attention Deep Dive)
@@ -117,8 +123,8 @@ SigLIP 引入了一个可学习的 Bias $b$ (通常初始化为 $- \log N$)。
 
 $$
 \text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right) V
-$$
 
+$$
 其中：
 - $Q = XW_Q$, $K = XW_K$, $V = XW_V$ (线性投影)
 - $d_k$: Key 的维度 (用于缩放，防止点积过大导致 softmax 饱和)
@@ -164,12 +170,12 @@ $$
 
 $$
 \text{MultiHead}(Q, K, V) = \text{Concat}(\text{head}_1, ..., \text{head}_h) W^O
-$$
 
+$$
 $$
 \text{head}_i = \text{Attention}(QW_i^Q, KW_i^K, VW_i^V)
-$$
 
+$$
 **优势**:
 - 不同头可以关注不同类型的关系 (位置、语义、纹理等)
 - 参数量不变 ($d_k = d / h$)，但表达能力更强
@@ -189,7 +195,6 @@ A: 因为 ViT 缺乏 **归纳偏置 (Inductive Bias)**。CNN 天生知道"相邻
 
 **Q: 什么是 Patchify?**
 A: 将一张图片切成一个个小方块 (e.g., 16x16 像素)，拉平成向量，作为 Transformer 的输入 Token。这相当于 NLP 中的分词 (Tokenization)。
-
 
 ---
 [← Back to Theory](./README.md)

@@ -453,7 +453,6 @@ class GraspEnvCfg(ManagerBasedRLEnvCfg):
         success=GraspSuccessTerm(),
     )
 
-
 class GraspEnv(ManagerBasedRLEnv):
     cfg: GraspEnvCfg
     
@@ -467,7 +466,6 @@ class GraspEnv(ManagerBasedRLEnv):
         self.object = RigidObject(self.cfg.object_cfg)
         # 添加地面
         self.ground = GroundPlane()
-
 
 # 训练
 from omni.isaac.lab_tasks.utils import parse_env_cfg

@@ -132,6 +132,5 @@
 2. **Co-fine-tuning**: 为什么要混合互联网数据？(答: 保持 VLM 的语义能力，防止灾难性遗忘)
 3. **Sim-to-Real**: OpenVLA 如何在真机上部署？(答: 量化，VLM 蒸馏)
 
-
 ---
 [← Back to Theory](./README.md)

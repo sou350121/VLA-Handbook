@@ -38,19 +38,16 @@
 ### 1.1. 映射公式
 将浮点数 $x$ 映射到整数 $q$：
 
-
 $$
 q = \text{round}\left( \frac{x}{S} + Z \right)
+
 $$
-
-
 反量化 (Dequantization)：
-
 
 $$
 \hat{x} = S(q - Z)
-$$
 
+$$
 其中：
 - $S$ (Scale): 缩放因子，决定了量化的粒度。
 - $Z$ (Zero-point): 零点偏移，用于对齐零点。
@@ -115,8 +112,12 @@ LLM / VLA 模型有一个特性：**激活值中存在极端的离群值** (Outl
 
 ### 3.2. 解决方案：SmoothQuant / AWQ
 - **SmoothQuant**: 数学等价变换。
-  $$ Y = X W = (X \cdot s^{-1}) \cdot (s \cdot W) $$
-  把激活值 $X$ 里的 Outlier "平摊" (Smooth) 到权重 $W$ 上。让 $X$ 变小，让 $W$ 变大。因为权重通常比较均匀，更容易量化。
+
+$$
+Y = X W = (X \cdot s^{-1}) \cdot (s \cdot W)
+
+$$
+把激活值 $X$ 里的 Outlier "平摊" (Smooth) 到权重 $W$ 上。让 $X$ 变小，让 $W$ 变大。因为权重通常比较均匀，更容易量化。
 - **AWQ (Activation-aware Weight Quantization)**:
   不量化那些对应重要激活值 (Salient Weights) 的权重，或者保留更高的精度。
 

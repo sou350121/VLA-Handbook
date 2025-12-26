@@ -37,18 +37,14 @@
 
 ACT 提出了一个简单而有效的想法：**一次预测一段未来的动作序列 (Action Chunk)**，而不是只预测下一步。
 
-
 $$
 \text{单步 BC}: \pi(o_t) \rightarrow a_t
+
 $$
-
-
-
 $$
 \text{ACT}: \pi(o_t) \rightarrow [a_t, a_{t+1}, ..., a_{t+k-1}]
+
 $$
-
-
 **核心优势**:
 - **减少决策点**: 如果 chunk 大小 $k=100$，决策频率从 50Hz 降到 0.5Hz，大大降低了误差累积的机会。
 - **隐式任务分解**: 预测一整段动作，模型需要"理解"整个子任务的结构 (如"伸手→抓握→抬起")，而不只是盲目模仿下一帧。
@@ -89,9 +85,8 @@ a_t^{final} = Σ w_i * a_t^{(i)}
 
 $$
 w_i = \exp(-m \cdot i)
+
 $$
-
-
 其中 $m$ 是衰减系数 (通常 $m=0.01$)，$i$ 是预测的"年龄"(越新的预测权重越大)。
 
 **效果**:
@@ -119,9 +114,8 @@ ACT 的另一个核心创新是使用 **CVAE** 来处理动作的**多模态分�
 
 $$
 \mathcal{L} = \underbrace{\| a - \hat{a} \|^2}_{\text{重建损失}} + \beta \cdot \underbrace{D_{KL}(q_\phi(z|o,a) \| \mathcal{N}(0, I))}_{\text{KL 散度}}
+
 $$
-
-
 - **重建损失**: 让解码器输出接近真实动作。
 - **KL 散度**: 让隐变量分布接近标准正态分布，便于推理时采样。
 - **$\beta$**: 权重系数 (ACT 中通常 $\beta = 10$)。
@@ -331,7 +325,6 @@ class ACTPolicy(nn.Module):
             z = torch.randn(obs.shape[0], self.z_dim, device=obs.device)
             pred_actions = self.decode(obs_feat, z)
             return pred_actions
-
 
 def compute_loss(pred_actions, gt_actions, z_mu, z_logvar, beta=10.0):
     """ACT 损失函数: 重建损失 + β * KL 散度"""

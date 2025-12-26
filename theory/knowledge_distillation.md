@@ -31,12 +31,10 @@
 
 ### 1.2 知识蒸馏的价值
 
-
 $$
 \text{小模型性能} + \text{大模型知识} \approx \text{大模型性能}
+
 $$
-
-
 - **模型压缩**: 10x 参数减少，性能损失 < 10%
 - **推理加速**: 降低延迟，满足实时控制需求
 - **降低成本**: 减少部署硬件需求
@@ -72,12 +70,10 @@ $$
 
 **软标签 (Soft Labels)**: 教师模型的 softmax 概率分布。
 
-
 $$
 p_i^{(T)} = \frac{\exp(z_i / T)}{\sum_j \exp(z_j / T)}
+
 $$
-
-
 其中 $T$ 是**温度参数** (Temperature)：
 - **T = 1**: 正常 softmax
 - **T > 1**: 分布更平滑，保留更多"暗知识"
@@ -487,7 +483,6 @@ class OpenVLADistillation:
         )
         
         return total_loss
-
 
 # 训练脚本
 distiller = OpenVLADistillation()

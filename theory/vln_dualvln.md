@@ -143,4 +143,3 @@ DualVLN 的一个核心工程点是：**不靠人工逐帧标注路标**，而�
 - [动作表示方法](./action_representations.md)（动作空间与轨迹生成范式）
 - [VLA 架构总览](./vla_arch.md)（如何把 VLM 与控制头解耦）
 
-
