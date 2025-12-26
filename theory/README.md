@@ -80,7 +80,7 @@
 | **RDT** | [`rdt.md`](./rdt.md) | 十亿参数扩散模型，双臂操作 |
 | **Flow Matching** | [`pi0_flow_matching.md`](./pi0_flow_matching.md) | 比 Diffusion 快 5x，π0 核心 |
 | **FAST** | [`fast.md`](./fast.md) | DCT 频域 Tokenization |
-| **MM-ACT** | [`vla_unified_token_space.md`](./vla_unified_token_space.md) | 🆕 全模态共享 Token 空间 |
+| **MM-ACT** | [`./frontier/vla_unified_token_space.md`](./frontier/vla_unified_token_space.md) | 🆕 全模态共享 Token 空间 |
 | **传统方法** | [`traditional_action_generation.md`](./traditional_action_generation.md) | 🆕 MSE 回归与 GMM (基础) |
 
 ### ⚡ 效率优化 (Efficiency)
@@ -139,7 +139,9 @@
 
 | 模型 | 文件 | 核心亮点 |
 |:-----|:-----|:---------|
-| **OneTwoVLA** | [`onetwovla.md`](./onetwovla.md) | 🆕 统一模型 + 自适应推理切换 |
+| **OneTwoVLA** | [`./frontier/onetwovla.md`](./frontier/onetwovla.md) | 🆕 统一模型 + 自适应推理切换 |
+| **MM-ACT** | [`./frontier/vla_unified_token_space.md`](./frontier/vla_unified_token_space.md) | 全模态共享 Token 空间 |
+| **SGTM** | [`./frontier/vla_intrinsic_safety.md`](./frontier/vla_intrinsic_safety.md) | 本质安全与知识屏蔽 |
 
 ---
 
@@ -149,7 +151,7 @@
 
 | 主题 | 文件 | 核心内容 |
 |:-----|:-----|:---------|
-| 🛡️ **本质安全 (SGTM)** | [`vla_intrinsic_safety.md`](./vla_intrinsic_safety.md) | 🆕 参数级“脑切除”，平衡安全与学习能力 |
+| 🛡️ **本质安全 (SGTM)** | [`./frontier/vla_intrinsic_safety.md`](./frontier/vla_intrinsic_safety.md) | 🆕 参数级“脑切除”，平衡安全与学习能力 |
 | ⚖️ **对齐技术** | [`alignment_vla.md`](./alignment_vla.md) | 具身 RLHF、受限马尔可夫决策过程 (CMDP) |
 | 🛡️ **知识绝缘** | [`knowledge_insulation.md`](./knowledge_insulation.md) | 微调时保护 VLM 通用常识 |
 | 🖐️ **灵巧手案例** | [`../deployment/dexterous_hand_wuji.md`](../deployment/dexterous_hand_wuji.md) | 🆕 Wuji (独立驱动) vs. [Optimus V2](../deployment/optimus_hand_v2.md) (肌腱驱动) |

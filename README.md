@@ -68,12 +68,13 @@ VLA-Handbook/
 │   ├── gr00t_n1_6.md           # NVIDIA GR00T-N1.6 人形模型
 │   ├── pi0_5_dissection.md     # π0.5：开放世界泛化
 │   ├── pi0_6_dissection.md     # π0.6：Recap 自我进化
-│   ├── onetwovla.md            # OneTwoVLA：自适应切换统一模型
 │   ├── gr_rl_dissection.md     # ByteDance GR-RL 详解
 │   ├── wall_oss.md             # WALL-OSS：Uni-CoT 端到端
-│   ├── vla_unified_token_space.md # MM-ACT：共享 Token 空间
+│   ├── frontier/               # 🧪 研究前沿与特定案例
+│   │   ├── onetwovla.md        # OneTwoVLA：自适应切换
+│   │   ├── vla_unified_token_space.md # MM-ACT：共享 Token 空间
+│   │   └── vla_intrinsic_safety.md  # SGTM 与 VLA 本质安全
 │   ├── tokenization.md         # 具身智能中的 Tokenization
-│   ├── vla_intrinsic_safety.md  # SGTM 与 VLA 本质安全
 │   ├── fast.md                 # FAST：频域动作 Token 化
 │   ├── traditional_action_generation.md # 传统 MSE/GMM 生成
 │   └── ...                     # 更多文档见 theory/README.md
@@ -121,7 +122,8 @@ VLA-Handbook/
 | **前沿模型** | [`pi0_5_dissection.md`](./theory/pi0_5_dissection.md) | π0.5 开放世界泛化，分层推理机制 |
 | | [`gr00t_n1_6.md`](./theory/gr00t_n1_6.md) | NVIDIA 人形基础模型，DiT 异步双系统 |
 | | [`wall_oss.md`](./theory/wall_oss.md) | Uni-CoT 边想边动，离散+连续双输出 |
-| | [`vla_unified_token_space.md`](./theory/vla_unified_token_space.md) | MM-ACT：全模态共享 Token 空间 |
+| | [`./theory/frontier/vla_unified_token_space.md`](./theory/frontier/vla_unified_token_space.md) | MM-ACT：全模态共享 Token 空间 |
+| | [`./theory/frontier/onetwovla.md`](./theory/frontier/onetwovla.md) | OneTwoVLA：自适应推理切换 |
 | **动作生成** | [`tokenization.md`](./theory/tokenization.md) | 详解均匀分桶、FAST 频域压缩与 VQ-VAE |
 | | [`diffusion_policy.md`](./theory/diffusion_policy.md) | 扩散去噪，解决多模态分布 |
 | | [`pi0_flow_matching.md`](./theory/pi0_flow_matching.md) | Flow Matching（比 Diffusion 快 5x） |
