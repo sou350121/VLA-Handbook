@@ -10,8 +10,8 @@
 
 $$
 \text{Observation} + \text{Instruction} \xrightarrow{\text{VLA}} \text{Action}
-
 $$
+
 **问题**:
 - **黑箱决策**: 无法理解机器人为什么这样做
 - **长序列任务困难**: 复杂任务需要多步规划
@@ -22,8 +22,8 @@ $$
 
 $$
 \text{Observation} + \text{Instruction} \xrightarrow{\text{VLA}} \underbrace{\text{Reasoning Steps}}_{\text{思维链}} \xrightarrow{} \text{Action}
-
 $$
+
 - **可解释性**: 可以追溯机器人的"思考过程"
 - **复杂任务分解**: 自动将长任务拆解为子任务
 - **错误纠正**: 可以在推理过程中发现并纠正错误

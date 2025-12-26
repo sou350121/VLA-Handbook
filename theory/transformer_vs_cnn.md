@@ -71,8 +71,8 @@ ViT 将图像视为一系列 Patch 的序列，完全摒弃了卷积。
 
 $$
 z_0 = [x_p^1 E; x_p^2 E; \cdots; x_p^N E] + E_{pos}
-
 $$
+
 其中 $E \in \mathbb{R}^{(P^2 \cdot C) \times D}$ 是可学习的线性投影矩阵，$E_{pos} \in \mathbb{R}^{(N+1) \times D}$ 是位置编码。
     - **关键细节**: 这一步等价于一个 `Conv2d(in_channels=3, out_channels=D, kernel_size=P, stride=P)` 操作。
 
@@ -93,8 +93,8 @@ OpenVLA 的视觉编码器使用的是 **SigLIP** (来自 Google DeepMind)，而
 
 $$
 L_{CLIP} = -\frac{1}{N} \sum_{i=1}^N \log \frac{e^{x_i \cdot y_i / \tau}}{\sum_{j=1}^N e^{x_i \cdot y_j / \tau}}
-
 $$
+
 - **通信瓶颈**: 分母 $\sum e^{...}$ 需要聚合所有 GPU 上的所有样本 (Global Reduction)。在分布式训练中，这会导致巨大的通信开销。
 
 #### 2. SigLIP 的创新 (Sigmoid Loss)
@@ -102,8 +102,8 @@ SigLIP 将 $N \times N$ 的匹配问题转化为 **$N^2$ 个独立的二分类�
 
 $$
 L_{SigLIP} = - \frac{1}{N} \sum_{i=1}^N \sum_{j=1}^N \left[ \mathbb{I}_{i=j} \log \sigma(x_i \cdot y_j / \tau + b) + \mathbb{I}_{i \neq j} \log (1 - \sigma(x_i \cdot y_j / \tau + b)) \right]
-
 $$
+
 - **$\mathbb{I}_{i=j}$**: 正样本对 (对角线)，标签为 1。
 - **$\mathbb{I}_{i \neq j}$**: 负样本对 (非对角线)，标签为 0。
 - **优势**:
@@ -123,8 +123,8 @@ SigLIP 引入了一个可学习的 Bias $b$ (通常初始化为 $- \log N$)。
 
 $$
 \text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right) V
-
 $$
+
 其中：
 - $Q = XW_Q$, $K = XW_K$, $V = XW_V$ (线性投影)
 - $d_k$: Key 的维度 (用于缩放，防止点积过大导致 softmax 饱和)
@@ -170,12 +170,12 @@ $$
 
 $$
 \text{MultiHead}(Q, K, V) = \text{Concat}(\text{head}_1, ..., \text{head}_h) W^O
-
 $$
+
 $$
 \text{head}_i = \text{Attention}(QW_i^Q, KW_i^K, VW_i^V)
-
 $$
+
 **优势**:
 - 不同头可以关注不同类型的关系 (位置、语义、纹理等)
 - 参数量不变 ($d_k = d / h$)，但表达能力更强

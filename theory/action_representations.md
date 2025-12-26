@@ -42,15 +42,15 @@
 
 $$
 Token = \text{round}\left( \frac{a - min}{max - min} \times (N - 1) \right)
-
 $$
+
 - **RT-1**: 使用 $N=256$。
 - **预测**: 模型输出一个 Logits 向量 $z \in \mathbb{R}^N$，通过 Softmax 得到概率分布：
 
 $$
 P(Token = i) = \frac{e^{z_i}}{\sum_{j=0}^{N-1} e^{z_j}}
-
 $$
+
 ### 优缺点
 - **优点**:
     - **多模态分布 (Multimodal)**: 可以很好地建模"向左走或向右走" (双峰分布)，而不会输出中间的平均值 (撞墙)。
@@ -74,15 +74,15 @@ $$
 
 $$
 q(x_t | x_0) = \mathcal{N}(x_t; \sqrt{\bar{\alpha}_t} x_0, (1 - \bar{\alpha}_t) I)
-
 $$
+
 - **逆向过程 (去噪)**:
 模型 $\epsilon_\theta(x_t, t, \text{cond})$ 预测噪声，从而逐步还原动作：
 
 $$
 x_{t-1} = \frac{1}{\sqrt{\alpha_t}} \left( x_t - \frac{1 - \alpha_t}{\sqrt{1 - \bar{\alpha}_t}} \epsilon_\theta(x_t, t, \text{cond}) \right) + \sigma_t z
-
 $$
+
 ### 优缺点
 - **优点**:
     - **高精度**: 输出是连续值，没有离散化误差。

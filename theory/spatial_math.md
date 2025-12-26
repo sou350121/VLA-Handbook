@@ -43,22 +43,22 @@
 
 $$
 T_{A}^{B} = \begin{bmatrix} R_{3\times3} & t_{3\times1} \\ 0_{1\times3} & 1 \end{bmatrix} \in SE(3)
-
 $$
+
 - **物理含义**: 描述了坐标系 $\{A\}$ 相对于坐标系 $\{B\}$ 的位姿。
 - **点的变换**: 如果点 $P$ 在 $\{A\}$ 中的坐标是 $P_A = [x, y, z, 1]^T$，那么它在 $\{B\}$ 中的坐标是：
 
 $$
 P_B = T_{A}^{B} \times P_A
-
 $$
+
 ### 2.1. 逆变换 (Inverse)
 求逆矩阵对应于反向变换 $T_{B}^{A} = (T_{A}^{B})^{-1}$：
 
 $$
 (T_{A}^{B})^{-1} = \begin{bmatrix} R^T & -R^T t \\ 0 & 1 \end{bmatrix}
-
 $$
+
 > **注意**: 旋转矩阵是正交矩阵，所以 $R^{-1} = R^T$，计算非常快。
 
 ### 2.2. 链式法则 (Chain Rule)
@@ -66,8 +66,8 @@ $$
 
 $$
 T_{O}^{W} = T_{C}^{W} \times T_{O}^{C}
-
 $$
+
 ---
 
 ## 3. 旋转表示深度解析 (Rotation Representations Deep Dive)
@@ -131,14 +131,14 @@ VLA 模型如何理解 3D 世界？通过相机内参。
 
 $$
 Z \begin{bmatrix} u \\ v \\ 1 \end{bmatrix} = K \begin{bmatrix} X \\ Y \\ Z \end{bmatrix}
-
 $$
+
 其中 $K$ 是 **相机内参矩阵 (Intrinsics Matrix)**：
 
 $$
 K = \begin{bmatrix} f_x & 0 & c_x \\ 0 & f_y & c_y \\ 0 & 0 & 1 \end{bmatrix}
-
 $$
+
 - $f_x, f_y$: 焦距 (Focal Length)，单位是像素。
 - $c_x, c_y$: 光心 (Principal Point)，通常是图像中心。
 
@@ -147,8 +147,8 @@ $$
 
 $$
 X = \frac{(u - c_x) \cdot Z}{f_x}, \quad Y = \frac{(v - c_y) \cdot Z}{f_y}
-
 $$
+
 这就是 **PointCloud** 生成的原理。
 
 ---

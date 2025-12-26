@@ -10,8 +10,8 @@
 
 $$
 \text{Minimize } \text{Distance}(P_S(\Phi(X)), P_T(\Phi(X)))
-
 $$
+
 其中 Distance 通常由 MMD (最大均值差异) 或 Adversarial Loss (对抗损失) 来衡量。本质上，这是在寻找一种**跨域不变的表示 (Invariant Representation)**，使得模型在新的环境中依然能识别出本质特征。
 
 ---
@@ -33,8 +33,8 @@ $$
 
 $$
 \text{数据收集成本} = \frac{\text{所需数据量}}{\text{数据收集效率}} \propto \frac{1}{\text{迁移能力}}
-
 $$
+
 - **减少数据需求**: 预训练模型只需少量目标域数据微调
 - **提高泛化能力**: 学习跨域不变的特征表示
 - **加速部署**: 新机器人/场景无需从头训练

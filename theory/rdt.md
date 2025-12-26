@@ -133,8 +133,8 @@ RDT 使用 **DDPM** 框架进行训练，但采用了几个优化:
 
 $$
 \mathcal{L} = \mathbb{E}_{t, a_0, \epsilon} \left[ \| \epsilon - \epsilon_\theta(a_t, t, c) \|^2 \right]
-
 $$
+
 其中:
 - $a_0$: 真实动作序列 (Action Chunk)
 - $a_t = \sqrt{\bar{\alpha}_t} a_0 + \sqrt{1 - \bar{\alpha}_t} \epsilon$: 加噪动作
@@ -217,8 +217,8 @@ def pad_action(action, embodiment_type):
 
 $$
 \mathcal{L} = \mathbb{E} \left[ \| m \odot (\epsilon - \hat{\epsilon}) \|^2 \right]
-
 $$
+
 ### 4.2 双臂协调优化 (Bimanual Coordination)
 
 双臂操作需要两只手**协同**工作（如折衣服、搬运大物体）。RDT 通过以下设计增强双臂协调:

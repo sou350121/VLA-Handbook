@@ -9,15 +9,15 @@
 
 $$
 SR = \frac{1}{N} \sum_{i=1}^{N} \mathbb{I}(\text{task}_i \text{ completed})
-
 $$
+
 - **定义**: $N$ 次尝试中成功的次数。
 - **置信区间 (Confidence Interval)**: 由于 $N$ 通常较小 (真机实验昂贵)，SR 的方差很大。建议使用 **Wald Interval** 或 **Wilson Score Interval** 报告误差范围。
 
 $$
 \hat{p} \pm z \sqrt{\frac{\hat{p}(1-\hat{p})}{N}}
-
 $$
+
 (当 $N=20, \hat{p}=0.5$ 时，误差范围高达 $\pm 22\%$！所以真机评估至少要跑 50 次以上才具备统计意义。)
 
 ### 1.2. Mean Steps to Success (MSS) - 平均成功步数
@@ -30,8 +30,8 @@ $$
 
 $$
 IR = \frac{\text{Total Interventions}}{\text{Total Operation Time (hours)}} \quad \text{or} \quad \frac{\text{Interventions}}{\text{Total Steps}}
-
 $$
+
 - **定义**: 人类专家为了防止灾难性后果 (碰撞、掉落) 而接管机器人的频率。
 - **MPI (Miles Per Intervention)**: 自动驾驶常用，VLA 中对应 **Steps Per Intervention (SPI)**。
 
@@ -109,8 +109,8 @@ $$
 
 $$
 \theta_{EMA} = \alpha \theta_{EMA} + (1-\alpha) \theta_{current}
-
 $$
+
 - **作用**: 极大地稳定了评估时的表现，平滑了训练过程中的震荡。**所有 SOTA 模型 (RT-2, Octo, Pi0) 评估时用的都是 EMA 权重，而不是当前权重**。
 
 ### 4.3. 最佳实践

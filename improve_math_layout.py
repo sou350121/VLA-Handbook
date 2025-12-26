@@ -23,17 +23,13 @@ def improve_math(content):
     # $ + 中文 -> $ + 空格 + 中文
     content = re.sub(r'\$([\u4e00-\u9fa5])', r'$ \1', content)
     
-    # 3. 修复常见的渲染字符冲突
-    # 在 GitHub 列表项中，公式最好不要紧跟在冒号后面，确保上方有空行
-    # (这一步在第一步已经通过全局替换 $$ 块大致解决了)
-    
-    # 4. 连续空行压缩
+    # 3. 连续空行压缩
     content = re.sub(r'\n{3,}', r'\n\n', content)
     
     return content
 
-# 目标目录
-base_dir = 'vla-interview-handbook'
+# 目标目录（在项目根目录下运行）
+base_dir = '.'
 dirs_to_process = ['theory', 'deployment']
 
 for d in dirs_to_process:

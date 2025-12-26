@@ -23,14 +23,14 @@
 
 $$
 \mathcal{L}_{MSE} = \frac{1}{N} \sum_{i=1}^N \| \pi_\theta(s_i) - a_i \|^2
-
 $$
+
 这本质上等价于最大似然估计 (MLE)，假设动作服从固定方差的单峰高斯分布：
 
 $$
 p(a|s) = \mathcal{N}(\pi_\theta(s), \sigma^2 I)
-
 $$
+
 ### 1.3 优缺点
 - **优点**:
     - **极简**: 实现简单，训练速度快，推理极快 (一次前向传播)。
@@ -55,8 +55,8 @@ $$
 
 $$
 p(a|s) = \sum_{k=1}^K \pi_k(s) \mathcal{N}(a; \mu_k(s), \Sigma_k(s))
-
 $$
+
 其中神经网络的输出包括：
 1.  **混合系数 (Weights)** $\pi_k$: 满足 $\sum \pi_k = 1$ (通过 Softmax)。
 2.  **均值 (Means)** $\mu_k$: 每个分量的中心。
@@ -66,8 +66,8 @@ $$
 
 $$
 \mathcal{L}_{GMM} = - \log \left( \sum_{k=1}^K \pi_k \mathcal{N}(a_{expert}; \mu_k, \Sigma_k) \right)
-
 $$
+
 ### 2.3 优缺点
 - **优点**:
     - **解决多模态**: 可以分别拟合"左绕"和"右绕"两个波峰，推理时可以选择概率最大的那个，而不是取平均。

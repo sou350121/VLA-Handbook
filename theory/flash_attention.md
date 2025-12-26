@@ -229,8 +229,8 @@ KV-Cache 需要额外显存存储历史 K 和 V：
 
 $$
 \text{KV-Cache Memory} = 2 \times L \times N \times d \times \text{batch\_size} \times \text{bytes}
-
 $$
+
 - $L$ : Transformer 层数
 - $N$ : 序列长度
 - $d$ : 隐藏维度

@@ -245,8 +245,8 @@ reconstruction_loss = MSE(decoder(encoder(masked_patches)), original)
 
 $$
 L_{align} = -log \frac{exp(sim(t_i, v_i) / τ)}{\sum_{j} exp(sim(t_i, v_j) / τ)}
-
 $$
+
 - `t_i`: 触觉 Embedding
 - `v_i`: 对应的视觉 Embedding
 - `τ`: 温度参数 (0.07)
@@ -385,16 +385,16 @@ loss = CrossEntropy(decoder(tactile_emb, vision_emb), text_tokens)
 
 $$
 \gamma(p) = [\sin(2^0 \pi p), \cos(2^0 \pi p), ..., \sin(2^{L-1} \pi p), \cos(2^{L-1} \pi p)]
-
 $$
+
 其中 $p$ 是 6D 位姿向量，$L$ 是频率级数。多尺度编码使得模型对不同精度的空间信息都敏感。
 
 **FiLM 调制公式**:
 
 $$
 \text{FiLM}(x, \gamma, \beta) = \gamma \cdot x + \beta
-
 $$
+
 其中 $\gamma, \beta$ 由位置编码通过 MLP 生成，$x$ 是触觉特征。
 
 #### 3.4.4 硬件配置

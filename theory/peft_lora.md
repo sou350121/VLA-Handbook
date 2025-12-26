@@ -58,8 +58,8 @@
 
 $$
 W = W_0 + \Delta W = W_0 + B A
-
 $$
+
 其中：
 - $B \in \mathbb{R}^{d \times r}, A \in \mathbb{R}^{r \times k}$
 - $r \ll \min(d, k)$ 是秩 (Rank)，通常取 8, 16, 32。
@@ -72,8 +72,8 @@ $$
 
 $$
 W_{merged} = W_0 + \alpha \cdot BA
-
 $$
+
 ($\alpha$ 是缩放系数，通常 $\alpha/r$ 用于归一化)。
 
 ---
@@ -167,8 +167,8 @@ QLoRA 结合了 **4-bit 量化** 和 **LoRA**，使得 65B 模型可以在 48GB 
 
 $$
 W = W_0 + \frac{\alpha}{r} \cdot BA
-
 $$
+
 - **$\alpha / r$ 比值**: 控制 LoRA 更新的"强度"
 - **常见设置**: $\alpha = 2r$ (即 $\alpha/r = 2$)
 - **$\alpha$ 大**: 更激进的更新，收敛快但可能不稳定
