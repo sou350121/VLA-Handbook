@@ -2880,7 +2880,7 @@ $$
 
 
 $$
-W_{merged} = W_0 + \alpha \cdot BA
+  W_{merged} = W_0 + \alpha \cdot BA
 $$
 
 
