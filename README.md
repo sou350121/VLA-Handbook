@@ -299,7 +299,9 @@ action = policy.select_action(observation)
 <details>
 <summary><b>📝 更新日志（最近更新）</b></summary>
 
-### 2025-12-26 🆕
+### 2025-12-28 🆕
+- **OneTwoVLA 深度解析**: 新增 [`onetwovla.md`](./theory/frontier/onetwovla.md)，详解单一统一模型如何通过 `[BOR]` 和 `[BOA]` Token 实现自适应逻辑切换。
+- **真机适配指南**: 在 [`ur5_control_guide.md`](./deployment/ur5_control_guide.md) 和 [`onetwovla.md`](./theory/frontier/onetwovla.md) 中同步新增了从 7-DOF Franka 迁移到 6-DOF UR5 的实战方案（含奇异点恢复与动作平滑）。
 - **数学与架构强化**: 深度补全了 Diffusion Policy、Flow Matching (π0)、FAST Tokenizer 的数学推导与数值演练。
 - **SOTA 模型详解**: 新增 [`gr00t_n1_6.md`](./theory/gr00t_n1_6.md) (NVIDIA 人形模型)、[`pi0_5_dissection.md`](./theory/pi0_5_dissection.md) (π0.5 开放世界泛化)、[`vla_unified_token_space.md`](./theory/vla_unified_token_space.md) (MM-ACT)。
 - **Tokenization 专题**: 新增 [`tokenization.md`](./theory/tokenization.md) 详解均匀分桶、FAST 频域压缩与 VQ-Codebook。
@@ -307,11 +309,9 @@ action = policy.select_action(observation)
 - **硬件深度拆解**: 新增舞肌手 (Wuji Hand) 与特斯拉 Optimus V2 灵巧手的机械与控制原理分析。
 - **批判性思维**: 为所有核心模型文档增加了“独立思考与批判性疑问”章节，提升面试竞争力。
 
-### 2025-12-18
+### 2025-12-26
 - **VLN 专题**: 新增 [`vln_dualvln.md`](./theory/vln_dualvln.md) - DualVLN 快慢系统（首个 VLN 基础模型）
 - **首页优化**: 重构为研究型 landing page，Theory 优先，长内容折叠收纳
-
-### 2025-12-16 🆕
 - **数学第一性原理**: 为 15+ 篇核心理论文档增加了 "Main Mathematical Idea" 章节
 - **真机部署实战**: 新增 UR5 Python 控制、ROS 集成与 Python 性能优化
 - **Python OOP 实战**: 题库新增面向对象编程在机器人控制中的应用题
