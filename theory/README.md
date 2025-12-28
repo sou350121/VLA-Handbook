@@ -139,6 +139,7 @@
 
 | 模型 | 文件 | 核心亮点 |
 |:-----|:-----|:---------|
+| **Reward Discovery** | [`./frontier/reward_discovery_rl.md`](./frontier/reward_discovery_rl.md) | 🆕 Nature Comm: 遗憾最小化元学习奖励发现 |
 | **OneTwoVLA** | [`./frontier/onetwovla.md`](./frontier/onetwovla.md) | 🆕 统一模型 + 自适应推理切换 |
 | **MM-ACT** | [`./frontier/vla_unified_token_space.md`](./frontier/vla_unified_token_space.md) | 全模态共享 Token 空间 |
 | **SGTM** | [`./frontier/vla_intrinsic_safety.md`](./frontier/vla_intrinsic_safety.md) | 本质安全与知识屏蔽 |

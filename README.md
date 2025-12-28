@@ -127,6 +127,7 @@ VLA-Handbook/
 | **动作生成** | [`tokenization.md`](./theory/tokenization.md) | 详解均匀分桶、FAST 频域压缩与 VQ-VAE |
 | | [`diffusion_policy.md`](./theory/diffusion_policy.md) | 扩散去噪，解决多模态分布 |
 | | [`pi0_flow_matching.md`](./theory/pi0_flow_matching.md) | Flow Matching（比 Diffusion 快 5x） |
+| | [`./theory/frontier/reward_discovery_rl.md`](./theory/frontier/reward_discovery_rl.md) | 🆕 强化学习：双层元梯度奖励发现 |
 | **导航专题** | [`vln_dualvln.md`](./theory/vln_dualvln.md) | DualVLN：慢规划/快执行的异步双系统 |
 | **效率优化** | [`flash_attention.md`](./theory/flash_attention.md) | Tiling + 重计算，显存 O(N²)→O(N) |
 | | [`peft_lora.md`](./theory/peft_lora.md) | 低秩分解，QLoRA ~6GB 微调 7B |
@@ -300,6 +301,7 @@ action = policy.select_action(observation)
 <summary><b>📝 更新日志（最近更新）</b></summary>
 
 ### 2025-12-28 🆕
+- **具身强化学习奖励发现**: 新增 [`reward_discovery_rl.md`](./theory/frontier/reward_discovery_rl.md)，详解 Nature Communications 最新成果：通过双层元学习框架实现零先验奖励的自主进化。
 - **OneTwoVLA 深度解析**: 新增 [`onetwovla.md`](./theory/frontier/onetwovla.md)，详解单一统一模型如何通过 `[BOR]` 和 `[BOA]` Token 实现自适应逻辑切换。
 - **真机适配指南**: 在 [`ur5_control_guide.md`](./deployment/ur5_control_guide.md) 和 [`onetwovla.md`](./theory/frontier/onetwovla.md) 中同步新增了从 7-DOF Franka 迁移到 6-DOF UR5 的实战方案（含奇异点恢复与动作平滑）。
 - **数学与架构强化**: 深度补全了 Diffusion Policy、Flow Matching (π0)、FAST Tokenizer 的数学推导与数值演练。

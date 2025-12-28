@@ -25,49 +25,50 @@
 ## 第三部分：训练技术与优化
 11. [参数高效微调 (PEFT/LoRA)](#第11章-参数高效微调-peftlora)
 12. [强化学习基础与 RLHF](#第12章-强化学习基础与-rlhf)
-13. [知识蒸馏](#第13章-知识蒸馏)
-14. [自监督学习](#第14章-自监督学习)
-15. [迁移学习与 Co-training](#第15章-迁移学习与-co-training)
-16. [量化技术](#第16章-量化技术)
+13. [自主奖励发现 (Nature Comm 2025)](../theory/frontier/reward_discovery_rl.md)
+14. [知识蒸馏](#第14章-知识蒸馏)
+15. [自监督学习](#第14章-自监督学习)
+16. [迁移学习与 Co-training](#第15章-迁移学习与-co-training)
+17. [量化技术](#第16章-量化技术)
 
 ## 第四部分：感知与空间智能
-17. [空间数学基础](#第17章-空间数学基础)
-18. [机器人控制方法](#第18章-机器人控制方法)
-19. [感知技术](#第19章-感知技术)
-20. [点云与 SLAM](#第20章-点云与-slam)
-21. [状态估计](#第21章-状态估计)
-22. [具身导航 (VLN) / DualVLN 快慢系统](#第22章-具身导航-vln--dualvln-快慢系统)
+18. [空间数学基础](#第17章-空间数学基础)
+19. [机器人控制方法](#第18章-机器人控制方法)
+20. [感知技术](#第19章-感知技术)
+21. [点云与 SLAM](#第20章-点云与-slam)
+22. [状态估计](#第21章-状态估计)
+23. [具身导航 (VLN) / DualVLN 快慢系统](#第22章-具身导航-vln--dualvln-快慢系统)
 
 ## 第五部分：抓取与运动规划
-23. [抓取算法](#第23章-抓取算法)
-24. [运动规划](#第24章-运动规划)
-25. [全模态共享 Token 空间 (MM-ACT)](../theory/frontier/vla_unified_token_space.md)
-26. [触觉 VLA](#第26章-触觉-vla)
+24. [抓取算法](#第23章-抓取算法)
+25. [运动规划](#第24章-运动规划)
+26. [全模态共享 Token 空间 (MM-ACT)](../theory/frontier/vla_unified_token_space.md)
+27. [触觉 VLA](#第26章-触觉-vla)
 
 ## 第六部分：前沿模型解析
-27. [RDT (Robotics Diffusion Transformer)](#第27章-rdt-robotics-diffusion-transformer)
-28. [π0 系列解析](#第28章-π0-系列解析)
-29. [Galaxea G0](#第28章-galaxea-g0)
-30. [WALL-OSS](#第30章-wall-oss)
-31. [GR00T-N1.6 (NVIDIA)](#第31章-gr00t-n16-nvidia)
-32. [OneTwoVLA: 自适应推理切换](../theory/frontier/onetwovla.md)
+28. [RDT (Robotics Diffusion Transformer)](#第27章-rdt-robotics-diffusion-transformer)
+29. [π0 系列解析](#第28章-π0-系列解析)
+30. [Galaxea G0](#第28章-galaxea-g0)
+31. [WALL-OSS](#第30章-wall-oss)
+32. [GR00T-N1.6 (NVIDIA)](#第31章-gr00t-n16-nvidia)
+33. [OneTwoVLA: 自适应推理切换](../theory/frontier/onetwovla.md)
 
 ## 第七部分：评估与推理
-33. [Chain-of-Thought 推理](#第33章-chain-of-thought-推理)
-34. [评估方法论](#第34章-评估方法论)
+34. [Chain-of-Thought 推理](#第33章-chain-of-thought-推理)
+35. [评估方法论](#第34章-评估方法论)
 
 ## 第八部分：真机部署与工程实战
-35. [UR5 Python 控制实战](#第35章-ur5-python-控制实战)
-36. [ROS 集成与算法优化](#第36章-ros-集成与算法优化)
-37. [Sim-to-Real 技术](#第37章-sim-to-real-技术)
-38. 灵巧手硬件与部署
-    *   [38.1 Wuji 手深度解析 (独立驱动)](../deployment/dexterous_hand_wuji.md)
-    *   [38.2 Tesla Optimus V2 手解析 (肌腱驱动)](../deployment/optimus_hand_v2.md)
-39. [模型量化与边缘部署](#第39章-模型量化与边缘部署)
+36. [UR5 Python 控制实战](#第35章-ur5-python-控制实战)
+37. [ROS 集成与算法优化](#第36章-ros-集成与算法优化)
+38. [Sim-to-Real 技术](#第37章-sim-to-real-技术)
+39. 灵巧手硬件与部署
+    *   [39.1 Wuji 手深度解析 (独立驱动)](../deployment/dexterous_hand_wuji.md)
+    *   [39.2 Tesla Optimus V2 手解析 (肌腱驱动)](../deployment/optimus_hand_v2.md)
+40. [模型量化与边缘部署](#第39章-模型量化与边缘部署)
 
 ## 第九部分：安全与对齐
-40. [VLA 本质安全 (SGTM)](../theory/frontier/vla_intrinsic_safety.md)
-41. [具身对齐与伦理](#第41章-具身对齐与伦理)
+41. [VLA 本质安全 (SGTM)](../theory/frontier/vla_intrinsic_safety.md)
+42. [具身对齐与伦理](#第41章-具身对齐与伦理)
 
 ## 附录
 - [数据格式与处理](#附录a-数据格式与处理)
