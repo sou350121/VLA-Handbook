@@ -304,13 +304,13 @@ action = policy.select_action(observation)
 <details>
 <summary><b>📝 更新日志（最近更新）</b></summary>
 
-### 2025-12-28 🆕
+### 2025-12-29 🆕
+- **AI Coding 智能体设计**: 新增 [`ai_coding_agent_design.md`](./system-design/ai_coding_agent_design.md)，深度解构顶尖 AI 编程工具的设计模式。
 - **数据飞轮与跨模态迁移**: 新增 [`data_flywheel_and_cross_modal.md`](./theory/frontier/data_flywheel_and_cross_modal.md)，深度解析如何利用互联网视频解决具身智能数据瓶颈。
 - **机器人新势力**: 新增 [`startups.md`](./companies/startups.md)，收录 **智在无界 (Boundless Intelligence)** 等具身智能新创公司。
 - **ROS2 进阶架构专题**: 在 [`ros_and_optimization.md`](./deployment/ros_and_optimization.md) 中深度加固：涵盖 **Zero-Copy (Iceoryx)**、**组件容器 (Component Containers)**、**WaitSet 实时模型**及分布式部署调优。
 - **机器人动力学专题**: 新增 [`robot_dynamics_classification.md`](./theory/robot_dynamics_classification.md)，从约束、地面接触、惯量完备性三个维度解构机器人动力学系统分类。
 - **具身强化学习奖励发现**: 新增 [`reward_discovery_rl.md`](./theory/frontier/reward_discovery_rl.md)，详解 Nature Communications 最新成果。
-- **AI Coding 智能体设计**: 新增 [`ai_coding_agent_design.md`](./system-design/ai_coding_agent_design.md)，深度解构顶尖 AI 编程工具的设计模式。
 - **OneTwoVLA 深度解析**: 新增 [`onetwovla.md`](./theory/frontier/onetwovla.md)，详解自适应逻辑切换。
 - **真机适配指南**: 在 [`ur5_control_guide.md`](./deployment/ur5_control_guide.md) 同步新增从 Franka 到 UR5 的实战方案。
 
@@ -338,19 +338,7 @@ action = policy.select_action(observation)
 - **论文索引系统**: [`paper_index.md`](./theory/paper_index.md) - 多维度索引（技术/公司/时间）
 - **ByteDance GR-RL**: [`gr_rl_dissection.md`](./theory/gr_rl_dissection.md) - 三阶段 RL 训练，首个真机穿鞋带 VLA (78% 成功率)
 
-### 2025-12-06
-- 新增 VLA 总工程师研究方案系列
-- 工程师 vs 生物学家三轮辩论
-- 技术路线顾问细节研发方案
-
-### 2025-12-05
-- 新增多模态模型详解，包含 2025 最新 VLM
-- π0.6 Action Expert 深度解析
-
-### 2025-12-01
-- 新增视觉感知、运动规划、SLAM 专题
-- 新增传感器集成与末端执行器控制
-
+> 💡 **查看更早更新**: 请参阅 [CHANGELOG.md](./CHANGELOG.md)
 </details>
 
 </details>
