@@ -25,13 +25,13 @@
 *   **下层优化 (Lower-level)**：在给定奖励函数 $R_{\psi}$ 的驱动下，优化策略参数 $\theta$。
 
 $$
-\theta^{*}(\psi) = \arg\max_{\theta} \mathbb{E}_{\tau \sim \pi_{\theta}} \left[ \sum_{t} \gamma^{t} R_{\psi}(s_{t}, a_{t}) \right]
+\theta^{\ast}(\psi) = \arg\max_{\theta} \mathbb{E}_{\tau \sim \pi_{\theta}} \left[ \sum_{t} \gamma^{t} R_{\psi}(s_{t}, a_{t}) \right]
 $$
 
-*   **上层优化 (Upper-level)**：寻找最优奖励参数 $\psi$，使得在该奖励下训练出的最优策略 $\theta^{*}$ 在真实任务目标 $G$ 下的**遗憾 (Regret)** 最小。
+*   **上层优化 (Upper-level)**：寻找最优奖励参数 $\psi$，使得在该奖励下训练出的最优策略 $\theta^{\ast}$ 在真实任务目标 $G$ 下的**遗憾 (Regret)** 最小。
 
 $$
-\psi^{*} = \arg\min_{\psi} \mathcal{J}_{\text{meta}}(\theta^{*}(\psi))
+\psi^{\ast} = \arg\min_{\psi} \mathcal{J}_{\text{meta}}(\theta^{\ast}(\psi))
 $$
 
     其中 $\mathcal{J}_{\text{meta}}$ 通常是真实环境提供的原始奖励（即使非常稀疏）或某种性能评估指标。
@@ -41,7 +41,7 @@ $$
 模型通过链式法则计算奖励函数的梯度：
 
 $$
-\nabla_{\psi} \mathcal{J}_{\text{meta}} = \frac{\partial \mathcal{J}_{\text{meta}}}{\partial \theta^{*}} \cdot \frac{\partial \theta^{*}}{\partial \psi}
+\nabla_{\psi} \mathcal{J}_{\text{meta}} = \frac{\partial \mathcal{J}_{\text{meta}}}{\partial \theta^{\ast}} \cdot \frac{\partial \theta^{\ast}}{\partial \psi}
 $$
 
 **直观理解**：
@@ -116,14 +116,14 @@ $$
 双层优化（Bi-level Optimization）听起来很高大上，其实就像**“学生刷题、导师改卷”**：
 
 ### 1. 下层优化：学生在做题
-$$ \theta^{*}(\psi) = \arg\max_{\theta} \mathbb{E} [...] $$
+$$ \theta^{\ast}(\psi) = \arg\max_{\theta} \mathbb{E} [...] $$
 *   **$\psi$ (奖励函数)**：这是导师出的**试卷难度和评分标准**。
 *   **$\theta$ (策略参数)**：这是**学生的解题思路**。
 *   **$\arg\max$**：学生的目标是根据导师给的评分标准，拿到最高分。
 *   **解读**：如果导师（奖励函数）觉得“接近终点”该给分，学生（策略）就会拼命往终点跑。
 
 ### 2. 上层优化：导师在改卷
-$$ \psi^{*} = \arg\min_{\psi} \mathcal{J}_{\text{meta}} [...] $$
+$$ \psi^{\ast} = \arg\min_{\psi} \mathcal{J}_{\text{meta}} [...] $$
 *   **$\psi$**：导师调整自己的评分标准。
 *   **$\arg\min$**：导师的目标是让学生最终考试（真实环境下的表现）的**遗憾（Regret）最小**。
 *   **解读**：导师发现学生只是在原地转圈，说明评分标准出错了（奖励太稀疏）。于是导师修改标准：“往前挪一点也给你加分”，从而引导学生进步。
@@ -131,8 +131,8 @@ $$ \psi^{*} = \arg\min_{\psi} \mathcal{J}_{\text{meta}} [...] $$
 ### 3. 元梯度：反馈的反馈
 $$ \nabla_{\psi} = \text{反馈} \times \text{反馈} $$
 *   **$\nabla_{\psi}$ (梯度)**：就是方向。
-*   **$\frac{\partial \mathcal{J}_{\text{meta}}}{\partial \theta^{*}}$**：观察学生的**表现变好了没**。
-*   **$\frac{\partial \theta^{*}}{\partial \psi}$**：分析学生的改变是由于**奖励函数哪一部分变动**引起的。
+*   **$\frac{\partial \mathcal{J}_{\text{meta}}}{\partial \theta^{\ast}}$**：观察学生的**表现变好了没**。
+*   **$\frac{\partial \theta^{\ast}}{\partial \psi}$**：分析学生的改变是由于**奖励函数哪一部分变动**引起的。
 *   **一句话总结**：通过观察学生表现的优劣，反向推导并升级“导师”的评分逻辑。
 
 ---
