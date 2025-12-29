@@ -5,6 +5,7 @@
 ## 📂 目录结构
 
 - **[中国头部机器人公司](./china.md)**: Unitree, Agibot, Fourier 等 15+ 家公司
+- **[新创公司 (Startups)](./startups.md)**: 智在无界等具身智能新势力 🆕
 - **[亚洲机器人公司](./asia.md)**: 新加坡、日本、台湾、韩国的领先公司
 - **[国际机器人公司](./international.md)**: Tesla, Figure AI, Boston Dynamics 等
 - **[具身智能软件与平台](./embodied_ai.md)**: Physical Intelligence, Covariant, Hugging Face 等
