@@ -18,32 +18,30 @@
 
 ## 2. 数学核心：双层元学习框架 (Mathematical Core)
 
-该方法将奖励函数的发现建模为一个元学习问题。
+该方法将奖励函数的发现建模为一个元学习问题。如果你觉得这些公式很抽象，可以参考下方的 **[💡 小白也能看懂的公式读法](#-小白也能看懂的公式读法)**。
 
 ### 2.1 双层优化公式
 
-*   **下层优化 (Lower-level)**：在给定奖励函数 $R_\psi$ 的驱动下，优化策略参数 $\theta$。
-    
+*   **下层优化 (Lower-level)**：在给定奖励函数 $R_{\psi}$ 的驱动下，优化策略参数 $\theta$。
 
 $$
-\theta^*(\psi) = \arg\max_{\theta} \mathbb{E}_{\tau \sim \pi_\theta} \left[ \sum_{t} \gamma^t R_\psi(s_t, a_t) \right]
+\theta^{*}(\psi) = \arg\max_{\theta} \mathbb{E}_{\tau \sim \pi_{\theta}} \left[ \sum_{t} \gamma^{t} R_{\psi}(s_{t}, a_{t}) \right]
 $$
 
-*   **上层优化 (Upper-level)**：寻找最优奖励参数 $\psi$，使得在该奖励下训练出的最优策略 $\theta^*$ 在真实任务目标 $G$ 下的**遗憾 (Regret)** 最小。
-    
+*   **上层优化 (Upper-level)**：寻找最优奖励参数 $\psi$，使得在该奖励下训练出的最优策略 $\theta^{*}$ 在真实任务目标 $G$ 下的**遗憾 (Regret)** 最小。
 
 $$
-\psi^* = \arg\min_{\psi} \mathcal{J}_{meta}(\theta^*(\psi))
+\psi^{*} = \arg\min_{\psi} \mathcal{J}_{\text{meta}}(\theta^{*}(\psi))
 $$
 
-    其中 $\mathcal{J}_{meta}$ 通常是真实环境提供的原始奖励（即使非常稀疏）或某种性能评估指标。
+    其中 $\mathcal{J}_{\text{meta}}$ 通常是真实环境提供的原始奖励（即使非常稀疏）或某种性能评估指标。
 
 ### 2.2 元梯度更新 (Meta-Gradient)
 
 模型通过链式法则计算奖励函数的梯度：
 
 $$
-\nabla_\psi \mathcal{J}_{meta} = \frac{\partial \mathcal{J}_{meta}}{\partial \theta^*} \cdot \frac{\partial \theta^*}{\partial \psi}
+\nabla_{\psi} \mathcal{J}_{\text{meta}} = \frac{\partial \mathcal{J}_{\text{meta}}}{\partial \theta^{*}} \cdot \frac{\partial \theta^{*}}{\partial \psi}
 $$
 
 **直观理解**：
@@ -60,7 +58,7 @@ $$
 ### 3.1 初始阶段 (Chaos)
 *   **环境设置**：只有当末端摆起到指定高度才给 +1，其余时间全是 0。
 *   **机器人状态**：随机乱动，几乎永远拿不到那 +1 分。
-*   **奖励函数 $R_\psi$**：由于 Regret 很大，上层优化器开始工作。
+*   **奖励函数 $R_{\psi}$**：由于 Regret 很大，上层优化器开始工作。
 
 ### 3.2 奖励塑形 (Shaping)
 *   模型发现，当关节角速度 $\dot{q}$ 与重力势能增加方向一致时，虽然环境奖励还是 0，但未来获得奖励的可能性在增加（优势函数 $A$ 上升）。
@@ -112,5 +110,32 @@ $$
 *   **所属路径**: 研究前沿 / 具身强化学习
 
 ---
+
+## 💡 小白也能看懂的公式读法 (The Non-Expert Guide)
+
+双层优化（Bi-level Optimization）听起来很高大上，其实就像**“学生刷题、导师改卷”**：
+
+### 1. 下层优化：学生在做题
+$$ \theta^{*}(\psi) = \arg\max_{\theta} \mathbb{E} [...] $$
+*   **$\psi$ (奖励函数)**：这是导师出的**试卷难度和评分标准**。
+*   **$\theta$ (策略参数)**：这是**学生的解题思路**。
+*   **$\arg\max$**：学生的目标是根据导师给的评分标准，拿到最高分。
+*   **解读**：如果导师（奖励函数）觉得“接近终点”该给分，学生（策略）就会拼命往终点跑。
+
+### 2. 上层优化：导师在改卷
+$$ \psi^{*} = \arg\min_{\psi} \mathcal{J}_{\text{meta}} [...] $$
+*   **$\psi$**：导师调整自己的评分标准。
+*   **$\arg\min$**：导师的目标是让学生最终考试（真实环境下的表现）的**遗憾（Regret）最小**。
+*   **解读**：导师发现学生只是在原地转圈，说明评分标准出错了（奖励太稀疏）。于是导师修改标准：“往前挪一点也给你加分”，从而引导学生进步。
+
+### 3. 元梯度：反馈的反馈
+$$ \nabla_{\psi} = \text{反馈} \times \text{反馈} $$
+*   **$\nabla_{\psi}$ (梯度)**：就是方向。
+*   **$\frac{\partial \mathcal{J}_{\text{meta}}}{\partial \theta^{*}}$**：观察学生的**表现变好了没**。
+*   **$\frac{\partial \theta^{*}}{\partial \psi}$**：分析学生的改变是由于**奖励函数哪一部分变动**引起的。
+*   **一句话总结**：通过观察学生表现的优劣，反向推导并升级“导师”的评分逻辑。
+
+---
+
 [← 返回理论索引](../README.md)
 
