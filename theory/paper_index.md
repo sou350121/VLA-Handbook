@@ -24,6 +24,7 @@
 |:---|:---|:---|
 | **Diffusion** | Diffusion Policy | [详细](#diffusion-policy) |
 | | RDT-1B | [详细](#rdt) |
+| | DKT Perception | [深度解析](./frontier/dkt_transparency_perception.md) |
 | **Flow Matching** | π0 | [深度解析](./pi0_flow_matching.md) |
 | | π0.5 | [深度解析](./pi0_5_dissection.md) |
 | | π0.6 | [深度解析](./pi0_6_dissection.md) |
@@ -63,6 +64,7 @@
 | **X² (自变量)** | WALL-OSS | [详细](#wall-oss) |
 | **Galaxea AI** | G0 | [详细](#galaxea-g0) |
 | **Columbia** | Diffusion Policy | [详细](#diffusion-policy) |
+| **浙江大学** 🆕 | DKT Perception | [深度解析](./frontier/dkt_transparency_perception.md) |
 | **华盛顿大学** 🆕 | Artificial Hivemind | [详细](./neurips_2025_insights.md#1-artificial-hivemind-语言模型的同质化问题) |
 | **阿里千问** 🆕 | Gated Attention | [详细](./neurips_2025_insights.md#2-gated-attention-门控注意力机制) |
 | **普林斯顿** 🆕 | 1000 Layer Networks | [详细](./neurips_2025_insights.md#3-1000-layer-networks-深层自监督-rl) |
@@ -80,6 +82,7 @@
 | **2024** | OpenVLA | [深度解析](#openvla) |
 | | π0 | [深度解析](./pi0_flow_matching.md) |
 | | RDT-1B | [详细](#rdt) |
+| | DKT Perception | [深度解析](./frontier/dkt_transparency_perception.md) |
 | | Galaxea G0 | [详细](#galaxea-g0) |
 | | Knowledge Insulation | [摘要](#knowledge-insulation) |
 | | UniVLA | [详细](#univla) |

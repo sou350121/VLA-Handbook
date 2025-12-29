@@ -638,6 +638,7 @@ for frame_idx, obj_ids, masks in predictor.propagate_in_video(state):
 | 模型 | 特点 | 输出 | 适用场景 |
 | :--- | :--- | :--- | :--- |
 | **Depth Anything V2** | 通用, 零样本 | 相对深度 | 通用场景 |
+| **DKT (Diffusion Knows Transparency)** | 🆕 透明物体深度/法向 | 深度 + 法向 | 玻璃、烧杯等透明物 |
 | **Metric3D** | 绝对深度 | 米制深度 | 需要真实尺度 |
 | **ZoeDepth** | 多数据集训练 | 米制深度 | 室内/室外 |
 | **MiDaS** | 鲁棒性强 | 相对深度 | 多样场景 |
@@ -665,6 +666,16 @@ depth_colored = cv2.applyColorMap(
     cv2.COLORMAP_INFERNO
 )
 ```
+
+### 4.5 透明物体深度估计 (Transparency Perception)
+
+针对玻璃、烧杯、移液管等透明物体，传统视觉方案往往失效（光线折射、反射导致点云穿透）。
+
+*   **代表模型**: **DKT (Diffusion Knows Transparency)**
+*   **核心原理**: 利用**视频扩散基础模型**（如 WAN）内部蕴含的物理先验（物体的遮挡关系、空间布局）来“脑补”透明区域的深度。
+*   **优势**: 支持任意长度视频，具备极强的时空一致性，在“野外”非约束环境下鲁棒性极高。
+*   **应用**: 实验室自动化抓取透明仪器、家庭服务机器人处理玻璃餐具。
+*   **详细解析**: 参见 [`./frontier/dkt_transparency_perception.md`](./frontier/dkt_transparency_perception.md)
 
 ---
 

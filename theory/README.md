@@ -96,19 +96,34 @@
 
 ## 🚀 Part 4: 进阶专题 (Advanced Topics)
 
-> *解决特定场景下的难题，面试差异化竞争点。*
+> *解决特定场景下的难题，提供面试中的差异化竞争点。*
+
+### 🛰️ 1. 具身感知与定位 (Embodied Perception)
+*侧重于机器人如何“看”和“感觉”物理世界。*
 
 | 主题 | 文件 | 核心内容 |
-|:-----|:-----|:---------|
+| :--- | :--- | :--- |
 | 👁️ **视觉感知技术** | [`perception_techniques.md`](./perception_techniques.md) | 检测/跟踪/Occupancy/BEV/位姿估计 |
+| 🛰️ **点云 & SLAM** | [`pointcloud_slam.md`](./pointcloud_slam.md) | 点云语义、配准、Visual/LiDAR SLAM |
+| 📡 **状态估计** | [`state_estimation.md`](./state_estimation.md) | EKF/UKF、粒子滤波、IMU+视觉融合 |
+| 🖐️ **触觉 VLA** | [`tactile_vla.md`](./tactile_vla.md) | GelSight/DIGIT/SaTA，盲盒操作 🆕 |
+
+### 🧭 2. 决策、规划与抓取 (Decision & Execution)
+*侧重于机器人如何“思考”路径并进行“精细操作”。*
+
+| 主题 | 文件 | 核心内容 |
+| :--- | :--- | :--- |
 | 🧭 **运动规划** | [`motion_planning.md`](./motion_planning.md) | RRT/PRM、TrajOpt、MoveIt & cuRobo |
 | 🗺️ **具身导航 (VLN)** | [`vln_dualvln.md`](./vln_dualvln.md) | 🆕 DualVLN：慢规划/快执行的异步双系统 |
-| 📡 **状态估计** | [`state_estimation.md`](./state_estimation.md) | EKF/UKF、粒子滤波、IMU+视觉融合 |
-| 🛰️ **点云 & SLAM** | [`pointcloud_slam.md`](./pointcloud_slam.md) | 点云语义、配准、Visual/LiDAR SLAM |
-| 🤖 **抓取算法 & 仿真** | [`grasp_algorithms.md`](./grasp_algorithms.md) | DexGraspNet/GraspGF、Isaac Sim/SAPIEN 🆕 |
-| 🛡️ **知识绝缘** | [`knowledge_insulation.md`](./knowledge_insulation.md) | 微调时保护 VLM 通用常识 |
-| 🖐️ **触觉 VLA** | [`tactile_vla.md`](./tactile_vla.md) | GelSight/DIGIT/SaTA，盲盒操作 🆕 |
+| 🤖 **抓取算法** | [`grasp_algorithms.md`](./grasp_algorithms.md) | DexGraspNet/GraspGF、抓取位姿生成 |
+
+### 🧪 3. 仿真底座与训练强化 (Sim & Augmentation)
+*侧重于高效数据生产与模型性能保护。*
+
+| 主题 | 文件 | 核心内容 |
+| :--- | :--- | :--- |
 | 🎮 **Isaac Lab** | [`isaac_lab.md`](./isaac_lab.md) | 🔥 GPU 仿真框架，单卡百万 FPS 🆕 |
+| 🛡️ **知识绝缘** | [`knowledge_insulation.md`](./knowledge_insulation.md) | 微调时保护 VLM 通用常识，防止“智障” |
 
 ---
 
@@ -142,7 +157,9 @@
 |:-----|:-----|:---------|
 | **Data Flywheel** | [`./frontier/data_flywheel_and_cross_modal.md`](./frontier/data_flywheel_and_cross_modal.md) | 🆕 互联网视频学习、跨模态迁移与数据演进 |
 | **Reward Discovery** | [`./frontier/reward_discovery_rl.md`](./frontier/reward_discovery_rl.md) | 🆕 Nature Comm: 遗憾最小化元学习奖励发现 |
+| **Vicarious Maps** | [`./frontier/vicarious_body_maps.md`](./frontier/vicarious_body_maps.md) | 🆕 Nature 2025: 视触觉“感同身受”的神经基础 |
 | **OneTwoVLA** | [`./frontier/onetwovla.md`](./frontier/onetwovla.md) | 🆕 统一模型 + 自适应推理切换 |
+| **DKT Perception** | [`./frontier/dkt_transparency_perception.md`](./frontier/dkt_transparency_perception.md) | 🆕 基于视频扩散先验的透明物体深度/法向估计 |
 | **MM-ACT** | [`./frontier/vla_unified_token_space.md`](./frontier/vla_unified_token_space.md) | 全模态共享 Token 空间 |
 | **SGTM** | [`./frontier/vla_intrinsic_safety.md`](./frontier/vla_intrinsic_safety.md) | 本质安全与知识屏蔽 |
 
