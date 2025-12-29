@@ -14,7 +14,7 @@
 *   **量产趋势**：量产时往往迁移到自研实时中间件。例如 Tesla Optimus 在研发期深度参考 ROS 生态，但其量产版控制系统基于自研实时框架，以规避开源软件的维护风险。
 
 ### 1.2 ROS2 实时性能突破：DDS 与通信延迟
-ROS2 相比 ROS1 的核心改进在于引入了 **DDS (Data Distribution Service)** 中件间（默认通常为 eProsima 的 Fast-DDS）。
+ROS2 相比 ROS1 的核心改进在于引入了 **DDS (Data Distribution Service)** 中间件（默认通常为 eProsima 的 Fast-DDS）。
 
 *   **实时性能指标**：在配置了 `PREEMPT_RT` 实时内核的系统上，端到端延迟可控制在 **100μs** 以下。
     *   **平均延迟**：~4.5μs
@@ -24,22 +24,42 @@ ROS2 相比 ROS1 的核心改进在于引入了 **DDS (Data Distribution Service
     *   **History**: 设置为 `KEEP_LAST(1)`，确保只处理最新帧。
     *   **Deadline**: 定义消息发布的硬间隔，监控控制回路。
 
-### 1.3 传统 ROS1 集成 (Legacy Support)
-虽然 `ur_rtde` 是高性能控制的首选，但在需要路径规划 (MoveIt) 或可视化 (Rviz) 时，ROS 是不可或缺的。
+### 1.3 深度优化：零拷贝与内存管理 (Zero-Copy & Memory)
+在 VLA 任务中，高分辨率图像（如 1080p）的传输是性能瓶颈。
+*   **Zero-Copy 传输**：利用 **Iceoryx (共享内存传输)** 结合 CycloneDDS 或 Fast-DDS。通过进程间内存借用，避免了大数据的多次序列化与拷贝。
+*   **内存预分配**：在 C++ 节点中使用 `StaticMemoryExecutor`，避免运行时堆分配导致的抖动。
 
-### 1.1 驱动选择
+### 1.4 组件容器 (Component Containers)
+为了进一步降低延迟，应将多个 Node 编译为 **Shared Library** 并加载到同一个 `ComponentContainer` 进程中。
+*   **优势**：Node 间通信退化为指针传递（In-process communication），延迟几乎为零，且不经过网络协议栈。
+
+### 1.5 跨设备分布式部署 (Distributed Deployment)
+VLA 模型通常运行在 4090/Orin 上，而控制律运行在实时控制器上。
+*   **DDS 发现机制优化**：在跨网段部署时，禁用多播 (Multicast)，改用 **Unicast (Peers list)** 以提升发现稳定性。
+*   **网络带宽调优**：对于图像流，开启 DDS 的 **Fragment** 功能，防止 UDP 报文过大导致的丢包。
+
+### 1.6 实时执行器 (Real-time Executor)
+ROS2 默认的执行器在多线程竞争时会导致严重抖动。
+*   **WaitSet 模型**：在需要极致确定性的 C++ 节点中，弃用 `Executor` 改用 `rclcpp::WaitSet` 手动轮询。这种方式可以精确控制回调函数的执行顺序，消除随机抖动。
+*   **优先级继承**：确保线程池中的线程运行在 `SCHED_FIFO` 调度模式下，防止低优先级任务阻塞关键控制逻辑。
+
+---
+
+## 2. 传统 ROS1 集成与实战 (Legacy & Practice)
+
+### 2.1 驱动选择
 - **ROS 1 (Noetic)**: [Universal_Robots_ROS_Driver](https://github.com/UniversalRobots/Universal_Robots_ROS_Driver)
 - **ROS 2 (Humble)**: [Universal_Robots_ROS2_Driver](https://github.com/UniversalRobots/Universal_Robots_ROS2_Driver)
 - **核心组件**: 需要在 UR 控制器上安装 `External Control` URCap。
 
-### 1.2 核心 Topic 接口
+### 2.2 核心 Topic 接口
 | Topic | 类型 | 作用 |
 | :--- | :--- | :--- |
 | `/joint_states` | `sensor_msgs/JointState` | **订阅**: 获取当前关节角度与速度 |
 | `/scaled_pos_joint_traj_controller/command` | `trajectory_msgs/JointTrajectory` | **发布**: 发送关节位置指令 (常用) |
 | `/speed_scaling_factor` | `std_msgs/Float64` | **订阅**: 获取当前速度缩放比例 |
 
-### 1.3 Python 实战: 发布关节轨迹 (ROS 1 Noetic)
+### 2.3 Python 实战: 发布关节轨迹 (ROS 1 Noetic)
 
 ```python
 #!/usr/bin/env python
@@ -99,13 +119,13 @@ if __name__ == "__main__":
     ur.move_to_q([0, -1.57, 0, -1.57, 0, 0])
 ```
 
-### 1.4 ROS vs RTDE 选型总结
+### 2.4 ROS vs RTDE 选型总结
 | 维度 | ROS Driver | ur_rtde |
 | :--- | :--- | :--- |
-| **延迟** | 中 (10-50ms) | **极低** (2ms) |
-| **功能** | 完整 (MoveIt规划, 避障) | 纯控制 (只有 MoveJ/ServoJ) |
-| **复杂度** | 高 (需配置 Ubuntu/ROS/Network) | 低 (pip install 即可) |
-| **适用** | 抓取规划、复杂避障 | **VLA模型推理、模仿学习数据采集** |
+| **延迟** | 中 (10-50ms) / **优 (100μs, ROS2+Iceoryx)** | **极低** (2ms) |
+| **功能** | 完整 (MoveIt规划, 避障, 分布式) | 纯控制 (只有 MoveJ/ServoJ) |
+| **复杂度** | 高 (需配置 DDS/实时内核) | 低 (pip install 即可) |
+| **适用** | **复杂系统集成、多机协作、视觉引导** | **VLA单一模型推理、简单轨迹跟随** |
 
 ---
 
@@ -260,5 +280,4 @@ def fast_fk_solver(q, dh_a, dh_d, dh_alpha):
 
 ## 🔗 参考索引
 *   **相关内容**: [UR5 控制实战](./ur5_control_guide.md) | [具身导航 DualVLN](../theory/vln_dualvln.md)
-
 

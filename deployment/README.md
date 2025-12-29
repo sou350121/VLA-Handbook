@@ -44,8 +44,8 @@
     - VLA 模型推理与控制线程架构
 12. **[ROS 集成与算法优化 (ROS & Optimization)](./ros_and_optimization.md)** 🆕
     - ROS2 在新型机器人中的主导地位
-    - DDS 通信性能与 QoS 实时调优
-    - 功能安全认证 (Apex.AI) 与量产鸿沟
+    - **进阶：零拷贝 (Iceoryx)、组件容器与 WaitSet 实时调优**
+    - DDS 分布式部署调优 (Unicast, Fragmentation)
     - Python 性能优化 (Zero-Allocation, Numba JIT)
 
 ## 学习建议
