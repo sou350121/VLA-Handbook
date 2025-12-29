@@ -98,7 +98,7 @@
 
 > *解决特定场景下的难题，提供面试中的差异化竞争点。*
 
-### 🛰️ 1. 具身感知与定位 (Embodied Perception)
+### 🛰️ 具身感知与定位 (Embodied Perception)
 *侧重于机器人如何“看”和“感觉”物理世界。*
 
 | 主题 | 文件 | 核心内容 |
@@ -108,7 +108,7 @@
 | 📡 **状态估计** | [`state_estimation.md`](./state_estimation.md) | EKF/UKF、粒子滤波、IMU+视觉融合 |
 | 🖐️ **触觉 VLA** | [`tactile_vla.md`](./tactile_vla.md) | GelSight/DIGIT/SaTA，盲盒操作 🆕 |
 
-### 🧭 2. 决策、规划与抓取 (Decision & Execution)
+### 🧭 决策、规划与抓取 (Decision & Execution)
 *侧重于机器人如何“思考”路径并进行“精细操作”。*
 
 | 主题 | 文件 | 核心内容 |
@@ -117,7 +117,7 @@
 | 🗺️ **具身导航 (VLN)** | [`vln_dualvln.md`](./vln_dualvln.md) | 🆕 DualVLN：慢规划/快执行的异步双系统 |
 | 🤖 **抓取算法** | [`grasp_algorithms.md`](./grasp_algorithms.md) | DexGraspNet/GraspGF、抓取位姿生成 |
 
-### 🧪 3. 仿真底座与训练强化 (Sim & Augmentation)
+### 🧪 仿真底座与训练强化 (Sim & Augmentation)
 *侧重于高效数据生产与模型性能保护。*
 
 | 主题 | 文件 | 核心内容 |
