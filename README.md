@@ -112,6 +112,7 @@ VLA-Handbook/
 | **🚀 真机部署** | [`deployment/README.md`](./deployment/README.md) | 硬件选型、ROS、优化、Sim-to-Real |
 | **💡 题库与实战** | [`question-bank/README.md`](./question-bank/README.md) | 面试真题、代码实战、微调指南 |
 | **📋 速查表** | [`cheat-sheet/README.md`](./cheat-sheet/README.md) | 时间线、核心公式 |
+| **📝 更新日志** | [`CHANGELOG.md`](./CHANGELOG.md) | 🆕 每日详细更新记录 |
 | **📘 电子书** | [`book/README.md`](./book/README.md) | 合并版 Markdown/PDF/HTML |
 
 ---
