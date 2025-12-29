@@ -41,7 +41,7 @@ VLA-Handbook/
 ├── cheat-sheet/     # 速查表
 ├── question-bank/   # 题库与实战
 ├── product/         # 机器人产品大百科
-├── system-design/   # 系统设计
+├── system-design/   # 系统设计（含 AI Coding Agent）
 └── companies/       # 机器人公司与求职
 ```
 
@@ -92,6 +92,9 @@ VLA-Handbook/
 ├── question-bank/              # 题库与实战
 ├── product/                    # 机器人产品大百科
 ├── system-design/              # 系统设计
+│   ├── README.md               # 索引
+│   ├── ai_coding_agent_design.md # 🆕 AI Coding 智能体设计
+│   └── ...
 └── companies/                  # 机器人公司与求职
 ```
 
