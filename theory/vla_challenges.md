@@ -76,6 +76,8 @@
 
 ## 挑战 2: 稳健推理 (Robust Reasoning)
 
+> 相关行业观点：Jim Fan 强调“VLM 为问答优化、视觉编码器丢弃低层细节”，导致 VLM→VLA 路线存在结构性错位。参见 [`./frontier/jim_fan_2025_robotics_lessons.md`](./frontier/jim_fan_2025_robotics_lessons.md)
+
 > **核心问题**: VLM 很聪明，但 VLA 动作仍然很蠢。
 
 ### 2.1 关键矛盾
@@ -162,6 +164,8 @@ A:
 ---
 
 ## 挑战 4: 可靠评估 (Reliable Evaluation)
+
+> 行业痛点总结：当前很多机器人工作缺乏统一评测协议与可复现资产（平台/任务定义/评分标准/失败分布），导致“人人都能通过临时定义 benchmark 宣称 SOTA”。参见 [`./frontier/jim_fan_2025_robotics_lessons.md`](./frontier/jim_fan_2025_robotics_lessons.md)
 
 > **核心问题**: Benchmark 环境太简单、太固定、太干净。
 

@@ -159,6 +159,7 @@
 | **Reward Discovery** | [`./frontier/reward_discovery_rl.md`](./frontier/reward_discovery_rl.md) | 🆕 Nature Comm: 遗憾最小化元学习奖励发现 |
 | **Vicarious Maps** | [`./frontier/vicarious_body_maps.md`](./frontier/vicarious_body_maps.md) | 🆕 Nature 2025: 视触觉“感同身受”的神经基础 |
 | **UniTacHand** | [`./frontier/unitachhand.md`](./frontier/unitachhand.md) | 🆕 arXiv 2025: MANO UV Map 统一触觉表征，实现人手→机器人零样本迁移 |
+| **Jim Fan 2025** | [`./frontier/jim_fan_2025_robotics_lessons.md`](./frontier/jim_fan_2025_robotics_lessons.md) | 🆕 行业复盘：硬件可靠性、评测可复现性、VLM→VLA 路线反思 |
 | **OneTwoVLA** | [`./frontier/onetwovla.md`](./frontier/onetwovla.md) | 🆕 统一模型 + 自适应推理切换 |
 | **DKT Perception** | [`./frontier/dkt_transparency_perception.md`](./frontier/dkt_transparency_perception.md) | 🆕 基于视频扩散先验的透明物体深度/法向估计 |
 | **MM-ACT** | [`./frontier/vla_unified_token_space.md`](./frontier/vla_unified_token_space.md) | 全模态共享 Token 空间 |

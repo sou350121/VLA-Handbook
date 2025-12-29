@@ -7,6 +7,9 @@
 ### 1.1. Success Rate (SR) - 成功率
 最直观但也最粗糙的指标。
 
+> **重要提醒（可复现性）**：只报 SR 很容易造成“从 100 次失败里剪出 1 次最好看的 demo”的错觉。建议同时报告：失败类型分布、长尾失败（corner cases）、评测协议（起始分布/随机种子/重置流程/控制频率/标定版本）。
+> - 行业复盘参考：[`./frontier/jim_fan_2025_robotics_lessons.md`](./frontier/jim_fan_2025_robotics_lessons.md)
+
 $$
 SR = \frac{1}{N} \sum_{i=1}^{N} \mathbb{I}(\text{task}_i \text{ completed})
 $$
