@@ -232,6 +232,9 @@
 
 ##### 灵巧手
 - GR-RL (穿鞋带), RDT-1B (双臂操作)
+- UniTacHand (2025): MANO UV Map 统一触觉表征，实现人手→机器人灵巧手策略迁移（零样本/小样本）
+  - [手册解读](./frontier/unitachhand.md)
+  - [论文（HTML）](https://arxiv.org/html/2512.21233v2)
 
 ---
 

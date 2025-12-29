@@ -317,6 +317,12 @@ loss = CrossEntropy(decoder(tactile_emb, vision_emb), text_tokens)
 
 ### 3.4 🔥 SaTA: 空间锚定触觉感知 (Sharpa + 清华 + 武大, 2025)
 
+### 3.5 🆕 UniTacHand: 人手→机器人灵巧手触觉技能迁移 (2025)
+> **论文**: [UniTacHand: Unified Spatio-Tactile Representation for Human to Robotic Hand Skill Transfer](https://arxiv.org/html/2512.21233v2)
+> **核心思想**: 先把人类触觉手套与机器人触觉传感器的信号投影到统一的 **MANO UV Map**（2D 规范表面），再用对比学习把两域对齐到同一潜空间，实现 **zero-shot** 策略迁移。
+> **手册解读**: 参见 [`./frontier/unitachhand.md`](./frontier/unitachhand.md)
+
+
 > **论文**: [SaTA: Spatially-anchored Tactile Awareness for Dexterous Manipulation](https://arxiv.org/abs/2510.14647)
 > **机构**: Sharpa (新加坡 AI 机器人公司) + 清华大学 + 武汉大学
 > **核心突破**: **首次将触觉信号锚定到机械手自身坐标系**，实现视觉遮挡下的亚毫米级精度"盲操作"
