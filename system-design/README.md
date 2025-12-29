@@ -27,6 +27,12 @@
     - Real-world Proxy (真机代理指标)
     - A/B Testing & Canary Deployment
 
+5.  **[AI Coding 智能体设计 (AI Coding Agent Design)](./ai_coding_agent_design.md)** 🆕
+    - 提示词预处理 (@路径, Slash 命令)
+    - MCP 协议与工具发现链路
+    - SubAgent 架构与上下文隔离
+    - 规约驱动开发 (Spec-driven Development)
+
 ## 学习建议
 - **关注 Scalability**: 所有的设计都要考虑 "如果机器人数从 10 台变成 1000 台，这个系统还能跑吗？"
 - **关注 Automation**: 尽量减少人工介入。最好的系统是机器人自己收集数据、自己训练、自己变强。
