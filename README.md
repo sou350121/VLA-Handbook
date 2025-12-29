@@ -304,15 +304,11 @@ action = policy.select_action(observation)
 <summary><b>📝 更新日志（最近更新）</b></summary>
 
 ### 2025-12-28 🆕
-- **具身强化学习奖励发现**: 新增 [`reward_discovery_rl.md`](./theory/frontier/reward_discovery_rl.md)，详解 Nature Communications 最新成果：通过双层元学习框架实现零先验奖励的自主进化。
-- **OneTwoVLA 深度解析**: 新增 [`onetwovla.md`](./theory/frontier/onetwovla.md)，详解单一统一模型如何通过 `[BOR]` 和 `[BOA]` Token 实现自适应逻辑切换。
-- **真机适配指南**: 在 [`ur5_control_guide.md`](./deployment/ur5_control_guide.md) 和 [`onetwovla.md`](./theory/frontier/onetwovla.md) 中同步新增了从 7-DOF Franka 迁移到 6-DOF UR5 的实战方案（含奇异点恢复与动作平滑）。
-- **数学与架构强化**: 深度补全了 Diffusion Policy、Flow Matching (π0)、FAST Tokenizer 的数学推导与数值演练。
-- **SOTA 模型详解**: 新增 [`gr00t_n1_6.md`](./theory/gr00t_n1_6.md) (NVIDIA 人形模型)、[`pi0_5_dissection.md`](./theory/pi0_5_dissection.md) (π0.5 开放世界泛化)、[`vla_unified_token_space.md`](./theory/vla_unified_token_space.md) (MM-ACT)。
-- **Tokenization 专题**: 新增 [`tokenization.md`](./theory/tokenization.md) 详解均匀分桶、FAST 频域压缩与 VQ-Codebook。
-- **本质安全专题**: 新增 [`vla_intrinsic_safety.md`](./theory/vla_intrinsic_safety.md) 详解 SGTM 知识屏蔽技术。
-- **硬件深度拆解**: 新增舞肌手 (Wuji Hand) 与特斯拉 Optimus V2 灵巧手的机械与控制原理分析。
-- **批判性思维**: 为所有核心模型文档增加了“独立思考与批判性疑问”章节，提升面试竞争力。
+- **机器人动力学专题**: 新增 [`robot_dynamics_classification.md`](./theory/robot_dynamics_classification.md)，从约束、地面接触、惯量完备性三个维度解构机器人动力学系统分类。
+- **具身强化学习奖励发现**: 新增 [`reward_discovery_rl.md`](./theory/frontier/reward_discovery_rl.md)，详解 Nature Communications 最新成果。
+- **AI Coding 智能体设计**: 新增 [`ai_coding_agent_design.md`](./system-design/ai_coding_agent_design.md)，深度解构顶尖 AI 编程工具的设计模式。
+- **OneTwoVLA 深度解析**: 新增 [`onetwovla.md`](./theory/frontier/onetwovla.md)，详解自适应逻辑切换。
+- **真机适配指南**: 在 [`ur5_control_guide.md`](./deployment/ur5_control_guide.md) 同步新增从 Franka 到 UR5 的实战方案。
 
 ### 2025-12-26
 - **VLN 专题**: 新增 [`vln_dualvln.md`](./theory/vln_dualvln.md) - DualVLN 快慢系统（首个 VLN 基础模型）

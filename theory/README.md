@@ -39,6 +39,7 @@
 |:-----|:-----|:---------|
 | 📦 **数据处理** | [`data.md`](./data.md) | RLDS vs LeRobot vs HDF5、数据加载流水线 |
 | 🧭 **空间智能** | [`spatial_math.md`](./spatial_math.md) | 坐标系变换、四元数 vs 欧拉角 vs 6D Rotation |
+| ⚙️ **动力学分类** | [`robot_dynamics_classification.md`](./robot_dynamics_classification.md) | 🆕 约束完备性、浮动基座与惯量矩阵 |
 | 🎮 **动作空间** | [`action_representations.md`](./action_representations.md) | 连续 vs 离散、Delta vs Absolute |
 | 🔄 **联合训练** | [`co_training.md`](./co_training.md) | 防止灾难性遗忘、Loss Masking |
 | 📝 **评估体系** | [`evaluation.md`](./evaluation.md) | CALVIN/SIMPLER、真机成功率 |
