@@ -1,11 +1,10 @@
 # Changelog
 
-All notable changes to the **VLA Handbook** project will be documented in this file.
+All notable changes to the **VLA Handbook** project are documented here, derived directly from the repository's git history.
 
 ---
 
-## [Unreleased] - 2025-12-29
-
+## [1.5.0] - 2025-12-29 🆕
 ### Added
 - **AI Coding Agent Design Deep Dive**: New document [`system-design/ai_coding_agent_design.md`](./system-design/ai_coding_agent_design.md) covering:
   - User prompt preprocessing (@context, slash commands).
@@ -17,82 +16,92 @@ All notable changes to the **VLA Handbook** project will be documented in this f
   - Humanoid foundation models using internet video data.
   - Boundless Intelligence (智在无界) case study.
 - **Robot Startup Category**: Added [`companies/startups.md`](./companies/startups.md) featuring Boundless Intelligence (智在无界) and CEO Zongqing Lu's team.
+- **Nature Communications Reward Discovery**: Added [`theory/frontier/reward_discovery_rl.md`](./theory/frontier/reward_discovery_rl.md).
 
 ### Changed
 - **ROS2 Section Reinforcement**: Major updates to [`deployment/ros_and_optimization.md`](./deployment/ros_and_optimization.md):
   - Added Zero-Copy (Iceoryx) and CycloneDDS tuning.
   - Added Component Containers and WaitSet real-time executor models.
   - Added Unicast/Peers-list discovery for distributed deployment.
-- **Robot Dynamics Classification Refinement**: Updated [`theory/robot_dynamics_classification.md`](./theory/robot_dynamics_classification.md) with:
-  - English terminology for all professional terms.
-  - "Algorithm-friendly" analogies for AI engineers.
-  - Expanded standard dynamics equation analysis.
+  - Added safety certification (Apex.OS) content.
+- **Robot Dynamics Classification Refinement**: Updated [`theory/robot_dynamics_classification.md`](./theory/robot_dynamics_classification.md) with English terms and algorithm-friendly analogies.
 
 ---
 
-## [1.2.0] - 2025-12-28
-
+## [1.4.0] - 2025-12-26 to 2025-12-28
 ### Added
-- **Robot Dynamics Classification**: New document [`theory/robot_dynamics_classification.md`](./theory/robot_dynamics_classification.md) covering:
-  - Over-constrained, Under-constrained, and Fully-constrained systems.
-  - Floating-base vs Grounded systems.
-  - Inertia completeness and numerical stability.
-- **Reward Discovery RL**: New document [`theory/frontier/reward_discovery_rl.md`](./frontier/reward_discovery_rl.md) analyzing Nature Communications 2025 paper.
-- **OneTwoVLA Dissection**: New document [`theory/frontier/onetwovla.md`](./theory/frontier/onetwovla.md) on adaptive reasoning/action tokens.
-- **MM-ACT (Unified Token Space)**: New document [`theory/frontier/vla_unified_token_space.md`](./theory/frontier/vla_unified_token_space.md).
-- **SGTM (Intrinsic Safety)**: New document [`theory/frontier/vla_intrinsic_safety.md`](./theory/frontier/vla_intrinsic_safety.md).
+- **OneTwoVLA Adaptation**: Real-world migration guide from 7-DOF Franka to 6-DOF UR5 in `ur5_control_guide.md`.
+- **Research Frontier Restructuring**: Organized model-specific analyses into `theory/frontier/`.
+- **Co-training Examples**: Added Robot vs Internet data comparison to π0.5 dissection.
+
+### Changed & Fixed
+- **GitHub Math Rendering Global Fix**: Optimized LaTeX layout across all 40+ documents, strictly enforcing blank lines around `$$` blocks for correct web display.
+- **Architecture Diagrams**: Replaced Mermaid with ASCII and enhanced diagrams for GR00T-N1.6, π0, and π0.5.
+- **Math Deep Dives**: Significantly enhanced explanations for Diffusion Policy and Flow Matching.
+
+---
+
+## [1.3.0] - 2025-12-21 to 2025-12-25
+### Added
+- **GR00T-N1.6 Deep Dive**: Detailed analysis of NVIDIA's humanoid foundation model, DiT architecture, and conditioning.
+- **Tesla Optimus V2 Analysis**: Added hardware analysis of the latest Optimus hand and compared it with the Wuji hand.
+- **MM-ACT (Unified Token Space)**: Analysis of multi-modality unified token space.
+- **SGTM (VLA Intrinsic Safety)**: Added chapter on safety and alignment.
+
+---
+
+## [1.2.0] - 2025-12-15 to 2025-12-18
+### Added
+- **VLN DualVLN**: Introduced Vision-Language Navigation with Dual-system (Fast/Slow).
+- **Traditional Action Generation**: Added MSE/GMM explanation to `theory/traditional_action_generation.md`.
+- **LeetCode for Beginners**: Added oral-style LeetCode training diary to the question bank.
 
 ### Changed
-- **UR5 Control Guide**: Added real-world adaptation from 7-DOF Franka to 6-DOF UR5.
-- **Main README**: Refactored into a research-oriented landing page with "Theory Fast Track".
+- **Handbook Restructuring**: Renamed to "VLA Handbook", optimized README with theory-first logic and collapsible sections.
+- **First Principles Math**: Added dedicated math sections to core theory documents.
 
 ---
 
-## [1.1.0] - 2025-12-26
-
+## [1.1.0] - 2025-12-10 to 2025-12-13
 ### Added
-- **VLN Special Topic**: Added [`theory/vln_dualvln.md`](./theory/vln_dualvln.md) - Dual-system for Vision-Language Navigation.
-- **UR5 Python Control 实战**: New guide [`deployment/ur5_control_guide.md`](./deployment/ur5_control_guide.md) with real-time kernel config and `ur_rtde` examples.
-- **Python OOP for Robotics**: Added OOP design patterns and safety decorators to question bank.
+- **NeurIPS 2025 Insights**: Decoded top papers from an Embodied AI perspective (Artificial Hivemind, Gated Attention, etc.).
+- **GELLO Deployment**: Added guide for assembly and UR5 teleoperation using GELLO.
+- **SaTA (Tactile Awareness)**: Deep analysis added to `tactile_vla.md`.
+- **Isaac Lab**: Added documentation for the GPU-accelerated simulation framework.
+
+### Fixed
+- **GELLO Pricing**: Corrected assembled price to ~¥2000 and added Taobao purchase links.
 
 ---
 
-## [1.0.0] - 2025-12-13
-
+## [1.0.0] - 2025-12-01 to 2025-12-08
 ### Added
-- **NeurIPS 2025 Insights**: Added [`theory/neurips_2025_insights.md`](./theory/neurips_2025_insights.md) covering top papers from an Embodied AI perspective.
-- **NVIDIA GR00T-N1.6**: Deep dive into the latest DiT-based humanoid foundation model.
+- **Small VLA Research**: Comprehensive analysis of Evo-1, SmolVLA, and Latent Action Learning (UniVLA, MemoryVLA).
+- **ByteDance GR-RL**: Dissection of the first VLA to achieve 78% shoe-tying success.
+- **Tactile VLA Module**: Added GelSight, Digit, DM-Tac, and GelStereo sensor analyses.
+- **VLM Comparison Tables**: Added PaliGemma 3B, SigLIP, and Qwen2-VL comparison for VLA backbones.
+- **Motion Planning & SLAM**: Added foundational modules for perception and navigation.
+
+### Changed
+- **README_FUN.md**: Introduced "Robot Growth School" analogy for easier onboarding.
+- **ASCII Cheat Sheet**: Added visual diagrams for core concepts like LoRA, CoT, and Flash Attention.
 
 ---
 
-## [0.9.0] - 2024-12-08
-
+## [0.8.0] - 2024-11-25 to 2024-11-30
 ### Added
-- **Small VLA Models**: Added research on Evo-1 (770M) and SmolVLA (450M).
-- **Latent Action Learning**: New section on UniVLA, EvoVLA, and MemoryVLA.
-- **ByteDance GR-RL**: Analysis of the first VLA to achieve 78% shoe-tying success.
+- **Product Encyclopedia**: Detailed specs and pricing for 50+ humanoid robots, arms, hands, and sensors.
+- **Evaluation Protocols**: Math definitions for success rates, A/B testing, and bench details.
+- **Simulation Guide**: Comprehensive guide on Isaac Sim, MuJoCo, and SAPIEN.
 
----
-
-## [0.8.0] - 2024-12-05
-
-### Added
-- **Multimodal Foundation**: Comprehensive guide on 2025 VLM models (Qwen2.5-VL, Eagle 2.5, etc.).
-- **π0.6 Action Expert**: Dissection of Recap self-evolution mechanism.
-
----
-
-## [0.7.0] - 2024-12-01
-
-### Added
-- **Perception & Planning**: Added Visual Perception, Motion Planning, and SLAM modules.
-- **Sensor Integration**: Added tactile sensor and end-effector control guides.
+### Changed
+- **Co-training Refactor**: Extracted Co-training to a dedicated document `theory/co_training.md`.
+- **Data Pipeline**: Detailed format comparison (RLDS vs LeRobot).
 
 ---
 
 ## [Initial Release] - 2024-11-15
-
 ### Added
-- Foundation documents: Transformer vs CNN, RL basics, and early VLA architectures (RT-1, RT-2).
-- Hardware pricing tables and camera calibration basics.
-
+- **Core VLA Theory**: Transformer vs CNN, RT-1/RT-2 architectures, and action representations.
+- **Hardware Pricing**: Initial hardware guide and RealSense calibration basics.
+- **Action Tokens**: Initial research on discrete vs continuous action spaces.
