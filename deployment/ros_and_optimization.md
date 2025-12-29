@@ -6,8 +6,25 @@
 
 ---
 
-## 1. ROS 通信集成 (ROS Integration)
+## 1. ROS 集成与系统架构 (ROS Integration & Architecture)
 
+### 1.1 ROS2 在新型机器人中的主导地位
+在四足机器人（如 Unitree、波士顿动力）、人形机器人（如 Tesla Optimus、傅利叶智能）等领域，ROS2 已成为研发阶段的**唯一事实标准**（渗透率 >80%）。
+*   **研发策略**：利用 ROS2 的分布式架构进行算法验证。
+*   **量产趋势**：量产时往往迁移到自研实时中间件。例如 Tesla Optimus 在研发期深度参考 ROS 生态，但其量产版控制系统基于自研实时框架，以规避开源软件的维护风险。
+
+### 1.2 ROS2 实时性能突破：DDS 与通信延迟
+ROS2 相比 ROS1 的核心改进在于引入了 **DDS (Data Distribution Service)** 中件间（默认通常为 eProsima 的 Fast-DDS）。
+
+*   **实时性能指标**：在配置了 `PREEMPT_RT` 实时内核的系统上，端到端延迟可控制在 **100μs** 以下。
+    *   **平均延迟**：~4.5μs
+    *   **最大抖动**：~35μs (无负载)
+*   **QoS (Quality of Service) 调优**：
+    *   **Reliability**: 通常选择 `BEST_EFFORT`（牺牲可靠性换取低延迟）。
+    *   **History**: 设置为 `KEEP_LAST(1)`，确保只处理最新帧。
+    *   **Deadline**: 定义消息发布的硬间隔，监控控制回路。
+
+### 1.3 传统 ROS1 集成 (Legacy Support)
 虽然 `ur_rtde` 是高性能控制的首选，但在需要路径规划 (MoveIt) 或可视化 (Rviz) 时，ROS 是不可或缺的。
 
 ### 1.1 驱动选择
@@ -223,4 +240,25 @@ def fast_fk_solver(q, dh_a, dh_d, dh_alpha):
     # ...
     return t_matrix
 ```
+
+---
+
+## 3. 从演示到产品 (Demo to Product) 的鸿沟
+
+### 3.1 功能安全认证 (Safety Certification)
+*   **Apex.OS**: 基于 ROS2，通过了 ISO 26262 ASIL-D 认证。其路径包括代码静态分析、限定 DDS 实现（Safe-DDS）以及严格的资源控制。
+*   **实时层划分**：
+    1.  **实时层 (< 1ms)**：关节伺服（专用实时系统）。
+    2.  **准实时层 (1-10ms)**：轨迹插补（ROS2 + PREEMPT_RT）。
+    3.  **非实时层 (> 10ms)**：任务规划、视觉处理（标准 ROS2）。
+
+### 3.2 长期维护与稳定性
+*   **TCO (总拥有成本)**：工业设备寿命通常 10-15 年，而 ROS2 LTS 生命周期仅 5 年。需自行维护安全补丁。
+*   **工程细节**：7x24 运行时，需警惕 TF 树积累、日志膨胀和内存碎片化问题。同时需建立自动化的**在线标定校验**机制。
+
+---
+
+## 🔗 参考索引
+*   **相关内容**: [UR5 控制实战](./ur5_control_guide.md) | [具身导航 DualVLN](../theory/vln_dualvln.md)
+
 

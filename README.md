@@ -304,6 +304,7 @@ action = policy.select_action(observation)
 <summary><b>📝 更新日志（最近更新）</b></summary>
 
 ### 2025-12-28 🆕
+- **ROS2 实时部署专题**: 在 [`ros_and_optimization.md`](./deployment/ros_and_optimization.md) 中新增 ROS2 DDS 性能分析、QoS 调优及量产安全认证内容。
 - **机器人动力学专题**: 新增 [`robot_dynamics_classification.md`](./theory/robot_dynamics_classification.md)，从约束、地面接触、惯量完备性三个维度解构机器人动力学系统分类。
 - **具身强化学习奖励发现**: 新增 [`reward_discovery_rl.md`](./theory/frontier/reward_discovery_rl.md)，详解 Nature Communications 最新成果。
 - **AI Coding 智能体设计**: 新增 [`ai_coding_agent_design.md`](./system-design/ai_coding_agent_design.md)，深度解构顶尖 AI 编程工具的设计模式。

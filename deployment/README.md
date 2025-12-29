@@ -43,9 +43,9 @@
     - 保护性停止 (Protective Stop) 自动恢复
     - VLA 模型推理与控制线程架构
 12. **[ROS 集成与算法优化 (ROS & Optimization)](./ros_and_optimization.md)** 🆕
-    - ROS 1/2 Driver 驱动选型与 Topic 接口
-    - Python 面向对象控制架构 (OOP)
-    - 安全装饰器 (Decorator) 设计
+    - ROS2 在新型机器人中的主导地位
+    - DDS 通信性能与 QoS 实时调优
+    - 功能安全认证 (Apex.AI) 与量产鸿沟
     - Python 性能优化 (Zero-Allocation, Numba JIT)
 
 ## 学习建议
