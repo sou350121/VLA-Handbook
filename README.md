@@ -304,7 +304,8 @@ action = policy.select_action(observation)
 <summary><b>📝 更新日志（最近更新）</b></summary>
 
 ### 2025-12-28 🆕
-- **机器人新势力**: 新增 [`startups.md`](./companies/startups.md)，收录 **智在无界 (Boundless Intelligence)** 等具身智能新创公司，详解北京大学卢宗青教授团队的人形机器人通用大模型布局。
+- **数据飞轮与跨模态迁移**: 新增 [`data_flywheel_and_cross_modal.md`](./theory/frontier/data_flywheel_and_cross_modal.md)，深度解析如何利用互联网视频解决具身智能数据瓶颈。
+- **机器人新势力**: 新增 [`startups.md`](./companies/startups.md)，收录 **智在无界 (Boundless Intelligence)** 等具身智能新创公司。
 - **ROS2 进阶架构专题**: 在 [`ros_and_optimization.md`](./deployment/ros_and_optimization.md) 中深度加固：涵盖 **Zero-Copy (Iceoryx)**、**组件容器 (Component Containers)**、**WaitSet 实时模型**及分布式部署调优。
 - **机器人动力学专题**: 新增 [`robot_dynamics_classification.md`](./theory/robot_dynamics_classification.md)，从约束、地面接触、惯量完备性三个维度解构机器人动力学系统分类。
 - **具身强化学习奖励发现**: 新增 [`reward_discovery_rl.md`](./theory/frontier/reward_discovery_rl.md)，详解 Nature Communications 最新成果。
