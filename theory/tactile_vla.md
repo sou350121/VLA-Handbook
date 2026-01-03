@@ -5,9 +5,18 @@
 2024-2025 年，VLA 领域开始爆发 "Vision-Tactile-Language-Action" 的研究，旨在赋予机器人"触觉语义"理解能力。
 
 ## 1. 为什么需要触觉? (Why Tactile?)
+
+> 如果你只记一句：视觉给你“全局坐标”，语言给你“任务意图”，**触觉给你“接触相位的闭环真反馈”**。
+> - 行业盘点（可面试复述）：[`./frontier/tactile_irreplaceable.md`](./frontier/tactile_irreplaceable.md)
+
 - **视觉遮挡 (Occlusion)**: 当机械手抓取物体时，手掌会挡住摄像头视线。此时只有触觉能提供反馈。
 - **物理属性感知**: 视觉无法直接判断物体的软硬、摩擦力、重量。
 - **微米级控制**: 视觉通常有毫米级误差，而触觉传感器 (如 GelSight) 可以提供微米级的纹理信息。
+
+### 1.1 触觉不可替代的三件事：力-形-质 (Force–Shape–Material)
+- **力 (Force)**：抓稳没？是否在滑？要不要加力/减力？
+- **形 (Shape)**：局部几何与边缘方向（尤其在视觉被遮挡时）。
+- **质 (Material)**：软硬/粗糙/摩擦/湿滑等，决定“最后 1cm 是否成功”。
 
 ### 🧠 神经科学基石：视触觉的“感同身受”
 最新的神经科学研究 (Nature 2025) 为触觉 VLA 提供了坚实的理论基础：
@@ -284,7 +293,7 @@ loss = CrossEntropy(decoder(tactile_emb, vision_emb), text_tokens)
 ---
 
 ### 3.2 VLA-Touch (2025)
-> **论文**: [VLA-Touch: Enhancing Generalist Robot Policies with Dual-Level Tactile Feedback](https://arxiv.org/abs/2502.xxxxx)
+> **论文**: [VLA-Touch: Enhancing Vision-Language-Action Models with Dual-Level Tactile Feedback](https://arxiv.org/abs/2507.17294)
 > **核心思想**: 双层反馈机制 (Dual-level Feedback)。
 
 - **背景**: 现有的 VLA (如 RT-2) 缺乏触觉通道。直接微调大模型成本太高。
@@ -299,7 +308,7 @@ loss = CrossEntropy(decoder(tactile_emb, vision_emb), text_tokens)
 - **优势**: 无需重新训练整个 VLA，即插即用。
 
 ### 3.3 OmniVTLA (2025)
-> **论文**: [OmniVTLA: A Unified Vision-Tactile-Language-Action Model](https://arxiv.org/abs/2503.xxxxx)
+> **论文**: [OmniVTLA: Vision-Tactile-Language-Action Model with Semantic-Aligned Tactile Sensing](https://arxiv.org/abs/2508.08706)
 > **核心思想**: 统一的视触觉语言动作模型 (Unified Vision-Tactile-Language-Action Model)。
 
 - **架构细节**:
@@ -581,7 +590,10 @@ A: 低频成分捕捉粗粒度位置 (厘米级)，高频成分捕捉细粒度�
 ## 4. 挑战与未来
 1.  **数据稀缺**: 相比于图像数据，高质量的触觉-语言对 (Tactile-Language Pairs) 非常少。
 2.  **Sim-to-Real**: 触觉仿真非常困难 (涉及复杂的软体形变)，目前主要依赖真机数据收集。
-3.  **硬件成本**: 高分辨率触觉传感器 (如 GelSight) 依然昂贵且易损耗。
+3.  **硬件成本/耐久性**: 高分辨率触觉传感器 (如 GelSight) 依然昂贵且易损耗；真正走向产品往往先卡在耐久、标定一致性与规模化制造。
+
+> 综述视角参考：
+> - [Tactile Robotics: An Outlook](https://arxiv.org/abs/2508.11261)
 
 ## 5. 深度解析: ResNet vs ViT for Tactile
 在触觉 VLA 中，选择 ResNet 还是 ViT 作为触觉编码器 (Tactile Encoder) 是一个关键的设计决策。这不仅仅是"CNN vs Transformer"的问题，而是关乎**触觉信号的物理特性**如何被编码。

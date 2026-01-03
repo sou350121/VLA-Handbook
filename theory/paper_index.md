@@ -1,7 +1,7 @@
 # VLA 论文索引 (Paper Index)
 
 > **快速查找**: 多维度索引系统，帮助快速定位相关论文
-> **最后更新**: 2025-12-13
+> **最后更新**: 2026-01-03
 
 ---
 
@@ -237,6 +237,17 @@
 - UniTacHand (2025): MANO UV Map 统一触觉表征，实现人手→机器人灵巧手策略迁移（零样本/小样本）
   - [手册解读](./frontier/unitachhand.md)
   - [论文（HTML）](https://arxiv.org/html/2512.21233v2)
+
+##### 触觉 / 视触觉 (Tactile)
+- 触觉为什么不可替代（行业/研究盘点）：[笔记](./frontier/tactile_irreplaceable.md)
+- **VLA-Touch** (2025): Dual-Level Tactile Feedback
+  - [论文](https://arxiv.org/abs/2507.17294)
+- **OmniVTLA** (2025): Semantic-Aligned Tactile Sensing
+  - [论文](https://arxiv.org/abs/2508.08706)
+- **GelSLAM** (2025): Real-time High-Fidelity 3D Tactile SLAM
+  - [论文](https://arxiv.org/abs/2508.15990)
+- **Tactile Robotics: An Outlook** (2025): 触觉机器人综述与路线图
+  - [论文](https://arxiv.org/abs/2508.11261)
 
 ---
 
