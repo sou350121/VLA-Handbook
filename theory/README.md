@@ -181,6 +181,17 @@
 
 ---
 
+## 🛠️ Part 7: 实战案例与部署 (Case Studies & Deployment)
+
+> *理论与实践的交汇点。展示如何将 VLA 与感知算法落地到真实硬件。*
+
+| 主题 | 文件 | 核心内容 |
+| :--- | :--- | :--- |
+| 🖐️ **手势控制灵巧手** | [`../deployment/mediapipe_wujihand_project.md`](../deployment/mediapipe_wujihand_project.md) | **MediaPipe + WujiHand**: 实时控制系统设计与 **500ms -> 50ms** 延迟优化实践 🆕 |
+| 🛡️ **灵巧手硬件对比** | [`../deployment/dexterous_hand_wuji.md`](../deployment/dexterous_hand_wuji.md) | Wuji (独立驱动) vs. [Optimus V2](../deployment/optimus_hand_v2.md) (肌腱驱动) |
+
+---
+
 ## 🎯 学习建议
 
 ```

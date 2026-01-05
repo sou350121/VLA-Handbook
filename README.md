@@ -304,7 +304,15 @@ action = policy.select_action(observation)
 <details>
 <summary><b>📝 更新日志（最近更新）</b></summary>
 
-### 2025-12-29 🆕
+### 2026-01-06 🆕
+- **實戰案例：手勢控制靈巧手**: 新增 [`mediapipe_wujihand_project.md`](./deployment/mediapipe_wujihand_project.md)，深度總結 MediaPipe + WujiHand 實時控制系統與 **500ms -> 50ms** 延遲優化實戰經驗。
+
+### 2026-01-03 🆕
+- **Jim Fan 2025 具身智能年度總結**: 新增 [`jim_fan_2025_robotics_lessons.md`](./theory/frontier/jim_fan_2025_robotics_lessons.md)，深度解讀 Jim Fan 關於硬件可靠性、評測災難與 VLM→VLA 路線的反思。
+- **觸覺為何不可替代**: 新增 [`tactile_irreplaceable.md`](./theory/frontier/tactile_irreplaceable.md)，從力-形-質三個維度探討觸覺在閉環控制中的第一性原理。
+- **UniTacHand**: 新增 [`unitachhand.md`](./theory/frontier/unitachhand.md)，詳解 arXiv 2025 最新成果：利用 MANO UV Map 統一觸覺表徵，實現人手→機器人靈巧手策略的零樣本遷移。
+
+### 2025-12-29
 - **AI Coding 智能体设计**: 新增 [`ai_coding_agent_design.md`](./system-design/ai_coding_agent_design.md)，深度解构顶尖 AI 编程工具的设计模式。
 - **数据飞轮与跨模态迁移**: 新增 [`data_flywheel_and_cross_modal.md`](./theory/frontier/data_flywheel_and_cross_modal.md)，深度解析如何利用互联网视频解决具身智能数据瓶颈。
 - **机器人新势力**: 新增 [`startups.md`](./companies/startups.md)，收录 **智在无界 (Boundless Intelligence)** 等具身智能新创公司。

@@ -4,7 +4,24 @@ All notable changes to the **VLA Handbook** project are documented here, derived
 
 ---
 
-## [1.5.0] - 2025-12-29 🆕
+## [1.6.0] - 2026-01-06 🆕
+### Added
+- **實戰案例：手勢控制靈巧手**: 新增 [`deployment/mediapipe_wujihand_project.md`](./deployment/mediapipe_wujihand_project.md)，包含：
+    - MediaPipe + WujiHand 聯動架構（WebSocket + USB SDK）。
+    - **延遲優化實戰**：記錄從 500ms 降至 50ms 的優化路徑（移除軟件濾波、啟用硬件 LowPass、非阻塞寫入）。
+    - **面試 Q&A 模擬**：針對實時控制、延遲優化、多維映射等核心問題的專業話術建議。
+- **Jim Fan 2025 年度復盤**: 新增 [`theory/frontier/jim_fan_2025_robotics_lessons.md`](./theory/frontier/jim_fan_2025_robotics_lessons.md)。
+- **觸覺不可替代性與視觸覺前沿**: 
+    - 新增 [`theory/frontier/tactile_irreplaceable.md`](./theory/frontier/tactile_irreplaceable.md)。
+    - 新增 [`theory/frontier/unitachhand.md`](./theory/frontier/unitachhand.md)（人手→機器人靈巧手策略零樣本遷移）。
+    - 更新 [`theory/tactile_vla.md`](./theory/tactile_vla.md) 的 Q&A 部分，增加「Demo 為何翻車」與「工程 Checklist」。
+
+### Changed
+- **理論索引更新**: 在 [`theory/README.md`](./theory/README.md) 中新增「Part 7: 實戰案例與部署」板塊。
+
+---
+
+## [1.5.0] - 2025-12-29
 ### Added
 - **AI Coding Agent Design Deep Dive**: New document [`system-design/ai_coding_agent_design.md`](./system-design/ai_coding_agent_design.md) covering:
   - User prompt preprocessing (@context, slash commands).
