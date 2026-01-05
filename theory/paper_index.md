@@ -35,7 +35,7 @@
 | | FAST | [详细](#fast) |
 | **RL 训练** | GR-RL | [深度解析](./gr_rl_dissection.md) |
 | | π*0.6 Recap | [深度解析](./pi0_6_dissection.md#recap) |
-| **架构创新** | WALL-OSS | [详细](#wall-oss) |
+| **架构创新** | WALL-OSS | [深度解析](./wall_oss.md) |
 | | Galaxea G0 | [详细](#galaxea-g0) |
 | **训练技术** | Knowledge Insulation | [摘要](#knowledge-insulation) |
 | **Latent Action** | UniVLA | [详细](#univla) |
@@ -63,7 +63,7 @@
 | | RDT-1B | [详细](#rdt) |
 | **Stanford** | OpenVLA | [深度解析](#openvla) |
 | | ACT | [详细](#act) |
-| **X² (自变量)** | WALL-OSS | [详细](#wall-oss) |
+| **X² (自变量)** | WALL-OSS | [深度解析](./wall_oss.md) |
 | **Galaxea AI** | G0 | [详细](#galaxea-g0) |
 | **Columbia** | Diffusion Policy | [详细](#diffusion-policy) |
 | **浙江大学** 🆕 | DKT Perception | [深度解析](./frontier/dkt_transparency_perception.md) |
@@ -92,7 +92,7 @@
 | | π0.6 | [深度解析](./pi0_6_dissection.md) |
 | | FAST | [详细](#fast) |
 | | GR-RL | [深度解析](./gr_rl_dissection.md) |
-| | WALL-OSS | [详细](#wall-oss) |
+| | WALL-OSS | [深度解析](./wall_oss.md) |
 | | EvoVLA | [详细](#evovla) |
 | | MemoryVLA | [详细](#memoryvla) |
 | | TTF-VLA | [详细](#ttf-vla) |
@@ -221,7 +221,7 @@
 
 ##### 层级架构
 - **WALL-OSS** (2025) - A级
-  - Uni-CoT + Dual Heads
+  - Hierarchical CoT + Dual Heads
   - [详细内容](./wall_oss.md)
 
 #### 4. 应用场景
