@@ -305,12 +305,12 @@ action = policy.select_action(observation)
 <summary><b>📝 更新日志（最近更新）</b></summary>
 
 ### 2026-01-06 🆕
-- **實戰案例：手勢控制靈巧手**: 新增 [`mediapipe_wujihand_project.md`](./deployment/mediapipe_wujihand_project.md)，深度總結 MediaPipe + WujiHand 實時控制系統與 **500ms -> 50ms** 延遲優化實戰經驗。
+- **实战案例：手势控制灵巧手**: 新增 [`mediapipe_wujihand_project.md`](./deployment/mediapipe_wujihand_project.md)，深度总结 MediaPipe + WujiHand 实时控制系统与 **500ms -> 50ms** 延迟优化实战经验。
 
 ### 2026-01-03 🆕
-- **Jim Fan 2025 具身智能年度總結**: 新增 [`jim_fan_2025_robotics_lessons.md`](./theory/frontier/jim_fan_2025_robotics_lessons.md)，深度解讀 Jim Fan 關於硬件可靠性、評測災難與 VLM→VLA 路線的反思。
-- **觸覺為何不可替代**: 新增 [`tactile_irreplaceable.md`](./theory/frontier/tactile_irreplaceable.md)，從力-形-質三個維度探討觸覺在閉環控制中的第一性原理。
-- **UniTacHand**: 新增 [`unitachhand.md`](./theory/frontier/unitachhand.md)，詳解 arXiv 2025 最新成果：利用 MANO UV Map 統一觸覺表徵，實現人手→機器人靈巧手策略的零樣本遷移。
+- **Jim Fan 2025 具身智能年度总结**: 新增 [`jim_fan_2025_robotics_lessons.md`](./theory/frontier/jim_fan_2025_robotics_lessons.md)，深度解读 Jim Fan 关于硬件可靠性、评测灾难与 VLM→VLA 路线的反思。
+- **触觉为何不可替代**: 新增 [`tactile_irreplaceable.md`](./theory/frontier/tactile_irreplaceable.md)，从力-形-质三个维度探讨触觉在闭环控制中的第一性原理。
+- **UniTacHand**: 新增 [`unitachhand.md`](./theory/frontier/unitachhand.md)，详解 arXiv 2025 最新成果：利用 MANO UV Map 统一触觉表征，实现人手→机器人灵巧手策略的零样本迁移。
 
 ### 2025-12-29
 - **AI Coding 智能体设计**: 新增 [`ai_coding_agent_design.md`](./system-design/ai_coding_agent_design.md)，深度解构顶尖 AI 编程工具的设计模式。

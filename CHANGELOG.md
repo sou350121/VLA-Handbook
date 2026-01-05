@@ -6,18 +6,18 @@ All notable changes to the **VLA Handbook** project are documented here, derived
 
 ## [1.6.0] - 2026-01-06 🆕
 ### Added
-- **實戰案例：手勢控制靈巧手**: 新增 [`deployment/mediapipe_wujihand_project.md`](./deployment/mediapipe_wujihand_project.md)，包含：
-    - MediaPipe + WujiHand 聯動架構（WebSocket + USB SDK）。
-    - **延遲優化實戰**：記錄從 500ms 降至 50ms 的優化路徑（移除軟件濾波、啟用硬件 LowPass、非阻塞寫入）。
-    - **面試 Q&A 模擬**：針對實時控制、延遲優化、多維映射等核心問題的專業話術建議。
-- **Jim Fan 2025 年度復盤**: 新增 [`theory/frontier/jim_fan_2025_robotics_lessons.md`](./theory/frontier/jim_fan_2025_robotics_lessons.md)。
-- **觸覺不可替代性與視觸覺前沿**: 
+- **实战案例：手势控制灵巧手**: 新增 [`deployment/mediapipe_wujihand_project.md`](./deployment/mediapipe_wujihand_project.md)，包含：
+    - MediaPipe + WujiHand 联动架构（WebSocket + USB SDK）。
+    - **延迟优化实战**：记录从 500ms 降至 50ms 的优化路径（移除软件滤波、启用硬件 LowPass、非阻塞写入）。
+    - **面试 Q&A 模拟**：针对实时控制、延迟优化、多维映射等核心问题的专业话术建议。
+- **Jim Fan 2025 年度复盘**: 新增 [`theory/frontier/jim_fan_2025_robotics_lessons.md`](./theory/frontier/jim_fan_2025_robotics_lessons.md)。
+- **触觉不可替代性与视触觉前沿**: 
     - 新增 [`theory/frontier/tactile_irreplaceable.md`](./theory/frontier/tactile_irreplaceable.md)。
-    - 新增 [`theory/frontier/unitachhand.md`](./theory/frontier/unitachhand.md)（人手→機器人靈巧手策略零樣本遷移）。
-    - 更新 [`theory/tactile_vla.md`](./theory/tactile_vla.md) 的 Q&A 部分，增加「Demo 為何翻車」與「工程 Checklist」。
+    - 新增 [`theory/frontier/unitachhand.md`](./theory/frontier/unitachhand.md)（人手→机器人灵巧手策略零样本迁移）。
+    - 更新 [`theory/tactile_vla.md`](./theory/tactile_vla.md) 的 Q&A 部分，增加「Demo 为何翻车」与「工程 Checklist」。
 
 ### Changed
-- **理論索引更新**: 在 [`theory/README.md`](./theory/README.md) 中新增「Part 7: 實戰案例與部署」板塊。
+- **理论索引更新**: 在 [`theory/README.md`](./theory/README.md) 中新增「Part 7: 实战案例与部署」板块。
 
 ---
 
