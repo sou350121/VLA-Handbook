@@ -35,6 +35,7 @@
 | | FAST | [详细](#fast) |
 | **RL 训练** | GR-RL | [深度解析](./gr_rl_dissection.md) |
 | | π*0.6 Recap | [深度解析](./pi0_6_dissection.md#recap) |
+| | RLinf（VLA+RL Infra） | [工具解读](./frontier/rlinf_vla_rl_training.md) |
 | **架构创新** | WALL-OSS | [深度解析](./wall_oss.md) |
 | | Galaxea G0 | [详细](#galaxea-g0) |
 | **训练技术** | Knowledge Insulation | [摘要](#knowledge-insulation) |
@@ -200,6 +201,11 @@
 - **π*0.6 Recap** (2025)
   - 技术: Offline RL
   - [深度解析](./pi0_6_dissection.md#recap)
+
+- **RLinf** (2025)
+  - 定位: Reinforcement Learning Infrastructure（面向 Embodied / Agentic AI）
+  - 关联: VLA+RL 训练框架（RLinf-VLA）、真机 RL、分布式 rollout 与可复现评估
+  - [项目主页](https://github.com/RLinf/RLinf) | [手册解读](./frontier/rlinf_vla_rl_training.md)
 
 ##### 混合方法
 - **π0.5** - Co-training (Robot + Internet + Sim)
