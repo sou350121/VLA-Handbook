@@ -42,6 +42,7 @@
 | ⚙️ **动力学分类** | [`robot_dynamics_classification.md`](./robot_dynamics_classification.md) | 🆕 约束完备性、浮动基座与惯量矩阵 |
 | 🎮 **动作空间** | [`action_representations.md`](./action_representations.md) | 连续 vs 离散、Delta vs Absolute |
 | 🔄 **联合训练** | [`co_training.md`](./co_training.md) | 防止灾难性遗忘、Loss Masking |
+| 🧮 **Loss Functions 手册** | [`vla_loss_functions_handbook.md`](./vla_loss_functions_handbook.md) | BC/GMM/Diffusion/Flow/RL、安全正则、对齐损失 🆕 |
 | 📝 **评估体系** | [`evaluation.md`](./evaluation.md) | CALVIN/SIMPLER、真机成功率 |
 
 ---
