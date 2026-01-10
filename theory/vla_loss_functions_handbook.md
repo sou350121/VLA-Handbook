@@ -26,23 +26,51 @@
 ### 观测与条件（conditioning）
 
 - **图像**：
-  $$I \in \mathbb{R}^{B\times T_{\text{obs}}\times C\times H\times W}$$
+
+  $$
+  I \in \mathbb{R}^{B\times T_{\text{obs}}\times C\times H\times W}
+  $$
+
 - **语言 token**：
-  $$x^{\text{text}} \in \mathbb{N}^{B\times L}$$
+
+  $$
+  x^{\text{text}} \in \mathbb{N}^{B\times L}
+  $$
+
   （注意 mask：`m_text` 为 0/1）
 - **触觉（图像型）**：
-  $$I^{\text{tac}} \in \mathbb{R}^{B\times T_{\text{tac}}\times C_t\times H_t\times W_t}$$
+
+  $$
+  I^{\text{tac}} \in \mathbb{R}^{B\times T_{\text{tac}}\times C_t\times H_t\times W_t}
+  $$
+
 - **本体/状态（proprio）**：
-  $$s \in \mathbb{R}^{B\times T_{\text{obs}}\times D_s}$$
+
+  $$
+  s \in \mathbb{R}^{B\times T_{\text{obs}}\times D_s}
+  $$
+
 
 ### 动作（action）
 
 - **连续动作序列**：
-  $$a \in \mathbb{R}^{B\times T_{\text{act}}\times D_a}$$
+
+  $$
+  a \in \mathbb{R}^{B\times T_{\text{act}}\times D_a}
+  $$
+
 - **动作 chunk（一次预测一段）**：
-  $$a_{t:t+K-1} \in \mathbb{R}^{B\times K\times D_a}$$
+
+  $$
+  a_{t:t+K-1} \in \mathbb{R}^{B\times K\times D_a}
+  $$
+
 - **离散 token 动作**：
-  $$y \in \mathbb{N}^{B\times T_{\text{act}}\times D_a}$$
+
+  $$
+  y \in \mathbb{N}^{B\times T_{\text{act}}\times D_a}
+  $$
+
   （每一维动作被离散化成 bins）
 
 ### 重要：训练/推理频率不匹配（teleop/VLA 常见）
@@ -81,9 +109,9 @@ Sensors -> Encoders -> Fusion -> Policy Head -> Action -> Robot
 
 **定义**
 
-\[
+$$
 \mathcal{L}_{\text{MSE}}=\frac{1}{N}\sum_{i}\|a_i-\hat a_i\|_2^2
-\]
+$$
 
 **张量**
 
@@ -116,19 +144,19 @@ loss = F.mse_loss(pred_action, gt_action)
 
 ### 1.2 L1 / Huber：抗异常、抗偶发噪声
 
-\[
+$$
 \mathcal{L}_{\text{L1}}=\frac{1}{N}\sum_i |a_i-\hat a_i|
-\]
+$$
 
-Huber（\(\delta\) 为阈值）：
+Huber（$\delta$ 为阈值）：
 
-\[
+$$
 \mathcal{L}_{\text{Huber}}=
 \begin{cases}
 \frac{1}{2}e^2,& |e|\le \delta\\
 \delta(|e|-\frac{1}{2}\delta),& \text{otherwise}
 \end{cases}
-\]
+$$
 
 **什么时候用**
 
@@ -146,11 +174,11 @@ loss_huber = F.smooth_l1_loss(pred_action, gt_action, beta=1.0)
 
 ### 1.3 高斯 NLL（学不确定性）：heteroscedastic regression
 
-如果模型输出均值 \(\mu\) 与方差 \(\sigma^2\)（或 log-variance），则：
+如果模型输出均值 $\mu$ 与方差 $\sigma^2$（或 log-variance），则：
 
-\[
+$$
 \mathcal{L}_{\text{NLL}}=\frac{1}{2}\sum_i\left(\frac{(a_i-\mu_i)^2}{\sigma_i^2} + \log\sigma_i^2\right)
-\]
+$$
 
 **输入输出**
 
@@ -185,9 +213,9 @@ loss = 0.5 * (((gt_action - mu) ** 2) / var + log_var).mean()
 
 **定义**：对 chunk 维度做 BC：
 
-\[
+$$
 \mathcal{L}_{\text{chunk}}=\frac{1}{BKD_a}\sum\|a_{t:t+K-1}-\hat a_{t:t+K-1}\|
-\]
+$$
 
 **关键超参**
 
@@ -202,9 +230,9 @@ loss = 0.5 * (((gt_action - mu) ** 2) / var + log_var).mean()
 
 ### 2.2 时间加权（越近越重要）
 
-\[
+$$
 \mathcal{L}=\sum_{k=0}^{K-1} w_k \cdot \ell(a_{t+k},\hat a_{t+k}),\quad w_0\ge w_1\ge\cdots
-\]
+$$
 
 **为什么**
 
@@ -219,9 +247,9 @@ loss = 0.5 * (((gt_action - mu) ** 2) / var + log_var).mean()
 
 ### 3.1 Cross Entropy（每维 bins 分类）
 
-\[
+$$
 \mathcal{L}_{\text{CE}} = -\sum \log p_\theta(y)
-\]
+$$
 
 **张量**
 
@@ -258,10 +286,10 @@ loss = F.cross_entropy(
 
 ### 4.1 GMM NLL
 
-\[
+$$
 p(a)=\sum_{k=1}^{K}\pi_k \mathcal{N}(a;\mu_k,\Sigma_k),\quad 
 \mathcal{L}_{\text{GMM}}=-\log p(a)
-\]
+$$
 
 **张量（常见对角协方差）**
 
@@ -286,12 +314,12 @@ p(a)=\sum_{k=1}^{K}\pi_k \mathcal{N}(a;\mu_k,\Sigma_k),\quad
 > 核心：预测噪声 \(\epsilon\)（或直接预测 \(x_0\)/v-parameterization），训练用 MSE。  
 > 适用：高精度、多模态轨迹；代价：推理步数多（可用 DDIM/少步采样缓解）。
 
-### 5.1 经典 \(\epsilon\)-prediction MSE
+### 5.1 经典 $\epsilon$-prediction MSE
 
-\[
+$$
 x_t=\sqrt{\bar\alpha_t}x_0+\sqrt{1-\bar\alpha_t}\epsilon,\quad
 \mathcal{L}_{\text{diff}}=\mathbb{E}\|\epsilon-\epsilon_\theta(x_t,t,c)\|^2
-\]
+$$
 
 **张量**
 
@@ -318,9 +346,9 @@ x_t=\sqrt{\bar\alpha_t}x_0+\sqrt{1-\bar\alpha_t}\epsilon,\quad
 
 ### 6.1 Flow Matching（基本形式）
 
-\[
+$$
 \mathcal{L}_{\text{flow}}=\mathbb{E}\|v_\theta(x_t,t,c)-v^\ast(x_t,t)\|^2
-\]
+$$
 
 > 注意：不同论文/实现的 \(v^\ast\) 定义不同（OT-CFM、rectified flow 等）。工程上把它当作“对 diffusion 的少步替代”即可。
 
@@ -332,10 +360,10 @@ x_t=\sqrt{\bar\alpha_t}x_0+\sqrt{1-\bar\alpha_t}\epsilon,\quad
 
 ### 7.1 CLIP/InfoNCE 对齐（图文/触觉-视觉）
 
-\[
+$$
 \mathcal{L}_{\text{InfoNCE}}=
 -\log \frac{\exp(\text{sim}(q,k^+)/\tau)}{\sum_j \exp(\text{sim}(q,k_j)/\tau)}
-\]
+$$
 
 **张量**
 
@@ -356,11 +384,11 @@ x_t=\sqrt{\bar\alpha_t}x_0+\sqrt{1-\bar\alpha_t}\epsilon,\quad
 
 ### 8.1 动作平滑（速度/加速度/jerk 正则）
 
-\[
+$$
 \mathcal{L}_{\text{smooth}}=
 \lambda_v\sum_t\|a_t-a_{t-1}\|^2+
 \lambda_a\sum_t\|(a_t-a_{t-1})-(a_{t-1}-a_{t-2})\|^2
-\]
+$$
 
 **适用**
 
@@ -370,9 +398,9 @@ x_t=\sqrt{\bar\alpha_t}x_0+\sqrt{1-\bar\alpha_t}\epsilon,\quad
 
 ### 8.2 约束/安全 barrier（软约束）
 
-\[
+$$
 \mathcal{L}_{\text{barrier}}=\sum_i \lambda_i \cdot \max(0, g_i(a,s))^2
-\]
+$$
 
 例：关节限位、速度限位、力矩限位、TCP workspace。
 
@@ -398,15 +426,15 @@ x_t=\sqrt{\bar\alpha_t}x_0+\sqrt{1-\bar\alpha_t}\epsilon,\quad
 
 离散动作：
 
-\[
+$$
 \mathcal{L}_{\text{KL}}=\text{KL}(p_{\text{teacher}}\|p_{\text{student}})
-\]
+$$
 
 连续动作（回归蒸馏）：
 
-\[
+$$
 \mathcal{L}_{\text{distill}}=\|a_{\text{student}}-a_{\text{teacher}}\|
-\]
+$$
 
 **工程要点**
 
@@ -421,16 +449,16 @@ x_t=\sqrt{\bar\alpha_t}x_0+\sqrt{1-\bar\alpha_t}\epsilon,\quad
 
 ### 11.1 PPO（最常见）
 
-\[
+$$
 \mathcal{L}_{\text{PPO}}=
 -\mathbb{E}\left[\min\left(r_t(\theta)\hat A_t,\ \text{clip}(r_t(\theta),1-\epsilon,1+\epsilon)\hat A_t\right)\right]
-\]
+$$
 
 并加价值函数与熵正则：
 
-\[
+$$
 \mathcal{L}=\mathcal{L}_{\text{PPO}}+\lambda_v \mathcal{L}_{V}-\lambda_H H(\pi)
-\]
+$$
 
 **VLA 适配要点**
 
