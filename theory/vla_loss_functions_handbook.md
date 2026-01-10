@@ -3,6 +3,8 @@
 > 目标：这是一份可以直接用于**设计 / 复盘 / debug VLA（Vision-Language-Action）与 VTLA（Vision-Tactile-Language-Action）训练目标**的工程手册。  
 > 覆盖：BC、sequence/chunk、GMM、Tokenization、Diffusion/Flow、RL fine-tune、Perception/Grounding、Safety regularization、Representation alignment、Co-training loss masking。
 
+> **數學前置知識**：在深入研究 Loss 之前，建議先閱讀 [VLA 數學必備：從直覺到實作](./math_for_vla.md)。
+
 ---
 
 ## 0. 使用方式（如何快速查表）
