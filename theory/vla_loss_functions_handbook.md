@@ -25,16 +25,25 @@
 
 ### 观测与条件（conditioning）
 
-- **图像**：\[I \in \mathbb{R}^{B\times T_{\text{obs}}\times C\times H\times W}\]
-- **语言 token**：\[x^{\text{text}} \in \mathbb{N}^{B\times L}\]，注意 mask：\[m^{\text{text}}\in\{0,1\}^{B\times L}\]
-- **触觉（图像型）**：\[I^{\text{tac}} \in \mathbb{R}^{B\times T_{\text{tac}}\times C_t\times H_t\times W_t}\]
-- **本体/状态（proprio）**：\[s \in \mathbb{R}^{B\times T_{\text{obs}}\times D_s}\]
+- **图像**：
+  $$I \in \mathbb{R}^{B\times T_{\text{obs}}\times C\times H\times W}$$
+- **语言 token**：
+  $$x^{\text{text}} \in \mathbb{N}^{B\times L}$$
+  （注意 mask：`m_text` 为 0/1）
+- **触觉（图像型）**：
+  $$I^{\text{tac}} \in \mathbb{R}^{B\times T_{\text{tac}}\times C_t\times H_t\times W_t}$$
+- **本体/状态（proprio）**：
+  $$s \in \mathbb{R}^{B\times T_{\text{obs}}\times D_s}$$
 
 ### 动作（action）
 
-- **连续动作序列**：\[a \in \mathbb{R}^{B\times T_{\text{act}}\times D_a}\]
-- **动作 chunk（一次预测一段）**：\[a_{t:t+K-1}\in\mathbb{R}^{B\times K\times D_a}\]
-- **离散 token 动作**：\[y \in \mathbb{N}^{B\times T_{\text{act}}\times D_a}\]（每一维动作被离散化成 bins）
+- **连续动作序列**：
+  $$a \in \mathbb{R}^{B\times T_{\text{act}}\times D_a}$$
+- **动作 chunk（一次预测一段）**：
+  $$a_{t:t+K-1} \in \mathbb{R}^{B\times K\times D_a}$$
+- **离散 token 动作**：
+  $$y \in \mathbb{N}^{B\times T_{\text{act}}\times D_a}$$
+  （每一维动作被离散化成 bins）
 
 ### 重要：训练/推理频率不匹配（teleop/VLA 常见）
 
