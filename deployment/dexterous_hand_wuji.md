@@ -128,4 +128,3 @@ Wuji 手放弃了拉索，转而采用 **“电机 + 行星减速器 + 锥齿轮
 4.  **硬件设计资源**: [wujihand-hardware-design](https://github.com/wuji-technology/wujihand-hardware-design) (确认了其抗冲击适配器与软包顺应性设计的机械细节)。
 5.  **重定向系统**: [wuji-retargeting](https://github.com/wuji-technology/wuji-retargeting) (揭示了基于 AVP 的高精度数据采集链路)。
 6.  **低成本遥操作实践**: [Vision_OS](https://github.com/sou350121/Vision_OS) (提供了基于普通摄像头的实时控制方案)。
-

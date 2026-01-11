@@ -1244,4 +1244,3 @@ volumes:
 [← Back to Deployment Index](./README.md)
 [← See Sensor Integration](./tactile_sensor_integration_challenges.md)
 [← See Dexterous Hand Guide](./dexterous_hand_communication_deployment.md)
-

@@ -6,18 +6,18 @@
 
 高质量的数据集必须遵循严格的结构化定义，以便于行为克隆（Behavior Cloning）或扩散策略（Diffusion Policy）的学习。
 
-### Episode (轨迹級) 结构
+### Episode (轨迹级) 结构
 - **Episode ID**: 唯一标识。
 - **Task Description**: 语言指令（如 "Pick up the bottle and unscrew the cap"）。
 - **Success Label**: 二元标签（由人工标注或自动评测得出）。
 - **Timesteps**: 一系列时序记录。
 
-### Timestep (步級) 核心信号
+### Timestep (步级) 核心信号
 | 信号类别 | 核心字段 | 说明 |
 | :--- | :--- | :--- |
 | **视觉 (Vision)** | `rgb_static`, `rgb_wrist` | 场景全局视角 + 腕部第一人称视角（POV）。 |
 | **本体 (Proprio)** | `joint_positions`, `joint_velocities` | 灵巧手 N 个关节的绝对位置与速度。 |
-| **示教 (Action)** | `joint_targets` | 专家示教的下一帧目标位置（通常是 $\Delta$ 增量或絕對位置）。 |
+| **示教 (Action)** | `joint_targets` | 专家示教的下一帧目标位置（通常是 $\Delta$ 增量或绝对位置）。 |
 | **触觉 (Tactile)** | `pressure_map`, `contact_force` | 关键触碰点的压力分布（若硬件支持）。 |
 
 ---
@@ -27,7 +27,7 @@
 ### 方案 A：专家遥操作 (Expert Teleoperation) — "Gold Standard"
 - **原理**: 专家佩戴 VR 头显（如 Apple Vision Pro）或数据手套（Manus/SenseGlove），通过 Retargeting 算法实时驱动灵巧手。
 - **优点**: 包含完整的示教逻辑，数据符合人类先验。
-- **挑战**: 成本极高，Retargeting 的運動學映射（Mapping）可能存在伪影。
+- **挑战**: 成本极高，Retargeting 的运动学映射（Mapping）可能存在伪影。
 
 ### 方案 B：脚本化/半自动化采数 (Scripted-HITL) — "Scalable"
 - **原理**: 针对特定任务（如抓取），编写启发式脚本（Heuristic Script）完成大部分动作，人在关键点（Human-in-the-loop）通过按键切换状态或微调动作。
@@ -73,5 +73,5 @@
 
 ### 算法与数据集
 - **Learning Hand-Eye Coordination (Levine et al., 2016)**: 大规模（80万次抓取）真实机器人数据采集鼻祖。 [arXiv:1603.02199](https://arxiv.org/abs/1603.02199)
-- **DexGraspNet (2022)**: 基于仿真生成的超大规模（130万+）灵巧抓取数据集。 [arXiv:2210.02697](https://arxiv.org/abs/2210.02697)
-- **Rotating without Seeing (2023)**: 仅依赖触觉（无需视觉）的手内操作数据集与策略。 [arXiv:2303.10880](https://arxiv.org/abs/2303.10880)
+- **DexGraspNet (2022)**: 基于仿真生成的超大规模（130万+）灵巧抓取数据集. [arXiv:2210.02697](https://arxiv.org/abs/2210.02697)
+- **Rotating without Seeing (2023)**: 仅依赖触觉（无需视觉）的手内操作数据集与策略. [arXiv:2303.10880](https://arxiv.org/abs/2303.10880)
