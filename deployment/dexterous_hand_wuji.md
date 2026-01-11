@@ -68,7 +68,7 @@ Wuji 手放弃了拉索，转而采用 **“电机 + 行星减速器 + 锥齿轮
 ## 6. 🧠 开发实战案例 (Applications)
 
 为了更好地理解硬件落地，请参考专用的案例手册：
-👉 **[灵巧手实战开发案例集](./dexterous_hand_applications.md)** | **[具身智能数据采集与训练方案](./data_collection_solutions.md)**
+👉 **[灵巧手实战开发案例集](./dexterous_hand_applications.md)** | **[具身智能数据采集概览](./embodied_data_collection_overview.md)**
 
 该手册包含了：
 *   **VisionOS**: 基于 Web 和普通摄像头的低成本遥操作方案。

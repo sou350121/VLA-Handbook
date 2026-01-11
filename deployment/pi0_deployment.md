@@ -255,7 +255,7 @@ torchrun --nproc_per_node=8 -m openpi.training.train \
 
 ## 7. 相机标定 (Camera Calibration)
 
-> **重要**: 这是一个通用的部署步骤。请参考专门的 **[相机标定指南 (Camera Calibration Guide)](./calibration.md)**。
+> **重要**: 这是一个通用的部署步骤。请参考专门的 **[相机标定指南 (Camera Calibration Guide)](./camera_calibration_eye_in_hand.md)**。
 
 它涵盖了：
 - **Eye-to-Hand** (High/Low Cam)

@@ -58,4 +58,4 @@
 ## 📚 参考资源与进阶方案
 *   [Vision_OS 源代码](https://github.com/sou350121/Vision_OS)
 *   [Wuji-Technology 官方仓库集](https://github.com/wuji-technology)
-*   👉 **[具身智能数据采集与训练方案 (POV / Sim2Real / RL)](./data_collection_solutions.md)**: 深入了解第三方数据引擎与更广泛的训练范式。
+*   👉 **[具身智能数据采集与训练方案 (POV / Sim2Real / RL)](./embodied_data_collection_overview.md)**: 深入了解第三方数据引擎与更广泛的训练范式。
