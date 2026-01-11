@@ -2,7 +2,7 @@
 
 对于 AI 背景的同学来说，机器人学最令人头大的往往不是深度学习模型，而是**坐标变换 (Coordinate Transformations)**。理解空间关系是训练 VLA 模型的基础。
 
-## 0. 主要數學思想 (Main Mathematical Idea)
+## 0. 主要数学思想 (Main Mathematical Idea)
 
 > **第一性原理**: **Rigid Body Invariance (刚体不变性 / Lie Group SE(3))**
 

@@ -20,7 +20,7 @@
 | | **Delta (台达电)** | SCARA, Articulated | 工业 | **Giant** | Taipei | 电源与自动化巨头，提供完整的工业机器人解决方案。 |
 | | **Advantech (研华)** | AMR/Controller | 工业/计算 | **Giant** | Taipei | 工业电脑龙头，提供机器人控制器和 AMR 解决方案。 |
 | | **HIWIN (上银)** | Ballscrew, Robot | 核心部件 | **Giant** | Taichung | 传动控制专家，也生产工业机器人和医疗复健机器人。 |
-| | **BenQ (佳世达)** | MiBot | 服务/医疗 | **Giant** | Taoyuan | 专注于医疗运输机器人和智能医院解决方案。 |
+| | **BenQ (佳世达)** | MiBot | 服务/医疗 | **Giant** | Taoyuan | 专注于医疗运输机器人 and 智能医院解决方案。 |
 | **South Korea** | **Rainbow Robotics** | HUBO, RB-Y1 | 人形/协作 | **Public (277810.KQ)** | Daejeon | KAIST 孵化，Samsung 投资。HUBO 曾获 DARPA 挑战赛冠军。 |
 | | **Doosan Robotics** | M/A/H Series | 协作 (Cobot) | **Public (454910.KQ)** | Suwon | 韩国最大的协作机器人厂商，产品线覆盖广泛。 |
 | | **Hyundai Motor** | Spot, Atlas | 工业/人形 | **Giant** | Seoul | 收购了 Boston Dynamics，致力于移动出行与机器人的结合。 |

@@ -2,7 +2,7 @@
 
 > **核心概念**: 自监督学习 (Self-Supervised Learning, SSL) 是一种从无标签数据中学习有意义表示的方法。通过设计 **Pretext Task (代理任务)**，让模型从数据本身的结构中学习。
 
-## 0. 主要數學思想 (Main Mathematical Idea)
+## 0. 主要数学思想 (Main Mathematical Idea)
 
 > **第一性原理**: **Structure is Supervision (结构即监督)**
 

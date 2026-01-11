@@ -4,7 +4,7 @@
 
 ---
 
-## 0. 主要數學思想 (Main Mathematical Idea)
+## 0. 主要数学思想 (Main Mathematical Idea)
 
 > **第一性原理**: **Consistency Maximization (一致性最大化)**
 

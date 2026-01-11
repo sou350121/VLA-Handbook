@@ -4,7 +4,7 @@
 
 本文总结采样式规划、轨迹优化、混合范式以及工程落地 (MoveIt / cuRobo) 的要点，帮助快速回答机器人运动规划相关问题。
 
-## 0. 主要數學思想 (Main Mathematical Idea)
+## 0. 主要数学思想 (Main Mathematical Idea)
 
 > **第一性原理**: **Connectivity and Smoothness (连通性与平滑性)**
 
@@ -51,7 +51,7 @@
 
 本文总结采样式规划、轨迹优化、混合范式以及工程落地 (MoveIt / cuRobo) 的要点，帮助快速回答机器人运动规划相关问题。
 
-## 0. 主要數學思想 (Main Mathematical Idea)
+## 0. 主要数学思想 (Main Mathematical Idea)
 
 > **第一性原理**: **Connectivity and Smoothness (连通性与平滑性)**
 

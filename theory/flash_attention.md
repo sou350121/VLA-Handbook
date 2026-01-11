@@ -2,7 +2,7 @@
 
 Flash Attention 是 Transformer 模型（包括 VLA）在部署时的核心优化技术，解决了标准 Attention 的内存瓶颈问题。
 
-## 0. 主要數學思想 (Main Mathematical Idea)
+## 0. 主要数学思想 (Main Mathematical Idea)
 
 > **第一性原理**: **Locality of Reference (引用的局部性 / Tiling)**
 

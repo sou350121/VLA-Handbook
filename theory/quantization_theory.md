@@ -2,7 +2,7 @@
 
 量化 (Quantization) 是将高精度浮点数 (FP32/FP16) 映射到低精度整数 (INT8/INT4) 的过程。它是 VLA 模型边缘部署的核心技术。
 
-## 0. 主要數學思想 (Main Mathematical Idea)
+## 0. 主要数学思想 (Main Mathematical Idea)
 
 > **第一性原理**: **Resolution vs. Range (分辨率与范围的权衡)**
 

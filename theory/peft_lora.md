@@ -2,7 +2,7 @@
 
 在 VLA 时代，我们通常基于 7B+ 的大模型进行微调。全量微调 (Full Fine-tuning) 极其昂贵，因此参数高效微调 (PEFT) 成为了必修课。
 
-## 0. 主要數學思想 (Main Mathematical Idea)
+## 0. 主要数学思想 (Main Mathematical Idea)
 
 > **第一性原理**: **Redundancy of Information (信息的冗余 / Intrinsic Dimension)**
 

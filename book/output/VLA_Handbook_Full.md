@@ -286,7 +286,7 @@ A: 将一张图片切成一个个小方块 (e.g., 16x16 像素)，拉平成向�
 
 Flash Attention 是 Transformer 模型（包括 VLA）在部署时的核心优化技术，解决了标准 Attention 的内存瓶颈问题。
 
-### 0. 主要數學思想 (Main Mathematical Idea)
+### 0. 主要数学思想 (Main Mathematical Idea)
 
 > **第一性原理**: **Locality of Reference (引用的局部性 / Tiling)**
 
@@ -1821,7 +1821,7 @@ $$
 > **核心论文**: [Diffusion Policy: Visuomotor Policy Learning via Action Diffusion](https://arxiv.org/abs/2303.04137) (Cheng Chi et al., RSS 2023)
 > **代表模型**: **Octo**, **MimicGen**, **Toyota HPT**
 
-### 0. 主要數學思想 (Main Mathematical Idea)
+### 0. 主要数学思想 (Main Mathematical Idea)
 
 > **第一性原理**: **Constructing Structure from Chaos (从混沌中构建秩序)**
 
@@ -1957,7 +1957,7 @@ A: 一次预测一段未来的动作序列，而不是只预测下一步。这�
 > **核心论文**: [Learning Fine-Grained Bimanual Manipulation with Low-Cost Hardware](https://arxiv.org/abs/2304.13705) (Tony Z. Zhao et al., RSS 2023)
 > **代表项目**: **ALOHA**, **Mobile ALOHA**, **ACT++**
 
-### 0. 主要數學思想 (Main Mathematical Idea)
+### 0. 主要数学思想 (Main Mathematical Idea)
 
 > **第一性原理**: **Compression of Intent (意图的压缩)**
 
@@ -2388,7 +2388,7 @@ A:
 
 > **注意**: Pi0 已于 2025 年 2 月开源 (OpenPI / LeRobot)。以下代码基于 Flow Matching 原理和 VLA 架构通识进行的 **核心逻辑解构**，方便理解其数学过程。
 
-### 0. 主要數學思想 (Main Mathematical Idea)
+### 0. 主要数学思想 (Main Mathematical Idea)
 
 > **第一性原理**: **The Shortest Path (最短路径 / Optimal Transport)**
 
@@ -2809,7 +2809,7 @@ FAST 已被集成到 **OpenVLA** 框架中：
 
 在 VLA 时代，我们通常基于 7B+ 的大模型进行微调。全量微调 (Full Fine-tuning) 极其昂贵，因此参数高效微调 (PEFT) 成为了必修课。
 
-### 0. 主要數學思想 (Main Mathematical Idea)
+### 0. 主要数学思想 (Main Mathematical Idea)
 
 > **第一性原理**: **Redundancy of Information (信息的冗余 / Intrinsic Dimension)**
 
@@ -4280,7 +4280,7 @@ A:
 
 > **核心概念**: 知识蒸馏 (Knowledge Distillation, KD) 是一种模型压缩技术，通过让小模型（学生）模仿大模型（教师）的行为，实现知识的迁移。在 VLA 领域，知识蒸馏是实现边缘端部署的关键技术。
 
-### 0. 主要數學思想 (Main Mathematical Idea)
+### 0. 主要数学思想 (Main Mathematical Idea)
 
 > **第一性原理**: **Smoothing the Decision Boundary (决策边界的平滑 / Dark Knowledge)**
 
@@ -4848,7 +4848,7 @@ A:
 
 > **核心概念**: 自监督学习 (Self-Supervised Learning, SSL) 是一种从无标签数据中学习有意义表示的方法。通过设计 **Pretext Task (代理任务)**，让模型从数据本身的结构中学习。
 
-### 0. 主要數學思想 (Main Mathematical Idea)
+### 0. 主要数学思想 (Main Mathematical Idea)
 
 > **第一性原理**: **Structure is Supervision (结构即监督)**
 
@@ -5937,7 +5937,7 @@ A:
 
 量化 (Quantization) 是将高精度浮点数 (FP32/FP16) 映射到低精度整数 (INT8/INT4) 的过程。它是 VLA 模型边缘部署的核心技术。
 
-### 0. 主要數學思想 (Main Mathematical Idea)
+### 0. 主要数学思想 (Main Mathematical Idea)
 
 > **第一性原理**: **Resolution vs. Range (分辨率与范围的权衡)**
 
@@ -6083,7 +6083,7 @@ A: 4-bit 只有 16 个格子。如果 Scale 稍微没选好，误差就会巨大
 
 对于 AI 背景的同学来说，机器人学最令人头大的往往不是深度学习模型，而是**坐标变换 (Coordinate Transformations)**。理解空间关系是训练 VLA 模型的基础。
 
-### 0. 主要數學思想 (Main Mathematical Idea)
+### 0. 主要数学思想 (Main Mathematical Idea)
 
 > **第一性原理**: **Rigid Body Invariance (刚体不变性 / Lie Group SE(3))**
 
@@ -6277,7 +6277,7 @@ A: 在 3D 旋转空间 $SO(3)$ 中，欧拉角有奇异点，四元数有双倍�
 
 本文涵盖机械臂的运动学建模、动力学建模，以及主流控制方法的原理与应用。
 
-### 0. 主要數學思想 (Main Mathematical Idea)
+### 0. 主要数学思想 (Main Mathematical Idea)
 
 > **第一性原理**: **Error Correction (误差修正 / Feedback Control)**
 
@@ -8288,7 +8288,7 @@ overlay = cv2.addWeighted(rgb, 0.5, rendered, 0.5, 0)
 
 ---
 
-### 0. 主要數學思想 (Main Mathematical Idea)
+### 0. 主要数学思想 (Main Mathematical Idea)
 
 > **第一性原理**: **Consistency Maximization (一致性最大化)**
 
@@ -8563,7 +8563,7 @@ print(reg_p2p.transformation)
 
 本章整理 Kalman/EKF/UKF、Particle Filter 以及多传感器融合的工程实践，帮助在面试中自信回答状态估计相关问题。
 
-### 0. 主要數學思想 (Main Mathematical Idea)
+### 0. 主要数学思想 (Main Mathematical Idea)
 
 > **第一性原理**: **Belief Update (信念更新 / Bayesian Inference)**
 
@@ -9835,7 +9835,7 @@ final_grasps = convert_to_se3(init_grasps)
 
 本文总结采样式规划、轨迹优化、混合范式以及工程落地 (MoveIt / cuRobo) 的要点，帮助快速回答机器人运动规划相关问题。
 
-### 0. 主要數學思想 (Main Mathematical Idea)
+### 0. 主要数学思想 (Main Mathematical Idea)
 
 > **第一性原理**: **Connectivity and Smoothness (连通性与平滑性)**
 
@@ -9881,7 +9881,7 @@ final_grasps = convert_to_se3(init_grasps)
 
 本文总结采样式规划、轨迹优化、混合范式以及工程落地 (MoveIt / cuRobo) 的要点，帮助快速回答机器人运动规划相关问题。
 
-### 0. 主要數學思想 (Main Mathematical Idea)
+### 0. 主要数学思想 (Main Mathematical Idea)
 
 > **第一性原理**: **Connectivity and Smoothness (连通性与平滑性)**
 

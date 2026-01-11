@@ -3,7 +3,7 @@
 > **核心论文**: [Learning Fine-Grained Bimanual Manipulation with Low-Cost Hardware](https://arxiv.org/abs/2304.13705) (Tony Z. Zhao et al., RSS 2023)
 > **代表项目**: **ALOHA**, **Mobile ALOHA**, **ACT++**
 
-## 0. 主要數學思想 (Main Mathematical Idea)
+## 0. 主要数学思想 (Main Mathematical Idea)
 
 > **第一性原理**: **Compression of Intent (意图的压缩)**
 

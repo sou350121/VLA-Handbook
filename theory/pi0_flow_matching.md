@@ -2,7 +2,7 @@
 
 > **注意**: Pi0 已于 2025 年 2 月开源 (OpenPI / LeRobot)。以下代码基于 Flow Matching 原理和 VLA 架构通识进行的 **核心逻辑解构**，方便理解其数学过程。
 
-## 0. 主要數學思想 (Main Mathematical Idea)
+## 0. 主要数学思想 (Main Mathematical Idea)
 
 > **第一性原理**: **The Shortest Path (最短路径 / Optimal Transport)**
 

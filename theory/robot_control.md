@@ -4,7 +4,7 @@
 
 本文涵盖机械臂的运动学建模、动力学建模，以及主流控制方法的原理与应用。
 
-## 0. 主要數學思想 (Main Mathematical Idea)
+## 0. 主要数学思想 (Main Mathematical Idea)
 
 > **第一性原理**: **Error Correction (误差修正 / Feedback Control)**
 

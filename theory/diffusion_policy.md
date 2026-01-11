@@ -3,7 +3,7 @@
 > **核心论文**: [Diffusion Policy: Visuomotor Policy Learning via Action Diffusion](https://arxiv.org/abs/2303.04137) (Cheng Chi et al., RSS 2023)
 > **代表模型**: **Octo**, **MimicGen**, **Toyota HPT**
 
-## 0. 主要數學思想 (Main Mathematical Idea)
+## 0. 主要数学思想 (Main Mathematical Idea)
 
 > **第一性原理**: **Constructing Structure from Chaos (从混沌中构建秩序)**
 

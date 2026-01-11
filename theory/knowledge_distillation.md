@@ -2,7 +2,7 @@
 
 > **核心概念**: 知识蒸馏 (Knowledge Distillation, KD) 是一种模型压缩技术，通过让小模型（学生）模仿大模型（教师）的行为，实现知识的迁移。在 VLA 领域，知识蒸馏是实现边缘端部署的关键技术。
 
-## 0. 主要數學思想 (Main Mathematical Idea)
+## 0. 主要数学思想 (Main Mathematical Idea)
 
 > **第一性原理**: **Smoothing the Decision Boundary (决策边界的平滑 / Dark Knowledge)**
 
