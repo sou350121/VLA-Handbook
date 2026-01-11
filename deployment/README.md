@@ -55,6 +55,12 @@
     - POV 方案: EgoScale 第一视角数据引擎
     - Sim2Real: 仿真大规模训练 + 真机校准
     - 真机 RL: 在线交互强化学习方案
+15. **[灵巧手数据采集方案 (DexHand Data Collection)](./dexterous_hand_data_collection.md)** 🆕
+    - 采集链路 (Episode/Timestep) 与 3 大采数路线
+    - 运动学重定向 (Retargeting) 与触觉代理信号
+16. **[多模态数据同步 (Multimodal Sync)](./multimodal_sync.md)** 🆕
+    - 异构采样频率对齐 (RGB-D vs 1000Hz Control)
+    - 硬件触发、PTP 协议与环形缓冲区重采样
 
 ## 学习建议
 - **硬件党**: 直接看 [硬件选型](./hardware.md)，了解最新的灵巧手和机器人平台。
