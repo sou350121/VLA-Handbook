@@ -47,6 +47,14 @@
     - **进阶：零拷贝 (Iceoryx)、组件容器与 WaitSet 实时调优**
     - DDS 分布式部署调优 (Unicast, Fragmentation)
     - Python 性能优化 (Zero-Allocation, Numba JIT)
+13. **[灵巧手实战案例集 (DexHand Applications)](./dexterous_hand_applications.md)** 🆕
+    - VisionOS: 基于摄像头的低成本遥操作
+    - Retargeting: 跨设备动作映射
+    - Sim2Real: 仿真到真机的闭环采集
+14. **[具身智能数据采集与训练方案 (Data Collection & Training)](./data_collection_solutions.md)** 🆕
+    - POV 方案: EgoScale 第一视角数据引擎
+    - Sim2Real: 仿真大规模训练 + 真机校准
+    - 真机 RL: 在线交互强化学习方案
 
 ## 学习建议
 - **硬件党**: 直接看 [硬件选型](./hardware.md)，了解最新的灵巧手和机器人平台。
