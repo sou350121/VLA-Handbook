@@ -1,157 +1,212 @@
-# Spirit-v1.5 深度拆解（Spirit AI）
+# Spirit-v1.5 模型解剖（Dissecting Spirit-v1.5）
 
-> 本文基于 Spirit AI 官方开源仓库进行**代码级**阅读与整理，重点覆盖：模型结构、推理数据流、RoboChallenge 运行入口、关键文件导航与可复现 checklist。
+> **写作风格说明**：本文刻意参考 `pi0_flow_matching.md` / `pi0_5_dissection.md` 的叙事逻辑：
+> **Main Mathematical Idea → 架构信息流（ASCII）→ 数学/推理细节 → 代码入口走读 → 复现 checklist → 与 π0/π0.5 对比**。
 
 - 官方仓库：[`Spirit-AI-Team/spirit-v1.5`](https://github.com/Spirit-AI-Team/spirit-v1.5)
 
 ---
 
-## 1. 一句话结论：为什么它值得你马上看
+## 0. 主要数学思想 (Main Mathematical Idea)
 
-Spirit-v1.5 是 Spirit AI 开源的 VLA（Vision-Language-Action）机器人基础模型实现。其仓库 README 明确声明：截至 2026-01-11，**Spirit-v1.5 在 RoboChallenge Table30 榜单位列第一**（并提供了推理代码与 checkpoint 下载方式）
-（引用见仓库 README：[`Spirit-AI-Team/spirit-v1.5`](https://github.com/Spirit-AI-Team/spirit-v1.5)）。
+> **第一性原理**：把“动作生成”写成 **条件 ODE 的轨迹积分**。
 
-同时，多家中文媒体在 2026-01-12 报道了“Spirit v1.5 超越 Pi0.5 登顶 Table30”的消息（用于交叉验证“今天打败 π0.5”这一叙述）：
-- [`m.sohu.com` 报道](https://m.sohu.com/a/975015519_610300)
-- [`stcn.com` 报道](https://www.stcn.com/article/detail/3586134.html)
+Spirit-v1.5 的 action head 不是一步回归，也不是离散 token 采样；它更像 π0 的 Flow Matching：
+
+- 让网络预测一个“速度/更新方向” $v_t$（代码中命名为 `v_t`）
+- 从噪声动作块 $x_t$ 出发
+- 用 Euler 积分把 $x_t$ 沿着 $v_t$ 逐步推回到“干净动作块”
+
+在代码里，这个过程长得非常像：
+
+$$
+\frac{dx}{dt} = v_\theta(x,t,\mathrm{cond})
+$$
+
+以及离散化的 Euler 更新：
+
+$$
+ x_{t+\Delta t} = x_t + \Delta t \cdot v_\theta(x_t,t,\mathrm{cond})
+$$
+
+其中条件 $\mathrm{cond}$ 来自 VLM（Qwen3-VL）的 hidden states。
 
 ---
 
-## 2. 模型架构概览（从代码视角）
+## 1. 核心架构：Qwen3-VL（大脑）+ DiT（小脑）+ ODE（执行）
 
-仓库 README 对模型结构的描述非常直接：
-- `model/modeling_spirit_vla.py`：主模型架构（**Qwen3-VL backbone + DiT head + policy API**）
-（见仓库目录结构说明：[`Spirit-AI-Team/spirit-v1.5`](https://github.com/Spirit-AI-Team/spirit-v1.5)）。
+Spirit-v1.5 的仓库目录结构中，明确写了主文件：
+- `model/modeling_spirit_vla.py`：主模型架构（Qwen3-VL backbone + DiT head + policy API）
+（见：[`Spirit-AI-Team/spirit-v1.5`](https://github.com/Spirit-AI-Team/spirit-v1.5)）。
 
-### 2.1 数据流（推理时）
+### 1.1 整体信息流（ASCII）
 
-```mermaid
-flowchart TD
-  obs[Obs_Images+State+TaskText] --> preprocess[preprocess_rb_batch]
-  preprocess --> qwen[Qwen3VLForConditionalGeneration]
-  qwen --> vlmHidden[HiddenStates_LastK]
-  obs --> statePad[pad_vector(State->max_state_dim)]
-  statePad --> stateProj[state_proj]
-  noise[Gaussian_Noise_ActionChunk] --> actionIn[action_in_proj]
-  vlmHidden --> proj[proj_vlm_output]
-  stateProj --> ditIn[Concat(StateEmb+ActionEmb)]
-  actionIn --> ditIn
-  proj --> dit[BaseDiT_CrossAttn]
-  dit --> vPred[action_out_proj]
-  vPred --> ode[ODE_Euler_Integration]
-  ode --> actionChunk[ActionChunk_TxD]
-  actionChunk --> unnorm[Unnormalize]
-  unnorm --> post[Executor_PostProcess_To_RobotAction]
+```
+                    Spirit-v1.5 端到端信息流（推理）
+┌──────────────────────────────────────────────────────────────┐
+│ 输入端：多视角图像 + 机器人状态 + 任务文本                    │
+│  - observation.images.{cam_high,cam_left_wrist,cam_right_wrist}│
+│  - observation.state                                          │
+│  - task / robot_type                                          │
+└───────────────┬──────────────────────────────────────────────┘
+                │
+                ▼
+┌──────────────────────────────────────────────────────────────┐
+│ 1) 文本+视觉预处理（Qwen3-VL Processor + Prompt Template）     │
+│  - 把多张 <image> placeholder 写进 prompt                      │
+│  - 把 robot_type 与 task 组织成对话（chat_template）            │
+└───────────────┬──────────────────────────────────────────────┘
+                │
+                ▼
+┌──────────────────────────────────────────────────────────────┐
+│ 2) VLM Backbone：Qwen3VLForConditionalGeneration               │
+│  - 输出 hidden_states（取最后 K 层拼接作为条件）                │
+└───────────────┬──────────────────────────────────────────────┘
+                │ cond = hidden_states_lastK
+                ▼
+┌──────────────────────────────────────────────────────────────┐
+│ 3) Action Head：DiT（BaseDiT）                                 │
+│  输入：state_emb + noisy_action_emb + time(t) + cond           │
+│  输出：v_t（动作更新方向 / 速度场）                             │
+└───────────────┬──────────────────────────────────────────────┘
+                │
+                ▼
+┌──────────────────────────────────────────────────────────────┐
+│ 4) ODE Solver：Euler Integration（num_steps 次）               │
+│  x <- x + dt * v_t                                             │
+└───────────────┬──────────────────────────────────────────────┘
+                │
+                ▼
+┌──────────────────────────────────────────────────────────────┐
+│ 5) 输出端：action chunk（反归一化）→ executor 做 robot-specific  │
+│    后处理 → RoboChallenge 下发动作                              │
+└──────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 3. 关键代码入口逐文件拆解
+## 2. 数学/推理细节：它到底“走了几步”，每一步做什么
 
-下面按仓库的“最短运行路径”来拆：`scripts/run_robochallenge.sh` → `robochallenge/run_robochallenge.py` → `executor.py` → `modeling_spirit_vla.py`。
+下面完全按 `model/modeling_spirit_vla.py` 的实现口径解释。
 
-### 3.1 `scripts/run_robochallenge.sh`：最小启动脚本
+### 2.1 状态与动作的归一化：MIN_MAX → [-1, 1]
 
-- 入口脚本：[`scripts/run_robochallenge.sh`](https://raw.githubusercontent.com/Spirit-AI-Team/spirit-v1.5/main/scripts/run_robochallenge.sh)
-- 关键点：
-  - 通过 `PYTHONPATH` 把 repo root 加入路径
-  - 要求环境变量：`TASK_NAME`, `ROBOCHALLENGE_JOB_ID`, `USER_TOKEN`, `CKPT_PATH`，以及可选 `USED_CHUNK_SIZE`（默认 60）
-  - 最终执行：`python -m robochallenge.run_robochallenge ...`
+在 `SpiritVLAPolicy.select_action(...)` 内，先执行：
+- `Normalize` inputs（state）
+- `Normalize` targets（action space 的定义）
 
-### 3.2 `robochallenge/run_robochallenge.py`：RoboChallenge 进程入口
+这一步依赖 MIN_MAX 统计量（min/max）。代码里 `Normalize(..., stats=None)`，但 forward 里会 assert min/max 不是 `inf`，因此这些 buffer 必须来自 checkpoint 的 `state_dict`。
+
+- 对应实现：[`model/utils.py`](https://raw.githubusercontent.com/Spirit-AI-Team/spirit-v1.5/main/model/utils.py)
+
+### 2.2 条件 ODE 的离散化：Euler 积分
+
+在 `_sample_actions_unified(...)` 内：
+- `x_t` 初始化为高斯噪声（action chunk）
+- `dt = -1.0 / num_steps`
+- `time` 从 1.0 递减到 0 附近
+- 每步调用 `_denoise_step(...)` 得到 `v_t`，然后更新：
+
+$$
+ x \leftarrow x + dt \cdot v_t
+$$
+
+这和 `pi0_flow_matching.md` 里介绍的“用 ODE solver 走 1~10 步”属于同一类推理范式。
+
+---
+
+## 3. 代码入口：从脚本到模型的一条最短路径
+
+下面按“怎么跑起来”来走读。
+
+### 3.1 `scripts/run_robochallenge.sh`：最小 launcher
+
+- 脚本：[`scripts/run_robochallenge.sh`](https://raw.githubusercontent.com/Spirit-AI-Team/spirit-v1.5/main/scripts/run_robochallenge.sh)
+- 环境变量：
+  - 必填：`TASK_NAME`, `ROBOCHALLENGE_JOB_ID`, `USER_TOKEN`, `CKPT_PATH`
+  - 可选：`USED_CHUNK_SIZE`（默认 60）
+
+脚本最终执行：
+- `python -m robochallenge.run_robochallenge --single_task ... --used_chunk_size ...`
+
+### 3.2 `robochallenge/run_robochallenge.py`：评测循环入口
 
 - 文件：[`robochallenge/run_robochallenge.py`](https://raw.githubusercontent.com/Spirit-AI-Team/spirit-v1.5/main/robochallenge/run_robochallenge.py)
-- 主要逻辑：
-  - 解析 CLI 参数：`--single_task --robochallenge_job_id --ckpt_path --user_token --used_chunk_size`
-  - 构造 `RoboChallengeExecutor(cfg)`
-  - 创建 `InterfaceClient(cfg.user_token)` 并进入 `job_loop(...)`
-  - 控制循环频率：`duration = 1 / 15`（即 15Hz 推理/下发节奏）
 
-### 3.3 `robochallenge/runner/task_info.py`：任务与机器人映射表
+关键点：
+- `RoboChallengeExecutor(cfg)`：封装 ckpt 加载 + policy 推理
+- `job_loop(..., duration=1/15)`：约 15Hz 的下发频率
+- `image_type` 会依据 `TASK_INFO[task][robot_type]` 做选择
+
+### 3.3 `robochallenge/runner/task_info.py`：任务元数据
 
 - 文件：[`robochallenge/runner/task_info.py`](https://raw.githubusercontent.com/Spirit-AI-Team/spirit-v1.5/main/robochallenge/runner/task_info.py)
-- 你需要注意的点：
-  - `TASK_INFO[task_name]` 给出：`task`（自然语言任务）、`robot_type`（ARX5/Franka/UR5/aloha）、`action_type`（leftpos/leftjoint/pos）、以及三路相机 key 的映射。
-  - `TASKS_USE_LESS_CHUNK_SIZE = ["move_objects_into_box"]`：某些任务默认用更小的 chunk（在 executor 里会覆盖为 40）。
+
+它把：
+- 任务名 → 任务文本（prompt 用）
+- 任务名 → robot_type / action_type
+- 任务名 → 三路相机 key 映射
 
 ### 3.4 `robochallenge/runner/executor.py`：I/O 适配与动作后处理
 
 - 文件：[`robochallenge/runner/executor.py`](https://raw.githubusercontent.com/Spirit-AI-Team/spirit-v1.5/main/robochallenge/runner/executor.py)
 
-核心链路：
-- `_prepare_batch(...)`：把 RC 的图像 bytes + state → `observation.images.*` + `observation.state` + `task` + `robot_type`
-- `policy.select_action(item)`：推理出 action chunk（B×T×D）
-- `_post_process_action(...)`：按 robot_type 把 action chunk 变成 RC 需要的动作格式（UR5/Franka/ARX5/aloha 的差异很大）
-
-### 3.5 `model/modeling_spirit_vla.py`：SpiritVLAPolicy 的推理核心
-
-- 文件：[`model/modeling_spirit_vla.py`](https://raw.githubusercontent.com/Spirit-AI-Team/spirit-v1.5/main/model/modeling_spirit_vla.py)
-
-关键点（只讲“能复现/能读懂”的）：
-
-- **Backbone**：`Qwen3VLForConditionalGeneration.from_pretrained(backbone)`
-- **视觉输入**：三路图像（high/left_wrist/right_wrist），通过 Qwen3-VL 的 image processor + vision tower 获取 embeddings
-- **prompt 组织**：把 `robot_type` 与 `task` 以 chat_template 形式组织进输入，使 VLM hidden states 吸收任务语义
-- **DiT head**：`BaseDiT` 作为动作生成器，cross-attend 到 VLM hidden states
-- **动作生成**：ODE/Euler 迭代形式的连续去噪/生成（`x_t += dt * v_t`），输出 action chunk
-- **归一化**：STATE/ACTION 默认走 MIN_MAX；注意 stats/buffer 需要随 checkpoint 加载，否则会在 Normalize 中报错（这一点对复现很关键）
-
-相关工具函数在：[`model/utils.py`](https://raw.githubusercontent.com/Spirit-AI-Team/spirit-v1.5/main/model/utils.py)
+你要重点看两段：
+- `_prepare_batch(...)`：把 RC 的 observation（图像 bytes + state）整理成 policy 需要的 batch
+- `_post_process_action(...)`：把模型 action chunk 转成不同 robot_type 的下发动作格式（UR5/Franka/ARX5/aloha）
 
 ---
 
-## 4. RoboChallenge 复现 checklist（按官方仓库最小路径）
+## 4. RoboChallenge 复现 checklist（工程版）
 
-### 4.1 安装
-官方 README 要求：Python 3.11+，并推荐 `uv` 或 `pip`。
+> 官方仓库 README 也给了简洁版本，这里是“工程可复现”口径的 checklist。
 
-- 参考：[`Spirit-AI-Team/spirit-v1.5`](https://github.com/Spirit-AI-Team/spirit-v1.5)
+1. Python 版本：3.11+
+2. 安装依赖：按仓库 README（uv 或 pip）
+3. 准备 checkpoint：确保 `CKPT_PATH/` 下至少存在：
+   - `config.json`
+   - `model.safetensors`
+4. 设置环境变量：
+   - `TASK_NAME`：必须在 `TASK_INFO` 中出现
+   - `ROBOCHALLENGE_JOB_ID`
+   - `USER_TOKEN`
+   - `CKPT_PATH`
+   - （可选）`USED_CHUNK_SIZE`：默认 60
+5. 运行：执行 `scripts/run_robochallenge.sh`
 
-### 4.2 下载 checkpoint
-- Base：[`Spirit-AI-robotics/Spirit-v1.5`](https://huggingface.co/Spirit-AI-robotics/Spirit-v1.5)
-- 详细 checkpoint 表见仓库 README：[`Spirit-AI-Team/spirit-v1.5`](https://github.com/Spirit-AI-Team/spirit-v1.5)
-
-### 4.3 运行
-按官方脚本：[`scripts/run_robochallenge.sh`](https://raw.githubusercontent.com/Spirit-AI-Team/spirit-v1.5/main/scripts/run_robochallenge.sh)
-
-你需要准备：
-- `TASK_NAME`：必须出现在 `TASK_INFO` 里（见：[`task_info.py`](https://raw.githubusercontent.com/Spirit-AI-Team/spirit-v1.5/main/robochallenge/runner/task_info.py)）
-- `ROBOCHALLENGE_JOB_ID`
-- `USER_TOKEN`
-- `CKPT_PATH`（要求目录下存在 `model.safetensors` 与 `config.json`）
-- `USED_CHUNK_SIZE`（默认 60；某些任务在 executor 内会改为 40）
-
----
-
-## 5. 与 π0.5 的“可验证”对比（不做无依据推断）
-
-这里只写**代码层面可验证**的差异点（而不是凭感觉解释为什么得分更高）：
-
-- **Backbone 选择**：Spirit-v1.5 明确是 **Qwen3-VL** 体系（见仓库 README 与 `SpiritVLAConfig.backbone` 默认值：[`Spirit-AI-Team/spirit-v1.5`](https://github.com/Spirit-AI-Team/spirit-v1.5)）。
-- **动作生成范式**：它用 DiT + ODE/Euler 迭代生成 action chunk（见：[`model/modeling_spirit_vla.py`](https://raw.githubusercontent.com/Spirit-AI-Team/spirit-v1.5/main/model/modeling_spirit_vla.py)）。
-- **评测集成方式**：它把 RoboChallenge 的 “job polling / executor / post-process” 做成独立模块（见：[`run_robochallenge.py`](https://raw.githubusercontent.com/Spirit-AI-Team/spirit-v1.5/main/robochallenge/run_robochallenge.py)，[`executor.py`](https://raw.githubusercontent.com/Spirit-AI-Team/spirit-v1.5/main/robochallenge/runner/executor.py)）。
-
-至于“今天打败 π0.5 登顶 Table30”，这里引用公开叙述，但不做无依据归因：
-- [`m.sohu.com` 报道](https://m.sohu.com/a/975015519_610300)
-- 仓库自身的 Table30 #1 声明：[`Spirit-AI-Team/spirit-v1.5`](https://github.com/Spirit-AI-Team/spirit-v1.5)
+引用：
+- 仓库 README：[`Spirit-AI-Team/spirit-v1.5`](https://github.com/Spirit-AI-Team/spirit-v1.5)
 
 ---
 
-## 6. 你可以怎么用它（两条路线）
+## 5. 与 π0 / π0.5 的“写作逻辑一致”的对比（只写可验证点）
 
-- **路线 A：复现 RoboChallenge**
-  - 直接按 `scripts/run_robochallenge.sh` 跑
-  - 先从单一任务验证 pipeline（例如 `move_objects_into_box`）
+这里刻意遵循 `pi0_flow_matching.md` / `pi0_5_dissection.md` 的对比方式：只写“代码/公开材料能确认”的点。
 
-- **路线 B：迁移到自家机器人/数据格式**
-  - 让你的观测对齐到 `observation.images.*` 与 `observation.state`
-  - 复用 `SpiritVLAPolicy.select_action(...)` 产出 action chunk
-  - 自己实现一个 `_post_process_action` 适配你的下发协议
+### 5.1 Backbone
+- Spirit-v1.5：Qwen3-VL（仓库 README 与 `SpiritVLAConfig.backbone`）
+  - 参考：[`Spirit-AI-Team/spirit-v1.5`](https://github.com/Spirit-AI-Team/spirit-v1.5)
+
+### 5.2 Action 生成范式
+- Spirit-v1.5：DiT head + Euler 迭代（ODE 风格）生成 action chunk
+  - 参考：[`model/modeling_spirit_vla.py`](https://raw.githubusercontent.com/Spirit-AI-Team/spirit-v1.5/main/model/modeling_spirit_vla.py)
+
+### 5.3 Benchmark 集成方式
+- Spirit-v1.5：把评测入口明确固化成 `scripts/` + `robochallenge/` 模块（可复现工程结构很清晰）
+  - 参考：[`scripts/run_robochallenge.sh`](https://raw.githubusercontent.com/Spirit-AI-Team/spirit-v1.5/main/scripts/run_robochallenge.sh)
+  - 参考：[`robochallenge/run_robochallenge.py`](https://raw.githubusercontent.com/Spirit-AI-Team/spirit-v1.5/main/robochallenge/run_robochallenge.py)
+
+### 5.4 “今天打败 π0.5 登顶”如何表述更严谨
+- **最强引用**：仓库 README 的 Table30 #1 声明（截至 2026-01-11）
+  - 参考：[`Spirit-AI-Team/spirit-v1.5`](https://github.com/Spirit-AI-Team/spirit-v1.5)
+- **交叉引用**：中文媒体 2026-01-12 的榜单叙述（用于“今天打败 π0.5”这一口径）
+  - 参考：[`m.sohu.com` 报道](https://m.sohu.com/a/975015519_610300)
+  - 参考：[`stcn.com` 报道](https://www.stcn.com/article/detail/3586134.html)
 
 ---
 
 ## 参考与延伸阅读
 
 - Spirit v1.5 官方仓库：[`Spirit-AI-Team/spirit-v1.5`](https://github.com/Spirit-AI-Team/spirit-v1.5)
-- Spirit v1.5 官方 blog：[`spirit-ai.com/en/blog/spirit-v1-5`](https://www.spirit-ai.com/en/blog/spirit-v1-5)
-- HuggingFace checkpoints：[`Spirit-AI-robotics/Spirit-v1.5`](https://huggingface.co/Spirit-AI-robotics/Spirit-v1.5)
+- Spirit v1.5 HuggingFace（仓库 README 提供）：[`Spirit-AI-robotics/Spirit-v1.5`](https://huggingface.co/Spirit-AI-robotics/Spirit-v1.5)
+- Spirit v1.5 官方 blog（仓库 README 的 BibTeX 指向）：[`spirit-ai.com/en/blog/spirit-v1-5`](https://www.spirit-ai.com/en/blog/spirit-v1-5)
