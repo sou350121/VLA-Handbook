@@ -60,6 +60,7 @@ VLA-Handbook/
 │   ├── vla_arch.md             # VLA 核心架构
 │   ├── pi0_flow_matching.md    # Flow Matching（π0 核心）
 │   ├── pi0_code_analysis.md    # π0 源码导读
+│   ├── spirit_v1_5_dissection.md # 🆕 Spirit-v1.5（RoboChallenge Table30 #1）代码级拆解
 │   ├── tactile_vla.md          # 触觉 VLA 与 SaTA 专题
 │   └── ...                     # 更多文档见 theory/README.md
 ├── deployment/                 # 真机与部署
@@ -101,6 +102,7 @@ VLA-Handbook/
 | | [`robot_hardware_selection_pricing.md`](./deployment/robot_hardware_selection_pricing.md) | 🆕 直驱 vs 绳驱 vs 液压流派对比与典型操纵难点解析 |
 | **前沿模型** | [`pi0_5_dissection.md`](./theory/pi0_5_dissection.md) | π0.5 开放世界泛化，分层推理机制 |
 | | [`pi0_6_dissection.md`](./theory/pi0_6_dissection.md) | π0.6 Recap 自我进化 + Action Expert |
+| | [`spirit_v1_5_dissection.md`](./theory/spirit_v1_5_dissection.md) | 🆕 Spirit-v1.5：Qwen3-VL + DiT，RoboChallenge 代码级复现与入口拆解 |
 | | [`tactile_vla.md`](./theory/tactile_vla.md) | 🆕 触觉反馈 VLA、DTA 动态触觉阵列与 SaTA 研究 |
 | **动作生成** | [`pi0_flow_matching.md`](./theory/pi0_flow_matching.md) | Flow Matching（比 Diffusion 快 5x，π0 核心） |
 | | [`diffusion_policy.md`](./theory/diffusion_policy.md) | 扩散去噪，解决多模态分布 |
@@ -161,6 +163,8 @@ VLA-Handbook/
     - 新增 **Sharpa Wave** (22-DOF, DTA触觉) 与 **LEAP Hand V2 Adv** (可折叠手掌) 深度调研。
     - 新增 **RealerHand (睿尔灵)** 硬件选型参考。
     - 深度对比 **直驱 vs 绳驱 vs 液压** 三大传动流派对 VLA 学习的影响。
+- **Spirit-v1.5（RoboChallenge Table30）**:
+    - 新增 [`spirit_v1_5_dissection.md`](./theory/spirit_v1_5_dissection.md)：代码级拆解（model/robochallenge/scripts 入口 + 复现 checklist）。
 - **机械学专题**:
     - 新增 [`dexterous_hand_mechanics.md`](./theory/dexterous_hand_mechanics.md)，涵盖 Grubler 公式、雅可比对偶性、阻抗控制数学推导。
 - **操控实战分析**:
