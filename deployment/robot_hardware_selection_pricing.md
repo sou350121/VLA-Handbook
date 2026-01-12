@@ -31,10 +31,50 @@
     *   **摩擦力非线性**：拉索与导管的摩擦、线缆拉伸导致的弹性，会引入难以建模的动力学噪声（Hysteresis）。
     *   **维护成本高**：长时间高强度使用后拉索会松动甚至断裂，严重影响数据的一致性。
 
-### 1.2 价格与选型表
+#### C. 液压驱动流派 (Hydraulic Actuation)
+*   **代表产品**：**Sanctuary AI - Phoenix**。
+*   **技术特点**：利用微型液压泵和伺服阀驱动关节。Sanctuary AI 成功将液压组件缩小至硬币尺寸，并通过了 20 亿次循环测试以解决传统液压的泄漏难题。
+*   **VLA 意义**：
+    *   **极致力量 (Heavy Duty)**：指尖力可达 **100N**（是普通电手的 5-10 倍），能轻松捏碎易拉罐，也能执行穿针引线等精细任务。
+    *   **高功率密度**：相同体积下动力输出是电机的 3-5 倍，非常接近人手的“肌肉”爆发力。
+    *   **天然顺应性**：液压介质具有物理阻尼特性，在高速接触碰撞时比刚性齿轮传动更具安全性。
+*   **挑战**：造价极高（单手系统或超 $5万），存在漏油风险，且工作时伴有明显的泵机噪音。
+
+#### D. 合成肌肉/生物启发流派 (Synthetic Muscles / Bio-inspired)
+*   **代表产品**：**Clone Robotics - Clone Hand**。
+*   **技术特点**：采用**热液压 (Thermal-Hydraulic)** 或水基合成肌肉。通过加热水介质使管道膨胀产生拉力，模拟生物肌肉纤维。
+*   **VLA 意义**：
+    *   **极致轻量化**：手指部分几乎没有电机和金属齿轮，重量极轻（约 1kg 以内）。
+    *   **解剖学一致性**：肌肉排布完全遵循人手解剖学（约 36 个驱动器），是目前形态上最接近人手的方案。
+*   **挑战**：控制逻辑极其复杂且非线性，响应速度受热循环限制，仍处于实验室/极少数科研阶段。
+
+### 1.2 触觉感知流派 (Tactile Sensing Lineages)
+
+在 VLA 闭环中，触觉反馈是解决“视觉遮挡”和“柔性抓取”的核心。
+
+#### A. 视触觉 (Vision-based / Optical Tactile)
+*   **代表**：**GelSight**, **DIGIT**, **Daimon (视触觉)**。
+*   **特点**：利用摄像头捕捉内部凝胶表面的弹性形变。
+*   **优势**：空间分辨率极高（可看清指纹/螺纹纹理），适合训练基于图像的端到端感知模型。
+*   **劣势**：体积通常较大，难以嵌入指侧；凝胶易损，需定期更换。
+
+#### B. 阵列式/电信号类 (Electronic Array / MEMS)
+*   **代表**：**Xela (uSkin)**, **SynTouch (BioTac)**, **Optimus Gen 2 (自研阵列)**。
+*   **特点**：利用电容、压阻或磁场变化感知压力分布。
+*   **优势**：超薄可贴合，可覆盖全手（如 uSkin）；响应频率极高（kHz 级）。
+*   **劣势**：分辨率远低于视觉类；存在布线难题。
+
+#### C. 动态触觉阵列 (Dynamic Tactile Array / DTA)
+*   **代表**：**Sharpa Wave**。
+*   **特点**：高集成度的微型传感器阵列，配合神经网络进行动态滑移检测。
+*   **价值**：专门针对高速闭环控制优化，是目前工业级灵巧手与 AI 结合的最前沿方向。
+
+### 1.3 价格与选型表
 | **Inspire** | RH56DFX | ~7.4万 - 15.5万 | 科研, 人形集成 | [Link](../product/hands.md#inspire-rh56dfx) |
 | **Unitree** | Dex3-1 | ~5.7万 - 6万 | 通用抓取 | [Link](../product/hands.md#unitree-dex3-1) |
 | **Agibot** | OmniHand | ~1.45万 | **高性价比**, 科研 | [Link](../product/hands.md#agibot-灵犀-x1) |
+| **Sanctuary AI** | Phoenix Hand | ~$5万+ | **液压重载**, 极致力量 | [Link](#液压驱动流派-hydraulic-actuation) |
+| **Clone Robotics** | Clone Hand | 询价 | **合成肌肉**, 仿生极点 | [Link](#d-合成肌肉生物启发流派-synthetic-muscles--bio-inspired) |
 | **LEAP** | LEAP V2 Adv | ~$3,000 (约2.1万) | **开源低成本**, 仿生数据采集 | [Link](#leap-hand-v2-advanced) |
 | **Sharpa** | Sharpa Wave | 询价 | **高性能**, 1:1 同构, 极速控制 | [Link](#sharpa-wave) |
 | **Wonik** | Allegro | ~11万 - 18万 | 经典科研 | [Link](../product/hands.md#wonik-allegro-hand) |
