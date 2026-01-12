@@ -9,27 +9,12 @@
 
 ## 0. 主要数学思想 (Main Mathematical Idea)
 
-> **第一性原理**：把“动作生成”写成 **条件 ODE 的轨迹积分**。
+> **第一性原理**：把“动作生成”写成 **条件 ODE 的轨迹积分**，并辅以 **“脏数据”预训练带来的物理常识**。
 
-Spirit-v1.5 的 action head 不是一步回归，也不是离散 token 采样；它更像 π0 的 Flow Matching：
+Spirit-v1.5 的成功很大程度上归功于其 **多样化数据采集（Diverse Collection）** 范式。它打破了传统具身智能依赖“干净/精心编排”数据集（如 OXE）的束缚，主张从真实、凌乱、非脚本化的数据中学习。
 
-- 让网络预测一个“速度/更新方向” $v_t$（代码中命名为 `v_t`）
-- 从噪声动作块 $x_t$ 出发
-- 用 Euler 积分把 $x_t$ 沿着 $v_t$ 逐步推回到“干净动作块”
-
-在代码里，这个过程长得非常像：
-
-$$
-\frac{dx}{dt} = v_\theta(x,t,\mathrm{cond})
-$$
-
-以及离散化的 Euler 更新：
-
-$$
- x_{t+\Delta t} = x_t + \Delta t \cdot v_\theta(x_t,t,\mathrm{cond})
-$$
-
-其中条件 $\mathrm{cond}$ 来自 VLM（Qwen3-VL）的 hidden states。
+- **Action Head**：它更像 π0 的 Flow Matching，让网络预测“速度场” $v_t$，通过 Euler 积分推回动作。
+- **数据核心**：Spirit AI 认为“干净数据是伟大机器人基础模型的敌人”。其预训练数据包含大量失败-重试、任务切换和环境干扰，这赋予了模型极强的 **物理常识（Physical Common Sense）** 和恢复能力。
 
 ---
 
@@ -435,26 +420,56 @@ state[:, :, [2, 9]] = 0
 
 ---
 
-## 5. 与 π0 / π0.5 的“写作逻辑一致”的对比（只写可验证点）
+## 5. 训练范式深度：多样性数据采集（Diverse Collection）
+
+根据 Spirit AI 官方 Blog [Spirit-v1.5: Clean Data Is the Enemy](https://www.spirit-ai.com/en/blog/spirit-v1-5)，该模型的核心竞争力来自对数据质量定义的重构。
+
+### 5.1 为什么要用“脏数据”？
+- **传统方式（Clean Data）**：任务脚本化、物体摆放预测、路径线性化。结果是机器人只学会了“实验室内的完美路径”，一旦遇到部分遮挡或微小偏差就会失败。
+- **Spirit 方式（Diverse Data）**：
+    - **随机性**：操作员即兴发挥，不设固定脚本（如“今天我用机器人调一杯鸡尾酒”，具体步骤自定）。
+    - **连续性**：在一次会话中覆盖多种原子技能（抓取、扭转、插入、双臂协作）。
+    - **容错性**：数据中包含大量“失败-重试”循环，使模型学会了如何从错误中恢复。
+
+### 5.2 消融实验发现：多样性溢价（Diversity Premium）
+Spirit AI 进行了 Group A（精心编排数据）与 Group B（多样化数据）的对比：
+- **迁移效率**：在相同数据量下，多样化模型（Group B）在微调阶段达到相同性能所需的迭代次数 **减少了 40%**。
+- **可扩展性**：由于不依赖精细的任务设计，数据采集效率提升了 **200%**，研究人员的关注度需求降低了 **60%**。
+
+---
+
+## 6. RoboChallenge Table30 评测深度
+
+Spirit-v1.5 登顶的 Table30 榜单是具身智能领域的高难度实机测评：
+- **30 个真实任务**：包括插花（arrange_flowers）、做素食三明治（make_vegetarian_sandwich）、插网线（plug_in_network_cable）等。
+- **多维度挑战**：精确 3D 定位、遮挡处理、长程时序依赖。
+- **跨平台一致性**：要求模型在 Franka、Arx5、UR5 和 ALOHA 等异构平台上表现稳定。
+
+---
+
+## 7. 与 π0 / π0.5 的“写作逻辑一致”的对比（只写可验证点）
 
 这里刻意遵循 `pi0_flow_matching.md` / `pi0_5_dissection.md` 的对比方式：只写“代码/公开材料能确认”的点。
 
-### 5.1 Backbone
+### 7.1 Backbone
 - Spirit-v1.5：Qwen3-VL（仓库 README 与 `SpiritVLAConfig.backbone`）
   - 参考：[`Spirit-AI-Team/spirit-v1.5`](https://github.com/Spirit-AI-Team/spirit-v1.5)
 
-### 5.2 Action 生成范式
+### 7.2 Action 生成范式
 - Spirit-v1.5：DiT head + Euler 迭代（ODE 风格）生成 action chunk
   - 参考：[`model/modeling_spirit_vla.py`](https://raw.githubusercontent.com/Spirit-AI-Team/spirit-v1.5/main/model/modeling_spirit_vla.py)
 
-### 5.3 Benchmark 集成方式
+### 7.3 Benchmark 集成方式
 - Spirit-v1.5：把评测入口明确固化成 `scripts/` + `robochallenge/` 模块（可复现工程结构很清晰）
   - 参考：[`scripts/run_robochallenge.sh`](https://raw.githubusercontent.com/Spirit-AI-Team/spirit-v1.5/main/scripts/run_robochallenge.sh)
   - 参考：[`robochallenge/run_robochallenge.py`](https://raw.githubusercontent.com/Spirit-AI-Team/spirit-v1.5/main/robochallenge/run_robochallenge.py)
 
-### 5.4 “今天打败 π0.5 登顶”如何表述更严谨
+### 7.4 “今天打败 π0.5 登顶”如何表述更严谨
+- **性能数据**：截至 2026-01-11，Spirit-v1.5 在 Table30 总分 66.09，成功率 50.33%，具有统计学显著的领先优势。
 - **最强引用**：仓库 README 的 Table30 #1 声明（截至 2026-01-11）
   - 参考：[`Spirit-AI-Team/spirit-v1.5`](https://github.com/Spirit-AI-Team/spirit-v1.5)
+- **官方 Blog 深度解析**：
+  - 参考：[Spirit-v1.5: Clean Data Is the Enemy of Great Robot Foundation Models](https://www.spirit-ai.com/en/blog/spirit-v1-5)
 - **交叉引用**：中文媒体 2026-01-12 的榜单叙述（用于“今天打败 π0.5”这一口径）
   - 参考：[`m.sohu.com` 报道](https://m.sohu.com/a/975015519_610300)
   - 参考：[`stcn.com` 报道](https://www.stcn.com/article/detail/3586134.html)
@@ -464,5 +479,6 @@ state[:, :, [2, 9]] = 0
 ## 参考与延伸阅读
 
 - Spirit v1.5 官方仓库：[`Spirit-AI-Team/spirit-v1.5`](https://github.com/Spirit-AI-Team/spirit-v1.5)
+- Spirit v1.5 官方 Blog：[Spirit-v1.5: Clean Data Is the Enemy](https://www.spirit-ai.com/en/blog/spirit-v1-5)
 - Spirit v1.5 HuggingFace（仓库 README 提供）：[`Spirit-AI-robotics/Spirit-v1.5`](https://huggingface.co/Spirit-AI-robotics/Spirit-v1.5)
-- Spirit v1.5 官方 blog（仓库 README 的 BibTeX 指向）：[`spirit-ai.com/en/blog/spirit-v1-5`](https://www.spirit-ai.com/en/blog/spirit-v1-5)
+- Spirit v1.5 官方演示视频（见 Blog）：涵盖了调酒、素描、积木堆叠等多样化技能演示。
