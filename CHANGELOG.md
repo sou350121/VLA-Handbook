@@ -4,7 +4,7 @@ All notable changes to the **VLA Handbook** project are documented here, derived
 
 ---
 
-## [1.8.0] - 2026-01-11 to 2026-01-12 🆕
+## 2026-01-11 to 2026-01-12 🆕
 ### Added
 - **Spirit-v1.5 深度拆解**: 新增 [`theory/spirit_v1_5_dissection.md`](./theory/spirit_v1_5_dissection.md)，包含：
     - **核心架构**：Qwen3-VL (大脑) + DiT (小脑) + ODE Euler 积分 (执行)。
@@ -31,7 +31,7 @@ All notable changes to the **VLA Handbook** project are documented here, derived
 
 ---
 
-## [1.7.0] - 2026-01-09 to 2026-01-10
+## 2026-01-09 to 2026-01-10
 ### Added
 - **VLA 必备数学基础**: 新增 [`theory/math_for_vla.md`](./theory/math_for_vla.md)，系统整理了从线性代数、空间表示 (SE3) 到扩散模型、流匹配的完整数学链条。
 - **VLA 损失函数手册**: 新增 [`theory/vla_loss_functions_handbook.md`](./theory/vla_loss_functions_handbook.md)，包含 NLL、KL 散度、ELBO 等公式大白话翻译与 PyTorch 实现。
@@ -40,7 +40,7 @@ All notable changes to the **VLA Handbook** project are documented here, derived
 
 ---
 
-## [1.6.0] - 2026-01-06
+## 2026-01-06
 ### Added
 - **实战案例：手势控制灵巧手**: 新增 [`deployment/mediapipe_wujihand_project.md`](./deployment/mediapipe_wujihand_project.md)，包含：
     - MediaPipe + WujiHand 联动架构（WebSocket + USB SDK）。
@@ -57,7 +57,7 @@ All notable changes to the **VLA Handbook** project are documented here, derived
 
 ---
 
-## [1.5.0] - 2025-12-29
+## 2025-12-29
 ### Added
 - **AI Coding Agent Design Deep Dive**: New document [`system-design/ai_coding_agent_design.md`](./system-design/ai_coding_agent_design.md) covering:
   - User prompt preprocessing (@context, slash commands).
@@ -81,7 +81,7 @@ All notable changes to the **VLA Handbook** project are documented here, derived
 
 ---
 
-## [1.4.0] - 2025-12-26 to 2025-12-28
+## 2025-12-26 to 2025-12-28
 ### Added
 - **OneTwoVLA Adaptation**: Real-world migration guide from 7-DOF Franka to 6-DOF UR5 in `ur5_control_guide.md`.
 - **Research Frontier Restructuring**: Organized model-specific analyses into `theory/frontier/`.
@@ -94,7 +94,7 @@ All notable changes to the **VLA Handbook** project are documented here, derived
 
 ---
 
-## [1.3.0] - 2025-12-21 to 2025-12-25
+## 2025-12-21 to 2025-12-25
 ### Added
 - **GR00T-N1.6 Deep Dive**: Detailed analysis of NVIDIA's humanoid foundation model, DiT architecture, and conditioning.
 - **Tesla Optimus V2 Analysis**: Added hardware analysis of the latest Optimus hand and compared it with the Wuji hand.
@@ -103,7 +103,7 @@ All notable changes to the **VLA Handbook** project are documented here, derived
 
 ---
 
-## [1.2.0] - 2025-12-15 to 2025-12-18
+## 2025-12-15 to 2025-12-18
 ### Added
 - **VLN DualVLN**: Introduced Vision-Language Navigation with Dual-system (Fast/Slow).
 - **Traditional Action Generation**: Added MSE/GMM explanation to `theory/traditional_action_generation.md`.
@@ -115,7 +115,7 @@ All notable changes to the **VLA Handbook** project are documented here, derived
 
 ---
 
-## [1.1.0] - 2025-12-10 to 2025-12-13
+## 2025-12-10 to 2025-12-13
 ### Added
 - **NeurIPS 2025 Insights**: Decoded top papers from an Embodied AI perspective (Artificial Hivemind, Gated Attention, etc.).
 - **GELLO Deployment**: Added guide for assembly and UR5 teleoperation using GELLO.
@@ -127,7 +127,7 @@ All notable changes to the **VLA Handbook** project are documented here, derived
 
 ---
 
-## [1.0.0] - 2025-12-01 to 2025-12-08
+## 2025-12-01 to 2025-12-08
 ### Added
 - **Small VLA Research**: Comprehensive analysis of Evo-1, SmolVLA, and Latent Action Learning (UniVLA, MemoryVLA).
 - **ByteDance GR-RL**: Dissection of the first VLA to achieve 78% shoe-tying success.
@@ -141,7 +141,7 @@ All notable changes to the **VLA Handbook** project are documented here, derived
 
 ---
 
-## [0.8.0] - 2024-11-25 to 2024-11-30
+## 2024-11-25 to 2024-11-30
 ### Added
 - **Product Encyclopedia**: Detailed specs and pricing for 50+ humanoid robots, arms, hands, and sensors.
 - **Evaluation Protocols**: Math definitions for success rates, A/B testing, and bench details.
@@ -153,7 +153,7 @@ All notable changes to the **VLA Handbook** project are documented here, derived
 
 ---
 
-## [Initial Release] - 2024-11-15
+## 2024-11-15 (Initial Release)
 ### Added
 - **Core VLA Theory**: Transformer vs CNN, RT-1/RT-2 architectures, and action representations.
 - **Hardware Pricing**: Initial hardware guide and RealSense calibration basics.
