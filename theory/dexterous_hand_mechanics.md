@@ -47,6 +47,12 @@
     *   **锥齿轮 (Bevel Gear)**：用于 90 度转角传动。
     *   **蜗轮蜗杆 (Worm Gear)**：具有自锁功能，但效率较低。
 
+### 2.2 驱动流派对比 (Actuation Lineages)
+
+*   **直驱/齿轮派 (Direct-Drive / Gear)**：电机直接集成在关节（如 **Wuji**, **RealerHand**, **Sharpa**）。透明度高，响应快，无拉索迟滞。
+*   **线驱动派 (Tendon-driven)**：通过高强拉索远程牵引（如 **Shadow**, **LEAP**）。手指惯性极小，但存在非线性摩擦。
+*   **液压派 (Hydraulic)**：微型液压系统（如 **Sanctuary Phoenix**）。功率密度极高，天然抗冲击。
+
 ---
 
 ## 3. 运动学与空间计算 (Kinematics)

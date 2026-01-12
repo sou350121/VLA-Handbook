@@ -13,7 +13,7 @@
 在 VLA 研究中，选择灵巧手本质上是在选择其**动力传动流派**，这直接影响了算法的复杂度和示教数据的质量。
 
 #### A. 电机集成与直驱/准直驱方案 (Integrated & Direct-Drive)
-*   **代表产品**：**Wuji (舞肌)**, **Sharpa Wave**, **Tesla Optimus Hand**, **Agibot OmniHand**。
+*   **代表产品**：**Wuji (舞肌)**, **Sharpa Wave**, **RealerHand (睿尔灵)**, **Tesla Optimus Hand**, **Agibot OmniHand**。
 *   **技术特点**：电机通过行星减速器或齿轮直接嵌入指骨/关节处。
 *   **VLA 意义**：
     *   **高透明度**：没有拉索的摩擦和滞后，动作极其精准且线性，模型更容易学习。
@@ -109,6 +109,7 @@
 | **Inspire** | RH56DFX | ~7.4万 - 15.5万 | 科研, 人形集成 | [Link](../product/hands.md#inspire-rh56dfx) |
 | **Unitree** | Dex3-1 | ~5.7万 - 6万 | 通用抓取 | [Link](../product/hands.md#unitree-dex3-1) |
 | **Agibot** | OmniHand | ~1.45万 | **高性价比**, 科研 | [Link](../product/hands.md#agibot-灵犀-x1) |
+| **RealerHand** | RealerHand L-series | 询价 | **高集成直驱**, 轻量化 | [Link](#电机集成与直驱方案-integrated--direct-drive) |
 | **Sanctuary AI** | Phoenix Hand | ~$5万+ | **液压重载**, 极致力量 | [Link](#液压驱动流派-hydraulic-actuation) |
 | **Clone Robotics** | Clone Hand | 询价 | **合成肌肉**, 仿生极点 | [Link](#d-合成肌肉生物启发流派-synthetic-muscles--bio-inspired) |
 | **LEAP** | LEAP V2 Adv | ~$3,000 (约2.1万) | **开源低成本**, 仿生数据采集 | [Link](#leap-hand-v2-advanced) |
