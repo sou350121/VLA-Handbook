@@ -41,6 +41,7 @@
 | 🧭 **空间智能** | [`spatial_math.md`](./spatial_math.md) | 坐标系变换、四元数 vs 欧拉角 vs 6D Rotation |
 | 🧮 **数学必备** | [`math_for_vla.md`](./math_for_vla.md) | 🆕 实现 VLA 必备的线代、概率、控制与几何直觉 |
 | ⚙️ **动力学分类** | [`robot_dynamics_classification.md`](./robot_dynamics_classification.md) | 🆕 约束完备性、浮动基座与惯量矩阵 |
+| 🖐️ **灵巧手机械学** | [`dexterous_hand_mechanics.md`](./dexterous_hand_mechanics.md) | 🆕 自由度分配、减速器、驱动流派与雅可比桥梁 |
 | 🎮 **动作空间** | [`action_representations.md`](./action_representations.md) | 连续 vs 离散、Delta vs Absolute |
 | 🔄 **联合训练** | [`co_training.md`](./co_training.md) | 防止灾难性遗忘、Loss Masking |
 | 🧮 **Loss Functions 手册** | [`vla_loss_functions_handbook.md`](./vla_loss_functions_handbook.md) | BC/GMM/Diffusion/Flow/RL、安全正则、对齐损失 🆕 |
