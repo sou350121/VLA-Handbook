@@ -17,7 +17,7 @@
 #### 1. VLA/具身智能算法
 **核心技术**: Vision-Language-Action 模型，端到端学习
 **推荐公司**: 
-- **国内**: Agibot, X Square (WALL-OSS), Galbot, Robot Era
+- **国内**: Agibot, X Square (WALL-OSS), Galbot, Robot Era, Lumos Robot
 - **国际**: Physical Intelligence, Figure AI, Covariant
 
 **关键技能**:

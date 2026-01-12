@@ -23,20 +23,50 @@
 | **Dataa (达闼机器人)** | Cloud Ginger | 服务人形 | **Pre-IPO (独角兽)** | 云端智能机器人 (Cloud Robot) 概念先行者，服务场景多。 |
 | **Kepler (开普勒)** | Forerunner K2 | 人形 | **A轮** | 专注于商业化落地，对标 Tesla Optimus，设计硬朗。 |
 | **Stardust (星尘智能)** | Astribot S1 | 人形 | **A轮** | 腾讯/百度背景，S1 展示了极高的操作精度和速度 (天下武功唯快不破)。 |
+| **Lumos Robot (鹿明机器人)** | FastUMI Pro | 具身数据/基础设施 | **Pre-A2 (数亿)** | 具身智能“超级数据工厂”，核心产品 FastUMI Pro 实现单条数据成本降低 80%，目标 2026 年建立百万小时数据集。 |
+
+## 具身智能基础设施与数据服务 (特色专题)
+
+### Lumos Robot (鹿明机器人) — 具身智能的“送水人”
+
+鹿明机器人占据了一个独特的生态位：**不做单纯的整机商，而是要做具身智能时代的“超级数据工厂”**。
+
+#### 1. 核心商业逻辑：鹿明指数
+创始人喻超（清华校友，曾主导追觅人形机器人及参与小米 CyberDog 研发）提出了衡量具身价值的公式：
+> **鹿明指数 = 场景价值 / (数据成本 × 硬件成本)**
+该逻辑试图用工业逻辑拆解 AI 的高昂成本，通过降低分母（数据与硬件成本）来释放场景价值。
+
+#### 2. 技术武器：FastUMI Pro 系统
+FastUMI Pro 是从学术界 FastUMI 升级而来的工业级、无本体数据采集系统。
+- **高效采集**：单条数据采集时间从 50 秒缩短至 **10 秒**，效率提升 5 倍，综合成本降低 **80%**。
+- **硬核同步**：实现 60Hz 高频记录，多模态信息毫秒级严格对齐，确保数据可被“Replay”（复现）。
+- **去耦合架构**：实现“一套数据，全机通用”，适配市场上数十种主流机械臂，打破数据孤岛。
+
+#### 3. 数据质量：8 道工业级评估体系
+鹿明将数据分为“有效数据”、“废数据”与“脏数据”：
+- **脏数据**：包含抖动、漂移、时间错位的数据（单视角 UMI 下噪声会被放大）。
+- **废数据**：缺乏“信息密度”和“教学意义”的自然行为数据（如人类自然叠衣服动作对机器人可能无效）。
+- **质量管理**：通过 8 道评估关卡，将数据有效率从行业普遍的 70% 提升至 **95% 以上**。
+
+#### 4. 2026 战略目标：百万小时级“物理石油”
+鹿明设定了 2026 年建成 **100 万小时** 具身真机数据产能的目标，力争建立全球最大的真机数据集，撬动具身智能的 Scaling Law 临界点。
+
+---
 
 ## 求职建议
 
 ### 算法岗位关注点
-- **VLA/具身智能**: ByteDance Seed, Agibot, X Square, Galbot, Robot Era
+- **VLA/具身智能**: ByteDance Seed, Agibot, X Square, Galbot, Robot Era, Lumos Robot
+- **数据工程/基础设施**: Lumos Robot (数据采集、同步、UMI 系统)
 - **运动控制/强化学习**: Unitree, LimX Dynamics, Deep Robotics
 - **SLAM/导航**: AgileX, Deep Robotics, Xiaomi
 - **感知/视觉**: UBTech, Fourier, Astribot
 
 ### 工作地点
 - **北京**: ByteDance Seed, UBTech, Galbot, Robot Era, Kepler
-- **上海**: Fourier, LimX Dynamics, Deep Robotics
+- **上海**: Fourier, LimX Dynamics, Deep Robotics, Lumos Robot
 - **深圳**: Unitree, Agibot, Dreame
-- **杭州**: Unitree, X Square
+- **杭州**: Unitree, X Square, Lumos Robot
 - **苏州**: AgileX
 
 ---
