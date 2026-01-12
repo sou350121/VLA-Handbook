@@ -7,7 +7,7 @@
 ## 目录
 
 ### 1. 硬件选型与通讯架构 (Hardware & Infrastructure)
-- **[硬件选型与成本 (Hardware & Pricing)](./robot_hardware_selection_pricing.md)**: 灵巧手/机械臂/传感器参考价格表与选型对比。
+- **[硬件选型与成本 (Hardware & Pricing)](./robot_hardware_selection_pricing.md)**: 包含 **Sharpa Wave**, **LEAP V2**, **Wuji** 等主流灵巧手/机械臂/传感器对比。
 - **[VLA 模型边缘部署优化 (VLA Edge Deployment)](./vla_model_edge_deployment.md)**: 量化 (GPTQ, AWQ) 与边缘推理 (TensorRT-LLM, vLLM)。
 - **[ROS 集成与算法优化 (ROS & Optimization)](./ros_and_optimization.md)**: ROS2 零拷贝、组件容器与 DDS 分布式调优。
 

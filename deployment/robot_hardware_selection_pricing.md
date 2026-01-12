@@ -13,12 +13,32 @@
 | **Inspire** | RH56DFX | ~7.4万 - 15.5万 | 科研, 人形集成 | [Link](../product/hands.md#inspire-rh56dfx) |
 | **Unitree** | Dex3-1 | ~5.7万 - 6万 | 通用抓取 | [Link](../product/hands.md#unitree-dex3-1) |
 | **Agibot** | OmniHand | ~1.45万 | **高性价比**, 科研 | [Link](../product/hands.md#agibot-灵犀-x1) |
-| **LEAP** | LEAP Hand | ~1.4万 - 2.1万 | **开源低成本**, Sim-to-Real | [Link](../product/hands.md#leap-hand) |
+| **LEAP** | LEAP V2 Adv | ~$3,000 (约2.1万) | **开源低成本**, 仿生数据采集 | [Link](#leap-hand-v2-advanced) |
+| **Sharpa** | Sharpa Wave | 询价 | **高性能**, 1:1 同构, 极速控制 | [Link](#sharpa-wave) |
 | **Wonik** | Allegro | ~11万 - 18万 | 经典科研 | [Link](../product/hands.md#wonik-allegro-hand) |
 | **Shadow** | Shadow Hand | ~85万+ | **高端触觉**, 遥操作 | [Link](../product/hands.md#shadow-hand) |
 | **Daimon** | DM-Hand1 | 询价 | **视触觉**, 仿人构型 | [Link](../product/hands.md#daimon-dm-hand1-视触觉灵巧手) |
 
-## 2. 平行夹爪 (Grippers)
+## 2. 前沿灵巧手深度调研
+
+### 2.1 Sharpa Wave (新加坡 Sharpa Robotics)
+*   **核心优势**：极致的 **1:1 同构 (Isomorphism)**。其手掌宽/长比严格遵循 0.618 黄金比例。
+*   **硬件参数**：
+    *   **22 个主动自由度**：目前行业领先，支持转笔、使用剪刀等精细动作。
+    *   **指尖压力 > 20N**：具备重载抓取能力。
+    *   **4Hz 全手势频率**：响应极快，适配高频 VLA 闭环（如 100Hz+ 控制）。
+*   **黑科技：DTA (Dynamic Tactile Array)**：
+    *   集成了基于神经网络算法的动态触觉阵列，能够感知物体表面的微小滑移和纹理细节，是训练端到端“触觉感知策略”的理想硬件。
+*   **鲁棒性**：100 万次循环寿命，全关节支持 **倒驱 (Backdrivable)**，抗意外冲击能力极强。
+
+### 2.2 LEAP Hand V2 Advanced (CMU)
+*   **核心优势**：**刚柔耦合 (Hybrid Rigid-Soft)** 与 **可动掌骨**。
+*   **技术亮点**：
+    *   **Articulated Palm**：手掌具有 2 个动力关节，可以像人手一样“收拢”手掌，极大地提升了抓握异形工具（如电钻、锥形瓶）的稳定性。
+    *   **TPU 仿生外壳**：PLA 骨架 + TPU 柔性外皮，天然具备物理防滑和力学顺应性，降低了对感知精度的极端依赖。
+*   **数据采集适配**：完美适配 **Manus 触觉手套**，是目前性价比最高的专家示教（Expert Demonstration）硬件方案。
+
+## 3. 平行夹爪 (Grippers)
 
 | 厂商 | 型号 | 参考价格 (RMB) | 特点 | 详情 |
 | :--- | :--- | :--- | :--- | :--- |
