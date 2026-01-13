@@ -13,7 +13,7 @@
 在 VLA 研究中，选择灵巧手本质上是在选择其**动力传动流派**，这直接影响了算法的复杂度和示教数据的质量。
 
 #### A. 电机集成与直驱/准直驱方案 (Integrated & Direct-Drive)
-*   **代表产品**：**Wuji (舞肌)**, **Sharpa Wave**, **RealerHand (睿尔灵)**, **Tesla Optimus Hand**, **Agibot OmniHand**。
+*   **代表产品**：**无极手（舞肌/Wuji）**, **Sharpa Wave**, **RealerHand (睿尔灵)**, **Tesla Optimus Hand**, **Agibot OmniHand**。
 *   **技术特点**：电机通过行星减速器或齿轮直接嵌入指骨/关节处。
 *   **VLA 意义**：
     *   **高透明度**：没有拉索的摩擦和滞后，动作极其精准且线性，模型更容易学习。

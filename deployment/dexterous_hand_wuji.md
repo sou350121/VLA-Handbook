@@ -1,10 +1,13 @@
-# 灵巧手硬件解析：Wuji 手 (20-DOF) 深度拆解
+# 灵巧手硬件解析：无极手（Wuji Hand，舞肌，20-DOF）深度拆解
 
-在 VLA（视觉-语言-动作）模型中，模型输出的动作最终由灵巧手执行。**Wuji 手（无极手）** 作为国产灵巧手的代表，其“全独立驱动”和“20 自由度”的设计为复杂操作提供了极高的上限。
+在 VLA（视觉-语言-动作）模型中，模型输出的动作最终由灵巧手执行。**无极手（Wuji Hand）** 作为国产灵巧手的代表，其“全独立驱动”和“20 自由度”的设计为复杂操作提供了极高的上限。
+
+> [!NOTE]
+> **命名澄清**：**舞肌**是公司/品牌名（其开源组织常见为 `wuji-technology` / *Wuji Technology*），**无极手**是其灵巧手产品名（英文常写作 *Wuji Hand*）。为避免误写成“舞肌手”，本文统一用 **无极手（Wuji Hand）** 指代这款硬件。
 
 ## 1. 核心规格与空间运动能力
 
-Wuji 手拥有 **20 个独立自由度 (DOF)**，其结构极其紧凑，且不依赖传统的拉索驱动（Tendon-driven），实现了全电机集成。
+无极手拥有 **20 个独立自由度 (DOF)**，其结构极其紧凑，且不依赖传统的拉索驱动（Tendon-driven），实现了全电机集成。
 
 ### 1.1 自由度与转动范围 (Joint Limits)
 *   **拇指 (Finger 1)**: 4 关节。
@@ -17,7 +20,7 @@ Wuji 手拥有 **20 个独立自由度 (DOF)**，其结构极其紧凑，且不�
 
 ## 2. 动力学布局：根部高力矩，末端高速度
 
-Wuji 手在 `effort limits`（力矩上限）和 `velocity limits`（速度上限）的配置上遵循了仿生学与机械设计的双重逻辑：
+无极手在 `effort limits`（力矩上限）和 `velocity limits`（速度上限）的配置上遵循了仿生学与机械设计的双重逻辑：
 
 | 位置 | 策略 | 目的 |
 |:---|:---|:---|
@@ -27,11 +30,11 @@ Wuji 手在 `effort limits`（力矩上限）和 `velocity limits`（速度上�
 
 ## 3. 传动拓扑：独立驱动的“黑科技”
 
-Wuji 手放弃了拉索，转而采用 **“电机 + 行星减速器 + 锥齿轮”** 的嵌入式方案。
+无极手放弃了拉索，转而采用 **“电机 + 行星减速器 + 锥齿轮”** 的嵌入式方案。
 
 ### 3.1 关键机构分析
 
-Wuji 手将复杂的机械元件高度集成在细长的指节中，其核心由四大支柱组成：
+无极手将复杂的机械元件高度集成在细长的指节中，其核心由四大支柱组成：
 
 *   **四连杆机构 (Four-bar Linkage)**: 
     *   **原理**: 模仿仿生学骨架，通过一组闭合连杆实现运动耦合。
@@ -47,7 +50,7 @@ Wuji 手将复杂的机械元件高度集成在细长的指节中，其核心由
 
 ## 4. 独立驱动 vs. 拉索驱动 (Comparison)
 
-| 特性 | Wuji 手 (独立驱动) | 传统灵巧手 (拉索/腱驱动) |
+| 特性 | 无极手（独立驱动） | 传统灵巧手 (拉索/腱驱动) |
 |:---|:---|:---|
 | **控制复杂度** | 线性控制，无滞后/摩擦补偿 | 需处理拉索伸长、摩擦非线性 |
 | **维护性** | 模块化，可单关节定位排错 | 复杂（“排雷”式拉索走线） |
@@ -58,8 +61,8 @@ Wuji 手将复杂的机械元件高度集成在细长的指节中，其核心由
 
 ## 5. 软件交互与仿真生态
 
-### 5.1 官方开源入口 (Wuji OSS Ecosystem)
-根据 [wuji-technology](https://github.com/wuji-technology) 官方仓库，该硬件提供了完善的软件支持：
+### 5.1 官方开源入口（舞肌 Wuji OSS Ecosystem）
+根据舞肌（Wuji Technology）的官方仓库 [wuji-technology](https://github.com/wuji-technology)，该硬件提供了完善的软件支持：
 *   **驱动与 SDK**: `wujihandros2` (支持 1000Hz 实时状态发布) / `wujihandpy`。
 *   **仿真模型**: `wuji-hand-description` 提供 MuJoCo (MJCF) 和 ROS (URDF) 双栈支持，确保 Sim2Real 几何一致性。
 *   **遥操作**: `wuji-retargeting` 支持 Apple Vision Pro 实时动捕重定向。
@@ -89,7 +92,7 @@ Wuji 手将复杂的机械元件高度集成在细长的指节中，其核心由
 
 ## 7. 🧠 独立思考：工程落地的关键挑战
 
-在真实场景部署 VLA 模型时，Wuji 手面临以下进阶挑战：
+在真实场景部署 VLA 模型时，无极手面临以下进阶挑战：
 
 *   **实时性瓶颈**: 控制环频率是否稳定？是否存在严重的端到端延迟（Latency）或抖动（Jitter）？
 *   **标定漂移**: 零位校准（Home Calibration）和手眼标定（Hand-Eye Calibration）如何保持长期一致？
@@ -132,7 +135,7 @@ Wuji 手将复杂的机械元件高度集成在细长的指节中，其核心由
 
 ## 8. 📚 参考来源 (References)
 
-1.  **Wuji Technology 官方 GitHub**: [wuji-technology](https://github.com/wuji-technology)
+1.  **舞肌（Wuji Technology）官方 GitHub**: [wuji-technology](https://github.com/wuji-technology)
 2.  **ROS2 驱动仓库**: [wujihandros2](https://github.com/wuji-technology/wujihandros2) (确认了 1000Hz 反馈与 TPDO 协议细节)。
 3.  **模型描述仓库**: [wuji-hand-description](https://github.com/wuji-technology/wuji-hand-description) (提供了 URDF、MuJoCo MJCF 和高精度 meshes 资源)。
 4.  **硬件设计资源**: [wujihand-hardware-design](https://github.com/wuji-technology/wujihand-hardware-design) (确认了其抗冲击适配器与软包顺应性设计的机械细节)。

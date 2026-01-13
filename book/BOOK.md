@@ -64,7 +64,7 @@
 37. [ROS 集成与算法优化](#第36章-ros-集成与算法优化)
 38. [Sim-to-Real 技术](#第37章-sim-to-real-技术)
 39. 灵巧手硬件与部署
-    *   [39.1 Wuji 手深度解析 (独立驱动)](../deployment/dexterous_hand_wuji.md)
+    *   [39.1 无极手（舞肌/Wuji）深度解析 (独立驱动)](../deployment/dexterous_hand_wuji.md)
     *   [39.2 Tesla Optimus V2 手解析 (肌腱驱动)](../deployment/optimus_hand_v2.md)
 40. [模型量化与边缘部署](#第39章-模型量化与边缘部署)
 

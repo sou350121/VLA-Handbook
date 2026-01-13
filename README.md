@@ -68,7 +68,7 @@ VLA-Handbook/
 │   ├── robot_hardware_selection_pricing.md # 🆕 硬件选型与前沿流派对比
 │   ├── embodied_data_collection_overview.md # 🆕 具身数据采集概览 (POV/Sim2Real/RL)
 │   ├── multimodal_data_synchronization.md # 🆕 多模态数据同步技术
-│   ├── dexterous_hand_wuji.md  # 舞肌手 (Wuji) 深度解析
+│   ├── dexterous_hand_wuji.md  # 无极手（舞肌/Wuji）深度解析
 │   ├── dexterous_hand_applications.md # 灵巧手实战案例集 (VisionOS)
 │   └── ...                     # 更多文档见 deployment/README.md
 ├── book/                       # 电子书版本
