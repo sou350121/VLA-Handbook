@@ -63,6 +63,71 @@
 
 ---
 
+## 4.1 对标 DYNA 的 “RM-in-loop” ：把「质量」做成可规模化的信号
+
+DYNA 的公开叙事里，一个很关键的工程点是：在连续部署（streaming、没有清晰 episode 边界）的场景下，用 **Reward Model (RM)** 去做「进度评估、质量蒸馏、错误恢复与数据切段」，从而让机器人能 **长时无干预运行**，并把部署数据“自动变成训练数据”。这套思路对灵巧手非常适配，因为灵巧操作的关键不是“某一次成功”，而是“接触密集状态下持续稳定 + 快速自救”。
+
+参考：
+- DYNA-1 强调 RM 能提供细粒度反馈，并支持 *Intentional Error Recovery* 与 *High-Quality Dataset Creation and Curation*：<https://www.dyna.co/dyna-1/research>
+- DYNA 的“第一性原理”里也把 RM 作为质量度量与可规模化改进的一部分：<https://www.dyna.co/blog/dyna-robotics-closes-120m-series-a>
+
+下面把 DYNA 的模块拆成「DexHand 可落地」的接口与数据字段。
+
+### A) RM 的输入：DexHand 要补哪些“可判别质量”的观测
+
+把 RM 理解成一个函数 \(r_t = \text{RM}(o_{0:t}, a_{0:t})\)（不一定输出奖励，也可以输出 *progress/quality* 分数）。为了让 RM 能可靠地区分“稳/不稳、可恢复/不可恢复”，DexHand 的观测需要比纯视觉更“接触可见”：
+
+- **视觉**: `rgb_static`, `rgb_wrist`（你已有）
+- **本体**: `joint_positions`, `joint_velocities`（你已有）
+- **力/扭矩代理（强烈建议加入）**: `joint_effort` / `motor_current`（用来判别接触、夹持、卡死、打滑）
+- **接触 proxy（可选但很有价值）**: `tactile`（若有传感器），或 `contact_flags`（阈值化的接触事件）
+- **环境状态（若可获取）**: 物体是否仍在手中（通过视觉跟踪/秤/开关量），作为 RM 的弱监督信号
+
+> 直觉：DexHand 的“失败”往往不是看不到，而是 **接触后物理状态变了**（滑、夹歪、卡、扭矩异常），这些必须进入 RM 的判别空间。
+
+### B) RM 的输出：不只一个标量 reward，而是一组“部署可用”的头
+
+DYNA 叙述里 RM 的价值之一是“进度估计 + 质量度量”，对 DexHand 我建议直接把 RM 设计成多头输出（你可以先用规则生成伪标签训练）：
+
+- **progress**: \(\hat{p}_t \in [0,1]\)（任务进度/阶段）
+- **quality**: \(\hat{q}_t \in [0,1]\)（动作是否“生产级稳定”）
+- **recoverability**: \(\hat{c}_t \in [0,1]\)（当前是否处于可自救状态）
+- **failure_mode**: 分类（`slip`, `jam`, `self_collision_risk`, `occlusion`, `unknown`…）
+
+这比“成功/失败”更贴近灵巧手的真实需求：**你需要知道怎么救**，而不是只知道失败了。
+
+### C) “RM-in-loop” 训练与部署闭环：对应到三条数采路线
+
+把 DYNA 的闭环翻译成你这份文档里的 A/B/C 三条数采路线：
+
+- **方案 A（专家遥操作）**：用专家轨迹提供“正例段”，并刻意采集 **纠偏段（recovery）**，让 RM 学到“偏离后如何回归”。  
+- **方案 B（脚本/HITL）**：脚本负责把系统推进到高密度接触区间，人类只在关键时刻介入；这些“介入点”天然就是 RM 的高价值训练数据（边界态）。  
+- **方案 C（Bootstrap）**：把 RM 当作过滤器与教练：
+  - **在线过滤**：当 \(\hat{q}_t\) 太低或 \(\hat{c}_t\) 太低，触发安全策略/人工接管  
+  - **自动收集 hard cases**：把 RM 判为“低质但可恢复”的片段打上优先级，进入后续训练池
+
+### D) Streaming 自动切段（解决“没有 episode 边界”）
+
+DYNA 明确提到 continuous deployment 数据没有天然 episode 边界，并发展了“自动分段 + subtask labeling”的做法（见其 DYNA-1 页面）。对 DexHand，你可以用 RM 的 `progress` 与 `failure_mode` 做事件分割：
+
+- **start**：首次进入接触（`effort`/`contact_flag` 上升）
+- **subtask switch**：\(\hat{p}_t\) 斜率变化 / `failure_mode` 切换（例如从 `approach` 到 `grasp` 到 `recover`）
+- **end**：物体稳定放置/任务完成；或 recoverability 很低并触发人工接管
+
+最终把“连续流”变成可训练的 episode：
+- `episode.boundaries = [(t0,t1), (t1,t2), ...]`
+- `episode.subtask = ["approach","pinch","rotate","recover",...]`
+
+### E) 最小可落地：先用规则做 RM 的伪标签（工程强可行）
+
+如果你现在没有足够标注训练 RM，仍可快速启用 RM-in-loop 的思路：
+
+- 用规则生成 `failure_mode`：例如 `motor_current` 异常升高 + `joint_velocity` 近 0 → `jam`
+- 用可复现性生成 `quality`：如你在 3.3 的 replay validation，能 replay 成功则 \(\hat{q}\) 高
+- 用滑移 proxy 生成 `recoverability`：`effort` 下降 + 视觉抓取框漂移 → `slip`（可恢复窗口）
+
+这能让你“先跑起来”，再用累积的数据训练更强的 RM。
+
 ## 5. 参考来源与论文
 
 ### 平台与硬件方案
