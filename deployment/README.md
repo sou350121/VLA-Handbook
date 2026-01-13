@@ -24,6 +24,7 @@
 ### 4. 灵巧手深度专题 (Dexterous Hand Deep Dive)
 - **[灵巧手通讯与部署实战 (DexHand Communication)](./dexterous_hand_communication_deployment.md)**: 通讯架构 (CANFD, EtherCAT)、Retargeting 与线缆管理。
 - **[灵巧手实战案例集 (DexHand Applications)](./dexterous_hand_applications.md)**: VisionOS 遥操作、跨设备动作映射与 Sim2Real 案例。
+- **[DexHand 传感系统设计（Sensing System Design）](./dexterous_hand_sensing_system_design.md)**: 面向部署 × 采数 × 自恢复的传感栈、三层闭环与 RM-in-loop 思路。
 - **[Wuji 灵巧手深度解析 (Wuji Hand Deep Dive)](./dexterous_hand_wuji.md)**: 20-DOF 非拉索、全电机集成驱动技术方案。
 - **[Optimus Hand V2 解析](./optimus_hand_v2.md)**: Tesla Optimus 灵巧手技术特点分析。
 
