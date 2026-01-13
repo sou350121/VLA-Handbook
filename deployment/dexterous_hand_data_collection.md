@@ -128,6 +128,74 @@ DYNA 明确提到 continuous deployment 数据没有天然 episode 边界，并�
 
 这能让你“先跑起来”，再用累积的数据训练更强的 RM。
 
+### F) 一个贴近真实的最小案例：DexHand 抓起桌面“手机/卡片”（薄片光滑物体）
+
+这个任务**很贴近真实落地**：薄、滑、和桌面有真实碰撞与对抗。你很容易采到“失败片段”（滑、卡、夹歪、顶到桌面），因此非常适合用规则生成伪标签，让 RM-in-loop 先跑起来。
+
+#### 任务与传感最小集合（不靠额外外设也能做）
+
+- **任务**：把手机（或卡片）从桌面抓起，抬离桌面 \(h \ge 2\text{cm}\)，稳定保持 2 秒。
+- **观测（最小）**：
+  - `rgb_wrist`（腕相机，判断薄片边缘、是否离桌）
+  - `joint_positions`, `joint_velocities`
+  - `motor_current` 或 `joint_effort`（必须有一个；用来判别接触/卡死/滑移）
+- **控制**：
+  - `joint_targets`（位置控制即可；推荐限速 + 电流阈值保护）
+
+> 为什么这个集合“够用”：薄片抓取的本质是“边缘接触 + 力学对抗”，电流/扭矩是你最便宜的“触觉替身”。
+
+#### 子任务分段（streaming → episode/subtask）
+
+用“事件”把连续流切成 4 段（可直接作为 RM 的 progress 伪标签）：
+
+- **S0 approach**：手指张开，靠近桌面上目标边缘（`motor_current` 低）
+- **S1 wedge/contact**：指尖接触桌面/物体边缘，出现轻微电流上升
+- **S2 pinch + micro-lift**：缓慢闭合并尝试抬离（电流上升 + 关节速度下降）
+- **S3 lift + hold**：物体离桌并稳定保持（视觉上有离桌间隙，电流稳定）
+
+#### 伪标签规则（可实现、可调参）
+
+下面这些规则都能用现有信号实现，且与“物理现象”强对应：
+
+- **success（episode 级标签）**：
+  - `lift_height >= 2cm` 且 `hold_time >= 2s`
+  - `lift_height` 可以先用 `rgb_wrist` 做一个很粗的“离桌判别”（例如桌面边缘线与物体下缘的像素间隙 > 阈值）
+- **failure_mode（步级/段级标签）**：
+  - `jam`（卡死/顶住）：
+    - `motor_current` 高于阈值（例如 > P95）持续 \(> 200\text{ms}\)
+    - 且 `joint_velocities` 近 0（例如 \(\|\dot{q}\|_\infty < \epsilon\)）
+  - `slip`（滑移）：
+    - 处于 S2/S3
+    - `motor_current` 明显下降（夹持力掉了）或闭合继续增加但 `lift_height` 无提升
+  - `table_collision_risk`（桌面强对抗风险）：
+    - 腕相机看到“手指/物体”与桌面边界重叠增加（粗规则即可）
+    - 且 `motor_current` 出现尖峰（spike）
+- **recoverability（可自救窗口）**：
+  - `recoverable = 1`：`slip` 发生但电流未到危险阈值，且仍能看到物体（未完全丢失）
+  - `recoverable = 0`：`jam` 且持续时间长、或物体完全离开视野/掉落
+- **quality（生产级质量伪标签）**：
+  - 先用最硬核的工程判据：**Replay Validation**
+    - 把 `joint_targets` 在真机上重放
+    - 若 “成功 + 轨迹无保护触发（无 jam spike）” → `quality=high`
+    - 若 “首次成功但重放失败” → `quality=low`（典型是延迟/同步问题导致不可复现）
+
+#### RM-in-loop 怎么用在“采数当天”（立刻可用）
+
+1) **在线过滤（安全 + 省时间）**
+- 若检测到 `jam` → 立即停止闭合，执行“回退 5mm + 重新对齐 approach”
+- 若 `table_collision_risk` → 降速（速度上限减半），或切换到“更高抬手高度再接触”
+
+2) **自动挑 hard cases（让数据更值钱）**
+- 把 `recoverable=1` 的 `slip` 片段单独存成 `recovery_clip`（训练“纠偏”最有用）
+- 把“成功但质量低（重放失败）”的 episode 标记为 `sync_suspect=1`，回头优先排查时间戳/对齐
+
+3) **从伪标签到真 RM（几天内可迭代）**
+- 第 1 周：完全用规则跑闭环（先把系统做稳）
+- 第 2 周：用规则生成的 `(progress, failure_mode, recoverability, quality)` 训练一个小 RM（例如轻量 transformer/1D temporal CNN）
+- 第 3 周：RM 替换部分规则（减少手工阈值依赖），继续收集更多“边界态”数据
+
+> 这就是 DYNA “用可规模化信号把部署变成训练”的最小翻译版：先用规则把闭环跑通，再逐步把规则学习化。
+
 ## 5. 参考来源与论文
 
 ### 平台与硬件方案
