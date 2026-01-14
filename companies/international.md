@@ -10,7 +10,7 @@
 | **Figure AI (US)** | Figure 01/02 | 人形 | **B轮 ($675M)** | Sunnyvale, CA (HQ) | OpenAI/Microsoft/NVIDIA 投资，端到端模型能力强，落地 BMW 工厂。 |
 | **Boston Dynamics (US)** | Atlas (Electric) | 人形, 四足 | **Hyundai 收购** | Waltham, MA (HQ) | 运动控制 (Control) 的天花板，液压转电驱后更适合商业化。 |
 | **Agility Robotics (US)** | Digit | 人形 (双足) | **B轮+ ($150M+)** | Corvallis, OR (HQ) / Pittsburgh / Palo Alto | Amazon 投资，专注物流场景，Digit 已在亚马逊仓库试运行。 |
-| **1X Technologies (Norway)** | Eve, Neo | 人形 (轮式/双足) | **B轮 ($100M)** | Moss, Norway (HQ) / Sunnyvale, CA | OpenAI 投资，Eve 是轮式人形，Neo 是双足。强调安全与家庭应用。 |
+| **1X Technologies (Norway)** | Eve, Neo | 人形 (轮式/双足) | **B轮 ($100M)** | Moss, Norway (HQ) / Sunnyvale, CA | OpenAI 投资，Eve 是轮式人形，Neo 是双足。强调安全与家庭应用；近期提出 **1X World Model（视频世界模型+逆动力学 IDM）** 路线（见 [1X 官方](https://www.1x.tech/discover/world-model-self-learning)）。 |
 | **Sanctuary AI (Canada)** | Phoenix | 人形 | **B轮 ($140M+)** | Vancouver, Canada (HQ) | 强调通用智能 (General Purpose)，Phoenix 拥有极强的灵巧手操作能力。 |
 | **Apptronik (US)** | Apollo | 人形 | **A轮 ($14.6M+)** | Austin, TX (HQ) | NASA 背景，Apollo 设计紧凑，与 Mercedes-Benz 合作。 |
 | **DYNA Robotics (US)** | DYNA-1 / DYNA-1i（机器人基础模型 + 商用机器人系统） | 商用通用机器人（工厂/餐饮/洗衣等） | **A轮 ($120M)** | Redwood City, CA | 主打“部署驱动的持续学习”：在真实环境训练 VLA，并引入 Reward Model 支撑长时无干预运行与自我纠错。 |
