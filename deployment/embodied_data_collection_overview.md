@@ -16,6 +16,8 @@
 ### 1.2 穿戴式方案 (Wearable Capture)
 *   **代表方案**: 
     *   **数据手套 (Data Gloves)**: 如 Manus, Dexmo。利用 IMU 或光纤传感器捕捉手指关节的高频运动数据。
+        *   **Manus MetaGloves Pro Haptic（振动触觉）**：手套内置振动触觉致动器（vibrotactile actuators），可把接触/施力的强弱作为**振动提示**回馈给操作者（偏“提示型触觉”，不等同阻力式 force feedback）。参考：[Manus 官方页面](https://www.manus-meta.com/metagloves-pro-haptic)。
+        *   **研究例子**：把机器人端 visuo-tactile（如 GelSight）估计的法向/剪切/滑移信息，通过振动反馈回传给操作者（vibrotactile），用于提升遥操作精细度。参考：[arXiv:2404.19585](https://arxiv.org/abs/2404.19585)。
     *   **触觉/力反馈外骨骼 (Haptic Exoskeletons)**: 捕获动作的同时，将机械手的受力反馈给操作员，提升精细操作（如旋拧）的数据保真度。
 *   **特点**: **高维度**，能够捕捉手指每一个指节的微小变动，是训练灵巧手 VLA 的核心来源。
 
