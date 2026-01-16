@@ -111,6 +111,7 @@
 | 🛰️ **点云 & SLAM** | [`pointcloud_slam.md`](./pointcloud_slam.md) | 点云语义、配准、Visual/LiDAR SLAM |
 | 📡 **状态估计** | [`state_estimation.md`](./state_estimation.md) | EKF 噪声抑制（Q/R 调参）、UKF、粒子滤波、IMU+视觉融合 |
 | 🖐️ **触觉 VLA** | [`tactile_vla.md`](./tactile_vla.md) | GelSight/DIGIT/SaTA，盲盒操作 🆕 |
+| 🧠 **语言塑形感知** | [`./frontier/language_shapes_perception.md`](./frontier/language_shapes_perception.md) | “灰度香蕉”启示：语义先验影响视觉表征与属性推断 🆕 |
 
 ### 🧭 决策、规划与抓取 (Decision & Execution)
 *侧重于机器人如何“思考”路径并进行“精细操作”。*
