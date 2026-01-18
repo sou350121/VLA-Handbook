@@ -113,6 +113,7 @@
 | 🖐️ **触觉 VLA** | [`tactile_vla.md`](./tactile_vla.md) | GelSight/DIGIT/SaTA，盲盒操作 🆕 |
 | 🧠 **语言塑形感知** | [`./frontier/language_shapes_perception.md`](./frontier/language_shapes_perception.md) | “灰度香蕉”启示：语义先验影响视觉表征与属性推断 🆕 |
 | 🧪 **Physics of AI** | [`./frontier/physics_of_ai_liuziming.md`](./frontier/physics_of_ai_liuziming.md) | 不赌规模：用“现象-观测量-规律”研究神经网络，沉淀工程抓手 🆕 |
+| 🐙 **软体本体感知** | [`./frontier/soft_robot_proprioception_gvs_sensitivity_ellipsoid.md`](./frontier/soft_robot_proprioception_gvs_sensitivity_ellipsoid.md) | GVS + 灵敏度椭球：把“不可观测性”变成可视化指标，并用于感知驱动规划 🆕 |
 
 ### 🧭 决策、规划与抓取 (Decision & Execution)
 *侧重于机器人如何“思考”路径并进行“精细操作”。*
