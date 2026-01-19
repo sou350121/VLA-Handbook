@@ -173,6 +173,7 @@
 | **1X World Model** | [`./frontier/one_x_world_model.md`](./frontier/one_x_world_model.md) | 🆕 视频世界模型 + 逆动力学（IDM）：先“想象”再“执行” |
 | **GenieReasoner / ERIQ / FACT** | [`./frontier/geniereasoner_eriq_fact.md`](./frontier/geniereasoner_eriq_fact.md) | 🆕 量化“推理→动作”传递损耗：推理基准 + 动作分词器 + 统一自回归 |
 | **GR-Dexter** | [`./frontier/gr_dexter_bimanual_dexterous_vla.md`](./frontier/gr_dexter_bimanual_dexterous_vla.md) | 🆕 ByteDance Seed：把 VLA 扩展到 21-DoF 灵巧手的全栈框架（硬件/遥操作/跨形态数据） |
+| **Ken Goldberg 对谈** | [`./frontier/ken_goldberg_data_quality_infrastructure.md`](./frontier/ken_goldberg_data_quality_infrastructure.md) | 🆕 GOFE 回归：瓶颈时刻数据、VLM 数据治理、Fog Robotics 与基础设施价值 |
 | **DKT Perception** | [`./frontier/dkt_transparency_perception.md`](./frontier/dkt_transparency_perception.md) | 🆕 基于视频扩散先验的透明物体深度/法向估计 |
 | **MM-ACT** | [`./frontier/vla_unified_token_space.md`](./frontier/vla_unified_token_space.md) | 全模态共享 Token 空间 |
 | **SGTM** | [`./frontier/vla_intrinsic_safety.md`](./frontier/vla_intrinsic_safety.md) | 本质安全与知识屏蔽 |
