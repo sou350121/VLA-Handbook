@@ -11,6 +11,7 @@
 | **UBTech (优必选)** | Walker S, Cruzr | 人形, 服务 | **上市 (HK.9880)** | "人形机器人第一股"，工业场景落地快，规模巨大。 |
 | **Agibot (智元机器人)** | 远征 A2, 灵犀 X1 | 人形, 灵巧手 | **独角兽 (>70亿)** | 稚晖君创业项目，迭代速度极快，人才密度高。 |
 | **Fourier (傅利叶智能)** | GR-1, 康复机器人 | 康复, 人形 | **D轮 (独角兽)** | 康复机器人起家，力控技术深厚，硬件自研能力强。 |
+| **Wuji Technology (舞肌 / 无极)** | 无极手 (Wuji Hand, 20-DOF) | 灵巧手 / 末端执行器 | **未公开** | 国产灵巧手代表之一。参考：[`deployment/dexterous_hand_wuji.md`](../deployment/dexterous_hand_wuji.md)、[GitHub](https://github.com/wuji-technology)。 |
 | **Galbot (银河通用)** | Galbot G1 | 具身智能 | **天使轮 (7亿)** | 专注于大模型与机器人的结合 (General Purpose)，泛化能力强。 |
 | **X Square (自变量机器人)** | WALL-A / WALL-OSS | 具身智能 | **媒体报道：获字节、红杉等押注（金额口径不一）** | 强调“物理世界基础模型”与端到端长时序操作；同时推进开源生态（WALL-OSS）。参考：[盖世汽车相关报道](https://auto.gasgoo.com/news/202503/25I70421301C106.shtml)、[搜狐相关报道](https://www.sohu.com/a/922941858_114765)。 |
 | **Robot Era (星动纪元)** | STAR 1, 小星 | 人形 | **A轮 (超3亿)** | 清华交叉信息院孵化，算法强，STAR 1 奔跑速度惊人。 |

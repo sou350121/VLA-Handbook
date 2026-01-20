@@ -52,7 +52,7 @@
 #### 4. 灵巧手控制
 **核心技术**: 高精度力控，触觉反馈
 **推荐公司**:
-- **国内**: Agibot (灵犀 X1), Fourier
+- **国内**: Agibot (灵犀 X1), Fourier, Wuji Technology（无极手）
 - **国际**: Sanctuary AI (Phoenix), Figure AI
 
 **关键技能**:
