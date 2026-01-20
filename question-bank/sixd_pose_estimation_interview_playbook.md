@@ -8,6 +8,63 @@
 
 > 你可以把 6D pose 想成一条流水线：**找物体（检测/分割）→ 先估个大概（初始 pose）→ 再对齐到更准（refine）→ 每帧稳定更新（tracking）**。
 
+### 0.0 6D Pose Workflow（ASCII 图，一眼看懂）
+
+```
+Inputs
+  ├─ RGB image (I)
+  ├─ Depth map (D)
+  ├─ Camera intrinsics (K)
+  └─ (optional) multi-view frames / multi-cam extrinsics (T_C^B)
+
+            +-----------------------------+
+            |  1) Detect / Segment        |
+            |  (bbox / mask of object)    |
+            +--------------+--------------+
+                           |
+                           v
+            +-----------------------------+
+            |  2) Init Pose (rough)       |
+            |  PnP + RANSAC (2D-3D)       |
+            |  output: T_obj^C, score     |
+            +--------------+--------------+
+                           |
+                           v
+            +-----------------------------+
+            |  3) Refinement (precise)    |
+            |  ICP (depth/point cloud)    |
+            |  and/or render-and-compare  |
+            |  output: refined T_obj^C    |
+            +--------------+--------------+
+                           |
+                           v
+            +-----------------------------+
+            |  4) Tracking (per-frame)    |
+            |  use last pose as prior     |
+            |  smooth + re-init on fail   |
+            +--------------+--------------+
+                           |
+      +--------------------+--------------------+
+      |                                         |
+      v                                         v
++-------------------------+         +-----------------------------+
+| 5A) Multi-view fusion   |         | 5B) Single-view output      |
+| (optional, if available)|         |                             |
+| - proposal+score select |         | Output pose + confidence:   |
+| - joint opt (BA-style)  |         |   T_obj^C (and -> T_obj^B)  |
+| - TSDF/point cloud fuse |         |   + residual / inliers      |
++-----------+-------------+         +--------------+--------------+
+            |                                      |
+            +--------------------+-----------------+
+                                 |
+                                 v
+                     Downstream applications
+                       ├─ Grasp / motion planning
+                       ├─ Assembly tolerance checking
+                       └─ VLA closed-loop control
+                           (policy predicts ΔT_E, use pose for feedback)
+```
+
 ### 0.1 6D Pose / 位姿（Pose）
 - **Pose**：一个物体在 3D 空间里的“位置 + 朝向”。
 - **6D**：3 个数表示位置（x,y,z）+ 3 个数表示旋转（朝向）。
