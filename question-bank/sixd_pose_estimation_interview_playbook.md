@@ -54,6 +54,44 @@
 - **一句话**：数学上用一个 $4\times4$ 矩阵同时表示旋转 + 平移（就是“坐标系怎么变换”）。
 - **面试里你只要记住**：不同坐标系的 pose 可以“连乘”串起来（谁乘谁别搞反）。
 
+### 0.14 常用 Python 包（你说“我用这些做过”就很像真做过）
+
+- **基础数值/科学计算**
+  - `numpy`：矩阵/向量/坐标变换的基础操作。
+  - `scipy`：优化、空间变换（`scipy.spatial.transform.Rotation`）、数值工具。
+
+- **图像与相机几何**
+  - `opencv-python`（`cv2`）：PnP / RANSAC / 标定 / 2D 特征与基础视觉管线。
+  - `kornia`：PyTorch 里的几何与视觉算子（有时比自己写更稳）。
+  - `albumentations`：图像增强（训练检测/分割/关键点常用）。
+
+- **点云 / 3D 处理**
+  - `open3d`：点云处理、法向、ICP、可视化（6D pose 工程非常常见）。
+  - `trimesh`：CAD/mesh 读取、采样点、几何工具。
+
+- **渲染/可视化（用于 pose 打分与 debug）**
+  - `pyrender` / `pyglet`：把 CAD 按 pose 渲染到图像上做 overlay/debug。
+  - `matplotlib`：快速画误差曲线、可视化中间结果。
+
+- **深度学习训练**
+  - `torch` / `torchvision`：训练 backbone、关键点/分割/pose 网络。
+
+- **推理/部署加速（按团队栈选择即可）**
+  - `onnxruntime`：把模型导出 ONNX 做跨平台推理。
+  - `tensorrt`（及相关 Python binding）：NVIDIA 推理加速（更偏部署侧）。
+
+- **工程化：配置、日志、实验管理**
+  - `pyyaml`：读写配置。
+  - `hydra` + `omegaconf`：复杂实验配置/多组参数管理。
+  - `tqdm`：训练/处理进度条。
+  - `loguru`：更好用的日志。
+  - `tensorboard` / `wandb`：训练与评估可视化。
+
+- **数据处理**
+  - `pandas`：离线分析评测结果、分桶统计。
+
+> 面试口径建议：不要一次报一大串。对方问你“怎么实现/怎么工程化”时，你再点名 2-3 个最相关的包即可（例如 PnP 就说 `opencv-python`，点云 refine 就说 `open3d`）。
+
 ---
 
 ## 1) 30 秒自我介绍模板（直接照念）
