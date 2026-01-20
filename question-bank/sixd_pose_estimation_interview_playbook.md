@@ -94,14 +94,90 @@
 
 ---
 
-## 4) 指标与基准：你要能把“评估”说得非常专业
+## 4) 关键模块细节（怕被问到细节：你就照着说）
 
-### 4.1 你要能说出这些关键词
+> 这一节的目标不是“把论文背出来”，而是让你听起来像真正在项目里落过地：知道**公式、参数、阈值、失败模式与 fallback**。
+
+### 4.1 RGB-D 的几何细节（1 分钟讲清）
+- **像素 → 相机坐标（反投影）**：给定内参 \((f_x,f_y,c_x,c_y)\) 和深度 \(z\)：
+  - \(X = (u-c_x)/f_x \cdot z\)
+  - \(Y = (v-c_y)/f_y \cdot z\)
+  - \(Z = z\)
+- **相机坐标 → 像素（重投影）**：
+  - \(u = f_x X/Z + c_x\), \(v = f_y Y/Z + c_y\)
+- **工程坑（面试官很爱问）**：
+  - depth 单位（mm vs m）、depth scale、RGB/Depth 是否已对齐（registered）。
+  - ROI 边缘的对齐误差会把姿态“拉偏”（尤其是细长物体）。
+
+### 4.2 PnP / RANSAC：你要能讲“怎么设参数”
+- **典型入口**：`solvePnPRansac`（OpenCV）
+  - 输入：3D 点 \(\{P_i\}\)（来自 CAD 或 depth back-projection）+ 2D 点 \(\{p_i\}\)（关键点/对应点）+ 相机内参。
+  - 输出：\(R,t\)（物体→相机 或 相机→物体，注意约定）。
+- **我常用的组合**（一句话就够）：
+  - 先用 **EPnP/P3P** 做初值 + RANSAC 去外点，再用 **ITERATIVE（LM）**做一次非线性 refine。
+- **RANSAC 你可以报出“合理范围”**（不要死背，报区间即可）：
+  - `reprojectionError`：一般 **2–5 px**（分辨率越高阈值可稍大；关键点噪声大则取 5–8 px）。
+  - `iterationsCount`：几百到几千（看 inlier ratio；如果 inlier 很低就别死跑，走 fallback）。
+  - `confidence`：0.99/0.995。
+- **我怎么判断 PnP 结果靠谱不靠谱**：
+  - inlier ratio、重投影 RMSE、以及（有 depth 时）把 CAD 点投到 depth 上看几何一致性。
+
+### 4.3 Refinement（ICP/可微渲染/混合）：你要能说“点到面、鲁棒核、阈值”
+- **ICP 两个版本**：
+  - **point-to-point**：简单但对噪声更敏感。
+  - **point-to-plane**：需要法向（更常用，收敛更快更稳）。
+- **我在 RGB-D 里常用的 refine 策略**：
+  - 先把观测点云做 **voxel downsample**（比如 2–5mm）+ 过滤离群深度。
+  - correspondence gating：距离阈值（比如 **1–2cm**）+ 法向夹角阈值（比如 **< 30°**）。
+  - 损失用 **Huber/Charbonnier**（鲁棒核），减少飞点/遮挡带来的外点影响。
+  - 多尺度（coarse→fine）：先大 voxel 再小 voxel，每层迭代 5–10 次。
+- **如果物体纹理强、深度弱**：我会加一项 **photometric / edge alignment** 或者用渲染的 silhouette 做对齐（analysis-by-synthesis）。
+
+### 4.4 置信度与 fallback（“像工程”的关键）
+- **我会输出 3 个可解释的置信度**：
+  - PnP：inlier ratio + reprojection RMSE。
+  - ICP：final residual + correspondence 数量。
+  - tracking：innovation（观测-预测残差）。
+- **典型 fallback**：
+  - 低置信度 → top-k 多假设（比如 3–5 个 pose）→ 用渲染/ICP 选最优。
+  - tracking 丢失 → 触发 re-detect / re-init，而不是硬跟。
+
+### 4.5 对称物体：别只说“ADD-S”，要能说“训练/推理怎么做”
+- **本质**：对称导致等价解集合 \(\{T\cdot S\}\)，回归会学到“平均姿态”。
+- **我会怎么做**：
+  - **评估**：对称件用 ADD-S 或 BOP 的对称定义。
+  - **训练**：loss 用“最小化到等价集合”的形式（预测 pose 与所有对称等价 pose 取最小误差）。
+  - **推理**：输出多假设（或在 refine 阶段用渲染一致性选择一个具体解）。
+
+### 4.6 Tracking：你要能讲清“状态怎么表示、怎么更新、怎么重置”
+- **状态表示**：我倾向用 \(SE(3)\) 的李代数增量 \(\xi\in\mathbb{R}^6\)，避免直接在欧拉角上滤波。
+- **更新形式（口头版即可）**：\(T_{k} = \exp(\xi)\,T_{k-1}\)；观测来自当前帧 pose，协方差来自 residual。
+- **丢失重置**：innovation 持续超阈值/观测置信度低 → 重启（re-detect 或 re-init），并把 velocity 清零。
+
+### 4.7 多视角融合：你要能说“同步多相机 vs 移动相机”
+- **同步多相机（外参稳定）**：
+  - 把多视角的 correspondence/point cloud 融合后统一 refine，或做 multi-view reprojection 最小化。
+- **移动相机（时序多帧）**：
+  - 需要相机位姿来源（SLAM/机械约束/手眼），然后做滑窗优化：最小化多帧 reprojection + depth alignment。
+
+### 4.8 实时工程：你要能讲“延迟预算怎么拆”
+- **我会先把 latency 拆开**：检测/分割（X ms）+ init pose（Y ms）+ refine（Z ms）+ tracking（W ms）。
+- **常见提速手段**：
+  - ROI crop + 缩小输入分辨率（先快后准）。
+  - depth 点云下采样（voxel）+ 只在 ROI 内跑 refine。
+  - refine 动态迭代：置信度高少迭代，低置信度多迭代或走多假设。
+  - 部署：ONNX/TensorRT、FP16、CUDA stream 并行、把后处理搬到 C++。
+
+---
+
+## 5) 指标与基准：你要能把“评估”说得非常专业
+
+### 5.1 你要能说出这些关键词
 - **ADD / ADD-S**：常用 6D pose 误差（对称物体用 ADD-S）。
 - **2D reprojection error**：把 3D 模型点投影到 2D，比对误差。
 - **BOP 指标族**：VSD / MSSD / MSPD / AR（更全面，面试加分）。
 
-### 4.2 数据集/基准（你不需要全背，但要有“常用清单”）
+### 5.2 数据集/基准（你不需要全背，但要有“常用清单”）
 - **LINEMOD (LM/LM-O)**：经典但相对简单；LM-O 有遮挡。
 - **YCB-Video**：日常物体，遮挡、背景更真实。
 - **T-LESS**：纹理少/相似物体多，非常考验方法。
@@ -109,35 +185,37 @@
 
 ---
 
-## 5) 高频追问：直接给你“可背诵”的回答要点
+## 6) 高频追问（细节版）：面试官追到这里你也能答
 
-### Q1：对称物体怎么处理？
-- **先讲本质**：对称导致 pose 多解，直接回归会出现“平均解”。
-- **处理策略**：
-  - 指标/训练：用对称等价类定义 loss/评估（ADD-S/BOP）。
-  - 表示：旋转表示要注意多解（可用分类+回归、多假设）。
-  - 后验：用渲染对齐/ICP 在观测上选最优假设。
+### Q1：PnP 里你用什么？EPnP / P3P / ITERATIVE 怎么选？
+- **我会这么答**：
+  - “我一般用 `solvePnPRansac`：最小集可以用 P3P，初值常用 EPnP，然后用 ITERATIVE（LM）做一轮 refine。关键是先把外点用 RANSAC 清掉。”
+  - “阈值我会从 2–5 px 起步，取决于关键点噪声和分辨率；inlier ratio 太低就走 fallback，不会死跑。”
 
-### Q2：深度噪声/空洞很严重怎么办？
-- **先说诊断**：统计 ROI 内 depth valid ratio、边缘错配、时间抖动。
-- **再说补救**：
-  - 预处理：temporal filtering、bilateral、hole filling。
-  - 训练：深度 dropout / 噪声注入，让模型学鲁棒。
-  - 融合：RGB 引导深度对齐（避免全靠 depth）。
+### Q2：ICP 你用 point-to-point 还是 point-to-plane？对应点怎么配？
+- **我会这么答**：
+  - “能拿到法向我更偏向 point-to-plane，收敛更稳；对应点会做 gating（距离 1–2cm、法向夹角 <30°），再配合 Huber 核抗飞点。”
+  - “会多尺度，从粗到细，每层 5–10 次迭代，避免局部最优。”
 
-### Q3：怎么做到“实时”同时又不掉精度？
-- **典型组合拳**：
-  - tracking 复用上一帧（减少每帧全量搜索）；
-  - refinement 迭代次数动态化（置信度高少迭代）；
-  - TensorRT/ONNX、半精度、批处理 ROI、C++ 后处理。
+### Q3：对称件你怎么保证不被指标‘骗’？
+- **我会这么答**：
+  - “评估用 ADD-S/BOP 对称定义；训练里也会做 symmetry-aware loss（对称等价 pose 取最小误差），推理时输出多假设再用渲染/ICP 选一个具体解。”
 
-### Q4：NeRF/implicit 在 pose 里到底怎么用？
-- **一句话定位**：把对象/场景表示成隐式场，通过多视角一致性和可微渲染做对齐。
-- **你要主动说 trade-off**：精度与遮挡建模更强，但训练/部署复杂、实时性压力更大。
+### Q4：深度空洞/抖动你怎么处理？
+- **我会这么答**：
+  - “先量化：ROI depth valid ratio、时间方差、边缘错配；再处理：temporal filter + ROI hole filling + 点云下采样去飞点；训练端做 depth dropout/噪声注入，让模型别过拟合某个相机噪声。”
+
+### Q5：如果要你上 TensorRT，你会卡在哪？
+- **我会这么答**：
+  - “主要是算子支持和动态 shape：我会先把模型固定输入尺寸（ROI crop），然后检查 NMS/后处理是否要搬到 plugin 或 C++；再用 FP16、profile 校验瓶颈在 backbone 还是 post-process。”
+
+### Q6：NeRF/implicit 你会怎么讲，才不像‘只看过’？
+- **我会这么答**：
+  - “我把它当成更强的几何/渲染一致性约束：对遮挡和跨视角一致性更好，但训练成本高、实时难。我更可能把它用于离线建模或特定高价值工位，而不是所有工位都上。”
 
 ---
 
-## 6) 你可以主动引导的“项目故事框架”（STAR 但更技术）
+## 7) 你可以主动引导的“项目故事框架”（STAR 但更技术）
 
 讲一个你最熟的项目，按这个顺序讲：
 - **S（场景）**：工业检测/装配/抓取，为什么必须 6D。
@@ -148,7 +226,7 @@
 
 ---
 
-## 7) 反问清单（让你显得“能落地、能推进”）
+## 8) 反问清单（让你显得“能落地、能推进”）
 
 建议至少问 3 个：
 - **数据与标注**：6D GT 怎么来？真实标注 vs 合成？是否有 BOP-format 的评测集？
@@ -159,7 +237,7 @@
 
 ---
 
-## 8) 面试前 20 分钟 Checklist（真的好用）
+## 9) 面试前 20 分钟 Checklist（真的好用）
 
 - **准备 2 个项目故事**：一个偏算法（方法与指标），一个偏工程（实时/鲁棒/上线）。
 - **把 3 个关键词背熟**：ADD-S、BOP AR、PnP+RANSAC。
@@ -172,6 +250,7 @@
 
 - BOP Challenge：`https://bop.felk.cvut.cz/`
 - BOP 工具与格式说明：`https://github.com/thodan/bop_toolkit`
+- OpenCV PnP 文档（`solvePnP/solvePnPRansac`）：`https://docs.opencv.org/4.x/d9/d0c/group__calib3d.html`
 - LINEMOD / LM-O（BOP 统一入口即可）：`https://bop.felk.cvut.cz/datasets/`
 - YCB-Video（常见数据源之一，具体下载入口可按团队习惯）：`https://rse-lab.cs.washington.edu/projects/posecnn/`
 
