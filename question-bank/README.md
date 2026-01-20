@@ -22,10 +22,10 @@
     - 评估维度 (Junior vs Senior)
     - 常见陷阱 (Red Flags)
     - 反向提问
-7. **[6D 姿态估计岗位：面试速答与临场打法](./sixd_pose_estimation_interview_playbook.md)** [New]
-    - 按 JD 分条回应：遮挡/干扰背景、单目 RGB-D、高精度、实时跟踪与多视角融合
-    - 高频追问速答：对称物体、深度空洞、实时优化、NeRF/implicit 怎么落地
-    - 反问清单 + 面试前 20 分钟 Checklist
+7. **[6D 姿态估计：工程实战工作流（RGB / RGB-D / 多视角 / 跟踪）](./sixd_pose_estimation_practical_workflows.md)**
+    - 从检测/分割 → 初始 pose（PnP）→ 精化（ICP/渲染）→ tracking → 多视角融合
+    - 关键细节：对称物体、噪声/遮挡、实时优化、工程坑点与 fallback
+    - 与 VLA 的关系：闭环 delta pose、数据/评估信号、risk-aware 置信度
 
 ## 刷题建议
 - **不要死记硬背**: 机器人面试更看重**工程直觉 (Engineering Intuition)**。
