@@ -21,6 +21,17 @@
 
 ## 🎯 按技术分类
 
+### 0. 触觉 / 视触觉（Tactile）
+
+> 说明：本综述以 VLA 动作生成与训练范式为主，但在灵巧操作中，“接触相位”的可观测性往往决定系统上限，因此建议把触觉相关工作作为必备补充阅读。
+
+- 触觉为何不可替代（工程盘点）：[`./frontier/tactile_irreplaceable.md`](./frontier/tactile_irreplaceable.md)
+- SuperTac + DOVE（Nature Sensors, 2025）：多模态电子皮肤 + 触觉语言模型（把触觉升级为可解释的语义状态）  
+  - 论文页：`https://www.nature.com/articles/s44460-025-00006-y`  
+  - 手册笔记：[`./frontier/supertac_dove_multimodal_tactile_sensor.md`](./frontier/supertac_dove_multimodal_tactile_sensor.md)
+- UniTacHand（2025）：人手→机器人触觉表征统一与技能迁移（MANO UV Map）  
+  - 手册解读：[`./frontier/unitachhand.md`](./frontier/unitachhand.md)
+
 ### 1. 动作生成策略 (Action Generation)
 
 #### 1.1 Diffusion 系列

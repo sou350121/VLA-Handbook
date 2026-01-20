@@ -218,6 +218,11 @@ Meta AI (FAIR) 开发的**开源**紧凑型触觉传感器，专为机器人手�
 - **ReSkin**: Meta AI，磁性薄膜触觉传感器，可贴附于任意表面
 - **Taxim**: CMU，基于有限元仿真的触觉传感器
 
+### 2.6 SuperTac：多光谱 + 摩擦电 + IMU 的多模态“电子皮肤” (Nature Sensors 2025)
+
+> **要点**：把多光谱成像、摩擦电与惯性感测等融合到超薄皮肤里，并配套一个触觉语言模型（DOVE）做语义理解。  
+> **笔记**：[`./frontier/supertac_dove_multimodal_tactile_sensor.md`](./frontier/supertac_dove_multimodal_tactile_sensor.md)
+
 ## 3. 最新模型进展 (2024-2025)
 
 ### 3.1 Tactile-VLA / TVL (ICML 2024)
