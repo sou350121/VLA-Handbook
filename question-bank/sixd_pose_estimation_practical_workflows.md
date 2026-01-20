@@ -65,7 +65,18 @@ Inputs
                            (policy predicts ΔT_E, use pose for feedback)
 ```
 
-### 0.1 6D Pose / 位姿（Pose）
+### 0.1 相关理论链接（Theory Map：点进去继续深挖）
+
+- **坐标系 / $SE(3)$ / 旋转表示（四元数、6D rotation）**：`../theory/spatial_math.md`
+- **相机投影几何（内参/反投影）**：`../theory/spatial_math.md`（相机投影相关小节）
+- **手眼标定（Eye-in-Hand / Eye-to-Hand, $AX=XB$）**：`../deployment/camera_calibration_eye_in_hand.md`
+- **视觉感知总览（检测/分割/跟踪/6D pose 工作流）**：`../theory/perception_techniques.md`
+- **状态估计与滤波（KF/EKF/异常观测 gating）**：`../theory/state_estimation.md`
+- **点云/多视角/图优化（Pose graph / BA 思路）**：`../theory/pointcloud_slam.md`
+- **动作表示：Delta Pose vs Absolute（VLA 常见问法）**：`../theory/action_representations.md`
+- **评估体系（成功率/误差/统计口径）**：`../theory/evaluation.md`
+
+### 0.2 6D Pose / 位姿（Pose）
 - **Pose**：一个物体在 3D 空间里的“位置 + 朝向”。
 - **6D**：3 个数表示位置（x,y,z）+ 3 个数表示旋转（朝向）。
 
