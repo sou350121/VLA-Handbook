@@ -9,6 +9,7 @@
 - **[亚洲机器人公司](./asia.md)**: 新加坡、日本、台湾、韩国的领先公司
 - **[国际机器人公司](./international.md)**: Tesla, Figure AI, Boston Dynamics 等
 - **[具身智能软件与平台](./embodied_ai.md)**: Physical Intelligence, Covariant, Hugging Face 等
+- **[产业报告 Digest](./industry_reports/README.md)**: 🆕 把券商/行业报告整理成工程化要点（含灵巧手）
 
 ## 🎯 求职方向指南
 
