@@ -22,6 +22,10 @@
     - 评估维度 (Junior vs Senior)
     - 常见陷阱 (Red Flags)
     - 反向提问
+7. **[6D 姿态估计岗位：面试速答与临场打法](./sixd_pose_estimation_interview_playbook.md)** [New]
+    - 按 JD 分条回应：遮挡/干扰背景、单目 RGB-D、高精度、实时跟踪与多视角融合
+    - 高频追问速答：对称物体、深度空洞、实时优化、NeRF/implicit 怎么落地
+    - 反问清单 + 面试前 20 分钟 Checklist
 
 ## 刷题建议
 - **不要死记硬背**: 机器人面试更看重**工程直觉 (Engineering Intuition)**。
