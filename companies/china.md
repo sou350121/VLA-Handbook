@@ -12,6 +12,7 @@
 | **Agibot (智元机器人)** | 远征 A2, 灵犀 X1 | 人形, 灵巧手 | **独角兽 (>70亿)** | 稚晖君创业项目，迭代速度极快，人才密度高。 |
 | **Fourier (傅利叶智能)** | GR-1, 康复机器人 | 康复, 人形 | **D轮 (独角兽)** | 康复机器人起家，力控技术深厚，硬件自研能力强。 |
 | **Wuji Technology (舞肌 / 无极)** | 无极手 (Wuji Hand, 20-DOF) | 灵巧手 / 末端执行器 | **未公开** | 国产灵巧手代表之一。参考：[`deployment/dexterous_hand_wuji.md`](../deployment/dexterous_hand_wuji.md)、[GitHub](https://github.com/wuji-technology)。 |
+| **RoboParty (萝博派对)** | Roboto_Origin（人形全栈开源参考机） | 人形 / 开源基建 | **种子/种子+（千万美元级，2025）** | “基础设施型开源”：硬件图纸+BOM+电控、控制栈与训练栈、装配/调参 Know-how 全链路可复现；目标是把“从 0 到跑”变成可复制工程流程。参考：[GitHub](https://github.com/roboparty/roboto_origin)、[Docs](https://roboparty.com/roboto_origin/doc)、[Gitee](https://gitee.com/roboparty/roboto_origin)、[`theory/frontier/robotics_open_source_infrastructure.md`](../theory/frontier/robotics_open_source_infrastructure.md)。 |
 | **Galbot (银河通用)** | Galbot G1 | 具身智能 | **天使轮 (7亿)** | 专注于大模型与机器人的结合 (General Purpose)，泛化能力强。 |
 | **X Square (自变量机器人)** | WALL-A / WALL-OSS | 具身智能 | **媒体报道：获字节、红杉等押注（金额口径不一）** | 强调“物理世界基础模型”与端到端长时序操作；同时推进开源生态（WALL-OSS）。参考：[盖世汽车相关报道](https://auto.gasgoo.com/news/202503/25I70421301C106.shtml)、[搜狐相关报道](https://www.sohu.com/a/922941858_114765)。 |
 | **Robot Era (星动纪元)** | STAR 1, 小星 | 人形 | **A轮 (超3亿)** | 清华交叉信息院孵化，算法强，STAR 1 奔跑速度惊人。 |
