@@ -182,6 +182,7 @@
 | **MM-ACT** | [`./frontier/vla_unified_token_space.md`](./frontier/vla_unified_token_space.md) | 全模态共享 Token 空间 |
 | **SGTM** | [`./frontier/vla_intrinsic_safety.md`](./frontier/vla_intrinsic_safety.md) | 本质安全与知识屏蔽 |
 | **RLinf（VLA+RL Infra）** | [`./frontier/rlinf_vla_rl_training.md`](./frontier/rlinf_vla_rl_training.md) | 🆕 VLA+RL 训练“生产线”：rollout / 数据面 / 评估可复现 |
+| **ReconVLA** | [`./frontier/reconvla_implicit_grounding_by_reconstruction.md`](./frontier/reconvla_implicit_grounding_by_reconstruction.md) | 🆕 隐式视觉接地：用“重建 gaze region”逼注意力对准目标 |
 
 ---
 

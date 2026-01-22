@@ -74,6 +74,8 @@ DP3（3D Diffusion Policy）是“几何/3D 输入增强带来显著泛化收益
 - **把感知不确定性显式化**：输出 pose/confidence/uncertainty，让下游 policy 能做 risk-aware 决策（例如触发重观测/换视角/重初始化）。
 - **从 object-centric 做起**：bbox→mask→keypoints/pose，尽量让 policy 看到的是“目标物体的状态”，而不是整张图的纹理噪声。
 - **多视角/多帧融合**：对遮挡、对称物体、多解姿态特别有效（这部分可结合你已写的 6D pose 多视角融合方法论）。
+- **隐式视觉接地（implicit grounding）**：不额外喂 bbox/mask，也不改动作输出协议，而是通过辅助监督把注意力“逼”到目标区域。
+  - 代表：**ReconVLA**（用扩散重建 gaze region 的 latent 来提升接地与细粒度表征）→ 见 [`./frontier/reconvla_implicit_grounding_by_reconstruction.md`](./frontier/reconvla_implicit_grounding_by_reconstruction.md)。
 
 ---
 
