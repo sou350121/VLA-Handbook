@@ -184,6 +184,7 @@
 | **RLinf（VLA+RL Infra）** | [`./frontier/rlinf_vla_rl_training.md`](./frontier/rlinf_vla_rl_training.md) | 🆕 VLA+RL 训练“生产线”：rollout / 数据面 / 评估可复现 |
 | **ReconVLA** | [`./frontier/reconvla_implicit_grounding_by_reconstruction.md`](./frontier/reconvla_implicit_grounding_by_reconstruction.md) | 🆕 隐式视觉接地：用“重建 gaze region”逼注意力对准目标 |
 | **鸽子磁感（前庭电流检测）** | [`./frontier/pigeon_magnetoreception_vestibular_electrosense.md`](./frontier/pigeon_magnetoreception_vestibular_electrosense.md) | 🆕 生物磁导航：内耳前庭可能是“磁感”器官（Science 2025 + Nature news） |
+| **皮层下“控制旋钮”** | [`./frontier/subcortical_control_knobs_neuropeptides_temporality.md`](./frontier/subcortical_control_knobs_neuropeptides_temporality.md) | 🆕 神经肽/调制×时间尺度×输入门控：从生存行为理解“皮层下计算” |
 
 ---
 
