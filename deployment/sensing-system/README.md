@@ -1,12 +1,15 @@
 # Sensing System（感知系统）总索引 (Sensing System Index)
 
-> **定位**：面向 VLA 真机落地的“感知系统工程”入口索引。\n+> 覆盖：传感器选型 → 标定与坐标系 → 多模态同步 → 数据质量与观测性 → 在线监控与评估。\n+> **写作规范**：遵循仓库根目录 `AGENT.md`（部署类文档结构：环境/硬件 → 步骤 → 配置/参数 → 常见坑 → 参考）。\n+
+> **定位**：面向 VLA 真机落地的“感知系统工程”入口索引。
+> 覆盖：传感器选型 → 标定与坐标系 → 多模态同步 → 数据质量与观测性 → 在线监控与评估。
+> **写作规范**：遵循仓库根目录 `AGENT.md`（部署类文档结构：环境/硬件 → 步骤 → 配置/参数 → 常见坑 → 参考）。
 ---
 
 ## 目录（会持续扩展）
 
 ### 1) 传感器与拓扑 (Sensors & Topology)
 - TODO：相机（RGB/RGB-D/事件相机）、IMU、力/力矩、触觉、编码器、外部定位（Vicon/UWB）等选型与系统拓扑。
+- **[Hyperpacked piezoelectric-powered capacitive sensor array（Nat. Sens. 2026）](./hyperpacked_piezocapacitive_vibration_sensor_array.md)**：自供能电容振动传感阵列，80–5,000 Hz 平坦频响，用于语音/呼吸/音乐等高保真振动检测。
 
 ### 2) 标定与坐标系 (Calibration & Frames)
 - TODO：内参/外参、手眼（eye-in-hand/eye-to-hand）、时间偏移估计、温漂与重标定策略。
