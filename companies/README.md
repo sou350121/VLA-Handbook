@@ -76,7 +76,7 @@
 ### 面试准备
 1. **理论基础**: 参考 [理论基础](../theory/README.md)
 2. **实战项目**: 参考 [题库](../question-bank/README.md)
-3. **硬件知识**: 参考 [硬件选型](../deployment/hardware.md)
+3. **硬件知识**: 参考 [硬件选型](../deployment/robot_hardware_selection_pricing.md)
 
 ## 🌍 地区选择
 

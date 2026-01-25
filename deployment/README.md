@@ -20,6 +20,7 @@
 ### 3. 机械臂控制与遥操作部署 (Robot Arm & Teleoperation)
 - **[UR5 Python 控制实战 (UR5 Control Guide)](./ur5_control_guide.md)**: 实时内核配置、`ur_rtde` 高频控制与保护性停止恢复。
 - **[GELLO 遥操作部署 (GELLO Deployment)](./gello_deployment.md)**: 低成本 3D 打印遥操作手柄配置与 LeRobot 格式转换。
+- **[手势控制灵巧手：MediaPipe + WujiHand 实战项目](./mediapipe_wujihand_project.md)**: 感知→映射→控制的闭环工程骨架与低延迟优化抓手。
 - **[Pi0 真机部署 (Pi0 Deployment)](./pi0_deployment.md)**: 官方 OpenPI 架构、Remote Inference 与硬件要求。
 
 ### 4. 灵巧手深度专题 (Dexterous Hand Deep Dive)
