@@ -10,6 +10,7 @@
 ### 1) 传感器与拓扑 (Sensors & Topology)
 - TODO：相机（RGB/RGB-D/事件相机）、IMU、力/力矩、触觉、编码器、外部定位（Vicon/UWB）等选型与系统拓扑。
 - **[Hyperpacked piezoelectric-powered capacitive sensor array（Nat. Sens. 2026）](./hyperpacked_piezocapacitive_vibration_sensor_array.md)**：自供能电容振动传感阵列，80–5,000 Hz 平坦频响，用于语音/呼吸/音乐等高保真振动检测。
+- **[SuperTac + DOVE：仿生多模态触觉传感与触觉语言模型（Nat. Sens. 2026）](./supertac_dove_biomimetic_multimodal_tactile_sensing.md)**：多光谱（UV/VIS/NIR/MIR）+ 摩擦电 + IMU 的 1mm 触觉皮肤，并用 8.5B 触觉语言模型做语义理解与推理。
 
 ### 2) 标定与坐标系 (Calibration & Frames)
 - TODO：内参/外参、手眼（eye-in-hand/eye-to-hand）、时间偏移估计、温漂与重标定策略。
