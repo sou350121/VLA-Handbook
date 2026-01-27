@@ -6,6 +6,10 @@
 
 - **[从手腕到脚踝：远程驱动、差速手腕与 RSU 脚踝拆解](./remote_actuation_differential_wrist_rsu_ankle.md)**：用载荷路径/封装/可靠性视角拆解上肢与下肢的典型机构选择（基于公开视频复盘，含待证点）。
 
+## 观点与商业化争议 (Debates & Commercialization)
+
+- **[我们真的需要人形机器人吗？（Humanoid vs Wheeled + Arm）](./do_we_need_humanoid_robots.md)**：把“人形是否必要”落到 ROI、可靠性、成本结构与基础设施改造成本的判断框架（播客观点整理，含局限）。
+
 ## Tesla Optimus
 > **Slogan**: "A general purpose, bi-pedal, humanoid robot."
 

@@ -24,6 +24,13 @@
 
 ---
 
+## 🧭 商业化与 PMF（新增）
+
+- **[大多数具身智能创业者并不真正理解 PMF（Embodied Robotics PMF）](./pmf_for_embodied_robotics.md)**  
+  - 用“定价/可靠性/ROI/复购”拆穿伪 PMF 信号：订单≠PMF，好奇心≠PMF，展厅≠上岗。
+
+---
+
 ## 🔧 部署与选型指南（新增）
 
 - **控制与驱动 (Actuation & Drives)**  
