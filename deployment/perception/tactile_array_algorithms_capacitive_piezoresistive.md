@@ -254,7 +254,7 @@ $$
   - `baseline_drift_rate`：无接触时基线漂移速度（/min）
   - `saturation_ratio`：饱和 taxel 占比
 
-这些指标建议接入你的监控面板（见 `deployment/sensing-system/README.md` 的 Monitoring 方向）。
+这些指标建议接入你的监控面板（可从 `deployment/perception/README.md` 的 Monitoring 方向扩展）。
 
 ---
 
@@ -386,5 +386,5 @@ slip_risk = E_win > threshold
 - 视触觉（TacTip，工具书入口）：[TacTip (Soft Robotics Toolkit)](https://softroboticstoolkit.com/tactip)  
 
 ---
-[← Back to Sensing System Index](./README.md)
+[← Back to Perception Index](./README.md)
 

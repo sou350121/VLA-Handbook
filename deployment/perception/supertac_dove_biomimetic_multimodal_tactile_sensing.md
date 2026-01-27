@@ -108,7 +108,7 @@ SuperTacSkin(1mm)
 
 ---
 
-## 5. 对 VLA/灵巧手的意义：为什么它应该进 sensing-system
+## 5. 对 VLA/灵巧手的意义：为什么它应该进 perception
 
 一句话总结：SuperTac 的价值在于把触觉从“控制回路的小信号”升级成“可被 foundation model 理解的多模态证据”。
 
@@ -126,5 +126,5 @@ SuperTacSkin(1mm)
 - DOVE 代码：`https://github.com/wut19/DOVE`
 
 ---
-[← Back to Sensing System Index](./README.md)
+[← Back to Perception Index](./README.md)
 

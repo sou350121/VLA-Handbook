@@ -210,5 +210,5 @@ $$
 - 技术报告（PDF）：`https://github.com/Robbyant/lingbot-depth/blob/main/tech-report.pdf`
 
 ---
-[← Back to Sensing System Index](./README.md)
+[← Back to Perception Index](./README.md)
 

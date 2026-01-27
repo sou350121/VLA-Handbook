@@ -13,7 +13,7 @@
 - **[ROS 集成与算法优化 (ROS & Optimization)](./ros_and_optimization.md)**: ROS2 零拷贝、组件容器与 DDS 分布式调优。
 
 ### 2. 感知、标定与多模态同步 (Sensing, Calibration & Sync)
-- **[Sensing System 总索引](./sensing-system/README.md)**: 感知系统工程（传感器选型、标定、同步、数据质量与评估）的入口与子主题目录。
+- **[Perception 总索引](./perception/README.md)**: 感知系统工程（传感器选型、标定、同步、数据质量与评估）的主入口与跨文档索引。
 - **[相机标定与手眼对齐 (Camera Calibration)](./camera_calibration_eye_in_hand.md)**: Eye-in-Hand vs Eye-to-Hand 标定实战。
 - **[多模态数据同步技术 (Multimodal Sync)](./multimodal_data_synchronization.md)**: 解决 RGB-D 与高频控制（1000Hz）的时间对齐难题。
 - **[触觉集成挑战 (Tactile Integration)](./tactile_sensor_integration_challenges.md)**: 触觉传感器与夹爪集成的工程难点。

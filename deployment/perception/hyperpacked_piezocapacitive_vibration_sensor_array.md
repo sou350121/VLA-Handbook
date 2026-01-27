@@ -93,7 +93,7 @@ SensorArray(soft-vibration)
 
 ---
 
-## 5. 对 VLA / 机器人部署的意义：为什么值得收进 sensing-system
+## 5. 对 VLA / 机器人部署的意义：为什么值得收进 perception
 
 这类“柔性高带宽振动阵列”对 VLA 真机落地的价值，不是“更灵敏”这么简单，而是：
 - **把一部分难题从视觉迁移到机械振动通道**：在强噪声、遮挡、强光等场景，振动通道可能更稳。
@@ -111,5 +111,5 @@ TODO（等你给 sensing 论文/任务再补齐）：
 - PDF：`https://www.nature.com/articles/s44460-025-00003-1.pdf`
 
 ---
-[← Back to Sensing System Index](./README.md)
+[← Back to Perception Index](./README.md)
 
