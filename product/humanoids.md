@@ -2,6 +2,10 @@
 
 本章节汇总了全球主流的具身智能人形机器人本体。
 
+## 机构拆解专题 (Mechanism Teardowns)
+
+- **[从手腕到脚踝：远程驱动、差速手腕与 RSU 脚踝拆解](./remote_actuation_differential_wrist_rsu_ankle.md)**：用载荷路径/封装/可靠性视角拆解上肢与下肢的典型机构选择（基于公开视频复盘，含待证点）。
+
 ## Tesla Optimus
 > **Slogan**: "A general purpose, bi-pedal, humanoid robot."
 
@@ -18,6 +22,15 @@
 - **VLM**: 集成 OpenAI GPT-4o，具备 Speech-to-Speech 能力。
 - **灵巧手**: 16 DOF，与人类手掌尺寸 1:1。
 - **电池**: 2.25 kWh，续航 >5 小时。
+
+## Figure 3 (Figure 03)
+> **定位**：从“好看 demo”走向“可复制量产”的 DFM 产品代际（以安全、补能、运维与装配节拍为核心叙事）。
+
+- **产品拆解**：**[从“好看视频”到“真量产”：Figure 3 的成本代际与产品路线](./figure_03_cost_generation_and_product_route.md)**  
+  - 成本代际：Figure 1 → Figure 2 → Figure 3（CNC → 冲压硬模 + 自动化装配）  
+  - 系统取舍：结构电池包、双脚电感充电 + 骨盆定位 + 后腰有线备份、外覆与可维护“换皮”  
+  - 关注点：错误频率/恢复能力、量产信号与不透明风险
+- **Last Update**：2026-01-27
 
 ## Unitree G1 / H1
 > **地位**: 知名足式与人形机器人公司。

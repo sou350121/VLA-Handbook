@@ -22,6 +22,7 @@
 
 ### 4) 数据质量、观测性与失败模式 (Data Quality & Failure Modes)
 - TODO：遮挡、反光/透明、运动模糊、滚快门、触觉飘移、IMU bias；如何把这些转成可监控指标与 fallback。
+- **[LingBot-Depth：用 MDM 修复透明/反光深度失效，让 RGB-D “看见玻璃”](./lingbot_depth_transparent_reflective_depth_enhancement.md)**：不换硬件，用掩码深度建模（MDM）把传感器天然孔洞转成学习信号，输出更稠密、更尺度一致的深度以支撑追踪/重建/抓取落地。
 
 ### 5) 在线监控与评估 (Monitoring & Evaluation)
 - TODO：感知健康度、延迟分布（P50/P95）、丢帧率、重投影误差、漂移检测、自动报警与回放复盘。
