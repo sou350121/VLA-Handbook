@@ -1,7 +1,7 @@
 # VLA 论文索引 (Paper Index)
 
 > **快速查找**: 多维度索引系统，帮助快速定位相关论文
-> **最后更新**: 2026-01-03
+> **最后更新**: 2026-01-28
 
 ---
 
@@ -30,6 +30,7 @@
 | **Flow Matching** | π0 | [深度解析](./pi0_flow_matching.md) |
 | | π0.5 | [深度解析](./pi0_5_dissection.md) |
 | | π0.6 | [深度解析](./pi0_6_dissection.md) |
+| | LingBot-VLA | [深度解析](./lingbot_vla_pragmatic_vla_foundation_model_2026.md) |
 | **Tokenization** | RT-2 | [深度解析](#rt-2) |
 | | OpenVLA | [深度解析](#openvla) |
 | | FAST | [详细](#fast) |
@@ -66,6 +67,7 @@
 | | ACT | [详细](#act) |
 | **X² (自变量)** | WALL-OSS | [深度解析](./wall_oss.md) |
 | **Galaxea AI** | G0 | [详细](#galaxea-g0) |
+| **Robbyant Team** 🆕 | LingBot-VLA | [深度解析](./lingbot_vla_pragmatic_vla_foundation_model_2026.md) |
 | **Columbia** | Diffusion Policy | [详细](#diffusion-policy) |
 | **浙江大学** 🆕 | DKT Perception | [深度解析](./frontier/dkt_transparency_perception.md) |
 | **华盛顿大学** 🆕 | Artificial Hivemind | [详细](./neurips_2025_insights.md#1-artificial-hivemind-语言模型的同质化问题) |
@@ -100,6 +102,8 @@
 | | OmniVLA | [详细](#omnivla) |
 | | MergeVLA | [详细](#mergevla) |
 | | **NeurIPS 2025 Best Papers** 🆕 | [专题解读](./neurips_2025_insights.md) |
+| **2026** 🆕 | LingBot-VLA | [深度解析](./lingbot_vla_pragmatic_vla_foundation_model_2026.md) |
+| | Video Generation Models in Robotics (Survey) | [前沿笔记](./frontier/video_generation_models_in_robotics_survey_2026.md) |
 
 ---
 
@@ -135,6 +139,11 @@
   - 技术: Flow Matching + Action Expert
   - 动作空间: 连续
   - [深度解析](./pi0_6_dissection.md)
+
+- **LingBot-VLA** (2026)
+  - 技术: Flow Matching + VLM + Action Expert（共享 attention）；可选 depth distill
+  - 动作空间: 连续
+  - [深度解析](./lingbot_vla_pragmatic_vla_foundation_model_2026.md)
 
 ##### Tokenization 系列
 - **RT-2** (2023)
@@ -309,6 +318,11 @@
 - FAST (2025.01)
 - GR-RL (2025)
 - WALL-OSS (2025)
+
+#### 2026（世界模型 / 视频生成综述）
+- Video Generation Models in Robotics (Survey, arXiv 2026): 视频生成模型在机器人中的应用、挑战与未来方向  
+  - [笔记](./frontier/video_generation_models_in_robotics_survey_2026.md)
+  - [论文](https://arxiv.org/abs/2601.07823)
 
 ---
 

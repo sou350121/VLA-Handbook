@@ -34,6 +34,7 @@
 
 - **[触觉集成挑战 (Tactile Integration)](../tactile_sensor_integration_challenges.md)**：触觉传感器与夹爪集成的工程难点（硬件/布线/噪声/耐久）。
 - **[LingBot-Depth：用 MDM 修复透明/反光深度失效，让 RGB-D “看见玻璃”](./lingbot_depth_transparent_reflective_depth_enhancement.md)**：把透明/反光的深度孔洞当作学习信号，提升深度覆盖率与下游抓取/追踪可用性（含启示与不足）。
+- **[Super Odometry：退化场景“自动升档”的分层自适应里程计（Sci. Robotics 2025）](./super_odometry_hierarchical_adaptation.md)**：从“外感知失明”到“内感知兜底”，按退化程度动态过滤特征/补强不可观方向/剔除失效因子，极端场景由学习式 IMU 里程计接管。
 
 ---
 

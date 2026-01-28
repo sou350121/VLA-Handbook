@@ -1,7 +1,7 @@
 # VLA 文献核心技术归纳 (Literature Technical Review)
 
 > **快速索引**: [论文索引 (Paper Index)](./paper_index.md) - 多维度查找系统
-> **最后更新**: 2025-12-06
+> **最后更新**: 2026-01-28
 
 本章节对 VLA 领域的核心文献进行**深度技术归纳**，按技术分类组织，适合面试前快速复习模型细节。
 
@@ -31,6 +31,17 @@
   - 手册笔记：[`./frontier/supertac_dove_multimodal_tactile_sensor.md`](./frontier/supertac_dove_multimodal_tactile_sensor.md)
 - UniTacHand（2025）：人手→机器人触觉表征统一与技能迁移（MANO UV Map）  
   - 手册解读：[`./frontier/unitachhand.md`](./frontier/unitachhand.md)
+
+### 0.5 世界模型 / 视频世界模型（World Models / Video）
+
+> 说明：这类路线的目标是把机器人决策从“直接出动作”推向“先想象再行动”——用可学习的世界模型做预测、规划与反事实评估。  
+> 注意：落地的第一性约束往往不是画质，而是**物理一致性、可控性、成本与安全**。
+
+- 视频世界模型综述（arXiv 2026）：Video Generation Models in Robotics - Applications, Research Challenges, Future Directions  
+  - [手册笔记](./frontier/video_generation_models_in_robotics_survey_2026.md)  
+  - 论文：`https://arxiv.org/abs/2601.07823`
+- 1X World Model（视频世界模型 + 逆动力学 IDM）：先“想象”再“执行”（公司路线复盘）  
+  - [手册笔记](./frontier/one_x_world_model.md)
 
 ### 1. 动作生成策略 (Action Generation)
 
@@ -107,6 +118,18 @@
     - 学习失败轨迹 (Failure Cases)，通过 Offline RL 抑制错误动作，奖励成功动作。
     - 实现了 **Data-Driven Self-Improvement**。
 - **Key Contribution**: 证明了机器人可以通过自我复盘 (Recap) 在操作速度和鲁棒性上超越人类专家。
+
+##### LingBot-VLA (Robbyant, 2026)
+> **论文**: `https://arxiv.org/abs/2601.18692`  
+> **代码**: `https://github.com/robbyant/lingbot-vla`  
+> **深度解析（手册）**: [lingbot_vla_pragmatic_vla_foundation_model_2026.md](./lingbot_vla_pragmatic_vla_foundation_model_2026.md)
+
+- **核心问题**: 把 VLA 从“能讲清楚”推到“能训得动/能复现吞吐/能部署”，强调真实大规模双臂数据下的工程可训练性。
+- **核心技术**: **Flow Matching (流匹配)** + **VLM + Action Expert 融合**（共享 attention 的 token 拼接式融合）。
+- **Backbone**: 可换底座（Qwen2.5-VL 或 PaliGemma 路线），便于做 ablation 与工程选型。
+- **Action Space**: **连续空间 (Continuous)**（chunked action + padding 维度对齐）。
+- **工程主张**: FSDP2、`torch.compile`、packing collator、分布式 checkpoint（dcp），以吞吐为中心指标组织训练栈。
+- **可选分支**: Depth 表征对齐/蒸馏（训练侧额外 loss；推理侧可不依赖 depth 模型）。
 
 ---
 

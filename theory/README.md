@@ -157,6 +157,7 @@
 | **ByteDance Seed** | GR-RL | [`gr_rl_dissection.md`](./gr_rl_dissection.md) | MoT 架构 + 三阶段 RL 训练 |
 | **NVIDIA** | GR00T-N1.6 | [`gr00t_n1_6.md`](./gr00t_n1_6.md) | 🆕 双系统 DiT 架构 + Isaac Lab 仿真 |
 | **Spirit AI** | Spirit-v1.5 | [`spirit_v1_5_dissection.md`](./spirit_v1_5_dissection.md) | 🆕 Qwen3-VL + DiT，RoboChallenge Table30 代码级复现指南 |
+| **Robbyant Team** | LingBot-VLA | [`lingbot_vla_pragmatic_vla_foundation_model_2026.md`](./lingbot_vla_pragmatic_vla_foundation_model_2026.md) | 🆕 实用主义 VLA：可换 VLM（Qwen2.5-VL / PaliGemma）+ Action Expert + Flow Matching + 高吞吐训练栈 |
 | **X² (自变量)** | WALL-OSS | [`wall_oss.md`](./wall_oss.md) | Uni-CoT 边想边动 |
 | **Galaxea AI** | G0 | [`galaxea_g0.md`](./galaxea_g0.md) | 大脑+小脑双系统 |
 
@@ -173,6 +174,7 @@
 | **Jim Fan 2025** | [`./frontier/jim_fan_2025_robotics_lessons.md`](./frontier/jim_fan_2025_robotics_lessons.md) | 🆕 行业复盘：硬件可靠性、评测可复现性、VLM→VLA 路线反思 |
 | **OneTwoVLA** | [`./frontier/onetwovla.md`](./frontier/onetwovla.md) | 🆕 统一模型 + 自适应推理切换 |
 | **1X World Model** | [`./frontier/one_x_world_model.md`](./frontier/one_x_world_model.md) | 🆕 视频世界模型 + 逆动力学（IDM）：先“想象”再“执行” |
+| **Video World Model Survey (2026)** | [`./frontier/video_generation_models_in_robotics_survey_2026.md`](./frontier/video_generation_models_in_robotics_survey_2026.md) | 🆕 综述：视频生成模型作为具身世界模型（数据生成/视觉规划/策略评估）；难点是物理幻觉、指令偏差、成本与安全 |
 | **GenieReasoner / ERIQ / FACT** | [`./frontier/geniereasoner_eriq_fact.md`](./frontier/geniereasoner_eriq_fact.md) | 🆕 量化“推理→动作”传递损耗：推理基准 + 动作分词器 + 统一自回归 |
 | **GR-Dexter** | [`./frontier/gr_dexter_bimanual_dexterous_vla.md`](./frontier/gr_dexter_bimanual_dexterous_vla.md) | 🆕 ByteDance Seed：把 VLA 扩展到 21-DoF 灵巧手的全栈框架（硬件/遥操作/跨形态数据） |
 | **开可乐/发牌（灵巧手）** | [`./frontier/dexterous_hands_open_can_cards_data_pyramid.md`](./frontier/dexterous_hands_open_can_cards_data_pyramid.md) | 🆕 为什么“开可乐/发扑克牌”比“倒酒/洗碗机”难一个数量级：硬件三路线 × 触觉 × 数据金字塔 |
