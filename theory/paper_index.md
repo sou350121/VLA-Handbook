@@ -27,6 +27,7 @@
 | **Diffusion** | Diffusion Policy | [详细](#diffusion-policy) |
 | | RDT-1B | [详细](#rdt) |
 | | DKT Perception | [深度解析](./frontier/dkt_transparency_perception.md) |
+| **Tactile / Visuotactile** 🆕 | VT Pretraining + Online Multitask (SciRobotics 2026) | [深度解析](./frontier/visual_tactile_pretraining_online_multitask_learning_2026.md) |
 | **Flow Matching** | π0 | [深度解析](./pi0_flow_matching.md) |
 | | π0.5 | [深度解析](./pi0_5_dissection.md) |
 | | π0.6 | [深度解析](./pi0_6_dissection.md) |
@@ -70,6 +71,7 @@
 | **Robbyant Team** 🆕 | LingBot-VLA | [深度解析](./lingbot_vla_pragmatic_vla_foundation_model_2026.md) |
 | **Columbia** | Diffusion Policy | [详细](#diffusion-policy) |
 | **浙江大学** 🆕 | DKT Perception | [深度解析](./frontier/dkt_transparency_perception.md) |
+| | VT Pretraining + Online Multitask (SciRobotics 2026) | [深度解析](./frontier/visual_tactile_pretraining_online_multitask_learning_2026.md) |
 | **华盛顿大学** 🆕 | Artificial Hivemind | [详细](./neurips_2025_insights.md#1-artificial-hivemind-语言模型的同质化问题) |
 | **阿里千问** 🆕 | Gated Attention | [详细](./neurips_2025_insights.md#2-gated-attention-门控注意力机制) |
 | **普林斯顿** 🆕 | 1000 Layer Networks | [详细](./neurips_2025_insights.md#3-1000-layer-networks-深层自监督-rl) |
@@ -103,6 +105,7 @@
 | | MergeVLA | [详细](#mergevla) |
 | | **NeurIPS 2025 Best Papers** 🆕 | [专题解读](./neurips_2025_insights.md) |
 | **2026** 🆕 | LingBot-VLA | [深度解析](./lingbot_vla_pragmatic_vla_foundation_model_2026.md) |
+| | VT Pretraining + Online Multitask (SciRobotics 2026) | [深度解析](./frontier/visual_tactile_pretraining_online_multitask_learning_2026.md) |
 | | Video Generation Models in Robotics (Survey) | [前沿笔记](./frontier/video_generation_models_in_robotics_survey_2026.md) |
 
 ---

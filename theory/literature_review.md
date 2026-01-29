@@ -26,6 +26,10 @@
 > 说明：本综述以 VLA 动作生成与训练范式为主，但在灵巧操作中，“接触相位”的可观测性往往决定系统上限，因此建议把触觉相关工作作为必备补充阅读。
 
 - 触觉为何不可替代（工程盘点）：[`./frontier/tactile_irreplaceable.md`](./frontier/tactile_irreplaceable.md)
+- SciRobotics 2026：Visual-tactile pretraining + online multitask learning（单目 + 二值触觉，统一策略覆盖多任务）  
+  - 手册笔记：[`./frontier/visual_tactile_pretraining_online_multitask_learning_2026.md`](./frontier/visual_tactile_pretraining_online_multitask_learning_2026.md)  
+  - 论文 DOI：`https://doi.org/10.1126/scirobotics.ady2869`  
+  - Focus：`https://doi.org/10.1126/scirobotics.aee5782`
 - SuperTac + DOVE（Nature Sensors, 2025）：多模态电子皮肤 + 触觉语言模型（把触觉升级为可解释的语义状态）  
   - 论文页：`https://www.nature.com/articles/s44460-025-00006-y`  
   - 手册笔记：[`./frontier/supertac_dove_multimodal_tactile_sensor.md`](./frontier/supertac_dove_multimodal_tactile_sensor.md)
