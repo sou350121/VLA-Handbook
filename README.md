@@ -8,24 +8,34 @@
 
 ---
 
-## 🚀 建议阅读路线 (Suggested Reading Path)
+## 为什么这个 Handbook 值得关注（但不灌水）
 
-### 新手入门
-1. [Theory 总索引](./theory/README.md) → **Part 1: Foundations**（数据格式、动作空间、评估体系、灵巧手机械学）
-2. **Part 2: Architecture & Algorithms**（VLA 核心架构、Diffusion Policy、Flow Matching）
-3. [真机部署索引](./deployment/README.md)（硬件选型、模型优化）
+- **以“可复现/可验收”为第一原则**：每篇尽量给出入口脚本、关键超参、shape/口径的 sanity-check（避免“看起来懂了，跑起来全错”）。  
+- **把 Robotics 的“脏活”写清楚**：多模态同步、动作空间对齐、Sim2Real 断点、触觉/灵巧手硬件选型。  
+- **持续更新，但不让 README 膨胀**：前沿用 Biweekly 回链，细节进深度笔记，改动进 Changelog。
 
-### 研究导向
-1. [论文索引](./theory/paper_index.md) + [文献综述](./theory/literature_review.md)（快速定位相关论文）
-2. [Theory 总索引](./theory/README.md) → **Part 5: Model Zoo**（π0、GR-RL、WALL-OSS 深度解析）
-3. [VLA 十大挑战](./theory/vla_challenges.md)（NTU/Stanford 2025 研究方向）
+## 先看这 6 篇（高信号精选）
 
-### 工程落地
-1. [真机部署索引](./deployment/README.md)（硬件选型、UR5 控制、ROS、多模态同步）
-2. [Theory 总索引](./theory/README.md) → **效率优化**（Flash Attention、LoRA、量化）
-3. [题库与实战](./question-bank/README.md)（代码实战、微调指南）
+| 方向 | 推荐入口 | 为什么值得点开 |
+|---|---|---|
+| **从 0 建立框架** | [`theory/README.md`](./theory/README.md) | 学习路线图 + 模块化索引（把“要学什么”降维成可走的路径） |
+| **Flow Matching 入门到可用** | [`theory/pi0_flow_matching.md`](./theory/pi0_flow_matching.md) | 把“为什么快/怎么采样/工程折中”讲成可用抓手 |
+| **代码级拆解（生成式动作头）** | [`theory/spirit_v1_5_dissection.md`](./theory/spirit_v1_5_dissection.md) | Qwen3-VL + DiT + ODE/Euler 的端到端入口与复现清单 |
+| **真实开源 VLA 训练栈** | [`theory/unifolm_vla_0_unitree_2026.md`](./theory/unifolm_vla_0_unitree_2026.md) | Unitree UnifoLM-VLA-0：数据管线/部署与“30 分钟验收” |
+| **触觉/灵巧操作范式** | [`theory/frontier/visual_tactile_pretraining_online_multitask_learning_2026.md`](./theory/frontier/visual_tactile_pretraining_online_multitask_learning_2026.md) | SciRobotics 2026：单目+二值触觉，含任务级失败模式与指标 |
+| **真机落地总入口** | [`deployment/README.md`](./deployment/README.md) | 硬件选型、多模态同步、控制与调参 checklist |
 
-> 💡 **详细路线**：查看 [Theory 总索引](./theory/README.md) 获取完整学习路径
+## 🚀 快速开始（按你的目标选入口）
+
+| 你现在想做什么 | 从这里开始 | 你会得到什么 |
+|---|---|---|
+| **补齐理论/刷面试** | [`theory/README.md`](./theory/README.md) | 学习路线图 + 核心概念索引 |
+| **找论文/做综述** | [`theory/paper_index.md`](./theory/paper_index.md)、[`theory/literature_review.md`](./theory/literature_review.md) | 多维索引 + 发展史全景图 |
+| **真机落地/跑通闭环** | [`deployment/README.md`](./deployment/README.md) | 硬件选型、多模态同步、控制与调参清单 |
+| **行业/公司信息** | [`companies/README.md`](./companies/README.md) | 公司与求职指南 + 产业报告 digest |
+| **追前沿（每两周）** | [`reports/biweekly/README.md`](./reports/biweekly/README.md) | 每期要点 + 深度笔记回链 |
+
+> 更细的学习路线与分 Part 结构，请直接看 [`theory/README.md`](./theory/README.md) 的“学习路线图”。
 
 ---
 
@@ -93,13 +103,14 @@ VLA-Handbook/
 | **📖 文献综述** | [`theory/literature_review.md`](./theory/literature_review.md) | VLA 发展史全景图（按技术分类） |
 | **🗓️ Biweekly 前沿报告** | [`reports/biweekly/README.md`](./reports/biweekly/README.md) | 每两周更新：VLA / 触觉 / 人形 / 基准 / 工程 |
 | **🚀 真机部署** | [`deployment/README.md`](./deployment/README.md) | 硬件选型、多模态同步、Sim-to-Real |
+| **🏢 公司与产业** | [`companies/README.md`](./companies/README.md) | 公司/求职指南 + 产业报告 digest（含人形整机图谱） |
 | **💡 题库与实战** | [`question-bank/README.md`](./question-bank/README.md) | 面试真题、代码实战、微调指南 |
 | **📋 速查表** | [`cheat-sheet/README.md`](./cheat-sheet/README.md) | 时间线、核心公式 |
-| **📝 更新日志** | [`CHANGELOG.md`](./CHANGELOG.md) | 🆕 每日详细更新记录 |
+| **📝 变更记录** | [`CHANGELOG.md`](./CHANGELOG.md) | 从 git 历史提炼的 Changelog |
 
 ---
 
-## 🧠 Theory 快速推荐
+## 🧠 Theory 快速推荐（高信号入口）
 
 | 主题 | 文档 | 一句话总结 |
 |:-----|:-----|:---------|
@@ -111,6 +122,7 @@ VLA-Handbook/
 | | [`tactile_vla.md`](./theory/tactile_vla.md) | 🆕 触觉反馈 VLA、DTA 动态触觉阵列与 SaTA 研究 |
 | **前沿系统** | [`figure_helix_02_full_body_autonomy_2026.md`](./theory/frontier/figure_helix_02_full_body_autonomy_2026.md) | 🆕 Helix 02：全身端到端 VLA，S0/S1/S2 分层闭环（200Hz/1kHz） |
 | | [`visual_tactile_pretraining_online_multitask_learning_2026.md`](./theory/frontier/visual_tactile_pretraining_online_multitask_learning_2026.md) | 🆕 SciRobotics 2026：单目 + 二值触觉（VT 预训练 + 在线多任务学习），含失败模式/未来方向 |
+| | [`unifolm_vla_0_unitree_2026.md`](./theory/unifolm_vla_0_unitree_2026.md) | 🆕 Unitree UnifoLM-VLA-0：开源训练/数据管线/部署，含可执行 sanity-check |
 | **动作生成** | [`pi0_flow_matching.md`](./theory/pi0_flow_matching.md) | Flow Matching（比 Diffusion 快 5x，π0 核心） |
 | | [`diffusion_policy.md`](./theory/diffusion_policy.md) | 扩散去噪，解决多模态分布 |
 | **效率优化** | [`flash_attention.md`](./theory/flash_attention.md) | Tiling + 重计算，显存 O(N²)→O(N) |
@@ -162,33 +174,10 @@ VLA-Handbook/
 
 ---
 
-<details open>
-<summary><b>📝 更新日志（最近更新）</b></summary>
+## 📝 最近更新怎么看？
 
-### 2026-01-12 🆕
-- **前沿灵巧手硬件专题**:
-    - 新增 **Sharpa Wave** (22-DOF, DTA触觉) 与 **LEAP Hand V2 Adv** (可折叠手掌) 深度调研。
-    - 新增 **RealerHand (睿尔灵)** 硬件选型参考。
-    - 深度对比 **直驱 vs 绳驱 vs 液压** 三大传动流派对 VLA 学习的影响。
-- **Spirit-v1.5（RoboChallenge Table30）**:
-    - 新增 [`spirit_v1_5_dissection.md`](./theory/spirit_v1_5_dissection.md)：代码级拆解（model/robochallenge/scripts 入口 + 复现 checklist）。
-- **机械学专题**:
-    - 新增 [`dexterous_hand_mechanics.md`](./theory/dexterous_hand_mechanics.md)，涵盖 Grubler 公式、雅可比对偶性、阻抗控制数学推导。
-- **操控实战分析**:
-    - 补充“开可乐（杠杆原理与指甲利用）”与“抓手机（环境物理对抗）”等工程细节。
-
-### 2026-01-28 🆕
-- **全身端到端 VLA（Humanoid Loco-manipulation）**：
-    - 新增 [`figure_helix_02_full_body_autonomy_2026.md`](./theory/frontier/figure_helix_02_full_body_autonomy_2026.md)：Figure Helix 02 的 S0/S1/S2 分层闭环笔记（含可复述的频率接口与工程落地视角）。
-- **视触觉 + 低成本传感（Dexterous Manipulation）**：
-    - 新增 [`visual_tactile_pretraining_online_multitask_learning_2026.md`](./theory/frontier/visual_tactile_pretraining_online_multitask_learning_2026.md)：SciRobotics 2026（单目 + 二值触觉）两阶段范式与任务级失败模式拆解。
-- **灵巧手硬件落地**：
-    - 新增 [`dexrobot_dexhand021_production_dexhand_2026.md`](./deployment/dexrobot_dexhand021_production_dexhand_2026.md)：DexRobot DexHand021（19-DOF, CANFD, ROS）量产手的对接清单与风险点。
-
-### 2026-01-06
-- **实战案例：手势控制灵巧手**: 新增 [`mediapipe_wujihand_project.md`](./deployment/mediapipe_wujihand_project.md)。
-
-</details>
+- **工程/研究前沿**：看双周报告索引 [`reports/biweekly/README.md`](./reports/biweekly/README.md)（每期都链回深度笔记）  
+- **全量变更记录**：看 [`CHANGELOG.md`](./CHANGELOG.md)（从 git 历史提炼，避免 README 长期膨胀）
 
 ---
 
