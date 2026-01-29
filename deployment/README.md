@@ -28,6 +28,7 @@
 - **[灵巧手通讯与部署实战 (DexHand Communication)](./dexterous_hand_communication_deployment.md)**: 通讯架构 (CANFD, EtherCAT)、Retargeting 与线缆管理。
 - **[灵巧手实战案例集 (DexHand Applications)](./dexterous_hand_applications.md)**: VisionOS 遥操作、跨设备动作映射与 Sim2Real 案例。
 - **[Wuji 灵巧手深度解析 (Wuji Hand Deep Dive)](./dexterous_hand_wuji.md)**: 20-DOF 非拉索、全电机集成驱动技术方案。
+- **[DexRobot DexHand021 量产版深度解析 (DexHand021 Production)](./dexrobot_dexhand021_production_dexhand_2026.md)**: 🆕 19-DOF（12 主动+7 被动）+ CANFD + ROS1/ROS2/micro-ROS + 多模态触觉（含滑觉/接近）落地拆解与对接清单。
 - **[Optimus Hand V2 解析](./optimus_hand_v2.md)**: Tesla Optimus 灵巧手技术特点分析。
 
 ### 5. 仿真、数据采集与 Sim2Real (Data, Sim & Training)

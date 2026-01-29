@@ -174,6 +174,7 @@
 | **Jim Fan 2025** | [`./frontier/jim_fan_2025_robotics_lessons.md`](./frontier/jim_fan_2025_robotics_lessons.md) | 🆕 行业复盘：硬件可靠性、评测可复现性、VLM→VLA 路线反思 |
 | **OneTwoVLA** | [`./frontier/onetwovla.md`](./frontier/onetwovla.md) | 🆕 统一模型 + 自适应推理切换 |
 | **1X World Model** | [`./frontier/one_x_world_model.md`](./frontier/one_x_world_model.md) | 🆕 视频世界模型 + 逆动力学（IDM）：先“想象”再“执行” |
+| **Figure Helix 02 (2026)** | [`./frontier/figure_helix_02_full_body_autonomy_2026.md`](./frontier/figure_helix_02_full_body_autonomy_2026.md) | 🆕 全身端到端 VLA：S2 语义目标 → S1 200Hz 全身关节目标 → S0 1kHz 执行（人类运动先验替代大量手写控制） |
 | **Video World Model Survey (2026)** | [`./frontier/video_generation_models_in_robotics_survey_2026.md`](./frontier/video_generation_models_in_robotics_survey_2026.md) | 🆕 综述：视频生成模型作为具身世界模型（数据生成/视觉规划/策略评估）；难点是物理幻觉、指令偏差、成本与安全 |
 | **GenieReasoner / ERIQ / FACT** | [`./frontier/geniereasoner_eriq_fact.md`](./frontier/geniereasoner_eriq_fact.md) | 🆕 量化“推理→动作”传递损耗：推理基准 + 动作分词器 + 统一自回归 |
 | **GR-Dexter** | [`./frontier/gr_dexter_bimanual_dexterous_vla.md`](./frontier/gr_dexter_bimanual_dexterous_vla.md) | 🆕 ByteDance Seed：把 VLA 扩展到 21-DoF 灵巧手的全栈框架（硬件/遥操作/跨形态数据） |
