@@ -37,6 +37,7 @@
 VLA-Handbook/
 ├── theory/          # 理论基础（核心）
 ├── deployment/      # 真机与部署
+├── reports/         # 双周/周期性前沿报告
 ├── book/            # 电子书版本
 ├── cheat-sheet/     # 速查表
 ├── question-bank/   # 题库与实战
@@ -71,6 +72,9 @@ VLA-Handbook/
 │   ├── dexterous_hand_wuji.md  # 无极手（舞肌/Wuji）深度解析
 │   ├── dexterous_hand_applications.md # 灵巧手实战案例集 (VisionOS)
 │   └── ...                     # 更多文档见 deployment/README.md
+├── reports/                     # 周期性前沿报告
+│   └── biweekly/                # 双周报告
+│       └── README.md            # 索引
 ├── book/                       # 电子书版本
 ├── question-bank/              # 题库与实战
 └── companies/                  # 机器人公司与求职
@@ -87,6 +91,7 @@ VLA-Handbook/
 | **📚 Theory 总索引** | [`theory/README.md`](./theory/README.md) | 理论基础、核心算法、前沿架构 |
 | **🔍 论文索引** | [`theory/paper_index.md`](./theory/paper_index.md) | 多维度查找（技术/公司/时间） |
 | **📖 文献综述** | [`theory/literature_review.md`](./theory/literature_review.md) | VLA 发展史全景图（按技术分类） |
+| **🗓️ Biweekly 前沿报告** | [`reports/biweekly/README.md`](./reports/biweekly/README.md) | 每两周更新：VLA / 触觉 / 人形 / 基准 / 工程 |
 | **🚀 真机部署** | [`deployment/README.md`](./deployment/README.md) | 硬件选型、多模态同步、Sim-to-Real |
 | **💡 题库与实战** | [`question-bank/README.md`](./question-bank/README.md) | 面试真题、代码实战、微调指南 |
 | **📋 速查表** | [`cheat-sheet/README.md`](./cheat-sheet/README.md) | 时间线、核心公式 |

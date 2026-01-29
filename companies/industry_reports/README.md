@@ -5,4 +5,5 @@
 ## 目录
 
 - **中金人机系列05：灵巧手**：[`cicc_dexterous_hand_05.md`](./cicc_dexterous_hand_05.md)
+- **北京人形机器人整机14家全景（两家已股改）**：[`beijing_humanoid_robot_oem_14_ipo_signals_2026.md`](./beijing_humanoid_robot_oem_14_ipo_signals_2026.md)
 
