@@ -29,6 +29,7 @@
 | 🆕 **[VLA 十大挑战](./vla_challenges.md)** | NTU/斯坦福 2025 研究方向 |
 | 🔥 **[小模型 VLA 研究](./small_vla_models.md)** | 边缘部署、SmolVLA、蒸馏压缩 |
 | 🏆 **[NeurIPS 2025 解读](./neurips_2025_insights.md)** | 6 篇最佳论文的具身智能视角 |
+| 🦿 **[Unitree UnifoLM-VLA-0 开源解读](./unifolm_vla_0_unitree_2026.md)** | Qwen2.5-VL + Flow Matching DiT 动作头 + LeRobot→RLDS 管线 + 真机 server 部署 🆕 |
 | 🧭 **[产业路线：通用性与“元学习”路径](./frontier/industry_paths_to_generalization.md)** | 全栈整合 / 垂直突破 / 生态平台三路径（策略视角） |
 
 ---

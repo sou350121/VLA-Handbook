@@ -4,18 +4,17 @@
 > **论文题目/模型名**：Visual-tactile pretraining and online multitask learning for humanlike manipulation dexterity  
 > **核心定位**：在多指灵巧手的“遮挡 + 接触动力学 + 高维动作”三重困难下，作者提出两阶段框架：**先用人类示范做自监督视触觉表征预训练（observation）**，再用 **RL + 在线模仿学习**训练一个 **统一多任务策略（practice）**。关键卖点是“传感降本”：只用 **单目 RGB** + **简单二值触觉**，仍实现 **5 个复杂任务 × 25 个物体的 85% 成功率**，并可泛化到 **3 个未见任务**。  
 
-**一手来源（摘要级）**：
+**一手来源（全文核对）**：
 - 论文 DOI：[`https://doi.org/10.1126/scirobotics.ady2869`](https://doi.org/10.1126/scirobotics.ady2869)  
 - 同期前沿聚焦（Focus）：[`https://doi.org/10.1126/scirobotics.aee5782`](https://doi.org/10.1126/scirobotics.aee5782)
-
-> 说明：我目前无法稳定抓取 `science.org` 的全文页面，因此本文对方法细节只做**“摘要可验证部分 + 可复用系统抽象”**；涉及网络结构名词（例如中文报道常提到的“IPL Token”）会明确标注为 **TODO（需以论文全文/作者代码确认）**，避免把二手稿当事实写入手册。
+- 数据与代码（论文声明）：`https://doi.org/10.5281/zenodo.17986310`
 
 ---
 
 ## 0. 先把“可复述结论”写清楚（1 分钟版）
 
 - **一句话**：这篇工作把“触觉”从昂贵阵列降到**二值接触信号**，仍能显著提升灵巧操作的**遮挡鲁棒性**与**Sim2Real 稳定性**；核心方法是 **Observation（自监督多模态预训练）→ Practice（RL+在线多任务模仿）** 的解耦。
-- **三条你能背的数字（来自论文摘要）**：
+- **三条你能背的数字（来自论文正文/结果）**：
   - 传感：**monocular images + simple binary tactile**
   - 结果：**85% success rate**（5 tasks × 25 objects）
   - 泛化：**3 unseen tasks**（共享类似手-物协调模式）
@@ -27,11 +26,11 @@
 
 ### 1.1 系统对比概览 (System Component Comparison)
 
-| 模块 | 角色 | 输入 → 输出 | 训练方式（摘要可验证） | 你应该盯的工程变量 |
+| 模块 | 角色 | 输入 → 输出 | 训练方式（论文） | 你应该盯的工程变量 |
 |---|---|---|---|---|
-| **VT 表征预训练（Observation）** | 学“看+触”的联合表征 | human demos → VT representation | **self-supervised learning from human demonstrations**（摘要） | 预训练数据量/多样性、遮挡分布、触觉信号口径（二值定义） |
-| **统一多任务策略（Practice）** | 一个 policy 覆盖多任务 | monocular RGB + binary tactile → actions | **reinforcement learning + online imitation learning**（摘要） | 多任务冲突/负迁移、在线聚合的数据比例、稳定性/回滚率 |
-| **解耦训练（Decoupled Learning）** | 先表征后策略 | representation → policy | 先学表征再学控制（摘要强调 decoupled） | 表征冻结/微调策略、触觉缺失时的退化策略 |
+| **VT 表征预训练（Observation）** | 学“看+触”的融合表征 | human demos (RGB $V$, tactile $C$) → integration token $h_{IPL}$ | **MAE 形式的自监督预训练**：跨模态 attention + **IPL integration token**；重建 $V$ 与 $C$ 的加权 MSE | mask 比例 $\gamma_v/\gamma_c$、tactile binarization、触觉手套数据覆盖度 |
+| **任务专家策略（Per-task expert）** | 每任务学习高成功率控制 | $s=[h_{IPL};P]$ → $a\in\mathbb{R}^{20}$ | **PPO** 训练任务专家；reward 按任务定义 | reward 规模对齐、任务难度差异、接触动力学稳定性 |
+| **统一多任务策略（Unified policy）** | 一个 policy 覆盖所有任务 | $\tilde{s}=[s_i; z_i]$ → $a$（MLP） | **在线多任务模仿**：rollout 统一策略 → 查询专家 → 数据聚合 | 观测漂移、任务 ID 设计、online 采样比例 |
 
 ### 1.2 关键机制 (Key Mechanism)
 
@@ -42,84 +41,80 @@
 
 #### 机制 B：Observation → Practice（人类学习范式的工程化）
 
-摘要明确写了“observation and practice”：
+论文明确写了“observation and practice”：
 - **Observation**：从人类示范中做自监督，学到可迁移的 VT 融合表征
 - **Practice**：再用 RL + 在线模仿把表征落到策略，形成统一多任务 policy
 
-这类解耦路线的价值：把“接触与遮挡的表征问题”先解决一半，让后面的控制学习不必在稀疏奖励/复杂接触上从零开始。
+这类解耦路线的价值：在高维动作 + 稀疏奖励下，先把“接触与遮挡的表征问题”解决一半，再让控制学习专注于动作层面，避免联合学习的样本效率与稳定性问题。
 
-#### 机制 C（TODO）：中文报道提到的“IPL Token”与掩码自编码器
+#### 机制 C：IPL Token + MAE 形式的视触觉融合（论文核心细节）
 
-中文解读常写到：用 MAE 类结构 + 可学习融合 token（类比顶下小叶 IPL）做视触觉融合，并用在线迭代聚合专家数据（类似 DAgger）解决多任务观测漂移。  
-**但这些细节不在摘要里**，需要阅读全文或对照作者代码/附录确认：
-
-- TODO：网络是否为 masked autoencoder？mask 哪些 token？重建目标是什么？
-- TODO：“IPL Token”是否就是一个可学习的全局融合 token（类似 `[CLS]`）？
-- TODO：在线模仿学习是否为 DAgger/DAgger-like（iterative aggregation）？
+- **MAE 结构**：对视觉/触觉 patch 做随机遮挡（modality-specific masking），通过 Transformer 编码器与解码器重建被遮挡内容。  
+- **IPL integration token**：在编码器里加入一个可学习的融合 token（IPL），用于汇聚可见视触觉信息，形成 $h_{IPL}$ 作为下游策略的关键表征。  
+- **动机**：作者指出以往“只做 cross-modal attention”的做法只能增强特征，但没有“类 IPL 的融合单元”；引入 IPL token 后能学到“接触相关”特征并对遮挡更鲁棒。
+ - **对比基线**：此前 MAE 仅做模态对齐（不含 IPL token），更新后的特征直接喂给策略，难以形成“融合单元”；本文的 IPL token 明确承担跨模态集成角色。
+- **数据来源**：预训练来自**带触觉手套的人类示范视频**，使视觉与触觉事件天然配对。
 
 ### 1.3 信息流/架构图 (Flow / Diagram)
 
 ```text
-      Observation (pretrain)                           Practice (policy learning)
-┌──────────────────────────────┐            ┌─────────────────────────────────────┐
-│ Human demonstrations (video)  │            │  Simulation + Online data           │
-│  - monocular RGB              │            │  - RL (task reward)                 │
-│  - (tactile proxy? TODO)      │            │  - online imitation learning        │
-└───────────────┬──────────────┘            └───────────────┬─────────────────────┘
-                │                                            │
-                v                                            v
-     ┌──────────────────────┐                   ┌───────────────────────────────┐
-     │ VT representation fθ  │                   │ unified multitask policy πϕ   │
-     │ (self-supervised)     │                   │ input: RGB + binary tactile   │
-     └───────────┬──────────┘                   │ output: dexterous actions     │
-                 │                               └───────────────┬──────────────┘
-                 └────────────── condition / init ───────────────┘
+      Observation (pretrain)                               Practice (policy learning)
+┌──────────────────────────────────┐            ┌────────────────────────────────────────┐
+│ Human demonstrations (RGB +触觉) │            │  Per-task experts (PPO, simulation)     │
+│  - monocular RGB                  │            │  + online imitation (dataset aggregation)│
+│  - tactile glove events (binary)  │            └───────────────┬────────────────────────┘
+└───────────────┬──────────────────┘                            │
+                │                                                v
+                v                                  ┌────────────────────────────────┐
+     ┌────────────────────────┐                    │ unified multitask policy (MLP)│
+     │ VT encoder + IPL token │                    │ input: s=[h_IPL; proprio] + ID│
+     │ (MAE, self-supervised) │                    │ output: 20-DoF joint actions  │
+     └───────────┬────────────┘                    └────────────────────────────────┘
+                 │
+                 └────────── condition / init (h_IPL) ────────────>
 ```
 
 ---
 
-## 2. 数学核心：为什么“掩码式多模态预训练”能补遮挡 (Math Core)
+## 2. 数学核心：MAE + IPL Token 如何做“视触觉融合” (Math Core)
 
-> 说明：论文摘要没有公开损失形式；这里给出一个**与摘要一致、且在多模态 MAE/掩码建模中常用**的最小数学模板，便于你把“方法直觉”讲清楚。若与论文细节不一致，以论文为准（TODO）。
+### 2.1 预训练目标：对视觉/触觉同时做掩码重建
 
-### 2.1 目标：学一个能在“缺视角/缺触觉”时仍稳定的表征
+论文明确给出 MAE 形式的多模态预训练。核心流程如下：
 
-设视觉 token 为 $v$，触觉 token 为 $t$。对它们分别采样 mask：
+**输入与 patch 嵌入**  
+视觉 $V \in \mathbb{R}^{H\times W\times 3}$ 切成 $N_v$ 个 patch，经线性投影与 2D 位置编码得到 $v$；  
+触觉 $C \in \{0,1\}^{20}$ 经过 MLP 与 1D 位置编码得到 $c$。
 
+**模态专属 mask**  
 $$
-m_v \sim \text{Mask}(\cdot),\quad m_t \sim \text{Mask}(\cdot)
-$$
-
-把可见部分编码成潜变量：
-
-$$
-z = \text{Enc}_\theta(v\odot (1-m_v),\ t\odot (1-m_t))
+v_{vis}=M(v,\gamma_v),\quad c_{vis}=M(c,\gamma_c)
 $$
 
-并重建被 mask 的部分：
-
+**融合编码（加入 IPL token）**  
 $$
-\hat v,\hat t = \text{Dec}_\theta(z)
-$$
-
-训练目标（最小模板）：
-
-$$
-\mathcal{L}_{VT} = \|(\hat v - v)\odot m_v\| + \lambda\|(\hat t - t)\odot m_t\|
+h_{IPL}, h_v, h_c = \mathrm{TransE}([IPL, v_{vis}, c_{vis}])
 $$
 
-### 2.2 变量说明
+**解码重建**  
+解码器 $\mathrm{TransD}$ 重建 $\hat V$ 与 $\hat C$，损失为加权 MSE：
+$$
+\mathcal{L}(\theta)=\lambda_v \mathrm{MSE}(V,\hat V)+\lambda_c \mathrm{MSE}(C,\hat C)
+$$
+
+### 2.2 变量说明（按论文符号）
 
 | 符号 | 含义 |
 |---|---|
-| $v$ | 视觉输入（单目 RGB 的 patch/token） |
-| $t$ | 触觉输入（这里是二值触觉/或其嵌入；具体定义需论文确认） |
-| $m_v,m_t$ | mask（模拟遮挡/缺测） |
-| $z$ | 联合视触觉潜变量（可作为策略输入或初始化） |
+| $V$ | 单目 RGB 图像 |
+| $C$ | 20 个触觉传感器的二值事件 |
+| $IPL$ | 可学习融合 token（类比 IPL 神经元） |
+| $h_{IPL}$ | 融合表征（下游策略的核心输入） |
+| $\gamma_v,\gamma_c$ | 视觉/触觉的 masking 比例 |
 
 ### 2.3 直觉：为什么能补“感知黑洞”
 
-遮挡本质上就是 $m_v$ 在真实世界里被动变大；而二值触觉在接触瞬间能提供强信息增益（哪怕信息量低）。  
+遮挡本质上就是可见视觉 patch 变少（$\gamma_v$ 有效升高）；而二值触觉在接触瞬间提供明确的“接触事件”信号。  
 掩码式预训练把“缺视角”当成常态训练，从而让模型学会在视觉不完整时依赖触觉做补全/判别，这通常会直接体现在：
 - 更稳定的接触相位判定（接触发生/是否滑移）
 - 更好的 Sim2Real（因为触觉在仿真与真机之间口径更一致，至少比像素一致性更容易）
@@ -128,15 +123,21 @@ $$
 
 ## 3. 带数字走一遍：二值触觉为何仍然有用 (Worked Example)
 
-设某任务需要“旋转瓶盖”：
+以论文中的 5 个训练任务为例：  
+**bottle cap turning / faucet screwing / lever sliding / tabletop reorientation / in-hand reorientation**。
+
+以 *bottle cap turning* 为例：
 
 - 视觉在握持后发生遮挡：瓶盖纹理/边缘不可见
 - 触觉只有二值：每个手指 $t_i \in \{0,1\}$ 表示是否接触（或是否超过阈值）
 
 即便如此，二值触觉仍能提供两个关键判断：
 
-1) **接触相位分段**：从“未接触（全 0）”到“稳定接触（部分 1）”，策略能切换到力/扭矩调制的子策略（哪怕扭矩不是显式输入）  
-2) **滑移风险代理**：如果视觉看不见，但接触模式在时间上出现“快速跳变/丢接触”，可以作为 slip 的 proxy，触发“加夹持/改变指位姿/重新抓取”
+1) **接触相位分段**：从“未接触（全 0）”到“稳定接触（部分 1）”，策略能切换到扭矩/位姿微调阶段  
+2) **滑移风险代理**：若触觉事件出现高频翻转，触发重抓/调姿，避免“空转”
+
+论文的泛化任务与数值结果也支持这一点：  
+未见任务 **pencil sharpening / screw unfastening / snack sleeve sliding** 中，成功率分别为 **9/10、6/10、8/10**，下降主要来自**接触动力学差异**（例如 screw unfastening 需要持续垂直调整，而 bottle cap turning 基本不需要）。
 
 这解释了为什么作者强调“simple binary tactile signals”也能带来实质收益（至少在成功率与鲁棒性上）。
 
@@ -146,13 +147,13 @@ $$
 
 ### 4.1 训练为什么要“RL + 在线模仿”
 
-摘要明确写了 unified multitask policy 的训练包含：
+论文明确写了 unified multitask policy 的训练包含：
 - **reinforcement learning**
 - **online imitation learning**
 
-一个合理的工程解释是：
-- RL 负责“把策略推到能做成”（尤其在复杂接触、稀疏奖励下）
-- 在线模仿负责“把策略拉回分布内”（缓解 rollout 导致的观测漂移/分布偏移）
+论文更具体的做法是：
+- **先学 per-task 专家**：每个任务用 **PPO** 在仿真中训练专家策略  
+- **再做在线多任务模仿**：统一策略在训练中 **rollout 自己的状态**，再去查询专家动作并聚合到数据集（DAgger-like）
 
 精简版理解（可背）：
 - **只用 RL 的坑**：接触任务奖励往往稀疏（例如“拧开才算”），早期探索难且容易学到投机动作；训练分布随策略变化会抖。
@@ -164,6 +165,9 @@ $$
 - **离线 BC 的核心假设被破坏**：BC 学的是专家分布 $d_{\pi^*}(s)$ 上的条件动作；一旦执行时进入 $d_\pi(s)\neq d_{\pi^*}(s)$（例如轻微滑移/遮挡导致状态偏移），错误会把系统推进到更偏的状态，产生 **compounding error**。
 - **在线聚合把训练分布对齐到 $d_\pi(s)$**：DAgger/在线模仿的直觉是“在你真正会到达的状态上学怎么纠错”，从而把误差从随时间累积（最坏可线性/更糟）压到更可控的范围（no-regret 的经验性解释）。
 
+补充一条“实证现象”（来自论文对比）：  
+在多任务设置中，**纯 RL** 需要百万级 steps 才开始提升，并在瓶盖任务上失败；**离线 IL** 虽然 loss 收敛，但成功率仍显著低于在线 IL；**在线 IL** 最稳且跨任务一致性最好。
+
 ### 4.2 低成本传感的真正挑战：口径一致性
 
 二值触觉看似简单，但落地时最容易翻车的是“阈值口径”：
@@ -174,11 +178,26 @@ $$
 - 触觉阈值的标定与漂移管理
 - 触觉与视觉的时间对齐（触觉是高频、视觉是低频）
 
+### 4.3 运行频率与策略结构（论文细节）
+
+- **控制频率**：仿真 60 Hz；真机 15 Hz（任务成功判定阈值 40 s 对应 1 个仿真 episode）。  
+- **动作空间**：Shadow Hand 24-DoF，但固定机械臂，仅输出 **20 维手指/手腕关节目标**。  
+- **统一策略网络**：MLP，三层隐藏维度 **1024 / 1024 / 512**，ELU 激活；输入是 $\tilde{s}=[h_{IPL};P;z_i]$。  
+- **触觉信号口径**：仿真中触觉阈值 **0.01 N** 得到二值事件；训练时随机化阈值以增强跨传感器鲁棒性。
+
+### 4.4 部署硬件与算力（论文实测）
+
+- **硬件**：Shadow Hand（安装在机械臂上）+ 单目 webcam + 自制触觉系统  
+- **触觉**：**20 个**压阻式传感器分布在手部表面  
+- **通信**：ROS  
+- **算力**：Intel i9-12900K + NVIDIA RTX 4070（论文给出的真机配置）  
+- **成本**：触觉与相机 **~$250**（论文给出的低成本设置）
+
 ---
 
 ## 5. 数据与评测 (Data & Eval)
 
-### 5.1 摘要披露的结果（可引用）
+### 5.1 论文结果摘要（可引用）
 
 - **85% success rate** across **five complex tasks** and **25 objects**  
 - Generalize to **three unseen tasks** that share similar hand-object coordination patterns  
@@ -191,6 +210,40 @@ Focus 文章标题是 *Within arm’s reach: A path forward for robot dexterity*
 
 这句话的含义是：把“人类数据 + 视触觉预训练”当作 **可规模化的 dexterity 路线**，而不是只做一个高成本 demo。
 
+### 5.3 论文给出的更细评测设置（关键数字）
+
+- **任务设置（训练 5 / 泛化 3）**  
+  - 训练任务：bottle cap turning、faucet screwing、lever sliding、tabletop reorientation、in-hand reorientation  
+  - 未见任务：pencil sharpening、screw unfastening、snack sleeve sliding  
+- **对象与试验**  
+  - 仿真训练：**40 个对象**  
+  - 真机评测（每个训练任务）：**5 个对象**（3 个训练分布的 3D 打印 + 2 个家庭物体），每个对象 **10 次**  
+  - 未见任务：每任务 **3 个家庭物体**  
+- **评价指标**  
+  - 成功率（success rate）  
+  - 成功完成时间（completion time）；若无成功则记为 **40 s**  
+  - 仿真 episode 长度 **600 steps**（真机 15 Hz / 仿真 60 Hz）  
+- **结果要点**  
+  - 真机 in-distribution：**~87%** 平均成功率  
+  - 真机 out-of-distribution：**~85%** 平均成功率  
+  - 未见任务：pencil sharpening **9/10**，screw unfastening **6/10**，snack sleeve sliding **8/10**
+  - **模态消融**：VT 在训练与真机上均明显优于 V-only / T-only；单模态在 sim-to-real 上掉得更明显（真机成功率 <40%）
+  - **效率指标**：VT 在成功完成时间上最短且更稳定；T-only 在 faucet 任务上失败并触发 40 s 上限
+
+- **Sim2Real 随机化（论文明确）**  
+  - proprio：关节位置/速度加高斯噪声  
+  - vision：颜色/纹理/光照随机化  
+  - tactile：二值化阈值随机化（提升异构触觉迁移）
+
+### 5.4 图表速览（按论文 Fig.1–6）
+
+- **Fig.1**：系统与学习管线。人类示范做 VT 预训练（MAE+IPL），任务专家用 PPO，统一策略用在线模仿聚合；真机为 Shadow Hand + 单目相机 + 触觉系统。  
+- **Fig.2**：8 个任务的执行帧序列（5 训练 + 3 未见），展示策略能覆盖多样接触模式。  
+- **Fig.3**：三类物体测试集（训练内/日常 OOD/未见任务物体），VT 在三类上都保持高成功率；并报告完成时间。  
+- **Fig.4**：触觉异构与光照扰动实验。二值触觉跨传感器可迁移；VT 对光照变化更稳，V-only 明显掉。  
+- **Fig.5**：训练策略与模态消融。VT > V-only / T-only；在线 IL > 离线 IL / 纯 RL；统一策略在共享表征下可超过专家。  
+- **Fig.6**：人类式触觉节奏与 IPL 注意力。VT 的触觉段分布更接近人类；IPL attention 更聚焦手-物交互区域并随接触状态变化。
+
 ---
 
 ## 6. 能力与失败模式 (Capabilities & Failure Modes)
@@ -200,12 +253,15 @@ Focus 文章标题是 *Within arm’s reach: A path forward for robot dexterity*
 - **遮挡下的接触阶段**：视觉不可靠时，触觉提供关键相位信息
 - **Sim2Real 更稳**：触觉信号的统计分布更“物理一致”（相比像素）
 - **多任务“触类旁通”**：如果不同任务共享相似的 hand-object coordination pattern，统一策略更可能学到可迁移规律
+- **更“类人”的接触节奏**：论文用触觉接触段长度分布（KDE/MSE）显示 VT 预训练更接近人类触觉节奏
+- **注意力更聚焦接触区域**：IPL attention maps 更稳定聚焦于手与物体交互区域，优于视觉-only
 
 ### 6.2 你应该预期的失败模式
 
 - **触觉阈值漂移**：二值化把“强度信息”压扁了，阈值漂移会直接改变策略的隐含状态机
 - **任务不共享协调模式时的负迁移**：统一策略并不总是赢（需要任务族设计与 loss/采样配比）
 - **数据偏差**：人类示范视频若过于单一，预训练表征会把注意力学歪（尤其是背景/光照相关 shortcut）
+- **单模态退化**：论文中 V-only / T-only 在 unseen objects 的 sim-to-real 表现显著下降；触觉-only 在 faucet 任务上失败并触发 40 s 上限
 
 ### 6.3 失败模式拆解：怎么死、怎么测、怎么救（Failure Mode Taxonomy）
 
@@ -215,18 +271,18 @@ Focus 文章标题是 *Within arm’s reach: A path forward for robot dexterity*
 |---|---|---|---|
 | **二值触觉阈值漂移 / 指尖间不一致** | 同一策略随时间成功率缓慢下滑；某几根手指“永远 1/永远 0”；接触相位切换点漂移 | 固定物体+固定抓型，跑 100 次：统计各指 $P(t_i=1)$ 与随时间的漂移；温度升高/指尖磨损后复测 | 重新标定阈值；把二值触觉改成 “soft-binary”（sigmoid 后输出概率）；训练时对阈值做 randomization（阈值扰动） |
 | **触觉 aliasing（信息量不足导致状态不可辨）** | 不同接触状态给出相同二值模式（例如“轻触”和“稳定夹持”都为 1）；策略在关键相位抖动/卡住 | 采集少量对照：同一物体，分别轻触/夹紧/滑移，记录二值序列是否可区分（互信息近似） | 增加一个廉价的“强度 proxy”（例如电阻值粗量化为 2-4 bit）；或引入速度/电流（proprio）作为辅助观测 |
-| **视觉 shortcut（背景/光照相关）** | 换桌布/换背景/换光照成功率骤降；但触觉模式正常 | 做 3 组 domain shift：背景、光照、相机曝光；保持触觉不变，观察失败类型 | 视觉增强与 domain randomization；把预训练 mask 策略显式包含“遮挡/曝光”扰动；加入对比学习抑制背景相关特征（TODO：需全文确认作者是否已做） |
+| **视觉 shortcut（背景/光照相关）** | 换桌布/换背景/换光照成功率骤降；但触觉模式正常 | 论文做了光照方向/强度扰动：VT 稳定，V 明显退化 | 视觉增强 + 触觉融合；把光照扰动写入仿真随机化（论文已做） |
+| **触觉异构（分辨率/原理差异）** | 更换触觉阵列后策略失效 | 用不同触觉阵列重复 bottle cap turning（论文中为 4×1、6×4 piezoresistive + 内置气压/温度） | 统一二值事件口径；训练中随机化阈值（论文已做） |
 | **时间对齐失败（视觉低频 vs 触觉高频）** | 接触发生时动作延迟，导致“先撞再纠正”；或策略错过短暂接触窗口 | 记录时间戳：计算触觉触发到动作变化的延迟分布（p50/p95） | 使用 ring buffer + 最近邻/插值对齐；把“触觉事件”做成边沿触发输入（event-based tactile），减少对齐敏感性 |
 | **多任务负迁移（task interference）** | A 任务学会后 B 任务变差；或新任务一加进来整体崩 | 按任务逐个加入训练（curriculum），画出 per-task 成功率随训练轮次曲线 | 任务采样配比调度；参数隔离（adapter/LoRA）；共享表征+任务特定 head；按“共享协调模式”分 task family |
 | **Sim2Real 断点来自接触动力学（而非像素）** | 仿真成功率高但真机失败在“接触相位”（打滑/压碎/夹不稳） | 在真机上统计失败原因占比（滑移/错位/碰撞/遮挡），对照仿真失败分布 | 提升接触随机化（摩擦、顺应性、接触点噪声）；把触觉作为 reward shaping 或 success predictor 的辅助信号 |
 | **在线模仿的分布漂移（on-policy 采样偏）** | 线上越跑越偏，出现新奇但错误的动作；回滚频繁 | 记录 rollout 的 state visitation 分布 vs expert data 分布（可用 embedding 距离近似） | 增大在线聚合比例；更强的安全约束（动作限幅/恢复策略）；不确定性触发“请求示范/回退” |
 
-> 注：上述“诊断/缓解”是从摘要披露的系统形态推导出的工程化 checklist；方法细节（例如是否真的是 DAgger-like）需全文/代码确认后再精确对齐。
+> 注：上述“诊断/缓解”是基于论文方法与实验细节提炼出的工程化 checklist。
 
 ### 6.4 更“贴任务”的失败模式：按 5 个典型 dexterity 任务族逐个拆（Task-Specific Failure Modes）
 
-> 下面把“失败模式”落到这类工作最常见的 5 类 dexterity 任务上（转/拧/滑/重定向）。  
-> 说明：SciRobotics 摘要没有列出 5 个任务名；但作者团队在相邻工作 **VTDexManip（ICLR 2025）**公布了高度重合的任务集合（BottleCap Turning / Faucet Screwing / Lever Sliding / Table Reorientation / In-hand Reorientation 等），因此这里用这些任务族来做**精确的失效机理分解**（任务名来源见 [VTDexManip 项目页](https://lqts.github.io/VTDexManip/) 与其代码仓库说明）。
+> 训练任务：bottle cap turning、faucet screwing、lever sliding、tabletop reorientation、in-hand reorientation。
 
 #### A) 螺纹/旋转类（BottleCap Turning / Faucet Screwing）
 
@@ -284,6 +340,7 @@ Focus 文章标题是 *Within arm’s reach: A path forward for robot dexterity*
 4) **任务族结构化：按“接触协调模式”分簇再共享策略**：把“统一策略是否会负迁移”变成可学习的路由问题（mixture-of-experts / adapter gating），并以“协调模式相似度”作为先验，而不是纯按任务名。
 5) **Sim2Real 的接触随机化要以“失败类型分布匹配”为目标**：不是随机化越多越好，而是让仿真失败类型（滑移/空转/卡死/掉物）与真机对齐。未来可以引入“失败类型判别器”做 domain alignment。
 6) **评测要从 success rate 走向“失败诊断报告”**：至少强制报告：每任务的失败类型占比、接触翻转率分布、阈值漂移曲线、以及视觉遮挡比例 vs 成功率曲线（这会直接回答“为什么二值触觉有效/何时无效”）。
+7) **把“静态图像预训练”升级为时序建模**：论文显示即便在单帧预训练下，IPL attention 也能随接触状态变化；下一步应显式引入时序建模以学习接触动力学与相位切换。
 
 ### 8.3 你可以立刻做的 3 个“论文复现级”核验（建议写进你的实验计划）
 
@@ -294,6 +351,9 @@ Focus 文章标题是 *Within arm’s reach: A path forward for robot dexterity*
 ---
 
 ## 7. 与相关工作对比 (Comparison)
+
+论文给出了与“状态专家 → 视觉触觉学生”的经典蒸馏管线对比：  
+**state expert → VT unified** 在 unseen objects 上出现 **~12%** 的学生退化（70.8% → 58.8%），而 **VT expert → VT unified** 反而出现 **~6%** 的提升（统一策略超过专家）。这说明“专家与学生共享同一表征”是避免信息损失的关键。
 
 | 维度 | 本文（SciRobotics 2026） | “昂贵传感器堆料”路线 | 纯视觉 dexterity |
 |---|---|---|---|
