@@ -104,6 +104,8 @@ VLA-Handbook/
 | | [`pi0_6_dissection.md`](./theory/pi0_6_dissection.md) | π0.6 Recap 自我进化 + Action Expert |
 | | [`spirit_v1_5_dissection.md`](./theory/spirit_v1_5_dissection.md) | 🆕 Spirit-v1.5：Qwen3-VL + DiT，RoboChallenge 代码级复现与入口拆解 |
 | | [`tactile_vla.md`](./theory/tactile_vla.md) | 🆕 触觉反馈 VLA、DTA 动态触觉阵列与 SaTA 研究 |
+| **前沿系统** | [`figure_helix_02_full_body_autonomy_2026.md`](./theory/frontier/figure_helix_02_full_body_autonomy_2026.md) | 🆕 Helix 02：全身端到端 VLA，S0/S1/S2 分层闭环（200Hz/1kHz） |
+| | [`visual_tactile_pretraining_online_multitask_learning_2026.md`](./theory/frontier/visual_tactile_pretraining_online_multitask_learning_2026.md) | 🆕 SciRobotics 2026：单目 + 二值触觉（VT 预训练 + 在线多任务学习），含失败模式/未来方向 |
 | **动作生成** | [`pi0_flow_matching.md`](./theory/pi0_flow_matching.md) | Flow Matching（比 Diffusion 快 5x，π0 核心） |
 | | [`diffusion_policy.md`](./theory/diffusion_policy.md) | 扩散去噪，解决多模态分布 |
 | **效率优化** | [`flash_attention.md`](./theory/flash_attention.md) | Tiling + 重计算，显存 O(N²)→O(N) |
@@ -169,6 +171,14 @@ VLA-Handbook/
     - 新增 [`dexterous_hand_mechanics.md`](./theory/dexterous_hand_mechanics.md)，涵盖 Grubler 公式、雅可比对偶性、阻抗控制数学推导。
 - **操控实战分析**:
     - 补充“开可乐（杠杆原理与指甲利用）”与“抓手机（环境物理对抗）”等工程细节。
+
+### 2026-01-28 🆕
+- **全身端到端 VLA（Humanoid Loco-manipulation）**：
+    - 新增 [`figure_helix_02_full_body_autonomy_2026.md`](./theory/frontier/figure_helix_02_full_body_autonomy_2026.md)：Figure Helix 02 的 S0/S1/S2 分层闭环笔记（含可复述的频率接口与工程落地视角）。
+- **视触觉 + 低成本传感（Dexterous Manipulation）**：
+    - 新增 [`visual_tactile_pretraining_online_multitask_learning_2026.md`](./theory/frontier/visual_tactile_pretraining_online_multitask_learning_2026.md)：SciRobotics 2026（单目 + 二值触觉）两阶段范式与任务级失败模式拆解。
+- **灵巧手硬件落地**：
+    - 新增 [`dexrobot_dexhand021_production_dexhand_2026.md`](./deployment/dexrobot_dexhand021_production_dexhand_2026.md)：DexRobot DexHand021（19-DOF, CANFD, ROS）量产手的对接清单与风险点。
 
 ### 2026-01-06
 - **实战案例：手势控制灵巧手**: 新增 [`mediapipe_wujihand_project.md`](./deployment/mediapipe_wujihand_project.md)。
