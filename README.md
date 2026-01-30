@@ -138,8 +138,8 @@ VLA-Handbook/
   **关键词**：π0.6 / Recap / Action Expert｜**适合**：追最新结构与训练口径
 - [`theory/spirit_v1_5_dissection.md`](./theory/spirit_v1_5_dissection.md)  
   **关键词**：Qwen3-VL + DiT + ODE/Euler｜**适合**：看一次代码级复现入口
-- [`theory/tactile_vla.md`](./theory/tactile_vla.md)  
-  **关键词**：触觉 VLA / DTA / SaTA｜**适合**：把触觉路线与关键论文串起来
+- [`theory/tactile/README.md`](./theory/tactile/README.md)  
+  **关键词**：VTLA / SaTA / 传感器选型 / 落地 checklist｜**适合**：把触觉相关内容单独拎出来一口气看完
 
 ### 前沿系统（全栈闭环：从“能演示”到“能稳定跑完任务”）
 
