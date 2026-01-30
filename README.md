@@ -16,14 +16,23 @@
 
 ## 先看这 6 篇（高信号精选）
 
-| 方向 | 推荐入口 | 为什么值得点开 |
-|---|---|---|
-| **从 0 建立框架** | [`theory/README.md`](./theory/README.md) | 学习路线图 + 模块化索引（把“要学什么”降维成可走的路径） |
-| **Flow Matching 入门到可用** | [`theory/pi0_flow_matching.md`](./theory/pi0_flow_matching.md) | 把“为什么快/怎么采样/工程折中”讲成可用抓手 |
-| **代码级拆解（生成式动作头）** | [`theory/spirit_v1_5_dissection.md`](./theory/spirit_v1_5_dissection.md) | Qwen3-VL + DiT + ODE/Euler 的端到端入口与复现清单 |
-| **真实开源 VLA 训练栈** | [`theory/unifolm_vla_0_unitree_2026.md`](./theory/unifolm_vla_0_unitree_2026.md) | Unitree UnifoLM-VLA-0：数据管线/部署与“30 分钟验收” |
-| **触觉/灵巧操作范式** | [`theory/frontier/visual_tactile_pretraining_online_multitask_learning_2026.md`](./theory/frontier/visual_tactile_pretraining_online_multitask_learning_2026.md) | SciRobotics 2026：单目+二值触觉，含任务级失败模式与指标 |
-| **真机落地总入口** | [`deployment/README.md`](./deployment/README.md) | 硬件选型、多模态同步、控制与调参 checklist |
+- **① 先拿到“地图”（10–20 分钟）**：[`theory/README.md`](./theory/README.md)  
+  - 你会得到：学习路线图 + 模块化索引（把“要学什么”降维成可走的路径）
+
+- **② 把动作生成学到“能用”（15–30 分钟）**：[`theory/pi0_flow_matching.md`](./theory/pi0_flow_matching.md)  
+  - 你会得到：Flow Matching 为什么更快、怎么采样、工程折中（可直接迁移到 VLA action head）
+
+- **③ 看一次代码级拆解（20–40 分钟）**：[`theory/spirit_v1_5_dissection.md`](./theory/spirit_v1_5_dissection.md)  
+  - 你会得到：Qwen3-VL + DiT + ODE/Euler 的端到端入口、关键超参与复现清单
+
+- **④ 直连真实开源训练栈（30–60 分钟）**：[`theory/unifolm_vla_0_unitree_2026.md`](./theory/unifolm_vla_0_unitree_2026.md)  
+  - 你会得到：数据管线/部署要点 + “30 分钟验收”清单（避免跑偏）
+
+- **⑤ 把触觉与失败模式讲清楚（20–40 分钟）**：[`theory/frontier/visual_tactile_pretraining_online_multitask_learning_2026.md`](./theory/frontier/visual_tactile_pretraining_online_multitask_learning_2026.md)  
+  - 你会得到：SciRobotics 2026（单目 + 二值触觉）的范式、任务级失败模式与指标
+
+- **⑥ 真机落地总入口（按需查阅）**：[`deployment/README.md`](./deployment/README.md)  
+  - 你会得到：硬件选型、多模态同步、控制与调参 checklist（把工程坑提前标出来）
 
 ## 🚀 快速开始（按你的目标选入口）
 
@@ -112,21 +121,48 @@ VLA-Handbook/
 
 ## 🧠 Theory 快速推荐（高信号入口）
 
-| 主题 | 文档 | 一句话总结 |
-|:-----|:-----|:---------|
-| **机械与硬件** | [`dexterous_hand_mechanics.md`](./theory/dexterous_hand_mechanics.md) | 🆕 Grubler 公式、雅可比对偶性与阻抗控制数学基础 |
-| | [`robot_hardware_selection_pricing.md`](./deployment/robot_hardware_selection_pricing.md) | 🆕 直驱 vs 绳驱 vs 液压流派对比与典型操纵难点解析 |
-| **前沿模型** | [`pi0_5_dissection.md`](./theory/pi0_5_dissection.md) | π0.5 开放世界泛化，分层推理机制 |
-| | [`pi0_6_dissection.md`](./theory/pi0_6_dissection.md) | π0.6 Recap 自我进化 + Action Expert |
-| | [`spirit_v1_5_dissection.md`](./theory/spirit_v1_5_dissection.md) | 🆕 Spirit-v1.5：Qwen3-VL + DiT，RoboChallenge 代码级复现与入口拆解 |
-| | [`tactile_vla.md`](./theory/tactile_vla.md) | 🆕 触觉反馈 VLA、DTA 动态触觉阵列与 SaTA 研究 |
-| **前沿系统** | [`figure_helix_02_full_body_autonomy_2026.md`](./theory/frontier/figure_helix_02_full_body_autonomy_2026.md) | 🆕 Helix 02：全身端到端 VLA，S0/S1/S2 分层闭环（200Hz/1kHz） |
-| | [`visual_tactile_pretraining_online_multitask_learning_2026.md`](./theory/frontier/visual_tactile_pretraining_online_multitask_learning_2026.md) | 🆕 SciRobotics 2026：单目 + 二值触觉（VT 预训练 + 在线多任务学习），含失败模式/未来方向 |
-| | [`unifolm_vla_0_unitree_2026.md`](./theory/unifolm_vla_0_unitree_2026.md) | 🆕 Unitree UnifoLM-VLA-0：开源训练/数据管线/部署，含可执行 sanity-check |
-| **动作生成** | [`pi0_flow_matching.md`](./theory/pi0_flow_matching.md) | Flow Matching（比 Diffusion 快 5x，π0 核心） |
-| | [`diffusion_policy.md`](./theory/diffusion_policy.md) | 扩散去噪，解决多模态分布 |
-| **效率优化** | [`flash_attention.md`](./theory/flash_attention.md) | Tiling + 重计算，显存 O(N²)→O(N) |
-| | [`peft_lora.md`](./theory/peft_lora.md) | 低秩分解，QLoRA ~6GB 微调 7B |
+按“你当下要解决的问题”选入口（每条都是**能落地/可复用**的高信号内容）：
+
+### 机械与硬件（把控制与可控性讲清楚）
+
+- [`theory/dexterous_hand_mechanics.md`](./theory/dexterous_hand_mechanics.md)  
+  **关键词**：Grübler / Jacobian / 阻抗控制｜**适合**：补硬核数学与控制直觉
+- [`deployment/robot_hardware_selection_pricing.md`](./deployment/robot_hardware_selection_pricing.md)  
+  **关键词**：直驱 vs 绳驱 vs 液压｜**适合**：做硬件选型与方案 trade-off
+
+### 前沿模型（看“模型怎么长出来”，而不是看宣传）
+
+- [`theory/pi0_5_dissection.md`](./theory/pi0_5_dissection.md)  
+  **关键词**：π0.5 / 开放世界泛化｜**适合**：理解分层推理与泛化机制
+- [`theory/pi0_6_dissection.md`](./theory/pi0_6_dissection.md)  
+  **关键词**：π0.6 / Recap / Action Expert｜**适合**：追最新结构与训练口径
+- [`theory/spirit_v1_5_dissection.md`](./theory/spirit_v1_5_dissection.md)  
+  **关键词**：Qwen3-VL + DiT + ODE/Euler｜**适合**：看一次代码级复现入口
+- [`theory/tactile_vla.md`](./theory/tactile_vla.md)  
+  **关键词**：触觉 VLA / DTA / SaTA｜**适合**：把触觉路线与关键论文串起来
+
+### 前沿系统（全栈闭环：从“能演示”到“能稳定跑完任务”）
+
+- [`theory/frontier/figure_helix_02_full_body_autonomy_2026.md`](./theory/frontier/figure_helix_02_full_body_autonomy_2026.md)  
+  **关键词**：Helix 02 / S0-S1-S2 / 200Hz-1kHz｜**适合**：全身 loco-manipulation 系统抽象
+- [`theory/frontier/visual_tactile_pretraining_online_multitask_learning_2026.md`](./theory/frontier/visual_tactile_pretraining_online_multitask_learning_2026.md)  
+  **关键词**：单目 + 二值触觉 / VT 预训练 / 失败模式｜**适合**：触觉带来的鲁棒性与边界
+- [`theory/unifolm_vla_0_unitree_2026.md`](./theory/unifolm_vla_0_unitree_2026.md)  
+  **关键词**：开源训练栈 / 数据管线 / 部署｜**适合**：按清单做“可执行 sanity-check”
+
+### 动作生成（把 distribution 学成可采样的动作）
+
+- [`theory/pi0_flow_matching.md`](./theory/pi0_flow_matching.md)  
+  **关键词**：Flow Matching｜**适合**：从原理到工程折中（π0 核心）
+- [`theory/diffusion_policy.md`](./theory/diffusion_policy.md)  
+  **关键词**：Diffusion｜**适合**：理解多模态动作分布与去噪采样
+
+### 效率优化（让训练/推理跑得动）
+
+- [`theory/flash_attention.md`](./theory/flash_attention.md)  
+  **关键词**：FlashAttention｜**适合**：显存/吞吐优化的第一性原理
+- [`theory/peft_lora.md`](./theory/peft_lora.md)  
+  **关键词**：PEFT / LoRA / QLoRA｜**适合**：小显存微调与工程落地
 
 ---
 
