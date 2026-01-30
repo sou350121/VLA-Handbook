@@ -87,20 +87,14 @@
 触觉 $C \in \{0,1\}^{20}$ 经过 MLP 与 1D 位置编码得到 $c$。
 
 **模态专属 mask**  
-$$
-v_{vis}=M(v,\gamma_v),\quad c_{vis}=M(c,\gamma_c)
-$$
+$v_{vis}=M(v,\gamma_v),\quad c_{vis}=M(c,\gamma_c)$
 
 **融合编码（加入 IPL token）**  
-$$
-h_{IPL}, h_v, h_c = \mathrm{TransE}([IPL, v_{vis}, c_{vis}])
-$$
+$h_{IPL}, h_v, h_c = \mathrm{TransE}([IPL, v_{vis}, c_{vis}])$
 
 **解码重建**  
 解码器 $\mathrm{TransD}$ 重建 $\hat V$ 与 $\hat C$，损失为加权 MSE：
-$$
-\mathcal{L}(\theta)=\lambda_v \mathrm{MSE}(V,\hat V)+\lambda_c \mathrm{MSE}(C,\hat C)
-$$
+$\mathcal{L}(\theta)=\lambda_v \mathrm{MSE}(V,\hat V)+\lambda_c \mathrm{MSE}(C,\hat C)$
 
 ### 2.2 变量说明（按论文符号）
 
