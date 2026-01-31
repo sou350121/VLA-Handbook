@@ -24,6 +24,7 @@
 - **SaTA / 空间锚定触觉（把触觉变成有坐标语义的 token）**：见 [`../tactile_vla.md`](../tactile_vla.md) 的 SaTA 小节
 - **UniTacHand（人手→机器人触觉技能迁移）**：[`../frontier/unitachhand.md`](../frontier/unitachhand.md)
 - **SuperTac + DOVE（多模态电子皮肤 + 触觉语言模型）**：[`../frontier/supertac_dove_multimodal_tactile_sensor.md`](../frontier/supertac_dove_multimodal_tactile_sensor.md)
+- **GenForce（跨触觉传感器的可迁移力感知）**：[`./genforce_tactile_force_transfer_2026.md`](./genforce_tactile_force_transfer_2026.md)
 
 ### C) 你要“硬件/传感器选型”（产品化优先）
 

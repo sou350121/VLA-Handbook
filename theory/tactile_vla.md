@@ -388,6 +388,11 @@ loss = CrossEntropy(decoder(tactile_emb, vision_emb), text_tokens)
 > **核心思想**: 先把人类触觉手套与机器人触觉传感器的信号投影到统一的 **MANO UV Map**（2D 规范表面），再用对比学习把两域对齐到同一潜空间，实现 **zero-shot** 策略迁移。
 > **手册解读**: 参见 [`./frontier/unitachhand.md`](./frontier/unitachhand.md)
 
+### 3.6 🆕 GenForce：跨触觉传感器的可迁移力感知 (Nature Communications 2026)
+> **论文**: Training tactile sensors to learn force sensing from each other (Nat Commun 2026) `https://doi.org/10.1038/s41467-026-68753-1`
+> **核心思想**: 用统一 marker 表示 + 条件扩散做 M2M（marker-to-marker）翻译，把“旧传感器的力标签”迁移到新传感器；再用时序力回归 + 材料补偿把误差压到可用范围。
+> **深度笔记**: [`./tactile/genforce_tactile_force_transfer_2026.md`](./tactile/genforce_tactile_force_transfer_2026.md)
+
 
 > **论文**: [SaTA: Spatially-anchored Tactile Awareness for Dexterous Manipulation](https://arxiv.org/abs/2510.14647)
 > **机构**: Sharpa (新加坡 AI 机器人公司) + 清华大学 + 武汉大学

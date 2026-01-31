@@ -35,6 +35,9 @@
   - 手册笔记：[`./frontier/supertac_dove_multimodal_tactile_sensor.md`](./frontier/supertac_dove_multimodal_tactile_sensor.md)
 - UniTacHand（2025）：人手→机器人触觉表征统一与技能迁移（MANO UV Map）  
   - 手册解读：[`./frontier/unitachhand.md`](./frontier/unitachhand.md)
+- GenForce（Nat Commun 2026）：跨触觉传感器的可迁移力感知（统一 marker 表示 + M2M 条件扩散 + 时序力回归 + 材料补偿）  
+  - 深度笔记：[`./tactile/genforce_tactile_force_transfer_2026.md`](./tactile/genforce_tactile_force_transfer_2026.md)  
+  - 论文 DOI：`https://doi.org/10.1038/s41467-026-68753-1`
 
 ### 0.5 世界模型 / 视频世界模型（World Models / Video）
 
