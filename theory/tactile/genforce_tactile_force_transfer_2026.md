@@ -19,8 +19,8 @@ GenForce 的真正贡献不是又一个更大的网络，而是一个可规模�
 | 模块 | 输入 → 输出 | 你需要的数据 | 解决的核心问题 |
 |---|---|---|---|
 | **统一 marker 表示** | 多源触觉信号（图像/多通道电信号）→ marker 图（2D deformation pattern） | 每种传感器的原始输出 + 转换/分割 | 把“不同物理原理/结构”的输入差异降到可对齐的公共空间 |
-| **M2M（Marker-to-Marker）翻译** | 源传感器的变形 marker 图 \(I^t_{S_i}\) + 目标传感器非接触参考图 \(I^0_{T_j}\) → 目标风格的变形图 \(I^t_{G_{i\to j}}\) | **位置配对**的 marker 图（远少于 force-paired） | 把“样式/分布差异”从源域搬运到目标域，同时保留形变信息 |
-| **力预测（Spatiotemporal）** | 目标域 marker 序列 → \(\hat F=(\hat F_x,\hat F_y,\hat F_z)\) | 源域已有的力标签（可被迁移） | 解决“同一张图对应不同力（加载/卸载 hysteresis）”、滑移/动态接触等时序问题 |
+| **M2M（Marker-to-Marker）翻译** | 源传感器的变形 marker 图 `I^t_{S_i}` + 目标传感器非接触参考图 `I^0_{T_j}` → 目标风格的变形图 `I^t_{G_{i->j}}` | **位置配对**的 marker 图（远少于 force-paired） | 把“样式/分布差异”从源域搬运到目标域，同时保留形变信息 |
+| **力预测（Spatiotemporal）** | 目标域 marker 序列 → `F_hat=(F_hat_x, F_hat_y, F_hat_z)` | 源域已有的力标签（可被迁移） | 解决“同一张图对应不同力（加载/卸载 hysteresis）”、滑移/动态接触等时序问题 |
 | **材料补偿（可选）** | 材料先验（force-normalized depth 曲线等）→ 修正迁移后的力标签 | 不同皮肤硬度的先验曲线 | 把“皮肤硬度差异”从不可控域差异变成可校正项 |
 
 ### 1.2 关键机制 (Key Mechanism)
@@ -62,26 +62,27 @@ GenForce 的真正贡献不是又一个更大的网络，而是一个可规模�
 ### 2.1 目标：在 many-to-many 传感器网络里复用力标签
 
 论文的形式化（Methods: Problem setting）是：  
-- 源域：\(\{S_i\}_{i=1}^n\) 有 \(\{I_{S_i}, F_{S_i}\}\)（force-paired）  
-- 目标域：\(\{T_j\}_{j=1}^m\) 只有 \(\{I_{T_j}\}\)（无力标签）  
-目标是得到能在 \(T_j\) 上工作的力预测器 \( \hat h_{i\to j} \)。
+- 源域：`{S_i}_{i=1..n}` 有 `{I_{S_i}, F_{S_i}}`（force-paired）  
+- 目标域：`{T_j}_{j=1..m}` 只有 `{I_{T_j}}`（无力标签）  
+目标是得到能在 `T_j` 上工作的力预测器 `h_hat(i->j)`。
 
 ### 2.2 关键公式（来自论文 Methods）
 
 - **条件扩散翻译（M2M）**：训练一个 image-conditioned diffusion model  
-  \(G(I^t_{S_i}, I^0_{T_j})\)，把源域变形图 \(I^t_{S_i}\) 映射到目标域风格的变形图：
+  `G(I^t_{S_i}, I^0_{T_j})`，把源域变形图 `I^t_{S_i}` 映射到目标域风格的变形图：
 
-\[
-G: I^t_{S_i} \rightarrow I^t_{T_j}
-\]
+```text
+G: I^t_{S_i} -> I^t_{T_j}
+```
 
-其中 condition 使用目标传感器的非接触参考图 \(I^0_{T_j}\)。训练好后得到生成图 \(I^t_{G_{i\to j}}\)，满足“像 \(T_j\)”但保留“源域的形变”。
+其中 condition 使用目标传感器的非接触参考图 `I^0_{T_j}`。训练好后得到生成图 `I^t_{G_{i->j}}`，满足“像 `T_j`”但保留“源域的形变”。
 
-- **迁移数据集构造**：把 \(\{I_{S_i}, F_{S_i}\}\) 变成 \(\{I_{G_{i\to j}}, F_{S_i}\}\)，用来训练目标域的力预测器：
+- **迁移数据集构造**：把 `{I_{S_i}, F_{S_i}}` 变成 `{I_{G_{i->j}}, F_{S_i}}`，用来训练目标域的力预测器：
 
-\[
-\hat h_{i\to j}: I_{G_{i\to j}} \mapsto F
-\]
+```text
+{I_{S_i}, F_{S_i}}  ->  {I_{G_{i->j}}, F_{S_i}}
+h_hat(i->j): I_{G_{i->j}} -> F
+```
 
 ### 2.3 直觉：为什么“先翻译形变”比“直接对齐 latent”更稳
 
@@ -115,6 +116,7 @@ G: I^t_{S_i} \rightarrow I^t_{T_j}
 ### 4.1 资源与吞吐
 
 - 论文 Methods：M2M 训练在 **NVIDIA A100 80GB** 上完成，图像统一到 **256×256**，AdamW，lr \(5\times 10^{-6}\)，80/20 split。  
+- 论文 Methods：M2M 训练在 **NVIDIA A100 80GB** 上完成，图像统一到 **256×256**，AdamW，lr `5e-6`，80/20 split。  
 - 仓库 README：官方测试 A100 80GB，但声明 **8GB 显存**、batch=1 也可跑（降低 batch_size）。  
 
 工程含义：M2M 训练是重的一步，但它是“传感器网络”级别的 amortized cost；一旦你把某类传感器风格接起来，后续更多同类传感器更换可以只做少量 location-paired 微调。
@@ -138,13 +140,13 @@ G: I^t_{S_i} \rightarrow I^t_{T_j}
 - **M2M 图像相似度**：FID / KID（论文 Results：Fig. 3）  
   - 平均 FID：>400 → **4**（约 100×）  
   - 平均 KID：>0.75 → **0.01**  
-- **力预测**：MAE + \(R^2\)（论文 Results：Fig. 4/5/6）
+- **力预测**：MAE + `R^2`（论文 Results：Fig. 4/5/6）
 
 ### 5.2 关键数字（强记忆点）
 
 - 仿真：12 marker patterns × 11 = **132** 组合（论文 Results：Fig. 3A）  
 - 真机：文中总结为 **74** 种 real-world combinations（论文 Discussion：贡献点 3）  
-- 同构 GelSight：source-only 最大 normal force error **>4.8N**；GenForce 后最大 error **<1N**，最小 **<0.7N**；\(R^2\) 平均 **>0.8**（论文 Results：Fig. 4D-E）  
+- 同构 GelSight：source-only 最大 normal force error **>4.8N**；GenForce 后最大 error **<1N**，最小 **<0.7N**；`R^2` 平均 **>0.8**（论文 Results：Fig. 4D-E）  
 - 材料补偿：hard-to-soft normal MAE **1.41N→0.99N（-30%）**；soft-to-hard **1.03N→0.87N（-16%）**；并报告 hard-to-soft **95%** 组合改善（论文 Results：Fig. 5E-F）  
 - 异构迁移：source-only 最大 MAE 可到 **7.76N（Fz）**；补偿后 uSkin→TacTip：**7.76N→0.52N（-93%）**（论文 Results：Fig. 6C）
 
@@ -155,7 +157,7 @@ G: I^t_{S_i} \rightarrow I^t_{T_j}
 ### 6.1 能力
 
 - **跨同构传感器（不同 illumination/marker pattern）**：显著降低误差（Fig. 4）  
-- **跨异构传感器（GelSight / TacTip / uSkin）**：在材料补偿后 \(R^2\) 全部转正，MAE 降到可用范围（Fig. 6）  
+- **跨异构传感器（GelSight / TacTip / uSkin）**：在材料补偿后 `R^2` 全部转正，MAE 降到可用范围（Fig. 6）  
 - **真机任务闭环**：日常物体抓取 + slip detection/compensation（Fig. 7；多传感器 force coordination）
 
 ### 6.2 失败模式与限制（论文 Discussion 明确给出）
