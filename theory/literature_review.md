@@ -32,7 +32,7 @@
   - Focus：`https://doi.org/10.1126/scirobotics.aee5782`
 - SuperTac + DOVE（Nature Sensors, 2025）：多模态电子皮肤 + 触觉语言模型（把触觉升级为可解释的语义状态）  
   - 论文页：`https://www.nature.com/articles/s44460-025-00006-y`  
-  - 手册笔记：[`./frontier/supertac_dove_multimodal_tactile_sensor.md`](./frontier/supertac_dove_multimodal_tactile_sensor.md)
+  - 手册笔记：[`../deployment/perception/supertac_dove_biomimetic_multimodal_tactile_sensing.md`](../deployment/perception/supertac_dove_biomimetic_multimodal_tactile_sensing.md)
 - UniTacHand（2025）：人手→机器人触觉表征统一与技能迁移（MANO UV Map）  
   - 手册解读：[`./frontier/unitachhand.md`](./frontier/unitachhand.md)
 - GenForce（Nat Commun 2026）：跨触觉传感器的可迁移力感知（统一 marker 表示 + M2M 条件扩散 + 时序力回归 + 材料补偿）  

@@ -261,7 +261,7 @@
 - 触觉为什么不可替代（行业/研究盘点）：[笔记](./frontier/tactile_irreplaceable.md)
 - **SuperTac + DOVE** (Nature Sensors, 2025): 多模态电子皮肤（多光谱+摩擦电+IMU+温度/接近/振动）+ 触觉语言模型
   - [论文页](https://www.nature.com/articles/s44460-025-00006-y)
-  - [手册笔记](./frontier/supertac_dove_multimodal_tactile_sensor.md)
+  - [手册笔记](../deployment/perception/supertac_dove_biomimetic_multimodal_tactile_sensing.md)
 - **VLA-Touch** (2025): Dual-Level Tactile Feedback
   - [论文](https://arxiv.org/abs/2507.17294)
 - **OmniVTLA** (2025): Semantic-Aligned Tactile Sensing

@@ -171,7 +171,7 @@
 | **Vicarious Maps** | [`./frontier/vicarious_body_maps.md`](./frontier/vicarious_body_maps.md) | 🆕 Nature 2025: 视触觉“感同身受”的神经基础 |
 | **UniTacHand** | [`./frontier/unitachhand.md`](./frontier/unitachhand.md) | 🆕 arXiv 2025: MANO UV Map 统一触觉表征，实现人手→机器人零样本迁移 |
 | **Tactile Outlook** | [`./frontier/tactile_irreplaceable.md`](./frontier/tactile_irreplaceable.md) | 🆕 触觉为何不可替代：力-形-质、闭环控制与产品化瓶颈 |
-| **SuperTac + DOVE** | [`./frontier/supertac_dove_multimodal_tactile_sensor.md`](./frontier/supertac_dove_multimodal_tactile_sensor.md) | 🆕 多模态电子皮肤（多光谱+摩擦电+IMU+温度/接近/振动）+ 触觉语言模型：让接触相位更可观测、更可解释 |
+| **SuperTac + DOVE** | [`../deployment/perception/supertac_dove_biomimetic_multimodal_tactile_sensing.md`](../deployment/perception/supertac_dove_biomimetic_multimodal_tactile_sensing.md) | 🆕 多模态电子皮肤（多光谱+摩擦电+IMU+温度/接近/振动）+ 触觉语言模型：让接触相位更可观测、更可解释 |
 | **Jim Fan 2025** | [`./frontier/jim_fan_2025_robotics_lessons.md`](./frontier/jim_fan_2025_robotics_lessons.md) | 🆕 行业复盘：硬件可靠性、评测可复现性、VLM→VLA 路线反思 |
 | **OneTwoVLA** | [`./frontier/onetwovla.md`](./frontier/onetwovla.md) | 🆕 统一模型 + 自适应推理切换 |
 | **1X World Model** | [`./frontier/one_x_world_model.md`](./frontier/one_x_world_model.md) | 🆕 视频世界模型 + 逆动力学（IDM）：先“想象”再“执行” |

@@ -23,7 +23,7 @@
 - **触觉为何不可替代（研究问题→可计算变量）**：[`../frontier/tactile_irreplaceable.md`](../frontier/tactile_irreplaceable.md)
 - **SaTA / 空间锚定触觉（把触觉变成有坐标语义的 token）**：见 [`../tactile_vla.md`](../tactile_vla.md) 的 SaTA 小节
 - **UniTacHand（人手→机器人触觉技能迁移）**：[`../frontier/unitachhand.md`](../frontier/unitachhand.md)
-- **SuperTac + DOVE（多模态电子皮肤 + 触觉语言模型）**：[`../frontier/supertac_dove_multimodal_tactile_sensor.md`](../frontier/supertac_dove_multimodal_tactile_sensor.md)
+- **SuperTac + DOVE（多模态电子皮肤 + 触觉语言模型）**：[`../../deployment/perception/supertac_dove_biomimetic_multimodal_tactile_sensing.md`](../../deployment/perception/supertac_dove_biomimetic_multimodal_tactile_sensing.md)
 - **GenForce（跨触觉传感器的可迁移力感知）**：[`./genforce_tactile_force_transfer_2026.md`](./genforce_tactile_force_transfer_2026.md)
 
 ### C) 你要“硬件/传感器选型”（产品化优先）
@@ -58,13 +58,10 @@ Tactile/Force (contact) ──────────────────�
 
 ---
 
-## 4. 触觉落地的 5 个最小验收点（建议写进实验计划）
+## 4. 工程落地入口（不在 theory 侧重复维护）
 
-- **时间对齐**：视觉/触觉/本体时间戳是否一致（是否存在 1–2 帧级错位导致“接触相位”漂移）
-- **口径统一**：触觉阈值、单位、漂移管理（同一指尖/不同指尖是否可比较）
-- **接触事件可复盘**：能否从日志里重建“何时接触/何时滑移/何时卡死”的关键片段
-- **闭环频率与 jitter**：接触控制层是否足够快且稳定（尤其是 System 0 / 反射层）
-- **失败模式字典**：至少能区分：空转/滑移/卡死/掉物/过力损伤（并有对应指标）
+- **触觉工程主入口（Perception）**：[`../../deployment/perception/README.md`](../../deployment/perception/README.md)  
+  - 推荐从 `4.1 触觉落地的最小验收点（Checklist）` 开始。
 
 ---
 

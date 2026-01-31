@@ -14,7 +14,7 @@
 - **把 Robotics 的“脏活”写清楚**：多模态同步、动作空间对齐、Sim2Real 断点、触觉/灵巧手硬件选型。  
 - **持续更新，但不让 README 膨胀**：前沿用 Biweekly 回链，细节进深度笔记，改动进 Changelog。
 
-## 先看这 6 篇（高信号精选）
+## 先看这 5 篇（高信号精选）
 
 - **① 先拿到“地图”（10–20 分钟）**：[`theory/README.md`](./theory/README.md)  
   - 你会得到：学习路线图 + 模块化索引（把“要学什么”降维成可走的路径）
@@ -28,10 +28,7 @@
 - **④ 直连真实开源训练栈（30–60 分钟）**：[`theory/unifolm_vla_0_unitree_2026.md`](./theory/unifolm_vla_0_unitree_2026.md)  
   - 你会得到：数据管线/部署要点 + “30 分钟验收”清单（避免跑偏）
 
-- **⑤ 把触觉与失败模式讲清楚（20–40 分钟）**：[`theory/frontier/visual_tactile_pretraining_online_multitask_learning_2026.md`](./theory/frontier/visual_tactile_pretraining_online_multitask_learning_2026.md)  
-  - 你会得到：SciRobotics 2026（单目 + 二值触觉）的范式、任务级失败模式与指标
-
-- **⑥ 真机落地总入口（按需查阅）**：[`deployment/README.md`](./deployment/README.md)  
+- **⑤ 真机落地总入口（按需查阅）**：[`deployment/README.md`](./deployment/README.md)  
   - 你会得到：硬件选型、多模态同步、控制与调参 checklist（把工程坑提前标出来）
 
 ## 🚀 快速开始（按你的目标选入口）
@@ -145,8 +142,6 @@ VLA-Handbook/
 
 - [`theory/frontier/figure_helix_02_full_body_autonomy_2026.md`](./theory/frontier/figure_helix_02_full_body_autonomy_2026.md)  
   **关键词**：Helix 02 / S0-S1-S2 / 200Hz-1kHz｜**适合**：全身 loco-manipulation 系统抽象
-- [`theory/frontier/visual_tactile_pretraining_online_multitask_learning_2026.md`](./theory/frontier/visual_tactile_pretraining_online_multitask_learning_2026.md)  
-  **关键词**：单目 + 二值触觉 / VT 预训练 / 失败模式｜**适合**：触觉带来的鲁棒性与边界
 - [`theory/unifolm_vla_0_unitree_2026.md`](./theory/unifolm_vla_0_unitree_2026.md)  
   **关键词**：开源训练栈 / 数据管线 / 部署｜**适合**：按清单做“可执行 sanity-check”
 

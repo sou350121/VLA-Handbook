@@ -34,7 +34,7 @@ SuperTacSkin(1mm)
 - **非成像模态补强**：摩擦电（材质/接近）+ IMU（姿态/碰撞/低频振动）。
 
 与 `theory/frontier` 的关联：
-- 仓库里已有更“研究视角”的笔记：`theory/frontier/supertac_dove_multimodal_tactile_sensor.md`（偏“为什么重要/产业启示”）；本文偏“部署/系统设计/工程坑点”。
+- `theory/frontier/supertac_dove_multimodal_tactile_sensor.md` 已与本文合并并保留为跳转页（避免重复维护）。
 
 ---
 
