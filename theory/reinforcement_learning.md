@@ -79,9 +79,9 @@
 
 ### 2.1 马尔可夫决策过程 (MDP)
 
-```
-MDP = (S, A, P, R, γ)
-```
+$$
+\text{MDP}=(S, A, P, R, \gamma)
+$$
 
 - **S**: 状态空间 (State Space) - 机器人观测到的一切
 - **A**: 动作空间 (Action Space) - 可执行的动作
@@ -93,9 +93,9 @@ MDP = (S, A, P, R, γ)
 
 **定义**: 下一状态只依赖于当前状态和动作，与历史无关。
 
-```
-P(s_{t+1} | s_t, a_t, s_{t-1}, a_{t-1}, ...) = P(s_{t+1} | s_t, a_t)
-```
+$$
+P(s_{t+1}\mid s_t,a_t,s_{t-1},a_{t-1},\ldots)=P(s_{t+1}\mid s_t,a_t)
+$$
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -123,44 +123,43 @@ P(s_{t+1} | s_t, a_t, s_{t-1}, a_{t-1}, ...) = P(s_{t+1} | s_t, a_t)
 
 最大化**累积折扣回报 (Cumulative Discounted Return)**:
 
-```
-G_t = Σ_{k=0}^{∞} γ^k × R_{t+k+1}
-```
+$$
+G_t=\sum_{k=0}^{\infty}\gamma^k\,R_{t+k+1}
+$$
 
 ### 2.4 价值函数 (Value Functions)
 
 **状态价值函数 (State Value)**:
 
-```
-V^π(s) = E_π[ G_t | S_t = s ]
-```
+$$
+V^\pi(s)=\mathbb{E}_\pi\big[G_t\mid S_t=s\big]
+$$
 
 **动作价值函数 (Action Value / Q-Function)**:
 
-```
-Q^π(s, a) = E_π[ G_t | S_t = s, A_t = a ]
-```
+$$
+Q^\pi(s,a)=\mathbb{E}_\pi\big[G_t\mid S_t=s,\ A_t=a\big]
+$$
 
 **Bellman 方程**:
 
-```
-Q^π(s, a) = R(s, a) + γ × E_{s' ~ P}[ V^π(s') ]
-```
+$$
+Q^\pi(s,a)=R(s,a)+\gamma\,\mathbb{E}_{s'\sim P(\cdot\mid s,a)}\big[V^\pi(s')\big]
+$$
 
 ### 2.5 最优价值函数与最优策略
 
 **最优价值函数**:
 
-```
-V*(s) = max_π V^π(s)
-Q*(s, a) = max_π Q^π(s, a)
-```
+$$
+V^*(s)=\max_\pi V^\pi(s),\qquad Q^*(s,a)=\max_\pi Q^\pi(s,a)
+$$
 
 **最优策略**:
 
-```
-π*(s) = argmax_a Q*(s, a)
-```
+$$
+\pi^*(s)=\arg\max_a Q^*(s,a)
+$$
 
 **为什么最优价值函数就是最优策略？**
 
@@ -330,11 +329,17 @@ Q*(s, a) = max_π Q^π(s, a)
 
 **目标函数**:
 
-```
-L_CLIP(θ) = E_t[ min( r_t(θ) × Â_t, clip(r_t(θ), 1-ε, 1+ε) × Â_t ) ]
-```
+$$
+\mathcal{L}_{\text{CLIP}}(\theta)
+= \mathbb{E}_t\Big[
+\min\big(
+r_t(\theta)\,\hat{A}_t,\;
+\operatorname{clip}(r_t(\theta), 1-\epsilon, 1+\epsilon)\,\hat{A}_t
+\big)
+\Big]
+$$
 
-其中 `r_t(θ) = π_θ(a_t|s_t) / π_{θ_old}(a_t|s_t)` 是重要性采样比率。
+其中 \(r_t(\theta)=\frac{\pi_\theta(a_t\mid s_t)}{\pi_{\theta_{\text{old}}}(a_t\mid s_t)}\) 是重要性采样比率，\(\hat{A}_t\) 是优势函数估计（常用 GAE）。
 
 ```python
 import torch
@@ -409,9 +414,9 @@ class PPO:
 
 **目标**:
 
-```
-J(π) = E_{τ ~ π}[ Σ_t R(s_t, a_t) + α × H(π(·|s_t)) ]
-```
+$$
+J(\pi)=\mathbb{E}_{\tau\sim\pi}\Big[\sum_t R(s_t,a_t)+\alpha\,\mathcal{H}(\pi(\cdot\mid s_t))\Big]
+$$
 
 ```python
 class SAC:
