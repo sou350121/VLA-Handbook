@@ -152,13 +152,13 @@ $$
 **最优价值函数**:
 
 $$
-V^{*}(s)=\max_{\pi} V^{\pi}(s),\qquad Q^{*}(s,a)=\max_{\pi} Q^{\pi}(s,a)
+V^{\star}(s)=\max_{\pi} V^{\pi}(s),\qquad Q^{\star}(s,a)=\max_{\pi} Q^{\pi}(s,a)
 $$
 
 **最优策略**:
 
 $$
-\pi^{*}(s)=\arg\max_{a} Q^{*}(s,a)
+\pi^{\star}(s)=\arg\max_{a} Q^{\star}(s,a)
 $$
 
 **为什么最优价值函数就是最优策略？**
