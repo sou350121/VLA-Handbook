@@ -334,7 +334,7 @@ $$
 = \mathbb{E}_t\Big[
 \min\big(
 r_t(\theta)\,\hat{A}_t,\;
-\operatorname{clip}(r_t(\theta), 1-\epsilon, 1+\epsilon)\,\hat{A}_t
+\mathrm{clip}(r_t(\theta), 1-\epsilon, 1+\epsilon)\,\hat{A}_t
 \big)
 \Big]
 $$
