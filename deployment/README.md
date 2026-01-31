@@ -11,6 +11,7 @@
 - **[可复现人形开源部署：Roboto_Origin](./roboto_origin_reproducible_humanoid_deployment.md)**: 从装配→ROS2 bring-up→仿真训练→Sim2Real→测试矩阵的落地清单。
 - **[VLA 模型边缘部署优化 (VLA Edge Deployment)](./vla_model_edge_deployment.md)**: 量化 (GPTQ, AWQ) 与边缘推理 (TensorRT-LLM, vLLM)。
 - **[ROS 集成与算法优化 (ROS & Optimization)](./ros_and_optimization.md)**: ROS2 零拷贝、组件容器与 DDS 分布式调优。
+- **[Agent 架构真机部署攻略 (Agentic VLA Deployment)](./agent_architecture_deployment_guide.md)**: 把 VLA 变成“能稳定做完任务”的系统：Planner/Policy/RT 控制分层、延迟预算、安全与恢复。
 
 ### 2. 感知、标定与多模态同步 (Sensing, Calibration & Sync)
 - **[Perception 总索引](./perception/README.md)**: 感知系统工程（传感器选型、标定、同步、数据质量与评估）的主入口与跨文档索引。
