@@ -37,6 +37,12 @@
 11. **[安克（Anker）面经：All-in 具身智能（RL + MPC）(2025)](./anker_allin_embodied_ai_interview_2025.md)** 🆕
     - RL：策略梯度推导、期望求导、方差降低、baseline 无偏性与类型、抓取场景 baseline
     - MPC：原理与 LQR/PID 区别、实时求解（qpOASES/OSQP）、失败兜底（备份控制器/安全模式）
+12. **[荣耀具身智能面经：VLA / LoRA / RTC / 综合主管面（2025）](./honor_embodied_ai_interview_2025.md)** 🆕
+    - 一面：构型/DoF、LoRA、RTC、模型 I/O、RL 算法对比
+    - 二面：动机与选择题（了解岗位/公司/是否选择/离职原因/困难协作/自动驾驶判断框架）
+13. **[众擎机器人：具身 VLA 算法面经（注意力/Transformer 手撕/BN vs LN）(2025)](./zhongqing_robotics_embodied_vla_interview_2025.md)** 🆕
+    - 一面：attention 公式、手撕 Transformer、归一化方式取舍、BN vs LN 细节
+    - 二面：主管深挖（你怎么做/为什么/实现了什么/还了解哪些替代方案）+ 研发组织与反问
 
 ## 刷题建议
 - **不要死记硬背**: 机器人面试更看重**工程直觉 (Engineering Intuition)**。
