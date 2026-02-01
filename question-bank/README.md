@@ -26,6 +26,9 @@
     - 从检测/分割 → 初始 pose（PnP）→ 精化（ICP/渲染）→ tracking → 多视角融合
     - 关键细节：对称物体、噪声/遮挡、实时优化、工程坑点与 fallback
     - 与 VLA 的关系：闭环 delta pose、数据/评估信号、risk-aware 置信度
+8. **[腾讯 Robotics X 具身算法一面（手术场景）高难应答稿 (2026)](./tencent_roboticsx_embodied_surgery_interview_2026.md)** 🆕
+    - 逐题复述：VLM×Diffusion 解耦、chunk 闭环、长时记忆（Mamba/外部记忆）、Sim2Real、OOD、安全策略
+    - 附：木棍折三段概率、岛屿数量两道手撕解法
 
 ## 刷题建议
 - **不要死记硬背**: 机器人面试更看重**工程直觉 (Engineering Intuition)**。
