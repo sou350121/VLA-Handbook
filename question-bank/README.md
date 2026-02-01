@@ -34,6 +34,9 @@
 10. **[Sharp Robotics 二面：两道纯手撕代码（矩阵乘法优化 / TopK）(2025)](./sharp_robotics_round2_coding_2025.md)** 🆕
     - 矩阵乘法：循环顺序 / 转置 / blocking 的 cache 友好优化口径
     - TopK：sort vs 最小堆 \(O(n\log k)\) vs quickselect/nth_element（期望线性）
+11. **[安克（Anker）面经：All-in 具身智能（RL + MPC）(2025)](./anker_allin_embodied_ai_interview_2025.md)** 🆕
+    - RL：策略梯度推导、期望求导、方差降低、baseline 无偏性与类型、抓取场景 baseline
+    - MPC：原理与 LQR/PID 区别、实时求解（qpOASES/OSQP）、失败兜底（备份控制器/安全模式）
 
 ## 刷题建议
 - **不要死记硬背**: 机器人面试更看重**工程直觉 (Engineering Intuition)**。
