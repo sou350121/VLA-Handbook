@@ -21,6 +21,49 @@
 
 ## 🎯 按技术分类
 
+### -0.5 经典真机数据与闭环抓取（Hand‑Eye Coordination / Grasping）
+
+> 说明：这类工作是“VLA 之前的真机学习底座”：它用可规模化的成功/失败信号，把抓取做成“候选动作评分 + 闭环伺服纠错”的系统工程范式。
+
+- Levine et al. (2016)：Learning Hand‑Eye Coordination for Robotic Grasping with Deep Learning and Large‑Scale Data Collection  
+  - 手册解读：[`./classics/levine_hand_eye_coordination_grasping_2016.md`](./classics/levine_hand_eye_coordination_grasping_2016.md)  
+  - arXiv：`https://arxiv.org/abs/1603.02199`
+
+- Levine et al. (2016)：End-to-End Training of Deep Visuomotor Policies（像素→扭矩，GPS 把 RL 变成监督学习）  
+  - 手册解读：[`./classics/levine_end_to_end_visuomotor_policies_2016.md`](./classics/levine_end_to_end_visuomotor_policies_2016.md)  
+  - arXiv：`https://arxiv.org/abs/1504.00702`
+
+- Levine & Abbeel (2014)：Learning Neural Network Policies with Guided Policy Search under Unknown Dynamics（未知动力学 + KL trust region）  
+  - 手册解读：[`./classics/levine_gps_unknown_dynamics_2014.md`](./classics/levine_gps_unknown_dynamics_2014.md)  
+  - NeurIPS PDF：`https://proceedings.neurips.cc/paper_files/paper/2014/file/6766aa2750c19aad2fa1b32f36ed4aee-Paper.pdf`
+
+### -0.4 基础模型能力注入：具身推理与可提示表征（Embodied CoT / Promptable Representations）
+
+> 说明：这两篇更像“把 VLM 的优势接到控制系统里”的两种方式：  
+> (1) **把推理链变成 policy 的显式中间变量（ECoT）**；(2) **把世界知识变成 state representation（PR2L）**。
+
+- Zawalski et al. (2024/2025)：Robotic Control via Embodied Chain-of-Thought Reasoning（ECoT：先推理再出动作，含 bbox/gripper grounding）  
+  - 手册解读：[`./frontier/embodied_chain_of_thought_robotic_control_2024.md`](./frontier/embodied_chain_of_thought_robotic_control_2024.md)  
+  - arXiv：`https://arxiv.org/abs/2407.08693`
+
+- Chen et al. (2024 arXiv / 2025 TMLR)：Vision-Language Models Provide Promptable Representations for Reinforcement Learning（PR2L：promptable state embedding + RL/BC grounding）  
+  - 手册解读：[`./frontier/vlm_promptable_representations_for_rl_pr2l_2025.md`](./frontier/vlm_promptable_representations_for_rl_pr2l_2025.md)  
+  - arXiv：`https://arxiv.org/abs/2402.02651`
+
+### -0.3 在线适配：无监督技能预训练与生成式回放（U2O RL / PGR）
+
+> 说明：这两篇更偏“训练配方/系统组件”，但对 VLA 很关键：  
+> (1) **U2O RL**：把离线预训练从“任务特定”改成“可复用的无监督技能”，再在线对齐任务；  
+> (2) **PGR**：把 replay buffer 从“重采样”升级为“条件生成”，提升在线样本效率并降低过拟合。
+
+- Kim et al. (2024)：Unsupervised-to-Online Reinforcement Learning（U2O RL：无监督离线技能预训练 + bridging + online fine-tuning）  
+  - 手册解读：[`./frontier/unsupervised_to_online_reinforcement_learning_u2o_2024.md`](./frontier/unsupervised_to_online_reinforcement_learning_u2o_2024.md)  
+  - arXiv：`https://arxiv.org/abs/2408.14785`
+
+- Wang et al. (2024 arXiv / 2025 ICLR)：Prioritized Generative Replay（PGR：条件扩散生成式回放 + relevance guidance，curiosity 是强默认项）  
+  - 手册解读：[`./frontier/prioritized_generative_replay_pgr_2025.md`](./frontier/prioritized_generative_replay_pgr_2025.md)  
+  - arXiv：`https://arxiv.org/abs/2410.18082`
+
 ### 0. 触觉 / 视触觉（Tactile）
 
 > 说明：本综述以 VLA 动作生成与训练范式为主，但在灵巧操作中，“接触相位”的可观测性往往决定系统上限，因此建议把触觉相关工作作为必备补充阅读。

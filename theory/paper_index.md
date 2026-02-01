@@ -39,12 +39,16 @@
 | **RL 训练** | GR-RL | [深度解析](./gr_rl_dissection.md) |
 | | π*0.6 Recap | [深度解析](./pi0_6_dissection.md#recap) |
 | | RLinf（VLA+RL Infra） | [工具解读](./frontier/rlinf_vla_rl_training.md) |
+| **Online RL / Replay** 🆕 | U2O RL (Unsupervised-to-Online) | [深度解读](./frontier/unsupervised_to_online_reinforcement_learning_u2o_2024.md) |
+|  | PGR (Prioritized Generative Replay) | [深度解读](./frontier/prioritized_generative_replay_pgr_2025.md) |
 | **架构创新** | WALL-OSS | [深度解析](./wall_oss.md) |
 | | Galaxea G0 | [详细](#galaxea-g0) |
 | **训练技术** | Knowledge Insulation | [摘要](#knowledge-insulation) |
 | **Latent Action** | UniVLA | [详细](#univla) |
 | | EvoVLA | [详细](#evovla) |
 | | MemoryVLA | [详细](#memoryvla) |
+| **VLM × 推理/表征** 🆕 | Embodied CoT (ECoT) | [深度解读](./frontier/embodied_chain_of_thought_robotic_control_2024.md) |
+|  | PR2L (Promptable Representations) | [深度解读](./frontier/vlm_promptable_representations_for_rl_pr2l_2025.md) |
 | **NeurIPS 2025** 🆕 | Artificial Hivemind | [详细](./neurips_2025_insights.md#1-artificial-hivemind-语言模型的同质化问题) |
 | | Gated Attention | [详细](./neurips_2025_insights.md#2-gated-attention-门控注意力机制) |
 | | 1000 Layer Networks | [详细](./neurips_2025_insights.md#3-1000-layer-networks-深层自监督-rl) |
@@ -94,6 +98,9 @@
 | | Galaxea G0 | [详细](#galaxea-g0) |
 | | Knowledge Insulation | [摘要](#knowledge-insulation) |
 | | UniVLA | [详细](#univla) |
+| | Embodied CoT (ECoT) | [深度解读](./frontier/embodied_chain_of_thought_robotic_control_2024.md) |
+| | PR2L (Promptable Reps for RL) | [深度解读](./frontier/vlm_promptable_representations_for_rl_pr2l_2025.md) |
+| | U2O RL (Unsupervised-to-Online) | [深度解读](./frontier/unsupervised_to_online_reinforcement_learning_u2o_2024.md) |
 | **2025** | π0.5 | [深度解析](./pi0_5_dissection.md) |
 | | π0.6 | [深度解析](./pi0_6_dissection.md) |
 | | FAST | [详细](#fast) |
@@ -104,6 +111,7 @@
 | | TTF-VLA | [详细](#ttf-vla) |
 | | OmniVLA | [详细](#omnivla) |
 | | MergeVLA | [详细](#mergevla) |
+| | PGR (Prioritized Generative Replay) | [深度解读](./frontier/prioritized_generative_replay_pgr_2025.md) |
 | | **NeurIPS 2025 Best Papers** 🆕 | [专题解读](./neurips_2025_insights.md) |
 | **2026** 🆕 | LingBot-VLA | [深度解析](./lingbot_vla_pragmatic_vla_foundation_model_2026.md) |
 | | VT Pretraining + Online Multitask (SciRobotics 2026) | [深度解析](./frontier/visual_tactile_pretraining_online_multitask_learning_2026.md) |
@@ -219,6 +227,17 @@
   - 定位: Reinforcement Learning Infrastructure（面向 Embodied / Agentic AI）
   - 关联: VLA+RL 训练框架（RLinf-VLA）、真机 RL、分布式 rollout 与可复现评估
   - [项目主页](https://github.com/RLinf/RLinf) | [手册解读](./frontier/rlinf_vla_rl_training.md)
+
+##### 轨迹优化 / Guided Policy Search（经典）
+> 注：这些是 VLA 之前的“真机学习底座”，但它们解释了为什么高精度任务往往需要“可控老师 + 可泛化学生 + 闭环”。
+
+- **Guided Policy Search under Unknown Dynamics** (Levine & Abbeel, NeurIPS 2014)
+  - 技术: local linear dynamics + KL trust region + distillation
+  - [手册解读](./classics/levine_gps_unknown_dynamics_2014.md) | [论文 PDF](https://proceedings.neurips.cc/paper_files/paper/2014/file/6766aa2750c19aad2fa1b32f36ed4aee-Paper.pdf)
+
+- **End-to-End Training of Deep Visuomotor Policies** (Levine et al., JMLR 2016)
+  - 技术: GPS 把 RL 转写成监督学习，学习像素→扭矩策略
+  - [手册解读](./classics/levine_end_to_end_visuomotor_policies_2016.md) | [arXiv](https://arxiv.org/abs/1504.00702)
 
 ##### 混合方法
 - **π0.5** - Co-training (Robot + Internet + Sim)

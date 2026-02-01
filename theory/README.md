@@ -184,6 +184,13 @@
 | **开可乐/发牌（灵巧手）** | [`./frontier/dexterous_hands_open_can_cards_data_pyramid.md`](./frontier/dexterous_hands_open_can_cards_data_pyramid.md) | 🆕 为什么“开可乐/发扑克牌”比“倒酒/洗碗机”难一个数量级：硬件三路线 × 触觉 × 数据金字塔 |
 | **中金（灵巧手）：工程约束→可计算变量** | [`./frontier/dexterous_hand_industry_cicc_05.md`](./frontier/dexterous_hand_industry_cicc_05.md) | 🆕 将产业“工程化瓶颈”映射为热/惯量/可观测性约束，并回链到 `companies/industry_reports` 的报告 digest |
 | **Ken Goldberg 对谈** | [`./frontier/ken_goldberg_data_quality_infrastructure.md`](./frontier/ken_goldberg_data_quality_infrastructure.md) | 🆕 GOFE 回归：瓶颈时刻数据、VLM 数据治理、Fog Robotics 与基础设施价值 |
+| **Levine 抓取（2016）** | [`./classics/levine_hand_eye_coordination_grasping_2016.md`](./classics/levine_hand_eye_coordination_grasping_2016.md) | 🆕 近百万级真实抓取数据 + 动作评分器 + 闭环视觉伺服：用“候选+评分+小步纠错”把抓取跑稳 |
+| **Levine 像素→扭矩（2016）** | [`./classics/levine_end_to_end_visuomotor_policies_2016.md`](./classics/levine_end_to_end_visuomotor_policies_2016.md) | 🆕 End-to-End visuomotor：用 GPS 把 RL 变成监督学习，学习像素→电机扭矩策略 |
+| **Levine GPS（2014）** | [`./classics/levine_gps_unknown_dynamics_2014.md`](./classics/levine_gps_unknown_dynamics_2014.md) | 🆕 未知动力学 + KL trust region 的轨迹优化，并蒸馏到神经网络策略（训练更安全、样本更高效） |
+| **Embodied CoT（2024）** | [`./frontier/embodied_chain_of_thought_robotic_control_2024.md`](./frontier/embodied_chain_of_thought_robotic_control_2024.md) | 🆕 具身思维链：训练 VLA 先推理（plan/subtask/move/bbox/gripper）再出动作，显著提升真实世界泛化，并支持语言纠错 |
+| **PR2L（2024/2025）** | [`./frontier/vlm_promptable_representations_for_rl_pr2l_2025.md`](./frontier/vlm_promptable_representations_for_rl_pr2l_2025.md) | 🆕 VLM 可提示表征：用 task-relevant prompt 把常识注入 state embedding，再用 RL/BC 做 grounding（Habitat CoT 1.5× 提升） |
+| **U2O RL（2024）** | [`./frontier/unsupervised_to_online_reinforcement_learning_u2o_2024.md`](./frontier/unsupervised_to_online_reinforcement_learning_u2o_2024.md) | 🆕 Unsupervised-to-Online RL：用无监督离线技能预训练替代任务特定离线预训练，提升复用性与在线微调稳定性 |
+| **PGR（2024/2025）** | [`./frontier/prioritized_generative_replay_pgr_2025.md`](./frontier/prioritized_generative_replay_pgr_2025.md) | 🆕 Prioritized Generative Replay：用条件扩散生成式回放 densify+guide 关键经验，提升在线样本效率并支撑更高 UTD |
 | **DKT Perception** | [`./frontier/dkt_transparency_perception.md`](./frontier/dkt_transparency_perception.md) | 🆕 基于视频扩散先验的透明物体深度/法向估计 |
 | **MM-ACT** | [`./frontier/vla_unified_token_space.md`](./frontier/vla_unified_token_space.md) | 全模态共享 Token 空间 |
 | **SGTM** | [`./frontier/vla_intrinsic_safety.md`](./frontier/vla_intrinsic_safety.md) | 本质安全与知识屏蔽 |

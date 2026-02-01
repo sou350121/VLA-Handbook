@@ -29,6 +29,8 @@
 8. **[腾讯 Robotics X 具身算法一面（手术场景）高难应答稿 (2026)](./tencent_roboticsx_embodied_surgery_interview_2026.md)** 🆕
     - 逐题复述：VLM×Diffusion 解耦、chunk 闭环、长时记忆（Mamba/外部记忆）、Sim2Real、OOD、安全策略
     - 附：木棍折三段概率、岛屿数量两道手撕解法
+9. **[星海图面经：训练系统 & 大模型基础逐题应答稿 (2026)](./xinghaitu_interview_infra_llm_2026.md)** 🆕
+    - 覆盖：DDP vs ZeRO-1、CPU offload、BF16/FP16、resume 数据连续性、DistributedSampler、GQA、RMSNorm、tokenization 放置、手撕省份数量
 
 ## 刷题建议
 - **不要死记硬背**: 机器人面试更看重**工程直觉 (Engineering Intuition)**。
