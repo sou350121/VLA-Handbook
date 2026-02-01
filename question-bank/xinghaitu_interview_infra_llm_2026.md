@@ -26,23 +26,23 @@
 
 ### 用“每个参数占多少字节”算一遍（面试官喜欢）
 以 Adam 为例（常见实现）：
-- 参数 \(W\)：fp16/bf16（2 bytes）
-- 梯度 \(\nabla W\)：fp16/bf16（2 bytes，具体取决于实现）
-- Adam 一阶/二阶矩 \(m,v\)：通常 fp32（各 4 bytes → 合计 8 bytes）
+- 参数 $W$：fp16/bf16（2 bytes）
+- 梯度 $\nabla W$：fp16/bf16（2 bytes，具体取决于实现）
+- Adam 一阶/二阶矩 $m,v$：通常 fp32（各 4 bytes → 合计 8 bytes）
 
 则 **DDP（不分片）**每参数显存大致：
-\[
+$$
 2 + 2 + 8 = 12\ \text{bytes/param}
-\]
+$$
 
-**ZeRO-1（N 卡）**把 optimizer state 分片为 \(1/N\)，则每参数显存大致：
-\[
+**ZeRO-1（N 卡）**把 optimizer state 分片为 $1/N$，则每参数显存大致：
+$$
 2 + 2 + \frac{8}{N}
-\]
+$$
 4 卡时：
-\[
+$$
 2 + 2 + \frac{8}{4} = 6\ \text{bytes/param}
-\]
+$$
 
 因此在这种典型设定下，**显存大约减半（12 → 6 bytes/param）**。  
 注意：实际数值会因 **梯度精度、是否保留 fp32 master weights、是否启用 gradient accumulation/activation checkpointing** 而变化，但“ZeRO-1 主要省 optimizer state”这个结论不变。
@@ -127,9 +127,9 @@ resume 时从 cursor 继续吐 index。
 1. 先生成一个全局 `indices=[0..len-1]`，若 `shuffle=True` 则用 `seed+epoch` 做确定性打乱  
 2. 计算 `total_size = num_samples * num_replicas`，必要时 padding/截断，使可整除  
 3. 各 rank 取子序列：
-\[
+$$
 \text{indices}_{rank} = \text{indices}[rank : total\_size : num\_replicas]
-\]
+$$
 
 这样每个 rank 的切片互不重叠，拼起来覆盖全局序列；全程不需要进程间通信，因为大家用同一套确定性规则生成同一个全局序列。
 
@@ -138,7 +138,7 @@ resume 时从 cursor 继续吐 index。
 ## 9) GQA 是什么？解决什么问题？
 
 ### 一句话
-**GQA（Grouped-Query Attention）**：让多个 Query head 共享更少的 Key/Value head（\(n_{kv} < n_q\)），从而降低 **KV cache** 的显存与带宽。
+**GQA（Grouped-Query Attention）**：让多个 Query head 共享更少的 Key/Value head（$n_{kv} < n_q$），从而降低 **KV cache** 的显存与带宽。
 
 ### 你可以补一句“为什么重要”
 长上下文推理/长任务里，KV cache 往往是显存大头；GQA 用更少的 KV 头显著省显存，同时通常比 MQA（单 KV）更稳。
@@ -175,14 +175,14 @@ RMSNorm 通常：
 
 ## 12) 手撕：省份数量
 
-这题通常是 LeetCode “省份数量 / 朋友圈” 变体：给定 \(N\times N\) 邻接矩阵 `isConnected`，求连通分量数量。
+这题通常是 LeetCode “省份数量 / 朋友圈” 变体：给定 $N\times N$ 邻接矩阵 `isConnected`，求连通分量数量。
 
 ### DFS/BFS 思路
-- 遍历每个城市 \(i\)，若未访问则 DFS/BFS 扩展所有与之连通的城市；计数 +1
+- 遍历每个城市 $i$，若未访问则 DFS/BFS 扩展所有与之连通的城市；计数 +1
 
 复杂度：
-- 时间 \(O(N^2)\)
-- 空间 \(O(N)\)
+- 时间 $O(N^2)$
+- 空间 $O(N)$
 
 ### 并查集（Union-Find）也可
 - 扫描矩阵的上三角，遇到 1 就 union；最后统计根的数量

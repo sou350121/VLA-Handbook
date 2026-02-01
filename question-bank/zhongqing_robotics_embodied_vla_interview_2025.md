@@ -31,26 +31,26 @@
 
 Scaled Dot-Product Attention：
 
-\[
+$$
 \text{Attention}(Q,K,V)=\text{softmax}\left(\frac{QK^\top}{\sqrt{d_k}}\right)V
-\]
+$$
 
 其中（以单头为例）：
-- \(Q = XW_Q\), \(K = XW_K\), \(V = XW_V\)
-- \(X\in\mathbb{R}^{T\times d}\)，\(d_k\) 是每头维度
+- $Q = XW_Q$, $K = XW_K$, $V = XW_V$
+- $X\in\mathbb{R}^{T\times d}$，$d_k$ 是每头维度
 
 多头注意力（MHA）：
-- 每头独立算 attention，然后 concat 再乘 \(W_O\)
+- 每头独立算 attention，然后 concat 再乘 $W_O$
 
 面试加分点：
-- **为什么要除以 \(\sqrt{d_k}\)**：避免点积随维度增大导致 softmax 饱和、梯度变小
-- **复杂度**：注意力矩阵是 \(T\times T\)，时间/显存 \(O(T^2)\)
+- **为什么要除以 $\sqrt{d_k}$**：避免点积随维度增大导致 softmax 饱和、梯度变小
+- **复杂度**：注意力矩阵是 $T\times T$，时间/显存 $O(T^2)$
 
 ### 1.3 手撕 Transformer（一层）：给出“最小可执行 forward”
 
 面试里最稳的“手撕结构”是按模块写：
 
-1) 线性投影：\(Q,K,V\)  
+1) 线性投影：$Q,K,V$  
 2) attention：softmax 权重 + 加权求和  
 3) 残差 + Norm  
 4) FFN（两层 MLP）  
@@ -72,6 +72,8 @@ def transformer_block(x):
     x = x + ffn(h)                # residual
     return x
 ```
+
+补一句避免歧义：如果面试官真的限定“输入只有一个 embedding（单 token）”，那么 $T=1$ 时 $QK^\top$ 只有一个标量，softmax 权重恒为 1，self-attention 退化成对该 token 的线性变换（本质上输出就是 $V$ 经输出投影后再走残差/FFN）。
 
 如果对方追问“Post-LN 呢？”：
 - Post-LN：把 layer_norm 放在 residual 后面（Transformer 原论文）

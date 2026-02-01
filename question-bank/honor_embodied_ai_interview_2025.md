@@ -47,12 +47,12 @@
 #### (B) LoRA 原理（高频必考）
 
 核心要点（尽量讲清楚“为什么省显存/算力”）：
-- 冻结原权重 \(W\)，只学习低秩增量 \(\Delta W = BA\)，其中 \(B\in\mathbb{R}^{d\times r}, A\in\mathbb{R}^{r\times k}\)，\(r\ll \min(d,k)\)
-- 前向：\(Wx \rightarrow (W+BA)x\)
-- 好处：训练参数从 \(O(dk)\) 变成 \(O(r(d+k))\)，并且便于多任务 adapter 管理
+- 冻结原权重 $W$，只学习低秩增量 $\Delta W = BA$，其中 $B\in\mathbb{R}^{d\times r}, A\in\mathbb{R}^{r\times k}$，$r\ll \min(d,k)$
+- 前向：$Wx \rightarrow (W+BA)x$
+- 好处：训练参数从 $O(dk)$ 变成 $O(r(d+k))$，并且便于多任务 adapter 管理
 
 可补一句工程口径：
-> “在 VLA 里常对 attention 的 \(W_q/W_k/W_v/W_o\) 或 MLP 层做 LoRA，推理时可 merge，也可保持可插拔。”
+> “在 VLA 里常对 attention 的 $W_q/W_k/W_v/W_o$ 或 MLP 层做 LoRA，推理时可 merge，也可保持可插拔。”
 
 #### (C) RTC 原理（这里容易歧义，建议给“可覆盖的解释”）
 

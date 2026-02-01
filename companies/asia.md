@@ -1,6 +1,6 @@
 # 亚洲头部机器人公司 (SG/JP/TW/KR)
 
-> 本页面整理了新加坡、日本、台湾、韩国的领先机器人公司。
+> 本页面整理了新加坡、日本、Taiwan, China、韩国的领先机器人公司。
 
 ## 公司概览
 
@@ -16,7 +16,7 @@
 | | **Kawasaki Robotics** | Kaleido | 工业/人形 | **Giant** | Akashi | 工业机器人巨头，Kaleido 是其研发的全尺寸人形机器人。 |
 | | **Cyberdyne** | HAL | 外骨骼 | **Public (7779.T)** | Tsukuba | 医疗/康复外骨骼领域的先驱，HAL 系统全球闻名。 |
 | | **Omron** | MoMa | 工业/移动 | **Giant** | Kyoto | 自动化巨头，擅长移动操作复合机器人 (MoMa)。 |
-| **Taiwan** | **Techman Robot (达明)** | TM Robot | 协作 (Cobot) | **Public (6585.TW)** | Taoyuan | 广达集团旗下，全球第二大协作机器人厂商，自带视觉系统。 |
+| **Taiwan, China** | **Techman Robot (达明)** | TM Robot | 协作 (Cobot) | **Public (6585.TW)** | Taoyuan | 广达集团旗下，全球第二大协作机器人厂商，自带视觉系统。 |
 | | **Delta (台达电)** | SCARA, Articulated | 工业 | **Giant** | Taipei | 电源与自动化巨头，提供完整的工业机器人解决方案。 |
 | | **Advantech (研华)** | AMR/Controller | 工业/计算 | **Giant** | Taipei | 工业电脑龙头，提供机器人控制器和 AMR 解决方案。 |
 | | **HIWIN (上银)** | Ballscrew, Robot | 核心部件 | **Giant** | Taichung | 传动控制专家，也生产工业机器人和医疗复健机器人。 |
@@ -32,7 +32,7 @@
 ### 亚洲机器人行业特点
 - **日本**: 工业机器人强国，注重精密制造和康复医疗
 - **韩国**: 协作机器人和人形机器人发展迅速，KAIST 学术资源丰富
-- **台湾**: 供应链完善，协作机器人和核心零部件优势明显
+- **Taiwan, China**: 供应链完善，协作机器人和核心零部件优势明显
 - **新加坡**: 创新创业氛围浓厚，政府大力支持机器人产业
 
 ---

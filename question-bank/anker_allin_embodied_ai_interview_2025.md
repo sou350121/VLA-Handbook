@@ -23,18 +23,18 @@
 
 最经典口径（REINFORCE）：
 
-\[
+$$
 \nabla_\theta J(\theta)=\nabla_\theta \mathbb{E}_{\tau\sim\pi_\theta}\left[\sum_{t} r_t\right]
 =\mathbb{E}_{\tau\sim\pi_\theta}\left[\sum_{t}\nabla_\theta \log \pi_\theta(a_t\mid s_t)\,G_t\right]
-\]
+$$
 
-其中 \(G_t=\sum_{t'\ge t}\gamma^{t'-t}r_{t'}\)。
+其中 $G_t=\sum_{t'\ge t}\gamma^{t'-t}r_{t'}$。
 
 如果想更贴近 actor-critic：
 
-\[
+$$
 \nabla_\theta J(\theta)=\mathbb{E}\left[\nabla_\theta \log \pi_\theta(a_t\mid s_t)\,A^\pi(s_t,a_t)\right]
-\]
+$$
 
 ### 1.2 为什么可以对“期望”求导？（期望与梯度交换）
 
@@ -42,20 +42,20 @@
 - 满足一定正则条件（可积性/支配收敛一类条件）时，可以交换导数与积分/求和顺序；
 - 在 RL 里常用 **log-derivative trick（score function trick）**：
 
-\[
+$$
 \nabla_\theta \mathbb{E}_{x\sim p_\theta}[f(x)]
 =\nabla_\theta \int p_\theta(x) f(x)\,dx
 =\int p_\theta(x)\nabla_\theta \log p_\theta(x)\,f(x)\,dx
 =\mathbb{E}\left[f(x)\nabla_\theta \log p_\theta(x)\right]
-\]
+$$
 
-把 \(p_\theta(x)\) 换成轨迹分布 \(p_\theta(\tau)\) 就得到策略梯度推导。
+把 $p_\theta(x)$ 换成轨迹分布 $p_\theta(\tau)$ 就得到策略梯度推导。
 
 ### 1.3 如何解决方差大的问题？
 
 面试常见要点（答 3–5 条就够）：
 - **baseline**（值函数/状态值/优势函数）
-- **actor-critic / GAE**：用优势估计替代 \(G_t\)，并用 GAE 平衡 bias-variance
+- **actor-critic / GAE**：用优势估计替代 $G_t$，并用 GAE 平衡 bias-variance
 - **reward normalization / advantage normalization**
 - **更大 batch / 多并行 rollout**（减少估计噪声）
 - **更稳的优化**：PPO clip、trust region、entropy regularization
@@ -67,31 +67,31 @@
 
 证明口径（写出一行就很加分）：
 
-\[
+$$
 \mathbb{E}_{a\sim\pi_\theta(\cdot\mid s)}\left[\nabla_\theta \log \pi_\theta(a\mid s)\,b(s)\right]
 =b(s)\nabla_\theta \sum_a \pi_\theta(a\mid s)
 =b(s)\nabla_\theta 1
 =0
-\]
+$$
 
 因此
 
-\[
+$$
 \mathbb{E}\left[\nabla_\theta \log \pi_\theta(a\mid s)\,(G_t-b(s_t))\right]
 =\mathbb{E}\left[\nabla_\theta \log \pi_\theta(a\mid s)\,G_t\right]
-\]
+$$
 
 **什么时候会引入 bias？**
-- baseline 如果依赖 \(a\)（例如 \(b(s,a)\)）且没做正确校正，会改变期望；
+- baseline 如果依赖 $a$（例如 $b(s,a)$）且没做正确校正，会改变期望；
 - advantage/critic 估计是近似的，会带来 **估计误差**，但这通常被视为“可控 trade-off”，在 actor-critic/PPO 里是标准做法。
 
 ### 1.5 简单介绍一下 baseline 类型
 
 按“baseline 用什么”分类，常见几类：
 - **常数 baseline**：用回报均值/滑动均值（最简单）
-- **state-value baseline**：\(V(s)\)，得到 advantage \(A=G-V(s)\)
-- **Q baseline / advantage baseline**：直接学 \(A(s,a)\) 或 \(Q(s,a)\)
-- **GAE**：优势的时序平滑估计（PPO 常用）
+- **state-value baseline**：$b(s)=V(s)$，得到 advantage $A=G_t-V(s_t)$
+- **time-dependent baseline**：$b(t)$ 或 $b(s,t)$（用于非平稳/阶段性任务，较少但合理）
+- **优势函数（advantage）口径**：把 baseline 融进 $A(s,a)$ 的估计（例如 critic 给 $V(s)$，再配合 GAE 得到低方差的 $A_t$）
 
 按“是否学习”分类：
 - **handcrafted baseline**（规则/启发式）
@@ -102,15 +102,15 @@
 更“工程口径”的答法：先明确你在说的是 **RL 训练稳定性** 的 baseline，而不是“抓取算法基线”。
 
 - 如果是 **on-policy（PPO/TRPO）** 做抓取（通常 sparse reward、contact 复杂）：
-  - 用 **\(V(s)\) critic** + **GAE**（最常见、最稳）
+  - 用 **$V(s)$ critic** + **GAE**（最常见、最稳）
   - reward/adv normalization
   - 如果任务长时/稀疏，可提 curriculum、reward shaping（但注意区分 baseline）
 
 - 如果是 **off-policy（SAC/TD3）**：
-  - 本质上不叫 baseline，而是直接学 Q；但你可以说“用双 Q/target network/温度项”稳定估计
+  - 严格说通常不叫“baseline”，而是通过 **Q/target network/双 Q/熵温度** 等机制稳定值估计与策略更新（回答时点明术语差异即可）
 
 一句话版本（适合面试收尾）：
-> “抓取这类接触丰富、奖励稀疏的问题，我会用 actor-critic 的 \(V(s)\) baseline + GAE（PPO 标配）来把方差压下来；如果是 off-policy 则用 Q/target 结构稳定训练。”
+> “抓取这类接触丰富、奖励稀疏的问题，我会用 actor-critic 的 $V(s)$ baseline + GAE（PPO 标配）来把方差压下来；如果是 off-policy 则用 Q/target 结构稳定训练。”
 
 ---
 
@@ -119,10 +119,10 @@
 ### 2.1 说一下 MPC 原理，和 LQR / PID 有什么区别？
 
 **MPC 核心**：
-- 每个控制周期，基于当前状态 \(x_t\) 解一个有限时域优化：
-  - 目标：最小化未来 \(H\) 步的代价
+- 每个控制周期，基于当前状态 $x_t$ 解一个有限时域优化：
+  - 目标：最小化未来 $H$ 步的代价
   - 约束：动力学约束 + 状态/控制约束（速度、力矩、碰撞、安全边界等）
-- 只执行第一步控制 \(u_t\)，下一周期滚动重解（receding horizon）
+- 只执行第一步控制 $u_t$，下一周期滚动重解（receding horizon）
 
 对比口径：
 - **PID**：误差反馈的固定结构控制，不显式优化未来，不自然处理复杂约束
