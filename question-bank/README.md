@@ -31,6 +31,9 @@
     - 附：木棍折三段概率、岛屿数量两道手撕解法
 9. **[星海图面经：训练系统 & 大模型基础逐题应答稿 (2026)](./xinghaitu_interview_infra_llm_2026.md)** 🆕
     - 覆盖：DDP vs ZeRO-1、CPU offload、BF16/FP16、resume 数据连续性、DistributedSampler、GQA、RMSNorm、tokenization 放置、手撕省份数量
+10. **[Sharp Robotics 二面：两道纯手撕代码（矩阵乘法优化 / TopK）(2025)](./sharp_robotics_round2_coding_2025.md)** 🆕
+    - 矩阵乘法：循环顺序 / 转置 / blocking 的 cache 友好优化口径
+    - TopK：sort vs 最小堆 \(O(n\log k)\) vs quickselect/nth_element（期望线性）
 
 ## 刷题建议
 - **不要死记硬背**: 机器人面试更看重**工程直觉 (Engineering Intuition)**。
