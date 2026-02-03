@@ -43,6 +43,7 @@
 | 📦 **数据处理** | [`data.md`](./data.md) | RLDS vs LeRobot vs HDF5、数据加载流水线 |
 | 🧭 **空间智能** | [`spatial_math.md`](./spatial_math.md) | 坐标系变换、四元数 vs 欧拉角 vs 6D Rotation |
 | 🧮 **数学必备** | [`math_for_vla.md`](./math_for_vla.md) | 🆕 实现 VLA 必备的线代、概率、控制与几何直觉 |
+| 🧩 **凸优化与 DCP** | [`dcp_convexity_rules.md`](./dcp_convexity_rules.md) | 🆕 CVX/CVXPY 的凸性检测规则与建模心法 |
 | ⚙️ **动力学分类** | [`robot_dynamics_classification.md`](./robot_dynamics_classification.md) | 🆕 约束完备性、浮动基座与惯量矩阵 |
 | 🖐️ **灵巧手机械学** | [`dexterous_hand_mechanics.md`](./dexterous_hand_mechanics.md) | 🆕 自由度分配、减速器、驱动流派与雅可比桥梁 |
 | 🎮 **动作空间** | [`action_representations.md`](./action_representations.md) | 连续 vs 离散、Delta vs Absolute |
