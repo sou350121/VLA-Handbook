@@ -10,6 +10,7 @@
 - **[国际机器人公司](./international.md)**: Tesla, Figure AI, Boston Dynamics 等
 - **[具身智能软件与平台](./embodied_ai.md)**: Physical Intelligence, Covariant, Hugging Face 等
 - **[产业报告 Digest](./industry_reports/README.md)**: 🆕 把券商/行业报告整理成工程化要点（含灵巧手）
+- **[公司动态：逐际动力 B 轮融资与路线](./limx_dynamics_series_b_200m_2026.md)**: 2 亿美元 B 轮融资 + TRON 2 / LimX COSA 叙事（原文口径，待核验）
 
 ## 🎯 求职方向指南
 

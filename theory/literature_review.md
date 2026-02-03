@@ -82,6 +82,23 @@
   - 深度笔记：[`./tactile/genforce_tactile_force_transfer_2026.md`](./tactile/genforce_tactile_force_transfer_2026.md)  
   - 论文 DOI：`https://doi.org/10.1038/s41467-026-68753-1`
 
+### 0.2 多模态融合与策略共识（Policy Consensus）
+
+> 说明：当触觉是“稀疏但关键”的模态时，特征拼接会把它当噪声；策略共识让每个模态拥有独立专家策略，再在动作层面组合。
+
+- Multi-Modal Manipulation via Policy Consensus (2025)  
+  - 手册解读：[`./frontier/policy_consensus_multimodal_manipulation_2025.md`](./frontier/policy_consensus_multimodal_manipulation_2025.md)  
+  - arXiv：`https://arxiv.org/pdf/2509.23468`  
+  - 项目主页：`https://policyconsensus.github.io/`
+
+### 0.3 物理方程视觉建模（Wave/Heat）
+
+> 说明：用物理方程刻画“特征传播”，为视觉骨干提供可解释的建模偏置。
+
+- WaveFormer: Frequency-Time Decoupled Vision Modeling with Wave Equation (2026)  
+  - 手册解读：[`./frontier/waveformer_wave_equation_vision_2026.md`](./frontier/waveformer_wave_equation_vision_2026.md)  
+  - arXiv：`https://arxiv.org/abs/2601.08602`
+
 ### 0.5 世界模型 / 视频世界模型（World Models / Video）
 
 > 说明：这类路线的目标是把机器人决策从“直接出动作”推向“先想象再行动”——用可学习的世界模型做预测、规划与反事实评估。  
@@ -515,6 +532,18 @@
 - Uni-CoT + 双头架构
 - [详细解析](./wall_oss.md)
 
+#### Policy Consensus (2025)
+- 多模态专家策略共识，避免特征拼接稀疏噪声化
+- [深度解读](./frontier/policy_consensus_multimodal_manipulation_2025.md)
+
+---
+
+### 2026（最新进展）
+
+#### WaveFormer (2026.01)
+- 波动方程视觉建模，频率-时间解耦，保留高频细节
+- [深度解读](./frontier/waveformer_wave_equation_vision_2026.md)
+
 ---
 
 ## 🔧 训练技术 (Training Techniques)
@@ -555,5 +584,5 @@
 
 ---
 
-**最后更新**: 2025-12-06
+**最后更新**: 2026-01-25
 [← Back to Theory](./README.md)

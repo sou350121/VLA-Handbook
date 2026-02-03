@@ -115,6 +115,7 @@
 | 🖐️ **触觉专题入口** | [`./tactile/README.md`](./tactile/README.md) | 触觉路线图：VTLA / SaTA / 硬件选型 / 落地 checklist 🆕 |
 | 🧠 **语言塑形感知** | [`./frontier/language_shapes_perception.md`](./frontier/language_shapes_perception.md) | “灰度香蕉”启示：语义先验影响视觉表征与属性推断 🆕 |
 | 🧪 **Physics of AI** | [`./frontier/physics_of_ai_liuziming.md`](./frontier/physics_of_ai_liuziming.md) | 不赌规模：用“现象-观测量-规律”研究神经网络，沉淀工程抓手 🆕 |
+| 🌊 **WaveFormer（2026）** | [`./frontier/waveformer_wave_equation_vision_2026.md`](./frontier/waveformer_wave_equation_vision_2026.md) | 波动方程视觉建模：频率-时间解耦，保留高频细节 🆕 |
 | 🐙 **软体本体感知** | [`./frontier/soft_robot_proprioception_gvs_sensitivity_ellipsoid.md`](./frontier/soft_robot_proprioception_gvs_sensitivity_ellipsoid.md) | GVS + 灵敏度椭球：把“不可观测性”变成可视化指标，并用于感知驱动规划 🆕 |
 
 ### 🧭 决策、规划与抓取 (Decision & Execution)
@@ -172,6 +173,7 @@
 | **Vicarious Maps** | [`./frontier/vicarious_body_maps.md`](./frontier/vicarious_body_maps.md) | 🆕 Nature 2025: 视触觉“感同身受”的神经基础 |
 | **UniTacHand** | [`./frontier/unitachhand.md`](./frontier/unitachhand.md) | 🆕 arXiv 2025: MANO UV Map 统一触觉表征，实现人手→机器人零样本迁移 |
 | **Tactile Outlook** | [`./frontier/tactile_irreplaceable.md`](./frontier/tactile_irreplaceable.md) | 🆕 触觉为何不可替代：力-形-质、闭环控制与产品化瓶颈 |
+| **Policy Consensus（2025）** | [`./frontier/policy_consensus_multimodal_manipulation_2025.md`](./frontier/policy_consensus_multimodal_manipulation_2025.md) | 🆕 策略级多模态融合：专家策略共识替代特征拼接，解决触觉稀疏噪声化 |
 | **SuperTac + DOVE** | [`../deployment/perception/supertac_dove_biomimetic_multimodal_tactile_sensing.md`](../deployment/perception/supertac_dove_biomimetic_multimodal_tactile_sensing.md) | 🆕 多模态电子皮肤（多光谱+摩擦电+IMU+温度/接近/振动）+ 触觉语言模型：让接触相位更可观测、更可解释 |
 | **Jim Fan 2025** | [`./frontier/jim_fan_2025_robotics_lessons.md`](./frontier/jim_fan_2025_robotics_lessons.md) | 🆕 行业复盘：硬件可靠性、评测可复现性、VLM→VLA 路线反思 |
 | **OneTwoVLA** | [`./frontier/onetwovla.md`](./frontier/onetwovla.md) | 🆕 统一模型 + 自适应推理切换 |

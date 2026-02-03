@@ -1,7 +1,7 @@
 # VLA 论文索引 (Paper Index)
 
 > **快速查找**: 多维度索引系统，帮助快速定位相关论文
-> **最后更新**: 2026-01-28
+> **最后更新**: 2026-01-25
 
 ---
 
@@ -29,6 +29,8 @@
 | | DKT Perception | [深度解析](./frontier/dkt_transparency_perception.md) |
 | **Tactile / Visuotactile** 🆕 | VT Pretraining + Online Multitask (SciRobotics 2026) | [深度解析](./frontier/visual_tactile_pretraining_online_multitask_learning_2026.md) |
 |  | GenForce (Nat Commun 2026) | [深度笔记](./tactile/genforce_tactile_force_transfer_2026.md) |
+| **Physics-Inspired Vision** 🆕 | WaveFormer (Wave Equation) | [深度解读](./frontier/waveformer_wave_equation_vision_2026.md) |
+| **Multimodal Fusion** 🆕 | Policy Consensus (Multi-Modal Manipulation) | [深度解读](./frontier/policy_consensus_multimodal_manipulation_2025.md) |
 | **Flow Matching** | π0 | [深度解析](./pi0_flow_matching.md) |
 | | π0.5 | [深度解析](./pi0_5_dissection.md) |
 | | π0.6 | [深度解析](./pi0_6_dissection.md) |
@@ -75,6 +77,8 @@
 | **Galaxea AI** | G0 | [详细](#galaxea-g0) |
 | **Robbyant Team** 🆕 | LingBot-VLA | [深度解析](./lingbot_vla_pragmatic_vla_foundation_model_2026.md) |
 | **Columbia** | Diffusion Policy | [详细](#diffusion-policy) |
+| **UIUC / Harvard / MIT / Columbia** 🆕 | WaveFormer | [深度解读](./frontier/waveformer_wave_equation_vision_2026.md) |
+| **UIUC / Harvard / MIT / Columbia** 🆕 | Policy Consensus | [深度解读](./frontier/policy_consensus_multimodal_manipulation_2025.md) |
 | **浙江大学** 🆕 | DKT Perception | [深度解析](./frontier/dkt_transparency_perception.md) |
 | | VT Pretraining + Online Multitask (SciRobotics 2026) | [深度解析](./frontier/visual_tactile_pretraining_online_multitask_learning_2026.md) |
 | **华盛顿大学** 🆕 | Artificial Hivemind | [详细](./neurips_2025_insights.md#1-artificial-hivemind-语言模型的同质化问题) |
@@ -112,10 +116,12 @@
 | | OmniVLA | [详细](#omnivla) |
 | | MergeVLA | [详细](#mergevla) |
 | | PGR (Prioritized Generative Replay) | [深度解读](./frontier/prioritized_generative_replay_pgr_2025.md) |
+| | Policy Consensus (Multi-Modal Manipulation) | [深度解读](./frontier/policy_consensus_multimodal_manipulation_2025.md) |
 | | **NeurIPS 2025 Best Papers** 🆕 | [专题解读](./neurips_2025_insights.md) |
 | **2026** 🆕 | LingBot-VLA | [深度解析](./lingbot_vla_pragmatic_vla_foundation_model_2026.md) |
 | | VT Pretraining + Online Multitask (SciRobotics 2026) | [深度解析](./frontier/visual_tactile_pretraining_online_multitask_learning_2026.md) |
 | | Video Generation Models in Robotics (Survey) | [前沿笔记](./frontier/video_generation_models_in_robotics_survey_2026.md) |
+| | WaveFormer (Wave Equation) | [深度解读](./frontier/waveformer_wave_equation_vision_2026.md) |
 
 ---
 

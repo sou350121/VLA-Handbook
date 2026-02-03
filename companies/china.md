@@ -16,7 +16,7 @@
 | **Galbot (银河通用)** | Galbot G1 | 具身智能 | **天使轮 (7亿)** | 专注于大模型与机器人的结合 (General Purpose)，泛化能力强。 |
 | **X Square (自变量机器人)** | WALL-A / WALL-OSS | 具身智能 | **媒体报道：获字节、红杉等押注（金额口径不一）** | 强调“物理世界基础模型”与端到端长时序操作；同时推进开源生态（WALL-OSS）。参考：[盖世汽车相关报道](https://auto.gasgoo.com/news/202503/25I70421301C106.shtml)、[搜狐相关报道](https://www.sohu.com/a/922941858_114765)。 |
 | **Robot Era (星动纪元)** | STAR 1, 小星 | 人形 | **A轮 (超3亿)** | 清华交叉信息院孵化，算法强，STAR 1 奔跑速度惊人。 |
-| **LimX Dynamics (逐际动力)** | CL-1, P1 | 人形, 四轮足 | **A轮** | 专注于运动控制 (Motion Control)，足式机器人技术硬核。 |
+| **LimX Dynamics (逐际动力)** | TRON 1/2, LimX COSA | 人形, 多形态 | **B轮 (2亿美元，待核验)** | 运动控制 + Agentic OS 路线；详见 [`limx_dynamics_series_b_200m_2026.md`](./limx_dynamics_series_b_200m_2026.md)。 |
 | **Deep Robotics (云深处)** | 绝影 X30, Dr.01 | 四足, 人形 | **B轮** | 工业级四足机器人领军者，电力巡检等场景落地多。 |
 | **AgileX (松灵机器人)** | Scout, LIMO | 移动底盘 | **B轮** | ROS 生态支持最好，移动底盘市占率高，适合科研。 |
 | **Dreame (追觅科技)** | 扫地机, 人形 | 消费, 人形 | **C轮 (百亿级)** | 消费电子巨头跨界，电机技术强，资金雄厚。 |
