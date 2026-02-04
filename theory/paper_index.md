@@ -51,8 +51,9 @@
 | **Latent Action** | UniVLA | [详细](#univla) |
 | | EvoVLA | [详细](#evovla) |
 | | MemoryVLA | [详细](#memoryvla) |
-| **VLM × 推理/表征** 🆕 | Embodied CoT (ECoT) | [深度解读](./frontier/embodied_chain_of_thought_robotic_control_2024.md) |
-|  | PR2L (Promptable Representations) | [深度解读](./frontier/vlm_promptable_representations_for_rl_pr2l_2025.md) |
+| **VLM × 推理/表征** 🆕 | Embodied CoT (ECoT) | [深度解读](./llm_reasoning/embodied_chain_of_thought_robotic_control_2024.md) |
+|  | PR2L (Promptable Representations) | [深度解读](./llm_reasoning/vlm_promptable_representations_for_rl_pr2l_2025.md) |
+| **Reasoning / Test-time Scaling** 🆕 | DAC-RL (Divide-and-Conquer) | [深度解读](./llm_reasoning/dac_rl_divide_conquer_reasoning_2026.md) |
 | **NeurIPS 2025** 🆕 | Artificial Hivemind | [详细](./neurips_2025_insights.md#1-artificial-hivemind-语言模型的同质化问题) |
 | | Gated Attention | [详细](./neurips_2025_insights.md#2-gated-attention-门控注意力机制) |
 | | 1000 Layer Networks | [详细](./neurips_2025_insights.md#3-1000-layer-networks-深层自监督-rl) |
@@ -80,6 +81,7 @@
 | **Galaxea AI** | G0 | [详细](#galaxea-g0) |
 | **Robbyant Team** 🆕 | LingBot-VLA | [深度解析](./lingbot_vla_pragmatic_vla_foundation_model_2026.md) |
 | **Samsung Research** 🆕 | Shallow-π | [深度解读](./frontier/shallow_pi_knowledge_distillation_flow_vla_2026.md) |
+| **UCLA / Microsoft** 🆕 | DAC-RL | [深度解读](./llm_reasoning/dac_rl_divide_conquer_reasoning_2026.md) |
 | **Columbia** | Diffusion Policy | [详细](#diffusion-policy) |
 | **UIUC / Harvard / MIT / Columbia** 🆕 | WaveFormer | [深度解读](./frontier/waveformer_wave_equation_vision_2026.md) |
 | **UIUC / Harvard / MIT / Columbia** 🆕 | Policy Consensus | [深度解读](./frontier/policy_consensus_multimodal_manipulation_2025.md) |
@@ -106,8 +108,8 @@
 | | Galaxea G0 | [详细](#galaxea-g0) |
 | | Knowledge Insulation | [摘要](#knowledge-insulation) |
 | | UniVLA | [详细](#univla) |
-| | Embodied CoT (ECoT) | [深度解读](./frontier/embodied_chain_of_thought_robotic_control_2024.md) |
-| | PR2L (Promptable Reps for RL) | [深度解读](./frontier/vlm_promptable_representations_for_rl_pr2l_2025.md) |
+| | Embodied CoT (ECoT) | [深度解读](./llm_reasoning/embodied_chain_of_thought_robotic_control_2024.md) |
+| | PR2L (Promptable Reps for RL) | [深度解读](./llm_reasoning/vlm_promptable_representations_for_rl_pr2l_2025.md) |
 | | U2O RL (Unsupervised-to-Online) | [深度解读](./frontier/unsupervised_to_online_reinforcement_learning_u2o_2024.md) |
 | **2025** | π0.5 | [深度解析](./pi0_5_dissection.md) |
 | | π0.6 | [深度解析](./pi0_6_dissection.md) |
@@ -125,6 +127,7 @@
 | **2026** 🆕 | LingBot-VLA | [深度解析](./lingbot_vla_pragmatic_vla_foundation_model_2026.md) |
 | | RDT2 (UMI Zero-shot) | [深度解读](./frontier/rdt2_umi_zero_shot_cross_embodiment_2026.md) |
 | | Shallow-π (Distillation) | [深度解读](./frontier/shallow_pi_knowledge_distillation_flow_vla_2026.md) |
+| | DAC-RL (Divide-and-Conquer) | [深度解读](./llm_reasoning/dac_rl_divide_conquer_reasoning_2026.md) |
 | | VT Pretraining + Online Multitask (SciRobotics 2026) | [深度解析](./frontier/visual_tactile_pretraining_online_multitask_learning_2026.md) |
 | | Video Generation Models in Robotics (Survey) | [前沿笔记](./frontier/video_generation_models_in_robotics_survey_2026.md) |
 | | WaveFormer (Wave Equation) | [深度解读](./frontier/waveformer_wave_equation_vision_2026.md) |
@@ -367,6 +370,8 @@
   - [笔记](./frontier/rdt2_umi_zero_shot_cross_embodiment_2026.md)
 - Shallow-π (2026.01): Flow-based VLA 层深蒸馏（18→6）  
   - [笔记](./frontier/shallow_pi_knowledge_distillation_flow_vla_2026.md)
+- DAC-RL (2026.02): 分治推理训练提升测试时可扩展性  
+  - [笔记](./llm_reasoning/dac_rl_divide_conquer_reasoning_2026.md)
 - Video Generation Models in Robotics (Survey, arXiv 2026): 视频生成模型在机器人中的应用、挑战与未来方向  
   - [笔记](./frontier/video_generation_models_in_robotics_survey_2026.md)
   - [论文](https://arxiv.org/abs/2601.07823)

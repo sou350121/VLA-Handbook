@@ -43,11 +43,11 @@
 > (1) **把推理链变成 policy 的显式中间变量（ECoT）**；(2) **把世界知识变成 state representation（PR2L）**。
 
 - Zawalski et al. (2024/2025)：Robotic Control via Embodied Chain-of-Thought Reasoning（ECoT：先推理再出动作，含 bbox/gripper grounding）  
-  - 手册解读：[`./frontier/embodied_chain_of_thought_robotic_control_2024.md`](./frontier/embodied_chain_of_thought_robotic_control_2024.md)  
+  - 手册解读：[`./llm_reasoning/embodied_chain_of_thought_robotic_control_2024.md`](./llm_reasoning/embodied_chain_of_thought_robotic_control_2024.md)  
   - arXiv：`https://arxiv.org/abs/2407.08693`
 
 - Chen et al. (2024 arXiv / 2025 TMLR)：Vision-Language Models Provide Promptable Representations for Reinforcement Learning（PR2L：promptable state embedding + RL/BC grounding）  
-  - 手册解读：[`./frontier/vlm_promptable_representations_for_rl_pr2l_2025.md`](./frontier/vlm_promptable_representations_for_rl_pr2l_2025.md)  
+  - 手册解读：[`./llm_reasoning/vlm_promptable_representations_for_rl_pr2l_2025.md`](./llm_reasoning/vlm_promptable_representations_for_rl_pr2l_2025.md)  
   - arXiv：`https://arxiv.org/abs/2402.02651`
 
 ### -0.3 在线适配：无监督技能预训练与生成式回放（U2O RL / PGR）
@@ -98,6 +98,14 @@
 - WaveFormer: Frequency-Time Decoupled Vision Modeling with Wave Equation (2026)  
   - 手册解读：[`./frontier/waveformer_wave_equation_vision_2026.md`](./frontier/waveformer_wave_equation_vision_2026.md)  
   - arXiv：`https://arxiv.org/abs/2601.08602`
+
+### 0.4 推理范式与测试时扩展（DAC-RL）
+
+> 说明：当 CoT 达到上限时，DAC-RL 通过“分解 + 征服”的训练对齐，提升 test-time scalability。
+
+- Training LLMs for Divide-and-Conquer Reasoning Elevates Test-Time Scalability (2026)  
+  - 手册解读：[`./llm_reasoning/dac_rl_divide_conquer_reasoning_2026.md`](./llm_reasoning/dac_rl_divide_conquer_reasoning_2026.md)  
+  - arXiv：`https://arxiv.org/pdf/2602.02477`
 
 ### 0.5 世界模型 / 视频世界模型（World Models / Video）
 
@@ -479,6 +487,9 @@
 ### Samsung Research
 - **Shallow-π** (2026)
 
+### UCLA / Microsoft
+- **DAC-RL** (2026)
+
 ### RDT Team / 清华大学 MARS Lab
 - **RDT2** (2026)
 
@@ -565,6 +576,10 @@
 ---
 
 ### 2026（最新进展）
+
+#### DAC-RL (2026.02)
+- 分治推理训练提升测试时可扩展性  
+- [深度解读](./llm_reasoning/dac_rl_divide_conquer_reasoning_2026.md)
 
 #### Shallow-π (2026.01)
 - Flow-based VLA 层深蒸馏（18→6）  
