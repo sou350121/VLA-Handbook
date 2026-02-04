@@ -15,6 +15,7 @@
 - **[Hyperpacked piezoelectric-powered capacitive sensor array（Nat. Sens. 2026）](./hyperpacked_piezocapacitive_vibration_sensor_array.md)**：自供能电容振动传感阵列，80–5,000 Hz 平坦频响，用于语音/呼吸/音乐等高保真振动检测。
 - **[SuperTac + DOVE：仿生多模态触觉传感与触觉语言模型（Nat. Sens. 2026）](./supertac_dove_biomimetic_multimodal_tactile_sensing.md)**：多光谱（UV/VIS/NIR/MIR）+ 摩擦电 + IMU 的 1mm 触觉皮肤，并用 8.5B 触觉语言模型做语义理解与推理。
 - **[触觉阵列算法：电容阵列 vs 压阻阵列（含视触觉）](./tactile_array_algorithms_capacitive_piezoresistive.md)**：从原始 taxel/触觉图像到 CoP/面积/法向代理 + 预滑/滑移特征与状态机；覆盖漂移、串扰、滞回/蠕变与视触觉（marker tracking / 深度重建）。
+- **[AFM：激光直写曲面可伸缩应变传感器（2025）](./afm_laser_direct_write_wearable_strain_hmi_2025.md)**：在手套等曲面上原位制造双层应变传感器阵列与互连，支持手势 HMI 与机械手同步。
 
 ---
 
