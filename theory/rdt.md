@@ -3,6 +3,7 @@
 > **核心论文**: [RDT-1B: a Diffusion Foundation Model for Bimanual Manipulation](https://arxiv.org/abs/2410.07864) (Liu et al., 2024)
 > **开发者**: 清华大学 MARS Lab & 字节跳动
 > **代表模型**: **RDT-170M**, **RDT-1B**
+> **RDT2 进展**: [RDT2 零样本跨本体部署与 UMI 数据规模化](./frontier/rdt2_umi_zero_shot_cross_embodiment_2026.md)
 
 ## 1. 为什么需要 RDT? (Why?)
 

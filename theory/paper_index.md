@@ -1,7 +1,7 @@
 # VLA 论文索引 (Paper Index)
 
 > **快速查找**: 多维度索引系统，帮助快速定位相关论文
-> **最后更新**: 2026-01-25
+> **最后更新**: 2026-02-03
 
 ---
 
@@ -26,6 +26,7 @@
 |:---|:---|:---|
 | **Diffusion** | Diffusion Policy | [详细](#diffusion-policy) |
 | | RDT-1B | [详细](#rdt) |
+| | RDT2 | [深度解读](./frontier/rdt2_umi_zero_shot_cross_embodiment_2026.md) |
 | | DKT Perception | [深度解析](./frontier/dkt_transparency_perception.md) |
 | **Tactile / Visuotactile** 🆕 | VT Pretraining + Online Multitask (SciRobotics 2026) | [深度解析](./frontier/visual_tactile_pretraining_online_multitask_learning_2026.md) |
 |  | GenForce (Nat Commun 2026) | [深度笔记](./tactile/genforce_tactile_force_transfer_2026.md) |
@@ -71,6 +72,7 @@
 | | Knowledge Insulation | [摘要](#knowledge-insulation) |
 | **ByteDance Seed** | GR-RL | [深度解析](./gr_rl_dissection.md) |
 | | RDT-1B | [详细](#rdt) |
+| **RDT Team / 清华大学 MARS Lab** 🆕 | RDT2 | [深度解读](./frontier/rdt2_umi_zero_shot_cross_embodiment_2026.md) |
 | **Stanford** | OpenVLA | [深度解析](#openvla) |
 | | ACT | [详细](#act) |
 | **X² (自变量)** | WALL-OSS | [深度解析](./wall_oss.md) |
@@ -119,6 +121,7 @@
 | | Policy Consensus (Multi-Modal Manipulation) | [深度解读](./frontier/policy_consensus_multimodal_manipulation_2025.md) |
 | | **NeurIPS 2025 Best Papers** 🆕 | [专题解读](./neurips_2025_insights.md) |
 | **2026** 🆕 | LingBot-VLA | [深度解析](./lingbot_vla_pragmatic_vla_foundation_model_2026.md) |
+| | RDT2 (UMI Zero-shot) | [深度解读](./frontier/rdt2_umi_zero_shot_cross_embodiment_2026.md) |
 | | VT Pretraining + Online Multitask (SciRobotics 2026) | [深度解析](./frontier/visual_tactile_pretraining_online_multitask_learning_2026.md) |
 | | Video Generation Models in Robotics (Survey) | [前沿笔记](./frontier/video_generation_models_in_robotics_survey_2026.md) |
 | | WaveFormer (Wave Equation) | [深度解读](./frontier/waveformer_wave_equation_vision_2026.md) |
@@ -141,6 +144,11 @@
   - 技术: DiT, 十亿参数
   - 动作空间: 连续
   - [详细内容](./rdt.md)
+
+- **RDT2** (2026)
+  - 技术: Residual VQ + Flow Matching + 单步蒸馏
+  - 动作空间: 连续
+  - [深度解读](./frontier/rdt2_umi_zero_shot_cross_embodiment_2026.md)
 
 ##### Flow Matching 系列
 - **π0** (2024)
@@ -315,6 +323,9 @@
 - **GR-RL** (2025)
 - **RDT-1B** (2024) (与清华合作)
 
+#### RDT Team / 清华大学 MARS Lab
+- **RDT2** (2026)
+
 #### Stanford
 - **OpenVLA** (2024)
 - **ACT** (2023)
@@ -349,6 +360,8 @@
 - WALL-OSS (2025)
 
 #### 2026（世界模型 / 视频生成综述）
+- RDT2 (2026.02): UMI 数据规模化与跨本体零样本部署  
+  - [笔记](./frontier/rdt2_umi_zero_shot_cross_embodiment_2026.md)
 - Video Generation Models in Robotics (Survey, arXiv 2026): 视频生成模型在机器人中的应用、挑战与未来方向  
   - [笔记](./frontier/video_generation_models_in_robotics_survey_2026.md)
   - [论文](https://arxiv.org/abs/2601.07823)
@@ -393,6 +406,6 @@
 
 ---
 
-**最后更新**: 2025-12-06
+**最后更新**: 2026-02-03
 **维护者**: VLA Handbook Team
 

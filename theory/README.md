@@ -86,6 +86,7 @@
 | **ACT** | [`act.md`](./act.md) | CVAE + 动作分块，ALOHA 核心 |
 | **Diffusion Policy** | [`diffusion_policy.md`](./diffusion_policy.md) | 扩散去噪，解决多模态分布 |
 | **RDT** | [`rdt.md`](./rdt.md) | 十亿参数扩散模型，双臂操作 |
+| **RDT2** | [`./frontier/rdt2_umi_zero_shot_cross_embodiment_2026.md`](./frontier/rdt2_umi_zero_shot_cross_embodiment_2026.md) | UMI 数据规模化 + 跨本体零样本 + 单步蒸馏 |
 | **Flow Matching** | [`pi0_flow_matching.md`](./pi0_flow_matching.md) | 比 Diffusion 快 5x，π0 核心 |
 | **FAST** | [`fast.md`](./fast.md) | DCT 频域 Tokenization |
 | **MM-ACT** | [`./frontier/vla_unified_token_space.md`](./frontier/vla_unified_token_space.md) | 🆕 全模态共享 Token 空间 |
@@ -170,6 +171,7 @@
 | 模型 | 文件 | 核心亮点 |
 |:-----|:-----|:---------|
 | **Data Flywheel** | [`./frontier/data_flywheel_and_cross_modal.md`](./frontier/data_flywheel_and_cross_modal.md) | 🆕 互联网视频学习、跨模态迁移与数据演进 |
+| **RDT2（2026）** | [`./frontier/rdt2_umi_zero_shot_cross_embodiment_2026.md`](./frontier/rdt2_umi_zero_shot_cross_embodiment_2026.md) | 🆕 UMI 数据规模化 + 跨本体零样本部署 + 单步蒸馏 |
 | **Reward Discovery** | [`./frontier/reward_discovery_rl.md`](./frontier/reward_discovery_rl.md) | 🆕 Nature Comm: 遗憾最小化元学习奖励发现 |
 | **Vicarious Maps** | [`./frontier/vicarious_body_maps.md`](./frontier/vicarious_body_maps.md) | 🆕 Nature 2025: 视触觉“感同身受”的神经基础 |
 | **UniTacHand** | [`./frontier/unitachhand.md`](./frontier/unitachhand.md) | 🆕 arXiv 2025: MANO UV Map 统一触觉表征，实现人手→机器人零样本迁移 |

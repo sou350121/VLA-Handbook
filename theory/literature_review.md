@@ -1,7 +1,7 @@
 # VLA 文献核心技术归纳 (Literature Technical Review)
 
 > **快速索引**: [论文索引 (Paper Index)](./paper_index.md) - 多维度查找系统
-> **最后更新**: 2026-01-28
+> **最后更新**: 2026-02-03
 
 本章节对 VLA 领域的核心文献进行**深度技术归纳**，按技术分类组织，适合面试前快速复习模型细节。
 
@@ -14,7 +14,7 @@
 | 📊 [论文索引](./paper_index.md) | 多维度索引（技术/公司/时间） |
 | 🎯 [按技术分类](#按技术分类) | 动作生成/训练方法/架构/应用 |
 | 🏢 [按公司分类](#按公司机构分类) | Google/Physical Intelligence/ByteDance 等 |
-| 📅 [按时间线](#按时间线) | 2023/2024/2025 |
+| 📅 [按时间线](#按时间线) | 2023/2024/2025/2026 |
 | 📊 [总结对比表](#总结对比表) | 所有模型快速对比 |
 
 ---
@@ -140,6 +140,16 @@
 - **Backbone**: DiT 架构，可扩展到数十亿参数。
 - **Action Space**: **连续空间**。
 - **Key Contribution**: 首个十亿参数级机器人扩散基础模型，专为双臂操作优化，证明 Scaling Law 在机器人领域也成立。
+
+##### RDT2 (RDT Team, 2026)
+> **论文**: [RDT2: Exploring the Scaling Limit of UMI Data Towards Zero-Shot Cross-Embodiment Generalization](https://arxiv.org/abs/2602.03310)  
+> **项目主页**: `https://rdt-robotics.github.io/rdt2/`  
+> **手册解读**: [`./frontier/rdt2_umi_zero_shot_cross_embodiment_2026.md`](./frontier/rdt2_umi_zero_shot_cross_embodiment_2026.md)
+
+- **核心问题**: 跨本体零样本部署与大规模真机数据成本瓶颈。  
+- **核心技术**: **Residual VQ 动作 tokenization + Flow Matching 动作专家 + 单步蒸馏**。  
+- **Action Space**: **连续空间**。  
+- **Key Contribution**: 依托 UMI 数据规模化与硬件统一，验证 4U 条件下零样本泛化（原文口径，待核验）。
 
 ---
 
@@ -456,6 +466,9 @@
 - **GR-RL** (2025)
 - **RDT-1B** (2024) (与清华合作)
 
+### RDT Team / 清华大学 MARS Lab
+- **RDT2** (2026)
+
 ### Stanford
 - **OpenVLA** (2024)
 - **ACT** (2023)
@@ -539,6 +552,10 @@
 ---
 
 ### 2026（最新进展）
+
+#### RDT2 (2026.02)
+- UMI 数据规模化 + 跨本体零样本部署  
+- [深度解读](./frontier/rdt2_umi_zero_shot_cross_embodiment_2026.md)
 
 #### WaveFormer (2026.01)
 - 波动方程视觉建模，频率-时间解耦，保留高频细节
