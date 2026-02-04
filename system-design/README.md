@@ -33,6 +33,10 @@
     - SubAgent 架构与上下文隔离
     - 规约驱动开发 (Spec-driven Development)
 
+6.  **[Text-to-SQL 可靠架构（Palantir 视角）](./text_to_sql_reliable_architecture_palantir_aip.md)** 🆕
+    - 语义层 (Ontology) + 工具化执行 + 审计
+    - 低置信度反问与可追溯性
+
 ## 学习建议
 - **关注 Scalability**: 所有的设计都要考虑 "如果机器人数从 10 台变成 1000 台，这个系统还能跑吗？"
 - **关注 Automation**: 尽量减少人工介入。最好的系统是机器人自己收集数据、自己训练、自己变强。
