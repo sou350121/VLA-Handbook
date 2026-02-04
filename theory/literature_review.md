@@ -196,6 +196,16 @@
     - 实现了 **Data-Driven Self-Improvement**。
 - **Key Contribution**: 证明了机器人可以通过自我复盘 (Recap) 在操作速度和鲁棒性上超越人类专家。
 
+##### Shallow-π (Samsung Research, 2026)
+> **论文**: [Shallow-π: Knowledge Distillation for Flow-based VLAs](https://arxiv.org/pdf/2601.20262)  
+> **项目主页**: `https://icsl-jeon.github.io/shallow-pi/`  
+> **手册解读**: [`./frontier/shallow_pi_knowledge_distillation_flow_vla_2026.md`](./frontier/shallow_pi_knowledge_distillation_flow_vla_2026.md)
+
+- **核心问题**: 解决 flow-based VLA 的端侧推理延迟。  
+- **核心技术**: 通过知识蒸馏 **同时压缩 VLM backbone 与 action head 层深**（18→6）。  
+- **关键结果**: 推理速度 >2×，成功率下降 <1%（论文口径）。  
+- **工程价值**: 在 Jetson Orin/Thor 上验证端侧部署可行性（论文口径）。
+
 ##### LingBot-VLA (Robbyant, 2026)
 > **论文**: `https://arxiv.org/abs/2601.18692`  
 > **代码**: `https://github.com/robbyant/lingbot-vla`  
@@ -466,6 +476,9 @@
 - **GR-RL** (2025)
 - **RDT-1B** (2024) (与清华合作)
 
+### Samsung Research
+- **Shallow-π** (2026)
+
 ### RDT Team / 清华大学 MARS Lab
 - **RDT2** (2026)
 
@@ -552,6 +565,10 @@
 ---
 
 ### 2026（最新进展）
+
+#### Shallow-π (2026.01)
+- Flow-based VLA 层深蒸馏（18→6）  
+- [深度解读](./frontier/shallow_pi_knowledge_distillation_flow_vla_2026.md)
 
 #### RDT2 (2026.02)
 - UMI 数据规模化 + 跨本体零样本部署  

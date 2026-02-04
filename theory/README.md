@@ -172,6 +172,7 @@
 |:-----|:-----|:---------|
 | **Data Flywheel** | [`./frontier/data_flywheel_and_cross_modal.md`](./frontier/data_flywheel_and_cross_modal.md) | 🆕 互联网视频学习、跨模态迁移与数据演进 |
 | **RDT2（2026）** | [`./frontier/rdt2_umi_zero_shot_cross_embodiment_2026.md`](./frontier/rdt2_umi_zero_shot_cross_embodiment_2026.md) | 🆕 UMI 数据规模化 + 跨本体零样本部署 + 单步蒸馏 |
+| **Shallow-π（2026）** | [`./frontier/shallow_pi_knowledge_distillation_flow_vla_2026.md`](./frontier/shallow_pi_knowledge_distillation_flow_vla_2026.md) | 🆕 Flow-based VLA 层深蒸馏，端侧推理加速 |
 | **Reward Discovery** | [`./frontier/reward_discovery_rl.md`](./frontier/reward_discovery_rl.md) | 🆕 Nature Comm: 遗憾最小化元学习奖励发现 |
 | **Vicarious Maps** | [`./frontier/vicarious_body_maps.md`](./frontier/vicarious_body_maps.md) | 🆕 Nature 2025: 视触觉“感同身受”的神经基础 |
 | **UniTacHand** | [`./frontier/unitachhand.md`](./frontier/unitachhand.md) | 🆕 arXiv 2025: MANO UV Map 统一触觉表征，实现人手→机器人零样本迁移 |
