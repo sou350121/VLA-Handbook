@@ -596,6 +596,85 @@ def shaped_reward(state, next_state, potential_func, gamma=0.99):
     return shaping
 ```
 
+### 5.4 ORM vs PRM：奖励模型与奖励分解
+
+**ORM (Outcome Reward Model)**：只在任务终局或里程碑给奖励（成功/失败/最终评分）。  
+**PRM (Process Reward Model)**：对过程中的关键步骤给稠密奖励（靠近/抓取/对齐/插入）。
+
+| 维度 | ORM | PRM |
+|:---|:---|:---|
+| 信号密度 | 稀疏 | 稠密 |
+| 信号偏差 | 低（不易引导错误路径） | 高（容易被“奖励黑客”） |
+| 学习难度 | 高（credit assignment 难） | 低（更易收敛） |
+| 适用场景 | 成功判定清晰、长时程 | 过程可分解、可观察 |
+
+**组合策略**：将 ORM 作为最终目标，PRM 作为引导。
+
+$$
+r_t = \alpha \cdot r_t^{process} + (1-\alpha)\cdot r_t^{outcome}
+$$
+
+**工程要点**：
+- PRM 只能覆盖“必要步骤”，不要覆盖“所有可观察量”。  
+- ORM 必须保留，避免“只学到会得分的动作”。  
+- PRM 的权重要逐步退火，避免后期被塑形奖励绑架。
+
+### 5.5 奖励设计的 5 个典型难点
+
+1) **Credit Assignment**：长时序任务中，正确动作与奖励相隔太远。  
+2) **Reward Hacking**：策略学会“钻奖励漏洞”，但任务失败。  
+3) **局部最优**：稠密奖励诱导“短期进步”，阻碍跨越关键门槛。  
+4) **可观测偏差**：奖励依赖不可观测变量，导致训练不稳定。  
+5) **分布漂移**：仿真奖励与真机成功率不一致。
+
+**对策清单**：
+- 设计“可解释”的中间里程碑奖励（PRM）。  
+- 使用终局成功奖励（ORM）做校准。  
+- 定期做“奖励消融”：移除某个 shaping 项，验证策略是否崩溃。  
+- 把失败模式写成**可计数指标**（碰撞次数/滑落/超力矩）。
+
+### 5.6 鲁棒性：不确定性与分布偏移
+
+**鲁棒性难点**：  
+- 观测噪声、物体材质/摩擦变化、初始分布变化  
+- 视觉域偏移（光照/背景/遮挡）  
+- 仿真到真机的物理差异  
+
+**典型工程策略**：
+- **Domain Randomization**：随机化纹理/光照/摩擦/质量  
+- **扰动训练**：对观测与动作加噪声，提高抗噪性  
+- **策略集成**：多策略或多 critic ensemble 抗过拟合  
+- **不确定性估计**：用熵/分布宽度检测 OOD  
+- **评测协议固定**：固定 seed 与任务分布，减少“伪进步”
+
+### 5.7 安全约束：从惩罚到可验证约束
+
+**核心问题**：RL 的优化目标是奖励最大化，但真实机器人需要满足安全约束（碰撞、力矩、速度、接触门槛）。
+
+**形式化约束 (CMDP)**：
+
+$$
+\max_{\pi}\ \mathbb{E}\Big[\sum_t r_t\Big]\quad
+\text{s.t. } \mathbb{E}\Big[\sum_t c_t\Big]\le d
+$$
+
+- $c_t$：安全成本（碰撞/过力矩/越界）  
+- $d$：允许的安全预算
+
+**常见实现路径**：
+- **Lagrangian**：在奖励中引入约束惩罚  
+  $$
+  \max_{\pi}\ \mathbb{E}\Big[\sum_t (r_t - \lambda c_t)\Big]
+  $$
+- **Action Projection**：把不安全动作投影回可行动作集合（QP/限制器）  
+- **Safety Critic**：单独训练一个风险评估器  
+- **Shielding / Rule-based Gate**：关键时刻用规则拦截危险动作
+
+**真机落地经验**：
+- 将安全约束与奖励分离，避免“奖励变了，安全也变了”。  
+- 高风险任务必须加 **KL-to-base** 或安全动作门控。  
+- 所有安全事件必须记录成结构化日志，作为回归测试基准。
+
 ## 6. RL + VLA 的结合 (RL + VLA Integration)
 
 ### 6.1 RLHF 完整流程 (RLHF Pipeline)
@@ -692,6 +771,60 @@ class DemoGuidedRL:
             # SAC/PPO 更新
             self.rl_update()
 ```
+
+### 6.3 模型融合范式：Reward Shaping / Critic Guidance / Policy Lifting
+
+很多 VLA+RL 系统不是“单一模型”，而是**把多种信号融合成一个可控的训练目标**。常见融合范式可以理解为：
+
+```
+π_base (BC/VLA) + Reward signals (ORM/PRM) + Critic Q/V
+                     └── fusion operator ──> π_new
+```
+
+#### 6.3.1 Reward Shaping（奖励融合）
+把 **ORM 终局奖励** 和 **PRM 过程奖励** 融成统一训练信号（见 5.4）。
+
+$$
+r_t = \alpha r_t^{process} + (1-\alpha) r_t^{outcome}
+$$
+
+**要点**：
+- ORM 保留“目标正确性”，PRM 提供“学习可行性”。  
+- PRM 权重需要退火，避免后期被塑形奖励绑架。  
+- 必须定期做奖励消融，检查是否出现 reward hacking。
+
+#### 6.3.2 Critic Network 引导（Value-Guided）
+Critic 不只是“学价值”，还可以用来**引导行为分布**。
+
+**三种常见做法**：
+1) **动作筛选**：从 policy 采样 K 个动作，用 Q 选最大者。  
+2) **优势加权回归 (AWR)**：用优势值重加权行为克隆。
+   $$
+   \min_\pi\ \mathbb{E}[-\log \pi(a|s)\cdot \exp(A(s,a)/\beta)]
+   $$
+3) **安全 critic**：用风险 critic 拦截危险动作（与 5.7 呼应）。
+
+**风险**：critic 过估计会把策略引向“假高分”区域，导致崩坏或分布漂移。
+
+#### 6.3.3 Policy Lifting（策略抬升）
+“Lifting” 的直觉：**用 critic 或规划器把一个可行动的策略抬升到更高水平**。
+
+**典型形式（软策略提升）**：
+$$
+\pi_{\text{lift}}(a|s) \propto \pi_{\text{base}}(a|s)\cdot \exp(Q(s,a)/\alpha)
+$$
+
+**落地方式**：
+- 先用 base policy 采样，再按 Q 重新加权并蒸馏成新策略。  
+- 先用高层规划/模型预测得到“优动作”，再反向蒸馏到 policy。  
+- 在真机上加 KL-to-base 做保守提升，避免策略漂移。
+
+#### 6.3.4 何时用哪一种？
+- **奖励稀疏**：优先 Reward Shaping + ORM 校准  
+- **能可靠估值**：优先 Critic Guidance / Policy Lifting  
+- **真机风险高**：以 Safety Critic + KL-to-base 为先  
+
+> 直觉总结：Reward Shaping 解决“学不学得动”，Critic Guidance/Policy Lifting 解决“学到更强但别跑偏”。
 
 ## 7. GR-RL: VLA + RL 融合框架案例 (ByteDance Seed)
 

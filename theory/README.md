@@ -139,6 +139,7 @@
 | :--- | :--- | :--- |
 | 🎮 **Isaac Lab** | [`isaac_lab.md`](./isaac_lab.md) | 🔥 GPU 仿真框架，单卡百万 FPS 🆕 |
 | 🛡️ **知识绝缘** | [`knowledge_insulation.md`](./knowledge_insulation.md) | 微调时保护 VLM 通用常识，防止“智障” |
+| 🧪 **VLA+RL 实战教程** | [`vla_rl_practical_guide.md`](./vla_rl_practical_guide.md) | Transformer VLA + RL 算法 + 工具链的落地路径 🆕 |
 
 ---
 

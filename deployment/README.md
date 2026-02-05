@@ -36,6 +36,7 @@
 - **[具身智能数据采集概览 (Embodied Data Collection)](./embodied_data_collection_overview.md)**: POV 第一视角 (EgoScale)、Sim2Real 规模化与真机 RL。
 - **[灵巧手数据采集方案 (DexHand Data Collection)](./dexterous_hand_data_collection.md)**: 结构化 Episode 定义、Retargeting 算法与数据回放验证。
 - **[仿真环境详解 (Simulation Environments)](./simulation_environments.md)**: Isaac Sim vs MuJoCo vs PyBullet 选型指南。
+- **[仿真基准与训练工具 (Sim Benchmarks & Tooling)](./simulation_benchmarks_and_tools.md)**: LIBERO / RLinf / SimpleVLA-RL 的分工、组合与落地路径。
 - **[Sim-to-Real 迁移策略 (Sim-to-Real Transfer)](./sim_to_real_transfer_strategies.md)**: Domain Randomization 与 Reality Gap 应对策略。
 - **[末端执行器控制系统 (End-Effector Control)](./end_effector_control.md)**: 数据驱动与触觉闭环控制软件架构设计。
 - **[StarVLA：Lego-like VLA 研发底座（训练/评测/策略服务脚手架）](./starvla_lego_like_vla_codebase_2026.md)**: 在同一套 bench 上对比 FAST/OFT/Flow/双系统等框架（Framework/Dataloader/Trainer/Eval 解耦）。
