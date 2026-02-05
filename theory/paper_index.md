@@ -1,7 +1,7 @@
 # VLA 论文索引 (Paper Index)
 
 > **快速查找**: 多维度索引系统，帮助快速定位相关论文
-> **最后更新**: 2026-02-03
+> **最后更新**: 2026-01-25
 
 ---
 
@@ -31,6 +31,9 @@
 | **Tactile / Visuotactile** 🆕 | VT Pretraining + Online Multitask (SciRobotics 2026) | [深度解析](./frontier/visual_tactile_pretraining_online_multitask_learning_2026.md) |
 |  | GenForce (Nat Commun 2026) | [深度笔记](./tactile/genforce_tactile_force_transfer_2026.md) |
 | **Physics-Inspired Vision** 🆕 | WaveFormer (Wave Equation) | [深度解读](./frontier/waveformer_wave_equation_vision_2026.md) |
+| **3D Reconstruction / View Synthesis** 🆕 | Zero-1-to-3 | [深度解读](./frontier/zero_1_to_3_zero_shot_one_image_to_3d_object_2023.md) |
+| **Evaluation / World Model** 🆕 | WorldEval | [深度解读](./frontier/worldeval_world_model_policy_evaluator_2025.md) |
+| **Graph ML / GNN 基线** 🆕 | Classic GNNs are Strong Baselines | [深度解读](./frontier/classic_gnns_strong_baselines_node_classification_2024.md) |
 | **Multimodal Fusion** 🆕 | Policy Consensus (Multi-Modal Manipulation) | [深度解读](./frontier/policy_consensus_multimodal_manipulation_2025.md) |
 | **Flow Matching** | π0 | [深度解析](./pi0_flow_matching.md) |
 | | π0.5 | [深度解析](./pi0_5_dissection.md) |
@@ -82,7 +85,10 @@
 | **Robbyant Team** 🆕 | LingBot-VLA | [深度解析](./lingbot_vla_pragmatic_vla_foundation_model_2026.md) |
 | **Samsung Research** 🆕 | Shallow-π | [深度解读](./frontier/shallow_pi_knowledge_distillation_flow_vla_2026.md) |
 | **UCLA / Microsoft** 🆕 | DAC-RL | [深度解读](./llm_reasoning/dac_rl_divide_conquer_reasoning_2026.md) |
+| **北航 / 香港理工大学** 🆕 | Classic GNNs are Strong Baselines | [深度解读](./frontier/classic_gnns_strong_baselines_node_classification_2024.md) |
 | **Columbia** | Diffusion Policy | [详细](#diffusion-policy) |
+| | Zero-1-to-3 | [深度解读](./frontier/zero_1_to_3_zero_shot_one_image_to_3d_object_2023.md) |
+| **WorldEval Team** 🆕 | WorldEval | [深度解读](./frontier/worldeval_world_model_policy_evaluator_2025.md) |
 | **UIUC / Harvard / MIT / Columbia** 🆕 | WaveFormer | [深度解读](./frontier/waveformer_wave_equation_vision_2026.md) |
 | **UIUC / Harvard / MIT / Columbia** 🆕 | Policy Consensus | [深度解读](./frontier/policy_consensus_multimodal_manipulation_2025.md) |
 | **浙江大学** 🆕 | DKT Perception | [深度解析](./frontier/dkt_transparency_perception.md) |
@@ -101,12 +107,14 @@
 | **2023** | Diffusion Policy | [详细](#diffusion-policy) |
 | | RT-2 | [深度解析](#rt-2) |
 | | ACT | [详细](#act) |
+| | Zero-1-to-3 | [深度解读](./frontier/zero_1_to_3_zero_shot_one_image_to_3d_object_2023.md) |
 | **2024** | OpenVLA | [深度解析](#openvla) |
 | | π0 | [深度解析](./pi0_flow_matching.md) |
 | | RDT-1B | [详细](#rdt) |
 | | DKT Perception | [深度解析](./frontier/dkt_transparency_perception.md) |
 | | Galaxea G0 | [详细](#galaxea-g0) |
 | | Knowledge Insulation | [摘要](#knowledge-insulation) |
+| | Classic GNNs are Strong Baselines | [深度解读](./frontier/classic_gnns_strong_baselines_node_classification_2024.md) |
 | | UniVLA | [详细](#univla) |
 | | Embodied CoT (ECoT) | [深度解读](./llm_reasoning/embodied_chain_of_thought_robotic_control_2024.md) |
 | | PR2L (Promptable Reps for RL) | [深度解读](./llm_reasoning/vlm_promptable_representations_for_rl_pr2l_2025.md) |
@@ -123,6 +131,7 @@
 | | MergeVLA | [详细](#mergevla) |
 | | PGR (Prioritized Generative Replay) | [深度解读](./frontier/prioritized_generative_replay_pgr_2025.md) |
 | | Policy Consensus (Multi-Modal Manipulation) | [深度解读](./frontier/policy_consensus_multimodal_manipulation_2025.md) |
+| | WorldEval | [深度解读](./frontier/worldeval_world_model_policy_evaluator_2025.md) |
 | | **NeurIPS 2025 Best Papers** 🆕 | [专题解读](./neurips_2025_insights.md) |
 | **2026** 🆕 | LingBot-VLA | [深度解析](./lingbot_vla_pragmatic_vla_foundation_model_2026.md) |
 | | RDT2 (UMI Zero-shot) | [深度解读](./frontier/rdt2_umi_zero_shot_cross_embodiment_2026.md) |
@@ -137,6 +146,24 @@
 ## 🔍 详细分类索引
 
 ### 技术分类索引
+
+#### 0. 图学习基线与评测 (Graph ML Baselines)
+
+- **Classic GNNs are Strong Baselines** (NeurIPS 2024)
+  - 主题: 经典 GNN 基线再评估、超参敏感性、评测公平性
+  - [深度解读](./frontier/classic_gnns_strong_baselines_node_classification_2024.md)
+
+#### 0.1 3D 重建与新视角合成 (3D Reconstruction / View Synthesis)
+
+- **Zero-1-to-3** (arXiv 2023)
+  - 主题: 单图像新视角合成 + 3D 重建先验
+  - [深度解读](./frontier/zero_1_to_3_zero_shot_one_image_to_3d_object_2023.md)
+
+#### 0.2 评测与世界模型 (Evaluation / World Model)
+
+- **WorldEval** (arXiv 2025)
+  - 主题: 世界模型评估机器人策略、生成式 rollout
+  - [深度解读](./frontier/worldeval_world_model_policy_evaluator_2025.md)
 
 #### 1. 动作生成策略
 
@@ -342,6 +369,18 @@
 #### Galaxea AI
 - **G0** (2024)
 
+#### WorldEval Team
+- **WorldEval** (2025)
+  - [深度解读](./frontier/worldeval_world_model_policy_evaluator_2025.md)
+
+#### Columbia / Toyota Research Institute
+- **Zero-1-to-3** (2023)
+  - [深度解读](./frontier/zero_1_to_3_zero_shot_one_image_to_3d_object_2023.md)
+
+#### 北航 / 香港理工大学
+- **Classic GNNs are Strong Baselines** (2024)
+  - [深度解读](./frontier/classic_gnns_strong_baselines_node_classification_2024.md)
+
 ---
 
 ### 时间线索引
@@ -350,6 +389,8 @@
 - Diffusion Policy (RSS 2023)
 - RT-2 (ICRA 2023)
 - ACT (2023)
+- Zero-1-to-3 (arXiv 2023)
+  - [笔记](./frontier/zero_1_to_3_zero_shot_one_image_to_3d_object_2023.md)
 
 #### 2024（爆发期）
 - OpenVLA (2024.06)
@@ -357,6 +398,8 @@
 - RDT-1B (2024.10)
 - Galaxea G0 (2024.09)
 - Knowledge Insulation (2024)
+- Classic GNNs are Strong Baselines (NeurIPS 2024)
+  - [笔记](./frontier/classic_gnns_strong_baselines_node_classification_2024.md)
 
 #### 2025（最新进展）
 - π0.5 (2025.01)
@@ -364,6 +407,8 @@
 - FAST (2025.01)
 - GR-RL (2025)
 - WALL-OSS (2025)
+- WorldEval (2025): 世界模型评测器
+  - [笔记](./frontier/worldeval_world_model_policy_evaluator_2025.md)
 
 #### 2026（世界模型 / 视频生成综述）
 - RDT2 (2026.02): UMI 数据规模化与跨本体零样本部署  
@@ -416,6 +461,6 @@
 
 ---
 
-**最后更新**: 2026-02-03
+**最后更新**: 2026-01-25
 **维护者**: VLA Handbook Team
 

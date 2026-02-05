@@ -117,6 +117,9 @@
 | 🖐️ **触觉专题入口** | [`./tactile/README.md`](./tactile/README.md) | 触觉路线图：VTLA / SaTA / 硬件选型 / 落地 checklist 🆕 |
 | 🧠 **语言塑形感知** | [`./frontier/language_shapes_perception.md`](./frontier/language_shapes_perception.md) | “灰度香蕉”启示：语义先验影响视觉表征与属性推断 🆕 |
 | 🧪 **Physics of AI** | [`./frontier/physics_of_ai_liuziming.md`](./frontier/physics_of_ai_liuziming.md) | 不赌规模：用“现象-观测量-规律”研究神经网络，沉淀工程抓手 🆕 |
+| 🧊 **Zero-1-to-3（2023）** | [`./frontier/zero_1_to_3_zero_shot_one_image_to_3d_object_2023.md`](./frontier/zero_1_to_3_zero_shot_one_image_to_3d_object_2023.md) | 🆕 单图像零样本新视角合成 + 3D 重建先验 |
+| 📈 **Classic GNNs（2024）** | [`./frontier/classic_gnns_strong_baselines_node_classification_2024.md`](./frontier/classic_gnns_strong_baselines_node_classification_2024.md) | 🆕 节点分类基线再评估：调参后经典 GNN 仍很强 |
+| 🌍 **WorldEval（2025）** | [`./frontier/worldeval_world_model_policy_evaluator_2025.md`](./frontier/worldeval_world_model_policy_evaluator_2025.md) | 🆕 世界模型评测器：用生成式 rollout 评估机器人策略 |
 | 🌊 **WaveFormer（2026）** | [`./frontier/waveformer_wave_equation_vision_2026.md`](./frontier/waveformer_wave_equation_vision_2026.md) | 波动方程视觉建模：频率-时间解耦，保留高频细节 🆕 |
 | 🐙 **软体本体感知** | [`./frontier/soft_robot_proprioception_gvs_sensitivity_ellipsoid.md`](./frontier/soft_robot_proprioception_gvs_sensitivity_ellipsoid.md) | GVS + 灵敏度椭球：把“不可观测性”变成可视化指标，并用于感知驱动规划 🆕 |
 

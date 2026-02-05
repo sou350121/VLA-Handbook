@@ -1,7 +1,7 @@
 # VLA 文献核心技术归纳 (Literature Technical Review)
 
 > **快速索引**: [论文索引 (Paper Index)](./paper_index.md) - 多维度查找系统
-> **最后更新**: 2026-02-03
+> **最后更新**: 2026-01-25
 
 本章节对 VLA 领域的核心文献进行**深度技术归纳**，按技术分类组织，适合面试前快速复习模型细节。
 
@@ -117,6 +117,36 @@
   - 论文：`https://arxiv.org/abs/2601.07823`
 - 1X World Model（视频世界模型 + 逆动力学 IDM）：先“想象”再“执行”（公司路线复盘）  
   - [手册笔记](./frontier/one_x_world_model.md)
+
+### 0.6 图学习基线与评测（Classic GNNs）
+
+> 说明：这类工作虽非 VLA 直系，但对“基线公平性/超参敏感性/评测可复现”很有借鉴价值。
+
+- Classic GNNs are Strong Baselines: Reassessing GNNs for Node Classification (NeurIPS 2024)  
+  - 手册解读：[`./frontier/classic_gnns_strong_baselines_node_classification_2024.md`](./frontier/classic_gnns_strong_baselines_node_classification_2024.md)  
+  - 论文 PDF：`https://proceedings.neurips.cc/paper_files/paper/2024/file/b10ed15ff1aa864f1be3a75f1ffc021b-Paper-Datasets_and_Benchmarks_Track.pdf`  
+  - 代码实现：`https://github.com/LUOyk1999/tunedGNN`  
+  - 关键结论：经典 GNN 调参后可与/超过多种 GT，归一化/残差/层深显著影响性能（论文口径）。
+
+### 0.7 单图像 3D 重建与新视角合成（Zero-1-to-3）
+
+> 说明：该方向强调用 2D 大模型的几何先验弥补 3D 标注缺口，对机器人视觉的“视角扩增/空间先验”很有借鉴意义。
+
+- Zero-1-to-3: Zero-shot One Image to 3D Object (arXiv 2023)  
+  - 手册解读：[`./frontier/zero_1_to_3_zero_shot_one_image_to_3d_object_2023.md`](./frontier/zero_1_to_3_zero_shot_one_image_to_3d_object_2023.md)  
+  - 论文 PDF：`https://arxiv.org/pdf/2303.11328`  
+  - 项目主页：`https://zero123.cs.columbia.edu/`  
+  - 关键结论：视角条件扩散可零样本合成新视角，并作为 3D 重建先验（论文口径）。
+
+### 0.8 世界模型评测（WorldEval）
+
+> 说明：用世界模型替代真机评测，将“策略评估”转化为“生成式 rollout + 指标统计”。
+
+- WorldEval: World Model as Real-World Robot Policies Evaluator (arXiv 2025)  
+  - 手册解读：[`./frontier/worldeval_world_model_policy_evaluator_2025.md`](./frontier/worldeval_world_model_policy_evaluator_2025.md)  
+  - 论文：`https://arxiv.org/abs/2505.19017`  
+  - 代码仓库：`https://github.com/liyaxuanliyaxuan/Worldeval`  
+  - 关键结论：用世界模型低成本评估策略，但仍需真机校准（论文口径）。
 
 ### 1. 动作生成策略 (Action Generation)
 
