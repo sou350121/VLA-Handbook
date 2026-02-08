@@ -99,6 +99,7 @@
 | 🚀 **Flash Attention** | [`flash_attention.md`](./flash_attention.md) | Tiling + 重计算，显存 O(N²)→O(N) |
 | 🔧 **PEFT & LoRA** | [`peft_lora.md`](./peft_lora.md) | 低秩分解，QLoRA ~6GB 微调 7B |
 | 📉 **量化理论** | [`quantization_theory.md`](./quantization_theory.md) | INT8/INT4、AWQ 原理 |
+| 🧪 **QVLA 量化（2026）** | [`./frontier/qvla_action_centric_quantization_2026.md`](./frontier/qvla_action_centric_quantization_2026.md) | 🆕 动作空间敏感量化与通道级比特分配 |
 
 ---
 
@@ -179,6 +180,7 @@
 | **RDT2（2026）** | [`./frontier/rdt2_umi_zero_shot_cross_embodiment_2026.md`](./frontier/rdt2_umi_zero_shot_cross_embodiment_2026.md) | 🆕 UMI 数据规模化 + 跨本体零样本部署 + 单步蒸馏 |
 | **Shallow-π（2026）** | [`./frontier/shallow_pi_knowledge_distillation_flow_vla_2026.md`](./frontier/shallow_pi_knowledge_distillation_flow_vla_2026.md) | 🆕 Flow-based VLA 层深蒸馏，端侧推理加速 |
 | **DAC-RL（2026）** | [`./llm_reasoning/dac_rl_divide_conquer_reasoning_2026.md`](./llm_reasoning/dac_rl_divide_conquer_reasoning_2026.md) | 🆕 分治推理训练，提升测试时可扩展性 |
+| **TinyLoRA（2026）** | [`./llm_reasoning/tiny_lora_13_params_reasoning_2026.md`](./llm_reasoning/tiny_lora_13_params_reasoning_2026.md) | 🆕 13 参数推理微调：RL 信号激活推理模式 |
 | **Reward Discovery** | [`./frontier/reward_discovery_rl.md`](./frontier/reward_discovery_rl.md) | 🆕 Nature Comm: 遗憾最小化元学习奖励发现 |
 | **Vicarious Maps** | [`./frontier/vicarious_body_maps.md`](./frontier/vicarious_body_maps.md) | 🆕 Nature 2025: 视触觉“感同身受”的神经基础 |
 | **UniTacHand** | [`./frontier/unitachhand.md`](./frontier/unitachhand.md) | 🆕 arXiv 2025: MANO UV Map 统一触觉表征，实现人手→机器人零样本迁移 |
@@ -190,6 +192,7 @@
 | **1X World Model** | [`./frontier/one_x_world_model.md`](./frontier/one_x_world_model.md) | 🆕 视频世界模型 + 逆动力学（IDM）：先“想象”再“执行” |
 | **Figure Helix 02 (2026)** | [`./frontier/figure_helix_02_full_body_autonomy_2026.md`](./frontier/figure_helix_02_full_body_autonomy_2026.md) | 🆕 全身端到端 VLA：S2 语义目标 → S1 200Hz 全身关节目标 → S0 1kHz 执行（人类运动先验替代大量手写控制） |
 | **VT Pretraining + Online Multitask (SciRobotics 2026)** | [`./frontier/visual_tactile_pretraining_online_multitask_learning_2026.md`](./frontier/visual_tactile_pretraining_online_multitask_learning_2026.md) | 🆕 单目 + 二值触觉：视触觉自监督预训练 + RL + 在线模仿，统一策略覆盖多项灵巧手任务 |
+| **TaF-VLA（2026）** | [`./frontier/taf_vla_tactile_force_alignment_2026.md`](./frontier/taf_vla_tactile_force_alignment_2026.md) | 🆕 触觉-力对齐：把触觉变成物理力语义，提升接触阶段稳定性 |
 | **Video World Model Survey (2026)** | [`./frontier/video_generation_models_in_robotics_survey_2026.md`](./frontier/video_generation_models_in_robotics_survey_2026.md) | 🆕 综述：视频生成模型作为具身世界模型（数据生成/视觉规划/策略评估）；难点是物理幻觉、指令偏差、成本与安全 |
 | **GenieReasoner / ERIQ / FACT** | [`./llm_reasoning/geniereasoner_eriq_fact.md`](./llm_reasoning/geniereasoner_eriq_fact.md) | 🆕 量化“推理→动作”传递损耗：推理基准 + 动作分词器 + 统一自回归 |
 | **GR-Dexter** | [`./frontier/gr_dexter_bimanual_dexterous_vla.md`](./frontier/gr_dexter_bimanual_dexterous_vla.md) | 🆕 ByteDance Seed：把 VLA 扩展到 21-DoF 灵巧手的全栈框架（硬件/遥操作/跨形态数据） |

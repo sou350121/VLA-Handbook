@@ -22,6 +22,7 @@
 
 - **触觉为何不可替代（研究问题→可计算变量）**：[`../frontier/tactile_irreplaceable.md`](../frontier/tactile_irreplaceable.md)
 - **SaTA / 空间锚定触觉（把触觉变成有坐标语义的 token）**：见 [`../tactile_vla.md`](../tactile_vla.md) 的 SaTA 小节
+- **TaF-VLA（触觉-力对齐）**：[`../frontier/taf_vla_tactile_force_alignment_2026.md`](../frontier/taf_vla_tactile_force_alignment_2026.md)
 - **UniTacHand（人手→机器人触觉技能迁移）**：[`../frontier/unitachhand.md`](../frontier/unitachhand.md)
 - **SuperTac + DOVE（多模态电子皮肤 + 触觉语言模型）**：[`../../deployment/perception/supertac_dove_biomimetic_multimodal_tactile_sensing.md`](../../deployment/perception/supertac_dove_biomimetic_multimodal_tactile_sensing.md)
 - **GenForce（跨触觉传感器的可迁移力感知）**：[`./genforce_tactile_force_transfer_2026.md`](./genforce_tactile_force_transfer_2026.md)

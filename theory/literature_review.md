@@ -1,7 +1,7 @@
 # VLA 文献核心技术归纳 (Literature Technical Review)
 
 > **快速索引**: [论文索引 (Paper Index)](./paper_index.md) - 多维度查找系统
-> **最后更新**: 2026-01-25
+> **最后更新**: 2026-02-04
 
 本章节对 VLA 领域的核心文献进行**深度技术归纳**，按技术分类组织，适合面试前快速复习模型细节。
 
@@ -147,6 +147,34 @@
   - 论文：`https://arxiv.org/abs/2505.19017`  
   - 代码仓库：`https://github.com/liyaxuanliyaxuan/Worldeval`  
   - 关键结论：用世界模型低成本评估策略，但仍需真机校准（论文口径）。
+
+### 0.9 VLA 模型量化（QVLA）
+
+> 说明：VLA 的量化目标应对齐“动作空间保真”，而不是单纯的特征重建。
+
+- QVLA: Not All Channels Are Equal in VLA Quantization (arXiv 2026)  
+  - 手册解读：[`./frontier/qvla_action_centric_quantization_2026.md`](./frontier/qvla_action_centric_quantization_2026.md)  
+  - 论文（HTML）：`https://arxiv.org/html/2602.03782v1`  
+  - 代码仓库：`https://github.com/AutoLab-SAI-SJTU/QVLA`  
+  - 关键结论：动作空间敏感度驱动通道级混精度与剪枝（论文口径）。
+
+### 0.10 触觉-力对齐（TaF-VLA）
+
+> 说明：将触觉对齐物理力表征，补齐 VLA 接触阶段的“力盲区”。
+
+- Tactile-Force Alignment in Vision-Language-Action Models for Force-aware Manipulation (arXiv 2026)  
+  - 手册解读：[`./frontier/taf_vla_tactile_force_alignment_2026.md`](./frontier/taf_vla_tactile_force_alignment_2026.md)  
+  - 论文 PDF：`https://arxiv.org/pdf/2601.20321`  
+  - 关键结论：触觉-力对齐提升接触密集任务稳定性（论文口径）。
+
+### 0.11 超低参推理微调（TinyLoRA）
+
+> 说明：极低参数预算下，RL 的结果监督能更有效激活推理模式。
+
+- Learning to Reason in 13 Parameters (arXiv 2026)  
+  - 手册解读：[`./llm_reasoning/tiny_lora_13_params_reasoning_2026.md`](./llm_reasoning/tiny_lora_13_params_reasoning_2026.md)  
+  - 论文 PDF：`https://arxiv.org/pdf/2602.04118`  
+  - 关键结论：TinyLoRA 用共享向量极限微调，RL 信号优于 SFT（论文口径）。
 
 ### 1. 动作生成策略 (Action Generation)
 

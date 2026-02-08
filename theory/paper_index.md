@@ -1,7 +1,7 @@
 # VLA 论文索引 (Paper Index)
 
 > **快速查找**: 多维度索引系统，帮助快速定位相关论文
-> **最后更新**: 2026-01-25
+> **最后更新**: 2026-02-04
 
 ---
 
@@ -30,9 +30,11 @@
 | | DKT Perception | [深度解析](./frontier/dkt_transparency_perception.md) |
 | **Tactile / Visuotactile** 🆕 | VT Pretraining + Online Multitask (SciRobotics 2026) | [深度解析](./frontier/visual_tactile_pretraining_online_multitask_learning_2026.md) |
 |  | GenForce (Nat Commun 2026) | [深度笔记](./tactile/genforce_tactile_force_transfer_2026.md) |
+|  | TaF-VLA (Tactile-Force Alignment) | [深度解读](./frontier/taf_vla_tactile_force_alignment_2026.md) |
 | **Physics-Inspired Vision** 🆕 | WaveFormer (Wave Equation) | [深度解读](./frontier/waveformer_wave_equation_vision_2026.md) |
 | **3D Reconstruction / View Synthesis** 🆕 | Zero-1-to-3 | [深度解读](./frontier/zero_1_to_3_zero_shot_one_image_to_3d_object_2023.md) |
 | **Evaluation / World Model** 🆕 | WorldEval | [深度解读](./frontier/worldeval_world_model_policy_evaluator_2025.md) |
+| **Quantization / Compression** 🆕 | QVLA | [深度解读](./frontier/qvla_action_centric_quantization_2026.md) |
 | **Graph ML / GNN 基线** 🆕 | Classic GNNs are Strong Baselines | [深度解读](./frontier/classic_gnns_strong_baselines_node_classification_2024.md) |
 | **Multimodal Fusion** 🆕 | Policy Consensus (Multi-Modal Manipulation) | [深度解读](./frontier/policy_consensus_multimodal_manipulation_2025.md) |
 | **Flow Matching** | π0 | [深度解析](./pi0_flow_matching.md) |
@@ -57,6 +59,7 @@
 | **VLM × 推理/表征** 🆕 | Embodied CoT (ECoT) | [深度解读](./llm_reasoning/embodied_chain_of_thought_robotic_control_2024.md) |
 |  | PR2L (Promptable Representations) | [深度解读](./llm_reasoning/vlm_promptable_representations_for_rl_pr2l_2025.md) |
 | **Reasoning / Test-time Scaling** 🆕 | DAC-RL (Divide-and-Conquer) | [深度解读](./llm_reasoning/dac_rl_divide_conquer_reasoning_2026.md) |
+|  | TinyLoRA (13 params) | [深度解读](./llm_reasoning/tiny_lora_13_params_reasoning_2026.md) |
 | **NeurIPS 2025** 🆕 | Artificial Hivemind | [详细](./neurips_2025_insights.md#1-artificial-hivemind-语言模型的同质化问题) |
 | | Gated Attention | [详细](./neurips_2025_insights.md#2-gated-attention-门控注意力机制) |
 | | 1000 Layer Networks | [详细](./neurips_2025_insights.md#3-1000-layer-networks-深层自监督-rl) |
@@ -89,6 +92,8 @@
 | **Columbia** | Diffusion Policy | [详细](#diffusion-policy) |
 | | Zero-1-to-3 | [深度解读](./frontier/zero_1_to_3_zero_shot_one_image_to_3d_object_2023.md) |
 | **WorldEval Team** 🆕 | WorldEval | [深度解读](./frontier/worldeval_world_model_policy_evaluator_2025.md) |
+| **SJTU AutoLab / Anyverse / CAS / Ant Group** 🆕 | QVLA | [深度解读](./frontier/qvla_action_centric_quantization_2026.md) |
+| **Meta FAIR** 🆕 | TinyLoRA | [深度解读](./llm_reasoning/tiny_lora_13_params_reasoning_2026.md) |
 | **UIUC / Harvard / MIT / Columbia** 🆕 | WaveFormer | [深度解读](./frontier/waveformer_wave_equation_vision_2026.md) |
 | **UIUC / Harvard / MIT / Columbia** 🆕 | Policy Consensus | [深度解读](./frontier/policy_consensus_multimodal_manipulation_2025.md) |
 | **浙江大学** 🆕 | DKT Perception | [深度解析](./frontier/dkt_transparency_perception.md) |
@@ -137,6 +142,9 @@
 | | RDT2 (UMI Zero-shot) | [深度解读](./frontier/rdt2_umi_zero_shot_cross_embodiment_2026.md) |
 | | Shallow-π (Distillation) | [深度解读](./frontier/shallow_pi_knowledge_distillation_flow_vla_2026.md) |
 | | DAC-RL (Divide-and-Conquer) | [深度解读](./llm_reasoning/dac_rl_divide_conquer_reasoning_2026.md) |
+| | TinyLoRA (13 params) | [深度解读](./llm_reasoning/tiny_lora_13_params_reasoning_2026.md) |
+| | QVLA (Quantization) | [深度解读](./frontier/qvla_action_centric_quantization_2026.md) |
+| | TaF-VLA (Tactile-Force Alignment) | [深度解读](./frontier/taf_vla_tactile_force_alignment_2026.md) |
 | | VT Pretraining + Online Multitask (SciRobotics 2026) | [深度解析](./frontier/visual_tactile_pretraining_online_multitask_learning_2026.md) |
 | | Video Generation Models in Robotics (Survey) | [前沿笔记](./frontier/video_generation_models_in_robotics_survey_2026.md) |
 | | WaveFormer (Wave Equation) | [深度解读](./frontier/waveformer_wave_equation_vision_2026.md) |
@@ -164,6 +172,12 @@
 - **WorldEval** (arXiv 2025)
   - 主题: 世界模型评估机器人策略、生成式 rollout
   - [深度解读](./frontier/worldeval_world_model_policy_evaluator_2025.md)
+
+#### 0.3 量化与模型压缩 (Quantization / Compression)
+
+- **QVLA** (arXiv 2026)
+  - 主题: 动作空间敏感量化、通道级比特分配与剪枝一体化
+  - [深度解读](./frontier/qvla_action_centric_quantization_2026.md)
 
 #### 1. 动作生成策略
 
@@ -373,6 +387,10 @@
 - **WorldEval** (2025)
   - [深度解读](./frontier/worldeval_world_model_policy_evaluator_2025.md)
 
+#### SJTU AutoLab / Anyverse / CAS / Ant Group
+- **QVLA** (2026)
+  - [深度解读](./frontier/qvla_action_centric_quantization_2026.md)
+
 #### Columbia / Toyota Research Institute
 - **Zero-1-to-3** (2023)
   - [深度解读](./frontier/zero_1_to_3_zero_shot_one_image_to_3d_object_2023.md)
@@ -417,6 +435,8 @@
   - [笔记](./frontier/shallow_pi_knowledge_distillation_flow_vla_2026.md)
 - DAC-RL (2026.02): 分治推理训练提升测试时可扩展性  
   - [笔记](./llm_reasoning/dac_rl_divide_conquer_reasoning_2026.md)
+- QVLA (2026.02): 动作空间敏感量化与通道级比特分配  
+  - [笔记](./frontier/qvla_action_centric_quantization_2026.md)
 - Video Generation Models in Robotics (Survey, arXiv 2026): 视频生成模型在机器人中的应用、挑战与未来方向  
   - [笔记](./frontier/video_generation_models_in_robotics_survey_2026.md)
   - [论文](https://arxiv.org/abs/2601.07823)
@@ -461,6 +481,6 @@
 
 ---
 
-**最后更新**: 2026-01-25
+**最后更新**: 2026-02-04
 **维护者**: VLA Handbook Team
 
