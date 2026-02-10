@@ -528,3 +528,49 @@
 **最后更新**: 2026-02-08
 **维护者**: VLA Handbook Team
 
+## 📄 Daily Papers (Auto)
+
+> 本节由日报任务自动追加（只追加，不改动其他内容）。
+> 若你要手动维护索引，请在上方既有结构中编辑；此处仅作为每日入口与追踪。
+
+
+### VLA 架构
+
+| 论文 | 链接 | 备注 |
+|:---|:---|:---|
+| EverydayVLA: Cost-Effective 6-DOF Manipulator with Unified VLA Model | [link](https://arxiv.org/abs/2511.05397) | 🔧 daily 2026-02-10 \| repo: https://github.com/EverydayRobotics/EverydayVLA |
+
+### 動作生成
+
+| 论文 | 链接 | 备注 |
+|:---|:---|:---|
+| StreamVLA: Breaking the Reason-Act Cycle via Completion-State Gating | [link](https://arxiv.org/abs/2602.01100) | 📖 daily 2026-02-10 |
+| From Knowing to Doing Precisely: A General Self-Correction and Termination Framework for VLA models | [link](https://arxiv.org/abs/2602.01811) | 📖 daily 2026-02-10 |
+| Vlaser: Coupling VLM for Embodied Reasoning with Flow-Matching Action Expert | [link](https://openreview.net/forum?id=8xTDnj39Ti) | 🔧 daily 2026-02-10 \| repo: https://github.com/vlaser-team/vlaser |
+
+### 數據
+
+| 论文 | 链接 | 备注 |
+|:---|:---|:---|
+
+### 部署
+
+| 论文 | 链接 | 备注 |
+|:---|:---|:---|
+| Efficient Long-Horizon Vision-Language-Action Models via Static-Dynamic Disentanglement | [link](https://arxiv.org/abs/2602.03983) | 📖 daily 2026-02-10 |
+
+### Sim2Real
+
+| 论文 | 链接 | 备注 |
+|:---|:---|:---|
+
+### 觸覺
+
+| 论文 | 链接 | 备注 |
+|:---|:---|:---|
+
+### 其他
+
+| 论文 | 链接 | 备注 |
+|:---|:---|:---|
+
