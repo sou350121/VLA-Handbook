@@ -93,7 +93,7 @@ $$
 C_{var}\approx C_{act}+C_{bat}+C_{structure}+C_{sensors}+C_{assembly}+C_{yield}
 $$
 
-> **AGENT.md 风格提醒**：这里所有项都是“结构化视角”，不是官方成本构成；用于把叙事变成可验证假设。
+> **AGENTS.md 风格提醒**：这里所有项都是“结构化视角”，不是官方成本构成；用于把叙事变成可验证假设。
 
 ---
 

@@ -8,7 +8,7 @@
 > **代码**：`https://github.com/wut19/DOVE`（论文页 Code availability）  
 > **核心定位**：把 visuotactile 从“可见光 + 形变”扩展为 **UV/VIS/NIR/MIR 多光谱 + 摩擦电 + IMU** 的 **1mm 触觉皮肤**，并用 **8.5B 触觉语言模型 DOVE** 让触觉信号进入“可描述/可推理/可决策”的语义层。
 
-本文按仓库 `AGENT.md` 的部署类结构写作：**环境/硬件 → 步骤 → 配置/参数 → 常见坑 → 参考**，重点回答：这套 sensing system 设计对机器人落地意味着什么。
+本文按仓库 `AGENTS.md` 的部署类结构写作：**环境/硬件 → 步骤 → 配置/参数 → 常见坑 → 参考**，重点回答：这套 sensing system 设计对机器人落地意味着什么。
 
 ---
 
