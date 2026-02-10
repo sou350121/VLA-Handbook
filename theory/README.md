@@ -27,6 +27,7 @@
 | 🧭 **[研究主线梳理](./vla_research_mainline.md)** | 从 ACT/DP baseline 到「数据×感知×后训练」闭环 🆕 |
 | 🔍 **[论文索引](./paper_index.md)** | 🆕 多维度快速查找（技术/公司/时间） |
 | 🧠 **[RynnBrain 开源解读](./frontier/rynnbrain_open_embodied_foundation_models_2026.md)** | 阿里达摩院：物理现实锚定的具身基础模型（Plan/Nav/CoP + RynnBrain-Bench） 🆕 |
+| 🖐️ **[TacRefineNet 开源解读](./frontier/tacrefinenet_tactile_only_grasp_refinement_2026.md)** | 小米机器人：tactile-only 抓取执行微调（goal-conditioned refinement） 🆕 |
 | 🆕 **[VLA 十大挑战](./vla_challenges.md)** | NTU/斯坦福 2025 研究方向 |
 | 🔥 **[小模型 VLA 研究](./small_vla_models.md)** | 边缘部署、SmolVLA、蒸馏压缩 |
 | 🏆 **[NeurIPS 2025 解读](./neurips_2025_insights.md)** | 6 篇最佳论文的具身智能视角 |
@@ -180,6 +181,7 @@
 | **LLM 推理专题** | [`./llm_reasoning/README.md`](./llm_reasoning/README.md) | 🆕 分治推理 / 具身 CoT / 可提示表征与推理迁移 |
 | **Data Flywheel** | [`./frontier/data_flywheel_and_cross_modal.md`](./frontier/data_flywheel_and_cross_modal.md) | 🆕 互联网视频学习、跨模态迁移与数据演进 |
 | **RynnBrain（2026）** | [`./frontier/rynnbrain_open_embodied_foundation_models_2026.md`](./frontier/rynnbrain_open_embodied_foundation_models_2026.md) | 🆕 物理现实锚定的具身基础模型：指向/轨迹/规划统一输出 + RynnBrain-Bench（Object/Spatial/Grounding/Pointing） |
+| **TacRefineNet（2026）** | [`./frontier/tacrefinenet_tactile_only_grasp_refinement_2026.md`](./frontier/tacrefinenet_tactile_only_grasp_refinement_2026.md) | 🆕 仅触觉的抓取执行末端微调：多指触觉 + 本体融合，目标驱动回归 wrist 6DoF 增量 |
 | **RDT2（2026）** | [`./frontier/rdt2_umi_zero_shot_cross_embodiment_2026.md`](./frontier/rdt2_umi_zero_shot_cross_embodiment_2026.md) | 🆕 UMI 数据规模化 + 跨本体零样本部署 + 单步蒸馏 |
 | **Shallow-π（2026）** | [`./frontier/shallow_pi_knowledge_distillation_flow_vla_2026.md`](./frontier/shallow_pi_knowledge_distillation_flow_vla_2026.md) | 🆕 Flow-based VLA 层深蒸馏，端侧推理加速 |
 | **DAC-RL（2026）** | [`./llm_reasoning/dac_rl_divide_conquer_reasoning_2026.md`](./llm_reasoning/dac_rl_divide_conquer_reasoning_2026.md) | 🆕 分治推理训练，提升测试时可扩展性 |

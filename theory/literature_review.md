@@ -207,6 +207,16 @@
 - RynnBrain-Bench：`https://raw.githubusercontent.com/alibaba-damo-academy/RynnBrain/main/rynnbrain-bench/README.md`（评测维度、指标与 leaderboard）
 - RynnScale：`https://raw.githubusercontent.com/alibaba-damo-academy/RynnScale/main/projects/rynn_brain/README.md`（坐标/轨迹输出格式、评测脚本）
 
+### 0.15 触觉驱动的精细抓取微调（TacRefineNet） 🆕
+
+> 说明：TacRefineNet 聚焦抓取执行阶段的“最后一公里误差”，把位姿微调建模为目标触觉条件化的 6DoF 增量回归；输入为多指 `current/target tactile` 与本体状态，输出 wrist 增量并在 regrasp 循环中迭代收敛（arXiv 口径）。
+
+- 深度笔记：[`./frontier/tacrefinenet_tactile_only_grasp_refinement_2026.md`](./frontier/tacrefinenet_tactile_only_grasp_refinement_2026.md)（方法结构、指标定义、工程启示）
+- arXiv：`https://arxiv.org/pdf/2509.25746`（Eq.(1)(2)、阈值定义、Table II）
+- 项目页：`https://sites.google.com/view/tacrefinenet`（演示视频与任务说明）
+- 关键结论（论文实验）：sim 预训练 + 小规模 real 微调（Policy B）优于 sim-only（Policy A）；在分组实验中可达到 1.1mm / 0.016rad 与 100% 成功率（Table II 口径）。
+- 边界与后续：对未见物体有一定泛化，但在几何差异较大的方向上会退化，论文结论建议后续引入 vision 等补充感知（Sec.IV-E / Sec.V）。
+
 ### 1. 动作生成策略 (Action Generation)
 
 #### 1.1 Diffusion 系列
