@@ -26,6 +26,7 @@
 | 📚 **[文献综述](./literature_review.md)** | VLA 发展史全景图（按分类组织） |
 | 🧭 **[研究主线梳理](./vla_research_mainline.md)** | 从 ACT/DP baseline 到「数据×感知×后训练」闭环 🆕 |
 | 🔍 **[论文索引](./paper_index.md)** | 🆕 多维度快速查找（技术/公司/时间） |
+| 🧠 **[RynnBrain 开源解读](./frontier/rynnbrain_open_embodied_foundation_models_2026.md)** | 阿里达摩院：物理现实锚定的具身基础模型（Plan/Nav/CoP + RynnBrain-Bench） 🆕 |
 | 🆕 **[VLA 十大挑战](./vla_challenges.md)** | NTU/斯坦福 2025 研究方向 |
 | 🔥 **[小模型 VLA 研究](./small_vla_models.md)** | 边缘部署、SmolVLA、蒸馏压缩 |
 | 🏆 **[NeurIPS 2025 解读](./neurips_2025_insights.md)** | 6 篇最佳论文的具身智能视角 |
@@ -166,6 +167,7 @@
 | **ByteDance Seed** | GR-RL | [`gr_rl_dissection.md`](./gr_rl_dissection.md) | MoT 架构 + 三阶段 RL 训练 |
 | **NVIDIA** | GR00T-N1.6 | [`gr00t_n1_6.md`](./gr00t_n1_6.md) | 🆕 双系统 DiT 架构 + Isaac Lab 仿真 |
 | **Spirit AI** | Spirit-v1.5 | [`spirit_v1_5_dissection.md`](./spirit_v1_5_dissection.md) | 🆕 Qwen3-VL + DiT，RoboChallenge Table30 代码级复现指南 |
+| **优必选（UBTECH Robotics）** | Thinker（4B/7B） | [`./frontier/thinker_vlm_embodied_intelligence_2026.md`](./frontier/thinker_vlm_embodied_intelligence_2026.md) | 🆕 具身任务规划 VLM：ego-view 数据配方 + “末帧 keyframe + 全视频”输入协议，缓解视角混淆与 ending 忽略 |
 | **Robbyant Team** | LingBot-VLA | [`lingbot_vla_pragmatic_vla_foundation_model_2026.md`](./lingbot_vla_pragmatic_vla_foundation_model_2026.md) | 🆕 实用主义 VLA：可换 VLM（Qwen2.5-VL / PaliGemma）+ Action Expert + Flow Matching + 高吞吐训练栈 |
 | **StarVLA** | StarVLA | [`../deployment/starvla_lego_like_vla_codebase_2026.md`](../deployment/starvla_lego_like_vla_codebase_2026.md) | 🆕 Lego-like VLA 研发底座：同一套 bench 上对比 FAST/OFT/Flow/双系统等框架（Framework/Dataloader/Trainer/Eval 解耦） |
 | **X² (自变量)** | WALL-OSS | [`wall_oss.md`](./wall_oss.md) | Uni-CoT 边想边动 |
@@ -177,10 +179,12 @@
 |:-----|:-----|:---------|
 | **LLM 推理专题** | [`./llm_reasoning/README.md`](./llm_reasoning/README.md) | 🆕 分治推理 / 具身 CoT / 可提示表征与推理迁移 |
 | **Data Flywheel** | [`./frontier/data_flywheel_and_cross_modal.md`](./frontier/data_flywheel_and_cross_modal.md) | 🆕 互联网视频学习、跨模态迁移与数据演进 |
+| **RynnBrain（2026）** | [`./frontier/rynnbrain_open_embodied_foundation_models_2026.md`](./frontier/rynnbrain_open_embodied_foundation_models_2026.md) | 🆕 物理现实锚定的具身基础模型：指向/轨迹/规划统一输出 + RynnBrain-Bench（Object/Spatial/Grounding/Pointing） |
 | **RDT2（2026）** | [`./frontier/rdt2_umi_zero_shot_cross_embodiment_2026.md`](./frontier/rdt2_umi_zero_shot_cross_embodiment_2026.md) | 🆕 UMI 数据规模化 + 跨本体零样本部署 + 单步蒸馏 |
 | **Shallow-π（2026）** | [`./frontier/shallow_pi_knowledge_distillation_flow_vla_2026.md`](./frontier/shallow_pi_knowledge_distillation_flow_vla_2026.md) | 🆕 Flow-based VLA 层深蒸馏，端侧推理加速 |
 | **DAC-RL（2026）** | [`./llm_reasoning/dac_rl_divide_conquer_reasoning_2026.md`](./llm_reasoning/dac_rl_divide_conquer_reasoning_2026.md) | 🆕 分治推理训练，提升测试时可扩展性 |
 | **TinyLoRA（2026）** | [`./llm_reasoning/tiny_lora_13_params_reasoning_2026.md`](./llm_reasoning/tiny_lora_13_params_reasoning_2026.md) | 🆕 13 参数推理微调：RL 信号激活推理模式 |
+| **IntelliFold 2（2026）** | [`./frontier/intellifold_2_surpassing_alphafold3_structural_consistency_2026.md`](./frontier/intellifold_2_surpassing_alphafold3_structural_consistency_2026.md) | 🆕 生成式科学智能：共折叠结构预测；latent scaling + 多尺度一致性 +（Pro）PPO 稳采样 + 难例加权 |
 | **Reward Discovery** | [`./frontier/reward_discovery_rl.md`](./frontier/reward_discovery_rl.md) | 🆕 Nature Comm: 遗憾最小化元学习奖励发现 |
 | **Vicarious Maps** | [`./frontier/vicarious_body_maps.md`](./frontier/vicarious_body_maps.md) | 🆕 Nature 2025: 视触觉“感同身受”的神经基础 |
 | **UniTacHand** | [`./frontier/unitachhand.md`](./frontier/unitachhand.md) | 🆕 arXiv 2025: MANO UV Map 统一触觉表征，实现人手→机器人零样本迁移 |

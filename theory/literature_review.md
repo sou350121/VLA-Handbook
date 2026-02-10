@@ -1,7 +1,7 @@
 # VLA 文献核心技术归纳 (Literature Technical Review)
 
 > **快速索引**: [论文索引 (Paper Index)](./paper_index.md) - 多维度查找系统
-> **最后更新**: 2026-02-04
+> **最后更新**: 2026-02-08
 
 本章节对 VLA 领域的核心文献进行**深度技术归纳**，按技术分类组织，适合面试前快速复习模型细节。
 
@@ -175,6 +175,37 @@
   - 手册解读：[`./llm_reasoning/tiny_lora_13_params_reasoning_2026.md`](./llm_reasoning/tiny_lora_13_params_reasoning_2026.md)  
   - 论文 PDF：`https://arxiv.org/pdf/2602.04118`  
   - 关键结论：TinyLoRA 用共享向量极限微调，RL 信号优于 SFT（论文口径）。
+
+### 0.12 具身任务规划与 Ego-view 视频理解（Thinker）
+
+> 说明：很多通用 VLM 在机器人视频上会出现两类“低级但致命”的错误：第一视角/第三视角混淆，以及忽略视频末端状态。Thinker 用 ego-view 定制数据 + “关键帧（末帧）+ 全视频”联合输入，作为一个强 baseline 来修正这两类问题。
+
+- Thinker: A vision-language foundation model for embodied intelligence (arXiv 2026)  
+  - 手册解读：[`./frontier/thinker_vlm_embodied_intelligence_2026.md`](./frontier/thinker_vlm_embodied_intelligence_2026.md)  
+  - 论文：`https://arxiv.org/abs/2601.21199`  
+  - 代码：`https://github.com/UBTECH-Robot/Thinker`  
+  - 权重：`https://huggingface.co/UBTECH-Robotics/Thinker-4B`  
+  - 关键结论：在 RoboVQA / EgoPlan-Bench2 上达成 SOTA（论文口径），并强调 keyframe+video 的输入协议对视频理解很关键。
+
+### 0.13 生成式科学智能：生物分子共折叠与结构一致性（IntelliFold 2）
+
+> 说明：IntelliFold 2 是生成式科学智能方向的一个重要案例：它在 AlphaFold3-like 路线内做“架构细化 + 结构一致性 + 采样稳定性 + 难例优化”，并用 v2-Flash / v2 / Pro 三个变体覆盖“开源可用→开源最强精度→server 极致精度”的不同需求。
+
+- IntelliFold 2: Surpassing AlphaFold 3 via Architectural Refinement and Structural Consistency (Release Note 2026)  
+  - 手册解读：[`./frontier/intellifold_2_surpassing_alphafold3_structural_consistency_2026.md`](./frontier/intellifold_2_surpassing_alphafold3_structural_consistency_2026.md)  
+  - Release Note（PDF）：`https://github.com/IntelliGen-AI/IntelliFold/raw/main/assets/Intellifold_v2_release_note.pdf`  
+  - 代码仓库：`https://github.com/IntelliGen-AI/IntelliFold`  
+  - 关键结论：在 FoldBench 上 Ab-Ag / Protein-Ligand 两类关键任务超过 AlphaFold 3（发布口径）；Pro 版进一步引入 PPO 稳采样与难例损失加权。
+
+### 0.14 物理现实锚定的具身基础模型（RynnBrain） 🆕
+
+> 说明：RynnBrain 把“具身理解”从被动观测升级为**自我中心认知 + 时空定位 + 空间指向/轨迹 + 规划**的一体化接口，并同时给出 **RynnBrain-Bench** 把 object/spatial/grounding/pointing 四类能力做成可回归评测（GitHub + bench README 口径）。
+
+- 深度笔记：[`./frontier/rynnbrain_open_embodied_foundation_models_2026.md`](./frontier/rynnbrain_open_embodied_foundation_models_2026.md)（含接口形态、bench 指标口径与可复现入口）
+- GitHub：`https://github.com/alibaba-damo-academy/RynnBrain`（模型结构、Model Zoo、cookbooks）
+- 项目主页：`https://alibaba-damo-academy.github.io/RynnBrain.github.io/`（概览、BibTeX、演示）
+- RynnBrain-Bench：`https://raw.githubusercontent.com/alibaba-damo-academy/RynnBrain/main/rynnbrain-bench/README.md`（评测维度、指标与 leaderboard）
+- RynnScale：`https://raw.githubusercontent.com/alibaba-damo-academy/RynnScale/main/projects/rynn_brain/README.md`（坐标/轨迹输出格式、评测脚本）
 
 ### 1. 动作生成策略 (Action Generation)
 
@@ -691,5 +722,5 @@
 
 ---
 
-**最后更新**: 2026-01-25
+**最后更新**: 2026-02-08
 [← Back to Theory](./README.md)

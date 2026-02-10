@@ -1,7 +1,7 @@
 # VLA 论文索引 (Paper Index)
 
 > **快速查找**: 多维度索引系统，帮助快速定位相关论文
-> **最后更新**: 2026-02-04
+> **最后更新**: 2026-02-08
 
 ---
 
@@ -34,6 +34,9 @@
 | **Physics-Inspired Vision** 🆕 | WaveFormer (Wave Equation) | [深度解读](./frontier/waveformer_wave_equation_vision_2026.md) |
 | **3D Reconstruction / View Synthesis** 🆕 | Zero-1-to-3 | [深度解读](./frontier/zero_1_to_3_zero_shot_one_image_to_3d_object_2023.md) |
 | **Evaluation / World Model** 🆕 | WorldEval | [深度解读](./frontier/worldeval_world_model_policy_evaluator_2025.md) |
+| **Embodied Task Planning / Video Reasoning** 🆕 | Thinker | [深度解读](./frontier/thinker_vlm_embodied_intelligence_2026.md) |
+|  | RynnBrain | [深度笔记](./frontier/rynnbrain_open_embodied_foundation_models_2026.md) |
+| **Generative Science / Biomolecular Structure** 🆕 | IntelliFold 2 | [深度解读](./frontier/intellifold_2_surpassing_alphafold3_structural_consistency_2026.md) |
 | **Quantization / Compression** 🆕 | QVLA | [深度解读](./frontier/qvla_action_centric_quantization_2026.md) |
 | **Graph ML / GNN 基线** 🆕 | Classic GNNs are Strong Baselines | [深度解读](./frontier/classic_gnns_strong_baselines_node_classification_2024.md) |
 | **Multimodal Fusion** 🆕 | Policy Consensus (Multi-Modal Manipulation) | [深度解读](./frontier/policy_consensus_multimodal_manipulation_2025.md) |
@@ -86,6 +89,9 @@
 | **X² (自变量)** | WALL-OSS | [深度解析](./wall_oss.md) |
 | **Galaxea AI** | G0 | [详细](#galaxea-g0) |
 | **Robbyant Team** 🆕 | LingBot-VLA | [深度解析](./lingbot_vla_pragmatic_vla_foundation_model_2026.md) |
+| **优必选（UBTECH Robotics）** 🆕 | Thinker | [深度解读](./frontier/thinker_vlm_embodied_intelligence_2026.md) |
+| **阿里达摩院（DAMO Academy）** 🆕 | RynnBrain | [深度笔记](./frontier/rynnbrain_open_embodied_foundation_models_2026.md) |
+| **IntelliGen-AI** 🆕 | IntelliFold 2 | [深度解读](./frontier/intellifold_2_surpassing_alphafold3_structural_consistency_2026.md) |
 | **Samsung Research** 🆕 | Shallow-π | [深度解读](./frontier/shallow_pi_knowledge_distillation_flow_vla_2026.md) |
 | **UCLA / Microsoft** 🆕 | DAC-RL | [深度解读](./llm_reasoning/dac_rl_divide_conquer_reasoning_2026.md) |
 | **北航 / 香港理工大学** 🆕 | Classic GNNs are Strong Baselines | [深度解读](./frontier/classic_gnns_strong_baselines_node_classification_2024.md) |
@@ -143,6 +149,9 @@
 | | Shallow-π (Distillation) | [深度解读](./frontier/shallow_pi_knowledge_distillation_flow_vla_2026.md) |
 | | DAC-RL (Divide-and-Conquer) | [深度解读](./llm_reasoning/dac_rl_divide_conquer_reasoning_2026.md) |
 | | TinyLoRA (13 params) | [深度解读](./llm_reasoning/tiny_lora_13_params_reasoning_2026.md) |
+| | Thinker (Embodied Planning VLM) | [深度解读](./frontier/thinker_vlm_embodied_intelligence_2026.md) |
+| | RynnBrain (Embodied Foundation Model) | [深度笔记](./frontier/rynnbrain_open_embodied_foundation_models_2026.md) |
+| | IntelliFold 2 (Generative Science) | [深度解读](./frontier/intellifold_2_surpassing_alphafold3_structural_consistency_2026.md) |
 | | QVLA (Quantization) | [深度解读](./frontier/qvla_action_centric_quantization_2026.md) |
 | | TaF-VLA (Tactile-Force Alignment) | [深度解读](./frontier/taf_vla_tactile_force_alignment_2026.md) |
 | | VT Pretraining + Online Multitask (SciRobotics 2026) | [深度解析](./frontier/visual_tactile_pretraining_online_multitask_learning_2026.md) |
@@ -178,6 +187,22 @@
 - **QVLA** (arXiv 2026)
   - 主题: 动作空间敏感量化、通道级比特分配与剪枝一体化
   - [深度解读](./frontier/qvla_action_centric_quantization_2026.md)
+
+#### 0.4 具身任务规划与 Ego-view 视频理解 (Embodied Task Planning / Ego-view Video)
+
+- **RynnBrain** (Release 2026)
+  - 主题: 物理现实锚定的具身基础模型（定位/指向/轨迹/规划统一输出）+ RynnBrain-Bench（Object/Spatial/Grounding/Pointing）
+  - [深度笔记](./frontier/rynnbrain_open_embodied_foundation_models_2026.md)
+
+- **Thinker** (arXiv 2026)
+  - 主题: 具身 VLM 任务规划、第一视角空间理解、视频末帧关键帧增强（keyframe + video）
+  - [深度解读](./frontier/thinker_vlm_embodied_intelligence_2026.md)
+
+#### 0.5 生成式科学智能与生物结构预测 (Generative Science / Biomolecular Structure)
+
+- **IntelliFold 2** (Release Note 2026)
+  - 主题: Ab-Ag / Protein-Ligand 共折叠；latent space scaling、随机原子化（stochastic atomization）、（Pro）PPO 稳采样与难例损失加权
+  - [深度解读](./frontier/intellifold_2_surpassing_alphafold3_structural_consistency_2026.md)
 
 #### 1. 动作生成策略
 
@@ -383,6 +408,10 @@
 #### Galaxea AI
 - **G0** (2024)
 
+#### 阿里达摩院（Alibaba DAMO Academy） 🆕
+- **RynnBrain** (Release 2026)
+  - [深度笔记](./frontier/rynnbrain_open_embodied_foundation_models_2026.md)
+
 #### WorldEval Team
 - **WorldEval** (2025)
   - [深度解读](./frontier/worldeval_world_model_policy_evaluator_2025.md)
@@ -429,6 +458,8 @@
   - [笔记](./frontier/worldeval_world_model_policy_evaluator_2025.md)
 
 #### 2026（世界模型 / 视频生成综述）
+- RynnBrain (Release 2026): 物理现实锚定的具身基础模型（定位/指向/轨迹/规划）+ RynnBrain-Bench  
+  - [笔记](./frontier/rynnbrain_open_embodied_foundation_models_2026.md)
 - RDT2 (2026.02): UMI 数据规模化与跨本体零样本部署  
   - [笔记](./frontier/rdt2_umi_zero_shot_cross_embodiment_2026.md)
 - Shallow-π (2026.01): Flow-based VLA 层深蒸馏（18→6）  
@@ -481,6 +512,6 @@
 
 ---
 
-**最后更新**: 2026-02-04
+**最后更新**: 2026-02-08
 **维护者**: VLA Handbook Team
 
