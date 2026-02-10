@@ -18,6 +18,7 @@
 - **[相机标定与手眼对齐 (Camera Calibration)](./camera_calibration_eye_in_hand.md)**: Eye-in-Hand vs Eye-to-Hand 标定实战。
 - **[多模态数据同步技术 (Multimodal Sync)](./multimodal_data_synchronization.md)**: 解决 RGB-D 与高频控制（1000Hz）的时间对齐难题。
 - **[触觉集成挑战 (Tactile Integration)](./tactile_sensor_integration_challenges.md)**: 触觉传感器与夹爪集成的工程难点。
+- **[运动传感器测量差异与 IEEE P3716 质量评估标准](./ieee_p3716_sports_tracking_quality_standard.md)**: 场地运动中人体/物体追踪测量一致性难题与标准化进展（对多传感器融合与评估的启示）。
 
 ### 3. 机械臂控制与遥操作部署 (Robot Arm & Teleoperation)
 - **[UR5 Python 控制实战 (UR5 Control Guide)](./ur5_control_guide.md)**: 实时内核配置、`ur_rtde` 高频控制与保护性停止恢复。
