@@ -25,6 +25,7 @@
 | 📊 **[ASCII 图鉴](./ascii_cheatsheet.md)** | 一页纸复习所有架构图 |
 | 📚 **[文献综述](./literature_review.md)** | VLA 发展史全景图（按分类组织） |
 | 🧭 **[研究主线梳理](./vla_research_mainline.md)** | 从 ACT/DP baseline 到「数据×感知×后训练」闭环 🆕 |
+| 🧩 **[弹性模组化架构 Table 生成器](./modular_pipeline_table_generator.md)** | 从 `theory/` 文本抽象可拼装 pipeline：Stages + Table + 路径图 🆕 |
 | 🔍 **[论文索引](./paper_index.md)** | 🆕 多维度快速查找（技术/公司/时间） |
 | 🧠 **[RynnBrain 开源解读](./frontier/rynnbrain_open_embodied_foundation_models_2026.md)** | 阿里达摩院：物理现实锚定的具身基础模型（Plan/Nav/CoP + RynnBrain-Bench） 🆕 |
 | 🖐️ **[TacRefineNet 开源解读](./frontier/tacrefinenet_tactile_only_grasp_refinement_2026.md)** | 小米机器人：tactile-only 抓取执行微调（goal-conditioned refinement） 🆕 |
