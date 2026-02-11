@@ -1,7 +1,7 @@
 # VLA 论文索引 (Paper Index)
 
 > **快速查找**: 多维度索引系统，帮助快速定位相关论文
-> **最后更新**: 2026-02-08
+> **最后更新**: 2026-02-11
 
 ---
 
@@ -35,8 +35,10 @@
 | **Physics-Inspired Vision** 🆕 | WaveFormer (Wave Equation) | [深度解读](./frontier/waveformer_wave_equation_vision_2026.md) |
 | **3D Reconstruction / View Synthesis** 🆕 | Zero-1-to-3 | [深度解读](./frontier/zero_1_to_3_zero_shot_one_image_to_3d_object_2023.md) |
 | **Evaluation / World Model** 🆕 | WorldEval | [深度解读](./frontier/worldeval_world_model_policy_evaluator_2025.md) |
+|  | DreamZero (WAM) | [深度解析](./dreamzero_world_action_models_zero_shot_policies_2026.md) |
 | **Embodied Task Planning / Video Reasoning** 🆕 | Thinker | [深度解读](./frontier/thinker_vlm_embodied_intelligence_2026.md) |
 |  | RynnBrain | [深度笔记](./frontier/rynnbrain_open_embodied_foundation_models_2026.md) |
+|  | VITRA | [深度解读](./frontier/vitra_scalable_vla_pretraining_human_activity_videos_2026.md) |
 | **Generative Science / Biomolecular Structure** 🆕 | IntelliFold 2 | [深度解读](./frontier/intellifold_2_surpassing_alphafold3_structural_consistency_2026.md) |
 | **Quantization / Compression** 🆕 | QVLA | [深度解读](./frontier/qvla_action_centric_quantization_2026.md) |
 | **Graph ML / GNN 基线** 🆕 | Classic GNNs are Strong Baselines | [深度解读](./frontier/classic_gnns_strong_baselines_node_classification_2024.md) |
@@ -84,6 +86,7 @@
 | | Knowledge Insulation | [摘要](#knowledge-insulation) |
 | **ByteDance Seed** | GR-RL | [深度解析](./gr_rl_dissection.md) |
 | | RDT-1B | [详细](#rdt) |
+| **NVIDIA** 🆕 | DreamZero (WAM) | [深度解析](./dreamzero_world_action_models_zero_shot_policies_2026.md) |
 | **RDT Team / 清华大学 MARS Lab** 🆕 | RDT2 | [深度解读](./frontier/rdt2_umi_zero_shot_cross_embodiment_2026.md) |
 | **Stanford** | OpenVLA | [深度解析](#openvla) |
 | | ACT | [详细](#act) |
@@ -96,6 +99,7 @@
 | **IntelliGen-AI** 🆕 | IntelliFold 2 | [深度解读](./frontier/intellifold_2_surpassing_alphafold3_structural_consistency_2026.md) |
 | **Samsung Research** 🆕 | Shallow-π | [深度解读](./frontier/shallow_pi_knowledge_distillation_flow_vla_2026.md) |
 | **UCLA / Microsoft** 🆕 | DAC-RL | [深度解读](./llm_reasoning/dac_rl_divide_conquer_reasoning_2026.md) |
+| **Microsoft Research Asia** 🆕 | VITRA | [深度解读](./frontier/vitra_scalable_vla_pretraining_human_activity_videos_2026.md) |
 | **北航 / 香港理工大学** 🆕 | Classic GNNs are Strong Baselines | [深度解读](./frontier/classic_gnns_strong_baselines_node_classification_2024.md) |
 | **Columbia** | Diffusion Policy | [详细](#diffusion-policy) |
 | | Zero-1-to-3 | [深度解读](./frontier/zero_1_to_3_zero_shot_one_image_to_3d_object_2023.md) |
@@ -133,6 +137,7 @@
 | | PR2L (Promptable Reps for RL) | [深度解读](./llm_reasoning/vlm_promptable_representations_for_rl_pr2l_2025.md) |
 | | U2O RL (Unsupervised-to-Online) | [深度解读](./frontier/unsupervised_to_online_reinforcement_learning_u2o_2024.md) |
 | **2025** | π0.5 | [深度解析](./pi0_5_dissection.md) |
+| | VITRA | [深度解读](./frontier/vitra_scalable_vla_pretraining_human_activity_videos_2026.md) |
 | | π0.6 | [深度解析](./pi0_6_dissection.md) |
 | | FAST | [详细](#fast) |
 | | GR-RL | [深度解析](./gr_rl_dissection.md) |
@@ -147,6 +152,7 @@
 | | WorldEval | [深度解读](./frontier/worldeval_world_model_policy_evaluator_2025.md) |
 | | **NeurIPS 2025 Best Papers** 🆕 | [专题解读](./neurips_2025_insights.md) |
 | **2026** 🆕 | LingBot-VLA | [深度解析](./lingbot_vla_pragmatic_vla_foundation_model_2026.md) |
+| | DreamZero (WAM) | [深度解析](./dreamzero_world_action_models_zero_shot_policies_2026.md) |
 | | RDT2 (UMI Zero-shot) | [深度解读](./frontier/rdt2_umi_zero_shot_cross_embodiment_2026.md) |
 | | Shallow-π (Distillation) | [深度解读](./frontier/shallow_pi_knowledge_distillation_flow_vla_2026.md) |
 | | DAC-RL (Divide-and-Conquer) | [深度解读](./llm_reasoning/dac_rl_divide_conquer_reasoning_2026.md) |
@@ -185,6 +191,10 @@
   - 主题: 世界模型评估机器人策略、生成式 rollout
   - [深度解读](./frontier/worldeval_world_model_policy_evaluator_2025.md)
 
+- **DreamZero** (2026)
+  - 主题: World Action Model (WAM)，联合预测视频 + 动作，基于 video diffusion 的零样本策略
+  - [深度解析](./dreamzero_world_action_models_zero_shot_policies_2026.md)
+
 #### 0.3 量化与模型压缩 (Quantization / Compression)
 
 - **QVLA** (arXiv 2026)
@@ -200,6 +210,10 @@
 - **Thinker** (arXiv 2026)
   - 主题: 具身 VLM 任务规划、第一视角空间理解、视频末帧关键帧增强（keyframe + video）
   - [深度解读](./frontier/thinker_vlm_embodied_intelligence_2026.md)
+
+- **VITRA** (arXiv 2025)
+  - 主题: 无标注人类手部 egocentric 视频 → VLA 同构 episode（指令 + 3D 手部运动 + 相机运动），可扩展预训练
+  - [深度解读](./frontier/vitra_scalable_vla_pretraining_human_activity_videos_2026.md)
 
 #### 0.5 生成式科学智能与生物结构预测 (Generative Science / Biomolecular Structure)
 
