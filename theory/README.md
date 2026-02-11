@@ -168,6 +168,7 @@
 | | π0.6 | [`pi0_6_dissection.md`](./pi0_6_dissection.md) | Recap 自我进化 + Action Expert |
 | **ByteDance Seed** | GR-RL | [`gr_rl_dissection.md`](./gr_rl_dissection.md) | MoT 架构 + 三阶段 RL 训练 |
 | **NVIDIA** | GR00T-N1.6 | [`gr00t_n1_6.md`](./gr00t_n1_6.md) | 🆕 双系统 DiT 架构 + Isaac Lab 仿真 |
+| | DreamZero | [`dreamzero_world_action_models_zero_shot_policies_2026.md`](./dreamzero_world_action_models_zero_shot_policies_2026.md) | 🆕 WAM：联合预测视频+动作，14B video diffusion 做到 7Hz 闭环控制 |
 | **Spirit AI** | Spirit-v1.5 | [`spirit_v1_5_dissection.md`](./spirit_v1_5_dissection.md) | 🆕 Qwen3-VL + DiT，RoboChallenge Table30 代码级复现指南 |
 | **优必选（UBTECH Robotics）** | Thinker（4B/7B） | [`./frontier/thinker_vlm_embodied_intelligence_2026.md`](./frontier/thinker_vlm_embodied_intelligence_2026.md) | 🆕 具身任务规划 VLM：ego-view 数据配方 + “末帧 keyframe + 全视频”输入协议，缓解视角混淆与 ending 忽略 |
 | **Robbyant Team** | LingBot-VLA | [`lingbot_vla_pragmatic_vla_foundation_model_2026.md`](./lingbot_vla_pragmatic_vla_foundation_model_2026.md) | 🆕 实用主义 VLA：可换 VLM（Qwen2.5-VL / PaliGemma）+ Action Expert + Flow Matching + 高吞吐训练栈 |
