@@ -167,7 +167,7 @@
 | | π0.5 | [`pi0_5_dissection.md`](./pi0_5_dissection.md) | Flow Matching + 隐式推理 |
 | | π0.6 | [`pi0_6_dissection.md`](./pi0_6_dissection.md) | Recap 自我进化 + Action Expert |
 | **ByteDance Seed** | GR-RL | [`gr_rl_dissection.md`](./gr_rl_dissection.md) | MoT 架构 + 三阶段 RL 训练 |
-| **Microsoft** | VITRA | [`vitra_scalable_vla_pretraining_human_activity_videos_2026.md`](./vitra_scalable_vla_pretraining_human_activity_videos_2026.md) | 🆕 真实人类手部视频 → VLA 预训练（1M+ episodes），zero-shot 手部动作预测，少量真机数据可适配 |
+| **Microsoft** | VITRA | [`./frontier/vitra_scalable_vla_pretraining_human_activity_videos_2026.md`](./frontier/vitra_scalable_vla_pretraining_human_activity_videos_2026.md) | 🆕 真实人类手部视频 → VLA 预训练（1M+ episodes），zero-shot 手部动作预测，少量真机数据可适配 |
 | **NVIDIA** | GR00T-N1.6 | [`gr00t_n1_6.md`](./gr00t_n1_6.md) | 🆕 双系统 DiT 架构 + Isaac Lab 仿真 |
 | | DreamZero | [`dreamzero_world_action_models_zero_shot_policies_2026.md`](./dreamzero_world_action_models_zero_shot_policies_2026.md) | 🆕 WAM：联合预测视频+动作，14B video diffusion 做到 7Hz 闭环控制 |
 | **Spirit AI** | Spirit-v1.5 | [`spirit_v1_5_dissection.md`](./spirit_v1_5_dissection.md) | 🆕 Qwen3-VL + DiT，RoboChallenge Table30 代码级复现指南 |

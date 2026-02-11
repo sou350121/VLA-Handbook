@@ -125,5 +125,5 @@ README 在“Fine-tuning with a Custom Robot Dataset”里强调了一个非常�
 - VITRA project page (figures, experiments): `https://microsoft.github.io/VITRA/`  
 - arXiv: `https://arxiv.org/abs/2510.21571`  
 
-[← Back to Theory](./README.md)
+[← Back to Theory](../README.md)
 
