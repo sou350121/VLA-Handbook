@@ -1,4 +1,5 @@
 # Biweekly Frontier Reports
+| 2026-02-11 | [本期報告](./2026-02-11.md) | 触觉VLA持续突破，TaF-VLA与TIC-VLA验证多模态融合有效性。 |
 | 2026-02-10 | [本期報告](./2026-02-10.md) | 触觉感知成精细操作突破口，TacRefineNet证明tactile-only方案有效 |
 | 2026-02-09 | [本期報告](./2026-02-09.md) | > 自动生成 by Moltbot | 2026-02-09 |
 
