@@ -539,6 +539,8 @@
 | 论文 | 链接 | 备注 |
 |:---|:---|:---|
 | EverydayVLA: Cost-Effective 6-DOF Manipulator with Unified VLA Model | [link](https://arxiv.org/abs/2511.05397) | 🔧 daily 2026-02-10 \| repo: https://github.com/EverydayRobotics/EverydayVLA |
+| TaF-VLA | [link](https://arxiv.org/abs/2601.20321) | 🎯 tactile \| 📖 daily 2026-02-11 |
+| TIC-VLA | [link](https://arxiv.org/abs/2602.02459) | 📖 daily 2026-02-11 |
 
 ### 動作生成
 
@@ -574,3 +576,4 @@
 | 论文 | 链接 | 备注 |
 |:---|:---|:---|
 
+| SCALE | [link](https://www.arxiv.org/abs/2602.04208) | 📖 daily 2026-02-11 |
