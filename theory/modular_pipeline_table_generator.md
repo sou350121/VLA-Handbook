@@ -1,5 +1,16 @@
 # 弹性模组化架构 Table 生成器（VLA Modular Pipelines）
 
+这份文档的作用是：把 `theory/` 中**分散且格式不统一**的架构描述，抽象成一张“可拼装”的 **pipeline 表**与一张**路径图**，用来快速对齐不同 VLA/具身模型的模块分工与组合方式。
+
+使用方式（建议）：
+- **先看 `Stages`**：它是默认的可组合阶段集合（4–6 段）。如果你在读某个模型时发现它强调了 Memory / Safety / Tooling 等，可以把它拆成独立 stage（但不要过细到实现细节）。
+- **再看 Table**：每一行代表一条“从输入到动作”的可运行路径；同一模型若有明显不同装配方式，最多保留 1–3 行代表路径。
+- **最后看 Mermaid**：只画 Table 里出现过的节点与连线，用来肉眼检查“是否真的是一条端到端管线”，以及不同路径在哪个 stage 分叉。
+
+重要约束（避免误导）：
+- **禁止脑补**：只有当 `theory/` 文本（同段落/同图）明确写出模块名或强指向时才填写；否则用 `—`，并在 `Missing Info` 里列出需要补的字段与检索关键词。
+- **节点命名尽量保留原文**：例如 `π0`、`PaliGemma 2B VLM`、`Action Expert` 等，不随意改名为同义词，避免丢失可追溯性。
+
 **A) Stages + Table**
 
 **Stages:** `Inputs → Perception → Backbone → World Model → Planner → Action/Control`
@@ -12,10 +23,10 @@
 | Image (RGB)<br>Proprioception | Visual Encoder (ResNet/ViT) | Denoising Network (CNN/U-Net or Transformer/DiT) | — | — | Action Chunking<br>Horizon Control (RHC) | Diffusion Policy | 扩散生成动作，强多峰分布表达。 |
 | Images (multi-view)<br>Language<br>Proprioception | SigLIP | PaliGemma 2B VLM | — | — | Action Expert (Flow Matching)<br>ODE Solver (Euler/RK4)<br>Action Chunk | π0 | VLM 条件 + Flow/ODE 动作生成。 |
 | RGB Image Sequence<br>Natural Language Cmd | VLM Backbone (3B-5B) | Unified Transformer | — | Latent Thought | FAST Tokenizer (training)<br>Flow Matching (inference)<br>50Hz Action Output | π0.5 | 训练离散、推理连续的混合架构。 |
-| — | — | 5B VLM Backbone | — | — | Action Expert<br>Velocity Field v(a_t,t) | π0.6 / π*0.6 | 引入 Action Expert 与 Recap（offline RL）后训练。 |
+| Up to four images (448×448): base camera + up to two wrist cameras + optional backward camera<br>tokenized language prompt<br>tokenized proprioceptive states<br>(optional) conditioning metadata | SigLIP (400M) | Gemma3 4B | — | Language subtasks (high-level subtask prediction) | Action Expert (~860M)<br>Flow matching (continuous actions)<br>FAST action tokens (discretized actions) | π0.6 / π*0.6 | Hierarchical（subtasks + action）；π*0.6 通过 RECAP 学习“从经验变强”。 |
 | Image<br>Language<br>Proprioception<br>Noisy Action x_t<br>Timestep t | Condition Encoder (SigLIP + T5 + Proprio Projection + Fusion) | DiT Backbone (AdaLN-Zero Transformer) | — | — | DDPM/DDIM Denoising Sampling<br>Denoised Action x_{t-1} | RDT-1B | 条件编码 + DiT 扩散基础模型路径。 |
 | Visual Input (HD)<br>Language Instruction<br>Real-time RGB<br>Proprioception/Joint States | Large VLM Encoder (System 2) | Diffusion Transformer (System 1, AdaLN-Zero) | — | Latent Task Tokens (Asynchronous Injection) | Denoising Process (3-5 Steps)<br>Action Chunking Output (~50Hz) | GR00T-N1.6 | 异步双系统（慢语义 + 快控制）。 |
-| 一帧初始画面<br>文本指令 | — | — | Text-conditioned Video Diffusion World Model | 并行候选视频 + VLM Evaluator 选优 | Inverse Dynamics Model (IDM)<br>Reject/Resample<br>时间平滑 | 1XWM | 先“想象未来视频”，再逆动力学映射动作。 |
+| 一帧初始画面<br>文本指令 | Visual encoder (temporal image encoder)<br>Action encoder | 14B generative video model | Text-conditioned diffusion model | 并行候选视频 + VLM Evaluator 选优 | IDM (two-image predictor, sliding window W=8)<br>Depth Anything backbone + flow matching head<br>rejection sampling + timewise averaging | 1XWM | 世界模型生成未来视频 → IDM 像素到动作；best-of-N 可选优。 |
 | 图像<br>指令 | Qwen2.5 VLMoE Backbone | Qwen2.5 VLMoE | — | Hierarchical CoT<br>(Reasoning → Sub-goal → Action Synthesis) | 离散头 (FAST Token)<br>连续头 (Flow Match)<br>X² Control | WALL-OSS | 分层 CoT + 双 head（离散规划/连续控制）。 |
 
 **B) Mermaid**
@@ -30,7 +41,7 @@ actIn["Image + Proprioception + Language"]
 dpIn["Image (RGB) + Proprioception"]
 pi0In["Images (multi-view) + Language + Proprioception"]
 pi05In["RGB Image Sequence + Natural Language Cmd"]
-pi06In["—"]
+pi06In["Up to four images (448×448) + language + proprio (+ metadata)"]
 rdtIn["Image + Language + Proprioception + Noisy Action x_t + Timestep t"]
 gr00tIn["Visual Input (HD) + Language + Real-time RGB + Proprioception"]
 oneXIn["一帧初始画面 + 文本指令"]
@@ -44,10 +55,10 @@ actPerc["Observation Encoder (ResNet-18 / ViT + Linear)"]
 dpPerc["Visual Encoder (ResNet/ViT)"]
 pi0Perc["SigLIP"]
 pi05Perc["VLM Backbone (3B-5B)"]
-pi06Perc["—"]
+pi06Perc["SigLIP (400M)"]
 rdtPerc["Condition Encoder (SigLIP + T5 + Proprio Projection + Fusion)"]
 gr00tPerc["Large VLM Encoder (System 2)"]
-oneXPerc["—"]
+oneXPerc["Visual encoder (temporal image encoder) + Action encoder"]
 wallPerc["Qwen2.5 VLMoE Backbone"]
 end
 
@@ -58,10 +69,10 @@ actBack["Transformer Decoder + CVAE Encoder(train)"]
 dpBack["Denoising Network (CNN/U-Net or Transformer/DiT)"]
 pi0Back["PaliGemma 2B VLM"]
 pi05Back["Unified Transformer"]
-pi06Back["5B VLM Backbone"]
+pi06Back["Gemma3 4B"]
 rdtBack["DiT Backbone (AdaLN-Zero)"]
 gr00tBack["Diffusion Transformer (System 1)"]
-oneXBack["—"]
+oneXBack["14B generative video model"]
 wallBack["Qwen2.5 VLMoE"]
 end
 
@@ -75,7 +86,7 @@ pi05WM["—"]
 pi06WM["—"]
 rdtWM["—"]
 gr00tWM["—"]
-oneXWM["Text-conditioned Video Diffusion World Model"]
+oneXWM["Text-conditioned diffusion model"]
 wallWM["—"]
 end
 
@@ -100,10 +111,10 @@ actAct["Action Chunking + Temporal Ensemble"]
 dpAct["Action Chunking + RHC"]
 pi0Act["Action Expert (Flow Matching) + ODE Solver + Action Chunk"]
 pi05Act["FAST(training) + Flow Matching(inference) + 50Hz"]
-pi06Act["Action Expert + Velocity Field v(a_t,t)"]
+pi06Act["Action Expert (~860M) + Flow matching + FAST tokens"]
 rdtAct["DDPM/DDIM Sampling + Denoised Action x_{t-1}"]
 gr00tAct["Denoising(3-5) + Action Chunking(~50Hz)"]
-oneXAct["IDM + Reject/Resample + 时间平滑"]
+oneXAct["IDM (Depth Anything + Flow) + Reject/Resample + Timewise averaging"]
 wallAct["离散头(FAST) + 连续头(Flow Match) + X² Control"]
 end
 
@@ -136,4 +147,8 @@ wallIn --> wallPerc --> wallBack --> wallWM --> wallPlan --> wallAct --> wallMod
 
 **C) Missing Info**
 
-- `RT-1` 缺 `World Model`：需要在 `theory/` 中找到其是否包含显式环境动态建模（关键词：world model / latent dynamics / predictive model）。\n+- `OpenVLA` 缺 `Planner`：需要在 `theory/vla_arch.md` 或 OpenVLA 专文中找到显式任务分解/规划模块描述（关键词：planner / sub-goal / reasoning chain）。\n+- `π0.6 / π*0.6` 缺 `Inputs`：需要在 `theory/pi0_6_dissection.md` 或 `theory/pi0_code_analysis.md` 找到完整输入模态定义（图像/语言/本体感知）。\n+- `π0.6 / π*0.6` 缺 `Perception`：需要补充其具体视觉编码器或条件编码器名称（关键词：vision encoder / SigLIP / tokenizer / condition encoder）。\n+- `RDT-1B` 缺 `Planner`：需要在 `theory/rdt.md` 或 `theory/frontier/rdt2_umi_zero_shot_cross_embodiment_2026.md` 查找是否有显式规划层（关键词：planner / hierarchical / sub-goal）。\n+- `1XWM` 缺 `Perception`：需要在 `theory/frontier/one_x_world_model.md` 补充世界模型前端编码器细节（关键词：vision encoder / text encoder / tokenizer）。\n+- `1XWM` 缺 `Backbone`：需要补充世界模型主干的具体网络命名（关键词：video diffusion backbone / transformer / U-Net）。\n+
+- **RT-1 — World Model**：无显式 world model；RT-1 是端到端 policy（images + instruction → tokenized actions）。来源：[`rt1.pdf`](https://robotics-transformer1.github.io/assets/rt1.pdf)
+- **OpenVLA — Planner**：无显式 planner/sub-goal 模块；fused visual encoder（SigLIP + DINOv2）+ projector + Llama 2 7B，预测 tokenized actions 并解码执行。来源：[OpenVLA 项目页](https://openvla.github.io/) / [arXiv:2406.09246](https://arxiv.org/abs/2406.09246)
+- **π0.6 / π*0.6 — Inputs / Perception / Planner**：最多四路 448×448 相机 + tokenized language + tokenized proprio（可选 metadata）；SigLIP (400M)；骨干初始化自 Gemma3 4B；保留 high-level subtask prediction。来源：[`π0.6 Model Card`](https://website.pi-asset.com/pi06star/PI06_model_card.pdf)
+- **RDT-1B — Planner**：未描述显式 planner；扩散去噪生成 denoised action chunk，条件为 image + language。来源：[RDT 项目页（Framework）](https://rdt-robotics.github.io/rdt-robotics/) / [arXiv:2410.07864](https://arxiv.org/abs/2410.07864)
+- **1XWM — Perception / Backbone / World Model / IDM**：visual+action encoder（temporal image encoder）；world model backbone 为 text-conditioned diffusion model（built upon 14B generative video model）；IDM 为 Depth Anything backbone + flow matching head（W=8 sliding window），并用于 rejection sampling 与 timewise averaging。来源：[1X 技术报告 (PDF)](https://www.1x.tech/1x-world-model.pdf) / [1X 官方博客](https://www.1x.tech/discover/world-model-self-learning)
