@@ -100,6 +100,7 @@
 | 主题 | 文件 | 核心内容 |
 |:-----|:-----|:---------|
 | 🚀 **Flash Attention** | [`flash_attention.md`](./flash_attention.md) | Tiling + 重计算，显存 O(N²)→O(N) |
+| 🧠 **KV Cache（推理）** | [`kv_cache_llm_inference.md`](./kv_cache_llm_inference.md) | Prefill/Decode、Paged/Radix、分层缓存与传输 |
 | 🔧 **PEFT & LoRA** | [`peft_lora.md`](./peft_lora.md) | 低秩分解，QLoRA ~6GB 微调 7B |
 | 📉 **量化理论** | [`quantization_theory.md`](./quantization_theory.md) | INT8/INT4、AWQ 原理 |
 | 🧪 **QVLA 量化（2026）** | [`./frontier/qvla_action_centric_quantization_2026.md`](./frontier/qvla_action_centric_quantization_2026.md) | 🆕 动作空间敏感量化与通道级比特分配 |
