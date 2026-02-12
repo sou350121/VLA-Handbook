@@ -555,6 +555,8 @@
 | EverydayVLA: Cost-Effective 6-DOF Manipulator with Unified VLA Model | [link](https://arxiv.org/abs/2511.05397) | 🔧 daily 2026-02-10 \| repo: https://github.com/EverydayRobotics/EverydayVLA |
 | TaF-VLA | [link](https://arxiv.org/abs/2601.20321) | 🎯 tactile \| 📖 daily 2026-02-11 |
 | TIC-VLA | [link](https://arxiv.org/abs/2602.02459) | 📖 daily 2026-02-11 |
+| CAPER: Constrained and Procedural Reasoning for Robotic Scientific Experiments | [link](https://arxiv.org/abs/2602.09367) | 📖 daily 2026-02-12 |
+| Sci-VLA: Agentic VLA Inference Plugin for Long-Horizon Tasks in Scientific Experiments | [link](https://arxiv.org/abs/2602.09430) | 📖 daily 2026-02-12 |
 
 ### 動作生成
 
@@ -563,6 +565,10 @@
 | StreamVLA: Breaking the Reason-Act Cycle via Completion-State Gating | [link](https://arxiv.org/abs/2602.01100) | 📖 daily 2026-02-10 |
 | From Knowing to Doing Precisely: A General Self-Correction and Termination Framework for VLA models | [link](https://arxiv.org/abs/2602.01811) | 📖 daily 2026-02-10 |
 | Vlaser: Coupling VLM for Embodied Reasoning with Flow-Matching Action Expert | [link](https://openreview.net/forum?id=8xTDnj39Ti) | 🔧 daily 2026-02-10 \| repo: https://github.com/vlaser-team/vlaser |
+| MVISTA-4D: View-Consistent 4D World Model with Test-Time Action Inference for Robotic Manipulation | [link](https://tldr.takara.ai/p/2602.09878) | 📖 daily 2026-02-12 |
+| Preference Aligned Visuomotor Diffusion Policies for Deformable Object Manipulation | [link](https://arxiv.org/abs/2602.09583) | 📖 daily 2026-02-12 |
+| AutoFly: Vision-Language-Action Model for UAV Autonomous Navigation in the Wild | [link](https://arxiv.org/abs/2602.09657) | 📖 daily 2026-02-12 |
+| Rethinking Visual-Language-Action Model Scaling: Alignment, Mixture, and Regularization | [link](https://arxiv.org/abs/2602.09722) | 📖 daily 2026-02-12 |
 
 ### 數據
 
@@ -591,3 +597,5 @@
 |:---|:---|:---|
 
 | SCALE | [link](https://www.arxiv.org/abs/2602.04208) | 📖 daily 2026-02-11 |
+| SceneSmith: Agentic Generation of Simulation-Ready Indoor Scenes | [link](https://arxiv.org/abs/2602.09153) | 📖 daily 2026-02-12 |
+| NavDreamer: Video Models as Zero-Shot 3D Navigators | [link](https://arxiv.org/abs/2602.09765) | 📖 daily 2026-02-12 |
