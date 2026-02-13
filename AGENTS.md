@@ -30,13 +30,30 @@ Moltbot（自动化 AI agent）通过 GitHub Contents API 向本仓库写入内�
 | 文件/目录 | 允许的操作 | 禁止的操作 |
 |-----------|-----------|-----------|
 | `theory/paper_index.md` | 追加表格行 | 修改/删除已有行、改表头、改分类结构 |
+| `theory/benchmark_tracker.md` | 追加表格行 | 修改/删除已有行、改表头、改 section 结构 |
+| `deployment/release_tracker.md` | 追加表格行 | 修改/删除已有行、改表头、改表格结构 |
 | `theory/code-notes/{project}_analysis.md` | 创建新文件 | 修改已存在的文件 |
-| `reports/biweekly/{YYYY-MM-DD}.md` | 创建新文件 | 修改已存在的报告 |
-| `reports/biweekly/README.md` | 追加索引行 | 修改已有索引行、改文件结构 |
+| `reports/biweekly/{YYYY-MM-DD}.md` | 创建新文件；如同日重跑允许覆盖（仅限自动生成内容） | 修改人工撰写报告、改报告结构 |
+| `reports/biweekly/README.md` | 追加索引行；同日允许 upsert（替换同日行并清理重复） | 修改其他日期索引行、改文件结构 |
 | `CHANGELOG.md` | 在顶部追加条目 | 修改已有条目 |
-| **其他所有文件** | **❌ 不可触碰** | 包括 theory/ 主目录深度笔记、deployment/、README.md 等 |
+| `deployment/robot_hardware_selection_pricing.md` / `product/*.md` / `companies/*.md`（条件触发） | 仅在文末“自动追踪区”追加（见下） | 修改/删除既有正文、在非自动区写入 |
+| **其他所有文件** | **❌ 默认不可触碰** | 包括 theory/ 主目录深度笔记、deployment/ 其他文件、README.md 等 |
 
-**核心原则：Moltbot 只做两种操作——追加行和创建新文件。永远不修改、不删除人工内容。**
+**核心原则：Moltbot 默认只做“追加行/创建新文件”。仅在权限矩阵明确允许时，才可对“自动生成文件”做同日 upsert（用于重跑修复）；永远不修改、不删除人工内容。**
+
+### 条件触发：Handbook 业务文档同步更新（严格）
+
+当且仅当满足以下条件时，才允许更新 `deployment/robot_hardware_selection_pricing.md` / `product/` / `companies/` 下的指定文件：
+
+- 信息量足够，且确认为正式发布（必须有一手来源链接）
+- 这次更新能明确改善读者决策（例如硬件选型、仿真平台升级路径）
+- 宁可不写也不写错；不确定就跳过
+
+写入协议：
+
+- 只允许在目标文件**文末**创建或使用固定 section：`## 🤖 Moltbot Updates`
+- 只做追加（append-only），每条追加必须包含：日期 + 事件一句话 + 影响一句话 + 一手来源 URL
+- 永远不修改/删除既有人工内容（包括标题、表格结构、排序）
 
 ### paper_index.md 写入规则
 
@@ -55,6 +72,8 @@ Moltbot（自动化 AI agent）通过 GitHub Contents API 向本仓库写入内�
 | 来源任务 | Commit Message 格式 | 示例 |
 |---------|-------------------|------|
 | Task 2（每日论文） | `📄 daily papers: {日期} (+N papers)` | `📄 daily papers: 2026-02-10 (+5 papers)` |
+| SOTA Tracker（榜单追踪） | `📈 benchmark: {model} on {benchmark}` | `📈 benchmark: pi0.5 on LIBERO` |
+| Release Tracker（平台/硬件） | `🔧 release: {source} — {event}` | `🔧 release: MuJoCo — v3.3.0 released` |
 | Task 4（双周报告） | `📊 biweekly report: {起始} to {结束}` | `📊 biweekly report: 2026-02-01 to 2026-02-14` |
 | 代码分析 | `📝 code analysis: {项目名}` | `📝 code analysis: OpenVLA-2` |
 | 索引更新 | `📋 update index: {文件名}` | `📋 update index: biweekly/README.md` |
@@ -122,9 +141,11 @@ Moltbot（自动化 AI agent）通过 GitHub Contents API 向本仓库写入内�
 | 内容类型 | 存放路径 | 来源任务 | 操作类型 |
 |---------|---------|---------|---------|
 | 论文索引追加 | `theory/paper_index.md`（追加行） | Moltbot Task 2（每日热点） | 追加行 |
-| 双周前沿报告 | `reports/biweekly/{YYYY-MM-DD}.md` | Moltbot Task 4（双周推理） | 创建新文件 |
+| Benchmark SOTA 追踪 | `theory/benchmark_tracker.md`（追加行） | VLA Benchmark SOTA Tracker | 追加行 |
+| Release 追踪（平台/硬件） | `deployment/release_tracker.md`（追加行） | VLA Release Tracker | 追加行 |
+| 双周前沿报告 | `reports/biweekly/{YYYY-MM-DD}.md` | Moltbot Task 4（双周推理） | 创建新文件 / 同日重跑允许覆盖 |
+| 双周索引更新 | `reports/biweekly/README.md`（追加/同日 upsert） | Moltbot Task 4（双周推理） | 追加行 / 同日 upsert |
 | 代码级分析速记 | `theory/code-notes/{project}_analysis.md` | Moltbot 代码分析任务 | 创建新文件 |
-| 双周索引更新 | `reports/biweekly/README.md`（追加行） | Moltbot Task 4（双周推理） | 追加行 |
 
 ---
 
