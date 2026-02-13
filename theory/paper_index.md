@@ -557,6 +557,7 @@
 | TIC-VLA | [link](https://arxiv.org/abs/2602.02459) | 📖 daily 2026-02-11 |
 | CAPER: Constrained and Procedural Reasoning for Robotic Scientific Experiments | [link](https://arxiv.org/abs/2602.09367) | 📖 daily 2026-02-12 |
 | Sci-VLA: Agentic VLA Inference Plugin for Long-Horizon Tasks in Scientific Experiments | [link](https://arxiv.org/abs/2602.09430) | 📖 daily 2026-02-12 |
+| Say, Dream, and Act: Learning Video World Models for Instruction-Driven Robot Manipulation | [link](https://arxiv.org/abs/2602.10717) | 📖 daily 2026-02-13 |
 
 ### 動作生成
 
@@ -569,6 +570,8 @@
 | Preference Aligned Visuomotor Diffusion Policies for Deformable Object Manipulation | [link](https://arxiv.org/abs/2602.09583) | 📖 daily 2026-02-12 |
 | AutoFly: Vision-Language-Action Model for UAV Autonomous Navigation in the Wild | [link](https://arxiv.org/abs/2602.09657) | 📖 daily 2026-02-12 |
 | Rethinking Visual-Language-Action Model Scaling: Alignment, Mixture, and Regularization | [link](https://arxiv.org/abs/2602.09722) | 📖 daily 2026-02-12 |
+| RISE: Self-Improving Robot Policy with Compositional World Model | [link](https://arxiv.org/abs/2602.11075) | 🔧 daily 2026-02-13 |
+| OAT: Ordered Action Tokenization | [link](https://arxiv.org/abs/2602.04215) | 📖 daily 2026-02-13 |
 
 ### 數據
 
@@ -585,6 +588,8 @@
 
 | 论文 | 链接 | 备注 |
 |:---|:---|:---|
+| LAP: Language-Action Pre-Training Enables Zero-shot Cross-Embodiment Transfer | [link](https://arxiv.org/abs/2602.10556) | ⚡ daily 2026-02-13 |
+| RADAR: Benchmarking Vision-Language-Action Generalization via Real-World Dynamics, Spatial-Physical Intelligence, and Autonomous Evaluation | [link](https://arxiv.org/abs/2602.10980) | ⚡ daily 2026-02-13 |
 
 ### 觸覺
 
@@ -599,3 +604,6 @@
 | SCALE | [link](https://www.arxiv.org/abs/2602.04208) | 📖 daily 2026-02-11 |
 | SceneSmith: Agentic Generation of Simulation-Ready Indoor Scenes | [link](https://arxiv.org/abs/2602.09153) | 📖 daily 2026-02-12 |
 | NavDreamer: Video Models as Zero-Shot 3D Navigators | [link](https://arxiv.org/abs/2602.09765) | 📖 daily 2026-02-12 |
+| Scaling World Model for Hierarchical Manipulation Policies | [link](https://arxiv.org/abs/2602.10983) | ⚡ daily 2026-02-13 |
+| From Representational Complementarity to Dual Systems: Synergizing VLM and Vision-Only Backbones for End-to-End Driving | [link](https://arxiv.org/abs/2602.10719) | 📖 daily 2026-02-13 |
+| Towards Learning a Generalizable 3D Scene Representation from 2D Observations | [link](https://arxiv.org/abs/2602.10943) | 📖 daily 2026-02-13 |
