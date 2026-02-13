@@ -400,6 +400,37 @@ SkillGen:
   - 无需逐个录制示范
 ```
 
+### 4.5 R²D² Digest (2026-02-10)
+
+> **来源**: [R²D²: Scaling Multimodal Robot Learning with NVIDIA Isaac Lab](https://developer.nvidia.com/blog/r2d2-scaling-multimodal-robot-learning-with-nvidia-isaac-lab/)
+
+#### 4.5.1 核心挑战与结论
+- **规模化瓶颈**: 传统 CPU 限制的模拟器无法支撑数千个并行环境的实时多模态学习。
+- **多模态对齐**: 必须在紧凑的训练循环中同步处理视觉、力觉和本体感知的高保真数据流。
+- **Sim-to-Real**: 需要通过鲁棒的 **Domain Randomization** 和精确物理建模（如执行器动力学）来填补 Reality Gap。
+
+#### 4.5.2 Isaac Lab 栈的关键增量
+1. **Manager-based Workflow**: 
+   - 将环境解耦为独立的 **Managers**（Observations, Actions, Rewards, Events）。
+   - **工程收益**: 代码高度模块化，例如可以更换奖励函数而不触碰传感器配置。
+2. **Procedural Scene Generation**:
+   - 定义规则自动生成多样化地形（如随机碎石、不同坡度的楼梯）。
+   - **工程收益**: 有效防止策略对单一静态场景的过拟合。
+3. **集成工作流**: 
+   - 内置支持 RL/IL、大规模数据采集、Domain Randomization 和策略评估。
+   - **生态集成**: 原生对接 **SKRL, RSL-RL, RL-Games, SB3, Ray** 等主流 RL 库，并可与 **NVIDIA Cosmos** 生成的数据集成。
+
+#### 4.5.3 最新性能 Benchmark
+- **Humanoid Locomotion (Unitree H1)**: 135,000 FPS。
+- **Manipulation (Franka Cabinet)**: 150,000+ FPS。
+- **可扩展性**: 在 4096 个环境并开启 RGB-D 传感器时仍保持高吞吐，性能随 VRAM 线性扩展。
+
+#### 4.5.4 生态采用案例
+- **Agility Robotics**: 使用 Isaac Lab 训练 Digit 的全身控制，提升在制造/物流环境中的抗干扰恢复能力。
+- **Skild AI**: 构建跨足式、轮式和人形机器人的通用基础模型。
+- **The Robotics and AI Institute**: 训练 Spot 和 Atlas 的高频 RL 控制器，优化 Sim-to-Real 参数。
+- **UCR**: 利用 GR00T 合成数据管线训练重工业人形机器人 Moby。
+
 ---
 
 ## 5. 典型应用场景
@@ -724,6 +755,7 @@ tactile_cfg = TactileSensorCfg(
 | **文档** | [Isaac Lab Documentation](https://isaac-sim.github.io/IsaacLab/) |
 | **Omniverse** | [NVIDIA Omniverse](https://developer.nvidia.com/omniverse) |
 | **Isaac Sim** | [NVIDIA Isaac Sim](https://developer.nvidia.com/isaac-sim) |
+| **R²D² Blog** | [Scaling Multimodal Robot Learning (2026-02)](https://developer.nvidia.com/blog/r2d2-scaling-multimodal-robot-learning-with-nvidia-isaac-lab/) |
 
 ---
 
