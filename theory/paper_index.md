@@ -558,6 +558,7 @@
 | CAPER: Constrained and Procedural Reasoning for Robotic Scientific Experiments | [link](https://arxiv.org/abs/2602.09367) | 📖 daily 2026-02-12 |
 | Sci-VLA: Agentic VLA Inference Plugin for Long-Horizon Tasks in Scientific Experiments | [link](https://arxiv.org/abs/2602.09430) | 📖 daily 2026-02-12 |
 | Say, Dream, and Act: Learning Video World Models for Instruction-Driven Robot Manipulation | [link](https://arxiv.org/abs/2602.10717) | 📖 daily 2026-02-13 |
+| JEPA-VLA: Video Predictive Embedding is Needed for VLA Models | [link](https://tldr.takara.ai/p/2602.11832) | ⚡ daily 2026-02-14 |
 
 ### 動作生成
 
@@ -607,3 +608,4 @@
 | Scaling World Model for Hierarchical Manipulation Policies | [link](https://arxiv.org/abs/2602.10983) | ⚡ daily 2026-02-13 |
 | From Representational Complementarity to Dual Systems: Synergizing VLM and Vision-Only Backbones for End-to-End Driving | [link](https://arxiv.org/abs/2602.10719) | 📖 daily 2026-02-13 |
 | Towards Learning a Generalizable 3D Scene Representation from 2D Observations | [link](https://arxiv.org/abs/2602.10943) | 📖 daily 2026-02-13 |
+| The Observer Effect in World Models: Invasive Adaptation Corrupts Latent Physics | [link](https://tldr.takara.ai/p/2602.12218) | ⚡ daily 2026-02-14 |
