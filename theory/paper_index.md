@@ -559,6 +559,7 @@
 | Sci-VLA: Agentic VLA Inference Plugin for Long-Horizon Tasks in Scientific Experiments | [link](https://arxiv.org/abs/2602.09430) | 📖 daily 2026-02-12 |
 | Say, Dream, and Act: Learning Video World Models for Instruction-Driven Robot Manipulation | [link](https://arxiv.org/abs/2602.10717) | 📖 daily 2026-02-13 |
 | JEPA-VLA: Video Predictive Embedding is Needed for VLA Models | [link](https://tldr.takara.ai/p/2602.11832) | ⚡ daily 2026-02-14 |
+| ABot-N0: Technical Report on the VLA Foundation Model for Versatile Embodied Navigation | [link](https://tldr.takara.ai/p/2602.11598) | ⚡ daily 2026-02-15 |
 
 ### 動作生成
 
@@ -573,11 +574,14 @@
 | Rethinking Visual-Language-Action Model Scaling: Alignment, Mixture, and Regularization | [link](https://arxiv.org/abs/2602.09722) | 📖 daily 2026-02-12 |
 | RISE: Self-Improving Robot Policy with Compositional World Model | [link](https://arxiv.org/abs/2602.11075) | 🔧 daily 2026-02-13 |
 | OAT: Ordered Action Tokenization | [link](https://arxiv.org/abs/2602.04215) | 📖 daily 2026-02-13 |
+| Olaf-World: Orienting Latent Actions for Video World Modeling | [link](https://tldr.takara.ai/p/2602.10104) | ⚡ daily 2026-02-15 |
+| Flow-Enabled Generalization to Human Demonstrations in Few-Shot Imitation Learning | [link](https://tldr.takara.ai/p/2602.10594) | 🔧 daily 2026-02-15 |
 
 ### 數據
 
 | 论文 | 链接 | 备注 |
 |:---|:---|:---|
+| MIND: Benchmarking Memory Consistency and Action Control in World Models | [link](https://tldr.takara.ai/p/2602.08025) | ⚡ daily 2026-02-15 |
 
 ### 部署
 
@@ -591,6 +595,7 @@
 |:---|:---|:---|
 | LAP: Language-Action Pre-Training Enables Zero-shot Cross-Embodiment Transfer | [link](https://arxiv.org/abs/2602.10556) | ⚡ daily 2026-02-13 |
 | RADAR: Benchmarking Vision-Language-Action Generalization via Real-World Dynamics, Spatial-Physical Intelligence, and Autonomous Evaluation | [link](https://arxiv.org/abs/2602.10980) | ⚡ daily 2026-02-13 |
+| Sample-Efficient Real-World Dexterous Policy Fine-Tuning via Action-Chunked Critics and Normalizing Flows | [link](https://tldr.takara.ai/p/2602.09580) | 🔧 daily 2026-02-15 |
 
 ### 觸覺
 
