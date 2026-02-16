@@ -576,6 +576,7 @@
 | OAT: Ordered Action Tokenization | [link](https://arxiv.org/abs/2602.04215) | 📖 daily 2026-02-13 |
 | Olaf-World: Orienting Latent Actions for Video World Modeling | [link](https://tldr.takara.ai/p/2602.10104) | ⚡ daily 2026-02-15 |
 | Flow-Enabled Generalization to Human Demonstrations in Few-Shot Imitation Learning | [link](https://tldr.takara.ai/p/2602.10594) | 🔧 daily 2026-02-15 |
+| CausalGDP: Causality-Guided Diffusion Policies for Reinforcement Learning | [link](https://tldr.takara.ai/p/2602.09207) | ⚡ daily 2026-02-16 |
 
 ### 數據
 
@@ -614,3 +615,4 @@
 | From Representational Complementarity to Dual Systems: Synergizing VLM and Vision-Only Backbones for End-to-End Driving | [link](https://arxiv.org/abs/2602.10719) | 📖 daily 2026-02-13 |
 | Towards Learning a Generalizable 3D Scene Representation from 2D Observations | [link](https://arxiv.org/abs/2602.10943) | 📖 daily 2026-02-13 |
 | The Observer Effect in World Models: Invasive Adaptation Corrupts Latent Physics | [link](https://tldr.takara.ai/p/2602.12218) | ⚡ daily 2026-02-14 |
+| Agent World Model: Infinity Synthetic Environments for Agentic Reinforcement Learning | [link](https://tldr.takara.ai/p/2602.10090) | ⚡ daily 2026-02-16 |
