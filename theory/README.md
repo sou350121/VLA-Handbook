@@ -167,6 +167,7 @@
 | | | [`pi0_code_analysis.md`](./pi0_code_analysis.md) | OpenPI 代码架构深度解析 |
 | | π0.5 | [`pi0_5_dissection.md`](./pi0_5_dissection.md) | Flow Matching + 隐式推理 |
 | | π0.6 | [`pi0_6_dissection.md`](./pi0_6_dissection.md) | Recap 自我进化 + Action Expert |
+| **GigaBrain Team / GigaAI** | GigaBrain-0.5M* | [`gigabrain_0_5m_star_world_model_based_rl_ramp_2026.md`](./gigabrain_0_5m_star_world_model_based_rl_ramp_2026.md) | 🆕 RAMP：世界模型条件化 RL（future latent + value）+ HILR 自我进化闭环；长时程任务相对 RECAP ~+30% |
 | **ByteDance Seed** | GR-RL | [`gr_rl_dissection.md`](./gr_rl_dissection.md) | MoT 架构 + 三阶段 RL 训练 |
 | **Microsoft** | VITRA | [`./frontier/vitra_scalable_vla_pretraining_human_activity_videos_2026.md`](./frontier/vitra_scalable_vla_pretraining_human_activity_videos_2026.md) | 🆕 真实人类手部视频 → VLA 预训练（1M+ episodes），zero-shot 手部动作预测，少量真机数据可适配 |
 | **NVIDIA** | GR00T-N1.6 | [`gr00t_n1_6.md`](./gr00t_n1_6.md) | 🆕 双系统 DiT 架构 + Isaac Lab 仿真 |
