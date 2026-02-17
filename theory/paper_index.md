@@ -560,6 +560,8 @@
 | Say, Dream, and Act: Learning Video World Models for Instruction-Driven Robot Manipulation | [link](https://arxiv.org/abs/2602.10717) | 📖 daily 2026-02-13 |
 | JEPA-VLA: Video Predictive Embedding is Needed for VLA Models | [link](https://tldr.takara.ai/p/2602.11832) | ⚡ daily 2026-02-14 |
 | ABot-N0: Technical Report on the VLA Foundation Model for Versatile Embodied Navigation | [link](https://tldr.takara.ai/p/2602.11598) | ⚡ daily 2026-02-15 |
+| UniManip: General-Purpose Zero-Shot Robotic Manipulation with Agentic Operational Graph | [link](https://arxiv.org/abs/2602.13086) | 📖 daily 2026-02-17 |
+| Self-Refining Vision Language Model for Robotic Failure Detection and Reasoning | [link](https://arxiv.org/abs/2602.12405) | 📖 daily 2026-02-17 |
 
 ### 動作生成
 
@@ -577,6 +579,9 @@
 | Olaf-World: Orienting Latent Actions for Video World Modeling | [link](https://tldr.takara.ai/p/2602.10104) | ⚡ daily 2026-02-15 |
 | Flow-Enabled Generalization to Human Demonstrations in Few-Shot Imitation Learning | [link](https://tldr.takara.ai/p/2602.10594) | 🔧 daily 2026-02-15 |
 | CausalGDP: Causality-Guided Diffusion Policies for Reinforcement Learning | [link](https://tldr.takara.ai/p/2602.09207) | ⚡ daily 2026-02-16 |
+| What Matters in Building Vision-Language-Action Models for Generalist Robots | [link](https://arxiv.org/abs/2412.14058) | 📖 daily 2026-02-17 |
+| SteerVLA: Steering Vision-Language-Action Models in Long-Tail Driving Scenarios | [link](https://arxiv.org/abs/2602.08440) | 📖 daily 2026-02-17 |
+| Imitating What Works: Simulation-Filtered Modular Policy Learning from Human Videos | [link](https://arxiv.org/abs/2602.13197) | 📖 daily 2026-02-17 |
 
 ### 數據
 
@@ -597,6 +602,7 @@
 | LAP: Language-Action Pre-Training Enables Zero-shot Cross-Embodiment Transfer | [link](https://arxiv.org/abs/2602.10556) | ⚡ daily 2026-02-13 |
 | RADAR: Benchmarking Vision-Language-Action Generalization via Real-World Dynamics, Spatial-Physical Intelligence, and Autonomous Evaluation | [link](https://arxiv.org/abs/2602.10980) | ⚡ daily 2026-02-13 |
 | Sample-Efficient Real-World Dexterous Policy Fine-Tuning via Action-Chunked Critics and Normalizing Flows | [link](https://tldr.takara.ai/p/2602.09580) | 🔧 daily 2026-02-15 |
+| Sim2real Image Translation Enables Viewpoint-Robust Policies from Fixed-Camera Datasets | [link](https://arxiv.org/abs/2601.09605) | 📖 daily 2026-02-17 |
 
 ### 觸覺
 
@@ -616,3 +622,5 @@
 | Towards Learning a Generalizable 3D Scene Representation from 2D Observations | [link](https://arxiv.org/abs/2602.10943) | 📖 daily 2026-02-13 |
 | The Observer Effect in World Models: Invasive Adaptation Corrupts Latent Physics | [link](https://tldr.takara.ai/p/2602.12218) | ⚡ daily 2026-02-14 |
 | Agent World Model: Infinity Synthetic Environments for Agentic Reinforcement Learning | [link](https://tldr.takara.ai/p/2602.10090) | ⚡ daily 2026-02-16 |
+| Real-to-Sim for Highly Cluttered Environments via Physics-Consistent Inter-Object Reasoning | [link](https://arxiv.org/abs/2602.12633) | 📖 daily 2026-02-17 |
+| Scaling Single Human Demonstrations for Imitation Learning using Generative Foundational Models | [link](https://arxiv.org/abs/2602.12734) | 📖 daily 2026-02-17 |
