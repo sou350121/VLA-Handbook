@@ -562,6 +562,8 @@
 | ABot-N0: Technical Report on the VLA Foundation Model for Versatile Embodied Navigation | [link](https://tldr.takara.ai/p/2602.11598) | ⚡ daily 2026-02-15 |
 | UniManip: General-Purpose Zero-Shot Robotic Manipulation with Agentic Operational Graph | [link](https://arxiv.org/abs/2602.13086) | 📖 daily 2026-02-17 |
 | Self-Refining Vision Language Model for Robotic Failure Detection and Reasoning | [link](https://arxiv.org/abs/2602.12405) | 📖 daily 2026-02-17 |
+| AsyncVLA: An Asynchronous VLA for Fast and Robust Navigation on the Edge | [link](https://arxiv.org/abs/2602.13476) | 📖 daily 2026-02-18 |
+| BPP: Long-Context Robot Imitation Learning by Focusing on Key History Frames | [link](https://arxiv.org/abs/2602.15010) | 📖 daily 2026-02-18 |
 
 ### 動作生成
 
@@ -582,6 +584,8 @@
 | What Matters in Building Vision-Language-Action Models for Generalist Robots | [link](https://arxiv.org/abs/2412.14058) | 📖 daily 2026-02-17 |
 | SteerVLA: Steering Vision-Language-Action Models in Long-Tail Driving Scenarios | [link](https://arxiv.org/abs/2602.08440) | 📖 daily 2026-02-17 |
 | Imitating What Works: Simulation-Filtered Modular Policy Learning from Human Videos | [link](https://arxiv.org/abs/2602.13197) | 📖 daily 2026-02-17 |
+| DM0: An Embodied-Native Vision-Language-Action Model towards Physical AI | [link](https://arxiv.org/abs/2602.14974) | 📖 daily 2026-02-18 |
+| FlowHOI: Flow-based Semantics-Grounded Generation of Hand-Object Interactions for Dexterous Robot Manipulation | [link](https://arxiv.org/abs/2602.13444) | 📖 daily 2026-02-18 |
 
 ### 數據
 
@@ -603,11 +607,15 @@
 | RADAR: Benchmarking Vision-Language-Action Generalization via Real-World Dynamics, Spatial-Physical Intelligence, and Autonomous Evaluation | [link](https://arxiv.org/abs/2602.10980) | ⚡ daily 2026-02-13 |
 | Sample-Efficient Real-World Dexterous Policy Fine-Tuning via Action-Chunked Critics and Normalizing Flows | [link](https://tldr.takara.ai/p/2602.09580) | 🔧 daily 2026-02-15 |
 | Sim2real Image Translation Enables Viewpoint-Robust Policies from Fixed-Camera Datasets | [link](https://arxiv.org/abs/2601.09605) | 📖 daily 2026-02-17 |
+| Direction Matters: Learning Force Direction Enables Sim-to-Real Contact-Rich Manipulation | [link](https://arxiv.org/abs/2602.14174) | 📖 daily 2026-02-18 |
 
 ### 觸覺
 
 | 论文 | 链接 | 备注 |
 |:---|:---|:---|
+| Semantic-Contact Fields for Category-Level Generalizable Tactile Tool Manipulation | [link](https://arxiv.org/abs/2602.13833) | 📖 daily 2026-02-18 |
+| TactAlign: Human-to-Robot Policy Transfer via Tactile Alignment | [link](https://arxiv.org/abs/2602.13579) | 📖 daily 2026-02-18 |
+| Symmetry-Aware Fusion of Vision and Tactile Sensing via Bilateral Force Priors for Robotic Manipulation | [link](https://arxiv.org/abs/2602.13689) | 📖 daily 2026-02-18 |
 
 ### 其他
 
