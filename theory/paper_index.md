@@ -564,6 +564,7 @@
 | Self-Refining Vision Language Model for Robotic Failure Detection and Reasoning | [link](https://arxiv.org/abs/2602.12405) | 📖 daily 2026-02-17 |
 | AsyncVLA: An Asynchronous VLA for Fast and Robust Navigation on the Edge | [link](https://arxiv.org/abs/2602.13476) | 📖 daily 2026-02-18 |
 | BPP: Long-Context Robot Imitation Learning by Focusing on Key History Frames | [link](https://arxiv.org/abs/2602.15010) | 📖 daily 2026-02-18 |
+| Selective Perception for Robot: Task-Aware Attention in Multimodal VLA | [link](https://arxiv.org/abs/2602.15543) | 🔧 daily 2026-02-19 |
 
 ### 動作生成
 
@@ -586,6 +587,7 @@
 | Imitating What Works: Simulation-Filtered Modular Policy Learning from Human Videos | [link](https://arxiv.org/abs/2602.13197) | 📖 daily 2026-02-17 |
 | DM0: An Embodied-Native Vision-Language-Action Model towards Physical AI | [link](https://arxiv.org/abs/2602.14974) | 📖 daily 2026-02-18 |
 | FlowHOI: Flow-based Semantics-Grounded Generation of Hand-Object Interactions for Dexterous Robot Manipulation | [link](https://arxiv.org/abs/2602.13444) | 📖 daily 2026-02-18 |
+| ActionCodec: What Makes for Good Action Tokenizers | [link](https://arxiv.org/abs/2602.15397) | ⚡ daily 2026-02-19 |
 
 ### 數據
 
@@ -608,6 +610,7 @@
 | Sample-Efficient Real-World Dexterous Policy Fine-Tuning via Action-Chunked Critics and Normalizing Flows | [link](https://tldr.takara.ai/p/2602.09580) | 🔧 daily 2026-02-15 |
 | Sim2real Image Translation Enables Viewpoint-Robust Policies from Fixed-Camera Datasets | [link](https://arxiv.org/abs/2601.09605) | 📖 daily 2026-02-17 |
 | Direction Matters: Learning Force Direction Enables Sim-to-Real Contact-Rich Manipulation | [link](https://arxiv.org/abs/2602.14174) | 📖 daily 2026-02-18 |
+| Dex4D: Task-Agnostic Point Track Policy for Sim-to-Real Dexterous Manipulation | [link](https://arxiv.org/abs/2602.15828) | ⚡ daily 2026-02-19 |
 
 ### 觸覺
 
@@ -632,3 +635,7 @@
 | Agent World Model: Infinity Synthetic Environments for Agentic Reinforcement Learning | [link](https://tldr.takara.ai/p/2602.10090) | ⚡ daily 2026-02-16 |
 | Real-to-Sim for Highly Cluttered Environments via Physics-Consistent Inter-Object Reasoning | [link](https://arxiv.org/abs/2602.12633) | 📖 daily 2026-02-17 |
 | Scaling Single Human Demonstrations for Imitation Learning using Generative Foundational Models | [link](https://arxiv.org/abs/2602.12734) | 📖 daily 2026-02-17 |
+| CLOT: Closed-Loop Global Motion Tracking for Whole-Body Humanoid Teleoperation | [link](https://arxiv.org/abs/2602.15060) | ⚡ daily 2026-02-19 |
+| MeshMimic: Geometry-Aware Humanoid Motion Learning through 3D Scene Reconstruction | [link](https://arxiv.org/abs/2602.15733) | 🔧 daily 2026-02-19 |
+| Feasibility-aware Imitation Learning from Observation with Multimodal Feedback | [link](https://arxiv.org/abs/2602.15351) | 🔧 daily 2026-02-19 |
+| One Agent to Guide Them All: Empowering MLLMs for Vision-and-Language Navigation via Explicit World Representation | [link](https://arxiv.org/abs/2602.15400) | 📖 daily 2026-02-19 |
