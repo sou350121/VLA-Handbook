@@ -565,6 +565,7 @@
 | AsyncVLA: An Asynchronous VLA for Fast and Robust Navigation on the Edge | [link](https://arxiv.org/abs/2602.13476) | 📖 daily 2026-02-18 |
 | BPP: Long-Context Robot Imitation Learning by Focusing on Key History Frames | [link](https://arxiv.org/abs/2602.15010) | 📖 daily 2026-02-18 |
 | Selective Perception for Robot: Task-Aware Attention in Multimodal VLA | [link](https://arxiv.org/abs/2602.15543) | 🔧 daily 2026-02-19 |
+| FUTURE-VLA: Forecasting Unified Trajectories Under Real-time Execution | [link](https://arxiv.org/abs/2602.15882) | 📖 daily 2026-02-20 |
 
 ### 動作生成
 
@@ -588,18 +589,23 @@
 | DM0: An Embodied-Native Vision-Language-Action Model towards Physical AI | [link](https://arxiv.org/abs/2602.14974) | 📖 daily 2026-02-18 |
 | FlowHOI: Flow-based Semantics-Grounded Generation of Hand-Object Interactions for Dexterous Robot Manipulation | [link](https://arxiv.org/abs/2602.13444) | 📖 daily 2026-02-18 |
 | ActionCodec: What Makes for Good Action Tokenizers | [link](https://arxiv.org/abs/2602.15397) | ⚡ daily 2026-02-19 |
+| World Action Models are Zero-shot Policies | [link](https://arxiv.org/abs/2602.15922) | ⚡ daily 2026-02-20 |
+| Scaling Verification Can Be More Effective than Scaling Policy Learning for Vision-Language-Action Alignment | [link](https://arxiv.org/abs/2602.12281) | ⚡ daily 2026-02-20 |
 
 ### 數據
 
 | 论文 | 链接 | 备注 |
 |:---|:---|:---|
 | MIND: Benchmarking Memory Consistency and Action Control in World Models | [link](https://tldr.takara.ai/p/2602.08025) | ⚡ daily 2026-02-15 |
+| EgoScale: Scaling Dexterous Manipulation with Diverse Egocentric Human Data | [link](https://arxiv.org/abs/2602.16710) | 🔧 daily 2026-02-20 |
 
 ### 部署
 
 | 论文 | 链接 | 备注 |
 |:---|:---|:---|
 | Efficient Long-Horizon Vision-Language-Action Models via Static-Dynamic Disentanglement | [link](https://arxiv.org/abs/2602.03983) | 📖 daily 2026-02-10 |
+| FreqPolicy: Efficient Flow-based Visuomotor Policy via Frequency Consistency | [link](https://arxiv.org/abs/2506.08822) | 🔧 daily 2026-02-20 |
+| EdgeNav-QE: QLoRA Quantization and Dynamic Early Exit for LAM-based Navigation on Edge Devices | [link](https://arxiv.org/abs/2602.15836) | 🔧 daily 2026-02-20 |
 
 ### Sim2Real
 
@@ -611,6 +617,7 @@
 | Sim2real Image Translation Enables Viewpoint-Robust Policies from Fixed-Camera Datasets | [link](https://arxiv.org/abs/2601.09605) | 📖 daily 2026-02-17 |
 | Direction Matters: Learning Force Direction Enables Sim-to-Real Contact-Rich Manipulation | [link](https://arxiv.org/abs/2602.14174) | 📖 daily 2026-02-18 |
 | Dex4D: Task-Agnostic Point Track Policy for Sim-to-Real Dexterous Manipulation | [link](https://arxiv.org/abs/2602.15828) | ⚡ daily 2026-02-19 |
+| RoboGene: Boosting VLA Pre-training via Diversity-Driven Agentic Framework for Real-World Task Generation | [link](https://arxiv.org/abs/2602.16444) | ⚡ daily 2026-02-20 |
 
 ### 觸覺
 
