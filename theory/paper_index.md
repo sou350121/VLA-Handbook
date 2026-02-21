@@ -598,6 +598,7 @@
 |:---|:---|:---|
 | MIND: Benchmarking Memory Consistency and Action Control in World Models | [link](https://tldr.takara.ai/p/2602.08025) | ⚡ daily 2026-02-15 |
 | EgoScale: Scaling Dexterous Manipulation with Diverse Egocentric Human Data | [link](https://arxiv.org/abs/2602.16710) | 🔧 daily 2026-02-20 |
+| Benchmarking the Effects of Object Pose Estimation and Reconstruction on Robotic Grasping Success | [link](https://tldr.takara.ai/p/2602.17101) | 🔧 daily 2026-02-21 |
 
 ### 部署
 
@@ -646,3 +647,4 @@
 | MeshMimic: Geometry-Aware Humanoid Motion Learning through 3D Scene Reconstruction | [link](https://arxiv.org/abs/2602.15733) | 🔧 daily 2026-02-19 |
 | Feasibility-aware Imitation Learning from Observation with Multimodal Feedback | [link](https://arxiv.org/abs/2602.15351) | 🔧 daily 2026-02-19 |
 | One Agent to Guide Them All: Empowering MLLMs for Vision-and-Language Navigation via Explicit World Representation | [link](https://arxiv.org/abs/2602.15400) | 📖 daily 2026-02-19 |
+| Continual uncertainty learning | [link](https://tldr.takara.ai/p/2602.17174) | 🔧 daily 2026-02-21 |
