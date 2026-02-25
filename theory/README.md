@@ -185,6 +185,7 @@
 |:-----|:-----|:---------|
 | **LLM 推理专题** | [`./llm_reasoning/README.md`](./llm_reasoning/README.md) | 🆕 分治推理 / 具身 CoT / 可提示表征与推理迁移 |
 | **Data Flywheel** | [`./frontier/data_flywheel_and_cross_modal.md`](./frontier/data_flywheel_and_cross_modal.md) | 🆕 互联网视频学习、跨模态迁移与数据演进 |
+| **Physical Intelligence Layer（2026）** | [`./frontier/physical_intelligence_layer_robot_api_2026.md`](./frontier/physical_intelligence_layer_robot_api_2026.md) | 🆕 “机器人基础模型 API / 物理智能层”：以自治率/干预/吞吐定义 SLO，Weave/Ultra 真机部署验证 |
 | **RynnBrain（2026）** | [`./frontier/rynnbrain_open_embodied_foundation_models_2026.md`](./frontier/rynnbrain_open_embodied_foundation_models_2026.md) | 🆕 物理现实锚定的具身基础模型：指向/轨迹/规划统一输出 + RynnBrain-Bench（Object/Spatial/Grounding/Pointing） |
 | **TacRefineNet（2026）** | [`./frontier/tacrefinenet_tactile_only_grasp_refinement_2026.md`](./frontier/tacrefinenet_tactile_only_grasp_refinement_2026.md) | 🆕 仅触觉的抓取执行末端微调：多指触觉 + 本体融合，目标驱动回归 wrist 6DoF 增量 |
 | **RDT2（2026）** | [`./frontier/rdt2_umi_zero_shot_cross_embodiment_2026.md`](./frontier/rdt2_umi_zero_shot_cross_embodiment_2026.md) | 🆕 UMI 数据规模化 + 跨本体零样本部署 + 单步蒸馏 |
