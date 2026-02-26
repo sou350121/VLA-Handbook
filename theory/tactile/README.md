@@ -15,6 +15,7 @@
 ### A) 你要“先跑通能用”（工程优先）
 
 - **主入口（总览 + Checklist）**：[`../tactile_vla.md`](../tactile_vla.md)
+- **仅触觉的主动探索与建模（动态未知刚体）**：[`./active_tactile_exploration_rigid_body_pose_shape_eig_2026.md`](./active_tactile_exploration_rigid_body_pose_shape_eig_2026.md)
 - **触觉如何让策略更稳（单目 + 二值触觉）**：[`../frontier/visual_tactile_pretraining_online_multitask_learning_2026.md`](../frontier/visual_tactile_pretraining_online_multitask_learning_2026.md)
 - **System 0 / 接触闭环在全身系统里的位置**：[`../frontier/figure_helix_02_full_body_autonomy_2026.md`](../frontier/figure_helix_02_full_body_autonomy_2026.md)
 

@@ -206,6 +206,7 @@
 | **Figure Helix 02 (2026)** | [`./frontier/figure_helix_02_full_body_autonomy_2026.md`](./frontier/figure_helix_02_full_body_autonomy_2026.md) | 🆕 全身端到端 VLA：S2 语义目标 → S1 200Hz 全身关节目标 → S0 1kHz 执行（人类运动先验替代大量手写控制） |
 | **VT Pretraining + Online Multitask (SciRobotics 2026)** | [`./frontier/visual_tactile_pretraining_online_multitask_learning_2026.md`](./frontier/visual_tactile_pretraining_online_multitask_learning_2026.md) | 🆕 单目 + 二值触觉：视触觉自监督预训练 + RL + 在线模仿，统一策略覆盖多项灵巧手任务 |
 | **UniVTAC（2026）** | [`./tactile/univtac_unified_visuo_tactile_simulation_platform_2026.md`](./tactile/univtac_unified_visuo_tactile_simulation_platform_2026.md) | 🆕 统一视触觉仿真底座：多传感器数据合成 + UniVTAC Encoder + 8 任务 Benchmark（含真机提升验证） |
+| **Active Tactile Exploration（ICRA 2026）** | [`./tactile/active_tactile_exploration_rigid_body_pose_shape_eig_2026.md`](./tactile/active_tactile_exploration_rigid_body_pose_shape_eig_2026.md) | 🆕 仅触觉：violation-implicit loss 同时学刚体轨迹+凸几何；EIG 主动探索加速收敛（<10s） |
 | **TaF-VLA（2026）** | [`./frontier/taf_vla_tactile_force_alignment_2026.md`](./frontier/taf_vla_tactile_force_alignment_2026.md) | 🆕 触觉-力对齐：把触觉变成物理力语义，提升接触阶段稳定性 |
 | **Video World Model Survey (2026)** | [`./frontier/video_generation_models_in_robotics_survey_2026.md`](./frontier/video_generation_models_in_robotics_survey_2026.md) | 🆕 综述：视频生成模型作为具身世界模型（数据生成/视觉规划/策略评估）；难点是物理幻觉、指令偏差、成本与安全 |
 | **GenieReasoner / ERIQ / FACT** | [`./llm_reasoning/geniereasoner_eriq_fact.md`](./llm_reasoning/geniereasoner_eriq_fact.md) | 🆕 量化“推理→动作”传递损耗：推理基准 + 动作分词器 + 统一自回归 |
