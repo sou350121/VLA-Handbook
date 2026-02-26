@@ -29,6 +29,7 @@
 | 🔍 **[论文索引](./paper_index.md)** | 🆕 多维度快速查找（技术/公司/时间） |
 | 🧠 **[RynnBrain 开源解读](./frontier/rynnbrain_open_embodied_foundation_models_2026.md)** | 阿里达摩院：物理现实锚定的具身基础模型（Plan/Nav/CoP + RynnBrain-Bench） 🆕 |
 | 🖐️ **[TacRefineNet 开源解读](./frontier/tacrefinenet_tactile_only_grasp_refinement_2026.md)** | 小米机器人：tactile-only 抓取执行微调（goal-conditioned refinement） 🆕 |
+| 🚀 **[DreamZero 深度解读](./dreamzero_world_action_models_zero_shot_policies_2026.md)** | NVIDIA：WAM 联合生成 video+action；DreamZero-Flash（1-step）+ 38× 加速，实现 7Hz 闭环控制 ⭐ |
 | 🆕 **[VLA 十大挑战](./vla_challenges.md)** | NTU/斯坦福 2025 研究方向 |
 | 🔥 **[小模型 VLA 研究](./small_vla_models.md)** | 边缘部署、SmolVLA、蒸馏压缩 |
 | 🏆 **[NeurIPS 2025 解读](./neurips_2025_insights.md)** | 6 篇最佳论文的具身智能视角 |
