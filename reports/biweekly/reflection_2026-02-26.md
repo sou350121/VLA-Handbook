@@ -4,24 +4,22 @@
 
 ## 趋势与判断
 
-1. CALVIN benchmark 在两周内被刷新两次（pi-RL 4.71 → Xiaomi-Robotics-0 4.80），但 LIBERO 已逼近饱和（SimpleVLA-RL 99.1%）。你认为 CALVIN 的头部竞争还能持续多久，还是说社区应该转向更难的 RoboChallenge（当前仅 72.25）？
+1. 触觉 VLA 在 2026-02-12 至 2026-02-25 期间集中出现 TaCo 基准、TactEx 框架、力控夹爪论文——这是领域成熟信号还是论文灌水周期？用 TaCo 的异构触觉数据类型数量回答。
 
-2. 本期 9 篇 theory 文章中，5 篇聚焦 world model（Agent World Model、MIND、Olaf-World、World Action Models、MVISTA-4D），2 篇聚焦触觉（TaCo、TactEx）。如果下季度你只能深入一个方向，选哪个？证据是什么？
+2. 世界模型相关理论文章占本期 9 篇中的 4 篇（MVISTA-4D、VLA-JEPA、MIND、Olaf-World）——社区是在收敛到统一范式，还是在发散探索不同路径？用"想象 - 执行"在 MVISTA-4D 和 VLA-JEPA 中的实现差异证明你的判断。
 
-3. Genesis 在 8 天内连发两个版本（v0.3.14 → v0.4.0），完成 Taichi 迁移。MuJoCo 3.5.0 同期发布但声量明显更低。这是模拟器赛道的收敛信号，还是开源社区对"易用性"的投票？
+3. CALVIN 榜单上 Xiaomi-Robotics-0 以 4.75/4.80 刷新 SOTA，LIBERO 上 ACoT-VLA 与 ABot-M0 交替领先（差距<1%）——VLA benchmark 是在逼近性能天花板，还是已进入微幅刷榜阶段？用 CALVIN ABC-D 分裂上前 5 名模型的分数方差回答。
 
-4. 触觉 VLA 升温是真实机会还是灌水赛道？TaCo 基准刚提出编解码标准，但本期 SOTA tracker 中没有任何触觉相关 benchmark 上榜。如果触觉真是精细操作的主流，为什么 leaderboard 还没体现？
+4. 如果未来 6 个月只能投入一个方向：触觉 VLA（TaCo/TactEx）、效率优化（Habilis-β端侧/VLA-Perf）、还是世界模型融合（MVISTA-4D/VLA-JEPA）？选一个，并用本期至少两个具体信号支撑你的选择。
 
-5. "世界模型+VLA 在 sim-to-real 超越纯 VLA"是本期预测。但 World Action Models 论文声称 zero-shot policy，而 MIND 在 benchmark 记忆一致性。这两个方向在打架还是互补？你站哪边？
+5. Genesis v0.4.0 迁移到 Quadrants 编译器、MuJoCo 3.5.0 发布——底层工具链迭代对 VLA 研究的实际推动力有多大？对比 Genesis v0.3.14 到 v0.4.0 的 release note，列出直接影响 VLA 训练效率的变更。
 
 ## 技术追问
 
-6. TaCo 基准提出了异构触觉数据的无损/有损编解码评估。你能说清 GelSight、DIGIT、Tactile 3D 这三种传感器的原始数据格式差异吗？如果不能，建议从 TaCo 论文 Appendix 开始读。
+1. TaCo 基准提出触觉数据的无损与有损编解码方案——你能说清两种方案在带宽、延迟、信息保留上的 trade-off 吗？如果不能，从 TaCo 论文 Table 2 开始读，搞懂为什么 GelSight 和 DIGIT 需要不同的编码策略。
 
-7. Xiaomi-Robotics-0 用 4.80 avg_len 刷新 CALVIN ABC-D。你知道它跟 pi-RL（4.71）在架构上的核心差异吗？是数据规模、训练策略、还是推理时的 test-time compute？去读它的 method section。
+2. CausalGDP 将因果推理引入扩散策略——它跟传统 diffusion policy 在动作生成机制上有什么本质区别？不知道的话，对比 CausalGDP 和 diffusion policy 的 sampling 公式，找出因果图介入的位置。
 
-8. CausalGDP 提出 causality-guided diffusion policy。你知道 standard diffusion policy 在因果推断上的盲点是什么吗？如果不知道，这是你这两周最该补的课——从 CausalGDP 的 Related Work 开始。
+3. MVISTA-4D 和 VLA-JEPA 都引入"想象 - 执行"范式——两者的"想象"模块在 latent space 构建方式上有什么不同？建议对照阅读两篇论文的 Figure 2，画出各自的 latent rollout 流程。
 
-9. TwinVLA 用"孪生单臂"实现双臂操作。这种设计跟传统 bimanual VLA 的数据效率优势在哪里？是数据复用还是架构归纳偏置？读它的 ablation study。
-
-10. RoboGene 用 agentic framework 生成真实世界任务来 boost VLA 预训练。你知道它跟传统 data augmentation 的本质区别吗？提示：看它的 task generation pipeline 是否引入环境交互。
+4. Scaling Verification 论文提出"扩展验证比扩展策略学习更有效"——test-time verification 在 VLA 中的具体实现机制是什么？从论文 Method 部分找出 verification 模块如何与 VLA 的 action head 交互。
