@@ -1,25 +1,27 @@
-# 🤔 双周反思 | 2026-02-12 – 2026-02-25
+# 🤔 双周反思 | 2026-02-13 – 2026-02-26
 
 > 基于本期双周报告生成。不需要回答，但如果你读完没有立场，说明这两周你在消费而不是研究。
 
 ## 趋势与判断
 
-1. 触觉 VLA 在 2026-02-12 至 2026-02-25 期间集中出现 TaCo 基准、TactEx 框架、力控夹爪论文——这是领域成熟信号还是论文灌水周期？用 TaCo 的异构触觉数据类型数量回答。
+1. CALVIN 榜单在 14 天内被刷新两次（pi-RL 4.71 → Xiaomi-Robotics-0 4.75/4.80）。这是真进步还是刷榜？Xiaomi 的论文里有没有公开训练细节让你能复现？
 
-2. 世界模型相关理论文章占本期 9 篇中的 4 篇（MVISTA-4D、VLA-JEPA、MIND、Olaf-World）——社区是在收敛到统一范式，还是在发散探索不同路径？用"想象 - 执行"在 MVISTA-4D 和 VLA-JEPA 中的实现差异证明你的判断。
+2. 触觉 VLA 突然升温——TaCo 基准、TactEx 框架、力控夹爪论文集中出现。这是领域到了爆发前夜，还是单纯的数据采集硬件终于便宜到实验室能批量买了？
 
-3. CALVIN 榜单上 Xiaomi-Robotics-0 以 4.75/4.80 刷新 SOTA，LIBERO 上 ACoT-VLA 与 ABot-M0 交替领先（差距<1%）——VLA benchmark 是在逼近性能天花板，还是已进入微幅刷榜阶段？用 CALVIN ABC-D 分裂上前 5 名模型的分数方差回答。
+3. 世界模型 +VLA 方向两周冒出 MIND、Olaf-World、Agent World Model、VLA-JEPA 四个新工作。社区是在收敛到"想象 - 执行"范式，还是在各自造轮子？选一个你相信会活过 2026 年的架构。
 
-4. 如果未来 6 个月只能投入一个方向：触觉 VLA（TaCo/TactEx）、效率优化（Habilis-β端侧/VLA-Perf）、还是世界模型融合（MVISTA-4D/VLA-JEPA）？选一个，并用本期至少两个具体信号支撑你的选择。
+4. LIBERO 榜单上 ACoT-VLA 和 ABot-M0 交替领先（98.6 vs 99.1），差距不到 1%。这种微幅刷新还有意义吗？还是说 LIBERO 已经饱和，需要新基准了？
 
-5. Genesis v0.4.0 迁移到 Quadrants 编译器、MuJoCo 3.5.0 发布——底层工具链迭代对 VLA 研究的实际推动力有多大？对比 Genesis v0.3.14 到 v0.4.0 的 release note，列出直接影响 VLA 训练效率的变更。
+5. Genesis 模拟器两周连发两版（0.3.14 → 0.4.0），直接迁移到 Quadrants 编译器。如果让你选 sim-to-real 的底层依赖，你押 Genesis 还是押 MuJoCo 3.5.0？为什么？
 
 ## 技术追问
 
-1. TaCo 基准提出触觉数据的无损与有损编解码方案——你能说清两种方案在带宽、延迟、信息保留上的 trade-off 吗？如果不能，从 TaCo 论文 Table 2 开始读，搞懂为什么 GelSight 和 DIGIT 需要不同的编码策略。
+6. TaCo 基准论文里对比了哪些触觉编解码方案？无损 vs 有损在 VLA 策略训练里的实际影响测过吗？没测过的话，这是不是你该补的实验？
 
-2. CausalGDP 将因果推理引入扩散策略——它跟传统 diffusion policy 在动作生成机制上有什么本质区别？不知道的话，对比 CausalGDP 和 diffusion policy 的 sampling 公式，找出因果图介入的位置。
+7. 本期世界模型工作（MIND、Olaf-World）都提到了"latent action"。这个概念跟 Diffusion Policy 里的 action chunking 有什么区别？说不清楚的话，建议把两篇论文的 method 部分对照着读一遍。
 
-3. MVISTA-4D 和 VLA-JEPA 都引入"想象 - 执行"范式——两者的"想象"模块在 latent space 构建方式上有什么不同？建议对照阅读两篇论文的 Figure 2，画出各自的 latent rollout 流程。
+8. Xiaomi-Robotics-0 刷新 CALVIN 记录时用了什么架构？OpenVLA 微调还是从头训练？如果它没公开代码，你能从论文图表里反推出关键设计选择吗？
 
-4. Scaling Verification 论文提出"扩展验证比扩展策略学习更有效"——test-time verification 在 VLA 中的具体实现机制是什么？从论文 Method 部分找出 verification 模块如何与 VLA 的 action head 交互。
+9. CausalGDP 那篇把 causality 引入 diffusion policy。你知道它具体在 diffusion 的哪个环节注入因果约束吗？是去噪过程、条件输入、还是 reward shaping？
+
+10. "Scaling Verification > Scaling Policy"这篇提出了测试时验证框架。如果让你把这个方法用到你的 VLA pipeline 里，你会在哪个环节加 verification？推理前、推理后、还是训练时？
