@@ -34,48 +34,44 @@ VLA 论文每天几十篇，真正能用的工程细节零散在 GitHub Issue �
 
 ---
 
-## 快速导航
-
-| 目标 | 入口 | 说明 |
-|---|---|---|
-| 补理论 / 刷面试 | `theory/README.md` | 路线图 + 核心概念索引 |
-| 找论文 / 做综述 | `theory/paper_index.md` · `theory/literature_review.md` | 多维索引 + 发展史全景图 |
-| 真机落地 | `deployment/README.md` | 硬件选型 · 多模态同步 · Sim-to-Real |
-| 公司 / 求职 | `companies/README.md` | 公司指南 + 产业报告 digest |
-| 双周前沿报告 | `reports/biweekly/README.md` | VLA / 触觉 / 人形 / 基准 · 含预测回顾 |
-| 周报 + 风向洞察 | `reports/weekly/README.md` | 每周论文精选 + SOTA + 趋势 Layer 分析 |
-| 最新论文解析 | `theory/` + `scripts/SCRIPTS.md` | 每日自动 pipeline 精选深度拆解 |
-| 变更记录 | `CHANGELOG.md` | 从 git 历史提炼，避免 README 膨胀 |
-
----
-
 ## 自动更新时刻表（北京时间）
 
-| 内容 | 更新时间 | 说明 |
-|------|---------|------|
-| ⚡ 论文评分（⚡/🔧/📖/❌）| 每日 09:15–10:00 | arXiv 当日新论文自动评级 + 热点筛选 |
-| 🔬 理论深度解析 | 周二 / 四 / 六 15:30 | ⚡/🔧 精选论文生成代码级拆解，写入 `theory/` |
-| 📡 SOTA · Release · 社交情报 | 每日 10:10–10:30 | 榜单变动 · 新版本 · 社区争议 |
-| 📋 周报 + 风向洞察 | 每周日 10:30 | 论文精选 + 4-Layer 趋势分析 |
-| 📊 双周推理报告 | 每两周 | 技术收敛判断 + 可验证预测 + 上期回顾 |
+| 内容 | 更新时间 | 去哪看 |
+|------|---------|--------|
+| ⚡ 论文评分（⚡/🔧/📖/❌） | 每日 09:15–10:00 | [theory/](theory/) |
+| 🔬 理论深度解析 | 周二 / 四 / 六 15:30 | [theory/](theory/) |
+| 📋 周报 + 风向洞察 | 每周日 10:30 | [reports/weekly/](reports/weekly/README.md) |
+| 📊 双周推理报告 | 每两周 | [reports/biweekly/](reports/biweekly/README.md) |
 
 ---
 
 ## 项目结构
 
-\`\`\`
-VLA-Handbook/
-├── theory/          # 理论基础（79 个文档，含每日自动深度解析）
-├── deployment/      # 真机与部署（硬件选型 · 多模态同步 · Sim-to-Real）
-├── reports/
-│   ├── biweekly/    # 双周推理报告（含 reflection 预测回顾）
-│   └── weekly/      # 周报：论文精选 + SOTA + 趋势风向洞察
-├── scripts/         # 自动化 pipeline（SCRIPTS.md 含完整 DAG）
-├── question-bank/   # 面试题库与代码实战
-├── companies/       # 机器人公司与求职指南
-├── cheat-sheet/     # 速查表（时间线 · 核心公式）
-└── book/            # 电子书版本
-\`\`\`
+| 目录 | 内容 |
+|------|------|
+| [`theory/`](theory/) | 79 篇理论文档 + 每日自动深度解析 |
+| [`deployment/`](deployment/) | 真机部署：硬件选型 · 多模态同步 · Sim-to-Real |
+| [`reports/biweekly/`](reports/biweekly/) | 双周推理报告（含预测回顾）|
+| [`reports/weekly/`](reports/weekly/) | 周报 + SOTA + 风向洞察 |
+| [`scripts/`](scripts/) | 自动化 pipeline（SCRIPTS.md 含完整 DAG）|
+| [`question-bank/`](question-bank/) | 面试题库与代码实战 |
+| [`companies/`](companies/) | 机器人公司与求职指南 |
+| [`cheat-sheet/`](cheat-sheet/) | 速查表（时间线 · 核心公式）|
+| [`book/`](book/) | 电子书版本 |
+
+---
+
+## 快速导航
+
+| 目标 | 入口 | 说明 |
+|---|---|---|
+| 补理论 / 刷面试 | [`theory/README.md`](theory/README.md) | 路线图 + 核心概念索引 |
+| 找论文 / 做综述 | [`theory/paper_index.md`](theory/paper_index.md) | 多维索引 + 发展史全景图 |
+| 真机落地 | [`deployment/README.md`](deployment/README.md) | 硬件选型 · 多模态同步 · Sim-to-Real |
+| 公司 / 求职 | [`companies/README.md`](companies/README.md) | 公司指南 + 产业报告 digest |
+| 双周前沿报告 | [`reports/biweekly/README.md`](reports/biweekly/README.md) | VLA / 触觉 / 人形 · 含预测回顾 |
+| 周报 + 风向洞察 | [`reports/weekly/README.md`](reports/weekly/README.md) | 每周论文精选 + SOTA + 趋势分析 |
+| 变更记录 | [`CHANGELOG.md`](CHANGELOG.md) | 从 git 历史提炼 |
 
 ---
 
@@ -83,55 +79,17 @@ VLA-Handbook/
 
 > ⚡ = 战略必读  🔧 = 工程可用  每日持续更新中
 
-| 论文 | 方向 | 链接 |
-|---|---|---|
-| World Action Models are Zero-shot Policies | 零样本泛化 | → |
-| TwinVLA: Data-Efficient Bimanual Manipulation | 双臂操作 | → |
-| Scaling Verification > Scaling Policy Learning | Test-Time Compute | → |
-| RoboGene: Diversity-Driven VLA Pre-training | 预训练数据 | → |
-| Olaf-World: Latent Actions for Video WM | 视频世界模型 | → |
-| MIND: Memory & Action Control Benchmark | World Model 评估 | → |
-| Agent World Model: Infinity Synthetic Envs | 合成环境 | → |
-| CausalGDP: Causality-Guided Diffusion Policy | 因果 + 扩散策略 | → |
-| TaCo: Tactile Codec Benchmark | 触觉数据 | → |
-
----
-
-## pipeline 如何工作
-
-每天凌晨到上午，[照见 Pulsar](https://github.com/sou350121/Pulsar-KenVersion) 系统自动完成这条链路：
-
-\`\`\`
-arXiv 当日论文
-      │
-      ▼
-  ⚡/🔧/📖/❌ 评分
-  （相关性 · 工程价值 · 机构权重）
-      │
-  精选 ⚡/🔧 论文
-      │
-      ▼
-  三段式 LLM 拆解
-  （原理 · 关键代码 · 工程折中）
-      │
-      ▼
-  写入 theory/ · 推送 Telegram
-      │
-  每周汇总 → 周报风向洞察
-      │
-  每两周 → 预测报告 + 上期验证
-\`\`\`
-
-不是人工维护——是一个会自我校准的知识积累系统。
-
----
-
-## 最近在更新什么
-
-- **每日论文解析**：`theory/` 目录（⚡ 评级论文自动拆解，每天更新）
-- **周报**：`reports/weekly/`（论文精选 + SOTA + 风向洞察）
-- **双周前沿推理**：`reports/biweekly/`（技术收敛判断 + 可验证预测）
-- **变更记录**：`CHANGELOG.md`
+| 论文 | 方向 |
+|------|------|
+| World Action Models are Zero-shot Policies | 零样本泛化 |
+| TwinVLA: Data-Efficient Bimanual Manipulation | 双臂操作 |
+| Scaling Verification > Scaling Policy Learning | Test-Time Compute |
+| RoboGene: Diversity-Driven VLA Pre-training | 预训练数据 |
+| Olaf-World: Latent Actions for Video WM | 视频世界模型 |
+| MIND: Memory & Action Control Benchmark | World Model 评估 |
+| Agent World Model: Infinity Synthetic Envs | 合成环境 |
+| CausalGDP: Causality-Guided Diffusion Policy | 因果 + 扩散策略 |
+| TaCo: Tactile Codec Benchmark | 触觉数据 |
 
 ---
 
@@ -141,4 +99,4 @@ arXiv 当日论文
 
 ## 许可证
 
-[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.zh)
+[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.zh) · 由 [照见 Pulsar](https://github.com/sou350121/Pulsar-KenVersion) 系统自动驱动
