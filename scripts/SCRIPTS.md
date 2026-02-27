@@ -6,6 +6,7 @@
 
 | Prefix/Pattern | Role |
 |---|---|
+| 2026-02-27 | [本期報告](./SCRIPTS.md) | > Last updated: 2026-02-27 |
 | `vla-*` | VLA pipeline (robotics/embodied AI) |
 | `ai-app-*` or `ai-*` | AI agent / app pipeline |
 | `prep-<pipeline>.py` | Phase 1: collect + filter candidates |
