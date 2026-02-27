@@ -31,6 +31,9 @@
 - **⑤ 真机落地总入口（按需查阅）**：[`deployment/README.md`](./deployment/README.md)  
   - 你会得到：硬件选型、多模态同步、控制与调参 checklist（把工程坑提前标出来）
 
+- **⑥ 追前沿解析（每日自动更新）**：[`theory/world_action_models_are_zero_shot_policies_dissection.md`](./theory/world_action_models_are_zero_shot_policies_dissection.md)  
+  - 你会得到：World Action Model 如何做到零样本策略迁移（Feb 2026 精选之一）；更多解析见 [theory/ 目录](./theory/)
+
 ## 🚀 快速开始（按你的目标选入口）
 
 | 你现在想做什么 | 从这里开始 | 你会得到什么 |
@@ -40,6 +43,7 @@
 | **真机落地/跑通闭环** | [`deployment/README.md`](./deployment/README.md) | 硬件选型、多模态同步、控制与调参清单 |
 | **行业/公司信息** | [`companies/README.md`](./companies/README.md) | 公司与求职指南 + 产业报告 digest |
 | **追前沿（每两周）** | [`reports/biweekly/README.md`](./reports/biweekly/README.md) | 每期要点 + 深度笔记回链 |
+| **看最新论文解析** | [`theory/`](./theory/) + [`scripts/SCRIPTS.md`](./scripts/SCRIPTS.md) | 每日自动 pipeline 生成 ⚡ 精选论文深度拆解 |
 
 > 更细的学习路线与分 Part 结构，请直接看 [`theory/README.md`](./theory/README.md) 的“学习路线图”。
 
@@ -166,6 +170,21 @@ VLA-Handbook/
 - [`theory/peft_lora.md`](./theory/peft_lora.md)  
   **关键词**：PEFT / LoRA / QLoRA｜**适合**：小显存微调与工程落地
 
+### 每日自动解析（Feb 2026 论文精选）
+
+> 由自动 pipeline 每日抓取 ⚡ 评级论文并生成深度拆解，持续更新中。
+
+- [`theory/world_action_models_are_zero_shot_policies_dissection.md`](./theory/world_action_models_are_zero_shot_policies_dissection.md)  
+  **关键词**：World Action Model / 零样本策略｜**适合**：理解"世界模型即策略"的第一性原理
+- [`theory/twinvla_data_efficient_bimanual_manipulation_with_twin_singl_dissection.md`](./theory/twinvla_data_efficient_bimanual_manipulation_with_twin_singl_dissection.md)  
+  **关键词**：TwinVLA / 双臂操作 / 数据效率｜**适合**：双臂任务与数据高效训练
+- [`theory/olaf_world_orienting_latent_actions_for_video_world_modeling_dissection.md`](./theory/olaf_world_orienting_latent_actions_for_video_world_modeling_dissection.md)  
+  **关键词**：OLAF / 潜在动作 / 视频世界模型｜**适合**：无标注视频学动作表示
+- [`theory/scaling_verification_can_be_more_effective_than_scaling_poli_dissection.md`](./theory/scaling_verification_can_be_more_effective_than_scaling_poli_dissection.md)  
+  **关键词**：Scaling Verification / Test-Time Compute｜**适合**：理解验证扩展 vs 策略扩展的 trade-off
+- [`theory/robogene_boosting_vla_pre_training_via_diversity_driven_agen_dissection.md`](./theory/robogene_boosting_vla_pre_training_via_diversity_driven_agen_dissection.md)  
+  **关键词**：RoboGene / 多样性驱动 / VLA 预训练｜**适合**：提升 VLA 预训练数据质量的方法论
+
 ---
 
 <details>
@@ -173,8 +192,9 @@ VLA-Handbook/
 
 1. **硬件-模型全链路**：不仅讲 π0，还讲如何选灵巧手、如何解决 1000Hz 传感器同步。
 2. **硬核数学推导**：包含雅可比矩阵、阻抗控制、Flow Matching 等核心数学第一性原理。
-3. **2026 前沿视野**：同步 2026 年 1 月最新硬件（Sharpa Wave, LEAP V2 Adv）与研究（SaTA）。
+3. **2026 前沿视野**：持续同步最新硬件（Sharpa Wave, LEAP V2 Adv）与前沿研究（Feb 2026 新增 9 篇论文深度解析）。
 4. **全中文 + 工程导向**：专业术语保留英文对照，聚焦 Robotics 特有挑战（如 Hysteresis、Backlash）。
+5. **每日自动 pipeline**：VLA 论文评分（⚡/🔧/📖）、社交情报、深度解析由自动化脚本持续写入，见 [`scripts/SCRIPTS.md`](./scripts/SCRIPTS.md)。
 
 </details>
 
@@ -214,7 +234,9 @@ VLA-Handbook/
 
 ## 📝 最近更新怎么看？
 
+- **每日论文解析**：看 [`theory/`](./theory/) 目录（自动 pipeline 每日抓取 ⚡ 论文并生成深度拆解）  
 - **工程/研究前沿**：看双周报告索引 [`reports/biweekly/README.md`](./reports/biweekly/README.md)（每期都链回深度笔记）  
+- **自动化原理**：看 [`scripts/SCRIPTS.md`](./scripts/SCRIPTS.md)（pipeline DAG 与脚本参考）  
 - **全量变更记录**：看 [`CHANGELOG.md`](./CHANGELOG.md)（从 git 历史提炼，避免 README 长期膨胀）
 
 ---
