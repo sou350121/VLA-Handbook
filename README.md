@@ -1,3 +1,5 @@
+<p align="center"><img src="docs/banner.svg" width="100%" alt="VLA Handbook"></p>
+
 # VLA Handbook
 
 [![CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
