@@ -12,7 +12,7 @@
 
 - **以“可复现/可验收”为第一原则**：每篇尽量给出入口脚本、关键超参、shape/口径的 sanity-check（避免“看起来懂了，跑起来全错”）。  
 - **把 Robotics 的“脏活”写清楚**：多模态同步、动作空间对齐、Sim2Real 断点、触觉/灵巧手硬件选型。  
-- **持续更新，但不让 README 膨胀**：前沿用 Biweekly 回链，细节进深度笔记，改动进 Changelog。
+- **持续更新，但不让 README 膨胀**：前沿用 Biweekly 回链，细节进深度笔记，改动进 Changelog。每日自动 pipeline（VLA 论文评分、社交情报、深度解析）持续写入内容，见 [`scripts/`](./scripts/SCRIPTS.md)。
 
 ## 先看这 5 篇（高信号精选）
 
@@ -54,6 +54,7 @@ VLA-Handbook/
 ├── theory/          # 理论基础（核心）
 ├── deployment/      # 真机与部署
 ├── reports/         # 双周/周期性前沿报告
+├── scripts/         # 自动化 pipeline 脚本（内容生成与推送）
 ├── book/            # 电子书版本
 ├── cheat-sheet/     # 速查表
 ├── question-bank/   # 题库与实战
@@ -89,8 +90,13 @@ VLA-Handbook/
 │   ├── dexterous_hand_applications.md # 灵巧手实战案例集 (VisionOS)
 │   └── ...                     # 更多文档见 deployment/README.md
 ├── reports/                     # 周期性前沿报告
-│   └── biweekly/                # 双周报告
-│       └── README.md            # 索引
+│   ├── biweekly/                # 双周报告
+│   │   └── README.md            # 索引
+│   └── weekly/                  # 周度质量评审 + 风向洞察
+├── scripts/                     # 自动化 pipeline 脚本
+│   ├── SCRIPTS.md               # 脚本参考文档（命名规则与 DAG 拓扑）
+│   ├── vla-trend-snapshot.py    # VLA 趋势快照生成器
+│   └── backfill-vla-history.py  # 历史数据回填工具
 ├── book/                       # 电子书版本
 ├── question-bank/              # 题库与实战
 └── companies/                  # 机器人公司与求职
@@ -112,6 +118,7 @@ VLA-Handbook/
 | **🏢 公司与产业** | [`companies/README.md`](./companies/README.md) | 公司/求职指南 + 产业报告 digest（含人形整机图谱） |
 | **💡 题库与实战** | [`question-bank/README.md`](./question-bank/README.md) | 面试真题、代码实战、微调指南 |
 | **📋 速查表** | [`cheat-sheet/README.md`](./cheat-sheet/README.md) | 时间线、核心公式 |
+| **⚙️ 自动化脚本** | [`scripts/SCRIPTS.md`](./scripts/SCRIPTS.md) | Pipeline 脚本参考：VLA 日报/双周/评分/社交情报/深度解析 |
 | **📝 变更记录** | [`CHANGELOG.md`](./CHANGELOG.md) | 从 git 历史提炼的 Changelog |
 
 ---
