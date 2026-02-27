@@ -70,6 +70,7 @@ Qwen3-VL + DiT + ODE/Euler，端到端复现入口，每步都有 shape 标注�
 | 内容 | 更新时间 | 去哪看 |
 |------|---------|--------|
 | ⚡ 论文评分（⚡/🔧/📖/❌） | 每日 09:15–10:00 | [theory/](theory/) |
+| 🛰️ VLA 社交情报 | 每日 09:30 | [vla-social-intel/ →](https://github.com/sou350121/VLA-Handbook/tree/main/memory/blog/archives/vla-social-intel) |
 | 🔬 理论深度解析 | 周二 / 四 / 六 15:30 | [theory/](theory/) |
 | 📋 周报 + 风向洞察 | 每周日 10:30 | [reports/weekly/](reports/weekly/README.md) |
 | 📊 双周推理报告 | 每两周 | [reports/biweekly/](reports/biweekly/README.md) |
