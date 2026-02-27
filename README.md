@@ -45,14 +45,23 @@ VLA 论文每天几十篇，真正能用的工程细节零散在 GitHub Issue �
 
 ## 先看这几篇（30 分钟内建立正确框架）
 
-| # | 文档 | 你会得到什么 | 时间 |
-|---|---|---|---|
-| ① | `theory/README.md` | 学习路线图：把"要学什么"降维成可走的路径 | 10–20 min |
-| ② | `theory/pi0_flow_matching.md` | Flow Matching 原理 + 工程折中，可直接迁移到 VLA action head | 15–30 min |
-| ③ | `theory/spirit_v1_5_dissection.md` | Qwen3-VL + DiT + ODE/Euler 端到端复现入口，代码级拆解 | 20–40 min |
-| ④ | `theory/unifolm_vla_0_unitree_2026.md` | 开源训练栈：数据管线 + 部署要点 + 30 分钟验收清单 | 30–60 min |
-| ⑤ | `deployment/README.md` | 真机落地总入口：硬件选型 · 多模态同步 · 调参 checklist | 按需查阅 |
-| ⑥ | `theory/world_action_models_are_zero_shot_policies_dissection.md` | World Action Model 如何做到零样本策略迁移（Feb 2026 精选） | 20 min |
+**① [学习路线图](theory/README.md)** `10–20 min`  
+把"要学什么"降维成可走的路径，适合刚入门。
+
+**② [Flow Matching 原理拆解](theory/pi0_flow_matching.md)** `15–30 min`  
+Flow Matching 原理 + 工程折中，可直接迁移到 VLA action head。
+
+**③ [Spirit-v1.5 代码级解析](theory/spirit_v1_5_dissection.md)** `20–40 min`  
+Qwen3-VL + DiT + ODE/Euler，端到端复现入口，每步都有 shape 标注。
+
+**④ [UnifolM 开源训练栈](theory/unifolm_vla_0_unitree_2026.md)** `30–60 min`  
+数据管线 + 部署要点 + 30 分钟验收清单，适合真机落地参考。
+
+**⑤ [真机部署总入口](deployment/README.md)** `按需查阅`  
+硬件选型 · 多模态同步 · Sim-to-Real · 调参 checklist。
+
+**⑥ [World Action Model 零样本策略迁移](theory/world_action_models_are_zero_shot_policies_dissection.md)** `20 min`  
+如何做到零样本策略迁移，Feb 2026 精选，适合了解最新方向。
 
 ---
 
