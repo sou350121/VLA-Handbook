@@ -1,6 +1,6 @@
 # VLA Handbook（Vision-Language-Action）
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
 
 > **VLA（Vision-Language-Action）领域的结构化知识库与工程实战手册。**
@@ -43,6 +43,7 @@
 | **真机落地/跑通闭环** | [`deployment/README.md`](./deployment/README.md) | 硬件选型、多模态同步、控制与调参清单 |
 | **行业/公司信息** | [`companies/README.md`](./companies/README.md) | 公司与求职指南 + 产业报告 digest |
 | **追前沿（每两周）** | [`reports/biweekly/README.md`](./reports/biweekly/README.md) | 每期要点 + 深度笔记回链 |
+| **周报 + 风向洞察** | [`reports/weekly/README.md`](./reports/weekly/README.md) | 每周论文精选 + SOTA + 趋势风向（Layer 分析） |
 | **看最新论文解析** | [`theory/`](./theory/) + [`scripts/SCRIPTS.md`](./scripts/SCRIPTS.md) | 每日自动 pipeline 生成 ⚡ 精选论文深度拆解 |
 
 > 更细的学习路线与分 Part 结构，请直接看 [`theory/README.md`](./theory/README.md) 的“学习路线图”。
@@ -94,9 +95,8 @@ VLA-Handbook/
 │   ├── dexterous_hand_applications.md # 灵巧手实战案例集 (VisionOS)
 │   └── ...                     # 更多文档见 deployment/README.md
 ├── reports/                     # 周期性前沿报告
-│   ├── biweekly/                # 双周报告
-│   │   └── README.md            # 索引
-│   └── weekly/                  # 周度质量评审 + 风向洞察
+│   ├── biweekly/                # 双周报告（含 reflection_*.md 预测回顾）
+│   └── weekly/                  # 周度报告：论文精选 + SOTA + 趋势风向洞察
 ├── scripts/                     # 自动化 pipeline 脚本
 │   ├── SCRIPTS.md               # 脚本参考文档（命名规则与 DAG 拓扑）
 │   ├── vla-trend-snapshot.py    # VLA 趋势快照生成器
@@ -118,6 +118,7 @@ VLA-Handbook/
 | **🔍 论文索引** | [`theory/paper_index.md`](./theory/paper_index.md) | 多维度查找（技术/公司/时间） |
 | **📖 文献综述** | [`theory/literature_review.md`](./theory/literature_review.md) | VLA 发展史全景图（按技术分类） |
 | **🗓️ Biweekly 前沿报告** | [`reports/biweekly/README.md`](./reports/biweekly/README.md) | 每两周更新：VLA / 触觉 / 人形 / 基准 / 工程 |
+| **📅 Weekly 周报** | [`reports/weekly/README.md`](./reports/weekly/README.md) | 每周：论文精选 + SOTA 动态 + 趋势风向洞察 |
 | **🚀 真机部署** | [`deployment/README.md`](./deployment/README.md) | 硬件选型、多模态同步、Sim-to-Real |
 | **🏢 公司与产业** | [`companies/README.md`](./companies/README.md) | 公司/求职指南 + 产业报告 digest（含人形整机图谱） |
 | **💡 题库与实战** | [`question-bank/README.md`](./question-bank/README.md) | 面试真题、代码实战、微调指南 |
@@ -236,6 +237,7 @@ VLA-Handbook/
 
 - **每日论文解析**：看 [`theory/`](./theory/) 目录（自动 pipeline 每日抓取 ⚡ 论文并生成深度拆解）  
 - **工程/研究前沿**：看双周报告索引 [`reports/biweekly/README.md`](./reports/biweekly/README.md)（每期都链回深度笔记）  
+- **周度论文精选 + 趋势风向**：看 [`reports/weekly/README.md`](./reports/weekly/README.md)  
 - **自动化原理**：看 [`scripts/SCRIPTS.md`](./scripts/SCRIPTS.md)（pipeline DAG 与脚本参考）  
 - **全量变更记录**：看 [`CHANGELOG.md`](./CHANGELOG.md)（从 git 历史提炼，避免 README 长期膨胀）
 
@@ -248,4 +250,4 @@ VLA-Handbook/
 
 ## 📄 许可证 (License)
 
-MIT License
+内容采用 [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.zh) 许可协议。
