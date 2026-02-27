@@ -8,10 +8,10 @@
 
 ### 全中文 · 工程实战导向的 VLA 知识库
 
-VLA 论文每天几十篇，真正能用的工程细节零散在 GitHub Issue 和论文附录里。  
+VLA 论文每天几十篇，真正能用的工程细节零散在 GitHub Issue 和论文附录里。
 这个 Handbook 做一件事：**把"看懂论文"和"跑通代码"之间的坑，全部填平。**
 
-> 79 理论文档 · 9+ Feb 2026 深度解析 · 每日自动 pipeline（⚡ 论文评分 · 深度拆解 · 社交情报）
+> 70+ 理论文档 · 18+ Feb 2026 深度解析 · 每日自动 pipeline（⚡ 论文评分 · 深度拆解 · 社交情报）
 
 ---
 
@@ -25,8 +25,8 @@ VLA 论文每天几十篇，真正能用的工程细节零散在 GitHub Issue �
 
 读 VLA 领域信息，大多数人用的是这三种方式——先说各自真正好在哪：
 
-**看公众号**（机器之心 / 量子位 / PaperWeekly）：中文团队写的可读综述，编辑质量有保证，适合碎片时间、移动端阅读。  
-**查 GitHub Awesome 列表 / 公开综述**：整理好的资源书签，方便快速找到经典论文和开源项目。  
+**看公众号**（机器之心 / 量子位 / PaperWeekly）：中文团队写的可读综述，编辑质量有保证，适合碎片时间、移动端阅读。
+**查 GitHub Awesome 列表 / 公开综述**：整理好的资源书签，方便快速找到经典论文和开源项目。
 **刷 X/Twitter 跟踪 VLA 作者**：第一时间看到作者反应和社区讨论，实时感强。
 
 **选 VLA Handbook**：需要工程级深度——论文怎么跑通、部署怎么踩坑、Sim2Real 断在哪，而且每天自动更新，永久可查。
@@ -45,22 +45,22 @@ VLA 论文每天几十篇，真正能用的工程细节零散在 GitHub Issue �
 
 ## 先看这几篇（30 分钟内建立正确框架）
 
-**① [学习路线图](theory/README.md)** `10–20 min`  
+**① [学习路线图](theory/README.md)** `10–20 min`
 把"要学什么"降维成可走的路径，适合刚入门。
 
-**② [Flow Matching 原理拆解](theory/pi0_flow_matching.md)** `15–30 min`  
+**② [Flow Matching 原理拆解](theory/pi0_flow_matching.md)** `15–30 min`
 Flow Matching 原理 + 工程折中，可直接迁移到 VLA action head。
 
-**③ [Spirit-v1.5 代码级解析](theory/spirit_v1_5_dissection.md)** `20–40 min`  
+**③ [Spirit-v1.5 代码级解析](theory/spirit_v1_5_dissection.md)** `20–40 min`
 Qwen3-VL + DiT + ODE/Euler，端到端复现入口，每步都有 shape 标注。
 
-**④ [UnifolM 开源训练栈](theory/unifolm_vla_0_unitree_2026.md)** `30–60 min`  
+**④ [UnifolM 开源训练栈](theory/unifolm_vla_0_unitree_2026.md)** `30–60 min`
 数据管线 + 部署要点 + 30 分钟验收清单，适合真机落地参考。
 
-**⑤ [真机部署总入口](deployment/README.md)** `按需查阅`  
+**⑤ [真机部署总入口](deployment/README.md)** `按需查阅`
 硬件选型 · 多模态同步 · Sim-to-Real · 调参 checklist。
 
-**⑥ [World Action Model 零样本策略迁移](theory/world_action_models_are_zero_shot_policies_dissection.md)** `20 min`  
+**⑥ [World Action Model 零样本策略迁移](theory/world_action_models_are_zero_shot_policies_dissection.md)** `20 min`
 如何做到零样本策略迁移，Feb 2026 精选，适合了解最新方向。
 
 ---
@@ -71,7 +71,7 @@ Qwen3-VL + DiT + ODE/Euler，端到端复现入口，每步都有 shape 标注�
 |------|---------|--------|
 | ⚡ 论文评分（⚡/🔧/📖/❌） | 每日 09:15–10:00 | [theory/](theory/) |
 | 🛰️ VLA 社交情报 | 每日 09:30 | [vla-social-intel/ →](https://github.com/sou350121/VLA-Handbook/tree/main/memory/blog/archives/vla-social-intel) |
-| 🔬 理论深度解析 | 周二 / 四 / 六 15:30 | [theory/](theory/) |
+| 🔬 理论深度解析 | 周一 / 三 / 五 15:30 | [theory/](theory/) |
 | 📋 周报 + 风向洞察 | 每周日 10:30 | [reports/weekly/](reports/weekly/README.md) |
 | 📊 双周推理报告 | 每两周 | [reports/biweekly/](reports/biweekly/README.md) |
 
@@ -81,7 +81,7 @@ Qwen3-VL + DiT + ODE/Euler，端到端复现入口，每步都有 shape 标注�
 
 | 目录 | 内容 |
 |------|------|
-| [`theory/`](theory/) | 79 篇理论文档 + 每日自动深度解析 |
+| [`theory/`](theory/) | 70+ 篇理论文档 + 周一/三/五自动深度解析 |
 | [`deployment/`](deployment/) | 真机部署：硬件选型 · 多模态同步 · Sim-to-Real |
 | [`reports/biweekly/`](reports/biweekly/) | 双周推理报告（含预测回顾）|
 | [`reports/weekly/`](reports/weekly/) | 周报 + SOTA + 风向洞察 |
@@ -122,6 +122,14 @@ Qwen3-VL + DiT + ODE/Euler，端到端复现入口，每步都有 shape 标注�
 | Agent World Model: Infinity Synthetic Envs | 合成环境 |
 | CausalGDP: Causality-Guided Diffusion Policy | 因果 + 扩散策略 |
 | TaCo: Tactile Codec Benchmark | 触觉数据 |
+| Spirit-v1.5: Qwen3-VL + DiT + ODE/Euler | 端到端 VLA |
+| pi0.5 / pi0.6: Physical Intelligence | 策略学习 |
+| GigaBrain: World Model RL Ramp | 强化学习 |
+| LingBot: Pragmatic VLA Foundation Model | 语言引导 |
+| StarVLA: LEGO-like VLA Codebase | 模块化架构 |
+| GR-RL: Reinforcement Learning for VLA | 强化学习微调 |
+| UnifolM: Open-source VLA Training Stack | 开源训练栈 |
+| DreamZero: World Action Models Zero-shot | 零样本迁移 |
 
 ---
 
@@ -137,7 +145,7 @@ VLA Handbook 的每日内容由 [照见 Pulsar](https://github.com/sou350121/Pul
 
 - **自愈 Watchdog** — 15 项健康检查，RSS 中断 · 评分缺失 · LLM 超时，故障自动恢复，不会静默丢数据
 - **评分前置** — 每天 30+ 篇论文先经 ⚡/🔧/📖/❌ 评级，精选才进 LLM，节省 80%+ 推理成本
-- **全自动** — 33 个 cron job，每天 09:15 开始，无需人工触发
+- **全自动** — 33 个 cron job，每天 09:00 开始，无需人工触发
 
 ## 贡献
 
