@@ -126,6 +126,7 @@
 | 🧊 **Zero-1-to-3（2023）** | [`./frontier/zero_1_to_3_zero_shot_one_image_to_3d_object_2023.md`](./frontier/zero_1_to_3_zero_shot_one_image_to_3d_object_2023.md) | 🆕 单图像零样本新视角合成 + 3D 重建先验 |
 | 📈 **Classic GNNs（2024）** | [`./frontier/classic_gnns_strong_baselines_node_classification_2024.md`](./frontier/classic_gnns_strong_baselines_node_classification_2024.md) | 🆕 节点分类基线再评估：调参后经典 GNN 仍很强 |
 | 🌍 **WorldEval（2025）** | [`./frontier/worldeval_world_model_policy_evaluator_2025.md`](./frontier/worldeval_world_model_policy_evaluator_2025.md) | 🆕 世界模型评测器：用生成式 rollout 评估机器人策略 |
+| 🌍 **Ctrl-World × WorldArena（2026）** | [`./frontier/ctrl_world_worldarena_embodied_world_model_benchmark_2026.md`](./frontier/ctrl_world_worldarena_embodied_world_model_benchmark_2026.md) | 🆕 ICLR 2026 Ctrl-World + WorldArena 统一评测：视频质量×功能任务（Data Engine/Policy Eval/Action Planner） |
 | 🌊 **WaveFormer（2026）** | [`./frontier/waveformer_wave_equation_vision_2026.md`](./frontier/waveformer_wave_equation_vision_2026.md) | 波动方程视觉建模：频率-时间解耦，保留高频细节 🆕 |
 | 🐙 **软体本体感知** | [`./frontier/soft_robot_proprioception_gvs_sensitivity_ellipsoid.md`](./frontier/soft_robot_proprioception_gvs_sensitivity_ellipsoid.md) | GVS + 灵敏度椭球：把“不可观测性”变成可视化指标，并用于感知驱动规划 🆕 |
 
