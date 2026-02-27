@@ -4,6 +4,38 @@ All notable changes to the **VLA Handbook** project are documented here, derived
 
 ---
 
+## 2026-02-15 to 2026-02-27 🆕
+### Added (Theory Deep Dives - Auto Pipeline)
+- **Agent World Model & Infinity Env**: [`theory/agent_world_model_infinity_synthetic_environments_for_agenti_dissection.md`](./theory/agent_world_model_infinity_synthetic_environments_for_agenti_dissection.md) — 無限合成環境對 VLA 泛化的影響
+- **CausalGDP**: [`theory/causalgdp_causality_guided_diffusion_policies_for_reinforcem_dissection.md`](./theory/causalgdp_causality_guided_diffusion_policies_for_reinforcem_dissection.md) — 因果引導的擴散策略 for RL
+- **MIND Benchmark**: [`theory/mind_benchmarking_memory_consistency_and_action_control_in_w_dissection.md`](./theory/mind_benchmarking_memory_consistency_and_action_control_in_w_dissection.md) — 記憶一致性與動作控制基準
+- **OLAF**: [`theory/olaf_world_orienting_latent_actions_for_video_world_modeling_dissection.md`](./theory/olaf_world_orienting_latent_actions_for_video_world_modeling_dissection.md) — 潛在動作定向的視頻世界模型
+- **RoboGene**: [`theory/robogene_boosting_vla_pre_training_via_diversity_driven_agen_dissection.md`](./theory/robogene_boosting_vla_pre_training_via_diversity_driven_agen_dissection.md) — 多樣性驅動的 VLA 預訓練增強
+- **TACO Benchmark**: [`theory/taco_a_benchmark_for_lossless_and_lossy_codecs_of_heterogene_dissection.md`](./theory/taco_a_benchmark_for_lossless_and_lossy_codecs_of_heterogene_dissection.md) — 異構感知器編解碼基準
+- **TwinVLA**: [`theory/twinvla_data_efficient_bimanual_manipulation_with_twin_singl_dissection.md`](./theory/twinvla_data_efficient_bimanual_manipulation_with_twin_singl_dissection.md) — 數據高效的雙臂操作
+- **World Action Models**: [`theory/world_action_models_are_zero_shot_policies_dissection.md`](./theory/world_action_models_are_zero_shot_policies_dissection.md) — 世界模型即零樣本策略
+- **Scaling Verification**: [`theory/scaling_verification_can_be_more_effective_than_scaling_poli_dissection.md`](./theory/scaling_verification_can_be_more_effective_than_scaling_poli_dissection.md) — 驗證擴展 vs 策略擴展
+
+### Added (Reports)
+- **Biweekly 2026-02-26**: [`reports/biweekly/2026-02-26.md`](./reports/biweekly/2026-02-26.md) + [`reflection`](./reports/biweekly/reflection_2026-02-26.md) — VLA 雙周研究報告與預測回顧
+- **Weekly 2026-02-20**: [`reports/weekly/2026-02-20.md`](./reports/weekly/2026-02-20.md) — 週度質量評審 + 風向洞察
+- **Wind Direction History**: [`reports/weekly/wind-direction-history-2026-02-26.md`](./reports/weekly/wind-direction-history-2026-02-26.md) — 4-layer 框架歷史趨勢
+
+### Added (Scripts & Automation)
+- **SCRIPTS.md**: [`scripts/SCRIPTS.md`](./scripts/SCRIPTS.md) — 完整 pipeline 腳本參考（命名規則、各腳本用途、DAG 拓撲）
+- **vla-trend-snapshot.py**: [`scripts/vla-trend-snapshot.py`](./scripts/vla-trend-snapshot.py) — 週度 VLA 趨勢快照生成器（4-layer 分類）
+- **backfill-vla-history.py**: [`scripts/backfill-vla-history.py`](./scripts/backfill-vla-history.py) — 歷史數據回填工具
+
+### Infrastructure Changes
+- **Watchdog v6**: 15 checks (from 13), 新增 lockfile 防 OOM、Phase 3 孤兒恢復、SOTA/Release 鮮度檢查、AI Deep Dive 預警、磁盤空間監控
+- **qwen3.5-plus 全面替換 qwen-max**: `_vla_expert.py`、`rate-vla-daily.py`、expert curation — 質量更好且速度更快
+- **VLA 評分超時修復**: Phase 2.5 timeout 180s → 600s，覆蓋 28 篇論文 + arXiv 查詢的正常耗時
+- **AI 社交情報修復**: `search_terms_social` 從 28 個發布類詞條替換為 20 個觀點/爭議/病毒類詞條
+- **Cron 時間調整**: AI Social 7:30→7:45，VLA SOTA 9:45→9:50，消除 3-way 重疊
+- **Calibration timing 修復**: 07:45 → 11:00 Shanghai（VLA pipeline 完成後），vla_release key mismatch 修復
+
+---
+
 ## 2026-01-11 to 2026-01-12 🆕
 ### Added
 - **Spirit-v1.5 深度拆解**: 新增 [`theory/spirit_v1_5_dissection.md`](./theory/spirit_v1_5_dissection.md)，包含：
