@@ -37,6 +37,11 @@
     - 语义层 (Ontology) + 工具化执行 + 审计
     - 低置信度反问与可追溯性
 
+7.  **[OpenClaw：用 SOUL/MEMORY/可更换大脑构建“数字生命”的系统设计笔记](./openclaw_digital_life_agent_architecture.md)** 🆕
+    - SOUL/MEMORY 本地化 + LLM 可替换
+    - 心跳/触发器驱动的“主动”运行时
+    - 分身并行、技能沉淀与权限审计
+
 ## 学习建议
 - **关注 Scalability**: 所有的设计都要考虑 "如果机器人数从 10 台变成 1000 台，这个系统还能跑吗？"
 - **关注 Automation**: 尽量减少人工介入。最好的系统是机器人自己收集数据、自己训练、自己变强。
