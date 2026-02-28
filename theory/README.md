@@ -145,6 +145,7 @@
 | 主题 | 文件 | 核心内容 |
 | :--- | :--- | :--- |
 | 🎮 **Isaac Lab** | [`isaac_lab.md`](./isaac_lab.md) | 🔥 GPU 仿真框架，单卡百万 FPS 🆕 |
+| 🧱 **GeoPT（物理仿真预训练，2026）** | [`./frontier/geopt_lifted_geometric_pretraining_physics_simulation_2026.md`](./frontier/geopt_lifted_geometric_pretraining_physics_simulation_2026.md) | 🆕 合成动力学 lifted 预训练：静态几何→轨迹自监督，减少 20–60% 物理标签数据，2× 收敛 |
 | 🛡️ **知识绝缘** | [`knowledge_insulation.md`](./knowledge_insulation.md) | 微调时保护 VLM 通用常识，防止“智障” |
 | 🧪 **VLA+RL 实战教程** | [`vla_rl_practical_guide.md`](./vla_rl_practical_guide.md) | Transformer VLA + RL 算法 + 工具链的落地路径 🆕 |
 
@@ -187,6 +188,7 @@
 |:-----|:-----|:---------|
 | **LLM 推理专题** | [`./llm_reasoning/README.md`](./llm_reasoning/README.md) | 🆕 分治推理 / 具身 CoT / 可提示表征与推理迁移 |
 | **Data Flywheel** | [`./frontier/data_flywheel_and_cross_modal.md`](./frontier/data_flywheel_and_cross_modal.md) | 🆕 互联网视频学习、跨模态迁移与数据演进 |
+| **GeoPT（2026）** | [`./frontier/geopt_lifted_geometric_pretraining_physics_simulation_2026.md`](./frontier/geopt_lifted_geometric_pretraining_physics_simulation_2026.md) | 🆕 动力学提升（lifted）几何预训练：合成速度场 + 边界轨迹监督，减少 20–60% 物理标签数据，2× 收敛 |
 | **Physical Intelligence Layer（2026）** | [`./frontier/physical_intelligence_layer_robot_api_2026.md`](./frontier/physical_intelligence_layer_robot_api_2026.md) | 🆕 “机器人基础模型 API / 物理智能层”：以自治率/干预/吞吐定义 SLO，Weave/Ultra 真机部署验证 |
 | **RynnBrain（2026）** | [`./frontier/rynnbrain_open_embodied_foundation_models_2026.md`](./frontier/rynnbrain_open_embodied_foundation_models_2026.md) | 🆕 物理现实锚定的具身基础模型：指向/轨迹/规划统一输出 + RynnBrain-Bench（Object/Spatial/Grounding/Pointing） |
 | **TacRefineNet（2026）** | [`./frontier/tacrefinenet_tactile_only_grasp_refinement_2026.md`](./frontier/tacrefinenet_tactile_only_grasp_refinement_2026.md) | 🆕 仅触觉的抓取执行末端微调：多指触觉 + 本体融合，目标驱动回归 wrist 6DoF 增量 |
