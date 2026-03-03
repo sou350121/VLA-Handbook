@@ -5,6 +5,7 @@
 [![CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
 ![Auto-updated](https://img.shields.io/badge/内容-每日自动更新-blue)
+<p align="center"><a href="https://sou350121.github.io/pulsar-web/">🌐 Pulsar Web</a> · <a href="https://github.com/sou350121/VLA-Handbook">🤖 VLA-Handbook</a> · <a href="https://github.com/sou350121/Agent-Playbook">📚 Agent-Playbook</a></p>
 
 ### 全中文 · 工程实战导向的 VLA 知识库
 
