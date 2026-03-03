@@ -5,10 +5,10 @@
 [![CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
 ![Auto-updated](https://img.shields.io/badge/内容-每日自动更新-blue)
-[![PULSAR 照见](https://img.shields.io/badge/PULSAR_照见-实时情报-FF6B35.svg)](https://sou350121.github.io/pulsar-web/)
+[![PULSAR 照见](https://img.shields.io/badge/PULSAR_照见-每日精选-FF6B35.svg)](https://sou350121.github.io/pulsar-web/)
 [![Agent-Playbook](https://img.shields.io/badge/Agent_Playbook-配套-8B5CF6.svg?logo=github&logoColor=white)](https://github.com/sou350121/Agent-Playbook)
 
-📊 实时情报 → **[PULSAR 照见](https://sou350121.github.io/pulsar-web/)** — `sou350121.github.io/pulsar-web`
+📊 **[PULSAR 照见](https://sou350121.github.io/pulsar-web/)** · 每日北京时间 12:00 更新，减少信息焦虑 — `sou350121.github.io/pulsar-web`
 
 ### 全中文 · 工程实战导向的 VLA 知识库
 
