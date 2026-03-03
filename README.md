@@ -8,6 +8,8 @@
 [![PULSAR 照见](https://img.shields.io/badge/PULSAR_照见-实时情报-FF6B35.svg)](https://sou350121.github.io/pulsar-web/)
 [![Agent-Playbook](https://img.shields.io/badge/Agent_Playbook-配套-8B5CF6.svg?logo=github&logoColor=white)](https://github.com/sou350121/Agent-Playbook)
 
+📊 实时情报 → **[PULSAR 照见](https://sou350121.github.io/pulsar-web/)** — `sou350121.github.io/pulsar-web`
+
 ### 全中文 · 工程实战导向的 VLA 知识库
 
 VLA 论文每天几十篇，真正能用的工程细节零散在 GitHub Issue 和论文附录里。
