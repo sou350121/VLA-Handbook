@@ -103,6 +103,7 @@
 | 🚀 **Flash Attention** | [`flash_attention.md`](./flash_attention.md) | Tiling + 重计算，显存 O(N²)→O(N) |
 | 🧠 **KV Cache（推理）** | [`kv_cache_llm_inference.md`](./kv_cache_llm_inference.md) | Prefill/Decode、Paged/Radix、分层缓存与传输 |
 | 🔧 **PEFT & LoRA** | [`peft_lora.md`](./peft_lora.md) | 低秩分解，QLoRA ~6GB 微调 7B |
+| ⚡ **更新成本摊销（Doc-to-LoRA / Text-to-LoRA）** | [`./frontier/instant_llm_updates_cost_amortization_doc_to_lora_text_to_lora_2026.md`](./frontier/instant_llm_updates_cost_amortization_doc_to_lora_text_to_lora_2026.md) | 🆕 超网络一次前向生成 LoRA：长文档内化（<50MB）+ 任务描述零样本适配 |
 | 📉 **量化理论** | [`quantization_theory.md`](./quantization_theory.md) | INT8/INT4、AWQ 原理 |
 | 🧪 **QVLA 量化（2026）** | [`./frontier/qvla_action_centric_quantization_2026.md`](./frontier/qvla_action_centric_quantization_2026.md) | 🆕 动作空间敏感量化与通道级比特分配 |
 
@@ -187,6 +188,7 @@
 | 模型 | 文件 | 核心亮点 |
 |:-----|:-----|:---------|
 | **LLM 推理专题** | [`./llm_reasoning/README.md`](./llm_reasoning/README.md) | 🆕 分治推理 / 具身 CoT / 可提示表征与推理迁移 |
+| ⚡ **更新成本摊销（D2L/T2L，2026）** | [`./frontier/instant_llm_updates_cost_amortization_doc_to_lora_text_to_lora_2026.md`](./frontier/instant_llm_updates_cost_amortization_doc_to_lora_text_to_lora_2026.md) | 🆕 Cost amortization：部署期一前向生成 LoRA，绕开长上下文 KV cache 与梯度更新流水线 |
 | **Data Flywheel** | [`./frontier/data_flywheel_and_cross_modal.md`](./frontier/data_flywheel_and_cross_modal.md) | 🆕 互联网视频学习、跨模态迁移与数据演进 |
 | **GeoPT（2026）** | [`./frontier/geopt_lifted_geometric_pretraining_physics_simulation_2026.md`](./frontier/geopt_lifted_geometric_pretraining_physics_simulation_2026.md) | 🆕 动力学提升（lifted）几何预训练：合成速度场 + 边界轨迹监督，减少 20–60% 物理标签数据，2× 收敛 |
 | **Physical Intelligence Layer（2026）** | [`./frontier/physical_intelligence_layer_robot_api_2026.md`](./frontier/physical_intelligence_layer_robot_api_2026.md) | 🆕 “机器人基础模型 API / 物理智能层”：以自治率/干预/吞吐定义 SLO，Weave/Ultra 真机部署验证 |
