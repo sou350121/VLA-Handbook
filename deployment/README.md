@@ -35,6 +35,7 @@
 
 ### 5. 仿真、数据采集与 Sim2Real (Data, Sim & Training)
 - **[具身智能数据采集概览 (Embodied Data Collection)](./embodied_data_collection_overview.md)**: POV 第一视角 (EgoScale)、Sim2Real 规模化与真机 RL。
+- **[Evo-RL 仓库部署审计 (Evo-RL Repo Analysis)](./evo_rl_repo_analysis.md)**: GPT 5.4 High 审计：可运行性、稳定性、隐含假设、未知项与真机复现门槛。
 - **[灵巧手数据采集方案 (DexHand Data Collection)](./dexterous_hand_data_collection.md)**: 结构化 Episode 定义、Retargeting 算法与数据回放验证。
 - **[仿真环境详解 (Simulation Environments)](./simulation_environments.md)**: Isaac Sim vs MuJoCo vs PyBullet 选型指南。
 - **[仿真基准与训练工具 (Sim Benchmarks & Tooling)](./simulation_benchmarks_and_tools.md)**: LIBERO / RLinf / SimpleVLA-RL 的分工、组合与落地路径。
