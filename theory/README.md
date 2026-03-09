@@ -146,6 +146,7 @@
 | 主题 | 文件 | 核心内容 |
 | :--- | :--- | :--- |
 | 🎮 **Isaac Lab** | [`isaac_lab.md`](./isaac_lab.md) | 🔥 GPU 仿真框架，单卡百万 FPS 🆕 |
+| 🏠 **BEHAVIOR-1K × OmniGibson（2024）** | [`./frontier/behavior_1k_human_centered_embodied_ai_benchmark_omnigibson_2024.md`](./frontier/behavior_1k_human_centered_embodied_ai_benchmark_omnigibson_2024.md) | 🆕 人类需求驱动的具身 benchmark：1000 日常活动 + 50 场景 + 9000+ 物体；OmniGibson 统一 rigid / cloth / fluid / thermal 状态仿真 |
 | 🧱 **GeoPT（物理仿真预训练，2026）** | [`./frontier/geopt_lifted_geometric_pretraining_physics_simulation_2026.md`](./frontier/geopt_lifted_geometric_pretraining_physics_simulation_2026.md) | 🆕 合成动力学 lifted 预训练：静态几何→轨迹自监督，减少 20–60% 物理标签数据，2× 收敛 |
 | 🔁 **Evo-RL（低成本真机 RL，2026）** | [`./frontier/evo_rl_open_real_world_rl_recap_pistar06_so101_2026.md`](./frontier/evo_rl_open_real_world_rl_recap_pistar06_so101_2026.md) | 🆕 在 SO101 / PiPER 上把 π*0.6 / RECAP 跑成可复现闭环：人在环纠错 + value/advantage/indicator + 下一轮再训练 |
 | 🛡️ **知识绝缘** | [`knowledge_insulation.md`](./knowledge_insulation.md) | 微调时保护 VLM 通用常识，防止“智障” |
@@ -179,6 +180,7 @@
 | | DreamZero | [`dreamzero_world_action_models_zero_shot_policies_2026.md`](./dreamzero_world_action_models_zero_shot_policies_2026.md) | 🆕 WAM：联合预测视频+动作，14B video diffusion 做到 7Hz 闭环控制 |
 | **Spirit AI** | Spirit-v1.5 | [`spirit_v1_5_dissection.md`](./spirit_v1_5_dissection.md) | 🆕 Qwen3-VL + DiT，RoboChallenge Table30 代码级复现指南 |
 | **优必选（UBTECH Robotics）** | Thinker（4B/7B） | [`./frontier/thinker_vlm_embodied_intelligence_2026.md`](./frontier/thinker_vlm_embodied_intelligence_2026.md) | 🆕 具身任务规划 VLM：ego-view 数据配方 + “末帧 keyframe + 全视频”输入协议，缓解视角混淆与 ending 忽略 |
+| **Frontier Robotics** | SimVLA | [`./frontier/simvla_simple_vla_baseline_robotic_manipulation_2026.md`](./frontier/simvla_simple_vla_baseline_robotic_manipulation_2026.md) | 🆕 极简 VLA baseline：VLM encoder + 轻量 flow action head，重点证明 shuffling / normalization / LR 等 recipe 往往比复杂模块更决定性能 |
 | **Robbyant Team** | LingBot-VLA | [`lingbot_vla_pragmatic_vla_foundation_model_2026.md`](./lingbot_vla_pragmatic_vla_foundation_model_2026.md) | 🆕 实用主义 VLA：可换 VLM（Qwen2.5-VL / PaliGemma）+ Action Expert + Flow Matching + 高吞吐训练栈 |
 | **StarVLA** | StarVLA | [`../deployment/starvla_lego_like_vla_codebase_2026.md`](../deployment/starvla_lego_like_vla_codebase_2026.md) | 🆕 Lego-like VLA 研发底座：同一套 bench 上对比 FAST/OFT/Flow/双系统等框架（Framework/Dataloader/Trainer/Eval 解耦） |
 | **X² (自变量)** | WALL-OSS | [`wall_oss.md`](./wall_oss.md) | Uni-CoT 边想边动 |
