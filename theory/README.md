@@ -191,6 +191,7 @@
 | **LLM 推理专题** | [`./llm_reasoning/README.md`](./llm_reasoning/README.md) | 🆕 分治推理 / 具身 CoT / 可提示表征与推理迁移 |
 | ⚡ **更新成本摊销（D2L/T2L，2026）** | [`./frontier/instant_llm_updates_cost_amortization_doc_to_lora_text_to_lora_2026.md`](./frontier/instant_llm_updates_cost_amortization_doc_to_lora_text_to_lora_2026.md) | 🆕 Cost amortization：部署期一前向生成 LoRA，绕开长上下文 KV cache 与梯度更新流水线 |
 | **Data Flywheel** | [`./frontier/data_flywheel_and_cross_modal.md`](./frontier/data_flywheel_and_cross_modal.md) | 🆕 互联网视频学习、跨模态迁移与数据演进 |
+| **AutoResearch（2026）** | [`./frontier/autoresearch_agentic_research_org_single_gpu_llm_training_2026.md`](./frontier/autoresearch_agentic_research_org_single_gpu_llm_training_2026.md) | 🆕 Karpathy 的“单 GPU 自治研究组织”最小原型：`program.md` 写研究规则，agent 连续试验 `train.py`，按固定 5 分钟预算 keep/discard |
 | 🎬 **VLA ↔ WAM 三路线综述（2026）** | [`./frontier/wam_three_routes_video_pretraining_vs_vla_2026.md`](./frontier/wam_three_routes_video_pretraining_vs_vla_2026.md) | 🆕 从两阶段解耦、端到端联合到统一多功能模型：视频预训练为何正在挑战 VLA 主范式 |
 | 🔁 **Evo-RL（2026）** | [`./frontier/evo_rl_open_real_world_rl_recap_pistar06_so101_2026.md`](./frontier/evo_rl_open_real_world_rl_recap_pistar06_so101_2026.md) | 🆕 在低成本机械臂上开源 π*0.6 / RECAP 真机闭环：LeRobot 工作流、人在环接管、advantage-conditioned policy |
 | **GeoPT（2026）** | [`./frontier/geopt_lifted_geometric_pretraining_physics_simulation_2026.md`](./frontier/geopt_lifted_geometric_pretraining_physics_simulation_2026.md) | 🆕 动力学提升（lifted）几何预训练：合成速度场 + 边界轨迹监督，减少 20–60% 物理标签数据，2× 收敛 |
