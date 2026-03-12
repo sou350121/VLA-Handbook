@@ -22,8 +22,10 @@
 ### B) 你要“研究路线图”（表征/对齐/泛化）
 
 - **触觉为何不可替代（研究问题→可计算变量）**：[`../frontier/tactile_irreplaceable.md`](../frontier/tactile_irreplaceable.md)
+- **Grip Force Classic（2004，神经科学底座）**：[`../classics/nowak_predictive_grip_force_without_somatosensory_feedback_2004.md`](../classics/nowak_predictive_grip_force_without_somatosensory_feedback_2004.md)
 - **SaTA / 空间锚定触觉（把触觉变成有坐标语义的 token）**：见 [`../tactile_vla.md`](../tactile_vla.md) 的 SaTA 小节
 - **TaF-VLA（触觉-力对齐）**：[`../frontier/taf_vla_tactile_force_alignment_2026.md`](../frontier/taf_vla_tactile_force_alignment_2026.md)
+- **TouchGuide（推理期触觉引导 + TacUMI）**：[`../frontier/touchguide_inference_time_steering_touch_guidance_2026.md`](../frontier/touchguide_inference_time_steering_touch_guidance_2026.md)
 - **UniTacHand（人手→机器人触觉技能迁移）**：[`../frontier/unitachhand.md`](../frontier/unitachhand.md)
 - **UniVTAC（统一视触觉仿真平台 + benchmark）**：[`./univtac_unified_visuo_tactile_simulation_platform_2026.md`](./univtac_unified_visuo_tactile_simulation_platform_2026.md)
 - **SuperTac + DOVE（多模态电子皮肤 + 触觉语言模型）**：[`../../deployment/perception/supertac_dove_biomimetic_multimodal_tactile_sensing.md`](../../deployment/perception/supertac_dove_biomimetic_multimodal_tactile_sensing.md)

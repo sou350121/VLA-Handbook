@@ -25,8 +25,10 @@
 | 📊 **[ASCII 图鉴](./ascii_cheatsheet.md)** | 一页纸复习所有架构图 |
 | 📚 **[文献综述](./literature_review.md)** | VLA 发展史全景图（按分类组织） |
 | 🧭 **[研究主线梳理](./vla_research_mainline.md)** | 从 ACT/DP baseline 到「数据×感知×后训练」闭环 🆕 |
+| 🌍 **[World Model 主线总纲](./world_model_mainline.md)** | 从 `WorldEval -> Ctrl-World / WorldArena -> DreamZero` 串起 evaluator / planner / WAM 支线 🆕 |
 | 🧩 **[弹性模组化架构 Table 生成器](./modular_pipeline_table_generator.md)** | 从 `theory/` 文本抽象可拼装 pipeline：Stages + Table + 路径图 🆕 |
 | 🔍 **[论文索引](./paper_index.md)** | 🆕 多维度快速查找（技术/公司/时间） |
+| 📏 **[Benchmark 专题入口](./frontier/benchmarks/README.md)** | benchmark / evaluator 导航：BEHAVIOR-1K、WorldArena、WorldEval 🆕 |
 | 🧠 **[RynnBrain 开源解读](./frontier/rynnbrain_open_embodied_foundation_models_2026.md)** | 阿里达摩院：物理现实锚定的具身基础模型（Plan/Nav/CoP + RynnBrain-Bench） 🆕 |
 | 🖐️ **[TacRefineNet 开源解读](./frontier/tacrefinenet_tactile_only_grasp_refinement_2026.md)** | 小米机器人：tactile-only 抓取执行微调（goal-conditioned refinement） 🆕 |
 | 🚀 **[DreamZero 深度解读](./dreamzero_world_action_models_zero_shot_policies_2026.md)** | NVIDIA：WAM 联合生成 video+action；DreamZero-Flash（1-step）+ 38× 加速，实现 7Hz 闭环控制 ⭐ |
@@ -126,8 +128,6 @@
 | 🧪 **Physics of AI** | [`./frontier/physics_of_ai_liuziming.md`](./frontier/physics_of_ai_liuziming.md) | 不赌规模：用“现象-观测量-规律”研究神经网络，沉淀工程抓手 🆕 |
 | 🧊 **Zero-1-to-3（2023）** | [`./frontier/zero_1_to_3_zero_shot_one_image_to_3d_object_2023.md`](./frontier/zero_1_to_3_zero_shot_one_image_to_3d_object_2023.md) | 🆕 单图像零样本新视角合成 + 3D 重建先验 |
 | 📈 **Classic GNNs（2024）** | [`./frontier/classic_gnns_strong_baselines_node_classification_2024.md`](./frontier/classic_gnns_strong_baselines_node_classification_2024.md) | 🆕 节点分类基线再评估：调参后经典 GNN 仍很强 |
-| 🌍 **WorldEval（2025）** | [`./frontier/worldeval_world_model_policy_evaluator_2025.md`](./frontier/worldeval_world_model_policy_evaluator_2025.md) | 🆕 世界模型评测器：用生成式 rollout 评估机器人策略 |
-| 🌍 **Ctrl-World × WorldArena（2026）** | [`./frontier/ctrl_world_worldarena_embodied_world_model_benchmark_2026.md`](./frontier/ctrl_world_worldarena_embodied_world_model_benchmark_2026.md) | 🆕 ICLR 2026 Ctrl-World + WorldArena 统一评测：视频质量×功能任务（Data Engine/Policy Eval/Action Planner） |
 | 🌊 **WaveFormer（2026）** | [`./frontier/waveformer_wave_equation_vision_2026.md`](./frontier/waveformer_wave_equation_vision_2026.md) | 波动方程视觉建模：频率-时间解耦，保留高频细节 🆕 |
 | 🐙 **软体本体感知** | [`./frontier/soft_robot_proprioception_gvs_sensitivity_ellipsoid.md`](./frontier/soft_robot_proprioception_gvs_sensitivity_ellipsoid.md) | GVS + 灵敏度椭球：把“不可观测性”变成可视化指标，并用于感知驱动规划 🆕 |
 
@@ -140,13 +140,28 @@
 | 🗺️ **具身导航 (VLN)** | [`vln_dualvln.md`](./vln_dualvln.md) | 🆕 DualVLN：慢规划/快执行的异步双系统 |
 | 🤖 **抓取算法** | [`grasp_algorithms.md`](./grasp_algorithms.md) | DexGraspNet/GraspGF、抓取位姿生成 |
 
+### 📏 Benchmark 与评测 (Benchmarks & Evaluation)
+*把“benchmark / evaluator / benchmark-oriented analysis”单独收口，避免与模型 baseline 混放。*
+
+| 主题 | 文件 | 核心内容 |
+| :--- | :--- | :--- |
+| 📏 **Benchmark 专题入口** | [`./frontier/benchmarks/README.md`](./frontier/benchmarks/README.md) | benchmark / evaluator 归档导航：收录 Benchmark 主线总纲、BEHAVIOR-1K、ENACT、BEHAVIOR Challenge system recipe、IS-Bench、WorldArena、WorldEval，并与 SimVLA 等 baseline 分开 |
+| 🧭 **Benchmark 主线总纲** | [`./frontier/benchmarks/benchmark_mainline.md`](./frontier/benchmarks/benchmark_mainline.md) | 把 6 篇 benchmark / evaluator 笔记串成一条“任务世界 -> 认知诊断 -> 系统解法 -> 安全约束 -> 世界模型评测器”的总线 |
+| 🌍 **World Model 主线总纲** | [`./world_model_mainline.md`](./world_model_mainline.md) | 把 `WorldEval -> Ctrl-World / WorldArena -> DreamZero` 串成 `evaluator -> planner -> WAM` 支线，解释 world model 在具身系统里的角色升级 |
+| 🏠 **BEHAVIOR-1K × OmniGibson（2024）** | [`./frontier/benchmarks/behavior_1k_human_centered_embodied_ai_benchmark_omnigibson_2024.md`](./frontier/benchmarks/behavior_1k_human_centered_embodied_ai_benchmark_omnigibson_2024.md) | 人类需求驱动的具身 benchmark：1000 日常活动 + 50 场景 + 9000+ 物体；OmniGibson 统一 rigid / cloth / fluid / thermal 状态仿真 |
+| 🧠 **ENACT（2025）** | [`./frontier/benchmarks/enact_embodied_cognition_world_modeling_egocentric_interaction_2025.md`](./frontier/benchmarks/enact_embodied_cognition_world_modeling_egocentric_interaction_2025.md) | 具身认知测试：把 BEHAVIOR 中的长时程 ego-view 交互转成 forward / inverse world modeling 排序题，诊断 action-effect、memory 与 embodied bias |
+| 🏆 **2025 BEHAVIOR Challenge 冠军方案** | [`./frontier/benchmarks/behavior_challenge_2025_first_place_solution_task_adaptation_vla_2025.md`](./frontier/benchmarks/behavior_challenge_2025_first_place_solution_task_adaptation_vla_2025.md) | benchmark 驱动的 system recipe：Pi0.5 adaptation + System 2 stage tracking + correction rules，展示长时程 household 任务里哪些补丁真的换分 |
+| 🛡️ **IS-Bench（2025）** | [`./frontier/benchmarks/is_bench_interactive_safety_vlm_embodied_agents_household_tasks_2025.md`](./frontier/benchmarks/is_bench_interactive_safety_vlm_embodied_agents_household_tasks_2025.md) | 交互安全 benchmark：把 embodied safety 从终局检查推进到过程检查，测 risk mitigation 是否在正确时机发生 |
+| 🌍 **WorldEval（2025）** | [`./frontier/benchmarks/worldeval_world_model_policy_evaluator_2025.md`](./frontier/benchmarks/worldeval_world_model_policy_evaluator_2025.md) | 世界模型评测器：用生成式 rollout 评估机器人策略 |
+| 🌍 **Ctrl-World × WorldArena（2026）** | [`./frontier/benchmarks/ctrl_world_worldarena_embodied_world_model_benchmark_2026.md`](./frontier/benchmarks/ctrl_world_worldarena_embodied_world_model_benchmark_2026.md) | ICLR 2026 Ctrl-World + WorldArena 统一评测：视频质量×功能任务（Data Engine/Policy Eval/Action Planner） |
+| 📈 **Benchmark Tracker** | [`./benchmark_tracker.md`](./benchmark_tracker.md) | 自动化 benchmark / leaderboard 追踪表，路径保持根目录不变 |
+
 ### 🧪 仿真底座与训练强化 (Sim & Augmentation)
 *侧重于高效数据生产与模型性能保护。*
 
 | 主题 | 文件 | 核心内容 |
 | :--- | :--- | :--- |
 | 🎮 **Isaac Lab** | [`isaac_lab.md`](./isaac_lab.md) | 🔥 GPU 仿真框架，单卡百万 FPS 🆕 |
-| 🏠 **BEHAVIOR-1K × OmniGibson（2024）** | [`./frontier/behavior_1k_human_centered_embodied_ai_benchmark_omnigibson_2024.md`](./frontier/behavior_1k_human_centered_embodied_ai_benchmark_omnigibson_2024.md) | 🆕 人类需求驱动的具身 benchmark：1000 日常活动 + 50 场景 + 9000+ 物体；OmniGibson 统一 rigid / cloth / fluid / thermal 状态仿真 |
 | 🧱 **GeoPT（物理仿真预训练，2026）** | [`./frontier/geopt_lifted_geometric_pretraining_physics_simulation_2026.md`](./frontier/geopt_lifted_geometric_pretraining_physics_simulation_2026.md) | 🆕 合成动力学 lifted 预训练：静态几何→轨迹自监督，减少 20–60% 物理标签数据，2× 收敛 |
 | 🔁 **Evo-RL（低成本真机 RL，2026）** | [`./frontier/evo_rl_open_real_world_rl_recap_pistar06_so101_2026.md`](./frontier/evo_rl_open_real_world_rl_recap_pistar06_so101_2026.md) | 🆕 在 SO101 / PiPER 上把 π*0.6 / RECAP 跑成可复现闭环：人在环纠错 + value/advantage/indicator + 下一轮再训练 |
 | 🛡️ **知识绝缘** | [`knowledge_insulation.md`](./knowledge_insulation.md) | 微调时保护 VLM 通用常识，防止“智障” |
@@ -196,10 +211,14 @@
 | **AutoResearch（2026）** | [`./frontier/autoresearch_agentic_research_org_single_gpu_llm_training_2026.md`](./frontier/autoresearch_agentic_research_org_single_gpu_llm_training_2026.md) | 🆕 Karpathy 的“单 GPU 自治研究组织”最小原型：`program.md` 写研究规则，agent 连续试验 `train.py`，按固定 5 分钟预算 keep/discard |
 | 🎬 **VLA ↔ WAM 三路线综述（2026）** | [`./frontier/wam_three_routes_video_pretraining_vs_vla_2026.md`](./frontier/wam_three_routes_video_pretraining_vs_vla_2026.md) | 🆕 从两阶段解耦、端到端联合到统一多功能模型：视频预训练为何正在挑战 VLA 主范式 |
 | 🔁 **Evo-RL（2026）** | [`./frontier/evo_rl_open_real_world_rl_recap_pistar06_so101_2026.md`](./frontier/evo_rl_open_real_world_rl_recap_pistar06_so101_2026.md) | 🆕 在低成本机械臂上开源 π*0.6 / RECAP 真机闭环：LeRobot 工作流、人在环接管、advantage-conditioned policy |
+| **AtomVLA（2026）** | [`./frontier/atomvla_offline_post_training_predictive_latent_world_models_2026.md`](./frontier/atomvla_offline_post_training_predictive_latent_world_models_2026.md) | 🆕 原子子任务分解 + predictive latent world model + offline GRPO：把 VLA 后训练从昂贵真机试错推向离线世界模型评估 |
+| **RoboPocket（2026）** | [`./frontier/robopocket_robot_free_instant_policy_iteration_phone_2026.md`](./frontier/robopocket_robot_free_instant_policy_iteration_phone_2026.md) | 🆕 手机端 AR 可视化策略意图 + 远程推理 + 在线微调：把 DAgger 式纠错推进到 robot-free instant policy iteration |
 | **GeoPT（2026）** | [`./frontier/geopt_lifted_geometric_pretraining_physics_simulation_2026.md`](./frontier/geopt_lifted_geometric_pretraining_physics_simulation_2026.md) | 🆕 动力学提升（lifted）几何预训练：合成速度场 + 边界轨迹监督，减少 20–60% 物理标签数据，2× 收敛 |
+| **AI 五层蛋糕（2026）** | [`./frontier/nvidia_ai_5_layer_cake_infrastructure_2026.md`](./frontier/nvidia_ai_5_layer_cake_infrastructure_2026.md) | 🆕 NVIDIA 的基础设施视角：`Energy -> Chips -> Infrastructure -> Models -> Applications`，机器人/自驾被明确放在顶层 embodied application |
 | **Physical Intelligence Layer（2026）** | [`./frontier/physical_intelligence_layer_robot_api_2026.md`](./frontier/physical_intelligence_layer_robot_api_2026.md) | 🆕 “机器人基础模型 API / 物理智能层”：以自治率/干预/吞吐定义 SLO，Weave/Ultra 真机部署验证 |
 | **RynnBrain（2026）** | [`./frontier/rynnbrain_open_embodied_foundation_models_2026.md`](./frontier/rynnbrain_open_embodied_foundation_models_2026.md) | 🆕 物理现实锚定的具身基础模型：指向/轨迹/规划统一输出 + RynnBrain-Bench（Object/Spatial/Grounding/Pointing） |
 | **TacRefineNet（2026）** | [`./frontier/tacrefinenet_tactile_only_grasp_refinement_2026.md`](./frontier/tacrefinenet_tactile_only_grasp_refinement_2026.md) | 🆕 仅触觉的抓取执行末端微调：多指触觉 + 本体融合，目标驱动回归 wrist 6DoF 增量 |
+| **TouchGuide（2026）** | [`./frontier/touchguide_inference_time_steering_touch_guidance_2026.md`](./frontier/touchguide_inference_time_steering_touch_guidance_2026.md) | 🆕 推理期触觉引导：用 task-specific CPM 在动作采样末段纠偏，跨 Diffusion Policy / π0.5 提升 contact-rich 操作成功率 |
 | **RDT2（2026）** | [`./frontier/rdt2_umi_zero_shot_cross_embodiment_2026.md`](./frontier/rdt2_umi_zero_shot_cross_embodiment_2026.md) | 🆕 UMI 数据规模化 + 跨本体零样本部署 + 单步蒸馏 |
 | **Shallow-π（2026）** | [`./frontier/shallow_pi_knowledge_distillation_flow_vla_2026.md`](./frontier/shallow_pi_knowledge_distillation_flow_vla_2026.md) | 🆕 Flow-based VLA 层深蒸馏，端侧推理加速 |
 | **DAC-RL（2026）** | [`./llm_reasoning/dac_rl_divide_conquer_reasoning_2026.md`](./llm_reasoning/dac_rl_divide_conquer_reasoning_2026.md) | 🆕 分治推理训练，提升测试时可扩展性 |
@@ -207,6 +226,8 @@
 | **IntelliFold 2（2026）** | [`./frontier/intellifold_2_surpassing_alphafold3_structural_consistency_2026.md`](./frontier/intellifold_2_surpassing_alphafold3_structural_consistency_2026.md) | 🆕 生成式科学智能：共折叠结构预测；latent scaling + 多尺度一致性 +（Pro）PPO 稳采样 + 难例加权 |
 | **Reward Discovery** | [`./frontier/reward_discovery_rl.md`](./frontier/reward_discovery_rl.md) | 🆕 Nature Comm: 遗憾最小化元学习奖励发现 |
 | **Vicarious Maps** | [`./frontier/vicarious_body_maps.md`](./frontier/vicarious_body_maps.md) | 🆕 Nature 2025: 视触觉“感同身受”的神经基础 |
+| **Grip Force Classic（2004）** | [`./classics/nowak_predictive_grip_force_without_somatosensory_feedback_2004.md`](./classics/nowak_predictive_grip_force_without_somatosensory_feedback_2004.md) | 🆕 Brain 经典：无体感反馈时，预测性抓取力控制会退化成高力、滞后、低精度兜底 |
+| **OFC Classic（2002）** | [`./classics/todorov_optimal_feedback_control_motor_coordination_2002.md`](./classics/todorov_optimal_feedback_control_motor_coordination_2002.md) | 🆕 Nature Neuroscience 经典：最优反馈控制 + 最小干预原则，解释 task-relevant correction、冗余与 synergy |
 | **UniTacHand** | [`./frontier/unitachhand.md`](./frontier/unitachhand.md) | 🆕 arXiv 2025: MANO UV Map 统一触觉表征，实现人手→机器人零样本迁移 |
 | **Tactile Outlook** | [`./frontier/tactile_irreplaceable.md`](./frontier/tactile_irreplaceable.md) | 🆕 触觉为何不可替代：力-形-质、闭环控制与产品化瓶颈 |
 | **Policy Consensus（2025）** | [`./frontier/policy_consensus_multimodal_manipulation_2025.md`](./frontier/policy_consensus_multimodal_manipulation_2025.md) | 🆕 策略级多模态融合：专家策略共识替代特征拼接，解决触觉稀疏噪声化 |

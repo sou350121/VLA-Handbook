@@ -8,6 +8,7 @@
 ## 📋 使用指南
 
 > **Industry Note**: Jim Fan 2025 年度复盘（硬件可靠性 / 评测可复现 / VLM→VLA 路线反思）见 [`./frontier/jim_fan_2025_robotics_lessons.md`](./frontier/jim_fan_2025_robotics_lessons.md)
+> **Industry Note**: NVIDIA AI 五层蛋糕（Energy / Chips / Infrastructure / Models / Applications）见 [`./frontier/nvidia_ai_5_layer_cake_infrastructure_2026.md`](./frontier/nvidia_ai_5_layer_cake_infrastructure_2026.md)
 
 | 查找方式 | 跳转链接 |
 |:---|:---|
@@ -32,10 +33,13 @@
 |  | GenForce (Nat Commun 2026) | [深度笔记](./tactile/genforce_tactile_force_transfer_2026.md) |
 |  | TaF-VLA (Tactile-Force Alignment) | [深度解读](./frontier/taf_vla_tactile_force_alignment_2026.md) |
 |  | TacRefineNet (Tactile-Only Grasp Refinement) | [深度笔记](./frontier/tacrefinenet_tactile_only_grasp_refinement_2026.md) |
+|  | TouchGuide (Inference-Time Steering) | [深度解读](./frontier/touchguide_inference_time_steering_touch_guidance_2026.md) |
 | **Physics-Inspired Vision** 🆕 | WaveFormer (Wave Equation) | [深度解读](./frontier/waveformer_wave_equation_vision_2026.md) |
 | **3D Reconstruction / View Synthesis** 🆕 | Zero-1-to-3 | [深度解读](./frontier/zero_1_to_3_zero_shot_one_image_to_3d_object_2023.md) |
-| **Evaluation / World Model** 🆕 | WorldEval | [深度解读](./frontier/worldeval_world_model_policy_evaluator_2025.md) |
+| **Evaluation / World Model** 🆕 | WorldEval | [深度解读](./frontier/benchmarks/worldeval_world_model_policy_evaluator_2025.md) |
+|  | ENACT | [深度解读](./frontier/benchmarks/enact_embodied_cognition_world_modeling_egocentric_interaction_2025.md) |
 |  | DreamZero (WAM) | [深度解析](./dreamzero_world_action_models_zero_shot_policies_2026.md) |
+|  | AtomVLA (Offline Post-training) | [深度解读](./frontier/atomvla_offline_post_training_predictive_latent_world_models_2026.md) |
 | **Embodied Task Planning / Video Reasoning** 🆕 | Thinker | [深度解读](./frontier/thinker_vlm_embodied_intelligence_2026.md) |
 |  | RynnBrain | [深度笔记](./frontier/rynnbrain_open_embodied_foundation_models_2026.md) |
 |  | VITRA | [深度解读](./frontier/vitra_scalable_vla_pretraining_human_activity_videos_2026.md) |
@@ -43,6 +47,7 @@
 | **Quantization / Compression** 🆕 | QVLA | [深度解读](./frontier/qvla_action_centric_quantization_2026.md) |
 | **Graph ML / GNN 基线** 🆕 | Classic GNNs are Strong Baselines | [深度解读](./frontier/classic_gnns_strong_baselines_node_classification_2024.md) |
 | **Multimodal Fusion** 🆕 | Policy Consensus (Multi-Modal Manipulation) | [深度解读](./frontier/policy_consensus_multimodal_manipulation_2025.md) |
+| **Embodied Data / Policy Iteration** 🆕 | RoboPocket | [深度解读](./frontier/robopocket_robot_free_instant_policy_iteration_phone_2026.md) |
 | **Flow Matching** | π0 | [深度解析](./pi0_flow_matching.md) |
 | | π0.5 | [深度解析](./pi0_5_dissection.md) |
 | | π0.6 | [深度解析](./pi0_6_dissection.md) |
@@ -103,11 +108,12 @@
 | **北航 / 香港理工大学** 🆕 | Classic GNNs are Strong Baselines | [深度解读](./frontier/classic_gnns_strong_baselines_node_classification_2024.md) |
 | **Columbia** | Diffusion Policy | [详细](#diffusion-policy) |
 | | Zero-1-to-3 | [深度解读](./frontier/zero_1_to_3_zero_shot_one_image_to_3d_object_2023.md) |
-| **WorldEval Team** 🆕 | WorldEval | [深度解读](./frontier/worldeval_world_model_policy_evaluator_2025.md) |
+| **WorldEval Team** 🆕 | WorldEval | [深度解读](./frontier/benchmarks/worldeval_world_model_policy_evaluator_2025.md) |
 | **SJTU AutoLab / Anyverse / CAS / Ant Group** 🆕 | QVLA | [深度解读](./frontier/qvla_action_centric_quantization_2026.md) |
 | **Meta FAIR** 🆕 | TinyLoRA | [深度解读](./llm_reasoning/tiny_lora_13_params_reasoning_2026.md) |
 | **UIUC / Harvard / MIT / Columbia** 🆕 | WaveFormer | [深度解读](./frontier/waveformer_wave_equation_vision_2026.md) |
 | **UIUC / Harvard / MIT / Columbia** 🆕 | Policy Consensus | [深度解读](./frontier/policy_consensus_multimodal_manipulation_2025.md) |
+| **上海交大 / Xense Robotics / 中山大学 / Oxford / UCSD** 🆕 | TouchGuide | [深度解读](./frontier/touchguide_inference_time_steering_touch_guidance_2026.md) |
 | **浙江大学** 🆕 | DKT Perception | [深度解析](./frontier/dkt_transparency_perception.md) |
 | | VT Pretraining + Online Multitask (SciRobotics 2026) | [深度解析](./frontier/visual_tactile_pretraining_online_multitask_learning_2026.md) |
 | **华盛顿大学** 🆕 | Artificial Hivemind | [详细](./neurips_2025_insights.md#1-artificial-hivemind-语言模型的同质化问题) |
@@ -149,7 +155,7 @@
 | | MergeVLA | [详细](#mergevla) |
 | | PGR (Prioritized Generative Replay) | [深度解读](./frontier/prioritized_generative_replay_pgr_2025.md) |
 | | Policy Consensus (Multi-Modal Manipulation) | [深度解读](./frontier/policy_consensus_multimodal_manipulation_2025.md) |
-| | WorldEval | [深度解读](./frontier/worldeval_world_model_policy_evaluator_2025.md) |
+| | WorldEval | [深度解读](./frontier/benchmarks/worldeval_world_model_policy_evaluator_2025.md) |
 | | **NeurIPS 2025 Best Papers** 🆕 | [专题解读](./neurips_2025_insights.md) |
 | **2026** 🆕 | LingBot-VLA | [深度解析](./lingbot_vla_pragmatic_vla_foundation_model_2026.md) |
 | | DreamZero (WAM) | [深度解析](./dreamzero_world_action_models_zero_shot_policies_2026.md) |
@@ -160,9 +166,12 @@
 | | Thinker (Embodied Planning VLM) | [深度解读](./frontier/thinker_vlm_embodied_intelligence_2026.md) |
 | | RynnBrain (Embodied Foundation Model) | [深度笔记](./frontier/rynnbrain_open_embodied_foundation_models_2026.md) |
 | | TacRefineNet (Tactile-Only Grasp Refinement) | [深度笔记](./frontier/tacrefinenet_tactile_only_grasp_refinement_2026.md) |
+| | AtomVLA (Offline Post-training) | [深度解读](./frontier/atomvla_offline_post_training_predictive_latent_world_models_2026.md) |
+| | RoboPocket (Instant Policy Iteration) | [深度解读](./frontier/robopocket_robot_free_instant_policy_iteration_phone_2026.md) |
 | | IntelliFold 2 (Generative Science) | [深度解读](./frontier/intellifold_2_surpassing_alphafold3_structural_consistency_2026.md) |
 | | QVLA (Quantization) | [深度解读](./frontier/qvla_action_centric_quantization_2026.md) |
 | | TaF-VLA (Tactile-Force Alignment) | [深度解读](./frontier/taf_vla_tactile_force_alignment_2026.md) |
+| | TouchGuide (Inference-Time Steering) | [深度解读](./frontier/touchguide_inference_time_steering_touch_guidance_2026.md) |
 | | VT Pretraining + Online Multitask (SciRobotics 2026) | [深度解析](./frontier/visual_tactile_pretraining_online_multitask_learning_2026.md) |
 | | Video Generation Models in Robotics (Survey) | [前沿笔记](./frontier/video_generation_models_in_robotics_survey_2026.md) |
 | | WaveFormer (Wave Equation) | [深度解读](./frontier/waveformer_wave_equation_vision_2026.md) |
@@ -189,11 +198,33 @@
 
 - **WorldEval** (arXiv 2025)
   - 主题: 世界模型评估机器人策略、生成式 rollout
-  - [深度解读](./frontier/worldeval_world_model_policy_evaluator_2025.md)
+  - [深度解读](./frontier/benchmarks/worldeval_world_model_policy_evaluator_2025.md)
+
+- **ENACT** (arXiv 2025 / ICLR 2026)
+  - 主题: 用 egocentric interaction world modeling 测 VLM 是否具备具身认知、action-effect reasoning 与长时程 memory
+  - [深度解读](./frontier/benchmarks/enact_embodied_cognition_world_modeling_egocentric_interaction_2025.md)
+
+- **2025 BEHAVIOR Challenge 冠军方案** (arXiv 2025)
+  - 主题: benchmark 驱动的 system recipe；在 Pi0.5 上加入 correlated noise、System 2 stage tracking、action compression 与 correction rules
+  - [深度解读](./frontier/benchmarks/behavior_challenge_2025_first_place_solution_task_adaptation_vla_2025.md)
+
+- **IS-Bench** (arXiv 2025 / AAAI 2026)
+  - 主题: 交互式 embodied safety benchmark；测风险识别与 risk mitigation 是否在正确时机发生，而不是只看终局是否安全
+  - [深度解读](./frontier/benchmarks/is_bench_interactive_safety_vlm_embodied_agents_household_tasks_2025.md)
 
 - **DreamZero** (2026)
   - 主题: World Action Model (WAM)，联合预测视频 + 动作，基于 video diffusion 的零样本策略
   - [深度解析](./dreamzero_world_action_models_zero_shot_policies_2026.md)
+
+- **AtomVLA** (arXiv 2026)
+  - 主题: 原子子任务分解 + predictive latent world model + offline GRPO；把 VLA 后训练从真机试错推进到离线 latent evaluator
+  - [深度解读](./frontier/atomvla_offline_post_training_predictive_latent_world_models_2026.md)
+
+#### 0.25 数据采集与即时策略迭代 (Data Collection / Instant Policy Iteration)
+
+- **RoboPocket** (arXiv 2026)
+  - 主题: 用手机 AR 直接可视化策略意图，在没有真实机器人在场的情况下做 DAgger-like corrective data collection 与分钟级在线微调
+  - [深度解读](./frontier/robopocket_robot_free_instant_policy_iteration_phone_2026.md)
 
 #### 0.3 量化与模型压缩 (Quantization / Compression)
 
@@ -334,6 +365,10 @@
 ##### 轨迹优化 / Guided Policy Search（经典）
 > 注：这些是 VLA 之前的“真机学习底座”，但它们解释了为什么高精度任务往往需要“可控老师 + 可泛化学生 + 闭环”。
 
+- **Optimal Feedback Control as a Theory of Motor Coordination** (Todorov & Jordan, Nat Neurosci 2002)
+  - 技术: stochastic optimal feedback control + minimal intervention principle + task-relevant correction
+  - [手册解读](./classics/todorov_optimal_feedback_control_motor_coordination_2002.md) | [论文 DOI](https://doi.org/10.1038/nn963)
+
 - **Guided Policy Search under Unknown Dynamics** (Levine & Abbeel, NeurIPS 2014)
   - 技术: local linear dynamics + KL trust region + distillation
   - [手册解读](./classics/levine_gps_unknown_dynamics_2014.md) | [论文 PDF](https://proceedings.neurips.cc/paper_files/paper/2014/file/6766aa2750c19aad2fa1b32f36ed4aee-Paper.pdf)
@@ -381,10 +416,16 @@
 
 ##### 触觉 / 视触觉 (Tactile)
 - 触觉为什么不可替代（行业/研究盘点）：[笔记](./frontier/tactile_irreplaceable.md)
+- **Grip Force Classic** (Brain 2004): 在长期去传入感觉条件下，抓取力会退化为高力、滞后、低精度兜底；说明 predictive grip-force control 需要至少间歇性的 somatosensory feedback 来校准 internal model
+  - [经典笔记](./classics/nowak_predictive_grip_force_without_somatosensory_feedback_2004.md)
+  - [论文 DOI](https://doi.org/10.1093/brain/awh016)
 - **TacRefineNet** (arXiv 2025 / 索引归入 2026 前沿): 多指触觉 + 本体融合的目标驱动微调，迭代回归 wrist 6DoF 增量，面向抓取执行“最后一公里”误差补偿
   - [深度笔记](./frontier/tacrefinenet_tactile_only_grasp_refinement_2026.md)
   - [论文 PDF](https://arxiv.org/pdf/2509.25746)
   - [Project Page](https://sites.google.com/view/tacrefinenet)
+- **TouchGuide** (2026): 在动作采样末段用 Contact Physical Model 做触觉引导，不重训 base policy；配套 TacUMI 解决高质量 contact-rich 示教采集
+  - [深度解读](./frontier/touchguide_inference_time_steering_touch_guidance_2026.md)
+  - [论文 HTML](https://arxiv.org/html/2601.20239v3)
 - **SuperTac + DOVE** (Nature Sensors, 2025): 多模态电子皮肤（多光谱+摩擦电+IMU+温度/接近/振动）+ 触觉语言模型
   - [论文页](https://www.nature.com/articles/s44460-025-00006-y)
   - [手册笔记](../deployment/perception/supertac_dove_biomimetic_multimodal_tactile_sensing.md)
@@ -439,11 +480,23 @@
 
 #### WorldEval Team
 - **WorldEval** (2025)
-  - [深度解读](./frontier/worldeval_world_model_policy_evaluator_2025.md)
+  - [深度解读](./frontier/benchmarks/worldeval_world_model_policy_evaluator_2025.md)
 
 #### SJTU AutoLab / Anyverse / CAS / Ant Group
 - **QVLA** (2026)
   - [深度解读](./frontier/qvla_action_centric_quantization_2026.md)
+
+#### 上海交大 / Xense Robotics / 中山大学 / Oxford / UCSD
+- **TouchGuide** (2026)
+  - [深度解读](./frontier/touchguide_inference_time_steering_touch_guidance_2026.md)
+
+#### 原力无限
+- **AtomVLA** (2026)
+  - [深度解读](./frontier/atomvla_offline_post_training_predictive_latent_world_models_2026.md)
+
+#### 上海交大 MVIG / 上海创智学院 / Noematrix
+- **RoboPocket** (2026)
+  - [深度解读](./frontier/robopocket_robot_free_instant_policy_iteration_phone_2026.md)
 
 #### Columbia / Toyota Research Institute
 - **Zero-1-to-3** (2023)
@@ -480,13 +533,19 @@
 - GR-RL (2025)
 - WALL-OSS (2025)
 - WorldEval (2025): 世界模型评测器
-  - [笔记](./frontier/worldeval_world_model_policy_evaluator_2025.md)
+  - [笔记](./frontier/benchmarks/worldeval_world_model_policy_evaluator_2025.md)
 
 #### 2026（世界模型 / 视频生成综述）
 - RynnBrain (Release 2026): 物理现实锚定的具身基础模型（定位/指向/轨迹/规划）+ RynnBrain-Bench  
   - [笔记](./frontier/rynnbrain_open_embodied_foundation_models_2026.md)
 - TacRefineNet (arXiv 2025 / 索引归入 2026): 仅触觉的抓取执行末端微调框架，目标驱动回归 wrist 6DoF 增量  
   - [笔记](./frontier/tacrefinenet_tactile_only_grasp_refinement_2026.md)
+- TouchGuide (arXiv 2026): 推理期触觉引导框架；用 Contact Physical Model 在动作采样末段纠偏，并配套 TacUMI 做高质量视触觉示教采集  
+  - [笔记](./frontier/touchguide_inference_time_steering_touch_guidance_2026.md)
+- AtomVLA (2026.03): 原子子任务分解 + predictive latent world model 评分 + offline GRPO，把 VLA 后训练从真机试错推进到离线 latent evaluator  
+  - [笔记](./frontier/atomvla_offline_post_training_predictive_latent_world_models_2026.md)
+- RoboPocket (2026.03): 手机端 AR 可视化策略意图 + 远程推理 + 在线微调，把 DAgger 式纠错推进到 robot-free instant policy iteration  
+  - [笔记](./frontier/robopocket_robot_free_instant_policy_iteration_phone_2026.md)
 - RDT2 (2026.02): UMI 数据规模化与跨本体零样本部署  
   - [笔记](./frontier/rdt2_umi_zero_shot_cross_embodiment_2026.md)
 - Shallow-π (2026.01): Flow-based VLA 层深蒸馏（18→6）  

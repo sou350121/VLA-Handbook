@@ -21,6 +21,14 @@
 
 ## 🎯 按技术分类
 
+### -0.6 经典运动控制理论（Optimal Feedback Control / Coordination）
+
+> 说明：这类工作不是 VLA 论文，但它们定义了很多今天机器人仍在用的基本口径：什么叫任务相关误差、为什么不该死盯一条理想轨迹、以及 synergy 为什么可能是最优解自然出现的结果。
+
+- Todorov & Jordan (2002)：Optimal feedback control as a theory of motor coordination  
+  - 手册解读：[`./classics/todorov_optimal_feedback_control_motor_coordination_2002.md`](./classics/todorov_optimal_feedback_control_motor_coordination_2002.md)  
+  - 论文 DOI：`https://doi.org/10.1038/nn963`
+
 ### -0.5 经典真机数据与闭环抓取（Hand‑Eye Coordination / Grasping）
 
 > 说明：这类工作是“VLA 之前的真机学习底座”：它用可规模化的成功/失败信号，把抓取做成“候选动作评分 + 闭环伺服纠错”的系统工程范式。
@@ -69,6 +77,9 @@
 > 说明：本综述以 VLA 动作生成与训练范式为主，但在灵巧操作中，“接触相位”的可观测性往往决定系统上限，因此建议把触觉相关工作作为必备补充阅读。
 
 - 触觉为何不可替代（工程盘点）：[`./frontier/tactile_irreplaceable.md`](./frontier/tactile_irreplaceable.md)
+- Brain 2004：Nowak et al. 证明在完全缺失 somatosensory feedback 时，受试者虽仍可借视觉维持大致 arm kinematics，但 predictive grip-force control 会退化为高力、滞后、低精度兜底  
+  - 手册笔记：[`./classics/nowak_predictive_grip_force_without_somatosensory_feedback_2004.md`](./classics/nowak_predictive_grip_force_without_somatosensory_feedback_2004.md)  
+  - 论文 DOI：`https://doi.org/10.1093/brain/awh016`
 - SciRobotics 2026：Visual-tactile pretraining + online multitask learning（单目 + 二值触觉，统一策略覆盖多任务）  
   - 手册笔记：[`./frontier/visual_tactile_pretraining_online_multitask_learning_2026.md`](./frontier/visual_tactile_pretraining_online_multitask_learning_2026.md)  
   - 论文 DOI：`https://doi.org/10.1126/scirobotics.ady2869`  
@@ -81,6 +92,9 @@
 - GenForce（Nat Commun 2026）：跨触觉传感器的可迁移力感知（统一 marker 表示 + M2M 条件扩散 + 时序力回归 + 材料补偿）  
   - 深度笔记：[`./tactile/genforce_tactile_force_transfer_2026.md`](./tactile/genforce_tactile_force_transfer_2026.md)  
   - 论文 DOI：`https://doi.org/10.1038/s41467-026-68753-1`
+- TouchGuide（arXiv 2026）：不重训 base policy，在动作采样后段用 Contact Physical Model 做触觉引导；TacUMI 同时回答了 contact-rich 任务的数据采集问题  
+  - 手册解读：[`./frontier/touchguide_inference_time_steering_touch_guidance_2026.md`](./frontier/touchguide_inference_time_steering_touch_guidance_2026.md)  
+  - 论文 HTML：`https://arxiv.org/html/2601.20239v3`
 
 ### 0.2 多模态融合与策略共识（Policy Consensus）
 
@@ -117,6 +131,9 @@
   - 论文：`https://arxiv.org/abs/2601.07823`
 - 1X World Model（视频世界模型 + 逆动力学 IDM）：先“想象”再“执行”（公司路线复盘）  
   - [手册笔记](./frontier/one_x_world_model.md)
+- AtomVLA（arXiv 2026）：原子子任务分解 + predictive latent world model + offline GRPO；不是在线真机试错，而是在 latent space 里评估候选动作并做离线后训练  
+  - [手册笔记](./frontier/atomvla_offline_post_training_predictive_latent_world_models_2026.md)  
+  - 论文：`https://arxiv.org/abs/2603.08519`
 
 ### 0.6 图学习基线与评测（Classic GNNs）
 
@@ -143,10 +160,29 @@
 > 说明：用世界模型替代真机评测，将“策略评估”转化为“生成式 rollout + 指标统计”。
 
 - WorldEval: World Model as Real-World Robot Policies Evaluator (arXiv 2025)  
-  - 手册解读：[`./frontier/worldeval_world_model_policy_evaluator_2025.md`](./frontier/worldeval_world_model_policy_evaluator_2025.md)  
+  - 手册解读：[`./frontier/benchmarks/worldeval_world_model_policy_evaluator_2025.md`](./frontier/benchmarks/worldeval_world_model_policy_evaluator_2025.md)  
   - 论文：`https://arxiv.org/abs/2505.19017`  
   - 代码仓库：`https://github.com/liyaxuanliyaxuan/Worldeval`  
   - 关键结论：用世界模型低成本评估策略，但仍需真机校准（论文口径）。
+
+- ENACT: Evaluating Embodied Cognition with World Modeling of Egocentric Interaction (arXiv 2025 / ICLR 2026)  
+  - 手册解读：[`./frontier/benchmarks/enact_embodied_cognition_world_modeling_egocentric_interaction_2025.md`](./frontier/benchmarks/enact_embodied_cognition_world_modeling_egocentric_interaction_2025.md)  
+  - 论文：`https://arxiv.org/abs/2511.20937`  
+  - 项目页：`https://enact-embodied-cognition.github.io/`  
+  - 关键结论：它不是测任务是否完成，而是测 VLM 是否真的理解长时程 ego-view 交互中的动作-状态-观察演化，并揭示 inverse > forward、长时程退化、人类视角偏置等问题（论文口径）。
+
+- Task adaptation of Vision-Language-Action model: 1st Place Solution for the 2025 BEHAVIOR Challenge (arXiv 2025)  
+  - 手册解读：[`./frontier/benchmarks/behavior_challenge_2025_first_place_solution_task_adaptation_vla_2025.md`](./frontier/benchmarks/behavior_challenge_2025_first_place_solution_task_adaptation_vla_2025.md)  
+  - 论文：`https://arxiv.org/abs/2512.06951`  
+  - 代码：`https://github.com/IliaLarchenko/behavior-1k-solution`  
+  - 关键结论：这篇不是再发明一个通用 VLA，而是在长时程 household leaderboard 压力下，总结出一套真正能换分的 system recipe：Pi0.5 adaptation + stage tracking + correlation-aware inpainting + correction rules（论文口径）。
+
+- IS-Bench: Evaluating Interactive Safety of VLM-Driven Embodied Agents in Daily Household Tasks (arXiv 2025 / AAAI 2026)  
+  - 手册解读：[`./frontier/benchmarks/is_bench_interactive_safety_vlm_embodied_agents_household_tasks_2025.md`](./frontier/benchmarks/is_bench_interactive_safety_vlm_embodied_agents_household_tasks_2025.md)  
+  - 论文：`https://arxiv.org/abs/2506.16402`  
+  - 项目页：`https://ursulalujun.github.io/isbench.github.io/`  
+  - 代码：`https://github.com/AI45Lab/IS-Bench`  
+  - 关键结论：它不是只看任务最后是否安全，而是用 process-oriented evaluation 检查风险缓解动作是否在正确时机发生，并揭示 current VLM agent 普遍存在 `task success != safe success` 与 safety-task trade-off（论文口径）。
 
 ### 0.9 VLA 模型量化（QVLA）
 
@@ -257,6 +293,16 @@
 - **核心技术**: **Residual VQ 动作 tokenization + Flow Matching 动作专家 + 单步蒸馏**。  
 - **Action Space**: **连续空间**。  
 - **Key Contribution**: 依托 UMI 数据规模化与硬件统一，验证 4U 条件下零样本泛化（原文口径，待核验）。
+
+##### RoboPocket (SJTU / Shanghai Innovation Institute / Noematrix, 2026)
+> **论文**: [RoboPocket: Improve Robot Policies Instantly with Your Phone](https://arxiv.org/abs/2603.05504)  
+> **项目主页**: `https://robo-pocket.github.io`  
+> **手册解读**: [`./frontier/robopocket_robot_free_instant_policy_iteration_phone_2026.md`](./frontier/robopocket_robot_free_instant_policy_iteration_phone_2026.md)
+
+- **核心问题**: 便携手持采集可 scale，但大多开环；DAgger 能纠正 covariate shift，却依赖真机执行。  
+- **核心技术**: **AR Visual Foresight + Remote Inference + Robot-Free Instant Policy Iteration**。  
+- **系统定位**: **数据采集与即时策略迭代基础设施**，不是新的 VLA backbone。  
+- **Key Contribution**: 把“看策略意图 -> 找弱点 -> 采纠错 -> 在线微调”压缩到分钟级闭环，项目页口径称可带来最高 `2x` 数据效率提升。
 
 ---
 

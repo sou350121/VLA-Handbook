@@ -3,7 +3,7 @@
 > **发布时间**：2024-03（arXiv: 2403.09227）  
 > **论文题目**：BEHAVIOR-1K: A Human-Centered, Embodied AI Benchmark with 1,000 Everyday Activities and Realistic Simulation  
 > **机构/团队**：Stanford / Stanford HAI / Salesforce Research 等  
-> **核心定位**：不是只把任务数量从 `100` 扩到 `1000`，而是把“人真正想让机器人做什么”作为 benchmark 的起点，并配套一个能模拟 **刚体 + 关节物体 + 流体 + 柔性物体 + 连续状态变化** 的仿真环境 `OmniGibson`。  
+> **核心定位**：不是只把“任务数量”从 `100` 扩到 `1000`，而是把“人真正想让机器人做什么”作为 benchmark 的起点，并配套一个能模拟 **刚体 + 关节物体 + 流体 + 柔性物体 + 连续状态变化** 的仿真环境 `OmniGibson`。  
 > **一句话 takeaway**：BEHAVIOR-1K 的真正意义，不在“任务很多”，而在它第一次比较系统地把 **人类需求、语义任务定义、复杂物理状态、真实仿真** 绑成了一个统一 benchmark。  
 > **主要来源**：论文 HTML [`arXiv:2403.09227`](https://arxiv.org/html/2403.09227v1)，项目主页 [`behavior.stanford.edu`](https://behavior.stanford.edu)
 
@@ -455,4 +455,5 @@ BEHAVIOR-1K 也间接说明了为什么触觉重要：
 - 项目主页：[behavior.stanford.edu](https://behavior.stanford.edu)
 
 ---
-[← Back to Theory](../README.md)
+[← Back to Benchmark Hub](./README.md)
+[← Back to Theory](../../README.md)
