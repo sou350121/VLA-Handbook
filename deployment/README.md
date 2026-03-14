@@ -33,7 +33,10 @@
 - **[DexRobot DexHand021 量产版深度解析 (DexHand021 Production)](./dexrobot_dexhand021_production_dexhand_2026.md)**: 🆕 19-DOF（12 主动+7 被动）+ CANFD + ROS1/ROS2/micro-ROS + 多模态触觉（含滑觉/接近）落地拆解与对接清单。
 - **[Optimus Hand V2 解析](./optimus_hand_v2.md)**: Tesla Optimus 灵巧手技术特点分析。
 
-### 5. 仿真、数据采集与 Sim2Real (Data, Sim & Training)
+### 5. 社区实战经验 (Community Field Notes)
+- **[小红书 VLA 从业者经验蒸馏 (Community Field Notes)](./community_field_notes_xiaohongshu.md)**: 🆕 60+ 篇小红书帖子+评论蒸馏。训练参数（ACT/SmolVLA/π0/Motus 社区验证配置）、真机部署调试（推理卡顿、冷启动、精度陷阱）、Sim2Real 失败根因、数据量门槛、模型对比（论文 vs 实测差距）、逆共识信号、行业生态。**每 3 天自动增量更新。**
+
+### 6. 仿真、数据采集与 Sim2Real (Data, Sim & Training)
 - **[具身智能数据采集概览 (Embodied Data Collection)](./embodied_data_collection_overview.md)**: POV 第一视角 (EgoScale)、Sim2Real 规模化与真机 RL。
 - **[Evo-RL 仓库部署审计 (Evo-RL Repo Analysis)](./evo_rl_repo_analysis.md)**: GPT 5.4 High 审计：可运行性、稳定性、隐含假设、未知项与真机复现门槛。
 - **[灵巧手数据采集方案 (DexHand Data Collection)](./dexterous_hand_data_collection.md)**: 结构化 Episode 定义、Retargeting 算法与数据回放验证。

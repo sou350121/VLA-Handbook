@@ -64,7 +64,10 @@ Qwen3-VL + DiT + ODE/Euler，端到端复现入口，每步都有 shape 标注�
 **⑤ [真机部署总入口](deployment/README.md)** `按需查阅`
 硬件选型 · 多模态同步 · Sim-to-Real · 调参 checklist。
 
-**⑥ [World Action Model 零样本策略迁移](theory/world_action_models_are_zero_shot_policies_dissection.md)** `20 min`
+**⑥ [社区实战笔记](deployment/community_field_notes_xiaohongshu.md)** `按需查阅` 🆕
+论文不会告诉你的事——60+ 篇小红书帖子蒸馏的真实参数、真实失败、真实吐槽。ACT 50 episodes 就能 work、π0 微调该预测绝对量还是 delta、Sim2Real 八成是物理参数没校准。每 3 天自动更新。
+
+**⑦ [World Action Model 零样本策略迁移](theory/world_action_models_are_zero_shot_policies_dissection.md)** `20 min`
 如何做到零样本策略迁移，Feb 2026 精选，适合了解最新方向。
 
 ---
@@ -104,6 +107,7 @@ Qwen3-VL + DiT + ODE/Euler，端到端复现入口，每步都有 shape 标注�
 | 补理论 / 刷面试 | [`theory/README.md`](theory/README.md) | 路线图 + 核心概念索引 |
 | 找论文 / 做综述 | [`theory/paper_index.md`](theory/paper_index.md) | 多维索引 + 发展史全景图 |
 | 真机落地 | [`deployment/README.md`](deployment/README.md) | 硬件选型 · 多模态同步 · Sim-to-Real |
+| 社区踩坑经验 | [`deployment/community_field_notes_xiaohongshu.md`](deployment/community_field_notes_xiaohongshu.md) | 🆕 真实参数 · 真实失败 · 每 3 天更新 |
 | 公司 / 求职 | [`companies/README.md`](companies/README.md) | 公司指南 + 产业报告 digest |
 | 双周前沿报告 | [`reports/biweekly/README.md`](reports/biweekly/README.md) | VLA / 触觉 / 人形 · 含预测回顾 |
 | 周报 + 风向洞察 | [`reports/weekly/README.md`](reports/weekly/README.md) | 每周论文精选 + SOTA + 趋势分析 |
