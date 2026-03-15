@@ -27,6 +27,16 @@
     "https://dtsbourg.me/en/articles/predictions-embodied-ai",
     "https://developer.nvidia.com/blog/streamline-robot-learning-with-whole-body-control-and-enhanced-teleoperation-in-nvidia-isaac-lab-2-3/",
     "https://aws.amazon.com/blogs/opensource/building-intelligent-physical-ai-from-edge-to-cloud-with-strands-agents-bedrock-agentcore-claude-4-5-nvidia-gr00t-and-hugging-face-lerobot/",
-    "https://wiki.seeedstudio.com/fine_tune_gr00t_n1.5_for_lerobot_so_arm_and_deploy_on_jetson_thor/"
+    "https://wiki.seeedstudio.com/fine_tune_gr00t_n1.5_for_lerobot_so_arm_and_deploy_on_jetson_thor/",
+    "https://robot-learning-collective.github.io/vla-0-smol",
+    "https://docs.phospho.ai/blog/decoding-smolvla",
+    "https://developer.nvidia.com/blog/gr00t-n1-6-sim-to-real/",
+    "https://developer.nvidia.com/blog/isaac-lab-arena/",
+    "https://huggingface.co/docs/lerobot/en/xvla",
+    "https://www.kamenski.me/articles/robotics-made-simple-playing-with-lerobot-and-so-101",
+    "https://io-ai.tech/platform/en/guides/Pipeline/LeRobot/Pi0/",
+    "https://icra2026vlapipeline.github.io/",
+    "https://roboticsandautomationnews.com/2026/03/13/robbyant-open-sources-lingbot-vla-model-as-a-universal-brain-for-robots/99640/",
+    "https://arxiv.org/abs/2512.11921"
   ]
 }
