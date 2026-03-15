@@ -12,6 +12,11 @@
 > 需要深入理解的话，每个 section 末尾有对应专题文件链接。
 > **每 3 天自动增量更新。**
 
+**[🔧 GitHub 社区实战笔记 (GitHub Community Field Notes)](./community_field_notes_github.md)** — 200+ 条高互动 Issues 蒸馏。硬件兼容矩阵、训练收敛失败根因、官方 checkpoint 复现问题、跨仓库收敛信号。
+
+> 21 个仓库（lerobot/openpi/GR00T/ManiSkill/IsaacLab/Genesis...），每条结论附 Issue 链接。
+> **Pulsar GitHub Issues Sensor 每周自动扫描更新。**
+
 ---
 
 ## 目录
