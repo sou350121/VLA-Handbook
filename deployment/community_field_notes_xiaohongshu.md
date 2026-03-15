@@ -1,6 +1,6 @@
 # 社区实战笔记：小红书 VLA 从业者经验蒸馏 (Community Field Notes)
 
-> **来源**：135+ 篇小红书帖子 + 评论区，2026-03-14 起持续收集
+> **来源**：150+ 篇小红书帖子 + 评论区，2026-03-14 起持续收集
 > **原始数据**：[memory/blog/archives/xiaohongshu-community/](../../memory/blog/archives/xiaohongshu-community/)
 > **定位**：论文不会告诉你的东西——社区实战者的真实参数、真实失败和真实吐槽。每条结论附「帖N」编号，可在原始数据中回溯验证。
 > **更新频率**：每 3 天自动增量收集
@@ -31,7 +31,9 @@
 | VLA 还是 VAM？ | VAM(Video-Action Model) 正在起势，用 10% 数据达最高成功率 | [§9.5](#95-vla-vs-vam-路线之争) |
 | VLA-Adapter 是什么？ | 保留 VLM 能力 + decoder 端接 action head，科研平民化 | [§9.2](#92-lora-vs-全量微调) |
 | 真机 RL 怎么闭环？ | Evo-RL: 示教→部署→犯错→人工纠偏→数据回流→再训练 | [§1.6](#16-rl-后训练-post-training) |
-| World Model 哪条技术路线？ | 四大路线：自回归/扩散/流匹配/混合，各有取舍 | [§9.6](#96-world-model-技术路线) |
+| World Model 哪条技术路线？ | 四大路线：自回归/扩散/流匹配/混合，各有取舍 | [§9.10](#910-world-model-技术路线) |
+| Diffusion 还是 Flow Matching？ | FM 训练稳定推理快，DP 易被误用于单模态场景 | [§9.6](#96-diffusion-policy-vs-flow-matching-实战) |
+| 移动操作/导航方向？ | 从桌面走向全屋，导航+操作统一是趋势 | [§9.9](#99-移动操作与导航) |
 | 仿真器选 Isaac 还是 MuJoCo？ | 接触力精度选 MuJoCo，大规模并行选 Isaac Gym | [§3.3](#33-仿真平台选型) |
 | 数据难洗怎么办？ | HDF5→RLDS 有标准流程，但真机数据清洗仍是手工活 | [§4.3](#43-数据格式与清洗) |
 | 触觉/灵巧手怎么选传感器？ | 五大方案各有取舍：电阻/电容/压电/电磁/光学 | [§9.7](#97-触觉传感与灵巧手) |
@@ -139,8 +141,6 @@ ACT 是当前小数据场景下社区验证度最高的方案。多个独立团�
 - 稀疏奖励 → 换成距离递减的稠密奖励，训练速度可提升数倍
 - 简单规则策略或 IL 做初始化，避免从零随机探索
 
-> 📖 **深入阅读**: [Pi0 真机部署](./pi0_deployment.md) · [Evo-RL 仓库审计](./evo_rl_repo_analysis.md) · [StarVLA 框架对比](./starvla_lego_like_vla_codebase_2026.md)
-
 ---
 
 ## 2. 真机部署调试 (Deployment Debugging)
@@ -185,8 +185,6 @@ VLA 微调后视觉理解能力退化是一个已被定量确认但社区关注�
 - 实测发现 VLA 的 attention 集中在**背景而非目标物体**（帖37 用户实测）
 - **解法**：用原始未微调的 VLM 做"视觉老师"，约束视觉模块不偏移（Visual Representation Alignment）
 - 诊断工具：VL-Think（帖31）、VLAExplain（帖37，支持 Pi05 注意力可视化）
-
-> 📖 **深入阅读**: [硬件选型与成本](./robot_hardware_selection_pricing.md) · [VLA 边缘部署](./vla_model_edge_deployment.md) · [Agent 架构部署攻略](./agent_architecture_deployment_guide.md)
 
 ---
 
@@ -240,8 +238,6 @@ VLA 微调后视觉理解能力退化是一个已被定量确认但社区关注�
 **2023-2025 开源仿真平台推荐**（帖85，深蓝具身智能，84 赞）：
 - 新手入门：MuJoCo（免费、文档好）→ 进阶：Isaac Lab → 前沿：Genesis
 
-> 📖 **深入阅读**: [Sim-to-Real 迁移策略](./sim_to_real_transfer_strategies.md) · [仿真环境详解](./simulation_environments.md) · [仿真基准与工具](./simulation_benchmarks_and_tools.md)
-
 ---
 
 ## 4. 数据采集经验 (Data Collection)
@@ -283,7 +279,25 @@ VLA 微调后视觉理解能力退化是一个已被定量确认但社区关注�
 - VR 遥操作延迟约 30-50ms，可接受
 - 关键：VR 手柄到机械臂的坐标映射必须仔细标定
 
-> 📖 **深入阅读**: [数据采集概览](./embodied_data_collection_overview.md) · [灵巧手数据采集](./dexterous_hand_data_collection.md) · [GELLO 遥操作部署](./gello_deployment.md)
+### 4.4 数据采集硬件与大规模数据集
+
+**史上最大机器人数据集开源**（帖115，Nifty，178 赞）：
+- 大规模开源数据集持续涌现，数据量从千级→万级→十万级
+- 但社区反馈：数据量大不等于质量好，不同实验室的数据格式/标注标准差异巨大
+
+**DAS Gripper 无本体数据采集**（帖116，简智机器人，97 赞）：
+- 不依赖特定机械臂的数据采集方案，降低硬件耦合
+- 适合快速收集多场景 demo 数据
+
+**UMI 加上了力反馈**（帖117，♥VLA和RL的具身未来😴，91 赞）：
+- UMI（Universal Manipulation Interface）增加力反馈功能
+- 解决了"遥操作时人感受不到力"的痛点（对比帖24 提到的问题）
+
+**RoboMIND 2.0 数据集**（帖118，具身智能观察猿，10 赞）：
+- 标准化机器人操作数据集的新版本
+
+**Sunday 机器人硬件细节**（帖119，小白学具身，317 赞）：
+- 详细拆解了 Sunday 机器人的硬件设计细节，对自组装有参考价值
 
 ---
 
@@ -467,7 +481,54 @@ Kivy 的分析（帖17）：Diffusion Policy 有效的核心不是"多模态分�
 - 支持 VLA 派：端到端更简洁，推理更快，π0 系列已验证可扩展性
 - 中间派：最终会融合——VLA 做快速反应（S1），VAM 做慢速规划（S2）
 
-### 9.6 World Model 技术路线
+### 9.6 Diffusion Policy vs Flow Matching 实战
+
+**"为什么 Flow Matching 能成为 VLA 主流？"**（帖120，PandaSyL，182 赞）：
+- Flow Matching 训练更稳定，不需要噪声 schedule 调参
+- 推理速度比 DDPM 快（ODE solver 步数可控）
+- π0 系列的成功进一步确认了 FM 路线的可扩展性
+
+**"为什么最近的一步扩散模型表现得这么好？"**（帖121，吴泰霖Talent，612 赞）：
+- 一步生成（distilled diffusion）在多个任务上接近甚至超过多步扩散
+- 意味着推理延迟问题可能被根本解决
+
+**"扩散策略让很多人把自己推入了骗局"**（帖122，Kivy，169 赞）：
+- 与 §6.3 相互印证：Diffusion Policy 有效的核心是迭代精化，不是多模态建模
+- 很多人在单模态任务上强行用扩散，结果反而更差
+- Kivy 建议：先试 ACT/Flow Matching，不要默认用 Diffusion Policy
+
+**真机 RL 思考：World or Human in the Loop**（帖123，眠歌，150 赞）：
+- 深度思考帖：World Model 辅助的 RL vs 人类在环 RL 的取舍
+- 核心论点：短期内 Human-in-the-Loop 更可靠，长期 World Model 更可扩展
+
+**ICLR 2026 工作分享**（帖124，Ming，177 赞）：
+- 具身智能在 ICLR 2026 的接收情况
+
+**DSRL：UC Berkeley 强化学习+DP**（帖125，西图Situr，110 赞）：
+- Diffusion Policy + RL 的组合方案
+
+**"生成这方向已经玩完了"**（帖126，942 赞）：
+- 高互动争议帖：对生成式模型方向的悲观看法
+- 评论区有大量反驳和讨论，值得看评论质量
+
+### 9.9 移动操作与导航
+
+**首个长时移动操作框架**（帖127，具身智能观察猿，37 赞）：
+- 移动操作（mobile manipulation）开始从桌面走向全屋场景
+
+**NaVILA：腿式机器人导航**（帖128，智元星群💫，51 赞）：
+- 将 VLA 扩展到腿式机器人导航，不只是手臂操作
+
+**[ICRA 2026] DSPv2 全身移动操作策略**（帖129，selen，80 赞）：
+- 全身协调的移动操作策略，ICRA 2026 接收
+
+**多功能具身导航 VLA 基础模型**（帖130，刘东瑞 上海 AI Lab，25 赞）：
+- 上海 AI Lab 的导航 VLA 技术报告，尝试统一导航+操作
+
+**具身智能 2 大核心方向**（帖131，硅基漫步，17 赞）：
+- 操作 vs 导航是具身智能的两大核心，当前操作更热但导航同样重要
+
+### 9.10 World Model 技术路线
 
 **"世界模型的四大技术路线"**（帖100，吕对对，1036 赞，极高信号帖）：
 
@@ -535,7 +596,7 @@ Kivy 的分析（帖17）：Diffusion Policy 有效的核心不是"多模态分�
 
 ## 10. 小红书上找不到的东西
 
-以下话题搜遍 135 篇帖子仍然缺少实操经验分享。如果你正在做这些方向，建议去 GitHub Issues（LeRobot/openpi/SmolVLA）、知乎专栏、或直接联系论文作者：
+以下话题搜遍 150 篇帖子仍然缺少实操经验分享。如果你正在做这些方向，建议去 GitHub Issues（LeRobot/openpi/SmolVLA）、知乎专栏、或直接联系论文作者：
 
 1. **FAST tokenization**（DCT+BPE 动作压缩）——π0.5 在用但没人分享调参经验
 2. **Co-training 数据混合比例**——机器人数据 vs 互联网视频 vs 仿真数据的配比怎么调
@@ -577,6 +638,11 @@ Kivy 的分析（帖17）：Diffusion Policy 有效的核心不是"多模态分�
 | Star✨ | 技术辩论 | RAE 质疑引发高质量讨论（464 赞） |
 | 机器人猎头David | 行业观察 | 2026 灵巧手行业解读（797 赞） |
 | Guss | 框架集成 | LeRobot+ROS2+IsaacLab 三框架联通（133 赞） |
+| PandaSyL | 技术分析 | Flow Matching 为何成为 VLA 主流（182 赞） |
+| 吴泰霖Talent | 扩散模型研究 | 一步扩散模型为何表现好（612 赞） |
+| 眠歌 | RL 思考 | World vs Human in the Loop 深度分析（150 赞） |
+| 具身智能观察猿 | 前沿追踪 | 移动操作框架 + RoboMIND 2.0 数据集 |
+| 刘东瑞 | 上海 AI Lab | 导航 VLA + World Model 安全综述 |
 
 ---
 
