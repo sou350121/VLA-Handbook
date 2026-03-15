@@ -211,10 +211,10 @@ Step 3: 时间套利检查
 
 | 文件 | 功能 | v3 角色 |
 |------|------|---------|
-| `BELIEF_GRAPH.md` | 条件依赖信念网络 | **后端内核**（不是用户界面） |
-| `EPISTEMICS.md` | 校准纪律 + 偏误检测 + 辩论协议 | **质检层** |
-| `CONVERGENCE_MAP.md` | 相变追踪 + 收敛检测 + 时间套利 | **信号雷达** |
-| `REVIEW_TEMPLATE.md` | 论文评估模板 | **三视角辩论的结构化输出** |
+| `docs/system/BELIEF_GRAPH.md` | 条件依赖信念网络 | **后端内核**（不是用户界面） |
+| `docs/system/EPISTEMICS.md` | 校准纪律 + 偏误检测 + 辩论协议 | **质检层** |
+| `docs/system/CONVERGENCE_MAP.md` | 相变追踪 + 收敛检测 + 时间套利 | **信号雷达** |
+| `docs/system/REVIEW_TEMPLATE.md` | 论文评估模板 | **三视角辩论的结构化输出** |
 
 ---
 
@@ -227,7 +227,9 @@ VLA-Handbook/
 │   ├── tactile/             # 触觉专题
 │   ├── llm_reasoning/       # LLM 推理 × 具身
 │   └── classics/            # 经典论文
-├── deployment/              # 真机部署指南
+├── deployment/              # 真机部署指南 + 220+ 社区实战笔记
+├── docs/                    # 文档
+│   └── system/              # 系统配置（Belief Graph / Epistemics / 模板）
 ├── reports/                 # 周报/双周报/每日摘要
 ├── memory/blog/archives/    # 每日社交情报
 ├── companies/               # 公司分析 + 产业报告
@@ -235,6 +237,8 @@ VLA-Handbook/
 ├── question-bank/           # 面试题库
 ├── system-design/           # 系统设计案例
 ├── scripts/                 # 自动化 pipeline
+│   ├── vla-expert/          # VLA Expert skill 文件 + eval
+│   └── xhs-vla-collector/   # 小红书收集器 + 方法论
 └── book/                    # 电子书版本
 ```
 
