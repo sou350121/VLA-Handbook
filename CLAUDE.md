@@ -207,7 +207,29 @@ Step 3: 时间套利检查
 
 ---
 
-## 6. 配套文件
+## 6. 社区采集系统
+
+这个 handbook 是给读者看的。社区采集的唯一目的是给读者补充论文没覆盖的实战内容。
+
+**设计哲学**：不用评分体系。收录标准只有一条——"读者看到会不会说'谢谢，这帮到我了'"。有可操作 takeaway、有踩坑经验、填补空白、校准预期，满足任一就收。
+
+**两条采集线**：
+
+| 线 | 来源 | 输出文件 | Skill |
+|---|---|---|---|
+| 英文线 | HF Blog、厂商博客、LeRobot Discord | `deployment/community_field_notes_english.md` | `en-vla-collector`（每周一 10:00 自动 + 手动触发） |
+| 中文线 | 小红书 | `deployment/community_field_notes_xiaohongshu.md` | `xhs-vla-collector`（手动触发） |
+
+**技术约束**：
+- Chrome MCP 是主提取器（WebFetch 对 huggingface.co 被 EGRESS_BLOCKED）
+- Discord 用搜索栏采集（不遍历频道）
+- GitHub Issues 是用户自己在云端跑的 Plan B，这两条线不涉及
+
+详见 `scripts/en-vla-collector/SKILL.md` 和 `scripts/xhs-vla-collector/xiaohongshu-vla-collector-SKILL.md`。
+
+---
+
+## 7. 配套文件
 
 | 文件 | 功能 | v3 角色 |
 |------|------|---------|
@@ -238,10 +260,11 @@ VLA-Handbook/
 ├── system-design/           # 系统设计案例
 ├── scripts/                 # 自动化 pipeline
 │   ├── vla-expert/          # VLA Expert skill 文件 + eval
-│   └── xhs-vla-collector/   # 小红书收集器 + 方法论
+│   ├── en-vla-collector/    # 英文社区采集器（HF Blog / Discord）
+│   └── xhs-vla-collector/   # 小红书采集器
 └── book/                    # 电子书版本
 ```
 
 ---
 
-*v3 — 2026-03-05 重写。核心升级：从"认知赌注管理"转向"对抗性思辩 × 校准纪律 × 用户判断优化"。*
+*v3.1 — 2026-03-15 更新。v3 核心不变；新增 §6 社区采集系统（读者优先、无评分）。*
