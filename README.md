@@ -40,8 +40,8 @@ VLA 论文每天几十篇，真正能用的工程细节零散在 GitHub Issue �
 |------|-------------|-------------------|--------------|-----------|-----------------|
 | **最擅长** | 可读中文综述，移动端友好 | 资源书签，快速入手 | 实时讨论，作者第一反应 | 一线踩坑、真实参数、失败复盘 | 工程实战 + 每日自动深度解析 |
 | **工程细节** | ❌ 媒体视角 | ❌ 链接汇总 | ❌ 碎片化 | ⚠️ 有但散落在评论区 | ✅ 入口脚本 · 关键超参 · shape 校验 |
-| **一手踩坑** | ❌ | ❌ | ⚠️ 偶尔 | ✅ 评论区大量真实经验 | ✅ [社区经验蒸馏](deployment/community_field_notes_xiaohongshu.md) |
-| **更新频率** | 不定期 | 月 / 季度 | 实时 | 实时（但搜索困难） | 每日自动 + 每 3 天小红书收集 |
+| **一手踩坑** | ❌ | ❌ | ⚠️ 偶尔 | ✅ 评论区大量真实经验 | ✅ [中文蒸馏](deployment/community_field_notes_xiaohongshu.md) · [英文蒸馏](deployment/community_field_notes_english.md) |
+| **更新频率** | 不定期 | 月 / 季度 | 实时 | 实时（但搜索困难） | 每日自动 + 小红书每 3 天 + 英文社区每周一 |
 | **历史可查** | ❌ 90 天后限流失效 | ✅ 静态存档 | ❌ 算法埋没 | ❌ 搜索质量差，帖子易沉 | ✅ Git 永久记录，全文 grep |
 | **生产踩坑** | ❌ | ❌ | ❌ | ✅ 但需要自己挖掘整理 | ✅ Sim2Real · 多模态同步 · 硬件选型 |
 | **趋势预测验证** | ❌ 无追踪 | ❌ | ❌ | ❌ | ✅ 双周 ✅/❌ 历史追踪 |
@@ -66,10 +66,13 @@ Qwen3-VL + DiT + ODE/Euler，端到端复现入口，每步都有 shape 标注�
 **⑤ [真机部署总入口](deployment/README.md)** `按需查阅`
 硬件选型 · 多模态同步 · Sim-to-Real · 调参 checklist。
 
-**⑥ [社区实战笔记](deployment/community_field_notes_xiaohongshu.md)** `按需查阅` 🆕
-论文不会告诉你的事——60+ 篇小红书帖子蒸馏的真实参数、真实失败、真实吐槽。ACT 50 episodes 就能 work、π0 微调该预测绝对量还是 delta、Sim2Real 八成是物理参数没校准。每 3 天自动更新。
+**⑥ [社区实战笔记（中文）](deployment/community_field_notes_xiaohongshu.md)** `按需查阅` 🆕
+论文不会告诉你的事——220+ 篇小红书帖子蒸馏的真实参数、真实失败、真实吐槽。ACT 50 episodes 就能 work、π0 微调该预测绝对量还是 delta、Sim2Real 八成是物理参数没校准。每 3 天自动更新。
 
-**⑦ [World Action Model 零样本策略迁移](theory/world_action_models_are_zero_shot_policies_dissection.md)** `20 min`
+**⑦ [社区实战笔记（英文）](deployment/community_field_notes_english.md)** `按需查阅` 🆕
+HuggingFace Blog、LeRobot Discord、厂商技术博客的一手经验。SmolVLA 训练配方、π0 真机评估、边缘部署延迟实测、夹爪电机死机排查。每周一自动更新。
+
+**⑧ [World Action Model 零样本策略迁移](theory/world_action_models_are_zero_shot_policies_dissection.md)** `20 min`
 如何做到零样本策略迁移，Feb 2026 精选，适合了解最新方向。
 
 ---
@@ -81,7 +84,8 @@ Qwen3-VL + DiT + ODE/Euler，端到端复现入口，每步都有 shape 标注�
 | ⚡ 论文评分（⚡/🔧/📖/❌） | 每日 09:15–10:00 | [theory/](theory/) |
 | 🛰️ VLA 社交情报 | 每日 09:30 | [vla-social-intel/ →](https://github.com/sou350121/VLA-Handbook/tree/main/memory/blog/archives/vla-social-intel) |
 | 🔬 理论深度解析 | 周一 / 三 / 五 15:30 | [theory/](theory/) |
-| 📕 小红书社区经验收集 | 每 3 天 14:00 | [社区实战笔记](deployment/community_field_notes_xiaohongshu.md) |
+| 📕 小红书社区经验收集 | 每 3 天 14:00 | [社区实战笔记（中文）](deployment/community_field_notes_xiaohongshu.md) |
+| 🌐 英文社区经验收集 | 每周一 10:00 | [社区实战笔记（英文）](deployment/community_field_notes_english.md) |
 | 📋 周报 + 风向洞察 | 每周日 10:30 | [reports/weekly/](reports/weekly/README.md) |
 | 📊 双周推理报告 | 每两周 | [reports/biweekly/](reports/biweekly/README.md) |
 
@@ -110,7 +114,8 @@ Qwen3-VL + DiT + ODE/Euler，端到端复现入口，每步都有 shape 标注�
 | 补理论 / 刷面试 | [`theory/README.md`](theory/README.md) | 路线图 + 核心概念索引 |
 | 找论文 / 做综述 | [`theory/paper_index.md`](theory/paper_index.md) | 多维索引 + 发展史全景图 |
 | 真机落地 | [`deployment/README.md`](deployment/README.md) | 硬件选型 · 多模态同步 · Sim-to-Real |
-| 社区踩坑经验 | [`deployment/community_field_notes_xiaohongshu.md`](deployment/community_field_notes_xiaohongshu.md) | 🆕 真实参数 · 真实失败 · 每 3 天更新 |
+| 社区踩坑（中文） | [`deployment/community_field_notes_xiaohongshu.md`](deployment/community_field_notes_xiaohongshu.md) | 🆕 小红书 220+ 帖 · 每 3 天更新 |
+| 社区踩坑（英文） | [`deployment/community_field_notes_english.md`](deployment/community_field_notes_english.md) | 🆕 HF Blog + Discord · 每周一更新 |
 | 公司 / 求职 | [`companies/README.md`](companies/README.md) | 公司指南 + 产业报告 digest |
 | 双周前沿报告 | [`reports/biweekly/README.md`](reports/biweekly/README.md) | VLA / 触觉 / 人形 · 含预测回顾 |
 | 周报 + 风向洞察 | [`reports/weekly/README.md`](reports/weekly/README.md) | 每周论文精选 + SOTA + 趋势分析 |
