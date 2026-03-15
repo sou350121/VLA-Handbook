@@ -54,15 +54,15 @@
 | 28 | Jetson Thor + GR00T N1.5 部署 SO-101 全流程 | Seeed Studio Wiki | 2026-01 | Edge, Recipe | [链接](https://wiki.seeedstudio.com/fine_tune_gr00t_n1.5_for_lerobot_so_arm_and_deploy_on_jetson_thor/) | GR00T N1.5 在 Jetson Thor 上的端到端部署指南；从 SO-101 数据采集 → 微调 → Jetson Thor 部署；Jetson Thor 1200 FP4 TFLOPS/64GB 内存，前代 Orin 2× 性能；社区首个 Jetson Thor + VLA 完整教程；与 hackathon 冠军"Matcha Bot"使用相同技术栈 |
 | 29 | VLA-0-Smol: 500M 参数复现大模型级 LIBERO 性能 | Robot Learning Collective | 2025-12 | Recipe, Arch | [链接](https://robot-learning-collective.github.io/vla-0-smol) | 500M 参数（SmolVLM2-500M）在 LIBERO 上达到 94.1% 平均 SR，接近 VLA-0 3B 的 94.7%；系统性 ablation 揭示训练 VLA 的优先级：**LR 是生死线**（5e-6 完全不学，5e-5 最优）、**必须微调 vision encoder**（冻结掉 32 个百分点）、**whole-action masking +7.8%**、相对动作 > 绝对动作；system prompt 在微调后无用；float16 梯度爆炸必须用 bf16；LIBERO 高分主要测记忆力非泛化（LIBERO-Plus/PRO 证实）；消费级 GPU 即可训练 |
 | 30 | Behind a Failed Robot Learning Project: 数据工程的教训 | Medium (CU Correll Lab) | 2026-01-21 | Recipe, Debug | [链接](https://medium.com/correll-lab/fine-tuning-smolvla-for-new-environments-code-included-af266c56d632) | SO-100 上 SmolVLA 微调失败复盘；**stats.json 不匹配是致命陷阱**——denormalization 用错数据集统计量导致动作完全失控；数据回放（replay）是最重要的验证步骤；相机视角对策略表现影响巨大；60 条 demo 不足以泛化；LeRobot V3 数据格式需要注意兼容性；RTX 3050 Ti 推理 ~10s/chunk；方法论 > 硬件 |
-| 31 | Decoding SmolVLA: 架构设计深度拆解 | Phospho Blog | 2026-02 | Arch | [链接](https://docs.phospho.ai/blog/decoding-smolvla) | SmolVLA 内部机制详解：pixel-shuffling 将每帧压缩到 64 tokens（vs PaliGemma 的 256+）；layer skipping 实现交错 CA+SA 降低计算量；flow matching 动作生成 vs 回归——flow matching 处理多模态动作分布更好；异步推理比同步快 30%（解耦 VLM 编码和动作生成）；450M 参数设计哲学：在 VLM backbone 和 action expert 之间找平衡 |
-| 32 | GR00T N1.6 + Cosmos-Reason: Sim-to-Real 零样本 | NVIDIA Developer Blog | 2026-03 | Arch, Recipe | [链接](https://developer.nvidia.com/blog/gr00t-n1-6-sim-to-real/) | GR00T N1.6 核心升级：Cosmos-Reason-2B VLM 替代之前的视觉编码器；DiT 扩大 2× 至 32 层；state-relative actions 替代绝对动作；全身 RL 在 Isaac Lab 中训练；COMPASS 导航模块支持自主导航；**关键突破**：零样本 sim-to-real 迁移——仿真训练直接部署到真机无需额外微调；展示从感知到控制的完整 physical AI stack |
-| 33 | Isaac Lab-Arena: 40× 加速的模块化评估框架 | NVIDIA Research | 2026-02 | Arch, Data | [链接](https://developer.nvidia.com/blog/isaac-lab-arena/) | 模块化任务构建：Object + Scene + Embodiment + Task 四维组合；并行评估 40× 加速（0.76h vs 34.9h）；250+ Lightwheel 预置任务；与 LeRobot Environment Hub 集成；支持 ACT/DP/VLA 等多种策略统一评估；解决 VLA 社区缺乏标准化评估的痛点 |
+| 31 | Decoding SmolVLA: 架构设计深度拆解 | Phospho Blog | 2026-02 | Arch | [链接](https://blog.phospho.ai/decoding-smolvla-a-vision-language-action-model-for-efficient-and-accessible-robotics/) | SmolVLA 内部机制详解：pixel-shuffling 将每帧压缩到 64 tokens（vs PaliGemma 的 256+）；layer skipping 实现交错 CA+SA 降低计算量；flow matching 动作生成 vs 回归——flow matching 处理多模态动作分布更好；异步推理比同步快 30%（解耦 VLM 编码和动作生成）；450M 参数设计哲学：在 VLM backbone 和 action expert 之间找平衡 |
+| 32 | GR00T N1.6 + Cosmos-Reason: Sim-to-Real 零样本 | NVIDIA Developer Blog | 2026-03 | Arch, Recipe | [链接](https://developer.nvidia.com/blog/building-generalist-humanoid-capabilities-with-nvidia-isaac-gr00t-n1-6-using-a-sim-to-real-workflow) | GR00T N1.6 核心升级：Cosmos-Reason-2B VLM 替代之前的视觉编码器；DiT 扩大 2× 至 32 层；state-relative actions 替代绝对动作；全身 RL 在 Isaac Lab 中训练；COMPASS 导航模块支持自主导航；**关键突破**：零样本 sim-to-real 迁移——仿真训练直接部署到真机无需额外微调；展示从感知到控制的完整 physical AI stack |
+| 33 | Isaac Lab-Arena: 40× 加速的模块化评估框架 | NVIDIA Research | 2026-02 | Arch, Data | [链接](https://developer.nvidia.com/blog/simplify-generalist-robot-policy-evaluation-in-simulation-with-nvidia-isaac-lab-arena/) | 模块化任务构建：Object + Scene + Embodiment + Task 四维组合；并行评估 40× 加速（0.76h vs 34.9h）；250+ Lightwheel 预置任务；与 LeRobot Environment Hub 集成；支持 ACT/DP/VLA 等多种策略统一评估；解决 VLA 社区缺乏标准化评估的痛点 |
 | 34 | X-VLA: 首个软提示跨具身 VLA（ICLR 2026 冠军） | HF LeRobot Docs | 2026-02 | Arch, Recipe | [链接](https://huggingface.co/docs/lerobot/en/xvla) | 0.9B 参数，ICLR 2026 最佳论文；核心创新：domain_id 系统为每个机器人注入 soft prompt，实现跨具身迁移；自动 action mode 检测（delta vs absolute）；LIBERO 93%、布料折叠 100%；Florence-2 视觉编码器 + flow matching action expert；训练只需冻结部分层 + LoRA，单卡可跑 |
 | 35 | Robotics Made Simple: SO-101 新手实战 | Val Kamenski Blog | 2025-08-17 | Recipe, Debug | [链接](https://www.kamenski.me/articles/robotics-made-simple-playing-with-lerobot-and-so-101) | 新手向 SO-101 完整上手指南；**硬件建议**：RTX 4090+ 是长期投资（GR00T/SmolVLA 需要 CUDA，Mac/Colab 不够用）；Ubuntu 24.04 裸机安装问题最少；USB 端口需 `sudo chmod 666`（文档容易漏看）；组装陷阱：夹爪装反 → 校准失败；**关键心态**：别期望 VLA 开箱即用——必须先训练；遥操录数据时不要直接看 follower 臂，通过摄像头观察；SO-101 成本 $200-400 |
-| 36 | EmbodiFlow: Pi0/Pi0.5 微调可视化平台 | EmbodiFlow (io-ai.tech) | 2026-01 | Recipe | [链接](https://io-ai.tech/platform/en/guides/Pipeline/LeRobot/Pi0/) | 基于 OpenPI 框架的 Pi0/Pi0.5 微调指南；可视化数据管理 + 一键导出 LeRobot 格式；支持自定义机器人和任务的数据导入；降低 Pi0 微调的工程门槛——不需要从零搭建 OpenPI 环境 |
+| 36 | EmbodiFlow: Pi0/Pi0.5 微调指南（基于 OpenPI） | EmbodiFlow (io-ai.tech) | 2026-01 | Recipe | [链接](https://io-ai.tech/platform/en/guides/Pipeline/LeRobot/Pi0/) | 基于 OpenPI 框架的 Pi0/Pi0.5 完整微调教程；导出 LeRobot v2.1 格式数据 → 配置 TrainConfig → compute_norm_stats → JAX 训练；**关键坑**：ALOHA 默认 14-dim action 但 7-axis arm 是 16-dim，不改代码会静默截断导致失控；推荐先用仿真（LIBERO/ALOHA Sim）排查流程再上真机 |
 | 37 | ICRA 2026 Workshop: VLA Pipelines for Real Robots | ICRA 2026 | 2026-06 | Strategy | [链接](https://icra2026vlapipeline.github.io/) | ICRA 2026 专题研讨会聚焦 VLA 从仿真到真机的 pipeline 完整性；核心议题：数据引擎（自动采集+质量控制）、domain randomization、human-in-the-loop、标准化评估；反映学术界共识——VLA 的瓶颈已从模型架构转向工程 pipeline |
-| 38 | LingBot-VLA: 国产开源"通用大脑"模型 | Robotics & Automation News | 2026-03-13 | Arch, Strategy | [链接](https://roboticsandautomationnews.com/2026/03/13/robbyant-open-sources-lingbot-vla-model-as-a-universal-brain-for-robots/99640/) | Robbyant（灵蚁智能）开源 LingBot-VLA；定位为机器人"通用大脑"；代表中国 VLA 产业化新动态——开源路线与闭源（Physical Intelligence）形成对比；需要关注其在真机上的实测表现 |
-| 39 | LoRA VLA: RTX 4060 8GB 上训练 3.1B VLA | arXiv 2512.11921 | 2025-12 | Recipe, Edge | [链接](https://arxiv.org/abs/2512.11921) | 3.1B 参数 VLA 通过 LoRA rank=8 + 4-bit 量化在 8GB VRAM 上训练；仅需 200 条 demo；SO-101 按钮按压任务验证；证明消费级 GPU（RTX 4060）也能参与 VLA 研发；对资源受限的个人/小团队极有价值 |
+| 38 | LingBot-VLA: 蚂蚁集团开源"通用大脑"模型 | Robotics & Automation News | 2026-03-13 | Arch, Strategy | [链接](https://roboticsandautomationnews.com/2026/03/13/robbyant-open-sources-lingbot-vla-model-as-a-universal-brain-for-robots/99640/) | 蚂蚁集团旗下 Robbyant 开源 LingBot-VLA；20,000+ 小时真实数据预训练、覆盖 9 种双臂配置（AgileX、Galaxea R1Pro 等）；GM-100 benchmark 上 SOTA；训练速度 1.5-2.8× 于 StarVLA/OpenPI；开源含完整代码+数据处理+微调+评估工具链；代表中国 VLA 产业化新动态——开源路线与闭源（Physical Intelligence）形成对比 |
+| 39 | LoRA VLA: 消费级 GPU 8GB 上训练 3.1B VLA | arXiv 2512.11921 | 2025-12 | Recipe, Edge | [链接](https://arxiv.org/abs/2512.11921) | 3.1B 参数 VLA 通过 LoRA + 量化技术在 8GB VRAM 消费级 GPU 上训练；200 条 demo 用于 SO-101 按钮按压任务；对比了冻结 vs 解冻 vision encoder 的 trade-off；证明资源受限的个人/小团队也能参与 VLA 研发 |
 | 40 | Phosphobot: 一站式 VLA 开发中间件 | Phospho | 2026-02 | Recipe | [链接](https://docs.phospho.ai/learn/train-smolvla) | pip install 一键安装；Meta Quest VR 遥操作；支持云端 GPU 训练；LeRobot 格式原生支持；从数据采集到模型部署的完整 pipeline；显著降低 SO-100/SO-101 用户的入门门槛——不需要写数据管道代码 |
 
 ---
@@ -212,21 +212,21 @@
 - **类别**: Edge, Arch
 - **关键数据点汇总**: ACT ~40ms（仍需 ACTSmooth）；SmolVLA ~10s/chunk on 3050 Ti；NXP i.MX95 ACT 优化后 0.32s；OneDP 蒸馏后 62Hz；**规律**：模型越大延迟越高，但 async inference + action chunking 是通用解药；边缘部署必须把延迟作为第一优先级
 
-### D23. GR00T vs X-VLA vs ACT 对比：社区实测经验
-- **来源**: `#vla-models` — **Don** (2026/2 左右)，Discord 搜索 "gr00t training"
-- **原文**: 社区用户 Don 对比三个模型在自定义任务上的表现，发现 GR00T 在预训练覆盖的任务上有优势但自定义任务微调困难，X-VLA 凭 soft prompt 在新 embodiment 上表现更灵活，ACT 虽小但在数据充足时仍有竞争力。
+### D23. GR00T/X-VLA/ACT 三模型同时微调实测
+- **来源**: `#vla-models` — **Don** (2026/1/11 04:28)，Discord 搜索 "gr00t training"
+- **原文**: "Have you guys found a workflow that works best with imitation learning? Have been finetuning XVLA models, doing LORAs for both XVLA/Gr00t, and trained a few act policies this week trying to figure out what works best for a pick and place task. Any thoughts?"
 - **类别**: Arch, Recipe
-- **关键数据点**: 三模型各有最佳适用场景——GR00T 适合预训练覆盖的任务域、X-VLA 适合跨 embodiment 迁移、ACT 适合数据充足的单任务；没有"万能模型"
+- **关键数据点**: 社区用户同时尝试 XVLA（LoRA）、GR00T（LoRA）、ACT 三个模型做 pick-and-place；反映社区仍在探索最佳模型选型——没有公认的"最优工作流"
 
 ### D24. GR00T 训练数据量经验：90/140/450 episodes 实测
-- **来源**: `#vla-models` — 多个用户 (2026/1-2)，Discord 搜索 "gr00t training"
-- **原文**: 社区多人分享 GR00T 微调数据量经验："90 episodes 能跑但抖动严重"、"140 episodes 明显改善"、"450 episodes 接近稳定"。共识是 2-300 episodes 是最优投入产出比区间——低于 100 条质量差，超过 300 条提升不明显。
+- **来源**: `#vla-models` — 匿名用户 (2026/1 左右)，Discord 搜索 "gr00t training"
+- **原文**: "...trained it on 9 tasks (Place the X in the center-box, Place the X in the top-left box, etc. One task for each token-placement). im not sure which model or how much data you have, but in our case we trained several with increasing amounts of data. (90 episodes, 140 episodes, and 450 episodes). The one trained on 90 episodes didnt work so good, 450 was probably too much. i think 2-300 is a good estimate using 2 cameras, 1 wrist and 1 top-view."
 - **类别**: Recipe, Data
 - **关键数据点**: GR00T 微调最优区间 200-300 episodes；低于 100 条动作抖动严重；与 SmolVLA/ACT 的 50-125 条相比，GR00T 因模型更大需要更多数据
 
 ### D25. GR00T 数据格式 v3.0 → v2.1 转换问题
-- **来源**: `#vla-models` — **andrewr96** (2026/2)，Discord 搜索 "gr00t training"
-- **原文**: "I collected data with the latest LeRobot which uses dataset format v3.0, but GR00T fine-tuning scripts expect v2.1. The conversion isn't straightforward and the documentation doesn't cover this gap."
+- **来源**: `#vla-models` — **andrewr96** (2025/9/25 18:35)，Discord 搜索 "gr00t training"
+- **原文**: "Is there any way to convert from 3.0 to 2.1? I collected a dataset which I planned to train gr00t on (which is compatible with 2.1) but the LeRobotDataset format changed and now I can't use it."
 - **类别**: Debug, Data
 - **关键数据点**: LeRobot v3.0 数据格式与 GR00T 微调脚本（期望 v2.1）不兼容；社区工具 Forge（见 D28）可解决此类格式转换问题
 
@@ -258,8 +258,8 @@
 - **关键数据点**: 社区对 LoRA 微调 VLA 有强烈需求但文档缺失；4090 24GB VRAM 是 LoRA 微调的可行配置（参考 #39 LoRA VLA 论文验证 8GB 也可行）；LeRobot v0.5.0 已官方支持 PEFT/LoRA（#4）
 
 ### D30. LeIsaac Pipeline: GR00T + Isaac Lab 端到端训练
-- **来源**: `#vla-models` — **zeyu.hu** (Lightwheel/NVIDIA) (2026/2)，Discord 搜索 "gr00t training"
-- **原文**: zeyu.hu 分享 LeIsaac pipeline 将 Isaac Lab 仿真环境与 GR00T 训练直接打通——仿真中生成的 episode 自动转为 GR00T 训练格式，减少数据管道的手动操作。Lightwheel 贡献了 250+ 预置任务。
+- **来源**: `#general-chat` — **zeyu.hu (Lightwheel)** (2025/7/15 14:01)，Discord 搜索 "gr00t training"
+- **原文**: zeyu.hu 分享 LeIsaac pipeline（`https://github.com/LightwheelAI/leisaac`）——"Welcome to the LeIsaac Era"，将 LeRobot + GR00T N1.5 + IsaacSim 打通为完整 pipeline，"the entire process is completed in just 5 simple steps"。
 - **类别**: Data, Recipe
 - **关键数据点**: LeIsaac = Isaac Lab → GR00T 的自动化数据管道；与 Isaac Lab-Arena（#33）配合使用；250+ 任务库降低了仿真数据生成门槛
 
