@@ -139,6 +139,8 @@ ACT 是当前小数据场景下社区验证度最高的方案。多个独立团�
 - 稀疏奖励 → 换成距离递减的稠密奖励，训练速度可提升数倍
 - 简单规则策略或 IL 做初始化，避免从零随机探索
 
+> 📖 **深入阅读**: [Pi0 真机部署](./pi0_deployment.md) · [Evo-RL 仓库审计](./evo_rl_repo_analysis.md) · [StarVLA 框架对比](./starvla_lego_like_vla_codebase_2026.md)
+
 ---
 
 ## 2. 真机部署调试 (Deployment Debugging)
@@ -183,6 +185,8 @@ VLA 微调后视觉理解能力退化是一个已被定量确认但社区关注�
 - 实测发现 VLA 的 attention 集中在**背景而非目标物体**（帖37 用户实测）
 - **解法**：用原始未微调的 VLM 做"视觉老师"，约束视觉模块不偏移（Visual Representation Alignment）
 - 诊断工具：VL-Think（帖31）、VLAExplain（帖37，支持 Pi05 注意力可视化）
+
+> 📖 **深入阅读**: [硬件选型与成本](./robot_hardware_selection_pricing.md) · [VLA 边缘部署](./vla_model_edge_deployment.md) · [Agent 架构部署攻略](./agent_architecture_deployment_guide.md)
 
 ---
 
@@ -236,6 +240,8 @@ VLA 微调后视觉理解能力退化是一个已被定量确认但社区关注�
 **2023-2025 开源仿真平台推荐**（帖85，深蓝具身智能，84 赞）：
 - 新手入门：MuJoCo（免费、文档好）→ 进阶：Isaac Lab → 前沿：Genesis
 
+> 📖 **深入阅读**: [Sim-to-Real 迁移策略](./sim_to_real_transfer_strategies.md) · [仿真环境详解](./simulation_environments.md) · [仿真基准与工具](./simulation_benchmarks_and_tools.md)
+
 ---
 
 ## 4. 数据采集经验 (Data Collection)
@@ -276,6 +282,8 @@ VLA 微调后视觉理解能力退化是一个已被定量确认但社区关注�
 **VR 遥操作实战**（帖90，MADE.，55 赞，"从0到1实现VLA第三节"）：
 - VR 遥操作延迟约 30-50ms，可接受
 - 关键：VR 手柄到机械臂的坐标映射必须仔细标定
+
+> 📖 **深入阅读**: [数据采集概览](./embodied_data_collection_overview.md) · [灵巧手数据采集](./dexterous_hand_data_collection.md) · [GELLO 遥操作部署](./gello_deployment.md)
 
 ---
 
