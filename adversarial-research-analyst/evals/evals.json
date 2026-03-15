@@ -1,0 +1,50 @@
+{
+  "skill_name": "adversarial-research-analyst",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "帮我看一下这篇论文: VLAW (Vision-Language-Action World Model) 用 world model 生成合成数据来辅助 VLA 训练，在 3 个桌面操作任务上提升了 39.2%。他们用一个 co-evolution loop: policy rollout → 校准 WM → 合成数据 → 更新 policy。论文来自 ByteDance，2026 年 2 月发布。",
+      "expected_output": "Should begin with TL;DR. Should produce a concise Adversarial Triad debate (Bull steelmans WM potential, Bear directly attacks Bull's claims, Arbiter gives concrete recommendation). Should update belief graph. Should use [Signal]/[Inference]/[Bet] tags. Target: 150-200 lines.",
+      "files": [],
+      "expectations": [
+        "Output begins with a TL;DR or executive summary section within the first 10 lines",
+        "Output contains 🔴 Bull section with specific claims about VLAW potential",
+        "Output contains 🔵 Bear section that directly addresses Bull's specific claims (not parallel analysis)",
+        "Output contains 🟢 Arbiter section with actionable recommendation",
+        "Output includes belief graph update showing before/after confidence values",
+        "Output includes a kill condition with a specific date (YYYY-MM or YYYY-QN format)",
+        "Output uses [Signal], [Inference], or [Bet] tags at least 3 times",
+        "Output uses calibrated confidence correctly (shows math when applying 0.9 discount to >80%)"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "VLA 下一步我该赌哪个方向？我是一个有 2 个 GPU 的独立研究者，时间有限（6 个月）。",
+      "expected_output": "Should begin with TL;DR. Bull and Bear should debate the SAME direction (not pitch different ones). Arbiter should separate domain truth from personal feasibility. Should be 200-250 lines max.",
+      "files": [],
+      "expectations": [
+        "Output begins with a TL;DR or executive summary section within the first 10 lines",
+        "Output contains three viewpoints (Bull, Bear, Arbiter) that engage the same core question",
+        "Bull and Bear directly respond to each other's arguments (not parallel pitches for different directions)",
+        "Arbiter separates domain truth from user's personal constraints (doesn't confuse what's true about the field with what user can do)",
+        "Output includes at least one contrarian bet or unconventional perspective",
+        "Output includes kill conditions for the recommended direction with dates",
+        "Recommendations are specific enough to be actionable (concrete tasks, timelines, datasets)"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "最近看到 3 篇论文都在用 Flow Matching 做 action head: LingBot-VLA, UnifolM, 还有一个日本团队的。这算是 phase transition 了吗？",
+      "expected_output": "Should begin with TL;DR. Should verify signal independence. Should apply calibration correctly with shown math. Should be 150-200 lines max.",
+      "files": [],
+      "expectations": [
+        "Output begins with a TL;DR or executive summary section within the first 10 lines",
+        "Output verifies independence of the 3 signals (checks citation chains or temporal overlap)",
+        "Output distinguishes between 'following a trend' and 'independent discovery'",
+        "Uses three-viewpoint debate format with Bull and Bear directly engaging",
+        "Output gives calibrated confidence with math shown (applies 0.9 discount correctly if >80%)",
+        "Output includes what would change the assessment (kill condition with date)"
+      ]
+    }
+  ]
+}
