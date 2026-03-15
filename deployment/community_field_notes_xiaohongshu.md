@@ -1,6 +1,6 @@
 # 社区实战笔记：小红书 VLA 从业者经验蒸馏 (Community Field Notes)
 
-> **来源**：170+ 篇小红书帖子 + 评论区，2026-03-14 起持续收集
+> **来源**：220+ 篇小红书帖子 + 评论区，2026-03-14 起持续收集
 > **原始数据**：[memory/blog/archives/xiaohongshu-community/](../../memory/blog/archives/xiaohongshu-community/)
 > **定位**：论文不会告诉你的东西——社区实战者的真实参数、真实失败和真实吐槽。每条结论附「帖N」编号，可在原始数据中回溯验证。
 > **更新频率**：每 3 天自动增量收集
@@ -42,6 +42,12 @@
 | 数据难洗怎么办？ | HDF5→RLDS 有标准流程，但真机数据清洗仍是手工活 | [§4.3](#43-数据格式与清洗) |
 | 触觉/灵巧手怎么选传感器？ | 五大方案各有取舍：电阻/电容/压电/电磁/光学 | [§9.7](#97-触觉传感与灵巧手) |
 | 视觉编码器选哪个？ | SigLIP-2 是新标杆，VGGT 在空间任务可能优于 DINO | [§9.8](#98-视觉编码器选型) |
+| π0 怎么微调/部署？ | openpi 复现看§10.7，50条单臂可跑通，双臂需更多数据 | [§10.7](#107-π0-微调与真机部署) |
+| VLA+RL 怎么做？ | SimpleVLA-RL(R1式)/WMPO(世界模型内)/π-StepNFT(flow-based) | [§10.8](#108-vla--rl-强化学习) |
+| Sim2Real 怎么缩小 gap？ | DoorMan(分布包含)、PIN-WM(可微物理)、仿真数据价值被放大 | [§10.9](#109-sim2real-仿真迁移) |
+| 触觉怎么接入 VLA？ | VLA-Touch(NUS)、TaF-VLA(触力对齐)、VTLA-RL(触觉+RL) | [§10.10](#1010-触觉传感与力控) |
+| 移动操作怎么做？ | MoManipVLA(50条)、Mobi-π(固定→移动)、ODYSSEY(四足) | [§10.11](#1011-移动操作与导航) |
+| 具身智能融资热度？ | 2025Q1国内37笔35亿，9家估值破百亿，星海图/无界动力领跑 | [§10.12](#1012-产业融资与公司动态) |
 
 ---
 
@@ -647,11 +653,96 @@ Kivy 的分析（帖17）：Diffusion Policy 有效的核心不是"多模态分�
 | 169 | DexImit：视频教会双臂灵巧操作 | Believer. | 2026-02-12 | 91 | [链接](https://www.xiaohongshu.com/explore/698d4d72000000001a01fc16) | 清华 DexImit：文本→视频→4D手物交互→灵巧手数据→zero-shot部署；用 Wan2.2 生成 |
 | 170 | 砸完拆——四款灵巧手终极测评 | 小Dou有两块钢铁 | 2026-01-21 | 104 | [链接](https://www.xiaohongshu.com/explore/696f19eb000000000e03f4e9) | 4 款灵巧手拆解对比测评 |
 
+### 10.6 数据采集与遥操作
+
+| # | 标题 | 作者 | 日期 | 赞 | URL | 核心内容 |
+|---|------|------|------|-----|-----|---------|
+| 171 | UMI加上了力反馈 | VLA和RL的具身未来 | 2026-01-24 | 91 | [链接](https://www.xiaohongshu.com/explore/6974a02e000000000d00c0b7) | UMI+力反馈遥操作方案 |
+| 172 | UMI是具身数采的新变量 | 具身纪元 | 2025-11-30 | 52 | [链接](https://www.xiaohongshu.com/explore/6748b3e30000000025008b68) | UMI 数据采集新变量分析 |
+| 173 | 机器人数据怎么采 | 吕对对 | 2026-01-28 | 69 | [链接](https://www.xiaohongshu.com/explore/697891b6000000000d036f0b) | 数据采集方案对比与流程 |
+| 174 | 如何把机器人数据采集规模++ | Wenhao Wang | 2026-02-27 | 88 | [链接](https://www.xiaohongshu.com/explore/69a02ce6000000001b01ed78) | 规模化数据采集方法论 |
+| 175 | 大热的UMI走到哪一步了 | AI智件 | 2026-02-05 | 19 | [链接](https://www.xiaohongshu.com/explore/69840eee000000000e00e35e) | UMI 进展追踪 |
+| 176 | TWIST2人型机器人大规模数据采集系统 | Yanjie Ze | 2025-11-06 | 308 | [链接](https://www.xiaohongshu.com/explore/6920f9dc000000001e02c1ee) | 人形机器人大规模数据采集系统 TWIST2 |
+
+### 10.7 π0 微调与真机部署
+
+| # | 标题 | 作者 | 日期 | 赞 | URL | 核心内容 |
+|---|------|------|------|-----|-----|---------|
+| 177 | π0.6的RL能力被开源平替了？ | AI烤红薯 | 2025-12-13 | 133 | [链接](https://www.xiaohongshu.com/explore/693caec7000000001f008e48) | πRL让Flow Matching VLA可做RL微调，清华+北大+CMU |
+| 178 | pi0微调尝试，效果还行 | ZHang | 2025-12-18 | 69 | [链接](https://www.xiaohongshu.com/explore/69440b99000000001e006a28) | π0真机部署，误映射笛卡尔空间仍能完成任务 |
+| 179 | 最强VLA模型π*0.6来了！ | 机器之心 | 2025-11-18 | 267 | [链接](https://www.xiaohongshu.com/explore/691c515e000000001e02ae52) | PI发布π0.6，微调后除衣物外90%成功率 |
+| 180 | π0真机部署 | 科研好楠人 | 2025-06-12 | 60 | [链接](https://www.xiaohongshu.com/explore/684abd98000000000303ded0) | π0复现踩坑，单臂50条数据微调跑通，双臂未work |
+| 181 | π0+RAG,告别微调 | 明天发顶会！ | 2025-06-02 | 273 | [链接](https://www.xiaohongshu.com/explore/683d293a000000002200732c) | π0+RAG方案，告别微调的新范式 |
+| 182 | Evo-RL: 复现并开源Pi*0.6真机RL | 赵波 SJTU | 2026-03-05 | 395 | [链接](https://www.xiaohongshu.com/explore/69a8cf99000000001b01d128) | SO101上复现RECAP真机RL，基于LeRobot，最廉价方案 |
+| 183 | 对openpi复现/finetune感兴趣 | 南柯 | 2025-03-18 | 121 | [链接](https://www.xiaohongshu.com/explore/67d8ea9d000000001c03e769) | openpi微调细节：关节角度定义差异、gripper弧度制0-1 |
+
+### 10.8 VLA + RL 强化学习
+
+| # | 标题 | 作者 | 日期 | 赞 | URL | 核心内容 |
+|---|------|------|------|-----|-----|---------|
+| 184 | 当我读了一堆VLA+RL的paper之后 | 张海爆 | 2025-12-04 | 498 | [链接](https://www.xiaohongshu.com/explore/6930cb75000000001e0105dd) | RL vs IL工具箱对比，RL工具更多(价值函数/策略梯度等) |
+| 185 | SimpleVLA-RL: VLA + R1like RL | 展的36次方 | 2025-05-30 | 385 | [链接](https://www.xiaohongshu.com/explore/683918530000000022024f9f) | 清华，DeepseekR1式RL用于VLA，单条轨迹+0/1奖励超越全量SFT |
+| 186 | VLA+RL 真机RL paper汇总 | S!mple | 2025-11-02 | 57 | [链接](https://www.xiaohongshu.com/explore/6906c807000000000503b25b) | VLA+RL论文列表汇总 |
+| 187 | 真机RL思考: World or Human in the Loop | 眠歌 | 2026-03-01 | 150 | [链接](https://www.xiaohongshu.com/explore/69a35542000000001b01df4e) | world model替代真实交互做RL vs human-in-loop |
+| 188 | 把DiffusionNFT用在VLA RL | 王啸峰 | 2026-03-06 | 107 | [链接](https://www.xiaohongshu.com/explore/69aae59a000000001d012a1b) | π-StepNFT：flow-based VLA无需likelihood/critic的RL微调 |
+| 189 | WMPO：VLA在世界模型中RL | (匿名) | 2026-01-14 | 87 | [链接](https://www.xiaohongshu.com/explore/69678d17000000000e03dceb) | ICLR2026，世界模型内on-policy RL，延续IRASim方向 |
+| 190 | ThinkAct：VLA+RL三思而后行 | 西图Situr | 2025-07-23 | 186 | [链接](https://www.xiaohongshu.com/explore/6880796f000000001d00de5b) | NVIDIA+台大，VLA显式推理+RL，解决多步规划痛点 |
+| 191 | VLA+真机RL路线的奇怪思考 | 骏骏骏骏🐎 | 2026-01-07 | 180 | [链接](https://www.xiaohongshu.com/explore/695e4900000000000e03f55e) | 逆共识思考：VLA+真机RL路线的质疑与反思 |
+
+### 10.9 Sim2Real 仿真迁移
+
+| # | 标题 | 作者 | 日期 | 赞 | URL | 核心内容 |
+|---|------|------|------|-----|-----|---------|
+| 192 | sim2real到底在说什么？ | 搞机器人的乌萨奇 | 2026-01-14 | 66 | [链接](https://www.xiaohongshu.com/explore/6967af3a000000002200a7f2) | Sim2Real Gap系统性梳理，目标不是仿真真实而是策略鲁棒 |
+| 193 | PIN-WM：可微物理世界模型Sim2Real | 强化学习实验室 | 2025-09-21 | 64 | [链接](https://www.xiaohongshu.com/explore/68cfb69500000000130351d7) | 物理-视觉端到端可微学习，Push-T仿真到真实 |
+| 194 | 英伟达sim2real新突破DoorMan | AI烤红薯 | 2025-12-13 | 63 | [链接](https://www.xiaohongshu.com/explore/693cbe93000000001e02d5a6) | DoorMan：让仿真分布⊃真实分布，人形开门43维动作空间 |
+| 195 | Simulation的价值正在被放大 | Dr.He | 2025-12-03 | 115 | [链接](https://www.xiaohongshu.com/explore/692fbbde000000001f0045aa) | 仿真派观点，InternData等工作证明Zero-shot Sim2Real Transfer可行 |
+| 196 | GSWorld闭环照片级仿真平台 | AI朋友圈 | 2025-10-28 | 39 | [链接](https://www.xiaohongshu.com/explore/69003555000000000700806d) | 3DGS照片级仿真+闭环操作，可"读档重来" |
+| 197 | EmbodieDreamer Real2Sim2Real | AI椰青 | 2025-07-08 | 19 | [链接](https://www.xiaohongshu.com/explore/686c9c25000000000d01a6ff) | PhysAligner+VisAligner，可微物理系统辨识三阶段 |
+| 198 | Isaac Sim在机器人行业的真实采用情况 | Zane的机器人技术社区 | 2026-01-19 | 122 | [链接](https://www.xiaohongshu.com/explore/696e0737000000002200bcfe) | Isaac Sim产业采用现状调查 |
+| 199 | DPPO：Diffusion Policy策略优化 | AI朋友圈 | 2024-09-05 | 154 | [链接](https://www.xiaohongshu.com/explore/66d986410000000012010e18) | 策略梯度优化预训练扩散策略，sim2real零样本迁移 |
+
+### 10.10 触觉传感与力控
+
+| # | 标题 | 作者 | 日期 | 赞 | URL | 核心内容 |
+|---|------|------|------|-----|-----|---------|
+| 200 | 真机VTLA-RL | R&B All Night🌙 | 2026-01-05 | 173 | [链接](https://www.xiaohongshu.com/explore/695bbb8e000000000e03f6fe) | 触觉不能简单当视觉模态用，表征方式无统一共识 |
+| 201 | VLA-Touch：触觉反馈让机器人更聪明 | 西图Situr | 2025-08-09 | 115 | [链接](https://www.xiaohongshu.com/explore/6896255300000000250117bb) | NUS VLA-Touch框架，解决VLA缺乏触觉感知的痛点 |
+| 202 | 视触觉对齐到触力对齐的范式转变 | AGI具身君 | 2026-02-15 | 38 | [链接](https://www.xiaohongshu.com/explore/699141650000000028008cd3) | TaF-VLA：触觉-力对齐替代触觉-视觉对齐，精准力调节 |
+| 203 | 灵巧手具身智能工程与AI协作 | 人形蘑菇的日常 | 2025-11-15 | 42 | [链接](https://www.xiaohongshu.com/explore/69189ddc0000000004011adc) | 触觉传感器坐标系转换到URDF的工程实践 |
+| 204 | 指尖触觉感知实现精细抓取调整 | 老段知识加油站 | 2025-10-02 | 41 | [链接](https://www.xiaohongshu.com/explore/68dd67aa000000000302c79f) | 小米TacRefineNet，多指触觉融合手内姿态调整 |
+| 205 | 具身智能触觉入门指南 | Mango-Man | 2024-12-27 | 315 | [链接](https://www.xiaohongshu.com/explore/676e057c0000000013003240) | 哥大博士，柔性触觉传感器全面入门 |
+| 206 | 为什么选择电磁方案触觉传感器 | Lai Wei | 2025-12-20 | 130 | [链接](https://www.xiaohongshu.com/explore/6946487f000000001f009cb3) | 霍尔方案多维力解算，各方案优缺点对比 |
+
+### 10.11 移动操作与导航
+
+| # | 标题 | 作者 | 日期 | 赞 | URL | 核心内容 |
+|---|------|------|------|-----|-----|---------|
+| 207 | MoManipVLA：50条数据学会移动操作 | 镜水明渊 | 2025-03-28 | 41 | [链接](https://www.xiaohongshu.com/explore/67e61f7a000000001b03bf12) | CVPR，VLA路标生成+移动操作，50组数据40%成功率 |
+| 208 | MobileVLA-R1：强化VLA的移动机器人 | 论文解码 | 2025-11-25 | 3 | [链接](https://www.xiaohongshu.com/explore/6925a46f000000000d036ece) | 北大，多粒度CoT+GRPO强化学习，导航+操作统一 |
+| 209 | ODYSSEY：四足机器人VLN+VLA统一框架 | 西图Situr | 2025-08-23 | 41 | [链接](https://www.xiaohongshu.com/explore/68a9c43a000000001d02d7b8) | 层次化VL规划+全身控制，四足locomotion+manipulation |
+| 210 | Mobi-π：让固定训练的具身AI动起来 | 西图Situr | 2025-08-26 | 53 | [链接](https://www.xiaohongshu.com/explore/68ad6e99000000001d034a00) | Stanford，固定位置训练策略→移动平台部署的迁移方案 |
+| 211 | GigaBrain-0：世界模型的VLA系统 | AI椰青 | 2025-10-24 | 56 | [链接](https://www.xiaohongshu.com/explore/68fa3eab0000000004002faa) | 世界模型生成数据的VLA基础模型，减少真实数据依赖 |
+| 212 | 星海图开源VLA G0 | Jay的机器人空间 | 2025-09-19 | 15 | [链接](https://www.xiaohongshu.com/explore/68cc353c000000001101ca62) | 500+小时真实移动操作数据，双臂平台，跨本体训练 |
+
+### 10.12 产业融资与公司动态
+
+| # | 标题 | 作者 | 日期 | 赞 | URL | 核心内容 |
+|---|------|------|------|-----|-----|---------|
+| 213 | 春晚后具身智能接连融资，9家估值超100亿 | 科技先声 | 2026-03-05 | 45 | [链接](https://www.xiaohongshu.com/explore/69a99c48000000001503071b) | 星动纪元/银河通用等9家破百亿，端到端RL成卖点 |
+| 214 | 2025年具身智能3个月37笔融资 | ROBO-INSIGHT | 2025-04-21 | 274 | [链接](https://www.xiaohongshu.com/explore/680628ca000000001d0004c7) | Q1国内37笔35亿，上海10家最卷，天使轮纪录8.8亿 |
+| 215 | 星海图融资背后的资本收编 | 掀桌指南 | 2026-02-11 | 89 | [链接](https://www.xiaohongshu.com/explore/698c4736000000000e00ee67) | 逆共识：找VC做CFO，用投资"收编"科学家，产业进化or初心迷失 |
+| 216 | 近期部分具身智能企业融资信息 | momo | 2026-03-15 | 3 | [链接](https://www.xiaohongshu.com/explore/69b5c63f0000000023020bde) | 帕西尼/星动纪元/极佳视界等最新融资明细 |
+| 217 | 无界动力成立3亿天使融资 | 张志鹏Dylan | 2025-11-10 | 120 | [链接](https://www.xiaohongshu.com/explore/69115d3b0000000007008051) | 红杉+线性领投，通用具身机器人，手眼脑协同 |
+| 218 | Manifold AI世界模型近2亿PreA | Manifold AI 流形空间 | 2026-03-11 | 43 | [链接](https://www.xiaohongshu.com/explore/69b122ac00000000060308a3) | 成立不到十个月4轮近5亿，华为哈勃/君联等投资 |
+| 219 | 星海图融资10亿后首次发声 | AGI具身职创局 | 2026-02-14 | 23 | [链接](https://www.xiaohongshu.com/explore/698fd5a5000000002800a635) | B轮估值破百亿，高瓴/美团/今日资本追投，VLA模型+数据采集 |
+| 220 | AMA：从创业到大厂到博士（蚂蚁具身仿真） | Ken学长 | 2025-11-02 | 523 | [链接](https://www.xiaohongshu.com/explore/6906c4cd0000000007002f4d) | 蚂蚁具身智能仿真组负责人，创业→字节/美团/腾讯→阿里 |
+
 ---
 
 ## 11. 小红书上找不到的东西
 
-以下话题搜遍 170 篇帖子仍然缺少实操经验分享。如果你正在做这些方向，建议去 GitHub Issues（LeRobot/openpi/SmolVLA）、知乎专栏、或直接联系论文作者：
+以下话题搜遍 220 篇帖子仍然缺少实操经验分享。如果你正在做这些方向，建议去 GitHub Issues（LeRobot/openpi/SmolVLA）、知乎专栏、或直接联系论文作者：
 
 1. **FAST tokenization**（DCT+BPE 动作压缩）——π0.5 在用但没人分享调参经验
 2. **Co-training 数据混合比例**——机器人数据 vs 互联网视频 vs 仿真数据的配比怎么调
