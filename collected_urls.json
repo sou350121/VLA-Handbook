@@ -1,0 +1,32 @@
+{
+  "collected": [
+    "https://huggingface.co/blog/smolvla",
+    "https://huggingface.co/blog/nvidia/gr00t-n1-5-so101-tuning",
+    "https://huggingface.co/blog/nxp/bringing-robotics-ai-to-embedded-platforms",
+    "https://huggingface.co/blog/lerobot-release-v050",
+    "https://huggingface.co/blog/sherryxychen/train-act-on-so-101",
+    "https://trelis.substack.com/p/train-an-act-policy-for-an-so-101",
+    "https://penn-pal-lab.github.io/Pi0-Experiment-in-the-Wild/",
+    "https://huggingface.co/blog/nvidia/cosmos-policy-for-robot-control",
+    "https://rocm.blogs.amd.com/artificial-intelligence/rocm-lerobot/README.html",
+    "https://mbreuss.github.io/blog_post_iclr_26_vla.html",
+    "https://www.pi.website/blog/pistar06",
+    "https://medium.com/correll-lab/fine-tuning-smolvla-for-new-environments-code-included-af266c56d632",
+    "https://openvla-oft.github.io/",
+    "https://www.figure.ai/news/helix",
+    "https://www.giacomoran.com/blog/act-smooth/",
+    "https://www.ml6.eu/en/blog/ai-robotics-a-field-report-on-imitation-learning-with-lerobot",
+    "https://ggando.com/blog/smolvla-so101/",
+    "https://docs.phospho.ai/learn/train-smolvla",
+    "https://www.hackster.io/shahizat/running-lerobot-so-101-arm-kit-using-nvidia-jetson-agx-orin-19b8a4",
+    "https://huggingface.co/docs/lerobot/en/hilserl",
+    "https://learnopencv.com/vision-language-action-models-lerobot-policy/",
+    "https://research.nvidia.com/labs/dir/onedp/",
+    "https://www.seeedstudio.com/blog/2025/11/06/2025-embodied-ai-hackathon-recap-we-built-home-cooking-robot/",
+    "https://medium.com/@henryhu1607/genai-for-robotics-fine-tuning-smolvla-to-pick-and-place-940b485e6c9b",
+    "https://dtsbourg.me/en/articles/predictions-embodied-ai",
+    "https://developer.nvidia.com/blog/streamline-robot-learning-with-whole-body-control-and-enhanced-teleoperation-in-nvidia-isaac-lab-2-3/",
+    "https://aws.amazon.com/blogs/opensource/building-intelligent-physical-ai-from-edge-to-cloud-with-strands-agents-bedrock-agentcore-claude-4-5-nvidia-gr00t-and-hugging-face-lerobot/",
+    "https://wiki.seeedstudio.com/fine_tune_gr00t_n1.5_for_lerobot_so_arm_and_deploy_on_jetson_thor/"
+  ]
+}

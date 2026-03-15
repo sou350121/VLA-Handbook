@@ -6,13 +6,19 @@
 
 ## ⚡ 卡住了？先看这个
 
-**[📕 社区实战笔记 (Community Field Notes)](./community_field_notes_xiaohongshu.md)** — 100+ 篇小红书帖子蒸馏。论文不会告诉你的真实参数、真实失败、真实吐槽。
+**[📕 社区实战笔记・中文 (小红书)](./community_field_notes_xiaohongshu.md)** — 220+ 篇小红书帖子蒸馏。论文不会告诉你的真实参数、真实失败、真实吐槽。
 
 > 带着问题来的话，直接看笔记顶部的「你现在卡在哪？」速查表。
 > 需要深入理解的话，每个 section 末尾有对应专题文件链接。
-> **每 3 天自动增量更新。**
+> **每周五 10:00 自动增量更新。**
 
-**[🔧 GitHub 社区实战笔记 (GitHub Community Field Notes)](./community_field_notes_github.md)** — 200+ 条高互动 Issues 蒸馏。硬件兼容矩阵、训练收敛失败根因、官方 checkpoint 复现问题、跨仓库收敛信号。
+**[📘 社区实战笔记・英文 (HF Blog / Discord / 厂商博客)](./community_field_notes_english.md)** — 50 条英文社区精选：SmolVLA / π0-FAST / GR00T N1.5 / ACT 的训练配方、真机部署踩坑、推理延迟实测、数据迭代经验。
+
+> 28 条 Blog 深度拆解（HuggingFace、NVIDIA、Phospho、ML6、个人实战博客等）+ 22 条 LeRobot Discord 一手情报。
+> 每条 Discord 原文保留英文全量展示，方便直接参考。
+> **每周五 11:00 自动增量更新。**
+
+**[🔧 GitHub 社区实战笔记 (GitHub Issues)](./community_field_notes_github.md)** — 200+ 条高互动 Issues 蒸馏。硬件兼容矩阵、训练收敛失败根因、官方 checkpoint 复现问题、跨仓库收敛信号。
 
 > 21 个仓库（lerobot/openpi/GR00T/ManiSkill/IsaacLab/Genesis...），每条结论附 Issue 链接。
 > **Pulsar GitHub Issues Sensor 每周自动扫描更新。**
@@ -63,5 +69,6 @@
 ## 学习建议
 - **刚入门**: 先看 **[📕 社区笔记速查表](./community_field_notes_xiaohongshu.md#速查你现在卡在哪)**，找到你的问题，再跳到对应专题文件。
 - **硬件党**: **[硬件选型](./robot_hardware_selection_pricing.md)** + **[📕 社区机械臂避坑](./community_field_notes_xiaohongshu.md#22-硬件相关陷阱)**。
-- **工程党**: **[VLA 边缘部署](./vla_model_edge_deployment.md)** + **[📕 社区推理加速实测](./community_field_notes_xiaohongshu.md#93-边缘部署与模型压缩)**。
+- **工程党**: **[VLA 边缘部署](./vla_model_edge_deployment.md)** + **[📕 社区推理加速实测](./community_field_notes_xiaohongshu.md#93-边缘部署与模型压缩)** + **[📘 英文社区推理延迟全景](./community_field_notes_english.md)**。
 - **算法党**: **[Sim-to-Real 策略](./sim_to_real_transfer_strategies.md)** + **[📕 社区 Sim2Real 失败根因](./community_field_notes_xiaohongshu.md#31-sim2real-gap-的真实根因)**。
+- **英文读者**: 直接看 **[📘 English Community Field Notes](./community_field_notes_english.md)** — Blog 深度拆解 + Discord 原文，不需要翻译。
