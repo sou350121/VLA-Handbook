@@ -1,6 +1,6 @@
 # 社区实战笔记：小红书 VLA 从业者经验蒸馏 (Community Field Notes)
 
-> **来源**：150+ 篇小红书帖子 + 评论区，2026-03-14 起持续收集
+> **来源**：170+ 篇小红书帖子 + 评论区，2026-03-14 起持续收集
 > **原始数据**：[memory/blog/archives/xiaohongshu-community/](../../memory/blog/archives/xiaohongshu-community/)
 > **定位**：论文不会告诉你的东西——社区实战者的真实参数、真实失败和真实吐槽。每条结论附「帖N」编号，可在原始数据中回溯验证。
 > **更新频率**：每 3 天自动增量收集
@@ -28,6 +28,10 @@
 | 全量微调 vs LoRA？ | 数据少用 LoRA，数据 >500 条考虑全量。别无脑 LoRA | [§9.2](#92-lora-vs-全量微调) |
 | 边缘部署怎么加速？ | CUDA Graph + 算子融合 → 单卡 30Hz 推理 480Hz 控制 | [§9.3](#93-边缘部署与模型压缩) |
 | 买哪个机械臂做研究？ | 低成本：XLeRobot(4K)/SO101。中端：松灵七轴(15K)。避开 Piper | [§9.4](#94-机械臂选型指南) |
+| VLA 推理加速有哪些方案？ | LAC(1.76x)、CUDA Graph+算子融合、action chunk overlap | [§10.3](#103-推理加速与部署) |
+| WAM/世界模型最新进展？ | CoWVLA(运动潜空间)、DreamZero(零样本)、LDA-1B | [§10.2](#102-世界模型方向) |
+| 灵巧手操作怎么做？ | DexImit(视频→数据)、DexWM(世界模型)、4款手测评 | [§10.5](#105-灵巧手与双臂操作) |
+| VLA 抖动/帕金森怎么修？ | chunk间→RTC过渡；chunk内→传统滤波后处理 | [§10.3](#103-推理加速与部署) |
 | VLA 还是 VAM？ | VAM(Video-Action Model) 正在起势，用 10% 数据达最高成功率 | [§9.5](#95-vla-vs-vam-路线之争) |
 | VLA-Adapter 是什么？ | 保留 VLM 能力 + decoder 端接 action head，科研平民化 | [§9.2](#92-lora-vs-全量微调) |
 | 真机 RL 怎么闭环？ | Evo-RL: 示教→部署→犯错→人工纠偏→数据回流→再训练 | [§1.6](#16-rl-后训练-post-training) |
@@ -594,9 +598,60 @@ Kivy 的分析（帖17）：Diffusion Policy 有效的核心不是"多模态分�
 
 ---
 
-## 10. 小红书上找不到的东西
+## 10. 可追溯信息源 (Traceable Posts, 2026-03-15 batch)
 
-以下话题搜遍 150 篇帖子仍然缺少实操经验分享。如果你正在做这些方向，建议去 GitHub Issues（LeRobot/openpi/SmolVLA）、知乎专栏、或直接联系论文作者：
+> 本轮起每条帖子附带**原文 URL + 发布日期 + 内容摘要**，方便回溯验证。
+
+### 10.1 VLA 训练与新范式
+
+| # | 标题 | 作者 | 日期 | 赞 | URL | 核心内容 |
+|---|------|------|------|-----|-----|---------|
+| 151 | Motus WA/VA insights | 谭谈AI | 2026-02-09 | 306 | [链接](https://www.xiaohongshu.com/explore/6989fc1f000000001a01d90b) | WA/VA 预测 1.6s/48 action/8 帧(5hz+30hz)，DreamZero 同 setting |
+| 152 | VLA预训练范式从根上就错了？WAM才是未来 | 爱喝咖啡的猪 | 2026-03-03 | 733 | [链接](https://www.xiaohongshu.com/explore/69a6ed98000000001a02700f) | LDA-1B(latent dynamics action model)在 DINO latent space 构建 dynamics+action unified model，跨本体异构数据 |
+| 153 | Jim Fan：世界动作模型WAM来了 | VLA和RL的具身未来 | 2026-02-05 | 30 | [链接](https://www.xiaohongshu.com/explore/698499f2000000000e00c079) | WAM 只有视频编码，长远任务规划存疑 |
+| 154 | VLA-Pilot被IEEE RAL接收 | ZhuoLi.Robotics | 2026-03-14 | 117 | [链接](https://www.xiaohongshu.com/explore/69b405df000000001a02fcec) | VLA-Pilot++开发中，系列计划开源 |
+| 155 | ICLR +4 具身VLA方向 | Yilun Chen | 2026-01-27 | 200 | [链接](https://www.xiaohongshu.com/explore/69778f49000000000d00a9fa) | 单人 4 篇 ICLR'26 VLA 方向论文 |
+| 156 | Lerobot框架真机VLA复现 | Claude | 2026-03-07 | 89 | [链接](https://www.xiaohongshu.com/explore/69873b46000000000a02e3aa) | smolvla 50ep/20hz/bs64/lr4e-5/30k step/chunksize30，成功率 50-80% |
+
+### 10.2 世界模型方向
+
+| # | 标题 | 作者 | 日期 | 赞 | URL | 核心内容 |
+|---|------|------|------|-----|-----|---------|
+| 157 | CVPR2026世界模型新思路 CoWVLA | 世界模型研究所 | 2026-03-09 | 94 | [链接](https://www.xiaohongshu.com/explore/69adb76c000000002800b91b) | Chain of World: 视频VAE→结构+运动潜变量，在运动空间做世界模型推理 |
+| 158 | 世界模型打开机器人操作新世界的大门 | YY硕 | 2026-03-13 | 170 | [链接](https://www.xiaohongshu.com/explore/69b26826000000001b0178a5) | "去掉L是符合直觉的前进方向"，VLA→VA 的讨论 |
+| 159 | DreamZero：英伟达零样本 | 探索ai的瓦力 | 2026-02-22 | 118 | [链接](https://www.xiaohongshu.com/explore/699a6b7c000000001600a280) | 先生成视频再执行，成本高讨论；知道做什么→知道怎么做→能做好是不同阶段 |
+| 160 | 王兴兴发论文！宇树机器人刷视频学极限动作 | 智东西 | 2026-03-03 | 681 | [链接](https://www.xiaohongshu.com/explore/69a6bf68000000001a020155) | 宇树从互联网视频学习极限动作的论文 |
+
+### 10.3 推理加速与部署
+
+| # | 标题 | 作者 | 日期 | 赞 | URL | 核心内容 |
+|---|------|------|------|-----|-----|---------|
+| 161 | 能让VLA推理提速1.76倍的框架 | 具身智能观察猿 | 2026-02-12 | 32 | [链接](https://www.xiaohongshu.com/explore/698d494d000000002800bb26) | LAC框架，A100/H100上复现，轻量级但需高效调优 |
+| 162 | 如何解决VLA推理过程卡顿 | 搞机器人的乌萨奇 | 2026-01-18 | 106 | [链接](https://www.xiaohongshu.com/explore/696cdd7d000000002200b312) | 等待下一推理结果时机械臂停顿；action chunk 过渡方案讨论 |
+| 163 | VLA可以跑多快？英伟达系统性分析 | 具身智能之心 | 2026-02-24 | 79 | [链接](https://www.xiaohongshu.com/explore/699d125c0000000028022fb4) | 4090 vs Jetson AGX/Thor 端侧推理测试对比 |
+| 164 | 如何改善VLA的帕金森 | duckduck | 2025-08 | 259 | [链接](https://www.xiaohongshu.com/explore/689df179000000001b03eecb) | chunk间抖动=相邻推理不连续(RTC过渡)；chunk内抖动=只监督均距无时序(滤波后处理) |
+
+### 10.4 工具与可视化
+
+| # | 标题 | 作者 | 日期 | 赞 | URL | 核心内容 |
+|---|------|------|------|-----|-----|---------|
+| 165 | VLAExplain-VLA模型注意力可视化工具开源 | 机器小白RobotNewbie | 2026-02-24 | 114 | [链接](https://www.xiaohongshu.com/explore/699d71ba000000001b015e7d) | VLA attention可视化开源；无pretrain时attention乱的问题 |
+
+### 10.5 灵巧手与双臂操作
+
+| # | 标题 | 作者 | 日期 | 赞 | URL | 核心内容 |
+|---|------|------|------|-----|-----|---------|
+| 166 | XLeRobot家务机器人开源4千元成本 | VectoriaWangel | 2026-03-15 | 1033 | [链接](https://www.xiaohongshu.com/explore/684989e6000000002300d85f) | 低成本开源家务机器人平台，Jetson Orin，大量学生复刻反馈 |
+| 167 | DexWM：专为灵巧操作的世界模型 | 深蓝具身智能 | 2026-01-14 | 447 | [链接](https://www.xiaohongshu.com/explore/6967098e0000000022023392) | 杨立昆团队，灵巧手世界模型 |
+| 168 | 70分钟对话灵巧智能CEO：灵巧手赛道真相 | 韩成龙Jackie | 2026-03-10 | 341 | [链接](https://www.xiaohongshu.com/explore/69ae5877000000001a030eee) | 灵巧手赛道产业真相，CEO 深度对谈 |
+| 169 | DexImit：视频教会双臂灵巧操作 | Believer. | 2026-02-12 | 91 | [链接](https://www.xiaohongshu.com/explore/698d4d72000000001a01fc16) | 清华 DexImit：文本→视频→4D手物交互→灵巧手数据→zero-shot部署；用 Wan2.2 生成 |
+| 170 | 砸完拆——四款灵巧手终极测评 | 小Dou有两块钢铁 | 2026-01-21 | 104 | [链接](https://www.xiaohongshu.com/explore/696f19eb000000000e03f4e9) | 4 款灵巧手拆解对比测评 |
+
+---
+
+## 11. 小红书上找不到的东西
+
+以下话题搜遍 170 篇帖子仍然缺少实操经验分享。如果你正在做这些方向，建议去 GitHub Issues（LeRobot/openpi/SmolVLA）、知乎专栏、或直接联系论文作者：
 
 1. **FAST tokenization**（DCT+BPE 动作压缩）——π0.5 在用但没人分享调参经验
 2. **Co-training 数据混合比例**——机器人数据 vs 互联网视频 vs 仿真数据的配比怎么调
