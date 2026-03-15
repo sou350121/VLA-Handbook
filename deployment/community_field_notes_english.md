@@ -1,6 +1,6 @@
 # VLA/Embodied AI 英文社区实战笔记
 
-> **版本**: v1.0 — 2026-03-15
+> **版本**: v2.0 — 2026-03-15
 > **数据来源**: HuggingFace Blog、GitHub Issues、厂商技术博客、Discord 社区
 > **对应中文版**: `community_field_notes_xiaohongshu.md`（220+ 篇小红书帖子）
 > **采集 skill**: `scripts/en-vla-collector/english-vla-collector-SKILL.md`
@@ -39,6 +39,19 @@
 | 13 | OpenVLA-OFT: Fine-Tuning Recipe for 26× Faster VLA | Stanford (Chelsea Finn Lab) | 2025-02 | Recipe, Arch | [链接](https://openvla-oft.github.io/) | 通过 parallel decoding + action chunking 实现 26× 加速、3× 低延迟；LIBERO 从 76.5%→97.1% SOTA；真机 ALOHA 双臂上超过 π0、RDT-1B、Diffusion Policy、ACT 最高 15%；**核心发现**：L1 regression 比 diffusion 在不完美数据上更鲁棒——diffusion 会精确复现 suboptimal 动作（如勺子插太深），L1 的有限表达力反而起到正则化效果，自动取 median mode；8×A100/H100 训练 1-2 天，50K-150K steps |
 | 14 | Figure Helix: 首个全身人形 VLA | Figure AI | 2025-02-20 | Arch, Strategy | [链接](https://www.figure.ai/news/helix) | System 1 + System 2 架构：S2 = 7B VLM@7-9Hz（场景理解）+ S1 = 80M transformer@200Hz（低级控制），通过 latent vector 端到端训练通信；仅 ~500h 遥操数据（不到前人 VLA 数据集的 5%）；35-DoF 全上身控制（含手指）；双机器人协作零样本抓取任何家用物品；**部署关键**：S1/S2 分跑双嵌入式 GPU，训练时注入 temporal offset 模拟推理延迟以消除 train-inference gap；单套权重、无需 task-specific fine-tuning |
 | 15 | ACTSmooth: 消除 ACT 在 SO-101 上的抖动 | Giacomo Moran Blog | 2026-03-10 | Recipe, Debug | [链接](https://www.giacomoran.com/blog/act-smooth/) | ACT 在真机上两大问题：推理延迟导致动作过期 + chunk 边界不连续导致抖动；ACTSmooth 方案：prefix conditioning（把上一个 chunk 的尾部动作作为下一个的输入）+ relative action representation + async inference；在 SO-101 + M2 Max MacBook 上实测：加速度均匀性从 170→115（降 32%），任务得分 1.8/2.0；relative actions 是关键（去掉后 smoothness 回退到 168）；past prefix 反而是负面结果（去掉后略微更smooth）；10FPS 下线性插值到 30FPS 命令率是必须的；代码开源 lerobot-policy-act-smooth |
+| 16 | ML6 Field Report: ACT + GR00T-N1 实战 | ML6 Blog | 2025-12 | Recipe, Debug, Strategy | [链接](https://www.ml6.eu/en/blog/ai-robotics-a-field-report-on-imitation-learning-with-lerobot) | 比利时 ML6 团队在 SO-100 上测试 ACT + GR00T-N1；**ACT 结果**：10k frames/20ep→60% SR（训练时间不够），46k/100ep→90%（单轴），137k/340ep→79%（双轴但可泛化）；**GR00T-N1 结果**：pick-place 完全失败（缺乏精度），但布料折叠达 80%（复杂任务反而好）；VLA 推理延迟导致动作间明显卡顿；关键学习：数据精确度 > 数量、受控环境很重要、loss 不能反映真实成功率；hackathon 第3名（用 gaussian splatting 解决相机不稳定） |
+| 17 | SmolVLA 在 SO-101 上的三轮数据迭代 | ggando Blog | 2026-03-01 | Recipe, Debug | [链接](https://ggando.com/blog/smolvla-so101/) | 三轮数据采集的深刻教训：v1(50ep/30cm)→手臂接近但抓空，v2(81ep)→引入"nudge trick"导致 20-80% 大方差（混合策略是毒药），v3(75ep/10cm/严格协议)→dual-cam 100% SR；**核心发现**：一致性 > 数量（75 clean > 81 mixed）、workspace 密度比总量重要（50ep@30cm 失败 vs 75ep@10cm 成功）；SmolVLA vs ACT 对比：同数据下 SmolVLA dual-cam 100% vs ACT 80%；RealSense 接 USB 2.0 会静默降速（用 lsusb -t 检查）；遥操延迟会降低 demo 质量（LeRobot record_loop 同步 IO 阻塞） |
+| 18 | Phospho SmolVLA 官方训练指南 | Phospho Docs | 2026-02 | Recipe | [链接](https://docs.phospho.ai/learn/train-smolvla) | 官方推荐：~50 episodes 起步，20k steps 约 4h on A100；SmolVLA 是 base model 必须 fine-tune；uv 包管理器推荐（避免依赖冲突）；phosphobot 中间件简化 SO-100/SO-101 控制、数据录制、模型训练全流程；支持 Meta Quest VR 遥操；数据采集到部署的端到端教程 |
+| 19 | SO-101 on Jetson AGX Orin: 边缘训练+推理 | Hackster.io (Shahizat) | 2025-07 | Edge, Recipe | [链接](https://www.hackster.io/shahizat/running-lerobot-so-101-arm-kit-using-nvidia-jetson-agx-orin-19b8a4) | Jetson AGX Orin 上端到端运行 LeRobot SO-101；Diffusion Policy 训练约 6h 完成；展示从硬件组装、校准、数据采集、训练到推理的完整 pipeline；Jetson GPU 同时用于训练和推理；边缘设备上的 imitation learning 可行性验证 |
+| 20 | HIL-SERL: 1-2h 真机 RL 达到近完美成功率 | HF LeRobot Docs | 2025-10 | Arch, Recipe | [链接](https://huggingface.co/docs/lerobot/en/hilserl) | Human-in-the-Loop Sample Efficient RL；分布式 SAC learner + actor + 人类干预；reward classifier 自动检测成功/失败；1-2h 真机训练即可达到 100% success rate；与纯 IL 对比：IL 受限于 demo 质量上限，HIL-SERL 可超越人类 demo；LeRobot 集成支持；关键限制：需要人一直在旁边看着、干预 |
+| 21 | LearnOpenCV VLA 全景 + LeRobot Policy 教程 | LearnOpenCV | 2025-04 | Arch, Strategy | [链接](https://learnopencv.com/vision-language-action-models-lerobot-policy/) | VLA 架构全景：dual-expert 路线（NVIDIA GR00T N1 + Figure Helix）vs generalist 路线（π0）；LeRobot 框架实现 IL/RL/VLA 三类 policy；SmolVLA 特色：社区数据驱动预训练；对初学者友好的 VLA 入门资源 |
+| 22 | One-Step Diffusion Policy: 1.5Hz→62Hz 加速 | NVIDIA Research (ICML 2025) | 2025-10 | Arch, Edge | [链接](https://research.nvidia.com/labs/dir/onedp/) | 蒸馏多步 diffusion 为单步生成器；推理频率从 1.5Hz→62Hz（41× 加速）；仅需 2-10% 额外预训练成本；KL divergence 沿 diffusion chain 最小化；6 个仿真 + 4 个 Franka 真机任务验证；解决 diffusion policy 的核心部署瓶颈——迭代去噪太慢 |
+| 23 | 2025 Embodied AI Hackathon 回顾 | Seeed Studio Blog | 2025-11-06 | Strategy, Recipe | [链接](https://www.seeedstudio.com/blog/2025/11/06/2025-embodied-ai-hackathon-recap-we-built-home-cooking-robot/) | Seeed Studio + LeRobot + NVIDIA 联合 hackathon；冠军"Matcha Bot"用双 SO-101 臂自动制作抹茶（GR00T N1.5 + Jetson Thor）；参赛队伍横跨 arms/exoskeleton/自由赛道；100h 真实数据 + 100% 成功率挑战赛道；硬件：20 YAM + 20 SO-101 提供给参赛者；展示社区从 hobby 到应用的转型 |
+| 24 | GenAI for Robotics: SmolVLA 仿真微调 | Medium (Henry Hu) | 2026-01 | Recipe, Debug | [链接](https://medium.com/@henryhu1607/genai-for-robotics-fine-tuning-smolvla-to-pick-and-place-940b485e6c9b) | SmolVLA 450M 在 Franka Panda 仿真 pick_cube_rl 数据集（25 episodes）上微调；Google Colab A100 约 4h；结果：未能成功抓取，但行为"戏剧性地"改善——手臂主动朝 cube 移动并尝试抓取；25 episodes 不足以学会完整任务；SmolVLA 降低 VLA 入门门槛（学术实验室/个人也可以跑） |
+| 25 | 12 Predictions for Embodied AI 2026 | Dylan Bourgeois Blog | 2026-01 | Strategy | [链接](https://dtsbourg.me/en/articles/predictions-embodied-ai) | 12 项预测含：VLA 将成为标配但 sim benchmark 会被解（LIBERO >95% 已不够）；数据飞轮比模型架构更重要；RL post-training 将成为标准流程；边缘部署仍是瓶颈（95%/step → 60%@10步链式任务）；开源 vs 闭源差距在缩小但真机泛化仍差；触觉传感将成为下一个 frontier |
+| 26 | NVIDIA Isaac Lab 2.3: 遥操数据采集新标准 | NVIDIA Developer Blog | 2025-12 | Data, Recipe | [链接](https://developer.nvidia.com/blog/streamline-robot-learning-with-whole-body-control-and-enhanced-teleoperation-in-nvidia-isaac-lab-2-3/) | Isaac Lab 2.3 扩展遥操设备支持：Meta Quest VR、Manus 手套；SpaceMouse 比键盘产出更平滑的 demo；全身控制支持人形机器人数据采集；与 LeRobot 集成打通 sim→real pipeline；数据采集效率和质量是 imitation learning 最关键的环节 |
+| 27 | AWS Embodied AI: 从边缘到云的 Physical AI | AWS Open Source Blog | 2026-02 | Arch, Edge, Strategy | [链接](https://aws.amazon.com/blogs/opensource/building-intelligent-physical-ai-from-edge-to-cloud-with-strands-agents-bedrock-agentcore-claude-4-5-nvidia-gr00t-and-hugging-face-lerobot/) | Strands Agents + Bedrock + Claude 4.5 + GR00T + LeRobot 集成；GR00T 在 Jetson 边缘硬件上运行控制机械臂；展示 LLM agent 编排 + VLA 执行的分层架构；从云端推理到边缘部署的完整 physical AI stack |
+| 28 | Jetson Thor + GR00T N1.5 部署 SO-101 全流程 | Seeed Studio Wiki | 2026-01 | Edge, Recipe | [链接](https://wiki.seeedstudio.com/fine_tune_gr00t_n1.5_for_lerobot_so_arm_and_deploy_on_jetson_thor/) | GR00T N1.5 在 Jetson Thor 上的端到端部署指南；从 SO-101 数据采集 → 微调 → Jetson Thor 部署；Jetson Thor 1200 FP4 TFLOPS/64GB 内存，前代 Orin 2× 性能；社区首个 Jetson Thor + VLA 完整教程；与 hackathon 冠军"Matcha Bot"使用相同技术栈 |
 
 ---
 
@@ -122,6 +135,56 @@
 - **类别**: Debug, Edge
 - **关键数据点**: 8 队参赛仅 5 队完成；部分队伍放弃 RL 转 imitation learning；**Mac 上的推理延迟问题导致至少 2 队失败**——这与 ACTSmooth blog（#15）的发现一致：即使 ~40ms 延迟也会导致可见抖动；对 Mac 用户的警告：推理延迟必须显式处理（latency matching 或 async inference），否则策略表面上训好了但真机跑不动
 
+### D14. vast.ai 训练 SmolVLA 10/10 成功但无法泛化
+- **来源**: `#general-chat` — **Psychonautic** (2026/1/19 23:37)
+- **原文**: "Thanks for the advice! I have a leader arm and did exactly as you said; I collected data on a simple pick and place task with a pen and tray. I then used vast.ai to finetune smolvla on the data. It performed the task with a 10/10 success rate! However, since the task was very simple and narrow (pen and tray always in the same place), it of course struggles when there are any changes to the environment. So I'm wondering what the next step is to make something a little more general."
+- **类别**: Recipe, Debug
+- **关键数据点**: vast.ai 云端训练 SmolVLA 可行；固定场景 10/10 完美；但任何环境变化就失败；与 D6（SmolVLA 98%→暴跌）和 #17（ggando 三轮迭代）完全一致——泛化是所有人的核心瓶颈
+
+### D15. Pi0.5 复现失败：4×H200 仅达 55% vs 官方 95%
+- **来源**: `#vla-models` — 匿名用户 (2026/1 左右)
+- **原文**: "I attempted to reproduce the results for lerobot/pi05_libero_finetuned by following the provided recipe. Using 4x H200 GPUs, I fine-tuned lerobot/pi05_libero_base with a batch size of 64 for 6k steps. However, the Success Rate (SR) on the libero_10 evaluation was only around 55%. In contrast, when I evaluate the official lerobot/pi05_libero finetuned checkpoint directly, it achieves an SR of approximately 95%. Why am I unable to reproduce the original performance? I used the HuggingFaceVLA/libero dataset for this run."
+- **类别**: Debug
+- **关键数据点**: 4×H200、batch 64、6k steps 仍只有 55% SR（官方 95%）；可能原因：数据集版本不匹配、超参差异、评估协议不同；**复现 VLA 结果比想象中难得多**——硬件够了不代表结果能对齐
+
+### D16. Pi0.5 人形机器人按电梯按钮：~100 样本微调
+- **来源**: `#vla-models` — **Tahsincan Kose** (2026/1/8 20:42)
+- **原文**: "Hello everyone. I've finetuned Pi0.5 base on a single-task dataset for a custom humanoid robot on elevator button-pushing task. So my finetuning dataset contains ~100 samples from real-robot..."
+- **类别**: Recipe, Arch
+- **关键数据点**: Pi0.5 base 在非标准人形机器人上微调；仅 ~100 条真机数据用于电梯按钮任务；展示 VLA 在人形场景的迁移潜力；单任务 fine-tune 数据需求与桌面臂类似
+
+### D17. RealSense 深度数据集成：编码到 RGB 通道的 workaround
+- **来源**: `#help-general` — **dsvschvhm** (2025/11/5 09:56)
+- **原文**: "I used to try this method: depth camera is Intel Realsense D415, which casts depth data into mm. With my little workspace, I think 16bit is enough so I embed depth data into R and G channel and save them to image. Then saving the raw images after encoding to video. For the loss in image<->video, finally I can only use raw image to get real depth data. This is not a good way, I tried to save depth as other numberic data to .parquet file but it may lead to a very very large file."
+- **类别**: Debug, Data
+- **关键数据点**: LeRobot 目前不原生支持深度数据；社区 workaround：16bit depth 编码到 R+G 通道存为 image，但 video 压缩会损失精度；parquet 存数值可行但文件巨大；深度集成仍是开放问题
+
+### D18. SmolVLA 颜色泛化测试：抓取 OK 但放置退化
+- **来源**: ggando blog 补充数据（#17 延伸）
+- **原文**: (ggando blog 中的实验) 仅用红色 cube 训练的 SmolVLA，测试橙/蓝/绿 cube：橙色成功但回程撞碗（罕见于红色）、蓝色抓起但运输中掉落、绿色抓起但撞碗失败；1/3 success vs 5/5 红色
+- **类别**: Debug, Recipe
+- **关键数据点**: VLA 的视觉泛化是部分的——抓取动作可以跨颜色泛化，但放置轨迹严重依赖训练颜色；需要在数据集中加入颜色变化才能鲁棒；对"VLA 理解语言就能泛化"的期望需要校准
+
+### D19. GR00T-N1 布料操作：复杂任务反而比 pick-place 好
+- **来源**: ML6 blog 补充数据（#16 延伸）
+- **原文**: (ML6 blog 中的实验) GR00T-N1 pick-place 完全失败（0%），但布料折叠达 80%！模型展现强全局任务意识但缺乏精度和子任务感知；失败时会持续尝试（识别到任务未完成）
+- **类别**: Debug, Arch
+- **关键数据点**: VLA foundation model 的反直觉现象——精确 pick-place 不如"模糊"布料操作；可能因为预训练数据中布料操作有更好的 prior；对 VLA 选型的启示：不是所有任务都适合同一个模型
+
+### D20. ACT vs SmolVLA 训练效率对比
+- **来源**: ggando blog 补充数据（#17 延伸）
+- **原文**: (ggando blog 中的实验) 同一 v3 数据集(75ep) 训练 20k steps：SmolVLA dual-cam L1 loss 0.005, grad norm 0.11, ~10.4h, 100% SR; ACT L1 loss 0.052, grad norm 3.92, ~10.5h, 80% SR。ACT 没有内置 image resize→640×480 产出 602 encoder tokens，batch_size=64 在 24GB OOM
+- **类别**: Recipe, Arch
+- **关键数据点**: SmolVLA 预训练 backbone 优势明显：同数据同时间，loss 低 10×、gradient 稳定 35×；ACT 需要手动处理图像分辨率否则 OOM；但 ACT 52M 从零训到 80% 也说明小模型的竞争力
+
+### D21. 遥操数据质量 > 数量：一致策略胜过混合技巧
+- **来源**: 多源汇总（#17 ggando + #16 ML6 + #5 Sherry Chen）
+- **关键数据点汇总**: ggando 的 v2→v3 教训（nudge trick 混入导致方差爆炸）、ML6 的数据指南（accuracy > quantity, controlled sequential movements）、Sherry Chen 的三轮迭代（数据多样性是关键但需要有策略地增加）；**共识**：imitation learning 的数据采集应遵循"一种策略做到底"原则，先在窄场景验证，再有计划地扩展
+
+### D22. VLA 推理延迟全景：从 40ms 到 10s+
+- **来源**: 多源汇总（#15 ACTSmooth + #3 NXP + #7 Penn PAL + #16 ML6 + #22 OneDP）
+- **关键数据点汇总**: ACT on M2 Max ~40ms（但仍导致可见抖动→需要 ACTSmooth）；SmolVLA on RTX 3050 Ti ~10s/chunk；NXP i.MX95 ACT ONNX 优化后 0.32s；GR00T-N1 推理延迟导致动作间明显卡顿（ML6）；OneDP 蒸馏后 62Hz；**规律**：模型越大延迟越高，但 async inference + action chunking 是通用解药；边缘部署必须把延迟作为第一优先级
+
 ---
 
 ## GitHub Issues 周报
@@ -131,4 +194,4 @@
 
 ---
 
-*v1.3 — 2026-03-15 更新。Blog 15 条 + Discord 13 条（D1-D13），共 28 条。新增：Trelis ACT SO-101 训练指南、OpenVLA-OFT 微调配方（L1 > diffusion 的反直觉发现）、Figure Helix S1/S2 人形 VLA 架构、ACTSmooth prefix conditioning 消除 SO-101 抖动、recovery episodes 录制讨论、Mac 推理延迟 hackathon 教训。*
+*v2.0 — 2026-03-15 更新。Blog 28 条 + Discord 22 条（D1-D22），共 50 条。本版大幅扩充：ML6 SO-100 实战（ACT 90% + GR00T-N1 布料 80%）、ggando SmolVLA 三轮迭代（一致性>数量）、Phospho 官方指南、Jetson AGX Orin/Thor 边缘部署、HIL-SERL 真机 RL（1-2h 100%）、One-Step Diffusion 41× 加速、Embodied AI Hackathon 回顾、Pi0.5 复现困难（55% vs 95%）、VLA 颜色泛化局限、推理延迟全景汇总。*
