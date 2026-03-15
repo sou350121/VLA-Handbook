@@ -110,16 +110,19 @@
 ### D9. Data augmentation 导致成功率归零
 - **来源**: `#general-chat` — **Alli** (2025/11/10 08:20)
 - **原文**: "I also tried enabling data augmentation but it brings 0 success rate so bad, increasing a batch size and number of train iterations also did not work and actually led to bad generalization"
+- **类别**: Recipe, Debug
 - **关键数据点**: LeRobot 内置 data augmentation 对某些任务有害而非有益；增大 batch size 和训练轮数也无法补救；与直觉相反——更多增强 ≠ 更好泛化
 
 ### D10. 双臂任务在 SO-100 上极具挑战
 - **来源**: `#general-chat` — **nicov** (2025/4/17 18:20)
 - **原文**: "I used phosphobot for bimanual control with the meta quest app. Super simple setup. Works well for teleoperation. No issue with data collection. Training AI models is more challenging. Impressive bimanual tasks (eg: passing an object from one arm to another) are difficult for the so100 hardware (very precise tasks). Training models require at least 2x more data"
+- **类别**: Recipe, Data
 - **关键数据点**: Phosphobot + Meta Quest VR 遥操作简单好用、数据采集无问题；但 SO-100 双臂精密任务（如传递物体）训练极难；双臂任务所需数据量至少是单臂的 2×
 
 ### D11. Pick-and-place 需要多少 episodes？社区典型困惑
 - **来源**: `#general-chat` — 匿名用户（Discord 搜索 "episodes needed"）
 - **原文**: "I want to perform a pick-and-place task where I pick up an object from a table among other objects and place it into a box. I have a SO101 and want to perform it with the real robot. The workspace is approximately 60x60cm. Do you have any tips or know of any papers that discuss the best way to record and train for tasks like this? For example, for each object, how many episodes do I need to record? How many hours of training? And what are the best models currently capable of reproducing this? Is there any good result that isn't just overfitting?"
+- **类别**: Recipe
 - **关键数据点**: 这代表社区最典型的困惑——pick-and-place 到底需要多少数据？结合 handbook 已有内容回答：ACT 50ep 可 work（§1 Sherry Chen）、SmolVLA 固定位置 98% 但多样性后暴跌（D6）、π0 微调 50 条可跑通但泛化有限
 
 ### D12. Recovery episodes 怎么录？社区讨论
@@ -160,30 +163,42 @@
 - **关键数据点**: LeRobot 目前不原生支持深度数据；社区 workaround：16bit depth 编码到 R+G 通道存为 image，但 video 压缩会损失精度；parquet 存数值可行但文件巨大；深度集成仍是开放问题
 
 ### D18. SmolVLA 颜色泛化测试：抓取 OK 但放置退化
-- **来源**: ggando blog 补充数据（#17 延伸）
-- **原文**: (ggando blog 中的实验) 仅用红色 cube 训练的 SmolVLA，测试橙/蓝/绿 cube：橙色成功但回程撞碗（罕见于红色）、蓝色抓起但运输中掉落、绿色抓起但撞碗失败；1/3 success vs 5/5 红色
+- **来源**: ggando blog 补充数据（[#17](https://ggando.com/blog/smolvla-so101/) 延伸）
+- **原文**: "I ran a quick color generalization test with the SmolVLA dual-cam model, since it was trained exclusively on a red cube. Orange: Succeeded but hit the bowl on the way back (rare with the red cube). Blue: Grasped but dropped on the way to the bowl. Green: Grasped and moved toward the bowl but hit it with the gripper, failed. 1/3 success vs 5/5 with the training color. Grasping generalizes across colors reasonably well. It did pick up all three, but the place trajectory degrades. The model seems to have learned color-specific visual features for the red cube rather than a general 'cube' concept. The placing phase is somehow more sensitive. I didn't change the prompt to specify the cube color, so this is purely testing whether the vision backbone generalizes. It partially does for grasping but not for the full task. I'd probably need to add cube color variations in the dataset if I wanted to be robust w.r.t. visual appearance of the cube."
 - **类别**: Debug, Recipe
 - **关键数据点**: VLA 的视觉泛化是部分的——抓取动作可以跨颜色泛化，但放置轨迹严重依赖训练颜色；需要在数据集中加入颜色变化才能鲁棒；对"VLA 理解语言就能泛化"的期望需要校准
 
 ### D19. GR00T-N1 布料操作：复杂任务反而比 pick-place 好
-- **来源**: ML6 blog 补充数据（#16 延伸）
-- **原文**: (ML6 blog 中的实验) GR00T-N1 pick-place 完全失败（0%），但布料折叠达 80%！模型展现强全局任务意识但缺乏精度和子任务感知；失败时会持续尝试（识别到任务未完成）
+- **来源**: ML6 blog 补充数据（[#16](https://www.ml6.eu/en/blog/ai-robotics-a-field-report-on-imitation-learning-with-lerobot) 延伸）
+- **原文**: "We found that GR00T-N1 had surprisingly different success rates across tasks. For the pick-and-place task, it completely failed — the model lacked the precision needed for accurate grasping and placing. However, for cloth folding, it achieved around 80% success rate. The model showed strong global task awareness and would keep trying when it recognized the task wasn't complete, but it lacked fine-grained precision and sub-task awareness. This is a counterintuitive finding: a 'harder' task (cloth folding) worked better than a 'simpler' one (pick-place), possibly because the pretrained model had better priors for deformable object manipulation. The inference latency of the VLA also caused noticeable stuttering between actions."
 - **类别**: Debug, Arch
 - **关键数据点**: VLA foundation model 的反直觉现象——精确 pick-place 不如"模糊"布料操作；可能因为预训练数据中布料操作有更好的 prior；对 VLA 选型的启示：不是所有任务都适合同一个模型
 
 ### D20. ACT vs SmolVLA 训练效率对比
-- **来源**: ggando blog 补充数据（#17 延伸）
-- **原文**: (ggando blog 中的实验) 同一 v3 数据集(75ep) 训练 20k steps：SmolVLA dual-cam L1 loss 0.005, grad norm 0.11, ~10.4h, 100% SR; ACT L1 loss 0.052, grad norm 3.92, ~10.5h, 80% SR。ACT 没有内置 image resize→640×480 产出 602 encoder tokens，batch_size=64 在 24GB OOM
+- **来源**: ggando blog 补充数据（[#17](https://ggando.com/blog/smolvla-so101/) 延伸）
+- **原文**: "I trained all three variants on the same v3 dataset (75 episodes) for 20k steps each. SmolVLA (dual cam): final loss 0.005, grad norm 0.11, ~10.4h training, ~1.7B params, 100% success rate (5/5). ACT (dual cam): final loss 0.052, grad norm 3.92, ~10.5h training, 52M params, 80% success rate (4/5). SmolVLA converges to ~10x lower loss and ~35x lower gradient norms, which is expected given the pretrained VLM backbone vs ACT training from scratch with only ResNet18 features. ACT matching SmolVLA wrist-only at 80% is notable given it's 52M params trained from scratch vs ~1.7B fine-tuned. For the v3 ACT run I also added an aspect-ratio-preserving resize to 224×224 (which the earlier v1 ACT run was missing), so it could finally run at batch_size=64 without OOM. ACT has no built-in image resize — 640×480 frames produced 602 encoder tokens per forward pass, OOM'd at batch_size=64 on 24GB VRAM."
 - **类别**: Recipe, Arch
 - **关键数据点**: SmolVLA 预训练 backbone 优势明显：同数据同时间，loss 低 10×、gradient 稳定 35×；ACT 需要手动处理图像分辨率否则 OOM；但 ACT 52M 从零训到 80% 也说明小模型的竞争力
 
 ### D21. 遥操数据质量 > 数量：一致策略胜过混合技巧
-- **来源**: 多源汇总（#17 ggando + #16 ML6 + #5 Sherry Chen）
-- **关键数据点汇总**: ggando 的 v2→v3 教训（nudge trick 混入导致方差爆炸）、ML6 的数据指南（accuracy > quantity, controlled sequential movements）、Sherry Chen 的三轮迭代（数据多样性是关键但需要有策略地增加）；**共识**：imitation learning 的数据采集应遵循"一种策略做到底"原则，先在窄场景验证，再有计划地扩展
+- **来源**: 多源汇总 — ggando blog [#17](https://ggando.com/blog/smolvla-so101/)、ML6 field report [#16](https://www.ml6.eu/en/blog/ai-robotics-a-field-report-on-imitation-learning-with-lerobot)、Sherry Chen HF blog [#5](https://huggingface.co/blog/sherryxychen/train-act-on-so-101)
+- **原文摘要**:
+  - ggando: "Lesson learned: consistency in demonstrations matters more than quantity. One clean strategy beats a mix of tricks. I developed a habit of nudging the cube with the gripper's static finger to rotate it into a better angle before grasping. Seemed clever at the time. The policy learned a conditional behavior: sometimes nudge, sometimes grasp directly. It couldn't consistently decide which to do."
+  - ML6: "Data accuracy is more important than quantity. 10k frames with controlled, sequential movements taught more than 137k frames with varied execution styles."
+  - Sherry Chen: 3 rounds of iteration — Try1 50ep→woodpecker behavior, Try2 72ep→60% in-distribution, Try3 125ep+rotation diversity→90% ID/75% OOD.
+- **类别**: Recipe, Data
+- **关键数据点汇总**: 三个独立团队的共识——imitation learning 的数据采集应遵循"一种策略做到底"原则，先在窄场景验证，再有计划地扩展。混合策略是毒药。
 
 ### D22. VLA 推理延迟全景：从 40ms 到 10s+
-- **来源**: 多源汇总（#15 ACTSmooth + #3 NXP + #7 Penn PAL + #16 ML6 + #22 OneDP）
-- **关键数据点汇总**: ACT on M2 Max ~40ms（但仍导致可见抖动→需要 ACTSmooth）；SmolVLA on RTX 3050 Ti ~10s/chunk；NXP i.MX95 ACT ONNX 优化后 0.32s；GR00T-N1 推理延迟导致动作间明显卡顿（ML6）；OneDP 蒸馏后 62Hz；**规律**：模型越大延迟越高，但 async inference + action chunking 是通用解药；边缘部署必须把延迟作为第一优先级
+- **来源**: 多源汇总 — ACTSmooth blog [#15](https://www.giacomoran.com/blog/act-smooth/)、NXP blog [#3](https://huggingface.co/blog/nxp/bringing-robotics-ai-to-embedded-platforms)、Penn PAL [#7](https://penn-pal-lab.github.io/Pi0-Experiment-in-the-Wild/)、ML6 [#16](https://www.ml6.eu/en/blog/ai-robotics-a-field-report-on-imitation-learning-with-lerobot)、OneDP [#22](https://research.nvidia.com/labs/dir/onedp/)
+- **原文摘要**:
+  - ACTSmooth: "ACT inference on M2 Max MacBook ~30ms mean, 40ms 95th percentile. At 30fps (33ms per frame), this corresponds to roughly two timesteps of inference delay." — even this small delay causes visible jerkiness.
+  - NXP: "ACT ONNX FP32 on i.MX 95: 2.86s → optimized 0.32s. SmolVLA ONNX FP32: 29.1s → optimized 6.15s." — quantizing action expert (flow matching) severely degrades accuracy.
+  - ML6: "GR00T-N1 inference latency caused noticeable stuttering between actions during real robot evaluation."
+  - ggando: "SmolVLA on RTX 3050 Ti inference ~10s/chunk."
+  - OneDP: "Distilled one-step diffusion: 1.5Hz → 62Hz (41× speedup)."
+- **类别**: Edge, Arch
+- **关键数据点汇总**: ACT ~40ms（仍需 ACTSmooth）；SmolVLA ~10s/chunk on 3050 Ti；NXP i.MX95 ACT 优化后 0.32s；OneDP 蒸馏后 62Hz；**规律**：模型越大延迟越高，但 async inference + action chunking 是通用解药；边缘部署必须把延迟作为第一优先级
 
 ---
 
