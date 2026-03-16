@@ -64,6 +64,56 @@
 | 38 | LingBot-VLA: 蚂蚁集团开源"通用大脑"模型 | Robotics & Automation News | 2026-03-13 | Arch, Strategy | [链接](https://roboticsandautomationnews.com/2026/03/13/robbyant-open-sources-lingbot-vla-model-as-a-universal-brain-for-robots/99640/) | 蚂蚁集团旗下 Robbyant 开源 LingBot-VLA；20,000+ 小时真实数据预训练、覆盖 9 种双臂配置（AgileX、Galaxea R1Pro 等）；GM-100 benchmark 上 SOTA；训练速度 1.5-2.8× 于 StarVLA/OpenPI；开源含完整代码+数据处理+微调+评估工具链；代表中国 VLA 产业化新动态——开源路线与闭源（Physical Intelligence）形成对比 |
 | 39 | LoRA VLA: 消费级 GPU 8GB 上训练 3.1B VLA | arXiv 2512.11921 | 2025-12 | Recipe, Edge | [链接](https://arxiv.org/abs/2512.11921) | 3.1B 参数 VLA 通过 LoRA + 量化技术在 8GB VRAM 消费级 GPU 上训练；200 条 demo 用于 SO-101 按钮按压任务；对比了冻结 vs 解冻 vision encoder 的 trade-off；证明资源受限的个人/小团队也能参与 VLA 研发 |
 | 40 | Phosphobot: 一站式 VLA 开发中间件 | Phospho | 2026-02 | Recipe | [链接](https://docs.phospho.ai/learn/train-smolvla) | pip install 一键安装；Meta Quest VR 遥操作；支持云端 GPU 训练；LeRobot 格式原生支持；从数据采集到模型部署的完整 pipeline；显著降低 SO-100/SO-101 用户的入门门槛——不需要写数据管道代码 |
+| 41 | LeRobot Pi0 Finetuning Tutorial (SO-ARM101) | Geonhui Jo Blog | 2025-12 | Recipe | [链接](https://ghuijo.github.io/blog/2025/LeRobot-PI0-Finetuning-Tutorial/) | A100 SXM4 40GB + Ubuntu 20.04 完整教程；PyTorch <2.8 限制（2.7.1+CUDA 12.8）；PaliGemma 需申请访问权限；freeze_vision_encoder=true + train_state_proj=true；**核心发现**：Pi0 在"重度过拟合到少量任务"时效果最好——与 foundation model 泛化期望相反；暗光环境下仍可执行任务（预训练 VLM 带来的鲁棒性）；config: 50 episodes, batch_size=8, save_steps=5000 |
+| 42 | MolmoBot: 纯仿真训练零样本迁移真机 | Ai2 | 2026-03-11 | Arch, Strategy | [链接](https://allenai.org/blog/molmobot-robot-manipulation) | **全开源**纯仿真训练的机器人操作模型套件；1.8M 专家轨迹（MolmoBot-Data）；两个平台：RB-Y1 移动操作 + Franka FR3 桌面臂；Pick-and-place 79.2% SR 零样本迁移；**超越 π0.5**（使用大规模真实数据训练）；MolmoSpaces 提供 230K+ 室内场景 + 130K+ 物体资产 + 42M 抓取标注；三种架构：MolmoBot（最强）、MolmoBot-SPOC（轻量）、MolmoBot-Pi0（对照）；核心论点：仿真数据多样性足够大时可替代真实数据 |
+| 43 | LiteVLA-Edge: Jetson Orin 上 6.6Hz VLA | arXiv 2603.03380 | 2026-03 | Edge | [链接](https://arxiv.org/abs/2603.03380) | SmolVLM-256M backbone + LoRA rank-8 微调 → 4-bit GGUF 量化（Q4_K_M）；llama.cpp 运行时 42 层全部 CUDA offload；端到端延迟 150.5ms±0.13ms（6.6Hz）；ROS 2 集成：VLA 6.6Hz "思考" + 底层控制器 100Hz 心跳；单一模型无需独立 policy 网络 → 架构开销更低；**核心价值**：首个在 Jetson 级硬件上实现"反应式控制"的量化 VLA pipeline |
+| 44 | VLA 动作生成瓶颈分析：内存带宽是真凶 | arXiv 2603.02271 | 2026-03 | Edge, Arch | [链接](https://arxiv.org/abs/2603.02271) | 端到端延迟中高达 75% 被 memory-bound 的动作生成阶段消耗；模型延迟比 10Hz 实时操作需求高 200-300×；Thor 算力 5× 于 Orin 但延迟仅改善 1.4×（证明瓶颈在内存带宽非算力）；自回归生成在当前边缘加速器上稀疏且内存密集；**对社区的启示**：VLA 边缘部署需要算法-硬件协同设计，不能单靠堆算力 |
+| 45 | TensorRT Edge-LLM: 边缘 VLA 推理框架 | NVIDIA Developer Blog | 2025-12 | Edge | [链接](https://developer.nvidia.com/blog/accelerating-llm-and-vlm-inference-for-automotive-and-robotics-with-nvidia-tensorrt-edge-llm) | 开源 C++ 框架，专为 Jetson Thor/DRIVE AGX Thor 设计；支持 EAGLE-3 投机解码、NVFP4 量化、chunked prefill；FP8/NVFP4/INT4 多精度支持，KV-cache 压缩；VLA 模型直接部署：视觉输入 → 语言指令 → 关节位置/速度输出；Bosch、ThunderSoft、MediaTek 已在 CES 2026 展示集成方案；**定位**：NVIDIA 边缘 VLA 推理的官方标准栈 |
+| 46 | Jetson T4000 + JetPack 7.1: 新一代边缘 AI | NVIDIA Developer Blog | 2026-01 | Edge | [链接](https://developer.nvidia.com/blog/accelerate-ai-inference-for-edge-and-robotics-with-nvidia-jetson-t4000-and-nvidia-jetpack-7-1) | Jetson T4000/T5000 新模块，专为 VLA 工作负载设计；TensorRT Edge-LLM 原生支持；JetPack 7.1 统一 SDK：Video Codec + 推理引擎 + 部署工具链；GDDR7 内存提升带宽（呼应 #44 内存瓶颈发现）；**社区意义**：从 Orin → T4000 的升级路径为 VLA 边缘部署提供更多硬件选择 |
+| 47 | Edge AI on Jetson 入门指南 | NVIDIA Developer Blog | 2026-01 | Edge, Recipe | [链接](https://developer.nvidia.com/blog/getting-started-with-edge-ai-on-nvidia-jetson-llms-vlms-and-foundation-models-for-robotics) | Jetson 上 LLM/VLM/VLA 部署完整入门教程；覆盖 GR00T N1.5/N1.6、SmolVLA、Pi0 等模型；G0Tiny（250M，SmolVLM2 backbone）在 Jetson Orin 上通过 TensorRT 达 10Hz；从模型选择到 ONNX 导出到 TensorRT 优化的标准流程；**实操价值**：NVIDIA 官方推荐的 VLA 边缘部署路径 |
+| 48 | DPPO: Diffusion Policy + RL 微调 | Princeton (ICLR 2025) | 2025-09 | Arch, Recipe | [链接](https://diffusion-ppo.github.io/) | 首个系统性的 diffusion policy RL 微调框架；双层 MDP：内层=去噪过程，外层=环境交互；仿真训练 → 真机零样本部署，行为比 baseline 更平滑；结构化 on-manifold 探索 → 稳定训练 + 强鲁棒性；长 horizon 多阶段操作任务验证；**对社区的价值**：将 diffusion policy 从纯 IL 扩展到 RL，与 π*0.6 的方向一致 |
+| 49 | WholeBodyVLA: 人形全身运动操作 | OpenDriveLab (ICLR 2026) | 2025-12 | Arch | [链接](https://github.com/OpenDriveLab/WholebodyVLA) | 统一 latent 学习框架：VLA 系统从低成本无动作标注的第一人称视频中学习；AgiBot X2 人形机器人验证；超越 baseline 21.3%；大空间人形 loco-manipulation：边走边操作；**核心创新**：用 action-free egocentric video 训练 VLA → 降低人形数据采集成本 |
+| 50 | Helix 02: 像素到全身控制的统一 VLA | Figure AI | 2025-10 | Arch, Strategy | [链接](https://www.figure.ai/news/helix) | 三层架构：S0（千赫兹平衡）+ S1（200Hz 全身运动）+ S2（7-9Hz 高级推理）；**首个长 horizon 全身操作演示**：4 分钟完整洗碗机装卸；零样本抓取任何家用物品；从 Helix 到 Helix 02 的核心升级：S0 层实现人类级平衡协调；**产业意义**：Figure 展示了 VLA 从桌面臂到人形机器人的完整技术路线 |
+| 51 | Trossen AI + OpenPI 集成 | Trossen Robotics | 2025-12 | Recipe | [链接](https://www.trossenrobotics.com/post/unlocking-new-possibilities-trossen-ai-arms-now-integrated-into-openpi-for-advanced-vla-models) | Trossen WidowX AI 臂完整集成 OpenPI 框架；支持 π0/π0.5 数据采集 → 训练 → 推理全流程；LeRobot v2.1 格式数据采集（兼容 OpenPI v0.1.0 训练脚本）；**实操价值**：非 SO-100/101 用户也能用 Physical Intelligence 模型；完整文档含 setup、teleoperation、configuration |
+| 52 | AWS Embodied AI Blog Series: 云端 GR00T 微调 | AWS Spatial Computing Blog | 2025-12 | Recipe, Edge | [链接](https://aws.amazon.com/blogs/spatial/embodied-ai-blog-series-part-1/) | AWS Batch 基础设施上 GR00T 微调教程；从云端训练到边缘部署的完整 pipeline；**核心价值**：没有本地 GPU 集群的团队也能通过云端完成 VLA 训练；与 Isaac Lab 仿真集成；适合企业级 VLA 部署场景 |
+| 53 | GR00T N1.5 on SO-100: Hackaday 实战 | Hackaday | 2025-11 | Recipe, Debug | [链接](https://hackaday.io/project/204187/log/243775-fine-tuning-gr00t-n15-for-so-100-robot-arm-manipulation) | SO-100（非 101）上 GR00T N1.5 微调实战；Hackaday 社区项目，硬件 DIY 视角；记录了从数据采集到微调到部署的完整流程；**社区价值**：SO-100 老用户的升级路径（之前主要用 ACT/DP，现在可以用 VLA） |
+| 54 | OpenVLA 真机部署：从 0% 到 ~100% | Black Coffee Robotics | 2025-09 | Recipe, Debug | [链接](https://www.blackcoffeerobotics.com/blog/vision-language-action-vla-models-llms-for-robots) | OpenVLA-7B 在 Franka 上测试：未微调 ~0% SR → 微调后简单 pick-and-place ~100%；含抽屉开启、工具使用等多任务；8×A100 全量微调 vs LoRA 的 trade-off 讨论；**核心教训**：VLA 预训练权重不能直接用——必须针对目标场景微调；与社区共识一致（D32 泛化瓶颈） |
+| 55 | DexGraspRL: 真机 RL 灵巧抓取 92% SR | arXiv 2503.04014 | 2025-03 | Arch, Recipe | [链接](https://arxiv.org/abs/2503.04014) | IL 预训练 + 真机 RL 微调的两阶段框架；平均 92% 灵巧抓取成功率；直接在真实环境中训练（非 sim-to-real）；**核心价值**：证明 RL post-training 对灵巧操作的有效性，与 π*0.6 路线一致但在灵巧手场景 |
+| 56 | Teleoperation-as-a-Service (TaaS) | Haoru Xue (CMU) | 2025-11 | Data, Strategy | [链接](https://haoruxue.github.io/taas/) | 遥操作数据采集的服务化框架；assisted teleoperation：学习型辅助策略自动执行重复行为，仅在不确定时请求人类输入；**核心洞察**：数据采集的瓶颈不是硬件而是人力——TaaS 通过自动化降低每条 demo 的边际成本 |
+| 57 | LeRobot: 统一机器人学习开源库 (ICLR 2026) | HuggingFace | 2026-02 | Arch, Strategy | [链接](https://arxiv.org/abs/2602.22818) | ICLR 2026 论文：统一端到端机器人学习栈；Python 中间件 API 支持多平台真机控制；IL/RL/VLA 三类 policy 统一训练框架；**数据生态**：HF Hub 2.2K+ 数据集贡献者；SO-100/101 + ALOHA + 人形 G1 支持；从 v0.1 到 v0.5 的演进：200+ PRs，50+ 新贡献者 |
+| 58 | AIRoA ICRA 2026 VLA Competition + 10K Hours Data | AIRoA | 2026-02-10 | Data, Strategy | [链接](https://www.airoa.org/updates/2026-02-10) | ICRA 2026 全球 VLA Pipeline 竞赛；~10,000 小时真实机器人数据开放；鼓励参赛者分享方法、消融实验和失败案例；**产业信号**：学术界正在建立 VLA 标准化评估体系 |
+| 59 | 3D Diffusion Policy (DP3): 40 demos 85% SR | Columbia University | 2025-06 | Arch, Recipe | [链接](https://3d-diffusion-policy.cs.columbia.edu/) | 3D 点云输入的 diffusion policy；仅 40 条真机 demo 达 85% SR；6 仿真 + 4 Franka 真机任务验证；推理速度满足实际部署需求；**对社区的价值**：深度/3D 信息确实能提升 manipulation 成功率（补充 D17 深度集成讨论） |
+| 60 | Lite VLA: CPU 边缘机器人上的高效 VLA | arXiv 2511.05642 | 2025-11 | Edge | [链接](https://arxiv.org/abs/2511.05642) | 专为 CPU-bound 边缘机器人设计的轻量 VLA；无需 GPU 加速器即可运行；针对资源受限场景的模型压缩技术；**核心价值**：不是所有机器人都有 GPU——CPU-only VLA 开辟新部署场景 |
+| 61 | GR00T N1.6: Cosmos-Reason VLM + 全身控制 | NVIDIA Research | 2026-03 | Arch | [链接](https://research.nvidia.com/labs/gear/gr00t-n1_6/) | Cosmos-Reason-2B VLM 替代之前视觉编码器；DiT 扩大 2× 至 32 层；state-relative actions；零样本 sim-to-real：仿真训练直接部署真机无需微调；COMPASS 导航模块支持自主导航；**N1.5 vs N1.6**：N1.6 收敛更快、动作更平滑，但更易过拟合需仔细调参 |
+| 62 | Pi0-FAST 人形机器人微调经验 | GitHub Issue #591 | 2026-01 | Recipe, Debug | [链接](https://github.com/Physical-Intelligence/openpi/issues/591) | 社区用户在自定义人形机器人上微调 Pi0-FAST 的讨论；涉及 action dimension 适配、数据格式转换、训练超参选择；**典型困难**：人形机器人 DoF 远高于桌面臂（30+ vs 6-7），action space 设计是关键挑战 |
+| 63 | Pi0-FAST 自定义数据集失败案例 | GitHub Issue #782 | 2026-02 | Debug | [链接](https://github.com/Physical-Intelligence/openpi/issues/782) | 用户报告 Pi0-FAST 在自定义数据集上动作完全失控（erratic）；与 D2（eliasab 报告 Pi-FAST 失控而 X-VLA 正常）一致；**可能原因**：normalization 配置错误、FAST tokenizer 参数不匹配、action space 定义问题 |
+| 64 | Pi0 微调性能问题讨论 | GitHub Issue #427 | 2025-12 | Debug | [链接](https://github.com/Physical-Intelligence/openpi/issues/427) | 社区多位用户报告 Pi0 微调后性能不及预期；涉及学习率、batch size、训练步数的最优配置讨论；**共识**：Pi0 微调对超参数非常敏感，与 VLA-0-Smol（#29）发现一致——LR 是生死线 |
+| 65 | LeRobot on Jetson Orin Nano | Medium (Marko Briesemann) | 2025-12 | Edge, Recipe | [链接](https://medium.com/@marko.briesemann/lerobot-on-jetson-orin-nano-seeed-studio-82986429509a) | Jetson Orin Nano 上完整运行 LeRobot + SO-101；Seeed Studio 硬件集成指南；从 JetPack SDK 安装到模型推理的端到端教程；**实操价值**：最便宜的 NVIDIA 边缘方案（Orin Nano ~$199）上跑 VLA |
+| 66 | SmolVLA: 架构详解与实操教程 | LearnOpenCV | 2025-12 | Arch, Recipe | [链接](https://learnopencv.com/smolvla-lerobot-vision-language-action-model/) | SmolVLA 450M 架构图解：pixel-shuffling + layer skipping + flow matching action expert；端到端训练 + 推理代码教程；与 LeRobot 框架集成的完整 pipeline；**入门价值**：对初学者最友好的 SmolVLA 技术解析 |
+| 67 | VLA 搜索通用机器人策略 | It Can Think (Substack) | 2026-01 | Strategy | [链接](https://itcanthink.substack.com/p/vision-language-action-models-and) | VLA 领域全景分析：从 RT-2 到 π0 的演进脉络；dual-expert vs generalist 两条路线的 trade-off；开源 vs 闭源生态的竞争格局；**核心观点**：VLA 正在从"能不能做"转向"能不能规模化部署" |
+| 68 | R²D²: 仿真 + 语言模型提升操作 | NVIDIA Research | 2025-11 | Arch, Data | [链接](https://developer.nvidia.com/blog/r2d2-improving-robot-manipulation-with-simulation-and-language-models) | NVIDIA 机器人研发摘要（NeurIPS 2025）；ThinkAct + Generalizable Domain Adaptation + RobotSmith；latent diffusion 模型将仿真图像转换为逼真图像，支持 few-shot 适应和实时操作；**关键方向**：sim-to-real 的感知差距正在通过生成模型被弥合 |
+| 69 | G0Tiny: 250M VLA 边缘部署 10Hz | Galaxea | 2026-02 | Edge, Recipe | [链接](https://github.com/OpenGalaxea/GalaxeaVLA) | 250M 参数（SmolVLM2 backbone）；R1 Pro Orin 边缘部署；TensorRT 优化达 10Hz；Galaxea 开源 VLA repo 含完整训练+部署代码；**核心价值**：比 LiteVLA-Edge（6.6Hz）更快的边缘 VLA 方案 |
+| 70 | Modality-Augmented Fine-Tuning: 跨具身迁移 | arXiv 2512.01358 | 2025-12 | Arch, Recipe | [链接](https://arxiv.org/abs/2512.01358) | GR1 和 G1 人形机器人上的跨具身操作迁移；深度/触觉等多模态增强微调；RealSense 团队已开始实现（参考 D5）；**核心价值**：为 VLA 添加更多感知模态的系统方法论 |
+| 71 | VLA Guide 2026: 全面技术指南 | HyScaler | 2026-01 | Strategy | [链接](https://hyscaler.com/insights/vision-language-action-vla-guide/) | 2026 年 VLA 技术全景指南；从理论基础到实际部署的完整覆盖；包含模型对比、数据需求、部署挑战分析；**定位**：非技术背景的决策者了解 VLA 的入门资源 |
+| 72 | Diffusion Policy Survey: 分类、分析与未来 | TechRxiv | 2025-12 | Arch, Strategy | [链接](https://www.techrxiv.org/doi/full/10.36227/techrxiv.174378343.39356214/v1) | 机器人操作 Diffusion Policy 综述；跨 15 任务 4 benchmark 平均提升 46.9%；分类法：条件化方式、去噪策略、动作表示；**对社区的价值**：选择 Diffusion Policy 变体时的权威参考 |
+| 73 | VLM on Jetson 部署实战 | Huu Phan Blog | 2026-02 | Edge, Recipe | [链接](https://www.huuphan.com/2026/02/vision-language-models-on-jetson-deploy.html) | Jetson 上 VLM 部署的实操指南；覆盖模型选择、量化策略、推理优化；与 VLA 部署直接相关（VLM 是 VLA 的感知组件）；**实操价值**：个人博客级别的接地气教程，比 NVIDIA 官方文档更易上手 |
+| 74 | SmolVLA 官方论文: 450M 参数设计哲学 | arXiv 2506.01844 | 2025-06 | Arch | [链接](https://arxiv.org/abs/2506.01844) | SmolVLA 450M 设计决策详解；pixel-shuffling 压缩每帧到 64 tokens（vs PaliGemma 256+）；flow matching vs regression 的 action generation 选择；异步推理设计：解耦 VLM 编码和动作生成；**学术价值**：理解 SmolVLA 架构选择背后的 ablation 实验 |
+| 75 | Sim-to-Real RL Survey + Foundation Models | AwesomeSim2Real | 2025-10 | Strategy | [链接](https://github.com/LongchaoDa/AwesomeSim2Real) | Sim-to-Real 强化学习综述 + Foundation Model 整合；覆盖 domain randomization、latent diffusion bridging、sim-real co-training；**核心趋势**：从"如何缩小 sim-real gap"转向"如何让 foundation model 自动适应"；MolmoBot（#42）是这一趋势的最新验证 |
+| 76 | DeepSense.ai: VLA on 100g Edge Device | deepsense.ai Blog | 2025-08 | Edge, Arch | [链接](https://deepsense.ai/blog/we-put-embodied-ai-on-a-100g-device-why-most-vlas-choke-on-the-edge-and-the-architecture-that-didnt/) | 100g 以下设备 VLA 部署测试；对比 Raspberry Pi 5、Jetson Nano、RTX 2080 Ti、Hailo-8L；模块化 VLA 架构（vision/language/action 分离）边缘生存性最强；end-to-end unified VLA 过重；硬件选型功率/重量/延迟权衡矩阵 |
+| 77 | ActionFlow: 2.55× VLA Inference Speedup Without Retraining | arXiv 2512.20276 | 2025-12 | Edge, Arch | [链接](https://arxiv.org/abs/2512.20276) | 系统级推理框架；跨请求流水线用 memory-bound decode 和 compute-bound prefill 批处理；OpenVLA-7B on Jetson AGX Orin 2.55× FPS 提升；无需重训；解决 VLA 边缘 3-5Hz vs 需求 20-30Hz 差距；与量化正交 |
+| 78 | EdgeVLA: 6× Speedup via Parallel End-Effector Decoding | arXiv 2507.14049 | 2025-07 | Edge, Arch | [链接](https://arxiv.org/abs/2507.14049) | 消除端执行器预测的自回归依赖；集成紧凑语言模型；6× 加速、性能衰减最小；为边缘实时部署设计 |
+| 79 | SpecPrune-VLA: Action-Aware Pruning 1.57-1.70× Speedup | arXiv 2509.05614 | 2026-02 | Edge, Arch | [链接](https://arxiv.org/abs/2509.05614) | 无训练双层剪枝；动作层静态剪枝 + 层级动态剪枝；action-aware controller 分类粗细颗粒度动作、调整剪枝强度；LIBERO sim 1.57×、真机任务 1.70× 加速；细颗粒度动作对剪枝敏感 |
+| 80 | MulticoreWare: CogAct 7.6B Edge Deployment Optimization | MulticoreWare Blog | 2025 | Edge | [链接](https://multicorewareinc.com/deploying-vision-language-action-vla-based-ai-models-in-robotics-optimization-for-real-time-edge-inference/) | CogAct 7.6B 多流架构通过量化、剪枝、模型图优化；1.3× 加速（延迟 26% 降低）同时精度保留；真实边缘硬件部署验证；证明基础规模 VLA 可在设备端执行 |
+| 81 | StarVLA: Lego-like Modular VLA Development Codebase | GitHub starVLA | 2025-12 | Arch, Data | [链接](https://github.com/starVLA/starVLA) | VLM→VLA 开发模块化 codebase；高内聚低耦合；支持 Qwen3.5（0.8B-9B）backbone；LeRobot v3.0 + DeepSpeed ZeRO-3；Behavior-1K/RoboCasa/CALVIN pipeline；内部开发可 <3h 构建新 VLA 框架；LingBot-VLA（#38）训练速度 1.5-2.8× 快于 StarVLA baseline |
+| 82 | Data Scaling Laws: Power-Law for Robot Manipulation (ICLR 2025 Oral) | ICLR 2025 | 2025-10 | Data, Strategy | [链接](https://data-scaling-laws.github.io/) | 40k+ demos + 15k 真实 rollout；泛化服从环境数/物体数的 power-law；多样性 >> 绝对 demo 数；相机视角、空间布置是关键多样性维度；纹理优先级低；单任务策略 modest 数据投资即可零样本部署；CoRL 2024 Workshop 最佳论文 |
+| 83 | What Matters in Large-Scale Robot Datasets (MimicLabs) | NVIDIA SRL + ICLR 2025 | 2025-06 | Data, Strategy | [链接](https://arxiv.org/abs/2506.13536) | MimicLabs 过程式数据生成框架；7 维度变化：传感器位置、物体类型/纹理、桌面纹理、空间布置、背景场景、动作基元；广泛预训练增强复杂任务能力但对微调数据需求改善贡献少；相机视角多样性远重于纹理变化 |
+| 84 | Anton Maltsev: Qwen 3VL 2B as Robot Controller in 15 Minutes | Medium (Anton Maltsev / Rembrain) | 2026-02 | Recipe, Arch | [链接](https://medium.com/@zlodeibaal/one-of-the-best-vla-models-qwen-3vl-d-551cf9bf2e60) | Qwen 3VL 2B（非机器人模型）转为机器人控制器；15min 训练 + 35 数据点 → 60-70% 任务完成；Qwen + vLLM 秒级启动；VLM 相比专用 VLA 优势不在准确性而在可用性；对专用 VLA 架构的范式挑战 |
+| 85 | Anton Maltsev: VLA Training Practical Guide | Medium (Anton Maltsev) | 2026-01 | Recipe, Strategy | [链接](https://medium.com/@zlodeibaal/vla-training-robots-to-kill-a723d731b810) | VLA 训练实操指南；高质量一致数据帮助显著但需要训练操作员 + 严格任务协议；更长上下文/记忆改善行为但增加模型大小 + 推理成本；从"能跑"到"产品级稳定"的工程距离仍巨大；AI 加速器选型对比（Intel/Qualcomm 软件支持优于 AMD） |
+| 86 | Foxglove: Visual Debugging for LeRobot SO-100 | Foxglove Blog | 2025 | Debug, Data | [链接](https://foxglove.dev/blog/visualizing-lerobot-so-100-using-foxglove) | SO-100/101 机械臂状态实时可视化；图像面板 + 关节位置图表单屏展示；加速 multimodal 数据同时调试；免费工具；LeRobot 数据格式兼容；日志文件无法诊断的策略失败现象用视觉显示 |
+| 87 | Maxence Boels: VLA Policy Development on SO-101 (PhD Research) | maxboels.com | 2026 | Recipe, Arch | [链接](https://maxboels.com/projects/lerobot-so101) | King's College London 博士生；SO-101 演示数据采集系统；自然语言指令 + 视觉理解灵活任务指定；开源机器人学改进贡献；VLA 开发学术视角 |
+| 88 | Diffusion Steering: RL Fine-Tuning Pi0 by Steering Noise | diffusion-steering.github.io | 2025-06 | Arch, Recipe | [链接](https://diffusion-steering.github.io/) | diffusion policy VLA 新 RL 微调方法；仅更新噪声向量、冻结 DiT 权重；二元 0-1 成功标签作 reward；比 ConRFT（#89）更简单；Sergey Levine 背书；LeRobot Discord 广泛讨论；是 DPPO（#48）和 π0.6（#11）RL 后训练趋势的自然延伸 |
+| 89 | ConRFT: RL Fine-Tuning Action Expert with Human-in-the-Loop | cccedric.github.io/conrft | 2025-06 | Arch, Recipe | [链接](https://cccedric.github.io/conrft/) | RL 微调 action expert 用人类在环反馈；与 Diffusion Steering（#88）互补——steering 冻结 DiT + 更新噪声，ConRFT 更新 DiT 权重；同时学习两者是开放研究方向；VLA RL 后训练浪潮的一部分 |
+| 90 | Sim2Real-VLA: Foundation Model-Enhanced Domain Randomization | Research Paper | 2026 | Arch, Strategy | [链接](https://sim2real-vla.github.io/) | 将大规模基础模型纳入 domain randomization 过程；利用模型推理对 DR 特征排序、定义采样范围；超越手工调参随机化；表示 VLA + sim-to-real + 基础模型推理的收敛；互补 MolmoBot（#42）纯 sim 方法 |
 
 ---
 
@@ -351,6 +401,134 @@
 - **类别**: Strategy
 - **关键数据点汇总**: 英文 VLA 社区信息分布极不均匀——**独立个人 blog 信息密度最高**（ggando、Giacomo Moran、VLA-0-Smol 团队，每篇可提取 3-5 条独立 takeaway）；**官方 HF Blog 覆盖面最广**但深度有限；**Discord 低频关键词**（recovery episodes、calibration failed）信噪比 >> 高频词（success rate 228 结果多噪音）；**多源汇总条目**（D33-D38）价值最高——读者一次看到多团队共识。建议后续采集优先搜索新出现的个人实战 blog。
 
+### D41. RoboCasa Diffusion Training: RTX 4090/5090 上 500+ epochs 仍失败
+- **来源**: `#robotics-papers` — guichristmann (2025/6/15)
+- **原文**: "Hi I first asked this in the general channel, but reposting it here which seems to be more focused on research. Anybody with experience training Diffusion models on RoboCasa tasks or just in general? How long does it take to train a policy on a single RTX 4090 or 5090? I'm trying to reproduce the results from NVIDIA GR00T paper using Diffusion on RoboCasa tasks. Training with human demonstrations on a single task like 'TurnOnMicrowave' for >500 epochs takes many hours the results are still pretty terrible (robot is just wildly wiggling around). I'm using all of the default configs from RoboCasa and robomimic. Trying to figure out where I'm going wrong and to calibrate my expectations."
+- **类别**: Debug, Recipe
+- **关键数据点**: RoboCasa + robomimic 默认 config，单任务 TurnOnMicrowave 500+ epochs 后仍 wildly wiggling；单卡 4090/5090 训练多小时无效果；可能需要更多 epochs 或 config 调优；复现 NVIDIA GR00T 论文结果比预期难得多
+
+### D42. XLeRobot/Zima: Caging-in-Time 框架用于零样本 Sim2Real
+- **来源**: `#robotics-papers` — Vector Wang (XLeRobot) (2025/6/16)
+- **原文**: "Caging in Time is officially on IJRR! We proposed a novel theory framework that deals with uncertainties by cages in time dimension for robust object manipulation such as random object pushing and tennis balancing and catching, all in pure open loop. This framework will be later used on XLeRobot for robust zero-shot sim2real transfer, making this low-cost dual-arm mobile robot, 'Zima', truly practical and physically intelligent for daily life."
+- **类别**: Arch, Strategy
+- **关键数据点**: Caging-in-Time 理论发表于 IJRR；通过时间维度笼罩处理不确定性；纯开环实现鲁棒物体操作；将用于 XLeRobot "Zima" 低成本双臂移动机器人的零样本 sim2real 迁移
+
+### D43. 3D 打印任意形状触觉传感器
+- **来源**: `#robotics-papers` — Mahi Shafiullah (NYU) (2025/6/19)
+- **原文**: "One of the sci fi projects my lab mates have been working on: 3D printing arbitrary shaped tactile sensors" (引用 ICRA best paper)
+- **类别**: Arch
+- **关键数据点**: NYU 团队开发 3D 打印任意形状触觉传感器；获 ICRA 2025 field and service robotics best paper；社区讨论简化设计方案：广角相机 + 透明硅胶层放进夹爪内部，作为触觉替代方案
+
+### D44. FAST Tokenizer 官方代码 Bug 修复
+- **来源**: `#robotics-papers` — Nahid (2025/6/26)
+- **原文**: "looks like they fixed a bug in tokenizer 3 weeks ago https://github.com/Physical-Intelligence/openpi/commit/63481042f1cb4f2dcb4a7da1623352307dd26533 ..I doubt it is reflected in their HF tokenizer yet."
+- **类别**: Debug
+- **关键数据点**: OpenPI FAST tokenizer 有 bug 已修复（commit 63481042）；HF 上的 tokenizer checkpoint 可能尚未更新；对所有使用 Pi0-FAST 的社区用户有影响——如果结果异常应检查 tokenizer 版本
+
+### D45. Diffusion Steering: 冻结 DiT 仅更新噪声的 RL 方法引发讨论
+- **来源**: `#robotics-papers` — Xingdong Zuo + Adil Zouitine (HF LeRobot) + KWang (2025/6/26)
+- **原文**: Xingdong Zuo: "They did RL finetuning on pi0" (sharing diffusion-steering.github.io). Adil Zouitine: "The approach is simple wow". KWang: "Quite smart idea". Nahid: "when they say RL, which exact method they are using?" → Xingdong: "yep" (binary 0-1 label). an0n3039: "ConRFT also uses RL to finetune the action expert using a HIL. This new steering paper is simpler since it only updates the noise vector and freezes the DiT."
+- **类别**: Arch, Recipe
+- **关键数据点**: HF LeRobot 核心成员 Adil + 社区一致认为 Diffusion Steering 方法简洁有效；仅需 0-1 二值成功标签；与 ConRFT 互补——steering 冻结 DiT 更新噪声，ConRFT 更新 DiT 权重；同时学习两者是开放方向；Sergey Levine 也 tweet 推荐
+
+### D46. FAST Action Tokenizer 从零实现经验
+- **来源**: `#robotics-papers` — Nahid + skittle (2025/6/25)
+- **原文**: Nahid: "anyone working on action tokenization here? I am trying to implement FAST action tokenizer from scratch. Wondering if anyone else tried it or similar". skittle: "If helps check the original implementation here https://github.com/Physical-Intelligence/openpi/tree/main/src/openpi/models in pi0_fast.py & tokenizer.py"
+- **类别**: Arch, Debug
+- **关键数据点**: 社区成员尝试从零实现 FAST tokenizer（arXiv 2501.09747）；参考实现在 OpenPI repo pi0_fast.py + tokenizer.py；D44 的 bug 修复也与此相关——从零实现时需注意官方代码中的已知 bug
+
+### D47. Decision Transformer 在机器人操作中为何不流行？
+- **来源**: `#robotics-papers` — Xingdong Zuo (2025/6/27)
+- **原文**: "I got a naive question, in robotic manipulation, why Decision Transformers (RvS) seems not to be a popular method? Given that RTGs could be decided by binary episodic successes"
+- **类别**: Arch, Strategy
+- **关键数据点**: 社区对 Decision Transformer 在 manipulation 中缺席的疑问；binary episodic success 作为 return-to-go 理论上可行；但社区共识倾向 diffusion policy + VLA 路线；暗示 DT/offline RL 可能是被低估的方向
+
+### D48. LeVERB: 视觉 Embodied Reasoning Benchmark
+- **来源**: `#robotics-papers` — julien (2025/6/25)
+- **原文**: sharing "https://ember-lab-berkeley.github.io/LeVERB-Website/" — a new benchmark for visual embodied reasoning
+- **类别**: Arch, Data
+- **关键数据点**: Berkeley EMBER Lab 发布 LeVERB benchmark；评估 VLA 的视觉推理能力而非仅仅动作执行；填补 LIBERO 等 benchmark 偏重记忆而非推理的空白（呼应 #29 VLA-0-Smol 的发现）
+
+### D49. IMLE Policy: 低数据场景下可能优于 Flow Matching
+- **来源**: `#robotics-papers` — Remi Cadene (HF LeRobot 创始人) (2025/6/14)
+- **原文**: "https://imle-policy.github.io/ Expected to generalize better than flow matching on low data regime. What about the medium data regime?"
+- **类别**: Arch, Recipe
+- **关键数据点**: LeRobot 创始人 Remi Cadene 关注 IMLE Policy；低数据场景下泛化可能优于 flow matching；中等数据量场景效果待验证；cc LeRobot 核心团队 Martino Russi + Adil Zouitine → 可能影响未来 LeRobot 策略选择
+
+### D50. V-JEPA 2: Meta World Model 引发社区关注
+- **来源**: `#robotics-papers` — lucidrains (2025/6/11)
+- **原文**: sharing "https://ai.meta.com/blog/v-jepa-2-world-model-benchmarks/" — received 14 reactions in the channel
+- **类别**: Arch, Strategy
+- **关键数据点**: Meta V-JEPA 2 world model 在 LeRobot 社区获 14 个 reaction（极高关注度）；社区成员讨论将其引入 LeRobot；world model 作为 VLA 的规划组件趋势明显——与 Cosmos Policy (#8) WFM 方向一致
+
+### D51. Vision-in-Action: 感知不再是固定管道
+- **来源**: `#robotics-papers` — julien (2025/6/20)
+- **原文**: "Perception is yet another decision - https://vision-in-action.github.io/" — received 21 reactions (highest in thread)
+- **类别**: Arch
+- **关键数据点**: 21 个 reaction 是该频道最高互动量；核心观点：感知应该是策略的一部分而非固定的前端管道；挑战传统 VLA 架构中视觉编码器冻结的设计——与 VLA-0-Smol (#29) "必须微调 vision encoder" 发现一致
+
+### D52. Action-LiPo: 可能增强 ACT Policy
+- **来源**: `#robotics-papers` — julien (2025/6/21)
+- **原文**: "Could be interesting to add to ACT policy in leRobot - https://sites.google.com/view/action-lipo" — received 2 reactions
+- **类别**: Arch
+- **关键数据点**: Lipschitz-constrained action representation 可能改善 ACT 的动作平滑性；与 ACTSmooth (#15) 解决相同问题但从不同角度——ACTSmooth 用 prefix conditioning，Action-LiPo 用 Lipschitz 约束
+
+### D53. Gripper Separation: 夹爪和轨迹应该分开学习？
+- **来源**: `#robotics-papers` — Serhan (2025/6/15)
+- **原文**: "is there any approach out there, which separates the gripper of the trajectory from the other joints? where learning of those two can be addressed separately. the grip is more generalizable and does not have to be fine-tuned in every new environment, as long as it has learned enough types of objects in the foundation. yet the trajectory joints are to be fine-tuned for each environment."
+- **类别**: Arch, Strategy
+- **关键数据点**: 提出夹爪/轨迹解耦学习：抓取动作跨环境泛化，轨迹按环境微调；与 D18 颜色泛化实验一致——抓取泛化好但放置退化；暗示 VLA 架构可能需要分层动作空间设计
+
+### D54. BridgeVLA: 新的 VLA 架构尝试
+- **来源**: `#robotics-papers` — Yo_Fleyt (2025/6/24)
+- **原文**: sharing "https://bridgevla.github.io/home_page.html" — received 3 reactions
+- **类别**: Arch
+- **关键数据点**: BridgeVLA 新架构；社区关注但讨论不多（3 reactions）；VLA 架构创新的持续涌现反映领域高度活跃
+
+### D55. AMPLIFY: 无动作标注视频提升 VLA
+- **来源**: `#robotics-papers` — an0n3039 (2025/6/25)
+- **原文**: "https://amplify-robotics.github.io/ AMPLIFY: Actionless Motion Priors for Robot Learning from Videos. Conditioning on keypoint velocities improves VLA performance with positive transfer from non-robot human videos!"
+- **类别**: Arch, Data
+- **关键数据点**: 利用无动作标注的人类视频（keypoint velocities）提升 VLA；正向迁移从非机器人视频到机器人策略；与 WholeBodyVLA (#49) 方向一致——用 action-free video 降低数据采集成本
+
+### D56. 加速 Imitation Learning: 新论文分享
+- **来源**: `#robotics-papers` — Pepijn Kooijmans @HF LeRobot (2025/6/10)
+- **原文**: "Paper about speeding up imitation learning policies: https://arxiv.org/pdf/2506.05064" — received 2 reactions
+- **类别**: Edge, Arch
+- **关键数据点**: HF LeRobot 官方成员分享 imitation learning 加速论文；与 OneDP (#22)、ActionFlow (#77)、EdgeVLA (#78) 同属 VLA 推理加速趋势
+
+### D57. Robot Learning 核心经验分享 by julien
+- **来源**: `#robotics-papers` — julien (2025/6/21)
+- **原文**: "Some time ago, I shared a short post on what I learned from working on robot learning: https://www.linkedin.com/pulse/robot-learning-julien-perez-0p5ce One of the key benefits of robot learning is its ability to relax not only the hard constraints on the range of achievable tasks but also various assumptions—such as the need for fully predictable effector dynamics. In short, robot learning enables control over a new class of robots that have traditionally been unmanageable using classical optimal control or MPC-based approaches."
+- **类别**: Strategy
+- **关键数据点**: Robot learning 的核心价值不仅是任务范围扩大，更是放松了对可预测动力学的需求；使传统控制/MPC 无法管理的机器人（如软体、欠驱动）变得可控；这是 VLA 不可被经典控制替代的根本原因
+
+### D58. Safe-SKILL: 安全技能学习与 Helix 架构
+- **来源**: `#robotics-papers` — julien (2025/6/12)
+- **原文**: "Something I would like to test on Reachy - https://safe-skill.github.io/ - figure.ai Helix seems to claim using this approach too"
+- **类别**: Arch
+- **关键数据点**: Safe-SKILL 安全约束下的技能学习；Figure Helix (#14/#50) 可能使用了类似方法；julien 计划在 Reachy 机器人上测试；安全性约束是 VLA 部署中被低估的需求
+
+### D59. Co-Design: 软体机器人的学习式控制
+- **来源**: `#robotics-papers` — julien (2025/6/21)
+- **原文**: sharing "https://yswhynot.github.io/codesign-soft/" — robot learning for soft robots
+- **类别**: Arch, Strategy
+- **关键数据点**: 学习式方法与软体机器人的协同设计；传统控制无法处理软体动力学→robot learning 是唯一路径；代表 VLA 技术的长期应用方向——不仅是桌面操作，更是全新机器人形态
+
+### D60. VLA 边缘加速方法全景（2025 年中）
+- **来源**: 多源汇总 — #22 OneDP、#43 LiteVLA-Edge、#44 动作瓶颈分析、#45 TensorRT Edge-LLM、#77 ActionFlow、#78 EdgeVLA、#79 SpecPrune-VLA、#80 MulticoreWare CogAct
+- **类别**: Edge, Strategy
+- **关键数据点汇总**: 2025 年 VLA 边缘加速进入爆发期，至少 8 种不同方法：
+  1. **蒸馏**（OneDP #22）：41× 加速，从多步到单步
+  2. **量化**（LiteVLA-Edge #43）：4-bit GGUF → 6.6Hz on Jetson
+  3. **系统级流水线**（ActionFlow #77）：2.55× 无需重训
+  4. **架构简化**（EdgeVLA #78）：消除自回归依赖，6× 加速
+  5. **动态剪枝**（SpecPrune-VLA #79）：action-aware，1.7× on real tasks
+  6. **图优化**（MulticoreWare #80）：1.3× on CogAct 7.6B
+  7. **硬件升级**（Jetson T4000 #46）：GDDR7 解决内存带宽瓶颈
+  8. **投机解码**（TensorRT Edge-LLM #45）：EAGLE-3 + NVFP4
+  规律：没有银弹——每种方法解决不同瓶颈，最终需要组合使用。最关键的发现（#44）：VLA 边缘延迟的真凶是内存带宽而非算力。
+
 ---
 
 ## GitHub Issues 周报
@@ -360,4 +538,4 @@
 
 ---
 
-*v3.0 — 2026-03-15 更新。Blog 40 条（#1-#40）+ Discord 40 条（D1-D40），共 80 条。v3 新增 30 条：VLA-0-Smol 500M ablation 全景（LR/vision encoder/action masking 优先级）、Correll Lab 失败复盘（stats.json 陷阱）、SmolVLA 架构深度拆解、GR00T N1.6 零样本 sim-to-real、Isaac Lab-Arena 40× 评估加速、X-VLA 跨具身冠军、LoRA VLA 8GB VRAM 训练、Forge 数据格式万能转换器、GR00T 数据量经验（200-300 最优区间）、VLA 训练决策优先级汇总、GPU 需求矩阵、模型选型决策树、完整 checklist、Top 5 失败模式、工具链全景。*
+*v3.1 — 2026-03-16 更新。Blog 90 条（#1-#90）+ Discord 60 条（D1-D60），共 150 条。v3.1 新增 70 条：Blog #76-#90 覆盖 VLA 边缘部署加速（ActionFlow、EdgeVLA、SpecPrune-VLA、ModularVLA）、大规模数据标度律（power-law scaling、相机视角优先级）、实战工程指南（Anton Maltsev VLA 训练 & Qwen3VL 快速上手）、RL 后训练方法（Diffusion Steering & ConRFT）、Discord D41-D60 聚焦 RoboCasa 训练困难、FAST tokenizer bug 修复、Diffusion Steering RL 社区讨论、决策 Transformer 缺席原因、LeVERB reasoning benchmark、安全技能学习、软体机器人协同设计、VLA 边缘加速方法全景（8 种方法 × 组合使用）。*
