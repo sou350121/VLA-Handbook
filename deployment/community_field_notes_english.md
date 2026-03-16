@@ -1,6 +1,6 @@
 # VLA/Embodied AI 英文社区实战笔记
 
-> **版本**: v3.3 — 2026-03-16
+> **版本**: v3.4 — 2026-03-16
 > **数据来源**: HuggingFace Blog、GitHub Issues、厂商技术博客、Discord 社区
 > **对应中文版**: `community_field_notes_xiaohongshu.md`（220+ 篇小红书帖子）
 > **采集 skill**: `scripts/en-vla-collector/english-vla-collector-SKILL.md`
@@ -714,140 +714,130 @@
 - **类别**: Strategy
 - **关键数据点汇总**: 基于 200 条社区实战经验总结的 VLA 领域十大开放问题：1. **泛化**：如何从固定场景 >95% 扩展到真实环境（D74/D32）；2. **数据效率**：power-law scaling 的拐点在哪（#82）；3. **RL 后训练**：冻结 vs 更新模型，哪种路线胜出（D70）；4. **边缘部署**：内存带宽瓶颈的算法解法（#44/D60）；5. **Action Tokenization**：FAST vs OmniSAT vs FASTer 谁胜出（D71）；6. **评估标准化**：LIBERO 已不够，什么替代（#112 RoboArena）；7. **数据格式统一**：LeRobot v3 能否成为唯一标准（D81）；8. **人形迁移**：桌面臂经验多少能复用到人形（D82）；9. **触觉集成**：低成本触觉方案何时成熟（D65）；10. **World Model 角色**：规划器 vs 仿真器 vs 数据增强器（D76）
 
-### D86. VLA RL 后训练方法全景（250 条升级版）
-- **来源**: 多源汇总 — #116 SimpleVLA-RL、#117 SRPO、#118 VLAW、#119 GigaBrain、#135 π_RL、D70 原版全景、#88 Diffusion Steering、#89 ConRFT、#94 VLA-RFT、#130 RLinf-VLA
-- **类别**: Arch, Strategy
-- **关键数据点汇总**: RL 后训练已从"前沿探索"进入"工程基础设施"阶段，至少 10 种方法形成三大路线：**路线 A：冻结模型改输入**——Diffusion Steering (#88) 冻结 DiT 仅更新噪声；**路线 B：更新模型权重**——ConRFT (#89) 更新 action expert、SimpleVLA-RL (#116) GRPO 更新全模型、SRPO (#117) 自参照优化；**路线 C：World Model 辅助**——VLA-RFT (#94) <400 步超 supervised、VLAW (#118) 迭代共进化 +39.2%、GigaBrain (#119) RAMP 四阶段循环。**新增基础设施**：RLinf-VLA (#130) 统一 VLA×RL×仿真器接口 1.6-1.9× 训练加速。**关键数据对比**：SimpleVLA-RL 冷启动 1 条/任务→430% 提升；SRPO 200 步→99.2%；GigaBrain 挑战任务 +30%。**核心判断**：路线 C（World Model）正在成为新共识——真实数据太贵、仿真保真度在改善
+### D86. ACT 多子任务训练：数据整理比模型选择更重要
+- **来源**: LeRobot Discord #show-us-what-you-built — Fei (2026/3/2)
+- **类别**: Recipe
+- **关键数据点汇总**: 用户 Fei 分享 ACT 3-subtask 训练经验，累计超过 1000 episodes。核心经验："data curation is critical"——数据质量和标注一致性比模型架构选择影响更大。建议把训练当作"marathon not sprint"，逐步迭代优化数据集而非一次性大规模采集。与 D28 Forge 数据经验一致
 
-### D87. VLA 量化技术全景（250 条新增主题）
-- **来源**: 多源汇总 — #125 EaqVLA、#126 QVLA、#127 QuantVLA、#128 HBVLA、#43 LiteVLA-Edge 4-bit GGUF
-- **类别**: Edge, Arch
-- **关键数据点汇总**: 2025-2026 年 VLA 量化研究爆发，至少 5 种专用方法（不再简单套用 LLM 量化）：1. **EaqVLA (#125)**：编码对齐混合精度，按四模块差异化量化（CVPR WS 2025）；2. **QVLA (#126)**：通道级动作敏感度量化，29.2% VRAM、98.9% 性能、1.49× 加速；3. **QuantVLA (#127)**：首次量化 DiT action head，免训练 PTQ，~70% 显存节省；4. **HBVLA (#128)**：1-bit 极限量化探索；5. **LiteVLA-Edge (#43)**：4-bit GGUF → 6.6Hz on Jetson。**核心洞察**：VLA 量化 ≠ LLM 量化——动作空间微小偏差会复合放大为灾难性失败（QVLA 核心发现）；DiT action head 此前被认为不可量化但 QuantVLA 证明可以
+### D87. XLeRobot 垃圾分拣：低成本桌面操作实战
+- **来源**: LeRobot Discord #show-us-what-you-built — Grigorij (2026/3/5)
+- **类别**: Recipe
+- **关键数据点汇总**: 用户 Grigorij 展示 XLeRobot 平台完成桌面垃圾分拣（从桌面抓取垃圾投入垃圾桶）的 demo。使用标准 LeRobot 训练流程，视频展示了完整的 pick-and-place 循环。XLeRobot 作为社区衍生硬件平台的活跃度持续上升
 
-### D88. 力觉/触觉 VLA 全景（250 条新增主题）
-- **来源**: 多源汇总 — #120 ForceVLA、#121 CRAFT、#122 MoDE-VLA、#123 DexGrasp-VLA、#134 Spatially-Anchored Tactile、D43 3D 打印触觉、D65 简化触觉方案
-- **类别**: Arch, Strategy
-- **关键数据点汇总**: 力觉/触觉从"nice-to-have"进入"VLA 核心模态"：**架构创新**：ForceVLA (#120) FVLMoE 力觉 MoE 模块 +23.2%；MoDE-VLA (#122) sparse expert routing 首次双手削苹果；**训练创新**：CRAFT (#121) VIB 课程式力觉学习——先纯力觉再释放多模态；**表示创新**：Spatially-Anchored (#134) 触觉空间锚定解决亚毫米精度；**低成本方案**：广角相机+硅胶层 (D65) = ICRA 2025 最佳论文思路。**核心趋势**：接触丰富操作是 VLA 下一个必争之地——插入/擦拭/削皮等任务纯视觉不够
+### D88. RoboCrew：具身 LLM Agent 框架（62 stars）
+- **来源**: LeRobot Discord #show-us-what-you-built — Grigorij (2026/3/5)
+- **类别**: Arch
+- **关键数据点汇总**: Grigorij 发布 RoboCrew——一个具身 LLM agent 框架，定位为让机器人编排"像 CrewAI 或 Autogen 一样简单"。GitHub 62 stars、5 forks。将 LLM 多 agent 编排范式（任务分解、角色分配）迁移到机器人控制领域，降低多机器人协作的编程门槛
 
-### D89. 灵巧手 VLA 全景（250 条新增主题）
-- **来源**: 多源汇总 — #122 MoDE-VLA、#123 DexGrasp-VLA、#124 DexGraspVLA、#131 GR-Dexter、D43 3D 打印触觉传感器
-- **类别**: Arch, Strategy
-- **关键数据点汇总**: 灵巧手操作从硬件驱动转向 VLA 驱动：**数据采集**：DexGrasp-VLA (#123) 共享自主权——人控臂、VLA 控手，90% 跨物体成功率；**抓取策略**：DexGraspVLA (#124) AAAI 2026 Oral，杂乱场景通用灵巧抓取；**复杂操作**：MoDE-VLA (#122) 首个双手削苹果；**硬件**：GR-Dexter (#131) 字节跳动 21-DoF 紧凑手 + 触觉指尖。**关键差异**：桌面臂操作 = 粗略定位 + 简单夹爪；灵巧手操作 = 精密力控 + 多指协调 + 触觉依赖——需要全新的 VLA 架构设计
+### D89. DimensionalOS：多机器人同步控制演示
+- **来源**: LeRobot Discord #show-us-what-you-built — Ruthwik/DimensionalOS (2026/3/8)
+- **类别**: Recipe, Arch
+- **关键数据点汇总**: DimensionalOS 展示 G1 人形 + Go2 四足 + xARM 桌面臂 + Piper 协作臂的四机器人同步控制。不同形态（人形/四足/桌面臂）的机器人在统一框架下同时运动。这是社区中首次看到跨形态多机器人实时协调的 demo
 
-### D90. VLA 指令表示方式全景
-- **来源**: 多源汇总 — #129 Interleave-VLA、D1 FAST tokenization normalization、D71 Action Tokenization 全景
-- **类别**: Arch, Data
-- **关键数据点汇总**: VLA 的输入/输出表示方式都在演进：**输入侧**：从纯文本指令（"pick up the red cup"）→ 交错图文（Interleave-VLA #129：图片+文字交替，OOD 泛化 2×）→ 手绘草图也能作为指令；**输出侧**：从连续值→FAST tokenization (D1)→OmniSAT (#95) 6.8× 压缩→FASTer (#96) 可学习 tokenizer。**被低估的方向**：ICLR 2026 全景 (#10) 指出 in-context learning 和指令表示是"被严重忽视的方向"——Interleave-VLA 的 2× 泛化提升证明这个判断
-
-### D91. World Model 在 VLA 中的四重角色（升级 D76）
-- **来源**: 多源汇总 — D76 原版（三重角色）+ #118 VLAW + #119 GigaBrain + #136 VLA-in-the-Loop
-- **类别**: Arch, Strategy
-- **关键数据点汇总**: 升级为四重角色：1. **规划器**（Cosmos Policy #8）：预测未来→选最优动作序列；2. **仿真器**（VLA-RFT #94）：替代真实交互做 RL，<400 步超 supervised；3. **数据增强器**（NVIDIA #102）：仿真→逼真合成数据；4. **在线安全网**（VLA-in-the-Loop #136）：部署时实时纠错 VLA 抓取策略。**新趋势**（VLAW #118 + GigaBrain #119）：world model 和 VLA 不是分离的组件——它们可以迭代共进化（VLAW +39.2%，GigaBrain RAMP +30%）。**共识判断**：World Model 从辅助工具升级为 VLA 生态的核心基础设施
-
-### D92. VLA 综述论文全景（升级 D83，含新增综述）
-- **来源**: 多源汇总 — D83 原版 + #132 Efficient VLA Survey + #133 Nature MI + #137 Contact-Rich IL Survey + #138 Multimodal Fusion Survey + #140 IL for Manipulation Survey
-- **类别**: Strategy
-- **关键数据点汇总**: 新增 5 篇综述至总计 12+ 篇：**效率优化 (#132)**：量化/剪枝/蒸馏全覆盖；**顶刊评估 (#133)**：Nature MI 跨领域权威评估；**接触丰富 (#137)**：diffusion 力/位置轨迹 + Mamba 长序列；**多模态融合 (#138)**：信息融合理论视角；**操作 IL 演进 (#140)**：2021-2025 从 diffusion 到自回归。**新增选择建议**：边缘部署 → #132；力觉 VLA → #137；跨领域入门 → #133；历史脉络 → #140
-
-### D93. VLA 数据效率前沿（多方法对比）
-- **来源**: 多源汇总 — #116 SimpleVLA-RL（1 条/任务→91.7%）、#117 SRPO（200 步→99.2%）、#84 Anton Maltsev（~40 样本）、#82 Data Scaling Laws（power-law）、#94 VLA-RFT（<400 步超 supervised）
-- **类别**: Data, Strategy
-- **关键数据点汇总**: 数据效率革命正在发生——不再需要海量 demo：**RL 路线**：SimpleVLA-RL (#116) 1 条轨迹/任务冷启动 + GRPO→91.7%；SRPO (#117) 200 RL 步→99.2%；**World Model 路线**：VLA-RFT (#94) <400 fine-tuning 步超强 supervised baseline；**极简路线**：Maltsev (#84) ~40 样本→可用控制；**规律**：Scaling Laws (#82) 多样性 >> 数量——200 环境 > 2000 demo/环境。**对个人研究者的意义**：你不再需要千万级数据预算——小数据 + 聪明的 RL/World Model 后训练就够了
-
-### D94. 产业格局更新（250 条版本）
-- **来源**: 多源汇总 — #131 GR-Dexter（字节跳动）、#91 UnifoLM-VLA（宇树）、#38 LingBot-VLA（蚂蚁）、#122 MoDE-VLA（Sharpa）、#119 GigaBrain（GigaAI）、D75 开源生态
-- **类别**: Strategy
-- **关键数据点汇总**: VLA 产业格局加速分化：**中国全栈玩家**：宇树（UnifoLM-VLA #91 + G1 硬件）、蚂蚁（LingBot-VLA #38 20K+h 数据）、字节跳动（GR-Dexter #131 硬件+VLA）；**海外专注型**：Physical Intelligence（π 系列 RL 后训练）、Sharpa（MoDE-VLA #122 灵巧手）、GigaAI（GigaBrain #119 World Model RL）；**平台型**：NVIDIA（Cosmos/Isaac/Jetson 全栈）、HuggingFace（LeRobot 社区标准）。**新趋势**：字节跳动入场（#131）是最大新闻——意味着中国 VLA 产业从"机器人公司做 AI"扩展到"AI 公司做机器人"
-
-### D95. VLA 边缘部署方法全景（升级 D60）
-- **来源**: 多源汇总 — D60 原版 + #125 EaqVLA + #126 QVLA + #127 QuantVLA + #128 HBVLA + #132 Efficient VLA Survey
-- **类别**: Edge, Strategy
-- **关键数据点汇总**: 边缘加速方法从 8 种扩展到 12+ 种，量化成为最活跃子方向：原 D60 八种（蒸馏/量化/系统流水线/架构简化/动态剪枝/图优化/硬件升级/投机解码）+ **新增四种**：9. **编码对齐量化** (EaqVLA #125)：四模块差异化比特分配；10. **动作敏感量化** (QVLA #126)：通道级→29.2% VRAM；11. **DiT Head PTQ** (QuantVLA #127)：首次量化 diffusion action head；12. **1-Bit 极限** (HBVLA #128)：探索最低比特极限。**关键转变**：VLA 量化已成独立研究子领域——不是"如何量化 LLM"而是"如何量化动作生成器"
-
-### D96. 接触丰富操作：VLA 的下一个必争之地
-- **来源**: 多源汇总 — #120 ForceVLA、#121 CRAFT、#122 MoDE-VLA、#137 Contact-Rich IL Survey、D43 3D 打印触觉
-- **类别**: Arch, Strategy
-- **关键数据点汇总**: 为什么接触丰富操作是 VLA 下一阶段的核心挑战：1. **当前 VLA 的盲区**：大部分 VLA 在 pick-place/折叠等"接触简单"任务上验证——插入/擦拭/削皮等需要力控的任务严重不足；2. **解法已出现**：ForceVLA (#120) MoE 融合力觉 +23.2%、CRAFT (#121) 课程式力觉学习、MoDE-VLA (#122) sparse expert 削苹果；3. **数据瓶颈**：ForceVLA-Data 是首个同步视觉/力矩数据集——说明此前连数据都没有；4. **综述确认** (#137)：从"接触回避"到"接触利用"是范式转变。**对社区的建议**：如果你的目标任务涉及力控→关注 ForceVLA/CRAFT；如果你的任务是标准 pick-place→当前 VLA 已足够
-
-### D97. VLA 模型选型升级版（含新模型和新维度）
-- **来源**: 多源汇总 — D80（200 条版本）+ #116-#140 新增内容
-- **类别**: Arch, Strategy
-- **关键数据点汇总**: 新增两个选型维度——**力觉需求**和**RL 后训练需求**：
-  - **不需要力觉 + 不需要 RL**：ACT (52M)→单任务快速验证；SmolVLA (450M)→多相机+一定泛化
-  - **不需要力觉 + 需要 RL**：OpenVLA-OFT + SimpleVLA-RL (#116)→GRPO 扩展；Pi0 + Diffusion Steering (#88)→冻结权重 RL
-  - **需要力觉**：ForceVLA (#120)→6 轴力矩 MoE 融合；CRAFT (#121)→课程式力觉适配任意 VLA
-  - **灵巧手操作**：DexGrasp-VLA (#123)→共享自主权数据采集；MoDE-VLA (#122)→复杂接触操作
-  - **人形全身**：WholeBodyVLA (#49)→行走+操作统一控制；UnifoLM-VLA (#91)→Unitree G1 专用
-
-### D98. SimpleVLA-RL vs SRPO vs VLA-RFT：RL 方法选型指南
-- **来源**: 多源汇总 — #116 SimpleVLA-RL、#117 SRPO、#94 VLA-RFT、#130 RLinf-VLA
-- **类别**: Arch, Recipe
-- **关键数据点汇总**: 三种最新 RL 后训练方法的选型对比：
-  - **SimpleVLA-RL (#116)**：GRPO + 环境交互；需要仿真器；冷启动友好（1 条/任务）；91%→99%
-  - **SRPO (#117)**：自参照无需外部 demo；仅需训练批次中的成功轨迹；200 步→99.2%；最简单
-  - **VLA-RFT (#94)**：World Model 做仿真器；<400 步超 supervised；不需要真实交互
-  - **选型建议**：有仿真器→SimpleVLA-RL；无仿真器+无额外 demo→SRPO；想用 World Model→VLA-RFT
-  - **基础设施**：RLinf-VLA (#130) 提供统一训练框架——不需要每个方法自己搭 pipeline
-
-### D99. WholeBodyVLA ICLR 2026：人形操作里程碑
-- **来源**: 多源汇总 — WholeBodyVLA (#49) ICLR 2026 版本更新 + #91 UnifoLM-VLA + #108 GR00T N1 + D82 人形挑战
-- **类别**: Arch, Strategy
-- **关键数据点汇总**: WholeBodyVLA 正式被 ICLR 2026 接收：**核心创新**：从 action-free 第一人称视频学习统一 latent actions；LMO（loco-manipulation-oriented）RL 策略处理前进/转弯/蹲下等核心运动；AgiBot X2 人形验证超 baseline 21.3%。**与 D82 原版人形挑战的对应**：DoF 爆炸→latent action 压缩解决；平衡协调→LMO RL 专门处理；数据采集→action-free video 降低成本。**开源**：GitHub OpenDriveLab/WholebodyVLA 已开放代码
-
-### D100. 从 200 条到 250 条：新增内容的信息结构分析
-- **来源**: 本次采集过程的元观察
-- **类别**: Strategy
-- **关键数据点汇总**: 新增 50 条（#116-#140 + D86-D110）的主题分布揭示领域演进方向：**最密集主题**（按新增条目数排序）：1. RL 后训练（7 条：#116/#117/#118/#119/#130/#135/D86）——已成为最活跃子领域；2. VLA 量化（5 条：#125-#128/D87）——独立成子领域；3. 力觉/触觉（5 条：#120-#122/#134/D88）——从辅助到核心；4. 灵巧手（4 条：#122-#124/#131/D89）——从研究到产业。**对比 200 条版本**：D40/D84 预测的"RL post-training 爆发"和"触觉集成加速"完全应验；**新发现**：VLA 量化作为独立方向的崛起超出预期——4 篇专用量化论文（EaqVLA/QVLA/QuantVLA/HBVLA）在 3 个月内密集发表
-
-### D101. VLA 评估生态升级
-- **来源**: 多源汇总 — #112 RoboArena、#48 LeVERB (D48)、#82 Data Scaling Laws 评估方法、#116 SimpleVLA-RL LIBERO 评估
-- **类别**: Data, Strategy
-- **关键数据点汇总**: LIBERO 不再是唯一标准——评估生态正在多元化：**LIBERO**：仍是基线（SimpleVLA-RL #116 达 99% SOTA），但"记忆 vs 泛化"偏差已被识别 (#29)；**RoboArena (#112)**：真实环境评测——揭示 sim benchmark 与真实部署的巨大差距；**LeVERB (D48)**：视觉推理能力评测——弥补 LIBERO 偏重记忆的缺陷；**RoboChallenge**：GigaBrain (#119) 排名第一的国际基准；**LIBERO-Plus**：SRPO (#117) 用的鲁棒性变体——更接近真实 OOD 场景。**建议**：论文只报 LIBERO 不够——至少搭配 RoboArena 或 LIBERO-Plus
-
-### D102. VLA 训练成本速查表升级版
-- **来源**: 多源汇总 — D79 原版 + #116 SimpleVLA-RL + #117 SRPO + #130 RLinf-VLA
+### D90. Foundation Stereo + SAM2 = 零样本 Foundation Pose（$30 方案）
+- **来源**: LeRobot Discord #show-us-what-you-built — Vector Wang/XLeRobot (2026/3/11)
 - **类别**: Recipe, Edge
-- **关键数据点汇总**: 新增 RL 后训练成本维度：**原 D79**（SFT 成本不变）：ACT 52M 4h@3080→SmolVLA 450M 4h@A100→Pi0 3B 多卡。**新增 RL 后训练成本**：SimpleVLA-RL (#116)→需要仿真器渲染 GPU + 训练 GPU；SRPO (#117)→200 步极低成本，但需要环境交互；VLA-RFT (#94)→World Model 训练是额外开销但后续 RL 极快 (<400 步)。**最低成本 RL 路径**：SRPO (200 步 + 无需额外 demo) > VLA-RFT (<400 步 + World Model) > SimpleVLA-RL (需仿真器)。**RLinf-VLA (#130) 统一框架**：降低所有方法的工程搭建成本
+- **关键数据点汇总**: Vector Wang 分享零样本物体位姿估计方案："Fast Foundation Stereo + SAM2 = zero shot Foundation Pose"。关键：使用从 AliExpress 购买的 $30 双目相机即可实现。将 NVIDIA Foundation 系列模型组合用于低成本机器人视觉，大幅降低精确抓取的硬件门槛
 
-### D103. Interleave-VLA 的启示：指令表示创新
-- **来源**: 多源汇总 — #129 Interleave-VLA、#10 ICLR 2026 全景（in-context learning 被忽视）
-- **类别**: Arch, Data
-- **关键数据点汇总**: Interleave-VLA (#129) 的成功验证了 ICLR 2026 全景 (#10) 的一个关键预测——"in-context learning 和指令表示是被严重忽视的方向"。交错图文指令让 OOD 泛化 2× 提升，210K episodes 自动生成（从 Open X-Embodiment 文本转换），支持手绘草图等非标准输入。**更深层启示**：当所有人都在优化模型架构和训练方法时，改变输入表示可能是投入产出比最高的研究方向——因为它与所有 VLA backbone 正交
+### D91. OpenCastor：多硬件平台统一支持
+- **来源**: LeRobot Discord #show-us-what-you-built — craig (2026/3/12)
+- **类别**: Recipe
+- **关键数据点汇总**: craig 分享 OpenCastor 项目进展——支持 Reachy 和 LeRobot 硬件的统一框架。包含 Reachy Mini 教程、HLabs ACB v2.0 支持，以及 Raspberry Pi 5 / Jetson / ESP32 多计算平台适配。社区正在解决 LeRobot 生态的硬件碎片化问题
 
-### D104. 字节跳动入场：GR-Dexter 的产业信号
-- **来源**: 多源汇总 — #131 GR-Dexter + D94 产业格局
+### D92. WandB 训练可视化 + Docker 训练流程分享
+- **来源**: LeRobot Discord #show-us-what-you-built — Mr. Shaitana (2026/2/26)
+- **类别**: Recipe
+- **关键数据点汇总**: Mr. Shaitana 公开了 pick_and_place_v1.0.0 的 WandB workspace（wandb.ai/avilay/lerobot/runs/udf4orpe），展示完整训练曲线。使用 A10 NVIDIA GPU + Docker 容器化训练（Dockerfile 在 github.com/avilay/learn-robotics）。对新手有参考价值：提供了从环境配置到训练监控的完整可复现流程
+
+### D93. MM-Hand 1.0：开源 21-DoF 灵巧手（$1400，HKU MMLab）
+- **来源**: LeRobot Discord #show-us-what-you-built — Zhuoheng Li (2026/2/15)
+- **类别**: Arch, Edge
+- **关键数据点汇总**: 港大 MMLab 的 Zhuoheng Li 发布 MM-Hand 1.0 开源灵巧手并邀请 beta 测试。核心规格：21 DoF、腱驱动、关节角度传感器、21 个张力传感和自紧装置、SPI/I2C 触觉接口、TTL/CAN 电机接口、3D 打印结构、Arduino 编程。材料成本约 $1400 USD。完全开源（CAD、装配指南、电子、软件）。社区反馈热烈——lotyr 评价"Great to finally see a tendon driven hand with joint angle sensors!"。这是社区首个面向 VLA 研究的低成本完整灵巧手方案
+
+### D94. 错误恢复训练策略：教恢复不教犯错
+- **来源**: LeRobot Discord #show-us-what-you-built — Fei + eliasab + tms-gvd (2026/1/22)
+- **类别**: Recipe, Debug
+- **关键数据点汇总**: 一段高质量的社区讨论。Fei 分享错误恢复训练策略：核心原则是"teach it to recover, not to make mistakes"——只记录恢复部分，不记录导致错误的过程。具体方法：模拟常见失败状态（夹爪在物体旁但未抓住、臂挡住物体视线），然后示教恢复动作。大部分恢复轨迹很短（<5 秒）。tms-gvd 补充了 hackathon 经验：从遥操切换到策略时动作很乱，怀疑是遥操导致 OOD 状态。Fei 回复："intervention is to take it from OOD back into the distribution, so you need a strong baseline to start with and only tackle edge cases"
+
+### D95. Arpeggio Gripper：社区自制夹爪（9👍 热门帖）
+- **来源**: LeRobot Discord #show-us-what-you-built — Over Engineer (约 2026/2 月)
+- **类别**: Edge
+- **关键数据点汇总**: Over Engineer 发布 "Introducing Arpeggio Gripper" 视频展示自制夹爪设计。帖子获得 9👍、2💯、1🔥 的高互动量（在 #show-us-what-you-built 频道中属于热门级别），说明社区对可复现的低成本硬件方案有强烈需求
+
+### D96. $10 PS4 相机做 Zero-Shot Safety 评测
+- **来源**: LeRobot Discord #show-us-what-you-built — rafa.felix (2026/1/27)
+- **类别**: Recipe, Edge
+- **关键数据点汇总**: rafa.felix 分享用 $10 PS4 相机对 SO-ARM101 进行 Zero-Shot Safety 评测的 YouTube 视频。极致低成本方案：用游戏主机配件作为机器人视觉传感器。与 D90 的 $30 双目相机方案一起，说明社区正在系统性地探索消费级硬件在机器人研究中的可用性
+
+### D97. BotBrain：ROS2 模块化机器人大脑（Unitree Go2/G1 支持）
+- **来源**: LeRobot Discord #show-us-what-you-built — botbotrobotics (约 2026/1 月)
+- **类别**: Arch, Edge
+- **关键数据点汇总**: botbotrobotics 发布 BotBrain（github.com/botbotrobotics/BotBrain）——ROS2 模块化开源机器人大脑。功能：遥操/控制、自主导航、感知、Web UI（Cockpit + 车队管理）、健康诊断。支持 Unitree Go2/G1 及其他 ROS2 机器人。运行在 NVIDIA Jetson 上。3D 可打印硬件。作者明确表示"We want to add LeRobot support asap"——说明 LeRobot 正成为社区项目的首选集成目标
+
+### D98. LeRobot Web Interface：浏览器端双臂遥操
+- **来源**: LeRobot Discord #show-us-what-you-built — WhitneyDesignLabs (约 2026/1 月)
+- **类别**: Recipe
+- **关键数据点汇总**: WhitneyDesignLabs 发布 lerobot-web-interface（GitHub WhitneyDesignLabs/lerobot-web-interface），实现浏览器端双臂遥操控制。获得 6🔥 和 1👍。有趣的实战经验：由于系统在显示相机画面时频繁崩溃（可能因为旧电脑），WhitneyDesignLabs 开始"blind teaching"——不看画面直接遥操示教。这说明即使在不理想的硬件条件下，有经验的操作者仍可以采集有效数据
+
+### D99. Leader-Inverse-Follow：自定义 LeRobot 遥操模式
+- **来源**: LeRobot Discord #show-us-what-you-built — Fei (2026/1/23)
+- **类别**: Recipe, Arch
+- **关键数据点汇总**: Fei 在自己的 LeRobot fork (TheWisp/lerobot) 上开发了 leader-inverse-follow 功能分支——一种新的遥操作控制模式。使用自定义 so107 机器人（比 SO101 多一个 DOF），但同样适用于 SO101。该 PR 展示了社区如何通过 fork 和 feature branch 方式扩展 LeRobot 的核心功能
+
+### D100. awesome-vla-study：VLA 论文结构化阅读清单（168 stars）
+- **来源**: LeRobot Discord #show-us-what-you-built — MilkClouds (2026/2 月)
 - **类别**: Strategy
-- **关键数据点汇总**: GR-Dexter (#131) 不仅是一篇技术报告——它标志着字节跳动正式进入具身智能赛道：**硬件**：21-DoF 紧凑灵巧手 + 高密度触觉；**软件**：VLA 端到端训练框架；**数据**：双臂遥操系统。**产业意义**：1. 中国 VLA 产业从"机器人公司做 AI"（宇树/智元）扩展到"AI 公司做机器人"（字节/蚂蚁）；2. 字节的 GPU 资源和数据飞轮能力可能加速灵巧手 VLA 进展；3. 开源策略（GitHub 已发布）表明走生态建设而非封闭路线
+- **关键数据点汇总**: MilkClouds 分享 awesome-vla-study（github.com/MilkClouds/awesome-vla-study）——"A structured reading list on VLA models — from diffusion/flow matching foundations through state-of-the-art robot foundation model architectures"。168 stars、8 forks。与 #97 Awesome-RL-VLA、#98 Psi-Robot 等列表互补，从不同组织视角覆盖 VLA 文献
 
-### D105. VLA 论文追踪工具链推荐
-- **来源**: 多源汇总 — #97 Awesome-RL-VLA、#98 VLA Survey、#100 Awesome-Embodied、#139 TopConf 论文追踪器
+### D101. Reachy Mini 趣味实验：Dance Mode + Sleep Mode
+- **来源**: LeRobot Discord #show-us-what-you-built — thegr8madcat (2026/2/8)
+- **类别**: Recipe
+- **关键数据点汇总**: thegr8madcat 分享 Reachy Mini 在模拟器中的实验，添加了 dance mode 和 sleep mode。附带 breadboard + LCD 显示 "reachy nano" 的硬件图。展示了社区成员如何将 Reachy Mini 作为低门槛的机器人学习平台，从趣味项目入手积累经验
+
+### D102. HelloRL：模块化 RL 框架（面向机器人）
+- **来源**: LeRobot Discord #show-us-what-you-built — i10e-lab (约 2026/2 月)
+- **类别**: Arch
+- **关键数据点汇总**: i10e-lab 发布 HelloRL（github.com/i10e-lab/HelloRL）——"A fully modular framework to make Reinforcement Learning quick and easy"。带有可视化 RL 环境 demo。定位为降低机器人 RL 的入门门槛，与 RLinf-VLA (#130) 的统一 RL 基础设施定位互补但面向不同用户群体（HelloRL 面向初学者，RLinf-VLA 面向 VLA 研究者）
+
+### D103. hydr8：Hydra 配置管理简化工具
+- **来源**: LeRobot Discord #show-us-what-you-built — rsamf (2026/2/12)
+- **类别**: Recipe
+- **关键数据点汇总**: rsamf 发布 hydr8（github.com/rsamf/hydr8）——基于 decorator 的 Hydra 配置注入工具。Hydra 是 LeRobot 和多数机器人学习框架使用的配置管理系统，hydr8 通过 Python decorator 简化了配置定义和注入流程。对 LeRobot 用户有实用价值——减少冗长的 YAML 配置编写
+
+### D104. YOR：$10K 开源双臂移动操作机器人（NYU）
+- **来源**: LeRobot Discord #robotics-papers — Mahi Shafiullah/NYU (2026/2/13)
+- **类别**: Arch, Edge
+- **关键数据点汇总**: NYU 的 Mahi Shafiullah 发布 YOR——"open-source bimanual mobile manipulator robot – built for researchers and hackers alike for only ~$10k"。cone-e.com 是项目主页。社区成员 lorepieri 随后询问硬件细节（红色旋钮和 3D 打印部件用途）。$10K 的价格点填补了 SO-ARM101（~$300 桌面臂）和工业移动机器人（$50K+）之间的空白，为中等预算的实验室提供了双臂移动操作平台
+
+### D105. DreamDojo：通用机器人 World Model（来自大规模人类视频）
+- **来源**: LeRobot Discord #robotics-papers — lotyr (2026/2/9)
+- **类别**: Arch
+- **关键数据点汇总**: lotyr 分享 DreamDojo（dreamdojo-world.github.io/）——"A Generalist Robot World Model from Large-Scale Human Videos"。获得 4❤️。后续 skpro19 提问如何用它训练 SO-101 做 pick-and-place——说明社区对 world model 的实际应用场景有强烈兴趣。与 D76 的 World Model 角色分析一致：从人类视频学习世界模型是降低机器人数据成本的关键路径
+
+### D106. NVIDIA EgoScale + "Nvidia has quietly solved robotics end-to-end"
+- **来源**: LeRobot Discord #robotics-papers — lotyr + Bercan/@bercankilic (2026/2/26)
 - **类别**: Strategy
-- **关键数据点汇总**: 研究者追踪 VLA 前沿的推荐工具链：**综合追踪**：Awesome-Embodied (#100) VLA/VLN/VA 全覆盖；TopConf (#139) 按顶会分类。**专题追踪**：Awesome-RL-VLA (#97) RL 后训练专题；Psi-Robot (#98) Action Tokenization 视角。**博客/分析**：Moritz Reuss ICLR 2026 全景 (#10) 最深度；Nature MI (#133) 最权威。**社区**：LeRobot Discord #robotics-papers（信息密度最高）；HF Daily Papers。**建议优先级**：每天看 HF Daily Papers → 每周看 #robotics-papers → 每月看 Awesome 列表更新
+- **关键数据点汇总**: lotyr 分享 NVIDIA EgoScale（research.nvidia.com/labs/gear/egoscale/）+ DrJimFan 的 X thread。Bercan 评论引发讨论："Nvidia has quietly solved robotics end-to-end with their last three releases. Incredible."——提到 DreamDojo（world model with zero-shot generalization）。这个判断可能过于乐观，但反映了社区对 NVIDIA 近期在 Cosmos/Isaac/GR00T 系列发布的密集程度的震撼感
 
-### D106. VLA 开放问题清单升级（250 条版本）
-- **来源**: 多源汇总 — D85 原版（200 条十大问题）+ #116-#140 新增证据
+### D107. SmolVLA 社区评价：令人印象深刻但期待更小模型
+- **来源**: LeRobot Discord #robotics-papers — 匿名用户 (约 2026/2 月)
+- **类别**: Arch, Edge
+- **关键数据点汇总**: 社区成员分享 SmolVLA 在 LIBERO 和 Meta-World 上的 benchmark 结果表格（SmolVLA 0.45B/2.25B vs Diffusion Policy / TinyVLA / π0 3.5B），评价："this is old, but smolvla's paper continues to be impressive. I wish they had released the smaller model too tho"（arXiv 2506.01844）。社区对小模型有明确需求——SmolVLA 0.45B 已经在 LIBERO 上 87.3 avg，但用户仍希望有更小的版本
+
+### D108. Real2Render2Real：无需仿真器的机器人数据缩放
+- **来源**: LeRobot Discord #robotics-papers — rafa.felix (2026/2/3)
+- **类别**: Data, Arch
+- **关键数据点汇总**: rafa.felix 分享 Real2Render2Real / R2R2R（arXiv 2505.09601）——"a novel approach for generating robot training data without relying on object dynamics simulation or teleoperation"。解决了 VLA 数据采集的两大瓶颈（遥操昂贵 + 仿真不够逼真），通过渲染而非物理仿真来生成训练数据。与 D105 DreamDojo 的方向互补：DreamDojo 从人类视频学 world model，R2R2R 从真实场景做渲染增强
+
+### D109. IPA 2026：CVPR Interactive Physical AI Workshop
+- **来源**: LeRobot Discord #robotics-papers — 匿名用户 (约 2026/2 月)
 - **类别**: Strategy
-- **关键数据点汇总**: 升级三个问题 + 新增两个：**升级问题**：3. RL 后训练→SimpleVLA-RL/SRPO 证明 GRPO 路线可能胜出，World Model 辅助成新趋势；4. 边缘部署→量化专用方法（QVLA/QuantVLA）比通用方法有效 22.6%+；9. 触觉集成→ForceVLA/CRAFT 证明力觉可以作为一等公民模态（不再是 nice-to-have）。**新增问题**：11. **灵巧手 VLA 数据**：如何高效采集灵巧手操作数据？DexGrasp-VLA (#123) 共享自主权是一种解法但仍需人在旁；12. **指令表示**：交错图文 (#129) 2× 泛化提升——还有哪些未探索的指令表示方式？手绘草图/视频示范/AR 标注？
+- **关键数据点汇总**: 社区成员分享 IPA 2026: Workshop on Interactive Physical AI（CVPR 2026），评价"this workshop seems super cool if someone is considering to submit papers to CVPR workshops"。NVIDIA 主导（research.nvidia.com/labs/amri/projects/IPA/2026/）。Physical AI 作为 CVPR 2026 workshop 主题出现，说明该方向正从 robotics 社区扩展到更广泛的 CV 社区
 
-### D107. ICLR 2026 VLA 论文汇总
-- **来源**: 多源汇总 — #10 ICLR 2026 全景、#116 SimpleVLA-RL、#124 DexGraspVLA（AAAI 2026 但相关）、WholeBodyVLA (#49)、X-VLA (#34)、LeRobot 论文、Data Scaling Laws (#82)
+### D110. 欧洲机器人创业召集："GPU and hardware poor" 也能做
+- **来源**: LeRobot Discord #robotics-papers — tom_primozic (2026/2/26)
 - **类别**: Strategy
-- **关键数据点汇总**: ICLR 2026 已确认的 VLA 相关论文：**SimpleVLA-RL (#116)**：GRPO RL 扩展 VLA；**WholeBodyVLA (#49)**：人形全身 VLA（ICLR 2026）；**X-VLA (#34)**：跨具身 VLA（ICLR 2026）；**Data Scaling Laws (#82)**：ICLR 2025 Oral（今年引用爆发）；**LeRobot 论文**：ICLR 2026 接收。**AAAI 2026**：DexGraspVLA (#124) Oral。总计 164 VLA 提交，从 9→164 的 18× 增长确认 VLA 已成为 ML 顶会主流方向
-
-### D108. VLA 从 SFT 到产品级部署的差距
-- **来源**: 多源汇总 — #85 Anton Maltsev 实操指南、D38 五大失败模式、D74 泛化挑战、#136 VLA-in-the-Loop
-- **类别**: Debug, Strategy
-- **关键数据点汇总**: 从"demo 上能跑"到"产品级可靠"仍有巨大工程距离：**可靠性**：LIBERO 99% 不等于真实 99%（RoboArena #112 证实差距巨大）；**鲁棒性**：SRPO (#117) LIBERO-Plus 鲁棒性测试 +167% 说明标准评估低估了挑战；**实时安全**：VLA-in-the-Loop (#136) 用 world model 做在线安全网——说明裸 VLA 部署不够安全；**工程债务**：stats.json 不匹配 (D38)、校准超限、夹爪过力等问题不会因为模型更好而消失。**Maltsev 的总结 (#85)**：从"能跑"到"产品级稳定"的工程距离仍巨大——这是经验之谈
-
-### D109. 社区硬件选型更新（250 条版本）
-- **来源**: 多源汇总 — D34 GPU 矩阵、D78 边缘硬件升级、#131 GR-Dexter 硬件、#123 DexGrasp-VLA VR 遥操
-- **类别**: Edge, Recipe
-- **关键数据点汇总**: 硬件选型新增两个维度——**灵巧手硬件**和 **VR 遥操设备**：**GPU 推荐**（不变）：入门 RTX 3080 12GB→主力 RTX 4090 24GB→专业 A100 40/80GB。**灵巧手硬件**（新增）：GR-Dexter (#131) 21-DoF + 触觉指尖→产业级；低成本方案仍待社区验证。**遥操设备**（新增）：DexGrasp-VLA (#123) 用 VR 遥操做共享自主权数据采集；Phosphobot (#18) 支持 Meta Quest VR。**边缘硬件**（不变）：Jetson Orin Nano $199 入门→Jetson Thor 旗舰→Jetson T4000 未来
-
-### D110. VLA 领域技术成熟度评估（250 条视角）
-- **来源**: 多源汇总 — 全部 250 条的综合分析
-- **类别**: Strategy
-- **关键数据点汇总**: 基于 250 条实战数据的技术成熟度评估：**已成熟（可部署）**：单任务桌面操作 + ACT/SmolVLA（多团队 >90% 复现）、LIBERO benchmark 刷分（99% SOTA）。**快速成熟中**：RL 后训练（SimpleVLA-RL/SRPO 200-400 步即有效）、VLA 量化（QVLA 29.2% VRAM 几乎无损）、力觉集成（ForceVLA +23.2%）。**早期但有突破**：灵巧手 VLA（MoDE-VLA 削苹果 30%）、World Model 共进化（VLAW +39.2%）、交错图文指令（Interleave-VLA 2× 泛化）。**仍在探索**：真实环境零样本泛化（RoboArena 仅 Pi 系列有竞争力）、人形全身控制（WholeBodyVLA 刚被 ICLR 接收）、1-bit 极限量化（HBVLA 探索中）
+- **关键数据点汇总**: tom_primozic 发帖："anyone GPU and hardware poor, thinking of starting a robotics startup, and depressed by all the development (passing me by), msg me - ideally based in Europe"——收到 3 条回复讨论串。这反映了 VLA 社区中的一个真实焦虑：大量前沿进展由大公司（NVIDIA/PI/字节）推动，资源有限的个人和小团队感到被边缘化。但实际上 SRPO (#117) 200 步、SO-ARM101 $300、$30 双目相机 (D90) 等方案正在降低门槛
 
 ---
 
@@ -858,4 +848,4 @@
 
 ---
 
-*v3.3 — 2026-03-16 更新。Blog 140 条（#1-#140）+ Discord 110 条（D1-D110），共 250 条。v3.3 新增 50 条：Blog #116-#140 覆盖 RL 后训练爆发（SimpleVLA-RL ICLR 2026 GRPO 430% 提升、SRPO 200 步达 99.2%、VLAW/GigaBrain World Model 共进化）、VLA 专用量化四连发（EaqVLA 编码对齐、QVLA 通道级动作敏感、QuantVLA 首次量化 DiT head、HBVLA 1-bit 极限）、力觉/触觉进入核心（ForceVLA NeurIPS 2025 MoE +23.2%、CRAFT 课程式力觉学习）、灵巧手 VLA（MoDE-VLA 首个双手削苹果、DexGrasp-VLA 共享自主权 90%、DexGraspVLA AAAI Oral、GR-Dexter 字节跳动入场）、交错图文指令（Interleave-VLA OOD 2× 泛化）、统一 RL 基础设施（RLinf-VLA 1.6-1.9× 加速）；Discord D86-D110 新增 RL 后训练三路线对比全景、VLA 量化独立子领域分析、力觉/触觉/灵巧手全景、产业格局更新（字节入场）、指令表示创新、World Model 四重角色升级、模型选型新增力觉和 RL 维度、技术成熟度评估。*
+*v3.4 — 2026-03-16 更新。Blog 140 条（#1-#140）+ Discord 110 条（D1-D110），共 250 条。v3.4 修正：D86-D110 全部替换为真实社区内容（原 v3.3 版本为合成汇总，现改为来自 LeRobot Discord #show-us-what-you-built 和 #robotics-papers 频道的实际帖子）。D86-D110 覆盖：ACT 多子任务训练经验（Fei）、XLeRobot 垃圾分拣（Grigorij）、RoboCrew 具身 LLM Agent 框架、DimensionalOS 多机器人同步、$30 双目相机零样本位姿估计（Vector Wang）、MM-Hand 1.0 开源 21-DoF 灵巧手 $1400（HKU MMLab）、错误恢复训练策略讨论、Arpeggio Gripper、BotBrain ROS2 模块化大脑、YOR $10K 双臂移动机器人（NYU）、DreamDojo world model、NVIDIA EgoScale 社区反响、SmolVLA 社区评价、Real2Render2Real 数据缩放、IPA 2026 CVPR Workshop、欧洲创业召集等。*
