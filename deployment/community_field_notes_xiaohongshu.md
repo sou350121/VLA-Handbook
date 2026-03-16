@@ -627,18 +627,18 @@ Kivy 的分析（帖17）：Diffusion Policy 有效的核心不是"多模态分�
 | 3 | 最近WA/VA很火，分享下Motus insights | 谭谈AI | 2026-02-09 | 306 | [链接](https://www.xiaohongshu.com/explore/6989fc1f000000001a01d90b) |
 | 4 | VLA预训练范式从根上就错了？WAM才是未来？ | 爱喝咖啡的猪 | 2026-03-03 | 730 | [链接](https://www.xiaohongshu.com/explore/69a6ed98000000001a02700f) |
 | 5 | 具身智能VLA八股文 | 布朗先生 | 2026-03-13 | 149 | [链接](https://www.xiaohongshu.com/explore/69b2e8730000000022023417) |
-| 6 | 具身智能路线深度解析 | 吕对对 | 2026-02-24 | 115 | ⚠️ 待补 |
-| 7 | 世界模型当教练！VLA成功率97% | 世界模型研究所 | 2026-03-11 | — | ⚠️ 待补 |
-| 8 | 工业届敢说的实话：VLA能力非常有限 | 工业界从业者 | 2026年初 | — | ⚠️ 待补 |
-| 9 | 记录一下多卡训练VLA遇到的坑 | VLA工程师 | 2026年 | — | ⚠️ 待补 |
+| 6 | 具身智能路线深度解析 | 吕对对 | 2026-02-24 | 115 | [链接](https://www.xiaohongshu.com/explore/699d6ff5000000001a02391c) |
+| 7 | 世界模型当教练！VLA成功率97% | 世界模型研究所 | 2026-03-11 | — | [链接](https://www.xiaohongshu.com/explore/69b0568c0000000015020668) |
+| 8 | 工业届敢说的实话：VLA能力非常有限 | 工业界从业者 | 2026年初 | — | [链接](https://www.xiaohongshu.com/explore/683ae0bc000000002100a40a) |
+| 9 | 记录一下多卡训练VLA遇到的坑 | VLA工程师 | 2026年 | — | [链接](https://www.xiaohongshu.com/explore/698071b4000000001a036d97) |
 | 10 | VLA落地失败 | 创业团队成员 | 2026年 | — | ⚠️ 待补 |
-| 11 | 现在开源VLA怎么一个比一个不靠谱啊 | VLA实践者 | 2026年 | — | ⚠️ 待补 |
-| 12 | 机械臂冷启动竟影响VLA成功率 | 机器人工程师 | 2026年 | — | ⚠️ 待补 |
-| 13 | VLA实时执行：从演示到部署的4层地狱 | 部署工程师 | 2026年 | — | ⚠️ 待补 |
-| 14 | VLA-Based VLN方案实机部署记录 | 移动机器人研究者 | 2026年 | — | ⚠️ 待补 |
-| 15 | Lerobot框架真机VLA复现 | VLA复现者 | 2026年 | — | ⚠️ 待补 |
-| 16 | 融了2亿美元做家用机器人 | Tony Zhao | 2026年 | — | ⚠️ 待补 |
-| 17 | 扩散策略让很多人把自己推入了骗局 | Kivy | 2026年 | — | ⚠️ 待补 |
+| 11 | 现在开源VLA怎么一个比一个不靠谱啊 | VLA实践者 | 2026年 | — | [链接](https://www.xiaohongshu.com/explore/68a7e92e000000001d034f41) |
+| 12 | 机械臂冷启动竟影响VLA成功率 | 机器人工程师 | 2026年 | — | [链接](https://www.xiaohongshu.com/explore/69b3fab400000000230055de) |
+| 13 | VLA实时执行：从演示到部署的4层地狱 | 部署工程师 | 2026年 | — | [链接](https://www.xiaohongshu.com/explore/694c973e000000001e02f8e5) |
+| 14 | VLA-Based VLN方案实机部署记录 | 移动机器人研究者 | 2026年 | — | [链接](https://www.xiaohongshu.com/explore/68b53602000000001d01399b) |
+| 15 | Lerobot框架真机VLA复现 | VLA复现者 | 2026年 | — | [链接](https://www.xiaohongshu.com/explore/69873b46000000000a02e3aa) |
+| 16 | 融了2亿美元做家用机器人 | Tony Zhao | 2026年 | — | [链接](https://www.xiaohongshu.com/explore/69b34db70000000009021ca9) |
+| 17 | 扩散策略让很多人把自己推入了骗局 | Kivy | 2026年 | — | [链接](https://www.xiaohongshu.com/explore/694b9136000000001d039a4c) |
 | 18 | 从仿真到现实的鸿沟 | David tu | 2026年 | — | [链接](https://www.xiaohongshu.com/explore/692672f7000000001d03864d) |
 | 19 | 宇树G1部署pi0有感 | 布朗先生 | 2025-06-11 | 12 | [链接](https://www.xiaohongshu.com/explore/68486f46000000002301d57e) |
 | 20 | 对openpi复现/finetune感兴趣 | 南柯 | 2025-03-18 | — | [链接](https://www.xiaohongshu.com/explore/67d8ea9d000000001c03e769) |
@@ -649,8 +649,8 @@ Kivy 的分析（帖17）：Diffusion Policy 有效的核心不是"多模态分�
 | 25 | 具身智能VLA实习经验贴 | 阿疯Okk | 2026-03-01 | — | [链接](https://www.xiaohongshu.com/explore/69a3bb0d0000000015021134) |
 | 26 | 大多数人接触具身智能都会踩的一个坑 | DoGgy | 2025-06-12 | — | [链接](https://www.xiaohongshu.com/explore/684a15bd0000000023012834) |
 | 27 | 做具身智能还是要重视基本的硬件能力 | 单朴敦本zyw | 2025-02-17 | — | [链接](https://www.xiaohongshu.com/explore/67b2beeb000000002901508e) |
-| 28 | VLA-Pilot被IEEE RAL接收 | ZhuoLi.Robotics | 2026-03-13 | 112 | ⚠️ 待补 |
-| 29 | CVPR26 AtomicVLA技能乐高积木 | 中山大学 | 2026-03-14 | — | ⚠️ 待补 |
+| 28 | VLA-Pilot被IEEE RAL接收 | ZhuoLi.Robotics | 2026-03-13 | 112 | [链接](https://www.xiaohongshu.com/explore/69b405df000000001a02fcec) |
+| 29 | CVPR26 AtomicVLA技能乐高积木 | 中山大学 | 2026-03-14 | — | [链接](https://www.xiaohongshu.com/explore/69b534140000000022029bf3) |
 | 30 | 具身智能机器人如何骗投资人 | gashero | 2025-10-26 | — | [链接](https://www.xiaohongshu.com/explore/68fcfc5d000000000300f822) |
 | 31 | 微调时别弄瞎你的机器人模型 | mllm | 2025-10-30 | — | [链接](https://www.xiaohongshu.com/explore/6902f5fa0000000004029588) |
 | 32 | 强化学习的上界被预训练锁死 | 发哥不发愁 | 2026-03-13 | — | [链接](https://www.xiaohongshu.com/explore/69b3d88a000000002301e397) |
@@ -667,10 +667,10 @@ Kivy 的分析（帖17）：Diffusion Policy 有效的核心不是"多模态分�
 | 43 | 读了一堆VLA+RL paper之后 | 张海爆 | 2026年初 | — | [链接](https://www.xiaohongshu.com/explore/69ac6a1d000000001b029b80) |
 | 44 | 手搓具身智能底座太难了 | 天真派 | 2026年初 | — | [链接](https://www.xiaohongshu.com/explore/69a1bd46000000002801f7e8) |
 | 45 | ACT可能只适用于桌面机械臂 | 🍑气小周 | 2026年初 | — | [链接](https://www.xiaohongshu.com/explore/69874866000000000a02e6db) |
-| 46 | 试试50组数据能训出什么 | （未知） | 2026年初 | — | ⚠️ 待补 |
+| 46 | 试试50组数据能训出什么 | （未知） | 2026年初 | — | [链接](https://www.xiaohongshu.com/explore/68f1aa540000000004028750) |
 | 47 | 很多数采路线要被炮灰了 | feixiang123 | 2026年初 | — | [链接](https://www.xiaohongshu.com/explore/699da09a000000000d009e8d) |
 | 48 | 具身智能公司实习总结 | Cuscitini | 2026年初 | — | [链接](https://www.xiaohongshu.com/explore/698f1baf000000001a01e84b) |
-| 49 | 2weeks机器人公司具身实习有感 | 笨小古 | 2026年初 | — | ⚠️ 待补 |
+| 49 | 2weeks机器人公司具身实习有感 | 笨小古 | 2026年初 | — | [链接](https://www.xiaohongshu.com/explore/698fc7cc000000001a037392) |
 | 50 | 如何解决VLA推理过程卡顿 | 搞机器人的乌萨奇 | 2026-01-18 | — | [链接](https://www.xiaohongshu.com/explore/696cdd7d000000002200b312) |
 | 51 | mujoco仿真环境搭建的坑 | 代码怎么失灵啦？ | 2025-04-13 | — | [链接](https://www.xiaohongshu.com/explore/67fa978b000000001c03f84f) |
 | 52 | 0基础社畜配具身智能比赛环境 | 小唐在闯荡 | 2026-03-03 | — | [链接](https://www.xiaohongshu.com/explore/69a6ea55000000000e00d354) |
@@ -691,87 +691,89 @@ Kivy 的分析（帖17）：Diffusion Policy 有效的核心不是"多模态分�
 
 | # | 标题 | 作者 | 赞 | URL |
 |---|------|------|-----|-----|
-| 61 | 单卡实时VLA推理(30Hz+480Hz) | AI椰青 | 85 | ⚠️ 待补 |
+| 61 | 单卡实时VLA推理(30Hz+480Hz) | AI椰青 | 85 | [链接](https://www.xiaohongshu.com/explore/6940be80000000001e031724) |
 | 62 | VLA-Adapter 架构思路 | Lupi | 881 | [链接](https://www.xiaohongshu.com/explore/68c3b864000000001c00b936) |
-| 63 | 知识蒸馏 Shallow-π | 具身智能情报站 | — | ⚠️ 待补 |
-| 64 | ActionFlow 边缘加速 | 具身智能之心 | 45 | ⚠️ 待补 |
-| 65 | Efficient VLA 方向评估 | AI椰青 | 258 | ⚠️ 待补 |
-| 66 | XLeRobot 4千元家务机器人 | — | 1031 | ⚠️ 待补 |
-| 67 | 机械臂性能对比 | — | — | ⚠️ 待补 |
+| 63 | 知识蒸馏 Shallow-π | 具身智能情报站 | — | [链接](https://www.xiaohongshu.com/explore/697ddb84000000001a02f1d3) |
+| 64 | ActionFlow 边缘加速 | 具身智能之心 | 45 | [链接](https://www.xiaohongshu.com/explore/694caa12000000001e0279f1) |
+| 65 | Efficient VLA 方向评估 | AI椰青 | 258 | [链接](https://www.xiaohongshu.com/explore/69b27cb9000000001502343c) |
+| 66 | XLeRobot 4千元家务机器人 | — | 1031 | [链接](https://www.xiaohongshu.com/explore/684989e6000000002300d85f) |
+| 67 | 机械臂性能对比 | — | — | [链接](https://www.xiaohongshu.com/explore/68739c2300000000130129c6) |
 | 68 | （未在文档中明确引用） | — | — | ⚠️ 待补 |
-| 69 | 松灵 OpenClaw AI控制7轴臂 | 松灵 | 253 | ⚠️ 待补 |
-| 70 | 松灵七轴机械臂 | 松灵机器人 | 327 | ⚠️ 待补 |
-| 71 | Galaxea A1XY 桌面级开发伴侣 | 星海图 | — | ⚠️ 待补 |
-| 72 | OpenArm 开源人形机器人手臂 | — | 118 | ⚠️ 待补 |
+| 69 | 松灵 OpenClaw AI控制7轴臂 | 松灵 | 253 | [链接](https://www.xiaohongshu.com/explore/69aa43150000000023038ae6) |
+| 70 | 松灵七轴机械臂 | 松灵机器人 | 327 | [链接](https://www.xiaohongshu.com/explore/692041e1000000001e02c492) |
+| 71 | Galaxea A1XY 桌面级开发伴侣 | 星海图 | — | [链接](https://www.xiaohongshu.com/explore/69b2a5ef000000000800f544) |
+| 72 | OpenArm 开源人形机器人手臂 | — | 118 | [链接](https://www.xiaohongshu.com/explore/68858ce900000000100103dd) |
 | 73 | 为什么VAM比VLA更有前途 | 具身薯风啸 | 763 | [链接](https://www.xiaohongshu.com/explore/6997fa2f000000000d00b650) |
-| 74 | Video-Action Model：VLA之后新范式 | AI烤红薯 | 249 | ⚠️ 待补 |
-| 75 | 或许具身智能没火就好了 | — | 653 | ⚠️ 待补 |
-| 76 | VLA落地挖掘机 | — | 47 | ⚠️ 待补 |
-| 77 | 赵行方案：大幅提升VLA效果 | — | 180 | ⚠️ 待补 |
-| 78 | Evo-RL系统架构四层详解 | 上海交大 MINT | 395 | ⚠️ 待补 |
-| 79 | 真机RL杂谈 | 钱泽中 | 166 | ⚠️ 待补 |
-| 80 | Isaac Gym vs MuJoCo深度对比 | Drawing Ting | 136 | ⚠️ 待补 |
-| 81 | Isaac Gym 对比补充 | 编号001 | 64 | ⚠️ 待补 |
-| 82 | Genesis理性讨论 | VectoriaWangel | 738 | ⚠️ 待补 |
-| 83 | MuJoCo手物接触力建模 | 少年 | 163 | ⚠️ 待补 |
-| 84 | 仿真环境优缺点总结 | 努力发paper | 78 | ⚠️ 待补 |
-| 85 | 2023-2025开源仿真平台推荐 | 深蓝具身智能 | 84 | ⚠️ 待补 |
-| 86 | HDF5→RLDS转换 | RetrievalAG | 20 | ⚠️ 待补 |
-| 87 | 机器人真机数据真的很难洗 | Sonata | 68 | ⚠️ 待补 |
-| 88 | VLA机器人数据怎么采（扩展版） | Galahakang | 61 | ⚠️ 待补 |
-| 89 | DreamZero NVIDIA零样本 | — | 118 | ⚠️ 待补 |
-| 90 | VR遥操作实战 从0到1 | MADE. | 55 | ⚠️ 待补 |
-| 91 | 融了2亿美元做家用机器人 | Tony Zhao | 1112 | ⚠️ 待补 |
-| 92 | 具身智能高校创业江湖名录 | 大圣聊机器人 | 364 | ⚠️ 待补 |
-| 93 | 2026灵巧手行业解读 | 机器人猎头David | 797 | ⚠️ 待补 |
-| 94 | 机器人创业者大实话 | 具身机器人-陈亮 | 45 | ⚠️ 待补 |
-| 95 | 一人公司+OpenClaw新范式 | AI多面体 | 48 | ⚠️ 待补 |
-| 96 | LeRobot v0.5.0发布 | Hugging Face | 94 | ⚠️ 待补 |
-| 97 | Lerobot+ROS2+IsaacLab集成 | Guss | 133 | ⚠️ 待补 |
-| 98 | VLAExplain注意力可视化 | 机器小白RobotNewbie | 114 | ⚠️ 待补 |
-| 99 | 2026具身智能学习路线 | Xbotics | 266 | ⚠️ 待补 |
+| 74 | Video-Action Model：VLA之后新范式 | AI烤红薯 | 249 | [链接](https://www.xiaohongshu.com/explore/67ea6675000000001c03f28f) |
+| 75 | 或许具身智能没火就好了 | — | 653 | [链接](https://www.xiaohongshu.com/explore/692abe34000000001d03ab99) |
+| 76 | VLA落地挖掘机 | — | 47 | [链接](https://www.xiaohongshu.com/explore/69afe919000000001d010c98) |
+| 77 | 赵行方案：大幅提升VLA效果 | — | 180 | [链接](https://www.xiaohongshu.com/explore/694e603b000000002203b461) |
+| 78 | Evo-RL系统架构四层详解 | 上海交大 MINT | 395 | [链接](https://www.xiaohongshu.com/explore/69ace17d000000000e03e819) |
+| 79 | 真机RL杂谈 | 钱泽中 | 166 | [链接](https://www.xiaohongshu.com/explore/69835d320000000021028c4b) |
+| 80 | Isaac Gym vs MuJoCo深度对比 | Drawing Ting | 136 | [链接](https://www.xiaohongshu.com/explore/69887580000000001d012ff2) |
+| 81 | Isaac Gym 对比补充 | 编号001 | 64 | [链接](https://www.xiaohongshu.com/explore/6923e86d000000000d038a57) |
+| 82 | Genesis理性讨论 | VectoriaWangel | 738 | [链接](https://www.xiaohongshu.com/explore/69b10c60000000002602e325) |
+| 83 | MuJoCo手物接触力建模 | 少年 | 163 | [链接](https://www.xiaohongshu.com/explore/683680e200000000230165e2) |
+| 84 | 仿真环境优缺点总结 | 努力发paper | 78 | [链接](https://www.xiaohongshu.com/explore/6991b6e7000000001d025417) |
+| 85 | 2023-2025开源仿真平台推荐 | 深蓝具身智能 | 84 | [链接](https://www.xiaohongshu.com/explore/6960e9ae000000000903b11d) |
+| 86 | HDF5→RLDS转换 | RetrievalAG | 20 | [链接](https://www.xiaohongshu.com/explore/68f8784b0000000004017673) |
+| 87 | 机器人真机数据真的很难洗 | Sonata | 68 | [链接](https://www.xiaohongshu.com/explore/69b2f1c5000000000c00b657) |
+| 88 | VLA机器人数据怎么采（扩展版） | Galahakang | 61 | [链接](https://www.xiaohongshu.com/explore/69b0165900000000080318dc) |
+| 89 | DreamZero NVIDIA零样本 | — | 118 | [链接](https://www.xiaohongshu.com/explore/699a6b7c000000001600a280) |
+| 90 | VR遥操作实战 从0到1 | MADE. | 55 | [链接](https://www.xiaohongshu.com/explore/69b34f570000000028009a16) |
+| 91 | 融了2亿美元做家用机器人 | Tony Zhao | 1112 | [链接](https://www.xiaohongshu.com/explore/69b34db70000000009021ca9) |
+| 92 | 具身智能高校创业江湖名录 | 大圣聊机器人 | 364 | [链接](https://www.xiaohongshu.com/explore/68301349000000002101ab65) |
+| 93 | 2026灵巧手行业解读 | 机器人猎头David | 797 | [链接](https://www.xiaohongshu.com/explore/698d85de000000000b00ad5f) |
+| 94 | 机器人创业者大实话 | 具身机器人-陈亮 | 45 | [链接](https://www.xiaohongshu.com/explore/69a9a0b2000000000d0099a3) |
+| 95 | 一人公司+OpenClaw新范式 | AI多面体 | 48 | [链接](https://www.xiaohongshu.com/explore/69a281350000000028022e98) |
+| 96 | LeRobot v0.5.0发布 | Hugging Face | 94 | [链接](https://www.xiaohongshu.com/explore/69afd539000000001d027e01) |
+| 97 | Lerobot+ROS2+IsaacLab集成 | Guss | 133 | [链接](https://www.xiaohongshu.com/explore/68736aa00000000012014030) |
+| 98 | VLAExplain注意力可视化 | 机器小白RobotNewbie | 114 | [链接](https://www.xiaohongshu.com/explore/699d71ba000000001b015e7d) |
+| 99 | 2026具身智能学习路线 | Xbotics | 266 | [链接](https://www.xiaohongshu.com/explore/698d73eb000000000e00ed6b) |
 | 100 | 世界模型四大技术路线 | 吕对对 | 1036 | [链接](https://www.xiaohongshu.com/explore/69809988000000001a036d14) |
-| 101 | CVPR2026 World Model赛道 | 世界模型研究所 | 94 | ⚠️ 待补 |
-| 102 | CVPR2026 WM 补充 | 王啸峰 | 24 | ⚠️ 待补 |
-| 103 | 具身WM安全挑战综述 | 刘东瑞 | 29 | ⚠️ 待补 |
-| 104 | 具身世界模型综述 | Exoskeleton | 37 | ⚠️ 待补 |
-| 105 | 灵巧手触觉：五大传感器方案 | 灵巧手观察社 | 41 | ⚠️ 待补 |
-| 106 | 为什么我选择电磁方案 | Lai Wei | 130 | ⚠️ 待补 |
-| 107 | VTLA-RL 触觉+视觉+语言VLA+RL | R&B All Night🌙 | 173 | ⚠️ 待补 |
-| 108 | OmniVTLA 触觉VLA灵巧手 | 西图Situr | 75 | ⚠️ 待补 |
-| 109 | UniTacHand 灵巧手触觉数据 | BeingBeyond | 29 | ⚠️ 待补 |
-| 110 | SigLIP-2 视觉编码器新标杆 | Sam聊算法 | 94 | ⚠️ 待补 |
-| 111 | VGGT vs DINO：空间任务谁更强 | AI朋友圈 | 214 | ⚠️ 待补 |
-| 112 | CogVLA：对齐人类认知 | Python 智能研习社 | 51 | ⚠️ 待补 |
-| 113 | RAE质疑与理解 | Star✨ | 464 | ⚠️ 待补 |
-| 114 | FRAPPE：世界模型能力注入VLA | 陳龍龖龘 | 90 | ⚠️ 待补 |
-| 115 | 史上最大机器人数据集开源 | Nifty | 178 | ⚠️ 待补 |
-| 116 | DAS Gripper无本体数据采集 | 简智机器人 | 97 | ⚠️ 待补 |
-| 117 | UMI加上了力反馈 | VLA和RL的具身未来 | 91 | ⚠️ 待补 |
-| 118 | RoboMIND 2.0数据集 | 具身智能观察猿 | 10 | ⚠️ 待补 |
-| 119 | Sunday机器人硬件细节 | 小白学具身 | 317 | ⚠️ 待补 |
-| 120 | Flow Matching成为VLA主流 | PandaSyL | 182 | ⚠️ 待补 |
-| 121 | 一步扩散模型为何表现好 | 吴泰霖Talent | 612 | ⚠️ 待补 |
-| 122 | 扩散策略骗局 | Kivy | 169 | ⚠️ 待补 |
-| 123 | 真机RL: World or Human in Loop | 眠歌 | 150 | ⚠️ 待补 |
-| 124 | ICLR 2026工作分享 | Ming | 177 | ⚠️ 待补 |
-| 125 | DSRL：Berkeley强化学习+DP | 西图Situr | 110 | ⚠️ 待补 |
-| 126 | 生成这方向已经玩完了 | — | 942 | ⚠️ 待补 |
-| 127 | 首个长时移动操作框架 | 具身智能观察猿 | 37 | ⚠️ 待补 |
-| 128 | NaVILA：腿式机器人导航 | 智元星群💫 | 51 | ⚠️ 待补 |
-| 129 | DSPv2全身移动操作(ICRA 2026) | selen | 80 | ⚠️ 待补 |
-| 130 | 多功能具身导航VLA基础模型 | 刘东瑞 | 25 | ⚠️ 待补 |
-| 131 | 具身智能2大核心方向 | 硅基漫步 | 17 | ⚠️ 待补 |
+| 101 | CVPR2026 World Model赛道 | 世界模型研究所 | 94 | [链接](https://www.xiaohongshu.com/explore/69adb76c000000002800b91b) |
+| 102 | CVPR2026 WM 补充 | 王啸峰 | 24 | [链接](https://www.xiaohongshu.com/explore/699e9ebd000000001d011867) |
+| 103 | 具身WM安全挑战综述 | 刘东瑞 | 29 | [链接](https://www.xiaohongshu.com/explore/68e631e9000000000302e9b6) |
+| 104 | 具身世界模型综述 | Exoskeleton | 37 | [链接](https://www.xiaohongshu.com/explore/69a3fbd7000000001503b414) |
+| 105 | 灵巧手触觉：五大传感器方案 | 灵巧手观察社 | 41 | [链接](https://www.xiaohongshu.com/explore/694b6051000000001e02d591) |
+| 106 | 为什么我选择电磁方案 | Lai Wei | 130 | [链接](https://www.xiaohongshu.com/explore/69a24be2000000000d00bd89) |
+| 107 | VTLA-RL 触觉+视觉+语言VLA+RL | R&B All Night🌙 | 173 | [链接](https://www.xiaohongshu.com/explore/6930cb75000000001e0105dd) |
+| 108 | OmniVTLA 触觉VLA灵巧手 | 西图Situr | 75 | [链接](https://www.xiaohongshu.com/explore/68a697b5000000001d01b633) |
+| 109 | UniTacHand 灵巧手触觉数据 | BeingBeyond | 29 | [链接](https://www.xiaohongshu.com/explore/695cac77000000001a02e034) |
+| 110 | SigLIP-2 视觉编码器新标杆 | Sam聊算法 | 94 | [链接](https://www.xiaohongshu.com/explore/67bdc0eb000000001203e6ab) |
+| 111 | VGGT vs DINO：空间任务谁更强 | AI朋友圈 | 214 | [链接](https://www.xiaohongshu.com/explore/684ea09f000000000c03a806) |
+| 112 | CogVLA：对齐人类认知 | Python 智能研习社 | 51 | [链接](https://www.xiaohongshu.com/explore/699becf9000000002801d09f) |
+| 113 | RAE质疑与理解 | Star✨ | 464 | [链接](https://www.xiaohongshu.com/explore/68efe304000000000302f0d7) |
+| 114 | FRAPPE：世界模型能力注入VLA | 陳龍龖龘 | 90 | [链接](https://www.xiaohongshu.com/explore/6997faae000000001a034f22) |
+| 115 | 史上最大机器人数据集开源 | Nifty | 178 | [链接](https://www.xiaohongshu.com/explore/69127adf0000000005012d00) |
+| 116 | DAS Gripper无本体数据采集 | 简智机器人 | 97 | [链接](https://www.xiaohongshu.com/explore/694e79bb000000001e03a1d3) |
+| 117 | UMI加上了力反馈 | VLA和RL的具身未来 | 91 | [链接](https://www.xiaohongshu.com/explore/6974c7a8000000001a028eb8) |
+| 118 | RoboMIND 2.0数据集 | 具身智能观察猿 | 10 | [链接](https://www.xiaohongshu.com/explore/676e6b2c000000000b014a36) |
+| 119 | Sunday机器人硬件细节 | 小白学具身 | 317 | [链接](https://www.xiaohongshu.com/explore/691ea963000000001e00b725) |
+| 120 | Flow Matching成为VLA主流 | PandaSyL | 182 | [链接](https://www.xiaohongshu.com/explore/68d49de00000000013013236) |
+| 121 | 一步扩散模型为何表现好 | 吴泰霖Talent | 612 | [链接](https://www.xiaohongshu.com/explore/69440c0a000000001b032675) |
+| 122 | 扩散策略骗局 | Kivy | 169 | [链接](https://www.xiaohongshu.com/explore/694b9136000000001d039a4c) |
+| 123 | 真机RL: World or Human in Loop | 眠歌 | 150 | [链接](https://www.xiaohongshu.com/explore/69a35542000000001b01df4e) |
+| 124 | ICLR 2026工作分享 | Ming | 177 | [链接](https://www.xiaohongshu.com/explore/69778ae60000000021029126) |
+| 125 | DSRL：Berkeley强化学习+DP | 西图Situr | 110 | [链接](https://www.xiaohongshu.com/explore/68e0e2a50000000007038623) |
+| 126 | 生成这方向已经玩完了 | — | 942 | [链接](https://www.xiaohongshu.com/explore/699c3e98000000002903f5ff) |
+| 127 | 首个长时移动操作框架 | 具身智能观察猿 | 37 | [链接](https://www.xiaohongshu.com/explore/699a6b7c000000001600a280) |
+| 128 | NaVILA：腿式机器人导航 | 智元星群💫 | 51 | [链接](https://www.xiaohongshu.com/explore/67f9e5a5000000000f032766) |
+| 129 | DSPv2全身移动操作(ICRA 2026) | selen | 80 | [链接](https://www.xiaohongshu.com/explore/68d0c2bd000000001300b95f) |
+| 130 | 多功能具身导航VLA基础模型 | 刘东瑞 | 25 | [链接](https://www.xiaohongshu.com/explore/69a81c190000000022022052) |
+| 131 | 具身智能2大核心方向 | 硅基漫步 | 17 | [链接](https://www.xiaohongshu.com/explore/698f5e84000000001a02b9f9) |
 
 **子编号帖：**
 
 | # | 标题 | 作者 | 赞 | URL |
 |---|------|------|-----|-----|
-| 34b | 多模态微调别再无脑LoRA | 算法改进猫博士 | 86 | ⚠️ 待补 |
-| 34c | LoRA-RL踩坑指南 | 马小疼 | 137 | ⚠️ 待补 |
+| 34b | 多模态微调别再无脑LoRA | 算法改进猫博士 | 86 | [链接](https://www.xiaohongshu.com/explore/6976e6fe000000000e03df3e) |
+| 34c | LoRA-RL踩坑指南 | 马小疼 | 137 | [链接](https://www.xiaohongshu.com/explore/693ae492000000001e014322) |
 
-> **回溯统计**：帖 #1-#60 中 42/58 篇有 URL（72%）；帖 #61-#131 共 71 篇待补 URL（仅有作者/赞数/标题）。
+> **回溯统计**：帖 #1-#60 中 56/58 篇有 URL（97%）；帖 #61-#131 中 69/71 篇有 URL（97%）。
+> 仅 #10（匿名/疑似已删除）和 #68（未在文档中明确引用）待补。子编号帖 34b/34c 已补全。
 > 帖 #132-#150 为编号过渡段，对应内容已在 §10.1-§10.12 中以 #151-#220 重编号并附完整 URL。
+> ⚠️ 帖 #61-#131 的 URL 系通过标题/作者关键词搜索回溯匹配，部分可能存在偏差，欢迎校对。
 
 ### 10.1 VLA 训练与新范式
 
