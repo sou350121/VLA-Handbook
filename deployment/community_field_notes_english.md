@@ -1,6 +1,6 @@
 # VLA/Embodied AI 英文社区实战笔记
 
-> **版本**: v3.4 — 2026-03-16
+> **版本**: v3.5 — 2026-03-17
 > **数据来源**: HuggingFace Blog、GitHub Issues、厂商技术博客、Discord 社区
 > **对应中文版**: `community_field_notes_xiaohongshu.md`（220+ 篇小红书帖子）
 > **采集 skill**: `scripts/en-vla-collector/english-vla-collector-SKILL.md`
@@ -164,6 +164,31 @@
 | 138 | Multimodal Fusion VLA Survey | ScienceDirect | 2025 | Arch, Strategy | [链接](https://www.sciencedirect.com/science/article/pii/S1566253525011248) | 多模态融合 VLA 系统综述；覆盖视觉-语言-动作-力觉-触觉多模态集成方法；信息融合期刊发表；**价值**：从信息融合理论角度审视 VLA——不仅是 ML 也是信号处理问题 |
 | 139 | Embodied AI TopConf 论文追踪器 | GitHub Songwxuan | 2025 | Strategy | [链接](https://github.com/Songwxuan/Embodied-AI-Paper-TopConf) | 持续维护的具身 AI 顶会论文列表；覆盖 ICLR/NeurIPS/ICML/RSS/CoRL/ICRA/IROS/CVPR/ICCV/ECCV；按年份+会议分类；**工具价值**：一站式追踪 VLA 领域所有顶会论文——比手动搜索高效 10× |
 | 140 | Robotic Manipulation via IL: 全面分类与演进 | arXiv 2508.17449 | 2025-08 | Arch, Strategy | [链接](https://arxiv.org/abs/2508.17449) | 2021-2025 机器人操作 IL 全面综述；从 diffusion/flow matching 到自回归/affordance 的方法论演进；覆盖数据采集、策略学习、部署全栈；**核心价值**：理解 VLA 如何从传统 IL 演进而来——知道历史才能判断未来 |
+| 141 | CGVD: 训练无关的 VLA 视觉杂乱防御 | arXiv 2603.10340 | 2026-03 | Arch | [链接](https://arxiv.org/abs/2603.10340) | Concept-Gated Visual Distillation——训练无关、模型无关的推理框架；解决 VLA 在杂乱环境中的"精度-推理鸿沟"（背景诱导的特征稀释）；通过 Fourier 修复生成干净观测；杂乱环境成功率 43%→77.5%；**核心价值**：不改模型、不重训练就能大幅提升真实环境部署可靠性 |
+| 142 | AR-VLA: 真正的自回归动作专家 | arXiv 2603.10126 | 2026-03 | Arch | [链接](https://arxiv.org/abs/2603.10126) | 独立自回归 Action Expert，维护自身历史记忆（long-lived memory）；解决快速控制与慢速推理的频率不匹配；轨迹更平滑、时空一致性更强；可替代传统 chunk-based action head；**对比 Pi0-FAST**：AR-VLA 是 context-aware 连续生成 vs Pi0-FAST 是 chunk-based 反应式 |
+| 143 | SeedPolicy: 自进化 Diffusion Policy 解锁长程操作 | arXiv 2603.05117 | 2026-03 | Arch | [链接](https://arxiv.org/abs/2603.05117) | Self-Evolving Gated Attention (SEGA) 解决 Diffusion Policy 随观测窗口增加的性能退化；RoboTwin 2.0 50 任务：+36.8%（clean）/ +169%（randomized）；参数量比 RDT 1.2B 少 1-2 个数量级但性能可比；代码开源 github.com/Youqiang-Gui/SeedPolicy |
+| 144 | BPP: 聚焦关键历史帧的长程 IL | arXiv 2602.15010 | 2026-02 | Arch | [链接](https://arxiv.org/abs/2602.15010) | Big Picture Policies——用 VLM 检测最小有意义关键帧集合；解决 naively conditioning on past observations 的虚假相关问题；真实世界评估比最佳对比方法高 70% 成功率；**核心洞察**：不是"看得越多越好"——精选关键帧比全历史更有效 |
+| 145 | EasyMimic: 低成本人类视频→机器人策略（ICRA 2026） | arXiv 2602.11464 | 2026-02 | Data, Recipe | [链接](https://arxiv.org/abs/2602.11464) | 从 RGB 人类视频提取 3D 手部轨迹→映射到机器人控制空间；手部视觉增强策略弥合 human-to-robot domain gap；co-training（人类数据+少量机器人数据）；LeRobot 平台验证 avg 0.88 成功率 vs robot-only 0.40；语言条件任务 0.90；**意义**：大幅降低数据采集成本 |
+| 146 | LaRA-VLA: 潜在推理 VLA（LIBERO 97.9%） | arXiv 2602.01166 | 2026-02 | Arch | [链接](https://arxiv.org/abs/2602.01166) | 将多模态 CoT 推理内化为连续潜在表示；课程式训练：显式 CoT→潜在推理→动作生成；LIBERO avg 97.9%（Object 99.8%、Long 96.6%）；消除推理时的显式 CoT 生成——更快更紧凑；**对比**：显式推理（Diffusion-VLA）vs 潜在推理（LaRA-VLA）是 2026 年核心辩题 |
+| 147 | FUTURE-VLA: 动作+未来预览同步生成 | arXiv 2602.15882 | 2026-02 | Arch | [链接](https://arxiv.org/abs/2602.15882) | 单次前向传播同时生成动作块和未来视觉预览；DINOv3 编码器 + 时间自适应级联压缩；Human-in-the-Loop 执行门控——人类可实时审核 VLA 的意图后再放行；**核心创新**：首次让 VLA "说出"自己打算做什么（通过视觉预测） |
+| 148 | Recurrent-Depth VLA: 测试时计算缩放（80× 加速） | arXiv 2602.07845 | 2026-02 | Arch, Edge | [链接](https://arxiv.org/abs/2602.07845) | 权重共享循环 action head + 自适应停止准则；0% 成功（单次迭代）→90%+（4 次迭代）——难任务需要更多"思考"；恒定内存占用；比 token-based reasoning VLA 推理快 80×；**核心洞察**：test-time compute scaling 对 VLA 同样有效——难任务多想、简单任务少想 |
+| 149 | Chain of World (CoWVLA): 潜在运动中的 World Model 思考 | arXiv 2603.03195 | 2026-03 | Arch | [链接](https://arxiv.org/abs/2603.03195) | 预训练视频 VAE 提取结构/运动潜在量→VLA 学习推理连续运动链并预测终帧；解决 world model VLA 重建冗余背景的浪费；比现有 world model 和 latent action 方法都好；**定位**：world model × latent action 的最佳结合点 |
+| 150 | KAN-We-Flow: KAN+RWKV 轻量 3D Flow Matching | arXiv 2602.01115 | 2026-02 | Arch, Edge | [链接](https://arxiv.org/abs/2602.01115) | RWKV 做时间/通道混合 + GroupKAN 做逐特征非线性校准；Action Consistency Regularization 减少漂移；参数减少 86.8%；Adroit/Meta-World/DexArt SOTA；**核心价值**：证明 flow matching 策略可以做到极轻量且保持 SOTA——对边缘部署意义重大 |
+| 151 | Refined Policy Distillation: VLA→RL 专家蒸馏（IROS 2026） | arXiv 2503.05833 | 2025-03 | Arch, Recipe | [链接](https://arxiv.org/abs/2503.05833) | 用 RL + BC 将 VLA 泛化能力蒸馏到紧凑专家策略；学生超越教师——蒸馏出的 RL 专家比原 VLA 成功率更高；对相机视角变化鲁棒；可泛化到 VLA 自己无法解决的任务变体；**IROS 2026 接收**；**对社区的意义**：VLA 做泛化基座、RL 做精细打磨的两阶段范式 |
+| 152 | VLATest: VLA 模型模糊测试框架（FSE 2025） | arXiv 2409.12894 | 2024-09 | Data, Strategy | [链接](https://arxiv.org/abs/2409.12894) | 10 种测试算子 + 生成式模糊测试；ManiSkill2 仿真环境；7 个代表性 VLA 模型评估；核心发现：VLA 对未见物体性能严重下降、对指令改写不鲁棒；**警示**：当前 VLA 还远未达到实际部署的鲁棒性要求 |
+| 153 | DiffusionVLA: 自回归推理 + Diffusion 策略统一（ICML 2025） | arXiv 2412.03293 | 2024-12 | Arch | [链接](https://arxiv.org/abs/2412.03293) | VLM 自生成推理短语注入 diffusion 策略学习；2B→72B 可扩展；DiffusionVLA-2B 单卡 A6000 82Hz；零样本 bin-picking 63.7%（102 未见物体）；<50 demo 从零训练复杂任务；**定位**：推理能力 + 动作精度的首次大规模统一 |
+| 154 | Discrete Diffusion VLA: 离散扩散动作解码 | arXiv 2508.20072 | 2025-08 | Arch | [链接](https://arxiv.org/abs/2508.20072) | 统一 transformer 中用离散扩散建模动作块；自适应解码顺序——先解简单动作元素再解难的；二次重掩码修正不确定预测；LIBERO 96.3%；打破自回归瓶颈的新范式；**vs AR-VLA (#142)**：离散扩散 vs 连续自回归——两种突破 chunk-based 限制的路径 |
+| 155 | GeoPredict: 3D Gaussian 几何增强 VLA 精准操作 | arXiv 2512.16811 | 2025-12 | Arch | [链接](https://arxiv.org/abs/2512.16811) | 预测多步 3D 关键点轨迹 + 预测 3D Gaussian 工作空间几何；训练时深度监督、推理时仅需轻量 query token；RoboCasa/LIBERO/真实世界几何密集任务超越基线；**核心洞察**：VLA 不能只看 2D——3D 几何先验是精细操作的关键 |
+| 156 | UniForce: 跨触觉传感器统一潜在力模型 | arXiv 2602.01153 | 2026-02 | Arch | [链接](https://arxiv.org/abs/2602.01153) | 统一潜在力空间学习框架；跨 GelSight/TacTip/uSkin 传感器域迁移；联合建模逆动力学（图像→力）和正向动力学（力→图像）；支持 Vision-Tactile-Language-Action 模型；**核心价值**：解决触觉传感器碎片化——不同传感器可以共享同一个力表示空间 |
+| 157 | ReBot: Real-to-Sim-to-Real 视频合成缩放数据（IROS 2025） | arXiv 2503.14526 | 2025-03 | Data | [链接](https://arxiv.org/abs/2503.14526) | 真实轨迹→仿真重放→真实背景修复→合成视频；GroundedSAM2 分割 + ProPainter 修复；OpenVLA 域内 +21.8%、域外 +9.4%；Franka 真实评估 +20%；**与 R2R2R (#108) 对比**：ReBot 侧重视频合成多样化、R2R2R 侧重渲染替代仿真 |
+| 158 | Demonstration Modality Impact: 示教方式对 IL 的影响 | arXiv 2503.07017 | 2025-03 | Data, Recipe | [链接](https://arxiv.org/abs/2503.07017) | 系统比较动觉示教 vs VR 遥操 vs SpaceMouse 遥操；混合少量动觉数据 + 遥操数据→成功率平均 +20%；用户偏好动觉但多数数据集用遥操采集；**实操建议**：不要只用一种示教方式——混合模态比单一模态更好 |
+| 159 | LeRobot.js: 浏览器端机器人控制（JavaScript） | HF Blog (NERDDISCO) | 2026 | Edge, Recipe | [链接](https://huggingface.co/blog/NERDDISCO/lerobotjs) | @lerobot/web 包；Chromium Web Serial + Web USB；支持 SO-100；API：find/connect/disable torque/calibrate/teleoperate；浏览器内直接采集数据集并导出 LeRobot 格式；**意义**：将 LeRobot 生态从 Python 扩展到 Web——降低入门门槛、支持远程遥操 |
+| 160 | LeRobot Annotation Studio: 浏览器端数据集标注 | HF Space | 2026-03 | Data | [链接](https://huggingface.co/blog/lerobot-release-v050) | LeRobot v0.5.0 引入的 HuggingFace Space；为数据集中的每个时刻标注自然语言子任务；**意义**：解决 VLA 训练数据中细粒度语言标注缺失的问题——之前只有 episode-level 标签，现在可以做 moment-level |
+| 161 | Real-is-Sim: 动态数字孪生弥合 Sim-to-Real | arXiv 2504.03597 | 2025-04 | Data, Arch | [链接](https://arxiv.org/abs/2504.03597) | 维持仿真与物理环境的实时对齐→策略无需微调直接部署；单一框架统一仿真与现实；**核心价值**：不是"让仿真更像真实"而是"让仿真跟踪真实"——实时数字孪生 vs 静态域随机化 |
+| 162 | 10 Open Challenges for VLA Models | arXiv 2511.05936 | 2025-11 | Strategy | [链接](https://arxiv.org/abs/2511.05936) | 十大开放挑战系统分析；覆盖泛化/安全/效率/多模态/评估等维度；**与 D85 对比**：学术视角的十大问题 vs 社区实战视角的十大问题——互补阅读价值 |
+| 163 | VLA Edge Bottleneck 分析: 动作生成才是瓶颈 | arXiv 2603.02271 | 2026-03 | Edge | [链接](https://arxiv.org/abs/2603.02271) | 系统分析 VLA 边缘部署瓶颈：动作生成（diffusion/flow matching head）是推理延迟的主要来源而非视觉编码器或 LLM；**核心洞察**：优化 VLA 推理应优先瘫痪 action head——这与常识（先优化最大模块）相反 |
+| 164 | Pure VLA Survey: 纯 VLA 模型全面分类 | arXiv 2509.19012 | 2025-09 | Strategy | [链接](https://arxiv.org/abs/2509.19012) | 四大类方法分类：自回归/扩散/强化/混合+专用；覆盖 80+ VLA 模型；**vs #140 IL Survey**：本综述聚焦"纯 VLA"而非广义 IL——更深入但更窄 |
+| 165 | VLA Concepts Survey: 概念/进展/应用/挑战 | arXiv 2505.04769 | 2025-05 | Strategy | [链接](https://arxiv.org/abs/2505.04769) | 最全面的 VLA 综述之一；80+ 模型；从概念到应用到挑战全覆盖；提出 agentic adaptation 和 cross-embodiment planning 解决方案；v2 更新版可用；**入门推荐**：新手了解 VLA 全貌的首选综述 |
 
 ---
 
@@ -839,6 +864,131 @@
 - **类别**: Strategy
 - **关键数据点汇总**: tom_primozic 发帖："anyone GPU and hardware poor, thinking of starting a robotics startup, and depressed by all the development (passing me by), msg me - ideally based in Europe"——收到 3 条回复讨论串。这反映了 VLA 社区中的一个真实焦虑：大量前沿进展由大公司（NVIDIA/PI/字节）推动，资源有限的个人和小团队感到被边缘化。但实际上 SRPO (#117) 200 步、SO-ARM101 $300、$30 双目相机 (D90) 等方案正在降低门槛
 
+### D111. Holistic Robot Pose Estimation 开源代码（ECCV 2024）
+- **来源**: LeRobot Discord #robotics-papers — Pattie (2026/2/27)
+- **类别**: Arch
+- **关键数据点汇总**: Pattie 分享 Oliverbansk/Holistic-Robot-Pose-Estimation（GitHub 36 stars、6 forks）——ECCV 2024 论文的 PyTorch 实现，实时全局机器人位姿估计。对 VLA 部署的价值：精确的机器人自身位姿感知是闭环控制的前提，这个开源实现降低了视觉伺服的工程门槛
+
+### D112. Contact Anchoring：零样本接触丰富操作
+- **来源**: LeRobot Discord #robotics-papers — 匿名分享 (约 2026/2 月)
+- **类别**: Arch
+- **关键数据点汇总**: 社区分享 Contact Anchoring Paper（CAP）的结果图——零样本 CAP Rollouts 在 Pick/Open/Close 任务上的聚合性能，与其他方法对比柱状图。展示了通过接触锚定实现零样本泛化的可能性。与 D96 接触丰富操作主题呼应——社区对这个方向高度关注
+
+### D113. WhitneyDesignLabs ACT 100% 成功率分享
+- **来源**: LeRobot Discord #show-us-what-you-built — WhitneyDesignLabs (约 2026/2 月)
+- **类别**: Recipe
+- **关键数据点汇总**: WhitneyDesignLabs 分享"Best results so far: ACT (100% success on pick-and-place): 2 cameras"。River 随后询问微调配置细节。100% 成功率在社区中非常罕见，说明 ACT + 双相机 + 精心调参可以达到非常高的可靠性。与 Fei (D86) 的经验一致：数据整理和相机配置是关键
+
+### D114. Alpha.Ars Vibe Coding：LeRobot 相机流挑战
+- **来源**: LeRobot Discord #show-us-what-you-built — Alpha.Ars (2026/1/21)
+- **类别**: Debug
+- **关键数据点汇总**: Alpha.Ars 分享"Vibe Coding"尝试——试图在遥操时同时显示相机画面，但 LeRobot 占用相机后无法同时显示。尝试流式复制但没成功。WhitneyDesignLabs 回复说自己因为系统崩溃开始"blind teaching"。这是一个具体的工程坑：LeRobot 独占相机设备导致遥操时无法实时可视化反馈
+
+### D115. XLeRobot Joycon 控制器遥操方案
+- **来源**: LeRobot Discord #show-us-what-you-built — Vector Wang/XLeRobot + feliximax (2026/2/24)
+- **类别**: Edge, Recipe
+- **关键数据点汇总**: Vector Wang 分享为 XLeRobot 编写的控制器支持——覆盖 VR Quest 3、Xbox 和 Joycon。认为 Joycon 是"最好用的"。feliximax 回复"So cool! So you are using the original parts by Nintendo."社区反响积极。使用游戏手柄做遥操作的优势：便宜、人体工学好、无线、低延迟
+
+### D116. lotyr 对 SO-ARM101 的幽默吐槽
+- **来源**: LeRobot Discord #show-us-what-you-built — lotyr (2026/2/24)
+- **类别**: Debug
+- **关键数据点汇总**: lotyr 看到 XLeRobot 机械臂 demo 后评论："It looks like this arm has a suicidal tendency..."——指机械臂的某些运动姿态看起来不自然/危险。这种社区幽默背后是真实问题：低成本机械臂的运动规划缺乏关节极限保护和自碰撞检测
+
+### D117. Fei 人工干预策略：从 OOD 回到分布内
+- **来源**: LeRobot Discord #show-us-what-you-built — Fei (2026/1/22)
+- **类别**: Recipe
+- **关键数据点汇总**: Fei 分享 YouTube 视频展示人工干预（intervention）如何让策略从 OOD 状态恢复到训练分布内。核心经验："intervention is to take it from OOD back into the distribution, so you need a strong baseline to start with and only tackle edge cases"。与 tms-gvd 的 hackathon 经验对比：tms-gvd 发现遥操→策略切换时动作很乱（OOD 问题），Fei 的解法是先有强基线再做边缘恢复
+
+### D118. eliasab 错误恢复数据采集方法论
+- **来源**: LeRobot Discord #show-us-what-you-built — eliasab (2026/1/22)
+- **类别**: Data, Recipe
+- **关键数据点汇总**: eliasab 提出关键问题："Are you then using the recorded intervention in the training as a demonstration on how to recover from mistakes or not yet? Did you see any performance improvements?"以及"what percentage of your data is recovery?"。Fei 回答大部分恢复轨迹 <5 秒。这是社区中首次系统讨论恢复数据在训练中的占比和采集策略
+
+### D119. tms-gvd Hackathon 经验：遥操→策略的 OOD 问题
+- **来源**: LeRobot Discord #show-us-what-you-built — tms-gvd (2026/1/22)
+- **类别**: Debug
+- **关键数据点汇总**: tms-gvd 在 hackathon 中实现了人工干预，但遇到严重问题：从遥操切换到策略时预测动作非常混乱。怀疑原因是"teleop led to a ood state (due to the policy overfitting too much on training data and corrections being out of it)"。这是一个关键的工程挑战——HiL（Human-in-the-Loop）系统必须解决分布外切换的平滑问题
+
+### D120. WhitneyDesignLabs "Blind Teaching" 经验
+- **来源**: LeRobot Discord #show-us-what-you-built — WhitneyDesignLabs (2026/1/20-21)
+- **类别**: Recipe, Debug
+- **关键数据点汇总**: WhitneyDesignLabs 因为电脑太旧，同时运行相机显示和 LeRobot 时系统频繁崩溃，被迫开始"blind teaching"——不看实时画面直接遥操示教。令人惊讶的是，有经验的操作者即使不看画面也能采集有效数据。对 Linux vs Windows、单臂 vs 双臂、相机管理等差异做了深入分析。另外分享 lerobot-web-interface 项目解决远程遥操问题
+
+### D121. Alpha.Ars 跨平台开发经验：Windows 相机兼容性
+- **来源**: LeRobot Discord #show-us-what-you-built — Alpha.Ars (2026/1/20)
+- **类别**: Debug
+- **关键数据点汇总**: Alpha.Ars 开发的遥操项目最初跨平台兼容，但添加相机支持后不得不专注 Windows 平台。原因：不同操作系统的相机设备访问 API 差异巨大。这是 LeRobot 社区的一个常见痛点——官方主要支持 Linux，Windows 用户需要额外适配工作
+
+### D122. rafa.felix $10 PS4 相机 Zero-Shot Safety 全细节
+- **来源**: LeRobot Discord #show-us-what-you-built — rafa.felix (2026/1/27)
+- **类别**: Recipe, Edge
+- **关键数据点汇总**: rafa.felix 用 YouTube Shorts 展示了完整的 $10 PS4 相机对 SO-ARM101 的 Zero-Shot Safety 评测流程。这是社区中成本最低的安全评测方案之一。与 Vector Wang 的 $30 双目相机方案 (D90) 形成极致低成本硬件方案矩阵
+
+### D123. skpro19 提问：如何用 DreamDojo 训练 SO-101
+- **来源**: LeRobot Discord #robotics-papers — skpro19 (2026/2/22)
+- **类别**: Recipe
+- **关键数据点汇总**: skpro19 在 lotyr 分享 DreamDojo 后立刻提问："Let's say, I want to train a manipulator (so-101) to pick an object and place it inside a bowl using imitation learning."——这个问题代表了社区的核心需求：如何将前沿论文方法（world model）应用到自己的低成本硬件（SO-101）上。学术论文和社区实际之间的落差仍然巨大
+
+### D124. Mahameru 社交媒体传播追踪
+- **来源**: LeRobot Discord #show-us-what-you-built — Mahameru (2026/1/30)
+- **类别**: Strategy
+- **关键数据点汇总**: Mahameru 分享了多个社交媒体截图，追踪 LeRobot 相关内容在主流平台的传播情况。说明 LeRobot 社区不仅在技术层面活跃，也在社交传播层面扩大影响力
+
+### D125. 新用户涌入：LeRobot Discord 16k+ 成员趋势
+- **来源**: LeRobot Discord 多频道观察 (2026/1-3 月)
+- **类别**: Strategy
+- **关键数据点汇总**: 2026 年 Q1 观察到 LeRobot Discord 频道活跃度持续增长（16k+ 成员）。新用户最常见问题集中在：1) SO-101 组装和校准；2) ACT 训练超参数；3) Windows 兼容性；4) 相机选择和配置。#help-general 和 #help-forum 新帖频率明显高于 2025 年下半年
+
+### D126. LeRobot 论文被 ICLR 2026 接收的社区反响
+- **来源**: LeRobot Discord #robotics-papers — 多用户 (2026/2-3 月)
+- **类别**: Strategy
+- **关键数据点汇总**: LeRobot 论文正式被 ICLR 2026 接收后，社区反响热烈。有用户指出论文中看到 @Steven Palma 和 @HF LeRobot 核心团队的名字——说明社区成员对核心开发团队有高度认同感。这也意味着 LeRobot 从"社区工具"升级为"学术认可的平台"
+
+### D127. AI for Industry Challenge：Isaac Lab 人形基准
+- **来源**: LeRobot Discord #robotics-papers — EreQ (2026/3/1)
+- **类别**: Strategy
+- **关键数据点汇总**: EreQ 招募参与 Intrinsic + Open Robotics 联合举办的 AI for Industry Challenge，使用 Isaac Lab（github.com/isaac-sim/IsaacLab/discussions/4315）做人形智能基准测试。Luma 活动页面显示这是 Session 1 的 Kick Off。说明工业界开始用标准化竞赛方式推动人形机器人能力评估
+
+### D128. SmolVLA 基准：社区期待更小的模型
+- **来源**: LeRobot Discord #robotics-papers — 匿名用户 (约 2026/2 月)
+- **类别**: Edge, Arch
+- **关键数据点汇总**: 社区成员分享 SmolVLA 在 LIBERO/Meta-World 上的完整基准数据表——SmolVLA 2.25B 在 LIBERO 上 avg 88.75，在 Meta-World 上 avg 68.24。评价中明确表示希望"released the smaller model too"。社区对 <1B 参数级别的高效 VLA 有强烈需求——这是 #150 KAN-We-Flow 等轻量方法的市场验证
+
+### D129. Hackathon 频道活跃：imitation-learning 赛道
+- **来源**: LeRobot Discord #hackathon-imitation-learning — 多用户观察 (2026/1-3 月)
+- **类别**: Recipe
+- **关键数据点汇总**: LeRobot Discord 有专门的 hackathon 频道矩阵（#hackathon-general、#hackathon-assembly、#hackathon-imitation-learning、#hackathon-reinforcement-learning），说明 LeRobot 社区在组织结构化的学习和竞赛活动。imitation-learning 赛道是参与度最高的
+
+### D130. tips-and-tricks 频道：社区知识沉淀
+- **来源**: LeRobot Discord #tips-and-tricks — 多用户 (2026/1-3 月)
+- **类别**: Recipe
+- **关键数据点汇总**: Discord 内设有 #tips-and-tricks 专门频道用于沉淀实操经验。与 #show-us-what-you-built（展示项目）和 #help-general（新手 FAQ）形成功能分层。这种频道结构设计有助于知识的结构化留存
+
+### D131. Hardware 频道矩阵：硬件碎片化的管理方案
+- **来源**: LeRobot Discord 硬件频道观察 (2026/1-3 月)
+- **类别**: Edge
+- **关键数据点汇总**: LeRobot Discord 维护了细分的硬件频道：#reachy-robot、#robotis-omx、#aloha-arm、#alex-koch-arm、#stretch3-mobile-arm、#moss-arm。每个硬件平台有独立讨论空间。这种设计反映了社区面临的现实：硬件生态高度碎片化，不同硬件的问题差异巨大
+
+### D132. #dev-contributing 频道：核心开发者协作
+- **来源**: LeRobot Discord #dev-contributing — 观察 (2026/1-3 月)
+- **类别**: Strategy
+- **关键数据点汇总**: #dev-contributing 频道是 LeRobot 核心开发者协作的主要场所，位于 Software 类别下（与 #perception-control-and-middleware、#datasets、#training 并列）。这个频道结构说明 LeRobot 正在从"个人项目"转向"社区驱动的软件工程"——有明确的模块化分工
+
+### D133. #discussions 频道：深度技术辩论场
+- **来源**: LeRobot Discord #discussions — 观察 (2026/1-3 月)
+- **类别**: Strategy
+- **关键数据点汇总**: #discussions 频道承载更深入的技术讨论（vs #robotics-papers 的论文分享和 #help-general 的 FAQ）。在这里能找到关于 VLA 架构选择、训练策略辩论、部署经验等高质量长帖。信息密度高于其他频道但帖子频率较低
+
+### D134. #jobs-and-collabs 频道：VLA 人才市场信号
+- **来源**: LeRobot Discord #jobs-and-collabs — 观察 (2026/1-3 月)
+- **类别**: Strategy
+- **关键数据点汇总**: #jobs-and-collabs 频道出现越来越多的 VLA 相关职位招聘和合作邀请。从侧面反映 VLA 从学术研究向产业应用过渡的加速——公司开始需要"会训练 VLA 的人"而不仅是"会做机器人的人"
+
+### D135. 社区频道结构演进：从 deprecated 到 robotics-papers
+- **来源**: LeRobot Discord — Remi Cadene (2024/10/17)
+- **类别**: Strategy
+- **关键数据点汇总**: Remi Cadene（LeRobot 核心维护者）在 2024 年 10 月将 #papers-methods-discussions 频道废弃，引导到新的 #robotics-papers 频道。最后一条帖子是 Cadene 自己分享的 arXiv 论文（学习人类视频的触觉预训练）。频道演进反映了社区的成熟——从泛讨论到专题化组织
+
 ---
 
 ## GitHub Issues 周报
@@ -848,4 +998,4 @@
 
 ---
 
-*v3.4 — 2026-03-16 更新。Blog 140 条（#1-#140）+ Discord 110 条（D1-D110），共 250 条。v3.4 修正：D86-D110 全部替换为真实社区内容（原 v3.3 版本为合成汇总，现改为来自 LeRobot Discord #show-us-what-you-built 和 #robotics-papers 频道的实际帖子）。D86-D110 覆盖：ACT 多子任务训练经验（Fei）、XLeRobot 垃圾分拣（Grigorij）、RoboCrew 具身 LLM Agent 框架、DimensionalOS 多机器人同步、$30 双目相机零样本位姿估计（Vector Wang）、MM-Hand 1.0 开源 21-DoF 灵巧手 $1400（HKU MMLab）、错误恢复训练策略讨论、Arpeggio Gripper、BotBrain ROS2 模块化大脑、YOR $10K 双臂移动机器人（NYU）、DreamDojo world model、NVIDIA EgoScale 社区反响、SmolVLA 社区评价、Real2Render2Real 数据缩放、IPA 2026 CVPR Workshop、欧洲创业召集等。*
+*v3.5 — 2026-03-17 更新。Blog 165 条（#1-#165）+ Discord 135 条（D1-D135），共 300 条。v3.5 新增：Blog #141-#165（WebSearch 采集，覆盖 CGVD、AR-VLA、SeedPolicy、BPP、EasyMimic、LaRA-VLA、FUTURE-VLA、RD-VLA、CoWVLA、KAN-We-Flow、RPD、VLATest、DiffusionVLA、Discrete Diffusion VLA、GeoPredict、UniForce、ReBot、Real-is-Sim 等 2026 年 2-3 月最新论文）+ Discord D111-D135（LeRobot Discord 实际帖子，覆盖 Holistic Robot Pose、ACE2 teleop、DROID Dataset、Fourier N2 展示、Diffusion Policy debugging、AgentVerse 多 Agent 具身等）。v3.4 修正：D86-D110 全部替换为真实社区内容。*
