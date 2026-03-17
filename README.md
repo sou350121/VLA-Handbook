@@ -31,7 +31,7 @@ VLA 论文每天几十篇，真正能用的工程细节零散在 GitHub Issue �
 
 | | 来源 | 内容 | 更新 |
 |---|---|---|---|
-| **[📕 中文社区（小红书）](deployment/community_field_notes_xiaohongshu.md)** | 250+ 条中文社区蒸馏（帖1-161 + 索引 220 条） | LingBot-VLA / UnifoLM / π*0.6 真机 RL / Figure Helix / GR00T N2 + ACT 训练成本实测 + 国标发布 + 薪资 80-120 万。 | 每周五 10:00 |
+| **[📕 中文社区（小红书）](deployment/community_field_notes_xiaohongshu.md)** | 300+ 条中文社区蒸馏（帖1-200 + 索引 40 条 + 黑话辞典 28 条） | LingBot-VLA / UnifoLM / π0.6 真机 RL / Figure Helix / GR00T N2 + ACT 训练成本实测 + 国标发布 + 薪资 80-120 万 + 社区黑话辞典。 | 每周五 10:00 |
 | **[📘 英文社区（HF Blog / Discord）](deployment/community_field_notes_english.md)** | 165 篇 Blog 深度拆解 + 135 条 Discord 情报（共 300 条） | SmolVLA / DiffusionVLA / RD-VLA / SeedPolicy / EasyMimic / π0-FAST / GR00T N1.5 等前沿论文 + LeRobot Discord 真实部署经验。 | 每周五 11:00 |
 | **[🔧 GitHub Issues](deployment/community_field_notes_github.md)** | 21 个仓库 200+ 条 Issues | 硬件兼容矩阵、训练收敛失败根因、官方 checkpoint 复现问题、跨仓库收敛信号。 | 每周自动扫描 |
 

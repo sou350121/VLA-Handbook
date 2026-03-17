@@ -1,6 +1,6 @@
 # 社区实战笔记：小红书 VLA 从业者经验蒸馏 (Community Field Notes)
 
-> **来源**：300+ 篇小红书 + 中文社区帖子（帖1-200 + 可追溯索引 243 条），2026-03-14 起持续收集
+> **来源**：300+ 条小红书社区蒸馏（帖1-200 + 可追溯索引 40 条 + 黑话辞典 28 条），2026-03-14 起持续收集
 > **原始数据**：[memory/blog/archives/xiaohongshu-community/](../../memory/blog/archives/xiaohongshu-community/)
 > **定位**：论文不会告诉你的东西——社区实战者的真实参数、真实失败和真实吐槽。每条结论附「帖N」编号，可在原始数据中回溯验证。
 > **更新频率**：每 3 天自动增量收集
@@ -1526,6 +1526,6 @@ Kivy 的分析（帖17）：Diffusion Policy 有效的核心不是"多模态分�
 
 ---
 
-*本文件由定时收集器自动更新（v2，帖 1-200 + 可追溯索引 243 条 + 黑话辞典 27 条，共 300+ 条）。原始数据和方法论详见 [收集流程复盘](../../memory/blog/archives/xiaohongshu-community/workflow-and-automation.md)。*
+*本文件由定时收集器自动更新（v2，帖 1-200 + 可追溯索引 40 条 + 黑话辞典 28 条，共 300+ 条）。原始数据和方法论详见 [收集流程复盘](../../memory/blog/archives/xiaohongshu-community/workflow-and-automation.md)。*
 
 [← Back to Deployment](./README.md)
