@@ -1,6 +1,6 @@
 # 社区实战笔记：小红书 VLA 从业者经验蒸馏 (Community Field Notes)
 
-> **来源**：270+ 篇小红书 + 中文社区帖子（帖1-177 + 可追溯索引 230 条），2026-03-14 起持续收集
+> **来源**：280+ 篇小红书 + 中文社区帖子（帖1-187 + 可追溯索引 230 条），2026-03-14 起持续收集
 > **原始数据**：[memory/blog/archives/xiaohongshu-community/](../../memory/blog/archives/xiaohongshu-community/)
 > **定位**：论文不会告诉你的东西——社区实战者的真实参数、真实失败和真实吐槽。每条结论附「帖N」编号，可在原始数据中回溯验证。
 > **更新频率**：每 3 天自动增量收集
@@ -947,7 +947,7 @@ Kivy 的分析（帖17）：Diffusion Policy 有效的核心不是"多模态分�
 
 ---
 
-## 12. 2026 Q1 新增（帖132-177）
+## 12. 2026 Q1 新增（帖132-187）
 
 > 2026-03-17 扩展收集。来源：小红书 + 知乎 + 量子位 + 36Kr + OFweek + B站等中文社区。按主题分组。
 
@@ -1216,8 +1216,18 @@ Kivy 的分析（帖17）：Diffusion Policy 有效的核心不是"多模态分�
 | 帖175 | 师兄学习VLA模型去世了 | 伊斯坦布尔的喵 | 160赞 | [链接](https://www.xiaohongshu.com/explore/691a037d000000000d0363db) |
 | 帖176 | 感觉pi0.5就是纯纯的过拟合 | Rose | 97赞 | [链接](https://www.xiaohongshu.com/explore/692433b7000000001e029ad6) |
 | 帖177 | 人形机器人必死 | 玖月 | 271赞 | [链接](https://www.xiaohongshu.com/search_result?keyword=人形机器人必死+玖月) |
+| 帖178 | 珍爱生命远离piper | bingcm | 102赞 | [链接](https://www.xiaohongshu.com/explore/68b9a82d000000001b03e6f8) |
+| 帖179 | lerobot项目官方还维护么 | 蓝瘦纸 | 134赞 | [链接](https://www.xiaohongshu.com/explore/6959fc5c000000001e027241) |
+| 帖180 | 大多数人接触具身智能都会踩的坑 | DoGgy | 202赞 | [链接](https://www.xiaohongshu.com/explore/684a15bd0000000023012834) |
+| 帖181 | 2026:VLA退场WAM强势来袭 | 深蓝具身智能 | 853赞 | [链接](https://www.xiaohongshu.com/explore/69b13be0000000001b017fc4) |
+| 帖182 | VLA预训练范式从根上就错了 | 爱喝咖啡的猪 | 761赞 | [链接](https://www.xiaohongshu.com/search_result?keyword=VLA预训练范式从根上就错了) |
+| 帖183 | NVIDIA打假VLA | Navis | 405赞 | [链接](https://www.xiaohongshu.com/search_result?keyword=NVIDIA打假VLA+Navis) |
+| 帖184 | VLA害了我女儿 | 延毕的佩吉 | 451赞 | [链接](https://www.xiaohongshu.com/search_result?keyword=VLA害了我女儿) |
+| 帖185 | 摆上台面的具身智能泡沫 | Dr.He | 190赞 | [链接](https://www.xiaohongshu.com/search_result?keyword=摆上台面的具身智能泡沫+Dr.He) |
+| 帖186 | 大胆预测具身比AI更先爆雷 | 假猫熊 | 263赞 | [链接](https://www.xiaohongshu.com/search_result?keyword=大胆预测具身比AI更先爆雷) |
+| 帖187 | Lerobot版pi0大家别试了 | 小白学具身 | 99赞 | [链接](https://www.xiaohongshu.com/search_result?keyword=Lerobot版pi0大家别试了) |
 
-**更多踩坑/吐槽帖摘要（帖172-177）：**
+**更多踩坑/吐槽帖摘要（帖172-187）：**
 
 **如何改善 VLA 的帕金森**（帖172，duckduck（27phd寻求中），259 赞）：
 - 仿真数据训练的 VLA，评估时抖动剧烈——能抓能动但全程帕金森
@@ -1253,6 +1263,63 @@ Kivy 的分析（帖17）：Diffusion Policy 有效的核心不是"多模态分�
 - **实锤**：小数据 LoRA 微调 π0.5 = 严重过拟合，验证了帖165 的结论
 - 🔗 https://www.xiaohongshu.com/explore/692433b7000000001e029ad6
 
+**珍爱生命，远离 Piper**（帖178，bingcm，102 赞，56 评论）：
+- 四大罪状：① 逆解无能（万向锁附近求解不出，不如开源库）② 官方库混乱（piper_ros 和 piper_isaacsim 的 URDF 末端坐标系不同）③ 无自锁（吃力过大或掉电直接砸地上）④ 肌无力一动就抖
+- 被评为"使用过最垃圾的机械臂"
+- **硬件避坑**：强化了 §2.2 中 Piper 的负面评价，多个独立来源交叉验证
+- 🔗 https://www.xiaohongshu.com/explore/68b9a82d000000001b03e6f8
+
+**LeRobot 项目官方还维护么**（帖179，蓝瘦纸，134 赞，55 评论）：
+- PR 没人 review、issue 没人解决、代码一更新就遇新 bug
+- 评论区爆料："自从 Remi 走后..."（暗示核心维护者离开）
+- hil_serl 代码一堆错误
+- 金句："原理 lerobot most time 会变得不幸"
+- **工具链警告**：LeRobot 社区维护力度存疑，依赖需谨慎
+- 🔗 https://www.xiaohongshu.com/explore/6959fc5c000000001e027241
+
+**大多数人接触具身智能都会踩的一个坑**（帖180，DoGgy，202 赞）：
+- 核心观点：一来就上 VLA、WBC 等大词，忽视基础——控制变量、读数据、调参数
+- "把问题拆解一下，背后还是一个个数学物理原理，一行行代码"
+- **新人建议**：先做简单小实验→读懂数据→读懂代码→加模块→量化效果
+- 🔗 https://www.xiaohongshu.com/explore/684a15bd0000000023012834
+
+**2026: VLA 退场，WAM 强势来袭？**（帖181，深蓝具身智能，853 赞，4 天前）：
+- 19 页图文长帖，拆解 WAM 方向 15 篇代表性工作的三大路线
+- VLA 陷入"能认物却不会动手"困境，WAM 以视频预训练为核心
+- 转载自 @爱喝咖啡的猪 原文
+- **范式信号**：2026 年 3 月 VLA→WAM 的叙事转向达到高峰（853 赞为近期最高）
+- 🔗 https://www.xiaohongshu.com/explore/69b13be0000000001b017fc4
+
+**VLA 预训练范式从根上就错了？WAM 才是未来？**（帖182，爱喝咖啡的猪，761 赞）：
+- 帖181 的原始长文版本，系统论述 VLA 预训练范式的根本缺陷
+- 三大路线拆解 WAM 方向的前沿工作
+- **信号**：两篇 WAM vs VLA 帖合计 1600+ 赞，社区风向明确转向
+
+**NVIDIA 打假 VLA**（帖183，Navis，405 赞）：
+- NVIDIA 官方质疑 VLA 范式的解读帖
+- 引发社区广泛讨论："连 NVIDIA 都不看好纯 VLA 了"
+- **产业信号**：硬件巨头对 VLA 的态度转变
+
+**VLA 害了我女儿**（帖184，延毕的佩吉，451 赞）：
+- 标题党+情绪帖：因 VLA 方向导致延毕的吐槽
+- 引发大量共鸣——VLA 研究周期长、真机实验难复现、容易延毕
+- **学术生态信号**：VLA 方向的研究风险对学生不友好
+
+**摆上台面的具身智能泡沫，我的几点看法**（帖185，Dr.He，190 赞）：
+- 来自工业界的冷静分析：具身智能泡沫已摆上台面
+- 与帖164 同一作者（Dr.He），持续输出工业界视角
+- **信号**：工业界对具身智能的冷静评估，与学术界的热情形成对比
+
+**大胆预测：具身智能会比 AI 更先爆雷**（帖186，假猫熊，263 赞）：
+- 逆共识预测：具身比 AI 更先暴雷
+- 评论区激烈争论，支持和反对各半
+- **逆共识信号**：值得关注是否成为未来回头看的"正确预测"
+
+**Lerobot 版 π0 大家别试了**（帖187，小白学具身，99 赞）：
+- LeRobot 内置的 π0 实现存在严重问题，直接劝退
+- 与帖179（LeRobot 维护问题）形成交叉验证
+- **工具链避坑**：LeRobot + π0 组合的坑已被多人验证
+
 ---
 
 ## 13. VLA 社区黑话辞典 🗣️
@@ -1277,6 +1344,10 @@ Kivy 的分析（帖17）：Diffusion Policy 有效的核心不是"多模态分�
 | **食堂打饭分析 ViT-L/14** | VLA 研究者职业病的极致体现——看到任何场景都想分析视觉特征 | 帖175 讽刺文学 |
 | **小作坊玩不下去了** | 具身智能科研资源门槛（臂 + GPU + 人力）已超出单个课题组承受范围 | 帖174（287赞） |
 | **VLA 绝对不是唯一范式** | 丁琰（644赞）观点：VLA 只能解决机器人 10% 不到的问题，力控、tool use 等更重要 | 搜索页可见丁琰帖 |
+| **珍爱生命远离 Piper** | 松灵 Piper 臂的代名词——逆解差、无自锁、肌无力、砸地上 | 帖178（bingcm，102赞） |
+| **原理 lerobot = 不幸** | LeRobot 框架 bug 多、PR 无人 review、核心维护者疑似离开 | 帖179（134赞）评论区 |
+| **VLA 退场 WAM 来袭** | 2026 年 3 月社区最大叙事转向——VLA→WAM，两篇合计 1600+ 赞 | 帖181（853赞）、帖182（761赞） |
+| **VLA 害了我女儿** | 因选 VLA 方向导致延毕的学术惨剧，引发广泛共鸣 | 帖184（延毕的佩吉，451赞） |
 
 > **使用说明**：以上黑话均来自小红书真实帖子评论区，附帖号可追溯。
 > 如果你在面试/汇报中自然使用这些术语，面试官会知道你是真的做过真机的人 😏
@@ -1340,6 +1411,6 @@ Kivy 的分析（帖17）：Diffusion Policy 有效的核心不是"多模态分�
 
 ---
 
-*本文件由定时收集器自动更新（v2，帖 1-177 + 可追溯索引 230 条 + 黑话辞典 16 条，共 270+ 条）。原始数据和方法论详见 [收集流程复盘](../../memory/blog/archives/xiaohongshu-community/workflow-and-automation.md)。*
+*本文件由定时收集器自动更新（v2，帖 1-187 + 可追溯索引 230 条 + 黑话辞典 16 条，共 280+ 条）。原始数据和方法论详见 [收集流程复盘](../../memory/blog/archives/xiaohongshu-community/workflow-and-automation.md)。*
 
 [← Back to Deployment](./README.md)
