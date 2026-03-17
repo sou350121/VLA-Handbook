@@ -186,7 +186,7 @@
 | 160 | LeRobot Annotation Studio: 浏览器端数据集标注 | HF Space | 2026-03 | Data | [链接](https://huggingface.co/blog/lerobot-release-v050) | LeRobot v0.5.0 引入的 HuggingFace Space；为数据集中的每个时刻标注自然语言子任务；**意义**：解决 VLA 训练数据中细粒度语言标注缺失的问题——之前只有 episode-level 标签，现在可以做 moment-level |
 | 161 | Real-is-Sim: 动态数字孪生弥合 Sim-to-Real | arXiv 2504.03597 | 2025-04 | Data, Arch | [链接](https://arxiv.org/abs/2504.03597) | 维持仿真与物理环境的实时对齐→策略无需微调直接部署；单一框架统一仿真与现实；**核心价值**：不是"让仿真更像真实"而是"让仿真跟踪真实"——实时数字孪生 vs 静态域随机化 |
 | 162 | 10 Open Challenges for VLA Models | arXiv 2511.05936 | 2025-11 | Strategy | [链接](https://arxiv.org/abs/2511.05936) | 十大开放挑战系统分析；覆盖泛化/安全/效率/多模态/评估等维度；**与 D85 对比**：学术视角的十大问题 vs 社区实战视角的十大问题——互补阅读价值 |
-| 163 | VLA Edge Bottleneck 分析: 动作生成才是瓶颈 | arXiv 2603.02271 | 2026-03 | Edge | [链接](https://arxiv.org/abs/2603.02271) | 系统分析 VLA 边缘部署瓶颈：动作生成（diffusion/flow matching head）是推理延迟的主要来源而非视觉编码器或 LLM；**核心洞察**：优化 VLA 推理应优先瘫痪 action head——这与常识（先优化最大模块）相反 |
+| 163 | VLA Edge Bottleneck 分析: 动作生成才是瓶颈 | arXiv 2603.02271 | 2026-03 | Edge | [链接](https://arxiv.org/abs/2603.02271) | 系统分析 VLA 边缘部署瓶颈：动作生成（diffusion/flow matching head）是推理延迟的主要来源而非视觉编码器或 LLM；**核心洞察**：优化 VLA 推理应优先针对 action head——这与常识（先优化最大模块）相反 |
 | 164 | Pure VLA Survey: 纯 VLA 模型全面分类 | arXiv 2509.19012 | 2025-09 | Strategy | [链接](https://arxiv.org/abs/2509.19012) | 四大类方法分类：自回归/扩散/强化/混合+专用；覆盖 80+ VLA 模型；**vs #140 IL Survey**：本综述聚焦"纯 VLA"而非广义 IL——更深入但更窄 |
 | 165 | VLA Concepts Survey: 概念/进展/应用/挑战 | arXiv 2505.04769 | 2025-05 | Strategy | [链接](https://arxiv.org/abs/2505.04769) | 最全面的 VLA 综述之一；80+ 模型；从概念到应用到挑战全覆盖；提出 agentic adaptation 和 cross-embodiment planning 解决方案；v2 更新版可用；**入门推荐**：新手了解 VLA 全貌的首选综述 |
 
