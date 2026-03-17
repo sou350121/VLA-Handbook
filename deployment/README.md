@@ -12,9 +12,9 @@
 > 需要深入理解的话，每个 section 末尾有对应专题文件链接。
 > **每周五 10:00 自动增量更新。**
 
-**[📘 社区实战笔记・英文 (HF Blog / Discord / 厂商博客)](./community_field_notes_english.md)** — 50 条英文社区精选：SmolVLA / π0-FAST / GR00T N1.5 / ACT 的训练配方、真机部署踩坑、推理延迟实测、数据迭代经验。
+**[📘 社区实战笔记・英文 (HF Blog / Discord / 厂商博客)](./community_field_notes_english.md)** — 300 条英文社区精选（Blog 165 + Discord 135）：SmolVLA / π0-FAST / GR00T N1.5 / ACT / DiffusionVLA / RD-VLA / SeedPolicy / EasyMimic 等最新论文拆解 + LeRobot Discord 真实部署经验、训练配方、推理延迟实测、数据迭代踩坑。
 
-> 28 条 Blog 深度拆解（HuggingFace、NVIDIA、Phospho、ML6、个人实战博客等）+ 22 条 LeRobot Discord 一手情报。
+> 165 条 Blog 深度拆解（arXiv 前沿论文 + HuggingFace、NVIDIA、Phospho、ML6 等厂商博客）+ 135 条 LeRobot Discord 一手情报（#show-us-what-you-built / #robotics-papers）。
 > 每条 Discord 原文保留英文全量展示，方便直接参考。
 > **每周五 11:00 自动增量更新。**
 

@@ -32,7 +32,7 @@ VLA 论文每天几十篇，真正能用的工程细节零散在 GitHub Issue �
 | | 来源 | 内容 | 更新 |
 |---|---|---|---|
 | **[📕 中文社区（小红书）](deployment/community_field_notes_xiaohongshu.md)** | 220+ 篇小红书帖子 | 真实参数、真实失败、真实吐槽。ACT 50 episodes 就能 work、π0 该用绝对量还是 delta、Sim2Real 八成是物理参数没校准。 | 每周五 10:00 |
-| **[📘 英文社区（HF Blog / Discord）](deployment/community_field_notes_english.md)** | 28 篇 Blog 深度拆解 + 22 条 Discord 情报 | SmolVLA 三轮数据迭代、π0-FAST 87.5% LIBERO、GR00T N1.5 布折叠、推理延迟全景（9.7s~200ms）。Discord 原文英文全量展示。 | 每周五 11:00 |
+| **[📘 英文社区（HF Blog / Discord）](deployment/community_field_notes_english.md)** | 165 篇 Blog 深度拆解 + 135 条 Discord 情报（共 300 条） | SmolVLA / DiffusionVLA / RD-VLA / SeedPolicy / EasyMimic / π0-FAST / GR00T N1.5 等前沿论文 + LeRobot Discord 真实部署经验。 | 每周五 11:00 |
 | **[🔧 GitHub Issues](deployment/community_field_notes_github.md)** | 21 个仓库 200+ 条 Issues | 硬件兼容矩阵、训练收敛失败根因、官方 checkpoint 复现问题、跨仓库收敛信号。 | 每周自动扫描 |
 
 ## 和这些方式相比
@@ -61,29 +61,43 @@ VLA 论文每天几十篇，真正能用的工程细节零散在 GitHub Issue �
 
 ## 先看这几篇（30 分钟内建立正确框架）
 
-**① [学习路线图](theory/README.md)** `10–20 min`
-把"要学什么"降维成可走的路径，适合刚入门。
+按依赖顺序排列——每一篇回答上一篇读完后自然产生的问题。
 
-**② [Flow Matching 原理拆解](theory/pi0_flow_matching.md)** `15–30 min`
-Flow Matching 原理 + 工程折中，可直接迁移到 VLA action head。
+**第一层：VLA 是什么、核心设计选择是什么（~15 min）**
 
-**③ [Spirit-v1.5 代码级解析](theory/spirit_v1_5_dissection.md)** `20–40 min`
-Qwen3-VL + DiT + ODE/Euler，端到端复现入口，每步都有 shape 标注。
+**① [VLA 架构总览](theory/vla_arch.md)** `5 min`
+先建立全局图：输入（视觉 + 语言）→ Backbone → Action Head → 机器人动作。RT-1 → RT-2 → OpenVLA → π0 的演化逻辑，读完你知道每个模块的作用和它们怎么拼在一起。
 
-**④ [UnifolM 开源训练栈](theory/unifolm_vla_0_unitree_2026.md)** `30–60 min`
-数据管线 + 部署要点 + 30 分钟验收清单，适合真机落地参考。
+**② [动作生成三范式](theory/action_representations.md)** `10 min`
+①读完你会问：Action Head 到底怎么输出动作？这篇回答：离散 Token（快但粗）→ Diffusion（精但慢）→ Flow Matching（又快又精）。这是 VLA 领域最关键的分叉点，后面所有论文都在这三条路上选边。
 
-**⑤ [真机部署总入口](deployment/README.md)** `按需查阅`
-硬件选型 · 多模态同步 · Sim-to-Real · 调参 checklist。
+**第二层：当前赢家为什么赢、整个领域怎么演化（~15 min）**
 
-**⑥ [📕 社区实战笔记（中文）](deployment/community_field_notes_xiaohongshu.md)** `按需查阅` 🔥
-论文不会告诉你的事——220+ 篇小红书帖子蒸馏的真实参数、真实失败、真实吐槽。ACT 50 episodes 就能 work、π0 微调该预测绝对量还是 delta、Sim2Real 八成是物理参数没校准。每周五自动更新。
+**③ [Flow Matching 原理拆解](theory/pi0_flow_matching.md)** `10 min`
+②告诉你 Flow Matching 胜出，这篇解释为什么：ODE 直线路径 vs Diffusion 的曲线去噪，5-20 步推理实现 50Hz 控制。π0 的工程实现细节。
 
-**⑦ [📘 社区实战笔记（英文）](deployment/community_field_notes_english.md)** `按需查阅` 🔥
-HuggingFace Blog、LeRobot Discord、厂商技术博客的一手经验。SmolVLA 训练配方、π0 真机评估、边缘部署延迟实测、夹爪电机死机排查。Discord 原文英文全量展示。每周五自动更新。
+**④ [研究主线梳理](theory/vla_research_mainline.md)** `5 min`
+拉远一步看全局：为什么 ACT/DP 仍是 baseline、数据规模化 → 感知增强 → RL 后训练三条改进主线怎么交汇。读完你有一张完整的领域地图。
 
-**⑧ [World Action Model 零样本策略迁移](theory/world_action_models_are_zero_shot_policies_dissection.md)** `20 min`
-如何做到零样本策略迁移，Feb 2026 精选，适合了解最新方向。
+**第三层：对接现实（按需深入）**
+
+**⑤ [社区实战笔记（中文）](deployment/community_field_notes_xiaohongshu.md)** 🔥
+论文不会告诉你的事——220+ 篇小红书帖子蒸馏的真实参数、真实失败、真实吐槽。ACT 50 episodes 就能 work、Sim2Real 八成是物理参数没校准。
+
+**⑥ [社区实战笔记（英文）](deployment/community_field_notes_english.md)** 🔥
+300 条英文社区精选（Blog 165 + Discord 135）。前沿论文深度拆解 + LeRobot Discord 真实部署经验、训练配方、推理延迟实测。
+
+**⑦ [真机部署总入口](deployment/README.md)**
+硬件选型 · 多模态同步 · Sim-to-Real · 调参 checklist。准备上真机时再看。
+
+**想深入特定模型？**
+
+| 方向 | 入口 | 适合谁 |
+|------|------|--------|
+| 开源训练栈复现 | [UnifolM-VLA-0](theory/unifolm_vla_0_unitree_2026.md) | 想在宇树机器人上跑通 |
+| 端到端代码级理解 | [Spirit-v1.5 解析](theory/spirit_v1_5_dissection.md) | 想读懂每行 shape 变换 |
+| 最新零样本迁移 | [World Action Model](theory/world_action_models_are_zero_shot_policies_dissection.md) | 想了解 2026 前沿方向 |
+| 完整学习路线 | [学习路线图](theory/README.md) | 想系统性地从头学 |
 
 ---
 
@@ -125,7 +139,7 @@ HuggingFace Blog、LeRobot Discord、厂商技术博客的一手经验。SmolVLA
 | 找论文 / 做综述 | [`theory/paper_index.md`](theory/paper_index.md) | 多维索引 + 发展史全景图 |
 | 真机落地 | [`deployment/README.md`](deployment/README.md) | 硬件选型 · 多模态同步 · Sim-to-Real |
 | 社区踩坑（中文） | [`deployment/community_field_notes_xiaohongshu.md`](deployment/community_field_notes_xiaohongshu.md) | 🔥 小红书 220+ 帖 · 每周五更新 |
-| 社区踩坑（英文） | [`deployment/community_field_notes_english.md`](deployment/community_field_notes_english.md) | 🔥 HF Blog + Discord 50 条 · 每周五更新 |
+| 社区踩坑（英文） | [`deployment/community_field_notes_english.md`](deployment/community_field_notes_english.md) | 🔥 Blog 165 + Discord 135 = 300 条 · 每周五更新 |
 | 公司 / 求职 | [`companies/README.md`](companies/README.md) | 公司指南 + 产业报告 digest |
 | 双周前沿报告 | [`reports/biweekly/README.md`](reports/biweekly/README.md) | VLA / 触觉 / 人形 · 含预测回顾 |
 | 周报 + 风向洞察 | [`reports/weekly/README.md`](reports/weekly/README.md) | 每周论文精选 + SOTA + 趋势分析 |
