@@ -658,6 +658,7 @@
 | MIND: Benchmarking Memory Consistency and Action Control in World Models | [link](https://tldr.takara.ai/p/2602.08025) | ⚡ daily 2026-02-15 |
 | EgoScale: Scaling Dexterous Manipulation with Diverse Egocentric Human Data | [link](https://arxiv.org/abs/2602.16710) | 🔧 daily 2026-02-20 |
 | Benchmarking the Effects of Object Pose Estimation and Reconstruction on Robotic Grasping Success | [link](https://tldr.takara.ai/p/2602.17101) | 🔧 daily 2026-02-21 |
+| SAGE: Scalable Agentic 3D Scene Generation for Embodied AI | [link](https://arxiv.org/abs/2602.10116) | 🔧 daily 2026-03-26 \| repo: https://github.com/NVlabs/sage |
 
 ### 部署
 
