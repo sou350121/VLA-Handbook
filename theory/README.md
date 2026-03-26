@@ -126,6 +126,7 @@
 | 🖐️ **触觉专题入口** | [`./tactile/README.md`](./tactile/README.md) | 触觉路线图：VTLA / SaTA / 硬件选型 / 落地 checklist 🆕 |
 | 🧠 **语言塑形感知** | [`./frontier/language_shapes_perception.md`](./frontier/language_shapes_perception.md) | “灰度香蕉”启示：语义先验影响视觉表征与属性推断 🆕 |
 | 🧪 **Physics of AI** | [`./frontier/physics_of_ai_liuziming.md`](./frontier/physics_of_ai_liuziming.md) | 不赌规模：用“现象-观测量-规律”研究神经网络，沉淀工程抓手 🆕 |
+| 👓 **Fast-FoundationStereo（2026）** | [`./frontier/fast_foundation_stereo_real_time_zero_shot_stereo_matching_2026.md`](./frontier/fast_foundation_stereo_real_time_zero_shot_stereo_matching_2026.md) | 🆕 实时零样本双目匹配：用蒸馏 + blockwise NAS + GRU 剪枝，把 FoundationStereo 压到实时 |
 | 🧊 **Zero-1-to-3（2023）** | [`./frontier/zero_1_to_3_zero_shot_one_image_to_3d_object_2023.md`](./frontier/zero_1_to_3_zero_shot_one_image_to_3d_object_2023.md) | 🆕 单图像零样本新视角合成 + 3D 重建先验 |
 | 📈 **Classic GNNs（2024）** | [`./frontier/classic_gnns_strong_baselines_node_classification_2024.md`](./frontier/classic_gnns_strong_baselines_node_classification_2024.md) | 🆕 节点分类基线再评估：调参后经典 GNN 仍很强 |
 | 🌊 **WaveFormer（2026）** | [`./frontier/waveformer_wave_equation_vision_2026.md`](./frontier/waveformer_wave_equation_vision_2026.md) | 波动方程视觉建模：频率-时间解耦，保留高频细节 🆕 |
