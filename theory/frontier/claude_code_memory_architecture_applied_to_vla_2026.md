@@ -1,5 +1,12 @@
 # Claude Code Memory 系統 → VLA 機器人記憶：跨領域架構遷移分析
 
+> ⚙️ 本文由 **Claude Opus 4.6** 生成 | 2026-04-01 | ✍️ 原創分析（非論文拆解）
+> **類型**：跨領域架構遷移分析
+> **關鍵詞**：Memory System、VLA Memory、Cross-Session Learning、Auto Dream、MemoryVLA、MEM、MemER
+> **參考論文**：MemoryVLA (ICLR 2026)、MEM (Physical Intelligence, 2026.03)、MemER (2025.10)、EchoVLA (2025.11)
+
+---
+
 ## 核心命題
 
 Claude Code 的 Memory 系統是目前 LLM agent 記憶設計中最成熟的工程實踐之一。VLA（Vision-Language-Action）模型正面臨幾乎相同的記憶困境——跨 episode 遺忘、長時序依賴缺失、多層級經驗無法累積。本文將 Claude Code Memory 的 7 個核心設計模式系統遷移到 VLA 領域，提出一個「分佈式分層機器人記憶架構」。
