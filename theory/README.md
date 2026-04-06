@@ -34,6 +34,7 @@
 | 🚀 **[DreamZero 深度解读](./dreamzero_world_action_models_zero_shot_policies_2026.md)** | NVIDIA：WAM 联合生成 video+action；DreamZero-Flash（1-step）+ 38× 加速，实现 7Hz 闭环控制 ⭐ |
 | 🆕 **[VLA 十大挑战](./vla_challenges.md)** | NTU/斯坦福 2025 研究方向 |
 | 🔥 **[小模型 VLA 研究](./small_vla_models.md)** | 边缘部署、SmolVLA、蒸馏压缩 |
+| 🤝 **[IAIL：跨机器人意图对齐](./frontier/iail_cross_robot_behavior_adaptation_through_intention_alignment_2026.md)** | 异构机器人模仿从动作复制切到意图对齐，并扩展到团队级动态任务分配 🆕 |
 | 🏆 **[NeurIPS 2025 解读](./neurips_2025_insights.md)** | 6 篇最佳论文的具身智能视角 |
 | 🦿 **[Unitree UnifoLM-VLA-0 开源解读](./unifolm_vla_0_unitree_2026.md)** | Qwen2.5-VL + Flow Matching DiT 动作头 + LeRobot→RLDS 管线 + 真机 server 部署 🆕 |
 | 🧭 **[产业路线：通用性与“元学习”路径](./frontier/industry_paths_to_generalization.md)** | 全栈整合 / 垂直突破 / 生态平台三路径（策略视角） |
@@ -222,6 +223,7 @@
 | **TacRefineNet（2026）** | [`./frontier/tacrefinenet_tactile_only_grasp_refinement_2026.md`](./frontier/tacrefinenet_tactile_only_grasp_refinement_2026.md) | 🆕 仅触觉的抓取执行末端微调：多指触觉 + 本体融合，目标驱动回归 wrist 6DoF 增量 |
 | **TouchGuide（2026）** | [`./frontier/touchguide_inference_time_steering_touch_guidance_2026.md`](./frontier/touchguide_inference_time_steering_touch_guidance_2026.md) | 🆕 推理期触觉引导：用 task-specific CPM 在动作采样末段纠偏，跨 Diffusion Policy / π0.5 提升 contact-rich 操作成功率 |
 | **RDT2（2026）** | [`./frontier/rdt2_umi_zero_shot_cross_embodiment_2026.md`](./frontier/rdt2_umi_zero_shot_cross_embodiment_2026.md) | 🆕 UMI 数据规模化 + 跨本体零样本部署 + 单步蒸馏 |
+| **IAIL（Sci Robotics）** | [`./frontier/iail_cross_robot_behavior_adaptation_through_intention_alignment_2026.md`](./frontier/iail_cross_robot_behavior_adaptation_through_intention_alignment_2026.md) | 🆕 异构机器人模仿：自然语言意图对齐 + 候选动作检索 + 团队级动态分工 |
 | **Shallow-π（2026）** | [`./frontier/shallow_pi_knowledge_distillation_flow_vla_2026.md`](./frontier/shallow_pi_knowledge_distillation_flow_vla_2026.md) | 🆕 Flow-based VLA 层深蒸馏，端侧推理加速 |
 | **DAC-RL（2026）** | [`./llm_reasoning/dac_rl_divide_conquer_reasoning_2026.md`](./llm_reasoning/dac_rl_divide_conquer_reasoning_2026.md) | 🆕 分治推理训练，提升测试时可扩展性 |
 | **TinyLoRA（2026）** | [`./llm_reasoning/tiny_lora_13_params_reasoning_2026.md`](./llm_reasoning/tiny_lora_13_params_reasoning_2026.md) | 🆕 13 参数推理微调：RL 信号激活推理模式 |
