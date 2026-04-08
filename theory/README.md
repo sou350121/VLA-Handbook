@@ -1,351 +1,345 @@
 # 🗺️ VLA Theory — Explorer's Map
 
-> *"The world of embodied AI is vast. Choose your path wisely."*
+> **VLA（Vision-Language-Action）** 让机器人"看懂世界、听懂指令、做出动作"。
+> 这里有 **203 篇深度解析**，是中文世界最完整的 VLA 理论库。
 >
-> **VLA（Vision-Language-Action）** 是让机器人"看懂世界、听懂指令、做出动作"的端到端模型。这个目录收录了 203 篇深度解析，覆盖从基础数学到前沿神经科学的完整光谱。下面的地图帮你找到最适合的起点。
+> 不知道从哪开始？先选你的角色 ↓
 
-```
-                          ┌─────────────────────────────────┐
-                          │         🔬 FRONTIER WILDS       │
-                          │    Neuroscience · Cross-domain   │
-                          │         (9 scrolls)              │
-                          └──────────────┬──────────────────┘
-                                         │
-              ┌──────────────────────────┼──────────────────────────┐
-              │                          │                          │
-    ┌─────────┴─────────┐    ┌──────────┴──────────┐    ┌─────────┴─────────┐
-    │  🔧 WORKSHOP      │    │  🧠 STRATEGY HALL   │    │  🤚 TOUCH CAVERN  │
-    │  Sim2Real · HW    │    │  Planning · Safety   │    │  Tactile · Force  │
-    │  (18 blueprints)  │    │  (27 war plans)      │    │  (21 relics)      │
-    └─────────┬─────────┘    └──────────┬──────────┘    └─────────┬─────────┘
-              │                          │                          │
-              └──────────────────────────┼──────────────────────────┘
-                                         │
-         ┌───────────────┬───────────────┼───────────────┬───────────────┐
-         │               │               │               │               │
-  ┌──────┴──────┐ ┌──────┴──────┐ ┌──────┴──────┐ ┌──────┴──────┐ ┌──────┴──────┐
-  │🌊 FLOW RIVER│ │🌍 WORLD    │ │🎮 TRAINING  │ │👁️ VISION   │ │🏗️ FOUNDATION│
-  │ Diffusion   │ │  REALM     │ │   ARENA     │ │   TOWER    │ │   MINES    │
-  │ Flow Match  │ │ World Model│ │ RL · Reward │ │ 3D · SLAM  │ │ Scale·Data │
-  │ (12 spells) │ │(23 oracles)│ │ (15 trials) │ │(15 lenses) │ │(30 ores)   │
-  └──────┬──────┘ └──────┬──────┘ └──────┬──────┘ └──────┬──────┘ └──────┬──────┘
-         │               │               │               │               │
-         └───────────────┴───────────────┼───────────────┴───────────────┘
-                                         │
-                              ┌──────────┴──────────┐
-                              │   🏛️ CENTRAL KEEP   │
-                              │  VLA Core · Models  │
-                              │   (33 artifacts)    │
-                              └──────────┬──────────┘
-                                         │
-                                    ⚔️ START
-```
+&nbsp;
 
-**读图方式**：从底部 ⚔️ START 出发，越往上越进阶。每个区域是一个研究主题，括号里是文章数量。区域之间有依赖关系——掌握下层才能理解上层。
+## 🎭 你是谁？
+
+| | 角色 | 你的背景 | 👉 推荐起点 |
+|:---:|------|---------|-----------|
+| 🧙 | **ML 研究者** | 熟悉 Transformer、训练流程 | → [VLA 核心架构](vla-core/vla_arch.md)，直接看模型怎么拼 |
+| 📖 | **LLM 从业者** | 做过 ChatGPT / Agent 相关 | → [研究主线](vla-core/vla_research_mainline.md)，VLA 就是"LLM 长了手" |
+| ⚙️ | **机器人工程师** | 写过 ROS、调过 PID | → [VLA+RL 实战](rl/vla_rl_practical_guide.md)，从你熟悉的地方切入 |
+| 🗡️ | **学生 / 新手** | 刚开始接触 | → [VLA 数学必备](foundation/math_for_vla.md)，打好地基再盖楼 |
+
+&nbsp;
 
 ---
 
-## 🏛️ The Ten Zones
+&nbsp;
 
-> 每个区域是一个独立的研究主题，有自己的核心问题和关键技术。
-
-### [🏛️ Central Keep — VLA 核心架构](vla-core/) `33 artifacts`
-
-**核心问题**：怎么把"看到的画面"和"听到的指令"变成"机器人的动作"？
-
-这是整个地图的起点。收录了所有主流 VLA 模型的深度解析：Physical Intelligence 的 **π0** 系列（从 π0 到 π0.6）、Google DeepMind 的 **RT** 系列、NVIDIA 的 **GR00T**、Tony Zhao 的 **ACT** 等。如果你只读一个区域，读这个。
-
-**入口文章**：[VLA 核心架构总览](vla-core/vla_arch.md) — 一张图看懂所有 VLA 的共同设计模式
-
----
-
-### [🌊 Flow River — 扩散与 Flow Matching](diffusion-flow/) `12 spells`
-
-**核心问题**：机器人的动作序列应该怎么"生成"出来？
-
-VLA 模型的最后一步不是分类或回归，而是**生成**——像画画一样，从噪声中逐步"去噪"出一条动作轨迹。这里解析了两大技术路线：**Diffusion Policy**（从图像生成借来的扩散模型）和 **Flow Matching**（π0 使用的更高效替代方案），以及它们在 VLA 中的具体实现。
-
-**入口文章**：[Diffusion Policy 详解](diffusion-flow/diffusion_policy.md) — 从 DDPM 到机器人：为什么"去噪"能生成动作
-
----
-
-### [🌍 World Realm — 世界模型](world-model/) `23 oracles`
-
-**核心问题**：机器人能不能在脑子里"模拟"行动的后果，然后再决定怎么做？
-
-人类做事之前会"想象"结果——倒水会洒、推门会开。世界模型让机器人也拥有这种能力：用视频预测未来帧，在"心理仿真"中试错，而不需要真的去碰。这里覆盖了从 **DreamZero**（世界动作模型 = 零样本策略）到 **EgoSim**（第一人称闭环世界模拟器）的最新进展。
-
-**入口文章**：[World Model 主线总纲](world-model/world_model_mainline.md) — 从 evaluator 到 planner，再到 world action model 的演进路线
-
----
-
-### [🎮 Training Arena — 强化学习](rl/) `15 trials`
-
-**核心问题**：VLA 模型学完模仿之后，怎么通过"试错"变得更强？
-
-模仿学习（SFT）让机器人学会基本动作，但要超越示范者，需要 RL 微调。这个区域解析了 VLA 专用的 RL 技术：如何设计奖励函数、如何在真实机器人上安全地做在线 RL、如何用 offline RL 利用已有数据。**GR-RL** 和 **VLA-OPD** 是两个具代表性的案例研究。
-
-**入口文章**：[强化学习基础](rl/reinforcement_learning.md) → [VLA+RL 实战教程](rl/vla_rl_practical_guide.md)
-
----
-
-### [🤚 Touch Cavern — 触觉感知](tactile/) `21 relics`
-
-**核心问题**：光靠"看"够吗？机器人需不需要"摸"？
-
-当机器人需要判断握力大小、检测物体滑动、操作柔软物体时，视觉不够用——需要触觉。这里是 VLA 研究中最"硬件化"的区域，从触觉传感器（TacMamba、GenForce）到力-视觉融合策略（FAVLA、OmniVTA），系统性地解析了怎么让机器人"用手指感受世界"。
-
-**入口文章**：[触觉感知与 VLA](tactile/tactile_vla.md) — 为什么触觉是 VLA 的"最后一公里"
-
----
-
-### [👁️ Vision Tower — 视觉与 3D 感知](perception/) `15 lenses`
-
-**核心问题**：机器人怎么"看懂"三维世界？
-
-VLA 的 "V" 代表 Vision，但视觉远不止"看图识物"。机器人需要理解深度、构建点云地图（SLAM）、从单张图推断 3D 结构、在动态场景中跟踪物体。这里收录了从 Flash Attention（让视觉模型更快）到 Zero-1-to-3（单图生成 3D）的感知技术栈。
-
-**入口文章**：[视觉与多模态感知技术](perception/perception_techniques.md) — VLA 的"眼睛"是怎么工作的
-
----
-
-### [🧠 Strategy Hall — 推理、规划与安全](planning/) `27 war plans`
-
-**核心问题**：机器人怎么"想清楚再行动"，而且不伤害人？
-
-这是 VLA 研究中最"认知科学"的区域。涵盖三大主题：**推理**（思维链 CoT、GenieReasoner）、**规划**（运动规划、长程任务分解）、**安全**（对齐约束、对抗攻击防御、不确定性感知）。Benchmark 论文（BEHAVIOR-1K、IS-Bench）也在这里，因为它们定义了"什么才算智能"。
-
-**入口文章**：[思维链推理](planning/chain_of_thought.md) — 让 VLA 先"想"再"做"
-
----
-
-### [🏗️ Foundation Mines — 基础理论与训练](foundation/) `30 ores`
-
-**核心问题**：VLA 模型的底层"工具箱"有什么？
-
-如果其他区域是"用工具做事"，这里就是"造工具"。收录了所有跨领域通用的 ML 基础技术：LoRA/DoRA 微调、知识蒸馏、量化推理、自监督学习、KV Cache 优化。还有 VLA 专用的损失函数手册和数学入门。**不需要按顺序读**——当你在其他区域遇到"这个技术是什么？"时，回来查。
-
-**入口文章**：[VLA 数学必备](foundation/math_for_vla.md) — 从直觉到实作
-
----
-
-### [🔧 Workshop — 部署与硬件](deployment/) `18 blueprints`
-
-**核心问题**：研究做出来的模型，怎么放到真实机器人上跑？
-
-从仿真到真实（Sim2Real）是 VLA 落地的最大鸿沟。这里解析了灵巧手机械学、抓取算法、仿真平台（Isaac Lab）、零样本跨本体部署（RDT2-UMI），以及产业界的视角（NVIDIA Physical AI、Physical Intelligence Layer）。
-
-**入口文章**：[机械臂控制](deployment/robot_control.md) — 运动学、动力学与控制的工程入门
-
----
-
-### [🔬 Frontier Wilds — 前沿与跨域](frontier/) `9 scrolls`
-
-**核心问题**：VLA 的灵感还可以从哪里来？
-
-这是地图边缘的未探索地带。收录了跨领域的灵感来源：鸽子的磁感导航机制（神经科学 → 具身感知）、皮层下行为控制（认知科学 → 机器人本能反射）、GNN 基线（图论 → 结构化推理）、Physics of AI（物理学 → 神经网络理论）。没有固定的阅读顺序——跟随你的好奇心。
-
----
-
-## 🎭 Choose Your Class
-
-> *Every adventurer has a background. Yours shapes the fastest path through the map.*
-
-| Class | Background | Recommended Start | Superpower | Weakness |
-|:-----:|-----------|-------------------|-----------|----------|
-| 🧙 **Mage** | ML/DL researcher | Foundation → Central Keep | 你已经知道 Transformer 和 loss function | 可能低估硬件和物理约束 |
-| 📖 **Scholar** | NLP / LLM 从业者 | Central Keep → Strategy Hall | VLA 的"Language"部分对你来说是母语 | "Action"和"3D"是新世界 |
-| ⚙️ **Engineer** | 机器人/控制工程师 | Workshop → Central Keep | 你知道真实机器人的物理限制 | 可能不熟悉 Diffusion 等生成模型 |
-| 🎨 **Artist** | CV / 视觉研究者 | Vision Tower → Flow River | 你理解 image generation 的 backbone | 需要补上 action space 和 RL |
-| 🗡️ **Warrior** | 学生 / 新手 | Foundation (Step 1) → 按顺序走 | 没有包袱，可以系统性学习 | 需要多花时间在数学基础 |
-
----
-
-## ⚔️ Quest Lines
-
-### 🟢 Beginner — "First Steps in VLA"
-
-> *你听说过"让机器人听懂话、看懂世界、自己动手"，想知道这到底怎么实现。*
+## 🌍 世界地图
 
 ```mermaid
-graph LR
-    A["🏗️ Foundation Mines<br/><i>Learn the basics</i>"] --> B["🏛️ Central Keep<br/><i>Meet the VLA models</i>"]
-    B --> C["🌊 Flow River<br/><i>How actions are made</i>"]
+graph TD
+    START["⚔️ START HERE"] --> CORE["🏛️ Central Keep<br/>VLA 核心架构<br/><b>33 篇</b>"]
 
-    style A fill:#1a1a2e,stroke:#e94560,color:#fff
-    style B fill:#1a1a2e,stroke:#0f3460,color:#fff
-    style C fill:#1a1a2e,stroke:#16213e,color:#fff
+    CORE --> FLOW["🌊 Flow River<br/>扩散 · Flow Matching<br/>12 篇"]
+    CORE --> WORLD["🌍 World Realm<br/>世界模型 · 仿真<br/>23 篇"]
+    CORE --> RL["🎮 Training Arena<br/>强化学习 · 奖励<br/>15 篇"]
+
+    FLOW --> PLAN["🧠 Strategy Hall<br/>推理 · 安全 · 规划<br/>27 篇"]
+    WORLD --> PLAN
+    RL --> PLAN
+
+    PLAN --> TOUCH["🤚 Touch Cavern<br/>触觉感知<br/>21 篇"]
+    PLAN --> EYE["👁️ Vision Tower<br/>3D · SLAM<br/>15 篇"]
+
+    TOUCH --> DEPLOY["🔧 Workshop<br/>部署 · 硬件<br/>18 篇"]
+    EYE --> DEPLOY
+
+    DEPLOY --> FRONTIER["🔬 Frontier Wilds<br/>跨域 · 神经科学<br/>9 篇"]
+
+    FOUND["🏗️ Foundation Mines<br/>基础理论 · 工具箱<br/>30 篇"] -.->|随时查阅| CORE
+    FOUND -.-> FLOW
+    FOUND -.-> RL
+
+    style START fill:#e94560,stroke:#e94560,color:#fff
+    style CORE fill:#0f3460,stroke:#16213e,color:#fff
+    style FLOW fill:#1a1a2e,stroke:#4361ee,color:#fff
+    style WORLD fill:#1a1a2e,stroke:#4361ee,color:#fff
+    style RL fill:#1a1a2e,stroke:#4361ee,color:#fff
+    style PLAN fill:#1a1a2e,stroke:#e94560,color:#fff
+    style TOUCH fill:#1a1a2e,stroke:#e94560,color:#fff
+    style EYE fill:#1a1a2e,stroke:#e94560,color:#fff
+    style DEPLOY fill:#1a1a2e,stroke:#f77f00,color:#fff
+    style FRONTIER fill:#533483,stroke:#533483,color:#fff
+    style FOUND fill:#1a1a2e,stroke:#2a9d8f,color:#fff
 ```
 
-| Step | Zone | Start With | What You'll Learn |
-|:----:|------|-----------|-------------------|
-| 1 | [🏗️ Foundation](foundation/) | [VLA 数学必备](foundation/math_for_vla.md) / [Loss Functions](foundation/vla_loss_functions_handbook.md) | 张量、旋转矩阵、训练目标——VLA 的数学语言 |
-| 2 | [🏛️ Central Keep](vla-core/) | [VLA 核心架构](vla-core/vla_arch.md) / [研究主线](vla-core/vla_research_mainline.md) | 从 ACT/DP 基线到 π0：VLA 模型长什么样、为什么这么设计 |
-| 3 | [🌊 Flow River](diffusion-flow/) | [Diffusion Policy](diffusion-flow/diffusion_policy.md) / [动作生成](diffusion-flow/action_representations.md) | 扩散模型怎么"画出"机器人动作、Flow Matching 为什么更快 |
+> **读图方式**：实线 = 建议学习顺序。虚线 = Foundation 是工具箱，遇到不懂的概念随时回来查。
 
-**通关标准**：能看懂 π0 的论文，理解"VLM backbone + action head + diffusion denoising"的基本架构。
+&nbsp;
 
 ---
 
-### 🟡 Intermediate — "The Model Architect"
+&nbsp;
 
-> *你理解了 VLA 的基本架构，现在想知道怎么让它"更聪明"——预测未来、从试错中学习、安全地规划。*
+## 🏛️ 十大区域
 
-```mermaid
-graph LR
-    A["🏛️ Central Keep"] --> B["🌍 World Realm<br/><i>Predict the future</i>"]
-    A --> C["🎮 Training Arena<br/><i>Learn from trial</i>"]
-    A --> D["🧠 Strategy Hall<br/><i>Think before acting</i>"]
+&nbsp;
 
-    style A fill:#1a1a2e,stroke:#0f3460,color:#fff
-    style B fill:#1a1a2e,stroke:#e94560,color:#fff
-    style C fill:#1a1a2e,stroke:#e94560,color:#fff
-    style D fill:#1a1a2e,stroke:#e94560,color:#fff
+<details open>
+<summary><h3>🏛️ Central Keep — VLA 核心架构 &nbsp;<code>33 篇</code></h3></summary>
+
+**一句话**：所有 VLA 模型的"解剖室"。
+
+VLA 的核心思想很简单：拿一个视觉语言模型（VLM），给它装上"手"——一个动作生成头（Action Head）。但魔鬼在细节：怎么编码动作？怎么处理多帧输入？怎么让模型既能聊天又能操作？
+
+这里收录了所有你听过名字的 VLA 模型：Physical Intelligence 的 **π0 系列**、Google 的 **RT 系列**、NVIDIA 的 **GR00T**、Tony Zhao 的 **ACT**、Unitree 的 **UnifoLM-VLA** 等。
+
+| 推荐入口 | 说明 |
+|---------|------|
+| [VLA 核心架构总览](vla-core/vla_arch.md) | 一篇看完所有 VLA 的共同设计模式 |
+| [π0 代码深度解析](vla-core/pi0_code_analysis.md) | 跟着代码理解 Flow Matching VLA |
+| [研究主线梳理](vla-core/vla_research_mainline.md) | 从 ACT/DP 到 π0：历史脉络 |
+
+</details>
+
+&nbsp;
+
+<details>
+<summary><h3>🌊 Flow River — 扩散策略与 Flow Matching &nbsp;<code>12 篇</code></h3></summary>
+
+**一句话**：机器人的动作是"画"出来的，不是"算"出来的。
+
+为什么不能让模型直接输出一个坐标？因为同一个任务往往有多条正确路径——从左边绕和从右边绕都行。如果用回归，模型会输出两条路的平均值（撞上去）。**Diffusion Policy** 从图像生成领域借来了去噪扩散模型，能从噪声中"画"出一条合理的动作轨迹。**Flow Matching**（π0 采用的方案）则更快更稳。
+
+| 推荐入口 | 说明 |
+|---------|------|
+| [Diffusion Policy 详解](diffusion-flow/diffusion_policy.md) | 从 DDPM 到机器人动作生成 |
+| [动作生成范式详解](diffusion-flow/action_representations.md) | 离散 vs 连续、分块 vs 流式 |
+| [Compression Gap](diffusion-flow/the_compression_gap_why_discrete_tokenization_limits_vision_dissection.md) | 为什么 token 化限制了 VLA 的 scaling |
+
+</details>
+
+&nbsp;
+
+<details>
+<summary><h3>🌍 World Realm — 世界模型与仿真 &nbsp;<code>23 篇</code></h3></summary>
+
+**一句话**：让机器人在"脑子里"先试一遍，再决定怎么做。
+
+人类做事之前会想象后果——倒水会洒、推门会开。世界模型（World Model）让机器人也有这种能力：用视频预测未来画面，在"心理仿真"中试错。**DreamZero** 甚至证明了纯世界模型就能直接当策略用，不需要额外的 policy 网络。
+
+| 推荐入口 | 说明 |
+|---------|------|
+| [World Model 总纲](world-model/world_model_mainline.md) | 从 evaluator 到 planner 到 world action model |
+| [DreamZero](world-model/dreamzero_world_action_models_zero_shot_policies_2026.md) | 世界模型 = 零样本策略 |
+| [EgoSim](world-model/egosim_egocentric_world_simulator_for_embodied_interaction_g_dissection.md) | 第一人称闭环世界模拟器 |
+
+</details>
+
+&nbsp;
+
+<details>
+<summary><h3>🎮 Training Arena — 强化学习 &nbsp;<code>15 篇</code></h3></summary>
+
+**一句话**：模仿学习有天花板，RL 帮 VLA 突破它。
+
+模仿学习（SFT）让机器人学会"像人一样做"，但不会比示范者更好。强化学习（RL）通过试错和奖励信号，让模型发现人类没想到的更优策略。难点在于：真实机器人上做 RL 很贵（每次试错都可能摔坏），奖励函数很难设计（什么算"做得好"？）。
+
+| 推荐入口 | 说明 |
+|---------|------|
+| [强化学习基础](rl/reinforcement_learning.md) | RL 的核心概念和 VLA 特有的挑战 |
+| [VLA+RL 实战教程](rl/vla_rl_practical_guide.md) | 架构选型、算法选择、工具链搭建 |
+| [π0.6 / RECAP](rl/pi0_6_recap_rl_as_supervised_learning.md) | 披着 RL 外衣的 Supervised Learning？ |
+
+</details>
+
+&nbsp;
+
+<details>
+<summary><h3>🤚 Touch Cavern — 触觉感知 &nbsp;<code>21 篇</code></h3></summary>
+
+**一句话**：闭上眼睛你也能系鞋带——因为手指在"看"。
+
+视觉能告诉机器人"杯子在哪"，但不能告诉它"握多紧才不会捏碎"。触觉传感器弥补了这个缺口：检测接触力、滑动、形状。从传感器硬件（TacMamba、GenForce）到力-视觉融合策略（FAVLA、OmniVTA），这里系统性地解析了触觉如何让 VLA 完成"光看不够"的任务。
+
+| 推荐入口 | 说明 |
+|---------|------|
+| [触觉感知与 VLA](tactile/tactile_vla.md) | 为什么触觉是 VLA 的"最后一公里" |
+| [TacMamba](tactile/tacmamba_a_tactile_history_compression_adapter_bridging_fast_dissection.md) | 触觉历史压缩：快速反射 + 慢速推理 |
+
+</details>
+
+&nbsp;
+
+<details>
+<summary><h3>👁️ Vision Tower — 视觉与 3D 感知 &nbsp;<code>15 篇</code></h3></summary>
+
+**一句话**：机器人的"眼睛"不只是拍照——要理解深度、空间和运动。
+
+VLA 的 V 代表 Vision，但机器人视觉远不止图像分类。需要从 2D 图像推断 3D 结构、在动态场景中建图定位（SLAM）、跟踪移动物体、估计自身位姿。这些能力决定了机器人能不能在真实世界中"不迷路、不撞墙"。
+
+| 推荐入口 | 说明 |
+|---------|------|
+| [视觉与多模态感知](perception/perception_techniques.md) | VLA 的眼睛怎么工作 |
+| [点云与 SLAM](perception/pointcloud_slam.md) | 3D 世界的数字孪生 |
+
+</details>
+
+&nbsp;
+
+<details>
+<summary><h3>🧠 Strategy Hall — 推理、规划与安全 &nbsp;<code>27 篇</code></h3></summary>
+
+**一句话**：让机器人"先想再做"，而且不伤害人。
+
+三大主题交织在这里：**推理**（思维链 CoT——让 VLA 输出中间推理步骤）、**规划**（把"做一顿饭"分解成"开冰箱→拿鸡蛋→打蛋→开火"）、**安全**（机器人在厨房拿刀时怎么确保不伤人）。Benchmark 论文也在这里，因为它们定义了"什么才算智能"。
+
+| 推荐入口 | 说明 |
+|---------|------|
+| [思维链推理](planning/chain_of_thought.md) | 让 VLA 先"想清楚"再动手 |
+| [运动规划](planning/motion_planning.md) | 从 A 到 B 的最优路径 |
+| [VLA 十大挑战](planning/vla_challenges.md) | 目前还没解决的 10 个难题 |
+
+</details>
+
+&nbsp;
+
+<details>
+<summary><h3>🏗️ Foundation Mines — 基础理论 &nbsp;<code>30 篇</code></h3></summary>
+
+**一句话**：不按顺序读——当你在其他区域遇到"这是什么？"时，回来查。
+
+这是一个**工具箱**，不是教科书。收录了 VLA 背后的通用 ML 技术：LoRA/DoRA 高效微调、知识蒸馏、量化推理、KV Cache 优化、自监督学习。还有 VLA 专用的损失函数手册和数学入门。
+
+| 推荐入口 | 说明 |
+|---------|------|
+| [VLA 数学必备](foundation/math_for_vla.md) | 张量、旋转矩阵、SE(3)——VLA 的数学语言 |
+| [Loss Functions 手册](foundation/vla_loss_functions_handbook.md) | 每种训练目标的直觉解释 |
+| [PEFT & LoRA](foundation/peft_lora.md) | 怎么用 1% 的参数微调整个模型 |
+
+</details>
+
+&nbsp;
+
+<details>
+<summary><h3>🔧 Workshop — 部署与硬件 &nbsp;<code>18 篇</code></h3></summary>
+
+**一句话**：仿真里成功率 95% 的模型，到真机上可能只有 30%。
+
+这个 gap 叫 **Reality Gap**，是 VLA 落地的最大障碍。仿真器的物理是理想化的——没有摩擦力误差、传感器噪声、执行器延迟。这里解析了各种弥合方法（Domain Randomization、System Identification），以及灵巧手机械学、仿真平台（Isaac Lab）和产业界的部署经验。
+
+| 推荐入口 | 说明 |
+|---------|------|
+| [机械臂控制](deployment/robot_control.md) | 运动学、动力学与控制的工程入门 |
+| [Isaac Lab](deployment/isaac_lab.md) | NVIDIA 的 GPU 加速仿真平台 |
+| [灵巧手机械学](deployment/dexterous_hand_mechanics.md) | 手指怎么做到像人一样灵活 |
+
+</details>
+
+&nbsp;
+
+<details>
+<summary><h3>🔬 Frontier Wilds — 前沿与跨域 &nbsp;<code>9 篇</code></h3></summary>
+
+**一句话**：VLA 的下一步灵感，可能来自鸽子的内耳。
+
+地图边缘的未探索地带。鸽子用内耳前庭系统感应地磁场（→ 机器人导航）、皮层下神经回路控制本能行为（→ 机器人反射机制）、Physics of AI 把神经网络当物理系统研究（→ 理论突破的方向）。没有固定顺序——跟随好奇心。
+
+| 推荐入口 | 说明 |
+|---------|------|
+| [Physics of AI](frontier/physics_of_ai_liuziming.md) | 不赌规模，把神经网络当物理系统 |
+| [鸽子磁感导航](frontier/pigeon_magnetoreception_vestibular_electrosense.md) | 生物传感器的硬核机制 |
+
+</details>
+
+&nbsp;
+
+---
+
+&nbsp;
+
+## ⚡ Speed Runs
+
+> *没时间读 203 篇？选一条最短路线。*
+
+&nbsp;
+
+### 🏃 "我就想跑通一个 VLA"（5 篇）
+
+```
+VLA 架构总览 → π0 代码解析 → Diffusion Policy → VLA+RL 实战 → Isaac Lab
 ```
 
-| Step | Zone | Start With | What You'll Learn |
-|:----:|------|-----------|-------------------|
-| 4 | [🌍 World Realm](world-model/) | [World Model 主线](world-model/world_model_mainline.md) / [DreamZero](world-model/dreamzero_world_action_models_zero_shot_policies_2026.md) | "在脑中模拟"：世界模型如何让机器人不用真的试错就能做决策 |
-| 5 | [🎮 Training Arena](rl/) | [强化学习基础](rl/reinforcement_learning.md) / [VLA+RL 实战](rl/vla_rl_practical_guide.md) | 模仿学习的天花板在哪、RL 微调怎么突破它、奖励函数怎么设计 |
-| 6 | [🧠 Strategy Hall](planning/) | [思维链](planning/chain_of_thought.md) / [运动规划](planning/motion_planning.md) | 让机器人"先想再做"：CoT 推理、安全约束、长程任务分解 |
+[开始 →](vla-core/vla_arch.md)
 
-**这三条路可以并行探索**——它们是 VLA 的三个独立进化方向，选你最感兴趣的先读。
+&nbsp;
 
----
+### 🎓 "我想搞懂原理"（5 篇）
 
-### 🔴 Advanced — "The Embodied Master"
-
-> *你想让机器人"用手指感受世界"、把模型部署到真实硬件上、或者从神经科学中找灵感。*
-
-```mermaid
-graph LR
-    A["🤚 Touch Cavern<br/><i>Feel the world</i>"] --> B["👁️ Vision Tower<br/><i>See in 3D</i>"]
-    B --> C["🔧 Workshop<br/><i>Build it for real</i>"]
-    C --> D["🔬 Frontier Wilds<br/><i>Beyond the map</i>"]
-
-    style A fill:#1a1a2e,stroke:#e94560,color:#fff
-    style B fill:#1a1a2e,stroke:#e94560,color:#fff
-    style C fill:#1a1a2e,stroke:#e94560,color:#fff
-    style D fill:#1a1a2e,stroke:#533483,color:#fff
+```
+VLA 数学 → Loss Functions → World Model 总纲 → 思维链 → VLA 十大挑战
 ```
 
-| Step | Zone | Start With | What You'll Learn |
-|:----:|------|-----------|-------------------|
-| 7 | [🤚 Touch Cavern](tactile/) | [触觉 VLA](tactile/tactile_vla.md) | 触觉传感器原理、力-视觉融合、为什么"光看不够" |
-| 8 | [👁️ Vision Tower](perception/) | [视觉感知技术](perception/perception_techniques.md) / [点云SLAM](perception/pointcloud_slam.md) | 3D 重建、深度估计、空间理解——机器人的"立体视觉" |
-| 9 | [🔧 Workshop](deployment/) | [机械臂控制](deployment/robot_control.md) / [Isaac Lab](deployment/isaac_lab.md) | Sim2Real 落地、灵巧手硬件选型、仿真平台搭建 |
-| 10 | [🔬 Frontier Wilds](frontier/) | Pick any scroll | 鸽子导航 → 具身感知、皮层下反射 → 机器人本能、AI 的物理学 |
+[开始 →](foundation/math_for_vla.md)
+
+&nbsp;
+
+### 🤖 "我要做触觉操作"（4 篇）
+
+```
+触觉 VLA → 灵巧手机械学 → 抓取算法 → Sim2Real
+```
+
+[开始 →](tactile/tactile_vla.md)
+
+&nbsp;
+
+### 🧬 "我从其他领域来"
+
+**NLP / LLM →** [VLA 架构](vla-core/vla_arch.md)（VLA 就是 LLM + 手）→ [Compression Gap](diffusion-flow/the_compression_gap_why_discrete_tokenization_limits_vision_dissection.md)（为什么不能用 token 做动作）
+
+**CV →** [视觉感知](perception/perception_techniques.md) → [World Model](world-model/world_model_mainline.md)（视频生成 → 世界模型）
+
+**控制 →** [机械臂控制](deployment/robot_control.md)（你已知的）→ [动作生成](diffusion-flow/action_representations.md)（VLA 怎么替代传统控制）
+
+&nbsp;
 
 ---
 
-## 🗂️ Zone Directory
-
-| Zone | Articles | Theme | Boss Monster (hardest read) | Drop Item (key takeaway) |
-|------|:--------:|-------|---------------------------|-----------------------|
-| [🏛️ Central Keep](vla-core/) | 33 | VLA 架构与模型 | [π0.6 解剖](vla-core/pi0_6_dissection.md) | VLA = VLM + Action Head |
-| [🏗️ Foundation](foundation/) | 30 | 基础理论与训练 | [DCP 凸优化](foundation/dcp_convexity_rules.md) | 工具箱，按需查阅 |
-| [🧠 Strategy Hall](planning/) | 27 | 推理、规划与安全 | [BEHAVIOR-1K](planning/behavior_1k_human_centered_embodied_ai_benchmark_omnigibson_2024.md) | 先想再做，安全第一 |
-| [🌍 World Realm](world-model/) | 23 | 世界模型与仿真 | [Simulation Distillation](world-model/simulation_distillation_pretraining_world_models_in_simulati_dissection.md) | 在脑中模拟，不试错 |
-| [🤚 Touch Cavern](tactile/) | 21 | 触觉感知 | [OmniVTA](tactile/omnivta_visuo_tactile_world_modeling_for_contact_rich_roboti_dissection.md) | 光看不够，要摸 |
-| [🔧 Workshop](deployment/) | 18 | 部署与硬件 | [House of Dextra](deployment/house_of_dextra_cross_embodied_co_design_for_dexterous_hands_dissection.md) | Sim2Real 是最后一公里 |
-| [👁️ Vision Tower](perception/) | 15 | 视觉与 3D | [DVGT-2](perception/dvgt_2_vision_geometry_action_model_for_autonomous_driving_a_dissection.md) | 3D 理解是空间智能的基础 |
-| [🎮 Training Arena](rl/) | 15 | 强化学习 | [GigaBrain-0.5M*](rl/gigabrain_0_5m_star_world_model_based_rl_ramp_2026.md) | RL 让 VLA 超越人类示范 |
-| [🌊 Flow River](diffusion-flow/) | 12 | 扩散与 Flow | [Compression Gap](diffusion-flow/the_compression_gap_why_discrete_tokenization_limits_vision_dissection.md) | 动作是"生成"的，不是"预测"的 |
-| [🔬 Frontier Wilds](frontier/) | 9 | 前沿与跨域 | [Physics of AI](frontier/physics_of_ai_liuziming.md) | 灵感无边界 |
-
----
-
-## 🧭 Special Quests
-
-### ⚡ Speed Run — "I just want to build a VLA"
-
-> 5 篇文章，从零到能跑代码。
-
-[VLA 核心架构](vla-core/vla_arch.md) → [π0 代码解析](vla-core/pi0_code_analysis.md) → [Diffusion Policy](diffusion-flow/diffusion_policy.md) → [VLA+RL 实战](rl/vla_rl_practical_guide.md) → [Isaac Lab](deployment/isaac_lab.md)
-
-### 🔍 Lore Run — "I want to understand the theory deeply"
-
-> 5 篇文章，建立完整的理论框架。
-
-[数学基础](foundation/math_for_vla.md) → [Loss Functions](foundation/vla_loss_functions_handbook.md) → [World Model 总纲](world-model/world_model_mainline.md) → [思维链](planning/chain_of_thought.md) → [VLA 十大挑战](planning/vla_challenges.md)
-
-### 🤖 Hardware Run — "I want to make a robot touch things"
-
-> 4 篇文章，从传感器选型到仿真验证。
-
-[触觉 VLA](tactile/tactile_vla.md) → [灵巧手机械学](deployment/dexterous_hand_mechanics.md) → [抓取算法](deployment/grasp_algorithms.md) → [Sim2Real HOI](deployment/pam_a_pose_appearance_motion_engine_for_sim_to_real_hoi_vide_dissection.md)
-
-### 🧬 Crossover Run — "I come from another field"
-
-> 从你的领域出发，看 VLA 借鉴了什么。
-
-**NLP/LLM 背景**：[VLA 核心架构](vla-core/vla_arch.md)（VLA 就是 LLM + 眼睛 + 手）→ [思维链](planning/chain_of_thought.md)（CoT 在机器人里怎么用）→ [Compression Gap](diffusion-flow/the_compression_gap_why_discrete_tokenization_limits_vision_dissection.md)（为什么不能直接用 token 做动作）
-
-**CV 背景**：[视觉感知技术](perception/perception_techniques.md) → [点云 SLAM](perception/pointcloud_slam.md) → [World Model 总纲](world-model/world_model_mainline.md)（视频生成 → 世界模型）
-
-**控制/机器人背景**：[机械臂控制](deployment/robot_control.md)（你已经知道的）→ [动作生成](diffusion-flow/action_representations.md)（VLA 怎么替代传统控制）→ [VLA+RL 实战](rl/vla_rl_practical_guide.md)（RL 怎么补上 gap）
-
----
+&nbsp;
 
 ## 🏆 Achievements
 
-> *解锁条件：读完对应文章并能向队友解释核心思想。*
+读完一篇就算解锁。看看你能拿几个？
 
-| Badge | Name | Condition |
-|:-----:|------|-----------|
-| 🥉 | **First Blood** | 读完任意 1 篇 theory 文章 |
-| 🎓 | **Orientation Complete** | 完成 Beginner Quest Line (3 篇) |
-| 🏅 | **Triple Threat** | 完成 World Realm + Training Arena + Strategy Hall 各 1 篇 |
-| 💎 | **Full Clear** | 每个 Zone 至少读 1 篇 |
-| 🐉 | **Boss Hunter** | 读完 3 个 Zone 的 Boss Monster |
-| ⚡ | **Speed Runner** | 完成 Speed Run Quest (5 篇) |
-| 🧬 | **Cross-Pollinator** | 读完 Frontier Wilds 的 3 篇跨域文章 |
-| 👑 | **Embodied Master** | 完成全部 3 条 Quest Lines (10 steps) |
-| 🌟 | **Cartographer** | 读完 50+ 篇并能画出自己的领域地图 |
+| | 成就 | 解锁条件 |
+|:---:|------|---------|
+| 🥉 | **First Blood** | 读完任意 1 篇 |
+| 🎓 | **Orientation** | 读完 VLA 架构 + Diffusion Policy + 数学入门 |
+| 💎 | **Full Map** | 10 个区域各读至少 1 篇 |
+| 🐉 | **Boss Hunter** | 读完 3 篇 "最难"文章（见下表） |
+| ⚡ | **Speed Runner** | 完成任意一条 Speed Run |
+| 👑 | **Embodied Master** | 10 个区域各读 3+ 篇 |
+
+<details>
+<summary>🐉 Boss Monsters（每区最硬的一篇）</summary>
+
+| Zone | Boss | Why It's Hard |
+|------|------|---------------|
+| 🏛️ Central Keep | [π0.6 解剖](vla-core/pi0_6_dissection.md) | RECAP RL + 双系统架构 |
+| 🌊 Flow River | [Compression Gap](diffusion-flow/the_compression_gap_why_discrete_tokenization_limits_vision_dissection.md) | 信息论 + VLA scaling 的深层矛盾 |
+| 🌍 World Realm | [Simulation Distillation](world-model/simulation_distillation_pretraining_world_models_in_simulati_dissection.md) | 仿真→真实的世界模型蒸馏 |
+| 🎮 Training Arena | [GigaBrain-0.5M*](rl/gigabrain_0_5m_star_world_model_based_rl_ramp_2026.md) | 世界模型原生 RL |
+| 🤚 Touch Cavern | [OmniVTA](tactile/omnivta_visuo_tactile_world_modeling_for_contact_rich_roboti_dissection.md) | 视触觉世界模型 |
+| 🧠 Strategy Hall | [BEHAVIOR-1K](planning/behavior_1k_human_centered_embodied_ai_benchmark_omnigibson_2024.md) | 1000 任务 benchmark |
+| 🏗️ Foundation | [DCP 凸优化](foundation/dcp_convexity_rules.md) | 纯数学，但非常实用 |
+| 👁️ Vision Tower | [DVGT-2](perception/dvgt_2_vision_geometry_action_model_for_autonomous_driving_a_dissection.md) | 几何感知的自动驾驶新范式 |
+| 🔧 Workshop | [House of Dextra](deployment/house_of_dextra_cross_embodied_co_design_for_dexterous_hands_dissection.md) | 灵巧手形态-控制协同设计 |
+| 🔬 Frontier | [Physics of AI](frontier/physics_of_ai_liuziming.md) | 用统计力学理解神经网络 |
+
+</details>
+
+&nbsp;
 
 ---
 
-## 💡 Lore Notes
-
-> *冒险者们在旅途中留下的笔记。*
+&nbsp;
 
 <details>
-<summary>🔮 为什么 VLA 用 Diffusion 而不是直接输出坐标？</summary>
+<summary>📊 Stats</summary>
 
-机器人动作是**多模态**的——同一个任务可能有多种正确做法（从左边绕过去或从右边绕过去）。如果用 MSE 回归，模型会输出"两条路的平均值"——撞上去。Diffusion/Flow Matching 能建模多峰分布，生成**其中一条**合理路径。
-→ 详见 [Diffusion Policy](diffusion-flow/diffusion_policy.md) 和 [Compression Gap](diffusion-flow/the_compression_gap_why_discrete_tokenization_limits_vision_dissection.md)
-</details>
+&nbsp;
 
-<details>
-<summary>🔮 World Model 和 VLA 的关系是什么？</summary>
+**203** articles · **10** zones · Auto-classified by [Pulsar](https://github.com/sou350121/Pulsar-KenVersion) using 15 method-family keywords
 
-把 VLA 想象成"反射弧"——看到 → 做出。World Model 则是"大脑皮层"——看到 → 想象 → 预测 → 再做出。两者可以独立使用，也可以组合：World Model 当规划器，VLA 当执行器。DreamZero 证明了**纯 World Model 也能零样本做策略**。
-→ 详见 [World Model 总纲](world-model/world_model_mainline.md)
-</details>
-
-<details>
-<summary>🔮 为什么触觉对机器人这么重要？</summary>
-
-人类闭上眼睛也能系鞋带——因为手指的触觉提供了足够的信息。当机器人需要操作柔软、透明、或遮挡的物体时（倒水、剥皮、拧螺丝），视觉信号不够。触觉传感器提供接触力、滑动检测、形状估计——这是机器人操作的"最后一公里"。
-→ 详见 [触觉 VLA](tactile/tactile_vla.md)
-</details>
-
-<details>
-<summary>🔮 Sim2Real 为什么这么难？</summary>
-
-仿真器里的物理是理想化的——没有摩擦力误差、传感器噪声、执行器延迟。在仿真里成功率 95% 的策略，到了真机可能只有 30%。这个 gap 叫 "Reality Gap"。Workshop 区域的文章讲了各种弥合方法：domain randomization、system identification、progressive transfer。
-→ 详见 [Isaac Lab](deployment/isaac_lab.md) 和 [House of Dextra](deployment/house_of_dextra_cross_embodied_co_design_for_dexterous_hands_dissection.md)
-</details>
-
----
-
-<details>
-<summary>📊 Stats & Meta</summary>
-
-- **Total scrolls**: 203 articles across 10 zones
-- **Auto-classified** by [Pulsar](https://github.com/sou350121/Pulsar-KenVersion) pipeline using 15 method-family keywords
-- **Updated**: New articles added daily by automated deep dive system
-- **Explore online**: [VLA Deep Dive](https://sou350121.github.io/pulsar-web/vla-deepdive/) — with sparklines, method family trends, and SOTA leaderboards
-- **Structure**: Reorganized 2026-04-08 from flat 212 files → 10 thematic directories
+New articles added daily. Explore with sparklines and trends at [VLA Deep Dive](https://sou350121.github.io/pulsar-web/vla-deepdive/).
 
 </details>
