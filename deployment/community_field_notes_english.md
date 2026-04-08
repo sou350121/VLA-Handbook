@@ -989,6 +989,101 @@
 - **类别**: Strategy
 - **关键数据点汇总**: Remi Cadene（LeRobot 核心维护者）在 2024 年 10 月将 #papers-methods-discussions 频道废弃，引导到新的 #robotics-papers 频道。最后一条帖子是 Cadene 自己分享的 arXiv 论文（学习人类视频的触觉预训练）。频道演进反映了社区的成熟——从泛讨论到专题化组织
 
+### D136. NXP i.MX95 嵌入式 VLA 部署：完整延迟基准与量化策略
+- **来源**: NXP × HuggingFace Blog — [Bringing Robotics AI to Embedded Platforms](https://huggingface.co/blog/nxp/bringing-robotics-ai-to-embedded-platforms)（2026 年 3 月）
+- **类别**: Edge, Recipe
+- **关键数据点汇总**: **首个完整嵌入式 VLA 部署基准**。ACT on i.MX95: ONNX FP32 2.86s → 优化后 0.32s（8.9×），96% 准确率。SmolVLA: 29.1s → 6.15s（4.7×），仍超过异步推理窗口（1.67s）。**最重要工程发现**：VLA 量化不能一刀切——Vision/LLM 耐受 8-bit，但 Flow Matching Action Expert 必须保持高精度（量化误差在迭代去噪中累积）。数据采集 best practice：120 episodes, 10 clusters, 3 相机, 20% recovery episodes, 夹爪加热缩管增摩擦。
+
+### D137. AMD ROCm Edge-to-Cloud VLA 训练管线
+- **来源**: AMD ROCm Blog — [Edge-to-Cloud Robotics with AMD ROCm](https://rocm.blogs.amd.com/artificial-intelligence/rocm-blogsblogsartificial-in/README.html)（2026 年）
+- **类别**: Recipe, Arch
+- **关键数据点汇总**: **AMD 正式进入 VLA 训练生态**。管线：Ryzen AI 9 HX370（边缘采集）→ MI300X（云端微调）→ Ryzen（边缘推理）。ROCm 6.3+, PyTorch 2.7.1, LeRobot v0.4.1 原生支持。Pi0 微调：3000 steps, batch 32, bf16。~50 demo episodes 即可学会 pick-and-place。CES 2026 Lisa Su keynote 提及。
+
+### D138. LeRobot → Embodied AI Infra：人形机器人开发者的生产化反思
+- **来源**: Stan Su — [From LeRobot to Embodied AI Infra](https://medium.com/@7thuniversels/from-lerobot-to-embodied-ai-infra-a-humanoid-developers-reflections-in-2026-15a343662182)（2026 年 1 月）
+- **类别**: Strategy, Debug
+- **关键数据点汇总**: **最诚实的 LeRobot 生产化差距分析**。硬件适配是"物理诅咒"——每种新硬件都要重写 adapter。生产缺失：无安全栈/fleet 管理/热更新/ARM 优化。提出方案：Host mode（实时）+ Docker 微服务（推理）+ Web UI。UMA Robots（前 LeRobot 核心团队）正填补产业空白。核心结论：算法管线 OK，最后一公里基础设施还远未就绪。
+
+### D139. GigaBrain-0.5M*：World Model + RL 后训练 VLA（RAMP 管线）
+- **来源**: GigaAI — [GigaBrain-0.5M*](https://arxiv.org/abs/2602.12099)（2026 年 2 月）
+- **类别**: Arch, Strategy
+- **关键数据点汇总**: RAMP 四阶段管线：World Model 预训练 → Policy 以 WM 预测为条件微调 → 真机部署采集 → WM+Policy 持续迭代。预训练 10,000+ 小时真机数据。Laundry Folding/Box Packing/Espresso 上 +30% 超 RECAP baseline。**World Model 作为 RL 条件输入**而非替代真机交互——是目前最完整的 VLA 自我改进闭环。
+
+### D140. UnifoLM-VLA-0：宇树开源 7B VLA（LIBERO 98.7 分）
+- **来源**: Unitree — [UnifoLM-VLA-0](https://unigen-x.github.io/unifolm-vla.github.io/)（2026 年 1 月）
+- **类别**: Arch, Recipe
+- **关键数据点汇总**: 基座 Qwen2.5-VL-7B + Action Head，340h 真机数据训练。**LIBERO 均分 98.7**（Spatial 99.0, Object 100, Goal 99.4, Long 96.2）——VLA 类最高。Unitree G1 验证 12 类操作。完全开源（代码+权重+数据）。注意：LIBERO 有记忆偏差（D32），真机泛化才是真考验。
+
+### D141. VLM4VLA：VLM 能力 ≠ VLA 下游性能（ICLR 2026）
+- **来源**: ICLR 2026 — [VLM4VLA](https://openreview.net/forum?id=tc2UsBeODW)
+- **类别**: Arch, Strategy
+- **关键数据点汇总**: **直接挑战"更好 VLM = 更好 VLA"假设**。VLM 通用 benchmark 高分不等于好 VLA。Vision encoder 可微调性比 LLM backbone 更重要（与 D33 "freezing vision encoder -32pp" 印证）。选 VLA 基座不要只看 VLM leaderboard。
+
+### D142. SimpleVLA-RL：1 条轨迹冷启动 → RL 拉到 91.7（ICLR 2026）
+- **来源**: PRIME-RL — [SimpleVLA-RL](https://github.com/PRIME-RL/SimpleVLA-RL)（ICLR 2026）
+- **类别**: Arch, Strategy
+- **关键数据点汇总**: LIBERO-Long SOTA 97.6。**极端数据效率**：每任务 1 条轨迹 SFT → RL 从 17.3 拉到 91.7（+430%）。发现"pushcut"现象：RL 自行发现训练数据中不存在的操作模式。RL 后训练路线的开源里程碑。
+
+### D143. DynamicVLA：0.4B 模型攻克动态物体操作
+- **来源**: NTU — [DynamicVLA](https://arxiv.org/abs/2601.22153)（2026 年 1 月）
+- **类别**: Arch, Data
+- **关键数据点汇总**: **VLA 首次系统攻克动态场景**。0.4B 紧凑模型，Continuous Inference + Latent-aware Action Streaming 降低延迟。DOM 基准：200K 合成 + 2K 真机 episodes。动态任务 +188% 到 +440%。数据采集自动化无需遥操。
+
+### D144. WholebodyVLA：人形全身协调操作（ICLR 2026）
+- **来源**: OpenDriveLab — [WholebodyVLA](https://github.com/OpenDriveLab/WholebodyVLA)（ICLR 2026）
+- **类别**: Arch, Strategy
+- **关键数据点汇总**: 从无动作标注第一人称视频学习 latent actions + 专用 loco-manipulation RL policy。AGIBOT X2 验证，超 baseline 21.3%。目前最完整的开源 VLA-for-humanoid 方案。
+
+### D145. AGIBOT WORLD 2026：百分百真机多模态数据集
+- **来源**: AGIBOT — [AGIBOT WORLD 2026](https://huggingface.co/datasets/agibot-world/AgiBotWorld2026)
+- **类别**: Data, Strategy
+- **关键数据点汇总**: 100% 真实环境采集，RGB(D)+触觉+LiDAR+IMU+全身关节。五阶段发布（第一阶段聚焦模仿学习）。OmniHand 灵巧手数据罕见。IROS 2025 Best Paper Finalist + IEEE TRO 2026。
+
+### D146. ICRA 2026 VLA Pipeline Workshop：10,000h 数据 + 真机竞赛
+- **来源**: AIRoA — [ICRA 2026 Workshop](https://icra2026vlapipeline.github.io/)
+- **类别**: Strategy, Data
+- **关键数据点汇总**: **VLA 领域首个大规模真机评测竞赛**。10,000h LeRobot 格式数据，Toyota HSR 平台，每两周真机评测 + 视频反馈。SmolVLA/π0 为官方 baseline。36 队满额。$2000/$1000/$600 奖金。6/5 维也纳。
+
+### D147. LeRobot v0.4.0：Datasets v3.0 + Pi0.5/GR00T N1.5 + 插件系统
+- **来源**: HF Blog — [LeRobot v0.4.0](https://huggingface.co/blog/lerobot-release-v040)
+- **类别**: Data, Arch
+- **关键数据点汇总**: **生态成熟标志**。Datasets v3.0 支持 OXE 级 400GB+ 流式加载。Pi0.5 + GR00T N1.5 原生集成。LIBERO 130+ 任务 + Meta-World 50+ 任务。数据集编辑工具。插件系统简化硬件集成。
+
+### D148. SO-101 Isaac Lab 中 VLA BC + RL：SmolVLA 仿真预训练关键发现
+- **来源**: LeRobot Discord #show-us-what-you-built — iterrani (2026/3/17) + [GitHub: MSSergeev/so101-lab](https://github.com/MSSergeev/so101-lab)（13 stars）
+- **类别**: Arch, Debug
+- **关键数据点汇总**: **Open X-Embodiment 预训练在仿真中完全失效（0%）**——sim 视觉与真实世界差异让预训练 expert 无用。SmolVLA frozen vs unfrozen backbone 几乎没差（70% vs 70-76%），从头训明显更差（56%）。IQL offline RL +12-16% over BC。Flow-Noise PPO pick-and-place 达 90%。VIP reward from ResNet50 Ego4D = reward-free RL 方向值得关注。
+
+### D149. LeRobot v0.6.0 社区路线图发布
+- **来源**: LeRobot Discord #announcements — Steven Palma @HF (2026/4/4) + [GitHub #3134](https://github.com/huggingface/lerobot/issues/3134)
+- **类别**: Strategy
+- **关键数据点汇总**: **v0.6.0 路线图公开 + 主动招募贡献者**。核心方向：新仿真 benchmark、VLA 训练优化、新硬件支持。LeRobot 从 v0.4→v0.5→v0.6 快速迭代，现在是参与核心开发的最佳窗口期。
+
+### D150. Unfolding Robotics：双臂衣物折叠完整开源（100+h 数据, 5k+ GPU 小时）
+- **来源**: LeRobot Discord #announcements — Pepijn Kooijmans @HF (2026/4/7) + [Blog](https://huggingface.co/spaces/lerobot/robot-folding)
+- **类别**: Recipe, Data
+- **关键数据点汇总**: **VLA 社区迄今最完整的双臂操作开源案例**。8 bimanual setups, 100+h demos, 5k+ GPU hours, LeRobot v0.5.1。覆盖全流程：硬件设置→数据采集→训练 recipe→经验教训。Hackathon 折叠 85% SR。社区反应极热（11🚀 7❤️ 7🔥 6🎉）。
+
+### D151. Pi0.5 版本升级陷阱：transformers 库版本导致动作完全失控
+- **来源**: LeRobot Discord #help-forum — danstrawbridge (2026/4/5) + Steven Palma 回复
+- **类别**: Debug
+- **关键数据点汇总**: 升级 LeRobot 后微调 pi0.5 动作变 "very erratic"。**根因：transformers 库版本不兼容**。修复：`pip install transformers==5.3.0`。这种 "silent failure"（模型正常加载但输出完全错误）是 VLA 部署中最危险的问题。**所有 Pi0/Pi0.5 用户：固定 transformers==5.3.0**。
+
+### D152. SO-101 舵机烧毁：高阻抗传播的未知机制
+- **来源**: LeRobot Discord #help-forum — mango (2026/4/9) — 16 评论
+- **类别**: Debug
+- **关键数据点汇总**: 舵机烧毁后替换新电机但高阻抗持续，后突然自行恢复。可能是总线通信问题而非机械故障。16 条评论 = 常见问题。**备用电机是必需品**（D5/D7/D38 已多次强调）。
+
+### D153. Robokin：开源 IK Helper Library
+- **来源**: LeRobot Discord #show-us-what-you-built — Dmitri (2026/4/3) — integration 标签
+- **类别**: Edge
+- **关键数据点汇总**: 开源逆运动学辅助库，简化笛卡尔→关节空间映射。对 VLA 跨硬件部署有实用价值（SmolVLA → Aloha 需要关节翻转/夹爪映射）。
+
+### D154. 开源平行夹爪 for SO-ARM100
+- **来源**: LeRobot Discord #show-us-what-you-built — Nikita Bragin (22天前) — 5 反应
+- **类别**: Edge
+- **关键数据点汇总**: 开源平行夹爪设计，与 D95 Arpeggio Gripper 形成社区夹爪生态。平行夹爪比默认夹爪更适合精密抓取。
+
 ---
 
 ## GitHub Issues 周报
@@ -998,4 +1093,4 @@
 
 ---
 
-*v3.5 — 2026-03-17 更新。Blog 165 条（#1-#165）+ Discord 135 条（D1-D135），共 300 条。v3.5 新增：Blog #141-#165（WebSearch 采集，覆盖 CGVD、AR-VLA、SeedPolicy、BPP、EasyMimic、LaRA-VLA、FUTURE-VLA、RD-VLA、CoWVLA、KAN-We-Flow、RPD、VLATest、DiffusionVLA、Discrete Diffusion VLA、GeoPredict、UniForce、ReBot、Real-is-Sim 等 2026 年 2-3 月最新论文）+ Discord D111-D135（LeRobot Discord 实际帖子，覆盖 Holistic Robot Pose、ACE2 teleop、DROID Dataset、Fourier N2 展示、Diffusion Policy debugging、AgentVerse 多 Agent 具身等）。v3.4 修正：D86-D110 全部替换为真实社区内容。*
+*v3.6 — 2026-04-09 更新。Blog 165 条（#1-#165）+ Discord 154 条（D1-D154），共 319 条。v3.6 新增：D136-D147（WebSearch 采集，覆盖 NXP i.MX95 嵌入式 VLA 部署基准、AMD ROCm Edge-to-Cloud 管线、LeRobot 生产化差距分析、GigaBrain-0.5M* RAMP 管线、UnifoLM-VLA-0 LIBERO 98.7、VLM4VLA VLM≠VLA 发现、SimpleVLA-RL 1 条轨迹冷启动、DynamicVLA 动态物体操作、WholebodyVLA 人形全身协调、AGIBOT WORLD 2026 多模态数据集、ICRA 2026 VLA 真机竞赛、LeRobot v0.4.0 生态升级）+ D148-D154（Discord 实际帖子，覆盖 SO-101 Isaac Lab BC+RL 实验含 SmolVLA 仿真预训练关键发现、LeRobot v0.6.0 路线图、Unfolding Robotics 双臂折叠 100+h 开源、Pi0.5 transformers 版本陷阱、SO-101 舵机烧毁、Robokin IK 库、开源平行夹爪）。*
