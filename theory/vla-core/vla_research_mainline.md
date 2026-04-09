@@ -1,297 +1,270 @@
 # VLA 研究主线梳理
 
-> **从 ACT/DP 基线到"数据 × 架构 × 后训练"的工程化闭环**
+> 这篇不是分类法，而是一个**赌注清单**。
 >
-> 这篇不重复解释每个模型怎么实现（那些在各自的 Deep Dive 里），而是回答一个更高层的问题：**VLA 研究这两年走了哪些路、哪些路走通了、下一步最可能往哪走**。
+> VLA 研究走到 2026 年中，底下有几条暗流：有些路被反复验证、有些路悄悄收敛、有些路看起来繁荣但可能是死胡同。这篇试图画出这些暗流，帮你判断——**如果你只有 6 个月的时间和一台机器人，该赌哪条路**。
 
 ---
 
-## 0. 一张图看全局
+## 两个根本问题
+
+在讨论任何技术细节之前，VLA 社区其实在争论两个更深的问题：
+
+### Q1：机器人需要"理解"吗，还是"足够多的模仿"就够了？
+
+一派认为（Scaling 派）：给模型看够多人类操作视频 + 机器人轨迹数据，它自然会学到"物理直觉"——不需要显式的世界模型、不需要推理模块、不需要符号表示。证据：π0.5 在 YouTube 视频上 co-training 后获得了开放世界泛化。
+
+另一派认为（Structure 派）：纯 imitation 有天花板——compounding error、OOD fragility、没有 recovery 能力。必须加入结构化组件：世界模型做预演、CoT 做推理、RL 做自我提升。证据：BEHAVIOR-1K 的 1000 任务中，纯 BC 模型的成功率在第 5 步之后断崖式下跌。
+
+**现实是两边都对一半**。π\*0.6 的 Recap 证明了 Scale + Structure 的组合拳最强——先 scale up BC，再用 RL 补结构性缺陷。这可能是未来 3 年的主旋律。
+
+### Q2："大脑"应该是一个还是两个？
+
+2024 年的 VLA 是一个端到端模型（一个 forward pass 从图像到动作）。2025 年开始，几乎所有新模型都变成了**双系统**。
+
+这不是时髦——是被物理逼的。一个 7B VLM 跑一次 500ms，而机器人手臂需要 100Hz (10ms) 的控制信号。你不可能让一个大模型同时做语义推理和高频运动控制。
+
+但双系统带来新问题：两个系统之间的**接口**是什么？文字（GR00T）？latent vector（Helix）？子目标图像（Goal-VLA）？这个接口的设计可能比两个系统各自的架构更重要——它决定了信息在"理解"和"执行"之间是否会断裂。
+
+→ 详见 [GR00T-N1.6](gr00t_n1_6.md) · [Helix 02](figure_helix_02_full_body_autonomy_2026.md) · [OneTwoVLA](onetwovla.md) · [Galaxea G0](galaxea_g0.md) · [Goal-VLA](../world-model/goal_vla_image_generative_vlms_as_object_centric_world_model_dissection.md)
+
+---
+
+## 演进时间线
 
 ```mermaid
-graph TD
-    subgraph "2022-2023: 证明可行"
-        RT1["RT-1<br/><i>Token baseline</i>"]
-        RT2["RT-2<br/><i>VLM + Action Token</i>"]
-        ACT["ACT<br/><i>CVAE + Chunking</i>"]
-        DP["Diffusion Policy<br/><i>多模态动作生成</i>"]
+graph LR
+    subgraph "Phase 1: 能做"
+        RT1["RT-1<br/>Token baseline"]
+        ACT["ACT<br/>CVAE chunking"]
+        DP["Diffusion Policy"]
     end
 
-    subgraph "2024: 开源浪潮"
-        OVLA["OpenVLA 7B"]
-        RDT1["RDT-1B"]
-        FAST["FAST Tokenizer"]
-        OXE["Open X-Embodiment<br/><i>统一数据集</i>"]
+    subgraph "Phase 2: 能泛化"
+        OXE["Open X-Embodiment"]
+        OVLA["OpenVLA"]
+        RDT["RDT-1B"]
+        FAST["FAST tokenizer"]
     end
 
-    subgraph "2025-2026: 基础模型竞赛"
-        PI["π0 → π0.5 → π*0.6"]
+    subgraph "Phase 3: 能进化"
+        PI["π0 → π*0.6"]
         GROOT["GR00T-N1.6"]
         WALL["WALL-OSS"]
-        HELIX["Figure Helix 02"]
+        HELIX["Helix 02"]
     end
 
-    RT1 --> RT2
-    RT2 --> OVLA
+    RT1 --> OXE
     ACT --> OVLA
-    DP --> RDT1
+    DP --> RDT
     DP --> FAST
-
     OXE --> OVLA
-    OXE --> RDT1
-
-    OVLA --> PI
-    RDT1 --> GROOT
+    OXE --> RDT
     FAST --> PI
+    RDT --> GROOT
     PI --> HELIX
-    GROOT --> HELIX
 
     style RT1 fill:#1a1a2e,stroke:#4361ee,color:#fff
-    style RT2 fill:#1a1a2e,stroke:#4361ee,color:#fff
     style ACT fill:#1a1a2e,stroke:#4361ee,color:#fff
     style DP fill:#1a1a2e,stroke:#4361ee,color:#fff
-    style OVLA fill:#0f3460,stroke:#16213e,color:#fff
-    style RDT1 fill:#0f3460,stroke:#16213e,color:#fff
-    style FAST fill:#0f3460,stroke:#16213e,color:#fff
     style OXE fill:#0f3460,stroke:#16213e,color:#fff
+    style OVLA fill:#0f3460,stroke:#16213e,color:#fff
+    style RDT fill:#0f3460,stroke:#16213e,color:#fff
+    style FAST fill:#0f3460,stroke:#16213e,color:#fff
     style PI fill:#e94560,stroke:#e94560,color:#fff
     style GROOT fill:#e94560,stroke:#e94560,color:#fff
     style WALL fill:#e94560,stroke:#e94560,color:#fff
     style HELIX fill:#e94560,stroke:#e94560,color:#fff
 ```
 
----
-
-## 1. 为什么 ACT 和 Diffusion Policy 仍是默认 baseline
-
-在 2026 年的今天，实验室里新项目的第一个实验仍然是"先跑个 ACT 或 DP 看看"。原因不是没有更好的模型，而是：
-
-**ACT** 覆盖了最常见的工程约束：
-- 推理路径短（无迭代去噪）→ 实时控制友好
-- 代码干净（CVAE + Transformer，<1K 行）→ 调试容易
-- 对小数据集（50-100 demos）已经能出不错的效果
-- ALOHA 硬件生态成熟，复现成本低 (~$20K)
-
-→ 详见 [ACT 详解](act.md)
-
-**Diffusion Policy** 覆盖了另一类需求：
-- 天然处理**多模态动作分布**（同一任务多种做法）
-- 动作轨迹更平滑（去噪过程自带 temporal smoothing）
-- 在标准 benchmark 上被反复验证为强基线
-
-→ 详见 [Diffusion Policy 详解](../diffusion-flow/diffusion_policy.md)
-
-> 💡 **现实里的大多数"改进工作"都在做同一件事**：让 ACT 更稳更泛化，或让 Diffusion 更快更可控。理解 baseline 的边界，才能判断改进是否值得。
+- **Phase 1（2022-23）**：证明 Transformer 能控制机器人。RT-1 用 token，ACT 用 CVAE，DP 用 diffusion。三个 baseline 至今仍在用。
+- **Phase 2（2024）**：开源 + 统一数据集。OXE 让跨形态预训练成为可能，OpenVLA/RDT/FAST 让所有人都能跑 VLA。
+- **Phase 3（2025-26）**：基础模型竞赛开始。核心不再是"能不能做"，而是"能不能在新环境/新任务/新机器人上 work"。
 
 ---
 
-## 2. 七条研究主线
+## 六个赌注
 
-### 主线 ① — 数据规模化：预训练 + 适配
+> 不叫"主线"了——叫**赌注**。每个赌注背后都有一个假设，如果假设成立就是重大突破，如果不成立就是沉没成本。
 
-> *从"训练一个任务"到"预训练一个基座，适配所有任务"。*
+&nbsp;
 
-**核心假设**：把足够多的机器人数据（跨任务、跨形态）+ 互联网数据（视频、语言）喂给一个大模型，它就能学到通用的"物理直觉"。
+### 赌注 1：动作的"语言"还没找到
 
-**里程碑**：
-| 时间 | 事件 | 意义 |
-|------|------|------|
-| 2023 | Open X-Embodiment (OXE) | 首个百万级跨形态机器人数据集 |
-| 2024 | OpenVLA / Octo | 首批在 OXE 上预训练的开源 VLA |
-| 2025 | π0.5 | 引入 YouTube 视频 co-training → 开放世界泛化 |
-| 2026 | RoboGene | 用 Agent 自动生成多样化训练数据 |
+**假设**：VLA 性能的瓶颈不在 VLM backbone，而在 Action Head。
 
-**为什么"大数据不一定万能"**：
-- **Embodiment mismatch**：不同机械臂的动作空间、控制频率、夹爪形状差异巨大。同一条轨迹在另一个平台上可能不可执行。
-- **动作语义漂移**：同一句 "pick up the cup" 在不同机器人上对应完全不同的关节序列。
-- **解法**：动作表示对齐（统一用 end-effector delta pose）+ 控制频率 resample + 元数据记录
+RT-2 用 55B 参数的 PaLI-X，π0 只用 3B，但 π0 在操作任务上赢了。区别不在"脑子大小"，而在"怎么说动作"。
 
-→ 详见 [数据处理](../foundation/data.md) · [动作生成范式](../diffusion-flow/action_representations.md) · [RoboGene](../foundation/robogene_boosting_vla_pre_training_via_diversity_driven_agen_dissection.md)
+目前的演进：
+
+| 时期 | 方式 | 比喻 | 问题 |
+|------|------|------|------|
+| 2022 | Token (256 bins) | 用 256 个字符写诗 | 词汇太少，表达不了微妙动作 |
+| 2023 | Diffusion (DDPM) | 从白噪声里"雕"出动作 | 雕得慢，要 10-100 步 |
+| 2024 | Flow Matching | 从噪声拉一条直线到目标 | 目前最优，但 1-5 步仍不算快 |
+| 2025 | FAST (DCT+BPE) | 把动作当"语言"压缩 | 快但不处理多模态 |
+| 2025 | 双分支 (WALL-OSS) | 两种语言按需切换 | 复杂度上升 |
+
+**未被探索的方向**：
+- 把动作看成**连续流形上的测地线**（不是欧氏空间的直线）→ [ABot-M0 动作流形](abot_m0_action_manifold_learning_vla_foundation_2026.md)
+- 用**神经隐式场**表示动作（不是离散序列）→ [Neural Implicit Action Fields](../diffusion-flow/neural_implicit_action_fields_from_discrete_waypoints_to_con_dissection.md)
+- **像素运动**代替关节命令（让模型"画"出未来图像，再反推动作）→ [DAWN](../diffusion-flow/pixel_motion_diffusion_is_what_we_need_for_robot_control_dissection.md)
+
+→ 更多见 [Diffusion Policy](../diffusion-flow/diffusion_policy.md) · [π0 代码解析](pi0_code_analysis.md) · [FAST](fast.md) · [Compression Gap](../diffusion-flow/the_compression_gap_why_discrete_tokenization_limits_vision_dissection.md) · [动作生成范式](../diffusion-flow/action_representations.md)
+
+&nbsp;
+
+### 赌注 2：RL 后训练是 VLA 的 "RLHF 时刻"
+
+**假设**：BC 是 VLA 的 SFT，RL 是 VLA 的 RLHF。两者缺一不可。
+
+LLM 领域已经证明了这条路：GPT-4 的能力大幅提升不是来自预训练的增量，而是 RLHF/DPO 后训练。VLA 正在走同一条路——π\*0.6 的 Recap 是第一个明确的成功案例。
+
+| | LLM | VLA |
+|--|-----|-----|
+| 预训练 | 网络文本 | 互联网视频 + 机器人数据 |
+| SFT | 指令微调 | 行为克隆 (BC) |
+| **后训练** | **RLHF / DPO** | **Recap / Online RL** |
+| 核心改善 | 对齐 + 安全 + 推理 | **Recovery + 精度 + 长程** |
+
+**争论点**：RL 在真实机器人上太危险（试错 = 摔坏机器人）。解法有三：
+1. **仿真先行**：Isaac Lab + Domain Randomization → [Isaac Lab](../deployment/isaac_lab.md)
+2. **Offline RL**：不做新探索，只从历史数据中"复盘" → [π\*0.6 Recap](../rl/pi0_6_recap_rl_as_supervised_learning.md)
+3. **安全护栏**：力/速度限位的 safety controller 永远在 policy 外层 → 不是研究问题，是工程问题
+
+**我的判断**：这条路会走通，但不是 online RL on real robots（太贵太危险），而是 **仿真 RL + 世界模型 RL + offline replay**。Scale of RL data 会成为下一个竞争维度。
+
+→ 详见 [VLA+RL 实战](../rl/vla_rl_practical_guide.md) · [Evo-RL](../rl/evo_rl_open_real_world_rl_recap_pistar06_so101_2026.md) · [GR-RL](../rl/gr_rl_dissection.md) · [RL 主线总纲](../rl/rl_mainline.md)
+
+&nbsp;
+
+### 赌注 3：世界模型让数据效率跳一个量级
+
+**假设**：如果机器人能在"脑子里"模拟 10000 次，就不需要在现实中做 10000 次。
+
+DreamZero 证明了世界模型不只是规划工具，它**本身就可以当策略用**。AtomVLA 更进一步——用世界模型把长程任务自动拆成"原子步骤"，每个步骤独立验证。
+
+**但这里有一个根本矛盾**：世界模型的预测精度受限于训练数据。如果真实世界的数据不够，世界模型就会"hallucinate"——在想象中做出物理上不可能的事。这和 LLM 的幻觉问题本质相同。
+
+**激进预测**：2027 年，VLA 训练的大部分"轨迹数据"将来自世界模型的仿真，而非真实机器人。就像 AlphaGo 的自我对弈一样——真实数据只提供 seed，合成数据提供 scale。
+
+→ 详见 [World Model 主线](../world-model/world_model_mainline.md) · [DreamZero](../world-model/dreamzero_world_action_models_zero_shot_policies_2026.md) · [AtomVLA](../world-model/atomvla_offline_post_training_predictive_latent_world_models_2026.md) · [EgoSim](../world-model/egosim_egocentric_world_simulator_for_embodied_interaction_g_dissection.md)
+
+&nbsp;
+
+### 赌注 4：触觉是 VLA 从"演示"到"真实"的最后一道门
+
+**假设**：纯视觉 VLA 在接触操作上有不可逾越的天花板。
+
+折衣服、拧瓶盖、插 USB——这些任务的共同点：关键信息不在图像里，在手指上。人类做这些事时 80% 靠触觉。但目前 95%+ 的 VLA 论文只用视觉。
+
+**为什么触觉研究进展慢**：
+1. 硬件不统一（每种传感器的数据格式不同）→ [TaCo Benchmark](../tactile/taco_a_benchmark_for_lossless_and_lossy_codecs_of_heterogene_dissection.md)
+2. 没有"ImageNet for touch"（缺少大规模触觉数据集）
+3. 融合架构没有共识（早期融合/自适应融合/独立通道 → [触觉主线](../tactile/tactile_mainline.md)）
+
+**转折点可能在**：当触觉传感器像摄像头一样便宜时（~$50/个），触觉数据的规模瓶颈就打破了。SuperTac 和 UniVTAC 正在朝这个方向走。
+
+→ 详见 [触觉 VLA](../tactile/tactile_vla.md) · [FAVLA](../tactile/favla_a_force_adaptive_fast_slow_vla_model_for_contact_rich_dissection.md) · [OmniVTA](../tactile/omnivta_visuo_tactile_world_modeling_for_contact_rich_roboti_dissection.md) · [TacMamba](../tactile/tacmamba_a_tactile_history_compression_adapter_bridging_fast_dissection.md)
+
+&nbsp;
+
+### 赌注 5：感知不再是瓶颈——接口才是
+
+**假设**：Vision Encoder 已经足够好了。真正的瓶颈是信息从感知到动作的传递损耗。
+
+DINOv2 和 SigLIP 已经能从图像中提取非常好的语义特征。但 VLA 的失败往往发生在"看到了但没用上"——注意力没聚焦到正确的物体、跨模态对齐不够强、语言指令的语义没有传递到动作层。
+
+**三个证据**：
+1. **LangGap** 发现 VLA 的语言理解能力比 VLM 差很多——动作训练"冲淡"了语言能力 → [LangGap](langgap_diagnosing_and_closing_the_language_gap_in_vision_la_dissection.md)
+2. **ReconVLA** 用重建监督强迫注意力聚焦目标，不改 action head 就提升了成功率 → [ReconVLA](reconvla_implicit_grounding_by_reconstruction.md)
+3. **FocusVLA** 用 gaze-like 机制选择性处理视觉信息，减少无关干扰 → [FocusVLA](focusvla_focused_visual_utilization_for_vision_language_acti_dissection.md)
+
+**延伸思考**：这和人类的注意力问题一样——你看到了房间里的一切，但如果大脑没有"注意到"桌上的杯子，你就抓不到它。VLA 的 cross-attention 就是它的"注意力分配器"。
+
+→ 也见 [视觉感知技术](../perception/perception_techniques.md) · [EyeVLA](../perception/look_zoom_understand_the_robotic_eyeball_for_embodied_percep_dissection.md) · [语言如何改写视觉](../perception/language_shapes_perception.md)
+
+&nbsp;
+
+### 赌注 6：VLA 和自动驾驶正在收敛
+
+**假设**：VLA（机器人操作）和 AD（自动驾驶）在架构上正在走向同一条路。
+
+这不是预测——已经在发生：
+- **DriveDreamer-Policy** 把 World-Action Model 用在自动驾驶上 → [DriveDreamer](../world-model/drivedreamer_policy_a_geometry_grounded_world_action_model_f_dissection.md)
+- **DVGT-2** 提出 Vision-Geometry-Action 架构，从 AD 反哺 VLA → [DVGT-2](../perception/dvgt_2_vision_geometry_action_model_for_autonomous_driving_a_dissection.md)
+- **GigaBrain** 用世界模型原生 RL，思路与 Waymo 的 simulation-based planning 一脉相承 → [GigaBrain](../rl/gigabrain_0_5m_star_world_model_based_rl_ramp_2026.md)
+
+**为什么会收敛**：因为核心问题是一样的——**从多模态感知到连续控制**。区别只在 action space（方向盘/油门 vs 关节角度）和 embodiment（车 vs 机械臂）。
+
+**含义**：自动驾驶的数据规模（万亿帧）和工程成熟度远超机器人。如果架构收敛，VLA 可以直接复用 AD 的基础设施。这可能是 VLA scale up 最快的路径。
 
 ---
 
-### 主线 ② — Action Head 演进：Token → Diffusion → Flow Matching
+## 可能的死胡同
 
-> *动作怎么"生成"？这个选择决定了速度、精度和多模态能力的上限。*
+诚实地说，有些方向可能不会走通：
+
+| 方向 | 为什么可能是死胡同 | 但也许不是死胡同如果... |
+|------|------------------|---------------------|
+| **纯端到端大模型** | 100Hz 控制和 VLM 推理无法共存在一个 forward pass 中 | ...量化/剪枝让 7B 模型跑到 100Hz |
+| **纯 offline RL** | 不做真机探索就学不到真正的 recovery | ...世界模型仿真足够逼真 |
+| **纯视觉** | 接触操作的物理信息不在图像里 | ...超分辨率/多视角能间接推断力 |
+| **跨形态预训练** | Embodiment mismatch 可能无法被 alignment 解决 | ...统一的 action representation 出现 |
+| **符号规划** | 太脆弱，不适应 open-world | ...LLM 级别的常识推理弥补了脆弱性 |
+
+---
+
+## 如果我只有 6 个月
+
+**最高 ROI 的赌注排序**（个人判断，不代表社区共识）：
+
+1. **RL 后训练** — 最确定的改善路径，π\*0.6 已经 proof of concept
+2. **双系统架构** — 物理约束决定了这是必然，剩下的只是接口设计
+3. **世界模型合成数据** — 数据效率的量级跳升，可能改变游戏规则
+4. **触觉融合** — 蓝海但硬件成本在快速下降
+5. **Action Head 创新** — 高风险高回报，可能出 10x 改善也可能颗粒无收
+6. **跨域（AD↔VLA）** — 长期最大的杠杆，但需要两个社区的协同
+
+---
+
+## 闭环：数据飞轮
+
+所有赌注不是独立的，它们通过**数据飞轮**连成闭环：
 
 ```
-2022  Token (RT-1)          ← 简单但粗糙，不能处理多模态动作
-  ↓
-2023  Diffusion (DP/RDT)    ← 多模态精细，但需要 10-100 步去噪，慢
-  ↓
-2024  Flow Matching (π0)    ← 多模态精细 + 只需 1-5 步，快 10x
-  ↓
-2025  FAST + Flow 混合       ← 预训练用 FAST (快)，推理用 FM (精)
-  ↓
-2025  双分支 (WALL-OSS)      ← Flow 做精细 + FAST 做粗粒度，按需切换
+  预训练 (互联网 + OXE)
+       ↓
+  BC 微调 (人类演示)
+       ↓
+  部署 → 收集 on-policy 数据 (成功 + 失败)
+       ↓
+  RL 后训练 (从失败中学)
+       ↓
+  世界模型训练 (从 on-policy 数据学物理)
+       ↓
+  合成数据 (世界模型生成 10000x 轨迹)
+       ↓
+  更好的预训练 → 回到顶部
 ```
 
-**关键洞察**：Action Head 的选择比 VLM backbone 的大小更重要。π0 用 3B 参数 + Flow Matching 打败了 RT-2 的 55B + Token，靠的是更好的动作生成机制。
+**飞轮的关键**：每一轮都比上一轮有更多、更好的数据。π0 → π0.5 → π\*0.6 就是这个飞轮转了三圈的结果。
 
-→ 详见 [Diffusion Policy](../diffusion-flow/diffusion_policy.md) · [π0 Flow Matching 代码解析](pi0_code_analysis.md) · [FAST](fast.md) · [Compression Gap](../diffusion-flow/the_compression_gap_why_discrete_tokenization_limits_vision_dissection.md)
-
----
-
-### 主线 ③ — 双系统架构：快慢分离
-
-> *语义理解不需要 100Hz，运动控制必须达到 100Hz。把它们分开。*
-
-这是 2025 年最重要的架构趋势。几乎所有最新的基础模型都采用了某种形式的快慢分离：
-
-| 模型 | 慢系统 (语义) | 快系统 (运动) | 频率比 |
-|------|-------------|-------------|:------:|
-| GR00T-N1.6 | VLM → 子任务文字 | Diffusion Transformer → 关节 | 2Hz : 100Hz |
-| Figure Helix 02 | S2 语义 latent | S1 视觉运动 (200Hz) + S0 扭矩 (1kHz) | 1Hz : 200Hz : 1kHz |
-| OneTwoVLA | System 2 规划 | System 1 执行 | 低频 : 高频 |
-| Galaxea G0 | 慢思考 | 快反应 | 低频 : 高频 |
-
-**为什么这么做**：
-1. **物理约束**：7B VLM 跑一次推理要 ~500ms，做不到 100Hz。但 200M 的 Action Model 可以。
-2. **认知科学启示**：人类大脑也是双系统——System 2（有意识推理）驱动 System 1（本能反射）。
-3. **工程优势**：两个系统可以独立训练、独立部署、独立更新。
-
-→ 详见 [GR00T-N1.6 解剖](gr00t_n1_6.md) · [Helix 02 解剖](figure_helix_02_full_body_autonomy_2026.md) · [小模型 VLA](small_vla_models.md)
+→ 详见 [数据飞轮与跨模态迁移](../foundation/data_flywheel_and_cross_modal.md)
 
 ---
 
-### 主线 ④ — RL 后训练：超越模仿的天花板
-
-> *模仿学习让机器人学会"像人一样做"，但永远不会比示范者更好。RL 打破这个天花板。*
-
-**BC（行为克隆）的系统性失败**：
-- 训练数据覆盖的是一个很窄的"成功流形"
-- 真实世界有噪声，系统必然会进入**分布外（OOD）状态**
-- 长任务中误差累积，缺少 recovery 行为 → 不可逆失败
-
-**RL 后训练的三步范式**（类比 LLM 的 SFT → RLHF）：
-
-| 阶段 | 方法 | 类比 LLM | VLA 代表 |
-|------|------|---------|---------|
-| Stage 1 | 互联网预训练 | GPT 预训练 | 所有 VLA |
-| Stage 2 | 模仿学习 (BC) | SFT | 所有 VLA |
-| Stage 3 | **RL 后训练** | **RLHF** | **π\*0.6 Recap** |
-
-**π\*0.6 的 Recap 是里程碑**：它证明了 VLA 可以通过复盘（offline RL）过去的成功/失败经验自我提升。吞吐量翻倍，失败率降低 50%。这打开了 VLA 的 "post-training" 时代。
-
-**工程上的 on-policy 数据流水线**：
-1. **触发式采集**：只在"置信度下降/接触异常/末端偏差超阈值"时开启高频记录
-2. **分阶段 reward**：把任务拆成 approach → pre-contact → contact → manipulate → retreat
-3. **Recovery skill 库**：把"重新定位、轻微抖动、换抓取点"当独立技能学
-4. **安全护栏**：力/速度/关节限位的 safety controller 永远在 policy 外层兜底
-
-→ 详见 [VLA+RL 实战教程](../rl/vla_rl_practical_guide.md) · [π0.6/RECAP 解析](../rl/pi0_6_recap_rl_as_supervised_learning.md) · [GR-RL 解剖](../rl/gr_rl_dissection.md) · [强化学习基础](../rl/reinforcement_learning.md)
-
----
-
-### 主线 ⑤ — 感知增强：把"看得更稳"作为成功率下限
-
-> *很多真实世界失败不是"动作模型不会做"，而是"输入端不稳定"。*
-
-常见的感知失败：遮挡、反光、背景干扰、视角变化、运动模糊、对称物体姿态歧义。
-
-**三层增强策略**：
-
-| 层 | 方法 | 效果 | 代表 |
-|:--:|------|------|------|
-| 表征层 | 更强的 VFM/VLM backbone | 降低 domain shift | SigLIP, DINOv2 |
-| 几何层 | 3D 点云 / 多视角融合 | 空间泛化 + 消歧 | DP3, 3D Diffusion Policy |
-| 注意力层 | 隐式视觉接地 | 让注意力聚焦目标 | ReconVLA, FocusVLA |
-
-**关键判断**：感知增强提升的是**鲁棒性下限**（不那么容易崩），但不会自动"发明新的动作逻辑"。想要新能力，还得靠数据和后训练。
-
-→ 详见 [视觉感知技术](../perception/perception_techniques.md) · [ReconVLA](reconvla_implicit_grounding_by_reconstruction.md) · [FocusVLA](focusvla_focused_visual_utilization_for_vision_language_acti_dissection.md) · [LangGap](langgap_diagnosing_and_closing_the_language_gap_in_vision_la_dissection.md)
-
----
-
-### 主线 ⑥ — 世界模型：在脑中模拟
-
-> *不需要真的试错——在"想象"中规划，然后一步到位。*
-
-世界模型让机器人在执行动作前"预演"结果，在心理仿真中试错。DreamZero 甚至证明了纯世界模型可以直接当策略用（zero-shot）。
-
-**两种用法**：
-1. **World Model as Planner**：预测多条未来轨迹 → 选最好的执行
-2. **World Model as Policy**（DreamZero）：不需要单独的 policy 网络，世界模型自己就是策略
-
-**开放问题**：世界模型预测的"未来"够不够准？如果预测偏了，执行也会偏。目前还没有很好的"预测可信度"度量。
-
-→ 详见 [World Model 主线总纲](../world-model/world_model_mainline.md) · [DreamZero](../world-model/dreamzero_world_action_models_zero_shot_policies_2026.md) · [EgoSim](../world-model/egosim_egocentric_world_simulator_for_embodied_interaction_g_dissection.md)
-
----
-
-### 主线 ⑦ — 触觉融合：光看不够
-
-> *闭上眼睛你也能系鞋带——因为手指在"看"。*
-
-当任务涉及力控（不捏碎鸡蛋）、滑动检测（东西快掉了）、柔软物操作（折衣服）时，纯视觉 VLA 不够用。触觉传感器提供接触力、滑动、形状估计。
-
-**融合范式**：
-- **早期融合**：触觉特征和视觉特征在 backbone 内融合（OmniVTA）
-- **自适应融合**：模型自动学习"什么时候该看、什么时候该摸"（FAVLA）
-- **快反射通道**：触觉走独立的低延迟通道，不经过大 VLM（TacMamba）
-
-→ 详见 [触觉 VLA](../tactile/tactile_vla.md) · [OmniVTA](../tactile/omnivta_visuo_tactile_world_modeling_for_contact_rich_roboti_dissection.md)
-
----
-
-## 3. 主线之间的关系：工程化闭环
-
-七条主线不是独立的，它们构成一个**迭代闭环**：
-
-```
-┌──────────────────────────────────────────────────────────────┐
-│                                                              │
-│  ① 数据规模化                                                │
-│  (更多数据 + 更多形态)                                        │
-│       │                                                      │
-│       ▼                                                      │
-│  ② Action Head 升级  ──→  ③ 双系统架构                       │
-│  (Token → FM)           (快慢分离)                            │
-│       │                     │                                │
-│       ▼                     ▼                                │
-│  ④ RL 后训练   ◄──────  ⑤ 感知增强                          │
-│  (超越模仿)           (看得更稳)                              │
-│       │                     │                                │
-│       ▼                     ▼                                │
-│  ⑥ 世界模型    ◄──────  ⑦ 触觉融合                          │
-│  (脑中模拟)           (多模态感知)                             │
-│       │                                                      │
-│       └──→ 新一轮数据采集 + 模型迭代 ──→ 回到 ①              │
-│                                                              │
-└──────────────────────────────────────────────────────────────┘
-```
-
-**闭环的关键**：RL 后训练产生的 on-policy 数据（包括失败和恢复）反馈回数据池，成为下一轮预训练的高质量数据。这就是 VLA 的"数据飞轮"。
-
-→ 详见 [数据飞轮与跨模态迁移](../frontier/data_flywheel_and_cross_modal.md)
-
----
-
-## 4. 下一步往哪走？（2026 开放问题）
-
-| 问题 | 当前状态 | 可能的突破方向 |
-|------|---------|-------------|
-| **通用性 vs 专用性** | 基础模型强但贵，专用小模型快但窄 | 双系统 + LoRA 适配可能是最优解 |
-| **数据效率** | 仍需 50-1000 demos/task | 世界模型仿真数据 + few-shot 适配 |
-| **长程任务** | >10 步任务成功率急剧下降 | 层级规划 + recovery skill + 世界模型验证 |
-| **安全** | 几乎没有形式化保证 | 安全约束层（独立于 policy） + 对抗测试 |
-| **评估** | 没有统一标准 | BEHAVIOR-1K 方向对但还不够 |
-
-→ 详见 [VLA 十大挑战](../planning/vla_challenges.md) · [BEHAVIOR-1K](../planning/behavior_1k_human_centered_embodied_ai_benchmark_omnigibson_2024.md)
-
----
-
-## 相关导读
+## 进一步阅读
 
 | 方向 | 推荐 |
 |------|------|
 | 架构总览 | [VLA 核心架构](vla_arch.md) |
 | 数学基础 | [VLA 数学必备](../foundation/math_for_vla.md) |
-| Loss 函数 | [VLA Loss Functions Handbook](../foundation/vla_loss_functions_handbook.md) |
 | 动作表示 | [动作生成范式详解](../diffusion-flow/action_representations.md) |
 | 小模型路线 | [小模型 VLA 研究方向](small_vla_models.md) |
-| 思维链 | [CoT for VLA](../planning/chain_of_thought.md) |
-| Sim2Real | [Isaac Lab](../deployment/isaac_lab.md) · [机械臂控制](../deployment/robot_control.md) |
+| 物理学视角 | [Physics of AI](../frontier/physics_of_ai_liuziming.md) |
+| 产业观点 | [Jim Fan 三条教训](../frontier/jim_fan_2025_robotics_lessons.md) · [Ken Goldberg](../frontier/ken_goldberg_data_quality_infrastructure.md) |
+| VLA 十大挑战 | [Open Challenges](../planning/vla_challenges.md) |
 
 ---
 
