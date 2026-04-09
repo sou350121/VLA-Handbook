@@ -1,10 +1,13 @@
 # Goal-VLA：图像生成式 VLM 作为物体中心世界模型赋能零样本机器人操作 (Goal-VLA: Image-Generative VLMs as Object-Centric World Models Empowering Zero-shot Robot Manipulation)
 
-> ⚙️ 本文由 Moltbot 自动生成 | 2026-04-01
+> ⚙️ 本文由 Moltbot 自动生成 | 2026-04-01 · **深度更新** Claude Opus 4.6 | 2026-04-09
+>
+> 🏆 **ICRA 2026 录用** · NUS 邵林团队（邵林为 RoboScience 首席科学家）· **VLOA 大模型的前序基础**
 >
 > **论文**: Goal-VLA: Image-Generative VLMs as Object-Centric World Models Empowering Zero-shot Robot Manipulation
 > **链接**: https://arxiv.org/abs/2506.23919
 > **项目主页**: https://nus-lins-lab.github.io/goalvlaweb/
+> **团队**: 共同一作陈浩楠、郭京翔（NUS）· 通讯作者邵林（NUS 计算机学院助理教授）
 > **核心定位**: 用图像生成式 VLM 作为物体中心世界模型生成目标状态，通过"物体姿态"这一黄金接口解耦高层语义推理与底层动作控制，实现真正的零样本泛化
 
 ---
@@ -465,16 +468,68 @@ P_goal = ApplyTransform((R,t), P_contact)
 
 ---
 
+## 9. 与 VLOA 具身世界模型的关系
+
+> Goal-VLA 是 RoboScience VLOA 大模型架构的前序基础。邵林为 RoboScience 首席科学家。
+
+### 从 Goal-VLA 到 VLOA 的演进
+
+| 维度 | Goal-VLA (ICRA 2026) | VLOA 具身世界模型 (2026) |
+|------|-----|------|
+| 输出 | 目标图像 → 提取物体 3D 姿态 | 3D 点云运动轨迹（连续时间序列） |
+| 时间建模 | 只预测终态（一张目标图像） | 预测完整运动过程 |
+| 物理约束 | 通过"合成-反思"迭代保证 | 端到端学习 + 显式几何约束 |
+| 世界模型 | VLM 生成图像（外部 API） | 专用世界因果 Transformer |
+| 数据需求 | 零样本（不需要训练数据） | 100 万小时视频 + 100 亿次仿真 |
+| 底层策略 | 免训练运动规划 | 专用通用操作模型 |
+
+**关键继承**：Goal-VLA 验证了"物体目标状态作为中间表示"的范式可行性。VLOA 将这一思路从"预测终态"推进到"预测完整 3D 轨迹"，从"依赖外部 VLM API"推进到"自研世界因果 Transformer"。
+
+**"合成-反思"机制的启示**：Goal-VLA 的迭代反思机制（从 40.0% → 88.8% 成功率）证明了自我验证在世界模型中的必要性。VLOA 的扩散多解性建模可以看作是一种"并行反思"——同时生成多条轨迹，隐式地做了可行性筛选。
+
+→ 详见 [VLOA 具身世界模型](vloa_embodied_world_model_3d_point_cloud_trajectory_2026.md)
+
+---
+
+## 10. Opus 的反思
+
+### 目标图像可能是比 3D 轨迹更自然的人机接口
+
+VLOA 用 3D 点云轨迹，技术上更精确。但 Goal-VLA 的"目标图像"对人类更直观——给机器人看一张"做完之后应该是什么样"的图片就够了。终极的人机协作可能是两种接口并存：非专业用户给目标图（Goal-VLA 风格），系统内部展开成 3D 轨迹（VLOA 风格）再执行。
+
+### "合成-反思"揭示了一个深层规律
+
+从 40% → 88.8% 的提升几乎完全来自让一个 VLM 审查另一个 VLM 的输出。这和 LLM 的 Constitutional AI / self-critique 是同一套思路。深层含义：在具身智能中，生成容易、验证也容易、但直接生成正确的很难。解法不是训练更强的生成器，而是加验证器做闭环。这可能适用于所有 VLA——先生成动作，用世界模型验证后果，不合理就重新生成。
+
+→ 与 [Scaling Verification](../rl/scaling_verification_can_be_more_effective_than_scaling_poli_dissection.md)（验证比策略学习更有效）的结论完全一致
+
+### 零训练是优势也是天花板
+
+不需要训练 = 极其容易部署。但能力上限被锁死在外部模块（Gemini、Depth Anything）。VLOA 选择自研端到端模型，短期更贵但天花板更高。最终赢家可能是渐进路线：先用免训练方法冷启动 → 收集数据 → 逐步替换为训练模型。
+
+→ 详见 [VLA 研究主线](../vla-core/vla_research_mainline.md)（冷启动问题）
+
+---
+
 ## 关键引用
 
 - **论文**: https://arxiv.org/abs/2506.23919
 - **项目主页**: https://nus-lins-lab.github.io/goalvlaweb/
-- **代码**: 论文提及"Supplementary materials"但未公开 GitHub（截至 2026-04-01）
+- **发表**: ICRA 2026（IEEE International Conference on Robotics & Automation）
 - **基线方法**:
   - MOKA: https://arxiv.org/abs/2402.12188
   - VoxPoser: https://arxiv.org/abs/2307.05973
   - OpenVLA: https://arxiv.org/abs/2406.09246
+  - π₀: https://arxiv.org/abs/2410.24164
+- **VLOA 关联**: [VLOA 具身世界模型](vloa_embodied_world_model_3d_point_cloud_trajectory_2026.md)
 
 ---
 
-[← Back to Theory](./README.md)
+<table><tr><td>
+
+**深度更新**：Claude Opus 4.6 × [Pulsar 照见](https://github.com/sou350121/Pulsar-KenVersion) · 2026-04-09
+**新增内容**：ICRA 2026 录用信息、VLOA 关联分析、Opus 反思（合成-反思深层规律）
+
+</td></tr></table>
+
+[← Back to Explorer's Map](../README.md)
