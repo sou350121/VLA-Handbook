@@ -269,6 +269,10 @@ DP3 (3D Diffusion Policy) 证明了在点云空间做动作生成比 2D 图像�
 | **Point Transformer V3** | Transformer + 序列化注意力 | 通用 3D 理解 · CVPR'24 Oral | [github/Pointcept/PointTransformerV3](https://github.com/Pointcept/PointTransformerV3) |
 | **Pointcept** | 统一点云感知框架 | 分割 / 检测 / 预训练 | [github/Pointcept/Pointcept](https://github.com/Pointcept/Pointcept) |
 | **Torch-Points3D** | 模块化 3D DL 框架 | 多任务可复现 | [github/torch-points3d](https://github.com/torch-points3d/torch-points3d) |
+| **Uni3D** | 3D 基础模型 · ICLR'24 Spotlight · 1B 参数 | 3D 表征对齐 CLIP | [github/baaivision/Uni3D](https://github.com/baaivision/Uni3D) |
+| **UniPre3D** | CVPR'25 · 3DGS 跨模态预训练 | 统一 3D 预训练 | [github/wangzy22/UniPre3D](https://github.com/wangzy22/UniPre3D) |
+| **PonderV2** | T-PAMI'25 · 通用 3D 预训练范式 | 3D 基础模型 | [github/OpenGVLab/PonderV2](https://github.com/OpenGVLab/PonderV2) |
+| **learning3d** | 点云 DL 方法合集（含预训练权重） | 快速复现 | [github/vinits5/learning3d](https://github.com/vinits5/learning3d) |
 
 ### 9.3 SLAM 系统
 
@@ -281,6 +285,9 @@ DP3 (3D Diffusion Policy) 证明了在点云空间做动作生成比 2D 图像�
 | **RTAB-Map** | 多模态 | RGB-D / Stereo / LiDAR | 大规模回环 + 多传感器支持 | [github/introlab/rtabmap](https://github.com/introlab/rtabmap) |
 | **SLAM Toolbox** | 2D | LiDAR | ROS2 官方推荐，lifelong mapping | [github/SteveMacenski/slam_toolbox](https://github.com/SteveMacenski/slam_toolbox) |
 | **hdl_graph_slam** | LiDAR | 3D LiDAR | 基于图的 3D SLAM | [github/koide3/hdl_graph_slam](https://github.com/koide3/hdl_graph_slam) |
+| **KISS-SLAM** | LiDAR | 3D LiDAR | IROS 2025 · "just works"，基于 KISS-ICP + MapClosures | [github/PRBonn/kiss-slam](https://github.com/PRBonn/kiss-slam) |
+| **FAST-LIO2** | LiDAR + IMU | LiDAR-Inertial | ikd-Tree 增量建图，HKU MARS Lab | [github/hku-mars/FAST_LIO](https://github.com/hku-mars/FAST_LIO) |
+| **Point-LIO** | LiDAR + IMU | LiDAR-Inertial | 高带宽紧耦合，剧烈运动下最稳 | [github/hku-mars/Point-LIO](https://github.com/hku-mars/Point-LIO) |
 
 ### 9.4 神经 SLAM / 3DGS-SLAM（2024-2026 前沿）
 
@@ -302,6 +309,7 @@ DP3 (3D Diffusion Policy) 证明了在点云空间做动作生成比 2D 图像�
 | **TEASER++** | 鲁棒全局点云配准（抗离群点） | [github/MIT-SPARK/TEASER-plusplus](https://github.com/MIT-SPARK/TEASER-plusplus) |
 | **small_gicp** | 快速 ICP/GICP/VGICP（nangicp 后继） | [github/koide3/small_gicp](https://github.com/koide3/small_gicp) |
 | **Fast-GICP** | GPU 加速 GICP | [github/SMRT-AIST/fast_gicp](https://github.com/SMRT-AIST/fast_gicp) |
+| **SANDRO** | RANSAC-free 鲁棒配准（IRLS + 分裂策略） | [github/iit-DLSLab/SANDRO](https://github.com/iit-DLSLab/SANDRO) |
 
 ### 9.6 3D 渲染与重建框架
 
@@ -323,7 +331,14 @@ DP3 (3D Diffusion Policy) 证明了在点云空间做动作生成比 2D 图像�
 
 > 💡 **PointWorld** 和 **PointVLA** 是 2025-2026 最值得关注的方向——它们验证了"点云是 VLA 的第三模态"这一假设。PointWorld 用 3D 点云流做世界模型；PointVLA 证明向现有 2D VLA 注入点云可以不重训就提升性能。
 
-### 9.8 Awesome 列表（持续追踪）
+### 9.8 综合对比与算法集合
+
+| 工具 | 说明 | 链接 |
+|------|------|------|
+| **SLAM-application** | 20+ SLAM 算法在 Gazebo/真机上的统一部署配置对比 | [github/engcang/SLAM-application](https://github.com/engcang/SLAM-application) |
+| **3D-PointCloud** | 点云论文 + 数据集全景索引 | [github/zhulf0804/3D-PointCloud](https://github.com/zhulf0804/3D-PointCloud) |
+
+### 9.9 Awesome 列表（持续追踪）
 
 | 列表 | 覆盖范围 | 链接 |
 |------|---------|------|
