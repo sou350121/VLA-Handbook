@@ -101,9 +101,9 @@ VLA 的核心思想很简单：拿一个视觉语言模型（VLM），给它装�
 
 | 推荐入口 | 说明 |
 |---------|------|
+| [**主线总纲**](diffusion-flow/diffusion_flow_mainline.md) | 动作生成的完整研究地图 |
 | [Diffusion Policy 详解](diffusion-flow/diffusion_policy.md) | 从 DDPM 到机器人动作生成 |
 | [动作生成范式详解](diffusion-flow/action_representations.md) | 离散 vs 连续、分块 vs 流式 |
-| [Compression Gap](diffusion-flow/the_compression_gap_why_discrete_tokenization_limits_vision_dissection.md) | 为什么 token 化限制了 VLA 的 scaling |
 
 </details>
 
@@ -118,7 +118,7 @@ VLA 的核心思想很简单：拿一个视觉语言模型（VLM），给它装�
 
 | 推荐入口 | 说明 |
 |---------|------|
-| [World Model 总纲](world-model/world_model_mainline.md) | 从 evaluator 到 planner 到 world action model |
+| [**主线总纲**](world-model/world_model_mainline.md) | 从 evaluator 到 planner 到 world action model |
 | [DreamZero](world-model/dreamzero_world_action_models_zero_shot_policies_2026.md) | 世界模型 = 零样本策略 |
 | [EgoSim](world-model/egosim_egocentric_world_simulator_for_embodied_interaction_g_dissection.md) | 第一人称闭环世界模拟器 |
 
@@ -135,6 +135,7 @@ VLA 的核心思想很简单：拿一个视觉语言模型（VLM），给它装�
 
 | 推荐入口 | 说明 |
 |---------|------|
+| [**主线总纲**](rl/rl_mainline.md) | RL for VLA 的完整研究地图 |
 | [强化学习基础](rl/reinforcement_learning.md) | RL 的核心概念和 VLA 特有的挑战 |
 | [VLA+RL 实战教程](rl/vla_rl_practical_guide.md) | 架构选型、算法选择、工具链搭建 |
 | [π0.6 / RECAP](rl/pi0_6_recap_rl_as_supervised_learning.md) | 披着 RL 外衣的 Supervised Learning？ |
@@ -152,8 +153,8 @@ VLA 的核心思想很简单：拿一个视觉语言模型（VLM），给它装�
 
 | 推荐入口 | 说明 |
 |---------|------|
+| [**主线总纲**](tactile/tactile_mainline.md) | 触觉研究的完整地图 |
 | [触觉感知与 VLA](tactile/tactile_vla.md) | 为什么触觉是 VLA 的"最后一公里" |
-| [TacMamba](tactile/tacmamba_a_tactile_history_compression_adapter_bridging_fast_dissection.md) | 触觉历史压缩：快速反射 + 慢速推理 |
 
 </details>
 
@@ -168,8 +169,8 @@ VLA 的 V 代表 Vision，但机器人视觉远不止图像分类。需要从 2D
 
 | 推荐入口 | 说明 |
 |---------|------|
+| [**主线总纲**](perception/perception_mainline.md) | 感知研究的完整地图 |
 | [视觉与多模态感知](perception/perception_techniques.md) | VLA 的眼睛怎么工作 |
-| [点云与 SLAM](perception/pointcloud_slam.md) | 3D 世界的数字孪生 |
 
 </details>
 
@@ -184,8 +185,8 @@ VLA 的 V 代表 Vision，但机器人视觉远不止图像分类。需要从 2D
 
 | 推荐入口 | 说明 |
 |---------|------|
+| [Benchmark 主线](planning/benchmark_mainline.md) | 评测体系的演进 |
 | [思维链推理](planning/chain_of_thought.md) | 让 VLA 先"想清楚"再动手 |
-| [运动规划](planning/motion_planning.md) | 从 A 到 B 的最优路径 |
 | [VLA 十大挑战](planning/vla_challenges.md) | 目前还没解决的 10 个难题 |
 
 </details>
@@ -201,9 +202,9 @@ VLA 的 V 代表 Vision，但机器人视觉远不止图像分类。需要从 2D
 
 | 推荐入口 | 说明 |
 |---------|------|
+| [**主线总纲**](foundation/foundation_mainline.md) | 基础技术工具箱地图 |
 | [VLA 数学必备](foundation/math_for_vla.md) | 张量、旋转矩阵、SE(3)——VLA 的数学语言 |
 | [Loss Functions 手册](foundation/vla_loss_functions_handbook.md) | 每种训练目标的直觉解释 |
-| [PEFT & LoRA](foundation/peft_lora.md) | 怎么用 1% 的参数微调整个模型 |
 
 </details>
 
@@ -218,9 +219,9 @@ VLA 的 V 代表 Vision，但机器人视觉远不止图像分类。需要从 2D
 
 | 推荐入口 | 说明 |
 |---------|------|
+| [**主线总纲**](deployment/deployment_mainline.md) | 部署与硬件的完整地图 |
 | [机械臂控制](deployment/robot_control.md) | 运动学、动力学与控制的工程入门 |
 | [Isaac Lab](deployment/isaac_lab.md) | NVIDIA 的 GPU 加速仿真平台 |
-| [灵巧手机械学](deployment/dexterous_hand_mechanics.md) | 手指怎么做到像人一样灵活 |
 
 </details>
 
@@ -235,8 +236,8 @@ VLA 的 V 代表 Vision，但机器人视觉远不止图像分类。需要从 2D
 
 | 推荐入口 | 说明 |
 |---------|------|
+| [**主线总纲**](frontier/frontier_mainline.md) | 跨域灵感的完整地图 |
 | [Physics of AI](frontier/physics_of_ai_liuziming.md) | 不赌规模，把神经网络当物理系统 |
-| [鸽子磁感导航](frontier/pigeon_magnetoreception_vestibular_electrosense.md) | 生物传感器的硬核机制 |
 
 </details>
 
