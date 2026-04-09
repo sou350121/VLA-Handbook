@@ -18,7 +18,7 @@
 VLA 论文每天几十篇，真正能用的工程细节零散在 GitHub Issue 和论文附录里。
 这个 Handbook 做一件事：**把"看懂论文"和"跑通代码"之间的坑，全部填平。**
 
-> 186 篇理论文档（含 33 篇 2026 前沿深度解析） · 165 篇英文社区实战笔记 · 300+ 条中文社区蒸馏 · 47 条 GitHub Issues 工程经验 · 12 期双周推理报告 · 每日自动 pipeline（⚡ 论文评分 · 深度拆解 · 社交情报）
+> 203 篇理论文档（10 个主题目录，含 33+ 篇 2026 前沿深度解析） · 165 篇英文社区实战笔记 · 300+ 条中文社区蒸馏 · 47 条 GitHub Issues 工程经验 · 12 期双周推理报告 · 每日自动 pipeline（⚡ 论文评分 · 深度拆解 · 社交情报）
 
 ---
 
@@ -68,18 +68,18 @@ VLA 论文每天几十篇，真正能用的工程细节零散在 GitHub Issue �
 
 **第一层：VLA 是什么、核心设计选择是什么（~15 min）**
 
-**① [VLA 架构总览](theory/vla_arch.md)** `5 min`
+**① [VLA 架构总览](theory/vla-core/vla_arch.md)** `5 min`
 先建立全局图：输入（视觉 + 语言）→ Backbone → Action Head → 机器人动作。RT-1 → RT-2 → OpenVLA → π0 的演化逻辑，读完你知道每个模块的作用和它们怎么拼在一起。
 
-**② [动作生成三范式](theory/action_representations.md)** `10 min`
+**② [动作生成三范式](theory/diffusion-flow/action_representations.md)** `10 min`
 ①读完你会问：Action Head 到底怎么输出动作？这篇回答：离散 Token（快但粗）→ Diffusion（精但慢）→ Flow Matching（又快又精）。这是 VLA 领域最关键的分叉点，后面所有论文都在这三条路上选边。
 
 **第二层：当前赢家为什么赢、整个领域怎么演化（~15 min）**
 
-**③ [Flow Matching 原理拆解](theory/pi0_flow_matching.md)** `10 min`
+**③ [Flow Matching 原理拆解](theory/diffusion-flow/pi0_flow_matching.md)** `10 min`
 ②告诉你 Flow Matching 胜出，这篇解释为什么：ODE 直线路径 vs Diffusion 的曲线去噪，5-20 步推理实现 50Hz 控制。π0 的工程实现细节。
 
-**④ [研究主线梳理](theory/vla_research_mainline.md)** `5 min`
+**④ [研究主线梳理](theory/vla-core/vla_research_mainline.md)** `5 min`
 拉远一步看全局：为什么 ACT/DP 仍是 baseline、数据规模化 → 感知增强 → RL 后训练三条改进主线怎么交汇。读完你有一张完整的领域地图。
 
 **第三层：对接现实（按需深入）**
@@ -97,11 +97,11 @@ VLA 论文每天几十篇，真正能用的工程细节零散在 GitHub Issue �
 
 | 方向 | 入口 | 适合谁 |
 |------|------|--------|
-| 开源训练栈复现 | [UnifolM-VLA-0](theory/unifolm_vla_0_unitree_2026.md) | 想在宇树机器人上跑通 |
-| 端到端代码级理解 | [Spirit-v1.5 解析](theory/spirit_v1_5_dissection.md) | 想读懂每行 shape 变换 |
-| 最新零样本迁移 | [World Action Model](theory/world_action_models_are_zero_shot_policies_dissection.md) | 想了解 2026 前沿方向 |
-| 触觉 + 力控对齐 | [TAF-VLA](theory/frontier/taf_vla_tactile_force_alignment_2026.md) | 想做触觉融合 |
-| VLA 知识蒸馏 | [Shallow-Pi](theory/frontier/shallow_pi_knowledge_distillation_flow_vla_2026.md) | 想做模型压缩 / 边缘部署 |
+| 开源训练栈复现 | [UnifolM-VLA-0](theory/vla-core/unifolm_vla_0_unitree_2026.md) | 想在宇树机器人上跑通 |
+| 端到端代码级理解 | [Spirit-v1.5 解析](theory/vla-core/spirit_v1_5_dissection.md) | 想读懂每行 shape 变换 |
+| 最新零样本迁移 | [World Action Model](theory/world-model/world_action_models_are_zero_shot_policies_dissection.md) | 想了解 2026 前沿方向 |
+| 触觉 + 力控对齐 | [TAF-VLA](theory/tactile/taf_vla_tactile_force_alignment_2026.md) | 想做触觉融合 |
+| VLA 知识蒸馏 | [Shallow-Pi](theory/foundation/shallow_pi_knowledge_distillation_flow_vla_2026.md) | 想做模型压缩 / 边缘部署 |
 | 完整学习路线 | [学习路线图](theory/README.md) | 想系统性地从头学 |
 
 ---
@@ -124,7 +124,7 @@ VLA 论文每天几十篇，真正能用的工程细节零散在 GitHub Issue �
 
 | 目录 | 内容 |
 |------|------|
-| [`theory/`](theory/) | 186 篇理论文档：90 篇核心 + 60 篇前沿 + 9 篇触觉 + 6 篇 LLM 推理 + 5 篇经典 + 子目录专题 |
+| [`theory/`](theory/) | 203 篇理论文档：90 篇核心 + 60 篇前沿 + 9 篇触觉 + 6 篇 LLM 推理 + 5 篇经典 + 子目录专题 |
 | [`deployment/`](deployment/) | 真机部署：硬件选型 · 多模态同步 · Sim-to-Real + 三份社区实战笔记 |
 | [`reports/biweekly/`](reports/biweekly/) | 12 期双周推理报告（含预测回顾 ✅/❌ 打分）|
 | [`reports/weekly/`](reports/weekly/) | 29 期周报 + 每日 digest + SOTA + 风向洞察 |
@@ -142,7 +142,7 @@ VLA 论文每天几十篇，真正能用的工程细节零散在 GitHub Issue �
 | 目标 | 入口 | 说明 |
 |---|---|---|
 | 补理论 / 刷面试 | [`theory/README.md`](theory/README.md) | 路线图 + 核心概念索引 |
-| 找论文 / 做综述 | [`theory/paper_index.md`](theory/paper_index.md) | 多维索引 + 发展史全景图 |
+| 找论文 / 做综述 | [`theory/paper_index.md`](theory/foundation/paper_index.md) | 多维索引 + 发展史全景图 |
 | 真机落地 | [`deployment/README.md`](deployment/README.md) | 硬件选型 · 多模态同步 · Sim-to-Real |
 | 社区踩坑（中文） | [`deployment/community_field_notes_xiaohongshu.md`](deployment/community_field_notes_xiaohongshu.md) | 🔥 300+ 条中文社区蒸馏 · 帖1-200 + 索引 + 黑话辞典 |
 | 社区踩坑（英文） | [`deployment/community_field_notes_english.md`](deployment/community_field_notes_english.md) | 🔥 165 条可追溯条目 · HF Blog + Discord + 厂商博客 |
@@ -161,42 +161,42 @@ VLA 论文每天几十篇，真正能用的工程细节零散在 GitHub Issue �
 | 论文 | 方向 |
 |------|------|
 | **架构与范式** | |
-| [Figure Helix 0.2: Full-Body Autonomy](theory/frontier/figure_helix_02_full_body_autonomy_2026.md) | S1+S2 双系统人形 VLA |
-| [SimVLA: Simple VLA Baseline](theory/frontier/simvla_simple_vla_baseline_robotic_manipulation_2026.md) | 极简 VLA 基线 |
-| [ABOT-M0: Action Manifold Learning](theory/frontier/abot_m0_action_manifold_learning_vla_foundation_2026.md) | 动作流形学习 |
-| [StarVLA: LEGO-like VLA Codebase](theory/starvla_lego_like_vla_codebase_2026.md) | 模块化架构 |
-| [LingBot: Pragmatic VLA Foundation Model](theory/lingbot_vla_pragmatic_vla_foundation_model_2026.md) | 语言引导 VLA |
-| [ViTRA: Scalable VLA Pretraining from Human Videos](theory/frontier/vitra_scalable_vla_pretraining_human_activity_videos_2026.md) | 人类视频预训练 |
+| [Figure Helix 0.2: Full-Body Autonomy](theory/vla-core/figure_helix_02_full_body_autonomy_2026.md) | S1+S2 双系统人形 VLA |
+| [SimVLA: Simple VLA Baseline](theory/vla-core/simvla_simple_vla_baseline_robotic_manipulation_2026.md) | 极简 VLA 基线 |
+| [ABOT-M0: Action Manifold Learning](theory/vla-core/abot_m0_action_manifold_learning_vla_foundation_2026.md) | 动作流形学习 |
+| [StarVLA: LEGO-like VLA Codebase](theory/vla-core/starvla_lego_like_vla_codebase_2026.md) | 模块化架构 |
+| [LingBot: Pragmatic VLA Foundation Model](theory/vla-core/lingbot_vla_pragmatic_vla_foundation_model_2026.md) | 语言引导 VLA |
+| [ViTRA: Scalable VLA Pretraining from Human Videos](theory/vla-core/vitra_scalable_vla_pretraining_human_activity_videos_2026.md) | 人类视频预训练 |
 | **世界模型** | |
-| [DreamZero: World Action Models Zero-shot](theory/dreamzero_world_action_models_zero_shot_policies_2026.md) | 零样本迁移 |
-| [AtomVLA: Offline Post-Training + Predictive World Models](theory/frontier/atomvla_offline_post_training_predictive_latent_world_models_2026.md) | 离线后训练 |
-| [VLAW: Iterative Co-Improvement VLA + World Model](theory/frontier/vlaw_iterative_co_improvement_vla_world_model_2026.md) | VLA-WM 协同 |
-| [WAM: Three Routes to Video Pretraining](theory/frontier/wam_three_routes_video_pretraining_vs_vla_2026.md) | 视频预训练路线 |
-| [Video Generation Models in Robotics Survey](theory/frontier/video_generation_models_in_robotics_survey_2026.md) | 视频生成综述 |
+| [DreamZero: World Action Models Zero-shot](theory/world-model/dreamzero_world_action_models_zero_shot_policies_2026.md) | 零样本迁移 |
+| [AtomVLA: Offline Post-Training + Predictive World Models](theory/world-model/atomvla_offline_post_training_predictive_latent_world_models_2026.md) | 离线后训练 |
+| [VLAW: Iterative Co-Improvement VLA + World Model](theory/world-model/vlaw_iterative_co_improvement_vla_world_model_2026.md) | VLA-WM 协同 |
+| [WAM: Three Routes to Video Pretraining](theory/world-model/wam_three_routes_video_pretraining_vs_vla_2026.md) | 视频预训练路线 |
+| [Video Generation Models in Robotics Survey](theory/world-model/video_generation_models_in_robotics_survey_2026.md) | 视频生成综述 |
 | **强化学习后训练** | |
-| [GigaBrain: World Model RL Ramp](theory/gigabrain_0_5m_star_world_model_based_rl_ramp_2026.md) | 世界模型 RL |
-| [Evo-RL: Open Real-World RL](theory/frontier/evo_rl_open_real_world_rl_recap_pistar06_so101_2026.md) | 真机 RL 闭环 |
+| [GigaBrain: World Model RL Ramp](theory/world-model/gigabrain_0_5m_star_world_model_based_rl_ramp_2026.md) | 世界模型 RL |
+| [Evo-RL: Open Real-World RL](theory/rl/evo_rl_open_real_world_rl_recap_pistar06_so101_2026.md) | 真机 RL 闭环 |
 | **触觉与感知** | |
-| [TAF-VLA: Tactile-Force Alignment](theory/frontier/taf_vla_tactile_force_alignment_2026.md) | 触觉力控对齐 |
-| [TacRefineNet: Tactile-Only Grasp Refinement](theory/frontier/tacrefinenet_tactile_only_grasp_refinement_2026.md) | 纯触觉抓取 |
-| [TouchGuide: Inference-Time Touch Steering](theory/frontier/touchguide_inference_time_steering_touch_guidance_2026.md) | 推理时触觉引导 |
-| [Visual-Tactile Pretraining + Online Multitask](theory/frontier/visual_tactile_pretraining_online_multitask_learning_2026.md) | 视觉-触觉预训练 |
+| [TAF-VLA: Tactile-Force Alignment](theory/tactile/taf_vla_tactile_force_alignment_2026.md) | 触觉力控对齐 |
+| [TacRefineNet: Tactile-Only Grasp Refinement](theory/tactile/tacrefinenet_tactile_only_grasp_refinement_2026.md) | 纯触觉抓取 |
+| [TouchGuide: Inference-Time Touch Steering](theory/tactile/touchguide_inference_time_steering_touch_guidance_2026.md) | 推理时触觉引导 |
+| [Visual-Tactile Pretraining + Online Multitask](theory/tactile/visual_tactile_pretraining_online_multitask_learning_2026.md) | 视觉-触觉预训练 |
 | **效率与部署** | |
-| [Shallow-Pi: Knowledge Distillation for Flow VLA](theory/frontier/shallow_pi_knowledge_distillation_flow_vla_2026.md) | VLA 知识蒸馏 |
-| [QVLA: Action-Centric Quantization](theory/frontier/qvla_action_centric_quantization_2026.md) | 动作量化 |
-| [RDT2-UMI: Zero-Shot Cross-Embodiment](theory/frontier/rdt2_umi_zero_shot_cross_embodiment_2026.md) | 跨具身零样本 |
-| [RoboPocket: Robot-Free Policy Iteration via Phone](theory/frontier/robopocket_robot_free_instant_policy_iteration_phone_2026.md) | 手机端策略迭代 |
+| [Shallow-Pi: Knowledge Distillation for Flow VLA](theory/foundation/shallow_pi_knowledge_distillation_flow_vla_2026.md) | VLA 知识蒸馏 |
+| [QVLA: Action-Centric Quantization](theory/foundation/qvla_action_centric_quantization_2026.md) | 动作量化 |
+| [RDT2-UMI: Zero-Shot Cross-Embodiment](theory/foundation/rdt2_umi_zero_shot_cross_embodiment_2026.md) | 跨具身零样本 |
+| [RoboPocket: Robot-Free Policy Iteration via Phone](theory/deployment/robopocket_robot_free_instant_policy_iteration_phone_2026.md) | 手机端策略迭代 |
 | **训练栈与基础设施** | |
-| [UnifolM: Open-source VLA Training Stack](theory/unifolm_vla_0_unitree_2026.md) | 开源训练栈 |
-| [RynnBrain: Open Embodied Foundation Models](theory/frontier/rynnbrain_open_embodied_foundation_models_2026.md) | 开源基础模型 |
-| [Physical Intelligence Layer: Robot API](theory/frontier/physical_intelligence_layer_robot_api_2026.md) | PI Robot API |
-| [NVIDIA Physical AI + Autonomous Driving](theory/frontier/nvidia_physical_ai_autonomous_driving_2026.md) | NVIDIA 物理 AI |
-| [NVIDIA AI 5-Layer Cake Infrastructure](theory/frontier/nvidia_ai_5_layer_cake_infrastructure_2026.md) | NVIDIA 基建 |
+| [UnifolM: Open-source VLA Training Stack](theory/vla-core/unifolm_vla_0_unitree_2026.md) | 开源训练栈 |
+| [RynnBrain: Open Embodied Foundation Models](theory/vla-core/rynnbrain_open_embodied_foundation_models_2026.md) | 开源基础模型 |
+| [Physical Intelligence Layer: Robot API](theory/deployment/physical_intelligence_layer_robot_api_2026.md) | PI Robot API |
+| [NVIDIA Physical AI + Autonomous Driving](theory/deployment/nvidia_physical_ai_autonomous_driving_2026.md) | NVIDIA 物理 AI |
+| [NVIDIA AI 5-Layer Cake Infrastructure](theory/deployment/nvidia_ai_5_layer_cake_infrastructure_2026.md) | NVIDIA 基建 |
 | **视觉与推理** | |
-| [Thinker-VLM: Embodied Intelligence](theory/frontier/thinker_vlm_embodied_intelligence_2026.md) | VLM 具身推理 |
-| [WaveFormer: Wave Equation Vision](theory/frontier/waveformer_wave_equation_vision_2026.md) | 波动方程视觉 |
-| [FAST Foundation Stereo](theory/frontier/fast_foundation_stereo_real_time_zero_shot_stereo_matching_2026.md) | 零样本立体匹配 |
-| [GeOPT: Geometric Pretraining for Physics Sim](theory/frontier/geopt_lifted_geometric_pretraining_physics_simulation_2026.md) | 几何预训练 |
+| [Thinker-VLM: Embodied Intelligence](theory/planning/thinker_vlm_embodied_intelligence_2026.md) | VLM 具身推理 |
+| [WaveFormer: Wave Equation Vision](theory/perception/waveformer_wave_equation_vision_2026.md) | 波动方程视觉 |
+| [FAST Foundation Stereo](theory/perception/fast_foundation_stereo_real_time_zero_shot_stereo_matching_2026.md) | 零样本立体匹配 |
+| [GeOPT: Geometric Pretraining for Physics Sim](theory/world-model/geopt_lifted_geometric_pretraining_physics_simulation_2026.md) | 几何预训练 |
 
 ---
 
@@ -214,7 +214,7 @@ VLA Handbook 的每日内容由 [照见 Pulsar](https://github.com/sou350121/Pul
 
 ## 🤖 让 AI 编程助手变成 VLA 专家
 
-想让你的 AI 助手直接拥有本 Handbook 186 篇理论文档的知识？
+想让你的 AI 助手直接拥有本 Handbook 203 篇理论文档的知识？
 
 **[VLA Expert Skill](https://github.com/sou350121/VLA-expert-skill)** 把 Handbook 的知识压缩成一个即插即用的 AI Skill，支持多个平台：
 
