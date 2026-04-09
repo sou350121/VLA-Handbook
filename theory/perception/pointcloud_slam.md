@@ -292,16 +292,16 @@ DP3 (3D Diffusion Policy) 证明了在点云空间做动作生成比 2D 图像�
 | **OpenGS-SLAM** | 3D Gaussian | RGB only | ICRA 2025 · 户外无界场景 | [github/3DAgentWorld/OpenGS-SLAM](https://github.com/3DAgentWorld/OpenGS-SLAM) |
 | **Photo-SLAM** | 3D Gaussian | Mono/Stereo/RGB-D | CVPR'24 · 实时光照真实建图 | [github/HuajianUP/Photo-SLAM](https://github.com/HuajianUP/Photo-SLAM) |
 
-### 9.5 优化后端 / 工具链
+### 9.5 优化后端 / 配准工具
 
 | 工具 | 用途 | 链接 |
 |------|------|------|
 | **GTSAM** | 因子图优化（LIO-SAM 的后端） | [github/borglab/gtsam](https://github.com/borglab/gtsam) |
 | **g2o** | 通用图优化（ORB-SLAM 的后端） | [github/RainerKuemmerle/g2o](https://github.com/RainerKuemmerle/g2o) |
 | **Ceres Solver** | 非线性最小二乘（BA / 标定） | [github/ceres-solver/ceres-solver](https://github.com/ceres-solver/ceres-solver) |
-| **Depth Anything V2** | 单目深度估计（替代 LiDAR） | [github/DepthAnything/Depth-Anything-V2](https://github.com/DepthAnything/Depth-Anything-V2) |
-| **Grounded SAM** | 3D 分割 + 检测（动态物体剔除） | [github/IDEA-Research/Grounded-SAM-2](https://github.com/IDEA-Research/Grounded-SAM-2) |
-| **TEASER++** | 鲁棒全局点云配准 | [github/MIT-SPARK/TEASER-plusplus](https://github.com/MIT-SPARK/TEASER-plusplus) |
+| **TEASER++** | 鲁棒全局点云配准（抗离群点） | [github/MIT-SPARK/TEASER-plusplus](https://github.com/MIT-SPARK/TEASER-plusplus) |
+| **small_gicp** | 快速 ICP/GICP/VGICP（nangicp 后继） | [github/koide3/small_gicp](https://github.com/koide3/small_gicp) |
+| **Fast-GICP** | GPU 加速 GICP | [github/SMRT-AIST/fast_gicp](https://github.com/SMRT-AIST/fast_gicp) |
 
 ### 9.6 Awesome 列表（持续追踪）
 
@@ -357,7 +357,7 @@ lio_sam:
 - **视觉**：信息丰富、成本低，但受光照/纹理影响
 - **LiDAR**：几何精确、鲁棒，但成本高、分辨率有限
 - **融合**：LiDAR 提供全局几何，视觉提供语义和精细结构
-- **趋势**：深度基础模型（Depth Anything V2）让纯视觉方案精度逼近 LiDAR
+- **趋势**：深度基础模型（[Depth Anything V3](https://github.com/ByteDance-Seed/Depth-Anything-3)，比 V2 在 ETH3D 上 +10%）让纯视觉方案精度逼近 LiDAR
 </details>
 
 <details>
