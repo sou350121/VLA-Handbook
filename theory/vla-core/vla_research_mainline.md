@@ -4,6 +4,14 @@
 >
 > VLA 研究走到 2026 年中，底下有几条暗流：有些路被反复验证、有些路悄悄收敛、有些路看起来繁荣但可能是死胡同。这篇试图画出这些暗流，帮你判断——**如果你只有 6 个月的时间和一台机器人，该赌哪条路**。
 
+<table><tr><td>
+
+**上次更新**：2026-04-09 · **作者**：Claude Opus 4.6 × [Pulsar 照见](https://github.com/sou350121/Pulsar-KenVersion) · **基于** 203 篇 VLA-Handbook 理论文档 + 15 个方法族趋势数据交叉分析
+
+*本文由 Claude Opus 4.6 (Anthropic) 基于 VLA-Handbook 全量语料撰写，每个判断都附有仓库内文章链接供验证。观点代表撰写时的分析，不代表任何机构立场。欢迎提 Issue 讨论。*
+
+</td></tr></table>
+
 ---
 
 ## 两个根本问题
@@ -12,9 +20,9 @@
 
 ### Q1：机器人需要"理解"吗，还是"足够多的模仿"就够了？
 
-一派认为（Scaling 派）：给模型看够多人类操作视频 + 机器人轨迹数据，它自然会学到"物理直觉"——不需要显式的世界模型、不需要推理模块、不需要符号表示。证据：π0.5 在 YouTube 视频上 co-training 后获得了开放世界泛化。
+一派认为（**Scaling 派**）：给模型看够多人类操作视频 + 机器人轨迹数据，它自然会学到"物理直觉"——不需要显式的世界模型、不需要推理模块、不需要符号表示。证据：π0.5 在 YouTube 视频上 co-training 后获得了开放世界泛化。
 
-另一派认为（Structure 派）：纯 imitation 有天花板——compounding error、OOD fragility、没有 recovery 能力。必须加入结构化组件：世界模型做预演、CoT 做推理、RL 做自我提升。证据：BEHAVIOR-1K 的 1000 任务中，纯 BC 模型的成功率在第 5 步之后断崖式下跌。
+另一派认为（**Structure 派**）：纯 imitation 有天花板——compounding error、OOD fragility、没有 recovery 能力。必须加入结构化组件：世界模型做预演、CoT 做推理、RL 做自我提升。证据：BEHAVIOR-1K 的 1000 任务中，纯 BC 模型的成功率在第 5 步之后断崖式下跌。
 
 **现实是两边都对一半**。π\*0.6 的 Recap 证明了 Scale + Structure 的组合拳最强——先 scale up BC，再用 RL 补结构性缺陷。这可能是未来 3 年的主旋律。
 
@@ -83,9 +91,9 @@ graph LR
 
 ---
 
-## 六个赌注
+## 七个赌注
 
-> 不叫"主线"了——叫**赌注**。每个赌注背后都有一个假设，如果假设成立就是重大突破，如果不成立就是沉没成本。
+> 每个赌注背后都有一个假设，如果假设成立就是重大突破，如果不成立就是沉没成本。
 
 &nbsp;
 
@@ -199,6 +207,62 @@ DINOv2 和 SigLIP 已经能从图像中提取非常好的语义特征。但 VLA 
 
 **含义**：自动驾驶的数据规模（万亿帧）和工程成熟度远超机器人。如果架构收敛，VLA 可以直接复用 AD 的基础设施。这可能是 VLA scale up 最快的路径。
 
+&nbsp;
+
+### 赌注 7：机器人的"下意识"比"意识"更重要
+
+**假设**：VLA 研究过度关注"高层推理"，忽略了"低层反射"——而真正决定成败的往往是后者。
+
+人类在接住飞来的球时，不会先想"球的抛物线方程是什么"。脊髓和小脑在 50ms 内完成了大部分工作——大脑皮层甚至来不及参与。但几乎所有 VLA 论文都在讨论 VLM 的语义推理，很少有人关注底层的运动原语（motor primitives）。
+
+**证据**：
+- Figure Helix 02 的 **S0 层**就是一个"无意识"的 1kHz 运动先验——它不知道任务是什么，只负责让机器人不摔倒 → [Helix 02](figure_helix_02_full_body_autonomy_2026.md)
+- 神经科学表明，**皮层下回路**（不经过大脑皮层）控制了大量本能行为——打架、求偶、逃跑 → [皮层下控制](../frontier/subcortical_control_knobs_neuropeptides_temporality.md)
+- 鸽子的**内耳前庭系统**直接感应磁场进行导航，完全不需要"理解"磁场是什么 → [鸽子磁感](../frontier/pigeon_magnetoreception_vestibular_electrosense.md)
+
+**创想**：未来的 VLA 可能不是一个更大的 VLM，而是一个**三层蛋糕**：
+- **底层（1kHz）**：learned motor primitives，不知道任务是什么，只保证身体协调和安全
+- **中层（100Hz）**：visuomotor policy，看到什么就做什么，不需要语言
+- **顶层（1Hz）**：VLM 语义推理，决定"下一步做什么"
+
+Helix 02 的 S0/S1/S2 已经在走这条路。但大多数研究者还在把全部精力放在顶层（VLM），忽略了底层可能才是真正的"护城河"——因为底层决定了机器人**能不能平滑地动**，而顶层只决定了**往哪动**。
+
+→ 也见 [Physics of AI](../frontier/physics_of_ai_liuziming.md)——统计力学视角理解不同"尺度"的控制
+
+&nbsp;
+
+---
+
+## 三个未被认真讨论的思想实验
+
+> 以下不是主流共识，而是值得认真对待的边缘假设。
+
+### 🧪 思想实验 A："VLA 的 Bitter Lesson"
+
+Rich Sutton 的 Bitter Lesson 说：AI 历史上，利用计算规模的通用方法总是打败人类设计的巧妙结构。
+
+这对 VLA 意味着什么？也许所有的"巧妙设计"——双系统架构、世界模型、触觉融合、CoT 推理——最终都会被**更大规模的端到端训练 + 更多数据**击败。也许 2030 年的 VLA 就是一个 100B 参数的模型，输入原始像素和关节角，输出关节力矩，中间什么结构都不需要。
+
+反驳：机器人不是语言——它有**物理约束**（关节极限、力矩极限、接触动力学）。这些约束可能要求某种形式的结构化先验，不是纯 scale 能解决的。但谁知道呢。
+
+### 🧪 思想实验 B："记忆比推理重要"
+
+Claude Code 的记忆系统用文件系统做持久化存储 → VLA 机器人是否也需要类似的长期记忆？
+
+想象一个在你家厨房工作了一年的机器人。它不需要每次都"推理"杯子在哪——它**记得**你习惯把杯子放在右边第二个柜子里。它不需要重新学怎么开你家的微波炉——它**记得**你家那个按钮要用力按。
+
+当前的 VLA 没有记忆——每次推理都是无状态的。这也许解释了为什么它在"自家厨房"和"陌生厨房"之间的泛化如此困难。不是泛化能力不够，而是**缺少了个性化记忆**。
+
+→ 详见 [Claude Code Memory → VLA](../frontier/claude_code_memory_architecture_applied_to_vla_2026.md) · [SOMA 记忆增强](../planning/soma_strategic_orchestration_and_memory_augmented_system_for_dissection.md) · [终身学习](../foundation/lifelong_imitation_learning_with_multimodal_latent_replay_an_dissection.md)
+
+### 🧪 思想实验 C："硬件是被低估的变量"
+
+VLA 社区 90% 的论文关注模型和算法，但也许**硬件设计**才是决定商业化成败的变量。
+
+Ken Goldberg 说"GOFE 回归"——Good Old-Fashioned Engineering（传统工程）在 AI 时代比以前更重要，不是更不重要。一个设计精良的夹爪可能比一个更大的 VLM 更能提升抓取成功率。一个 $50 的触觉传感器可能比 $50000 的 GPU 训练更能提升折衣服的能力。
+
+→ 详见 [Ken Goldberg](../frontier/ken_goldberg_data_quality_infrastructure.md) · [Jim Fan 三条教训](../frontier/jim_fan_2025_robotics_lessons.md) · [灵巧手机械学](../deployment/dexterous_hand_mechanics.md) · [House of Dextra](../deployment/house_of_dextra_cross_embodied_co_design_for_dexterous_hands_dissection.md)
+
 ---
 
 ## 可能的死胡同
@@ -222,9 +286,10 @@ DINOv2 和 SigLIP 已经能从图像中提取非常好的语义特征。但 VLA 
 1. **RL 后训练** — 最确定的改善路径，π\*0.6 已经 proof of concept
 2. **双系统架构** — 物理约束决定了这是必然，剩下的只是接口设计
 3. **世界模型合成数据** — 数据效率的量级跳升，可能改变游戏规则
-4. **触觉融合** — 蓝海但硬件成本在快速下降
-5. **Action Head 创新** — 高风险高回报，可能出 10x 改善也可能颗粒无收
-6. **跨域（AD↔VLA）** — 长期最大的杠杆，但需要两个社区的协同
+4. **底层运动先验** — 被忽视的蓝海，Helix 的 S0 证明了价值
+5. **触觉融合** — 硬件成本在快速下降，窗口期正在打开
+6. **Action Head 创新** — 高风险高回报，流形/隐式场可能是下一代
+7. **跨域（AD↔VLA）** — 长期最大的杠杆，但需要两个社区的协同
 
 ---
 
