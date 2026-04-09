@@ -298,7 +298,7 @@ graph TD
 | **Depth Anything V3** | ✅ 多个变体 | ✅ 官方提供 | 冻结 encoder / 全微调 / metric 适配 | 低-中 |
 | **SAM 3.1** | ✅ 4M+ 概念 | ✅ Meta 提供 | LoRA / adapter / prompt tuning | 低（few-shot 可用） |
 | **PointWorld** | ✅ 2M 轨迹预训练 | ⚠️ MPC 框架（非传统微调） | 预训练后直接 MPC，无需任务特定微调 | 低（zero-shot） |
-| **PointVLA** | ✅ 复用已有 VLA | ✅ | **不重训 VLA**，只训点云注入模块 | 低 |
+| **PointVLA** | ✅ 复用已有 VLA | ⚠️ **未开源** | 不重训 VLA，只训点云注入模块（论文方法） | 低 |
 | **ParticleFormer** | ✅ | ✅ | 3D 世界模型端到端训练 | 中-高 |
 
 &nbsp;
@@ -395,7 +395,7 @@ graph TD
 | 工具 | 核心能力 | 链接 |
 |------|---------|------|
 | **PointWorld** | 3D 世界模型——点云流预测 + MPC 操作 · NVIDIA · 2M 轨迹预训练 | [github/NVlabs/PointWorld](https://github.com/NVlabs/PointWorld) |
-| **PointVLA** | 向已有 VLA 注入点云输入（无需重训）· 超越 OpenVLA/DiffusionPolicy | [arxiv/2503.07511](https://arxiv.org/abs/2503.07511) |
+| **PointVLA** | 向已有 VLA 注入点云输入（无需重训）· 超越 OpenVLA/DiffusionPolicy · ⚠️ **未开源** | [论文](https://arxiv.org/abs/2503.07511) · [项目页](https://pointvla.github.io/) |
 | **ParticleFormer** | 3D 点云世界模型 · 多物体多材质操作 | [arxiv/2506.23126](https://arxiv.org/abs/2506.23126) |
 | **Depth Anything V3** | 单目/多目/视频统一深度估计 · ETH3D 比 V2 +10% | [github/ByteDance-Seed/Depth-Anything-3](https://github.com/ByteDance-Seed/Depth-Anything-3) |
 | **SAM 3.1** | 概念分割 + 多目标跟踪 · 16 目标 32FPS · Meta 2026.03 | [github/facebookresearch/sam3](https://github.com/facebookresearch/sam3) |
