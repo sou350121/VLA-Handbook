@@ -242,11 +242,82 @@ DP3 (3D Diffusion Policy) 证明了在点云空间做动作生成比 2D 图像�
 
 ---
 
-## 9. 开源工具全景
+## 9. 工具原理分类 × 微调支持总览
+
+> 60+ 工具按底层原理分成 7 大类。**是否支持微调/训练**是 VLA 研究者最关心的属性——决定了工具能否融入端到端 pipeline。
+
+### 原理分类全景
+
+```mermaid
+graph TD
+    ALL["60+ 点云/SLAM 工具"] --> GEO["几何方法<br/><i>无学习，纯数学优化</i>"]
+    ALL --> FEAT["特征 SLAM<br/><i>手工特征 + 图优化</i>"]
+    ALL --> DL_SUP["监督深度学习<br/><i>标注数据训练</i>"]
+    ALL --> DL_PRE["自监督/预训练<br/><i>基础模型</i>"]
+    ALL --> NEURAL["神经隐式/高斯<br/><i>可微地图表示</i>"]
+    ALL --> VLA_PC["VLA × 点云<br/><i>动作生成专用</i>"]
+    ALL --> INFRA["基础设施<br/><i>库/后端/工具链</i>"]
+
+    style GEO fill:#1a1a2e,stroke:#4361ee,color:#fff
+    style FEAT fill:#1a1a2e,stroke:#4361ee,color:#fff
+    style DL_SUP fill:#0f3460,stroke:#16213e,color:#fff
+    style DL_PRE fill:#0f3460,stroke:#16213e,color:#fff
+    style NEURAL fill:#e94560,stroke:#e94560,color:#fff
+    style VLA_PC fill:#e94560,stroke:#e94560,color:#fff
+    style INFRA fill:#533483,stroke:#533483,color:#fff
+```
+
+### 分类详表
+
+| 类别 | 原理 | 代表工具 | 可微？ | 可微调/训练？ | VLA 融入方式 |
+|------|------|---------|:------:|:----------:|------------|
+| **几何配准** | 最近邻迭代 (ICP) / 鲁棒估计 | small_gicp · Fast-GICP · TEASER++ · SANDRO | ❌ | ❌ 参数调节 | 预处理：点云对齐后喂给 VLA |
+| **特征 SLAM** | 手工特征（ORB/边/面）+ 因子图优化 | ORB-SLAM3 · LIO-SAM · FAST-LIO2 · Point-LIO · KISS-SLAM · Cartographer · VINS-Fusion | ❌ | ❌ 参数调节 | 提供位姿/地图作为 VLA 外部输入 |
+| **监督 3D DL** | 点级 MLP / 稀疏卷积 / 注意力 | PointNet++ · KPConv · MinkowskiEngine · Point Transformer V3 | ✅ | ✅ **支持微调** | 提取 3D 特征 → 作为 VLA 的 vision token |
+| **3D 基础模型** | 自监督预训练 + 跨模态对齐 | Uni3D · UniPre3D · PonderV2 · Depth Anything V3 | ✅ | ✅ **支持微调** | 预训练 3D 表征 → LoRA 适配到 VLA |
+| **神经 SLAM** | NeRF/3DGS 隐式地图 + 位姿优化 | MonoGS · SplaTAM · GS-SLAM · OpenGS-SLAM · Photo-SLAM | ✅ | ⚠️ 逐场景优化（非传统微调） | 可微地图 → 可端到端联合训练 |
+| **VLA × 点云** | 3D 世界模型 / 点云注入 VLA | PointWorld · PointVLA · ParticleFormer | ✅ | ✅ **支持微调** | **原生设计**就是给 VLA 用的 |
+| **基础设施** | 处理库 / 优化后端 / 渲染引擎 | Open3D · PCL · PyTorch3D · Kaolin · GTSAM · g2o · Ceres · Nerfstudio · gsplat | 部分 | N/A（库级工具） | 构建 pipeline 的积木 |
+
+### 微调支持详情
+
+<details>
+<summary><b>展开：每个可微调工具的具体支持情况</b></summary>
+
+&nbsp;
+
+| 工具 | 预训练权重 | 微调脚本 | 微调方式 | 训练数据需求 |
+|------|:---------:|:-------:|---------|------------|
+| **PointNet++** | ✅ ModelNet/ShapeNet | ✅ PyTorch | 全参数 / 冻结 backbone | 中（~1K 样本起步） |
+| **KPConv** | ✅ S3DIS/ScanNet | ✅ PyTorch | 全参数 | 中 |
+| **MinkowskiEngine** | ✅ ScanNet/S3DIS | ✅ PyTorch | 稀疏卷积层微调 | 中 |
+| **Point Transformer V3** | ✅ ScanNet/nuScenes | ✅ Pointcept 框架 | 全参数 / 解冻 head | 中 |
+| **Uni3D** | ✅ **1B 参数预训练** | ✅ | 对齐 CLIP → zero-shot 或 linear probe | 低（zero-shot 可用） |
+| **UniPre3D** | ✅ 3DGS 跨模态 | ✅ | 预训练 + 下游微调 | 中 |
+| **PonderV2** | ✅ 多任务预训练 | ✅ | 统一预训练 → 多任务微调 | 中 |
+| **Depth Anything V3** | ✅ 多个变体 | ✅ 官方提供 | 冻结 encoder / 全微调 / metric 适配 | 低-中 |
+| **SAM 3.1** | ✅ 4M+ 概念 | ✅ Meta 提供 | LoRA / adapter / prompt tuning | 低（few-shot 可用） |
+| **PointWorld** | ✅ 2M 轨迹预训练 | ⚠️ MPC 框架（非传统微调） | 预训练后直接 MPC，无需任务特定微调 | 低（zero-shot） |
+| **PointVLA** | ✅ 复用已有 VLA | ✅ | **不重训 VLA**，只训点云注入模块 | 低 |
+| **ParticleFormer** | ✅ | ✅ | 3D 世界模型端到端训练 | 中-高 |
+
+&nbsp;
+
+**VLA 研究者选择指南**：
+- 想**不训练**就用 → PointWorld (zero-shot MPC) 或 PointVLA (注入现有 VLA)
+- 想**轻量微调** → Uni3D (linear probe) 或 SAM 3.1 (LoRA)
+- 想**端到端训练** → Point Transformer V3 (Pointcept) 或 ParticleFormer
+- 想**替代 LiDAR** → Depth Anything V3 (单目深度) + 上述任一 3D 方法
+
+</details>
+
+---
+
+## 10. 开源工具详细列表
 
 > 按用途分类，附 GitHub 链接和推荐场景。
 
-### 9.1 点云处理库
+### 10.1 点云处理库
 
 | 工具 | 语言 | 核心优势 | 适用场景 | 链接 |
 |------|------|---------|---------|------|
@@ -259,7 +330,7 @@ DP3 (3D Diffusion Policy) 证明了在点云空间做动作生成比 2D 图像�
 
 **VLA 推荐**：研究阶段用 Open3D（快速原型）；训练阶段用 PyTorch3D（可微）；部署阶段用 PCL 或 Cupoch（性能）。
 
-### 9.2 点云深度学习框架
+### 10.2 点云深度学习框架
 
 | 框架 | 核心方法 | 任务 | 链接 |
 |------|---------|------|------|
@@ -274,7 +345,7 @@ DP3 (3D Diffusion Policy) 证明了在点云空间做动作生成比 2D 图像�
 | **PonderV2** | T-PAMI'25 · 通用 3D 预训练范式 | 3D 基础模型 | [github/OpenGVLab/PonderV2](https://github.com/OpenGVLab/PonderV2) |
 | **learning3d** | 点云 DL 方法合集（含预训练权重） | 快速复现 | [github/vinits5/learning3d](https://github.com/vinits5/learning3d) |
 
-### 9.3 SLAM 系统
+### 10.3 SLAM 系统
 
 | 系统 | 类型 | 传感器 | 亮点 | 链接 |
 |------|------|--------|------|------|
@@ -289,7 +360,7 @@ DP3 (3D Diffusion Policy) 证明了在点云空间做动作生成比 2D 图像�
 | **FAST-LIO2** | LiDAR + IMU | LiDAR-Inertial | ikd-Tree 增量建图，HKU MARS Lab | [github/hku-mars/FAST_LIO](https://github.com/hku-mars/FAST_LIO) |
 | **Point-LIO** | LiDAR + IMU | LiDAR-Inertial | 高带宽紧耦合，剧烈运动下最稳 | [github/hku-mars/Point-LIO](https://github.com/hku-mars/Point-LIO) |
 
-### 9.4 神经 SLAM / 3DGS-SLAM（2024-2026 前沿）
+### 10.4 神经 SLAM / 3DGS-SLAM（2024-2026 前沿）
 
 | 系统 | 地图表示 | 输入 | 亮点 | 链接 |
 |------|---------|------|------|------|
@@ -299,7 +370,7 @@ DP3 (3D Diffusion Policy) 证明了在点云空间做动作生成比 2D 图像�
 | **OpenGS-SLAM** | 3D Gaussian | RGB only | ICRA 2025 · 户外无界场景 | [github/3DAgentWorld/OpenGS-SLAM](https://github.com/3DAgentWorld/OpenGS-SLAM) |
 | **Photo-SLAM** | 3D Gaussian | Mono/Stereo/RGB-D | CVPR'24 · 实时光照真实建图 | [github/HuajianUP/Photo-SLAM](https://github.com/HuajianUP/Photo-SLAM) |
 
-### 9.5 优化后端 / 配准工具
+### 10.5 优化后端 / 配准工具
 
 | 工具 | 用途 | 链接 |
 |------|------|------|
@@ -311,7 +382,7 @@ DP3 (3D Diffusion Policy) 证明了在点云空间做动作生成比 2D 图像�
 | **Fast-GICP** | GPU 加速 GICP | [github/SMRT-AIST/fast_gicp](https://github.com/SMRT-AIST/fast_gicp) |
 | **SANDRO** | RANSAC-free 鲁棒配准（IRLS + 分裂策略） | [github/iit-DLSLab/SANDRO](https://github.com/iit-DLSLab/SANDRO) |
 
-### 9.6 3D 渲染与重建框架
+### 10.6 3D 渲染与重建框架
 
 | 工具 | 核心能力 | 适用 | 链接 |
 |------|---------|------|------|
@@ -319,7 +390,7 @@ DP3 (3D Diffusion Policy) 证明了在点云空间做动作生成比 2D 图像�
 | **gsplat** | CUDA 加速 3DGS 光栅化 · 60+ FPS 实时渲染 | GS-SLAM 后端 | [github/nerfstudio-project/gsplat](https://github.com/nerfstudio-project/gsplat) |
 | **CloudCompare** | 点云可视化/编辑/配准/比较 · GUI 工具 | 数据检查、质量评估 | [cloudcompare.org](https://www.cloudcompare.org/) |
 
-### 9.7 VLA × 点云专用工具（2025-2026 前沿）
+### 10.7 VLA × 点云专用工具（2025-2026 前沿）
 
 | 工具 | 核心能力 | 链接 |
 |------|---------|------|
@@ -331,14 +402,14 @@ DP3 (3D Diffusion Policy) 证明了在点云空间做动作生成比 2D 图像�
 
 > 💡 **PointWorld** 和 **PointVLA** 是 2025-2026 最值得关注的方向——它们验证了"点云是 VLA 的第三模态"这一假设。PointWorld 用 3D 点云流做世界模型；PointVLA 证明向现有 2D VLA 注入点云可以不重训就提升性能。
 
-### 9.8 综合对比与算法集合
+### 10.8 综合对比与算法集合
 
 | 工具 | 说明 | 链接 |
 |------|------|------|
 | **SLAM-application** | 20+ SLAM 算法在 Gazebo/真机上的统一部署配置对比 | [github/engcang/SLAM-application](https://github.com/engcang/SLAM-application) |
 | **3D-PointCloud** | 点云论文 + 数据集全景索引 | [github/zhulf0804/3D-PointCloud](https://github.com/zhulf0804/3D-PointCloud) |
 
-### 9.9 Awesome 列表（持续追踪）
+### 10.9 Awesome 列表（持续追踪）
 
 | 列表 | 覆盖范围 | 链接 |
 |------|---------|------|
@@ -350,7 +421,7 @@ DP3 (3D Diffusion Policy) 证明了在点云空间做动作生成比 2D 图像�
 
 ---
 
-## 10. 代码片段
+## 11. 代码片段
 
 ### Open3D ICP
 
@@ -384,7 +455,7 @@ lio_sam:
 
 ---
 
-## 11. 面试 Q&A
+## 12. 面试 Q&A
 
 <details>
 <summary><b>Q1: Visual SLAM vs LiDAR SLAM？</b></summary>
@@ -421,7 +492,7 @@ lio_sam:
 
 ---
 
-## 12. Opus 的反思
+## 13. Opus 的反思
 
 ### 🔮 点云是 VLA 被低估的"第三模态"
 
