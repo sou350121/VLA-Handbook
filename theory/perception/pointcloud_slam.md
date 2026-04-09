@@ -303,7 +303,27 @@ DP3 (3D Diffusion Policy) 证明了在点云空间做动作生成比 2D 图像�
 | **small_gicp** | 快速 ICP/GICP/VGICP（nangicp 后继） | [github/koide3/small_gicp](https://github.com/koide3/small_gicp) |
 | **Fast-GICP** | GPU 加速 GICP | [github/SMRT-AIST/fast_gicp](https://github.com/SMRT-AIST/fast_gicp) |
 
-### 9.6 Awesome 列表（持续追踪）
+### 9.6 3D 渲染与重建框架
+
+| 工具 | 核心能力 | 适用 | 链接 |
+|------|---------|------|------|
+| **Nerfstudio** | 统一 NeRF + 3DGS 训练框架 · Apache 2.0 | 场景重建、导航地图 | [github/nerfstudio-project/nerfstudio](https://github.com/nerfstudio-project/nerfstudio) |
+| **gsplat** | CUDA 加速 3DGS 光栅化 · 60+ FPS 实时渲染 | GS-SLAM 后端 | [github/nerfstudio-project/gsplat](https://github.com/nerfstudio-project/gsplat) |
+| **CloudCompare** | 点云可视化/编辑/配准/比较 · GUI 工具 | 数据检查、质量评估 | [cloudcompare.org](https://www.cloudcompare.org/) |
+
+### 9.7 VLA × 点云专用工具（2025-2026 前沿）
+
+| 工具 | 核心能力 | 链接 |
+|------|---------|------|
+| **PointWorld** | 3D 世界模型——点云流预测 + MPC 操作 · NVIDIA · 2M 轨迹预训练 | [github/NVlabs/PointWorld](https://github.com/NVlabs/PointWorld) |
+| **PointVLA** | 向已有 VLA 注入点云输入（无需重训）· 超越 OpenVLA/DiffusionPolicy | [arxiv/2503.07511](https://arxiv.org/abs/2503.07511) |
+| **ParticleFormer** | 3D 点云世界模型 · 多物体多材质操作 | [arxiv/2506.23126](https://arxiv.org/abs/2506.23126) |
+| **Depth Anything V3** | 单目/多目/视频统一深度估计 · ETH3D 比 V2 +10% | [github/ByteDance-Seed/Depth-Anything-3](https://github.com/ByteDance-Seed/Depth-Anything-3) |
+| **SAM 3.1** | 概念分割 + 多目标跟踪 · 16 目标 32FPS · Meta 2026.03 | [github/facebookresearch/sam3](https://github.com/facebookresearch/sam3) |
+
+> 💡 **PointWorld** 和 **PointVLA** 是 2025-2026 最值得关注的方向——它们验证了"点云是 VLA 的第三模态"这一假设。PointWorld 用 3D 点云流做世界模型；PointVLA 证明向现有 2D VLA 注入点云可以不重训就提升性能。
+
+### 9.8 Awesome 列表（持续追踪）
 
 | 列表 | 覆盖范围 | 链接 |
 |------|---------|------|
