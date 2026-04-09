@@ -242,7 +242,80 @@ DP3 (3D Diffusion Policy) 证明了在点云空间做动作生成比 2D 图像�
 
 ---
 
-## 9. 代码片段
+## 9. 开源工具全景
+
+> 按用途分类，附 GitHub 链接和推荐场景。
+
+### 9.1 点云处理库
+
+| 工具 | 语言 | 核心优势 | 适用场景 | 链接 |
+|------|------|---------|---------|------|
+| **Open3D** | C++/Python | 可视化强、API 干净、ICP/配准/重建一站式 | 研究原型 + 生产 | [open3d.org](https://www.open3d.org/) |
+| **PCL** | C++ | 算法最全（滤波/特征/分割/配准/重建） | 高性能 C++ 部署 | [pointcloudlibrary.github.io](https://pointcloudlibrary.github.io/) |
+| **PyTorch3D** | Python | **可微**点云操作 + 可微渲染 | 3D 深度学习训练 | [github/facebookresearch/pytorch3d](https://github.com/facebookresearch/pytorch3d) |
+| **Kaolin** | Python | NVIDIA GPU 加速 + 可微渲染 | 大规模 3D DL | [github/NVIDIAGameWorks/kaolin](https://github.com/NVIDIAGameWorks/kaolin) |
+| **Cupoch** | C++/Python | Open3D 的 GPU 加速版 | 实时处理 | [github/neka-nat/cupoch](https://github.com/neka-nat/cupoch) |
+| **Open3D-ML** | Python | Open3D + ML 扩展（语义分割等） | 3D 感知 pipeline | [github/isl-org/Open3D-ML](https://github.com/isl-org/Open3D-ML) |
+
+**VLA 推荐**：研究阶段用 Open3D（快速原型）；训练阶段用 PyTorch3D（可微）；部署阶段用 PCL 或 Cupoch（性能）。
+
+### 9.2 点云深度学习框架
+
+| 框架 | 核心方法 | 任务 | 链接 |
+|------|---------|------|------|
+| **PointNet / PointNet++** | MLP + 层级聚合 | 分类 / 分割 | [github/charlesq34/pointnet2](https://github.com/charlesq34/pointnet2) · [PyTorch 版](https://github.com/yanx27/Pointnet_Pointnet2_pytorch) |
+| **MinkowskiEngine** | 稀疏卷积 | 大规模语义分割 | [github/NVIDIA/MinkowskiEngine](https://github.com/NVIDIA/MinkowskiEngine) |
+| **KPConv** | 可变形点核卷积 | 密集点云分割 | [github/HuguesTHOMAS/KPConv-PyTorch](https://github.com/HuguesTHOMAS/KPConv-PyTorch) |
+| **Point Transformer V3** | Transformer + 序列化注意力 | 通用 3D 理解 · CVPR'24 Oral | [github/Pointcept/PointTransformerV3](https://github.com/Pointcept/PointTransformerV3) |
+| **Pointcept** | 统一点云感知框架 | 分割 / 检测 / 预训练 | [github/Pointcept/Pointcept](https://github.com/Pointcept/Pointcept) |
+| **Torch-Points3D** | 模块化 3D DL 框架 | 多任务可复现 | [github/torch-points3d](https://github.com/torch-points3d/torch-points3d) |
+
+### 9.3 SLAM 系统
+
+| 系统 | 类型 | 传感器 | 亮点 | 链接 |
+|------|------|--------|------|------|
+| **ORB-SLAM3** | 视觉 | Mono/Stereo/RGB-D + IMU | 最成熟的视觉 SLAM | [github/UZ-SLAMLab/ORB_SLAM3](https://github.com/UZ-SLAMLab/ORB_SLAM3) |
+| **VINS-Fusion** | VIO | Stereo + IMU + GPS | 多传感器松/紧耦合 | [github/HKUST-Aerial-Robotics/VINS-Fusion](https://github.com/HKUST-Aerial-Robotics/VINS-Fusion) |
+| **LIO-SAM** | LiDAR | LiDAR + IMU + GPS | 因子图后端，高精度标杆 | [github/TixiaoShan/LIO-SAM](https://github.com/TixiaoShan/LIO-SAM) |
+| **Cartographer** | LiDAR | LiDAR + IMU + Wheel | Google 开源，子图匹配 | [github/cartographer-project](https://github.com/cartographer-project/cartographer) |
+| **RTAB-Map** | 多模态 | RGB-D / Stereo / LiDAR | 大规模回环 + 多传感器支持 | [github/introlab/rtabmap](https://github.com/introlab/rtabmap) |
+| **SLAM Toolbox** | 2D | LiDAR | ROS2 官方推荐，lifelong mapping | [github/SteveMacenski/slam_toolbox](https://github.com/SteveMacenski/slam_toolbox) |
+| **hdl_graph_slam** | LiDAR | 3D LiDAR | 基于图的 3D SLAM | [github/koide3/hdl_graph_slam](https://github.com/koide3/hdl_graph_slam) |
+
+### 9.4 神经 SLAM / 3DGS-SLAM（2024-2026 前沿）
+
+| 系统 | 地图表示 | 输入 | 亮点 | 链接 |
+|------|---------|------|------|------|
+| **MonoGS** | 3D Gaussian | Mono/Stereo/RGB-D | CVPR'24 Highlight + Best Demo · 单目 GS-SLAM | [github/muskie82/MonoGS](https://github.com/muskie82/MonoGS) |
+| **SplaTAM** | 3D Gaussian | RGB-D | 稠密重建 + 位姿估计 2x 提升 | [spla-tam.github.io](https://spla-tam.github.io/) |
+| **GS-SLAM** | 3D Gaussian | RGB-D | CVPR'24 · 实时稠密建图 | [gs-slam.github.io](https://gs-slam.github.io/) |
+| **OpenGS-SLAM** | 3D Gaussian | RGB only | ICRA 2025 · 户外无界场景 | [github/3DAgentWorld/OpenGS-SLAM](https://github.com/3DAgentWorld/OpenGS-SLAM) |
+| **Photo-SLAM** | 3D Gaussian | Mono/Stereo/RGB-D | CVPR'24 · 实时光照真实建图 | [github/HuajianUP/Photo-SLAM](https://github.com/HuajianUP/Photo-SLAM) |
+
+### 9.5 优化后端 / 工具链
+
+| 工具 | 用途 | 链接 |
+|------|------|------|
+| **GTSAM** | 因子图优化（LIO-SAM 的后端） | [github/borglab/gtsam](https://github.com/borglab/gtsam) |
+| **g2o** | 通用图优化（ORB-SLAM 的后端） | [github/RainerKuemmerle/g2o](https://github.com/RainerKuemmerle/g2o) |
+| **Ceres Solver** | 非线性最小二乘（BA / 标定） | [github/ceres-solver/ceres-solver](https://github.com/ceres-solver/ceres-solver) |
+| **Depth Anything V2** | 单目深度估计（替代 LiDAR） | [github/DepthAnything/Depth-Anything-V2](https://github.com/DepthAnything/Depth-Anything-V2) |
+| **Grounded SAM** | 3D 分割 + 检测（动态物体剔除） | [github/IDEA-Research/Grounded-SAM-2](https://github.com/IDEA-Research/Grounded-SAM-2) |
+| **TEASER++** | 鲁棒全局点云配准 | [github/MIT-SPARK/TEASER-plusplus](https://github.com/MIT-SPARK/TEASER-plusplus) |
+
+### 9.6 Awesome 列表（持续追踪）
+
+| 列表 | 覆盖范围 | 链接 |
+|------|---------|------|
+| Awesome-3DGS-SLAM | 3D Gaussian SLAM 论文 + 代码 | [github/KwanWaiPang/Awesome-3DGS-SLAM](https://github.com/KwanWaiPang/Awesome-3DGS-SLAM) |
+| Awesome-NeRF-and-3DGS-SLAM | NeRF + 3DGS + SLAM + 机器人 | [github/3D-Vision-World/awesome-NeRF-and-3DGS-SLAM](https://github.com/3D-Vision-World/awesome-NeRF-and-3DGS-SLAM) |
+| Awesome-3DGS-in-Robotics | 3DGS 在机器人中的应用 | [github/zstsandy/Awesome-3D-Gaussian-Splatting-in-Robotics](https://github.com/zstsandy/Awesome-3D-Gaussian-Splatting-in-Robotics) |
+| Awesome-SLAM | 综合 SLAM 资源 | [github/SilenceOverflow/Awesome-SLAM](https://github.com/SilenceOverflow/Awesome-SLAM) |
+| Awesome-LiDAR-Visual-SLAM | 激光-视觉融合 SLAM | [github/sjtuyinjie/awesome-LiDAR-Visual-SLAM](https://github.com/sjtuyinjie/awesome-LiDAR-Visual-SLAM) |
+
+---
+
+## 10. 代码片段
 
 ### Open3D ICP
 
@@ -276,7 +349,7 @@ lio_sam:
 
 ---
 
-## 10. 面试 Q&A
+## 11. 面试 Q&A
 
 <details>
 <summary><b>Q1: Visual SLAM vs LiDAR SLAM？</b></summary>
@@ -313,7 +386,7 @@ lio_sam:
 
 ---
 
-## 11. Opus 的反思
+## 12. Opus 的反思
 
 ### 🔮 点云是 VLA 被低估的"第三模态"
 
