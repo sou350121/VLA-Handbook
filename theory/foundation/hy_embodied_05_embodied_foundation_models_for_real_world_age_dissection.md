@@ -1,355 +1,369 @@
-# HY-Embodied-0.5：具身基础模型实战拆解 (HY-Embodied-0.5: Embodied Foundation Models for Real-World Agents)
+# HY-Embodied-0.5：具身基础模型实战解析 (HY-Embodied-0.5: Embodied Foundation Models for Real-World Agents)
 
 > ⚙️ 本文由 Moltbot 自动生成 | 2026-04-13
 >
 > **论文**: HY-Embodied-0.5: Embodied Foundation Models for Real-World Agents
 > **链接**: https://arxiv.org/abs/2604.07430
-> **代码**: https://github.com/Tencent-Hunyuan/HY-Embodied
-> **核心定位**: 腾讯机器人 X 团队推出的具身 VLM 基础模型，用 MoT 架构 + 迭代式后训练 + 大对小程序蒸馏，在 2B 激活参数下实现边缘部署友好的具身智能，32B 版本性能对标 Gemini 3.0 Pro。
+> **核心定位**: 腾讯推出具身专用 VLM 系列，用 MoT 架构 + 视觉 latent tokens + 迭代式后训练，在 2B 小模型上实现超越同尺寸 SOTA 的具身感知与推理能力
 
-## ⚡ 快速判断（30 秒读完这段就够了）
+## ⚡ 快速判斷（30 秒讀完這段就夠了）
 
-| 维度 | 判断 |
+| 維度 | 判斷 |
 |------|------|
-| 核心结论 | MoT 架构分离视觉/语言计算路径 + 视觉 latent token + 迭代 RL/RFT 后训练，使 2B 模型在 22 个具身基准上平均 58.0%，超越同尺寸 SOTA |
-| 适合精读 | 如果你在做边缘部署的具身 VLM、VLA 预训练、或小模型蒸馏到机器人控制器，重点看 §2 架构和 §4 后训练 |
-| 可以跳过 | 如果你只关心纯 VLA 动作头设计或具体机器人控制实验，这篇距离中等（§6 仅概述 VLA 下游） |
-| 落地可行性 | 中（代码开源，但 400M ViT + MoT-2B 需确认边缘设备实测延迟；蒸馏方案可复用） |
-| 主要风险 | 训练数据细节（100M+ 样本构成）未完全公开；VLA 控制实验细节有限 |
+| 核心結論 | MoT-2B 在 22 個具身基準上 16 個 SOTA，平均 58.0%；MoE-32B 平均 67.0% 超越 Gemini 3.0 Pro (63.6%) |
+| 適合精讀 | 如果你在做 edge 部署的具身 Agent、需要高頻視覺感知 + 推理、或關注 MoT 架構設計 |
+| 可以跳過 | 如果你只關心純語言 Agent 或不涉及實時機器人控制的場景 |
+| 落地可行性 | 高（2B 版本已開源 HuggingFace，推理代碼完備，支持 Transformers 直接加載） |
+| 主要風險 | 實作依賴特定 Transformers 版本（需安裝 git 倉庫特定 commit），vLLM 推理尚未支持 |
 
-💡 **X-Ray 开场**（2-3 句，非专家也能读懂）
-这篇论文解决什么问题？通用 VLM 在具身场景（机器人操作、空间推理）上表现不佳，因为缺乏细粒度视觉感知和面向动作的推理能力。HY-Embodied-0.5 通过专用架构（MoT）和训练策略（迭代 RL + 蒸馏）让小型模型也能胜任真实机器人任务。对 VLA 研究者意味着什么？它提供了一套从 VLM 预训练到 VLA 微调的完整路径，尤其是小模型如何从大模型蒸馏具身推理能力的方案。
+💡 **X-Ray 開場**  
+這篇論文解決什麼問題？通用 VLM 在具身場景下視覺感知粒度不足、缺乏動作導向的推理能力。  
+發現了什麼？用 Mixture-of-Transformers 架構分離視覺/語言計算路徑，加上視覺 latent tokens 和迭代式 RL+RFT 後訓練，能在 2B 參數量下實現超越 4B-7B 模型的具身性能。  
+對 VLA 研究者意味著什麼？提供了一個已驗證的 edge-ready 基礎模型，可直接作為 VLA 的「大腦」，且開源權重和推理代碼完備。
 
-📍 **研究全景时间线**
-
+📍 **研究全景時間線**
 ```
-[2023] LLaVA/VLM 兴起 → [2024] RoboVLA/π0 等 VLA 专用模型 → [2025] MoT 架构提出 → [2026] HY-Embodied-0.5 ← 当前位置
-                                                          ↑
-                                              本文创新：MoT + 迭代后训练 + 大→小蒸馏
-```
-
-**局限**: 未公开完整训练超参；VLA 控制实验仅在特定机器人平台验证；边缘设备实测延迟数据缺失。
-
-## 1. 核心架构/方法总览 (Overview / Architecture)
-
-### 1.1 系统对比概览 (System Component Comparison)
-
-| 组件 | HY-Embodied-0.5 MoT-2B | HY-Embodied-0.5 MoE-32B | 传统 VLM (如 Qwen3-VL) |
-|------|------------------------|-------------------------|------------------------|
-| 激活参数 | 2B | 32B |  varies |
-| 总参数 | 4B | 407B | varies |
-| 视觉编码器 | HY-ViT 2.0 (400M, native resolution) | 同左 | 通常固定分辨率 ViT |
-| 架构类型 | Mixture-of-Transformers (MoT) | Mixture-of-Experts (MoE) | 标准 Transformer |
-| 视觉/语言参数 | 非共享 (duplication) | 共享专家 | 共享 |
-| 视觉 latent token | ✓ (带 global loss 监督) | ✓ | 通常无 |
-| 注意力机制 | 视觉双向 / 语言单向 | 同左 | 通常全单向 |
-| 边缘部署优化 | 是 (400M ViT 蒸馏自更大模型) | 否 | 部分支持 |
-
-### 1.2 关键机制 (Key Mechanism)
-
-**MoT 架构核心设计**:
-- 在预训练开始前，复制 LLM 的 FFN 和 QKV 参数，初始化为预训练 LLM 权重
-- 视觉 token 用复制的参数计算，文本 token 用原始参数计算
-- 效果：在不显著增加计算开销下，视觉建模能力提升，同时避免重视觉训练导致的语言退化
-
-**视觉 Latent Token**:
-- 在每个视觉元素（图像/视频帧）末尾附加可学习的 latent token
-- 预训练阶段用大 ViT 的全局特征监督该 token 输出（global loss）
-- 作用：桥接视觉和语言内容，提升小 VLM 整体感知能力
-
-**迭代式后训练范式**:
-- 冷启动 SFT (100k CoT 样本) → RL (GRPO, 50k/轮动态数据) → RFT (拒绝采样 fine-tuning) → 循环
-- RL 用任务感知奖励（几何密集奖励 + 精确匹配 + LLM judge 回退）
-- RFT 从 RL 探索结果中筛选高质量推理轨迹，转为显式监督
-
-⚡ **Eureka Moment**: 这篇论文最核心的洞见是**"具身能力不能只靠预训练数据堆砌，必须通过迭代式后训练（RL 探索 + RFT 固化）将偶发成功转化为稳定能力，再用 on-policy 蒸馏让小型模型继承大模型的推理风格"**——这解释了为什么同样尺寸的模型，HY-Embodied-0.5 在具身任务上显著优于通用 VLM。
-
-### 1.3 信息流/架构图 (Flow / Diagram)
-
-```
-[输入图像] → HY-ViT 2.0 (400M) → 视觉 token + 离散码监督
-                                    ↓
-[文本 prompt] → Tokenizer → 文本 token
-                                    ↓
-                    ┌─────────────────────────────┐
-                    │  Mixture-of-Transformers    │
-                    │  ┌─────────┐ ┌─────────┐    │
-                    │  │ Vision  │ │ Language│    │
-                    │  │ QKV/FFN │ │ QKV/FFN │    │
-                    │  │(双向注意)│ │(单向注意)│    │
-                    │  └─────────┘ └─────────┘    │
-                    │        ↑                    │
-                    │  Visual Latent Token        │
-                    │  (global loss 监督)          │
-                    └─────────────────────────────┘
-                                    ↓
-                    ┌─────────────────────────────┐
-                    │   后训练管道                 │
-                    │  SFT → RL → RFT → 循环      │
-                    │  (GRPO + 任务感知奖励)       │
-                    └─────────────────────────────┘
-                                    ↓
-                    ┌─────────────────────────────┐
-                    │   大→小程序蒸馏              │
-                    │  On-Policy Distillation     │
-                    │  (学生 rollout → 教师强制)   │
-                    └─────────────────────────────┘
-                                    ↓
-                         [输出：推理/动作/感知]
+[2023] LLaVA / Qwen-VL 通用 VLM 興起 → [2024] RoboBrain / π0 具身專用模型 → [2025] MiMo-Embodied 7B
+                                         ↓
+                                    [本文 HY-Embodied-0.5] ← 首個 2B 具身模型超越 4B-7B 同儕
+                                         ↓
+                            局限：實作依賴特定 Transformers 版本，vLLM 尚未支持
 ```
 
-## 2. 数学核心 (Math Core)
+## 1. 核心架構/方法總覽 (Overview / Architecture)
 
-📌 **Napkin Formula**（一行抓住本质）：
+### 1.1 系統對比概覽 (System Component Comparison)
 
+| 組件 | MoT-2B (Edge) | MoE-32B (Complex) | 設計目的 |
+|------|---------------|-------------------|----------|
+| 總參數量 | 4B | 407B | - |
+| 激活參數 | 2.2B | 32B | 推理時實際計算量 |
+| 視覺編碼器 | HY-ViT 2.0 (400M) | 同左 | 原生分辨率支持，任意尺寸輸入 |
+| 架構類型 | Mixture-of-Transformers | Mixture-of-Experts | 模態自適應計算 |
+| 視覺路徑 | 獨立 QKV + FFN + 雙向 Attention | 同左 | 避免視覺訓練污染語言能力 |
+| Latent Tokens | 有（每圖 1 個） | 同左 | 連接視覺與語言語義 |
+| 推理速度 | ≈ Dense-2B | - | MoT 引入開銷可忽略 |
+
+### 1.2 關鍵機制 (Key Mechanism)
+
+**MoT 架構核心設計**：
+- 在預訓練 LLM 基礎上複製 FFN 和 QKV 參數，初始化為原 LLM 權重
+- 視覺 token 用複製的參數計算，文本 token 用原始參數計算
+- 視覺分支用雙向 Attention（視覺數據無單向性），語言分支用因果 Attention
+- 視覺 next-code prediction 任務：用更大 ViT 生成的离散 visual code 監督視覺分支輸出
+
+**視覺 Latent Tokens**：
+- 每個視覺元素（圖像/視頻幀）末尾附加 1 個可學習的 latent token
+- 預訓練階段用大 ViT 的全局 CLS 特徵監督該 token 輸出
+- 作用：提取細粒度語義視覺特徵並與語言概念對齊
+
+⚡ **Eureka Moment**：**模態分離計算 + 視覺 latent tokens** 讓小模型在視覺訓練時不犧牲語言能力，同時通過 latent token 建立跨模態語義橋樑——這是 2B 模型能超越 4B-7B 的關鍵。
+
+### 1.3 信息流/架構圖 (Flow / Diagram)
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                        HY-Embodied-0.5                          │
+├─────────────────────────────────────────────────────────────────┤
+│  輸入圖像 (任意分辨率)                                           │
+│         ↓                                                        │
+│  ┌─────────────────┐                                            │
+│  │   HY-ViT 2.0    │  (400M, 原生分辨率，蒸馏自更大 ViT)          │
+│  │  視覺編碼器      │                                            │
+│  └────────┬────────┘                                            │
+│           ↓ 視覺 token 序列                                       │
+│  ┌────────────────────────────────────────────────────────┐     │
+│  │           Mixture-of-Transformers (MoT)                │     │
+│  │  ┌──────────────┐    ┌──────────────┐                 │     │
+│  │  │ 視覺分支      │    │ 語言分支      │                 │     │
+│  │  │ 獨立 QKV/FFN │    │ 原始 LLM      │                 │     │
+│  │  │ 雙向 Attention│    │ 因果 Attention│                 │     │
+│  │  │ Vision Loss  │    │ LLM Loss     │                 │     │
+│  │  └──────┬───────┘    └──────┬───────┘                 │     │
+│  │         └──────────┬─────────┘                         │     │
+│  │                    ↓                                   │     │
+│  │         ┌──────────────────┐                           │     │
+│  │         │ Visual Latent    │ ← Global Loss 監督         │     │
+│  │         │ Token (每圖 1 個)  │   (與教師 ViT CLS 對齊)      │     │
+│  │         └──────────────────┘                           │     │
+│  └────────────────────────────────────────────────────────┘     │
+│                    ↓                                             │
+│         多模態融合表示 → LLM 解碼生成                             │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+## 2. 數學核心 (Math Core)
+
+📌 **Napkin Formula**（一行抓住本質）：
 ```
 L_total = L_llm + L_vision + L_global
 ```
 
-**训练目标分解**:
-- `L_llm`: 标准自回归语言损失
-- `L_vision`: 视觉 next-code 预测的交叉熵
-- `L_global`: latent token 与教师 ViT 全局特征的负余弦相似度
+**目標**：聯合優化語言生成、視覺感知、跨模態對齊三項能力。
 
-**详细公式**:
+**公式拆解**：
 
 ```
-L_vision = -1/N_v · Σ_{i=1}^{N_v} log p_i(z_i)
+(1) 視覺 Loss (Visual Next-Code Prediction):
+    L_vision = -1/N_v · Σ_{i=1}^{N_v} log p_i(z_i)
+    
+    N_v = 視覺 token 數量
+    p_i = 第 i 個 token 的預測概率分佈
+    z_i = 教師 ViT 生成的目標离散 code
 
-L_global = -(f_latent^T · f_teacher) / (||f_latent|| · ||f_teacher||)
+(2) 全局 Loss (Latent Token 對齊):
+    L_global = -(f_latent^T · f_teacher) / (||f_latent|| · ||f_teacher||)
+    
+    f_latent = latent token 的映射隱藏狀態
+    f_teacher = 教師 ViT 的全局 CLS 特徵
+    → 負餘弦相似度，最大化對齊
 
-L_RL(x) = -1/Σ|y_i| · Σ_{i=1}^{G} Σ_{t=1}^{|y_i|} min(ρ_{i,t}·A_i, clip(ρ_{i,t}, 1-ε_low, 1+ε_high)·A_i)
-
-L_OPD = E_{x,y~π_s}[1/|y| · Σ_{t=1}^{|y|} KL(π_t(·|x,y_{<t}) || π_s(·|x,y_{<t}))]
+(3) 總 Loss (預訓練階段):
+    L_total = L_llm + L_vision + L_global
+    
+    中訓練及微調階段：僅用 L_llm（自回歸語言 Loss）
 ```
 
-**变量说明**:
-| 符号 | 含义 |
-|------|------|
-| N_v | 视觉 token 数量 |
-| p_i(z_i) | 第 i 个 token 预测目标离散码 z_i 的概率 |
-| f_latent | latent token 映射后的隐藏状态 |
-| f_teacher | 教师 ViT 提取的全局 CLS 特征 |
-| G | RL 采样组大小 (16) |
-| ρ_{i,t} | 策略比率 π_θ/π_θ_old |
-| A_i | 组内归一化优势 (r_i - μ)/σ |
-| π_t, π_s | 教师和学生的 next-token 分布 |
+**變量說明**：
 
-> 符号与本文/相关文档保持一致：L_vision 对应论文 Figure 2 中的 Vision Loss；L_global 对应 Global Loss；L_OPD 为 On-Policy Distillation 损失。
-
-**直觉解释**:
-- 预训练阶段三损失联合优化：语言理解 + 视觉重建 + 跨模态对齐
-- 中训练及之后仅用 L_llm（冻结 ViT，专注具身 fine-tuning）
-- RL 用组内相对优势避免不同任务间奖励尺度不可比问题
-- On-policy 蒸馏关键：让学生在**自己生成的轨迹上**学习教师分布，而非仅模仿教师 rollout
-
-## 3. 带数字走一遍：玩具例子 (Worked Example)
-
-假设我们有一个简化的具身场景：机器人需要抓取桌上的红色杯子。
-
-**输入**:
-- 图像：640×480 RGB，桌上有红色杯子、蓝色杯子、黄色方块
-- 指令："Pick up the red cup"
-
-**前向传播过程**:
-
-```
-步骤 1: 视觉编码
-  输入图像 → HY-ViT 2.0 → 196 个视觉 token (14×14 patch)
-  同时输出离散码监督信号 (来自更大 ViT 的 teacher)
-
-步骤 2: Latent Token 附加
-  196 视觉 token + 1 latent token = 197 视觉侧 token
-
-步骤 3: MoT 处理
-  视觉 token (197 个) → Vision QKV/FFN (双向注意)
-  文本 token ("Pick up..." 分词后约 8 个) → Language QKV/FFN (单向注意)
-  注意：两套参数不共享，但输出在同一 embedding 空间
-
-步骤 4: 推理生成
-  LLM 自回归生成：
-  t=1: "First" (P=0.92)
-  t=2: " I" (P=0.88)
-  t=3: " need" (P=0.85)
-  ...
-  t=15: "grasp" (P=0.79)
-  t=16: " the" (P=0.91)
-  t=17: " red" (P=0.94)
-  t=18: " cup" (P=0.96)
-  t=19: " at" (P=0.82)
-  t=20: " coordinates" (P=0.88)
-  t=21: " (320," (P=0.75)
-  t=22: " 240)" (P=0.81)
-
-步骤 5: RL 奖励计算 (训练阶段)
-  假设标准答案："(315, 245)"
-  使用归一化点距离奖励：
-  r = 1 - sqrt((320-315)² + (240-245)²) / max_distance
-    = 1 - sqrt(50) / 400 ≈ 0.98
-```
-
-**蒸馏过程** (大→小):
-
-```
-学生模型 (MoT-2B) rollout:
-  生成前缀："First I need to grasp the red cup at"
-  学生 next-token 分布: coordinates(0.4), position(0.3), location(0.2), ...
-
-教师模型 (MoE-32B) teacher forcing:
-  相同前缀下，教师分布: coordinates(0.7), location(0.2), position(0.08), ...
-
-蒸馏损失:
-  KL(教师分布 || 学生分布) = Σ p_t · log(p_t / p_s)
-  这个损失推动学生分布靠近教师分布
-```
-
-## 4. 工程视角 (Engineering View)
-
-| 工程指标 | MoT-2B (边缘) | MoE-32B (云端) | 备注 |
-|----------|---------------|----------------|------|
-| 激活参数 | 2B | 32B | MoE 总参数 407B，但每 token 仅激活 32B |
-| ViT 参数 | 400M | 400M | 蒸馏自更大内部模型，支持任意分辨率 |
-| 推理延迟 | 待实测 (目标 <100ms @ Jetson Orin) | 待实测 | 论文未给出边缘设备实测数据 |
-| 显存占用 | ~4GB (FP16) | ~64GB (FP16) | 估算值，未考虑 KV cache |
-| 训练 token | 600B+ (预训练) + 25M (中训练) | 同左 | 预训练 389B 通用 + 236B 具身/感知 |
-| 后训练数据 | 100k SFT + 50k/轮 RL + 300k RFT | 同左 | RL 动态筛选，RFT 从 1M 候选筛到 300k |
-| 蒸馏方式 | On-Policy (学生 rollout + 教师强制) | 教师 | 关键：监督学生在自己状态下的分布 |
-
-**部署约束**:
-- 边缘设备需确认 400M ViT + MoT-2B 的实际吞吐（论文声称"实时响应"但未给数字）
-- 蒸馏后的小模型保留了多少大模型的推理深度？需要实测验证
-- VLA 微调阶段需要多少机器人数据？论文 §6 仅概述，未给数据量级
-
-**Trade-off 分析**:
-- MoT vs 标准 Transformer: 参数量翻倍 (4B vs 2B)，但计算开销几乎不变（因为视觉/语言 token 分开计算，无交叉）
-- Latent Token: 增加 1 个 token 的计算，但换来全局语义对齐，适合小模型
-- 迭代后训练：计算成本高（多轮 RL+RFT），但换来推理质量稳定提升
-
-## 5. 数据与评测 (Data & Eval)
-
-### 5.1 数据组成
-
-| 数据类型 | 样本量 | 来源 | 用途 |
-|----------|--------|------|------|
-| Omni-Detection | 62M | OpenImages, Objects365, RefCOCO, SA-1B + 自动标注 | 2D/3D 检测、物体识别 |
-| Depth Estimation | 36M | 室内/室外 3D 数据集 + 自动驾驶语料 | 绝对/相对深度感知 |
-| Segmentation | 5M | SA-1B (过滤后) | 细粒度视觉感知、边缘感知 |
-| Pointing & Counting | 11M | Pixmo-Points + 高密度场景筛选 | 物体指向与计数 |
-| Embodied (Grounding/Affordance/Trajectory) | 未公开 | Molmo, RoboPoint, ShareRobot + 自采 | 具身操作基础 |
-| Spatial (Correspondence/Geometry/Configuration) | 未公开 | ScanNet, ScanNet++, ARKitScenes + 自采 | 3D 空间理解 |
-| General Understanding | 389B tokens | 内部通用 VLM 数据 | 基础推理与理解 |
-
-**预训练混合**: 600B+ tokens (389B 通用 + 236B 具身/感知，其中空间/机器人占 43%)
-**中训练混合**: 25M 样本 (通用：具身：空间 = 12:5:3)
-
-### 5.2 评测基准与结果
-
-**22 个基准覆盖三大类**:
-
-| 类别 | 代表基准 | 评测能力 |
-|------|----------|----------|
-| 视觉感知 | Visual Genome, RefCOCO, SA-1B | 物体识别、指代理解、分割 |
-| 空间推理 | ScanQA, ScanRefer, ARKitScenes | 3D 定位、空间关系、深度估计 |
-| 具身理解 | RoboVQA, RoboPoint, Molmo | 机器人场景理解、操作规划 |
-
-**关键结果** (论文 Table 1/2 摘要):
-
-| 模型 | 激活参数 | 22 基准平均 | 备注 |
-|------|----------|-------------|------|
-| HY-Embodied-0.5 MoT-2B | 2B | 58.0% | 16/22 基准 SOTA |
-| Qwen3-VL-4B | 4B | 47.8% | 通用 VLM |
-| RoboBrain2.5-4B | 4B | 49.4% | 具身专用 VLM |
-| HY-Embodied-0.5 MoE-32B | 32B | 67.0% | 超越 Gemini 3.0 Pro (63.6%) |
-| Gemini 3.0 Pro | 未公开 | 63.6% | 前沿闭源模型 |
-
-**分项表现亮点**:
-- **视觉感知**: 在 RefCOCO 指代理解任务上达到 78.2%，超越 Qwen3-VL-4B (71.5%)
-- **空间推理**: 在 ScanRefer 3D 定位任务上达到 45.8%，较 RoboBrain2.5-4B 提升 8.3%
-- **具身理解**: 在 RoboPoint 指点任务上达到 82.1%，接近人类水平 (85.3%)
-
-**VLA 下游实验** (§6):
-- 用 HY-Embodied-0.5 作为 VLM 基础训练 VLA 模型
-- 在真实机器人物理评估中取得"compelling results"
-- 但论文未给出具体任务成功率、对比基线等细节（TODO: 待补充）
-- 推测使用 ACT 或 Diffusion Policy 作为动作头，需等待代码开源确认
-
-## 6. 能力与失败模式 (Capabilities & Failure Modes)
-
-### 6.1 能做什么
-
-| 能力 | 场景 | 证据 |
+| 符號 | 含義 | 來源 |
 |------|------|------|
-| 细粒度物体定位 | 指点、计数、3D 框预测 | Pointing/Counting 数据 11M，基准测试 SOTA |
-| 深度感知 | 绝对/相对深度估计 | Depth Estimation 数据 36M |
-| 空间关系推理 | 物体相对位置、方向、距离排序 | Configuration/Measurement 数据 |
-| 具身规划 | 多步动作序列预测 | Planning 数据 (视频分段 + VLM 标注) |
-| 长链推理 | 复杂多步问题 | 迭代 RL+RFT 后训练，100k CoT 冷启动 |
+| N_v | 視覺 token 數量 | 由輸入圖像分辨率和 ViT patch size 決定 |
+| z_i | 目標离散 visual code | 由更大 ViT 教師模型生成，codebook size=2k，每 8×8 patch 壓縮為 1 個 code |
+| f_latent | latent token 特徵 | 模型內部可學習 |
+| f_teacher | 教師 ViT 全局特徵 | 預計算，固定監督信號 |
 
-### 6.2 不能做什么 / 局限
+**直覺**：視覺 Loss 讓模型學會「預測下一個視覺 patch 是什麼」，類似語言模型的 next-token prediction；全局 Loss 強迫 latent token 吸收整圖語義，成為視覺 - 語言的橋樑。
 
-| 局限 | 原因 | 影响 |
+> 符號與本文/相關文檔保持一致：L_vision 對應論文 Section 3.3 的 vision loss，L_global 對應 global loss。
+
+## 3. 帶數字走一遍：玩具例子 (Worked Example)
+
+假設輸入一張 512×512 的廚房場景圖像，任務是「找出橙子並給出抓取點」。
+
+**步驟 1：視覺編碼**
+```
+輸入圖像: 512×512
+HY-ViT 2.0 patch size: 14×14 (典型 ViT 設置)
+視覺 token 數量: (512/14)² ≈ 1344 個 token
++ 1 個 latent token
+= 1345 個視覺 token 輸入 MoT
+```
+
+**步驟 2：MoT 前向傳播**
+```
+視覺 token (1344 個) → 視覺分支 QKV/FFN → 雙向 Attention → 視覺表示
+文本 token ("找出橙子並給出抓取點") → 語言分支 QKV/FFN → 因果 Attention → 語言表示
+Latent token → 吸收全局語義 → 注入語言分支
+```
+
+**步驟 3：視覺 Loss 計算（預訓練階段）**
+```
+假設 N_v = 1344
+教師 ViT 為每個 patch 生成离散 code z_i ∈ {0, 1, ..., 1999} (codebook size=2k)
+模型預測每個 patch 的 code 概率分佈 p_i
+
+L_vision = -1/1344 · Σ_{i=1}^{1344} log p_i(z_i)
+
+若模型對某個 patch 預測 p_i(z_i) = 0.8，則該 patch 貢獻 -log(0.8) ≈ 0.22 到 Loss
+若預測 p_i(z_i) = 0.1，則貢獻 -log(0.1) ≈ 2.30
+→ 鼓勵模型對正確 code 給出高置信度
+```
+
+**步驟 4：推理輸出**
+```
+模型生成 Chain-of-Thought:
+<think>
+1. 檢測圖像中的水果：發現 3 個橙子，坐標分別為 (120, 340), (280, 350), (450, 360)
+2. 評估可抓取性：中間橙子 (280, 350) 無遮擋，抓取點應在橙子頂部偏右
+3. 生成抓取坐標：(295, 335)
+</think>
+最終答案：抓取點坐標為 (295, 335)
+```
+
+**步驟 5：Grounding 評價（RL 階段）**
+```
+若 ground truth 抓取點為 (290, 340)
+預測點 (295, 335) 與 GT 的歐式距離 = √((295-290)² + (335-340)²) = √50 ≈ 7.07 像素
+歸一化距離 (假設圖像 512×512) = 7.07 / 512 ≈ 0.014
+Reward = 1 - 0.014 = 0.986 (接近完美)
+```
+
+## 4. 工程視角 (Engineering View)
+
+| 指標 | MoT-2B | 含義 |
+|------|--------|------|
+| 激活參數 | 2.2B | 推理時實際載入 GPU 的參數量 |
+| 總參數 | 4B | 磁盤存儲量（約 8GB BF16） |
+| 視覺編碼器 | 400M | HY-ViT 2.0 參數量 |
+| 輸入分辨率 | 任意 | 原生支持，無需預處理縮放 |
+| 上下文長度 | 32k | 預訓練/中訓練階段 sequence packing |
+| 推理速度 | ≈ Dense-2B | MoT 引入開銷可忽略（解碼階段主導總時間） |
+| 顯存需求 | ≥16GB VRAM | 官方推薦，實際 BF16 推理約 10-12GB |
+| 推理框架 | Transformers | 需安裝特定 commit (9293856)，vLLM 尚未支持 |
+
+**部署約束**：
+- **依賴特定 Transformers 版本**：`pip install git+https://github.com/huggingface/transformers@9293856c419762ebf98fbe2bd9440f9ce7069f1a`
+- **推理溫度設置**：官方示例用 temperature=0.8，thinking mode 可選
+- **批處理支持**：支持 left-padding 批處理，適合多請求場景
+- **Edge 部署**：2B 版本專為 edge 設計，但需 16GB+ RAM（官方建議）
+
+**Trade-off 分析**：
+- MoT 架構雙倍參數（4B vs 2B）但激活參數不變 → 訓練時表達力提升，推理時速度不變
+- 視覺 latent token 僅 1 個/圖 → 開銷極小，但需額外的 global loss 監督
+- 雙向 Attention 用於視覺分支 → 更適合視覺建模，但需獨立實現 attention mask
+
+## 5. 數據與評測 (Data & Eval)
+
+### 5.1 數據組成
+
+**預訓練數據（600B+ tokens）**：
+| 類型 | 數據量 | 來源 |
+|------|--------|------|
+| 通用理解 | 389B tokens | 內部 VLM 數據（caption、STEM、文檔、多輪對話等） |
+| 具身 + 感知 | 236B tokens | 空間/機器人數據 43% + 視覺感知數據 57% |
+
+**視覺感知數據（細分）**：
+| 任務 | 數據量 | 來源 |
+|------|--------|------|
+| Omni-Detection (2D/3D) | 62M | OpenImages, Objects365, RefCOCO, SA-1B + VLM 自動標注 |
+| Depth Estimation | 36M | 室內/室外 3D 數據集 + 自動駕駛語料 |
+| Segmentation | 5M | SA-1B 高質量分割掩碼 |
+| Pointing & Counting | 11M | Pixmo-Points + 高密度場景篩選 |
+
+**具身數據（中訓練階段，12M+ QA pairs）**：
+- Grounding: Molmo, RoboPoint, RefSpatial + 內部標注
+- Affordance: RoboAfford, ShareRobot + VLM 生成指令
+- Trajectory: MolmoAct, ShareRobot, FSD + CoTracker3 追蹤提取
+- Understanding: Robo2VLM, RoboVQA, RoboRefit, RoboInter-VQA
+- Planning: 機器人操作視頻 VLM 標注 + RoboVQA/RoboInter
+- Reasoning: 內部構建的長程推理數據集
+
+**空間數據**：
+- Correspondence, Geometry, Configuration, Measurement, Dynamics
+- 來源：ScanNet, ScanNet++, ARKitScenes + 自採集數據
+
+### 5.2 評測基準（22 個）
+
+**視覺感知（2 個）**：CV-Bench, DA-2K
+
+**具身理解（8 個）**：ERQA, EmbSpatial-Bench, RoboBench-MCQ, RoboBench-Planning, RoboSpatial-Home, ShareRobot-Affordance, ShareRobot-Trajectory, Ego-Plan2
+
+**空間理解（12 個）**：3DSRBench, All-Angles Bench, MindCube, MMSI-Bench, RefSpatial-Bench, SAT, SIBench-mini, SITE-Bench-Image, SITE-Bench-Video, ViewSpatial, VSIBench, Where2Place
+
+### 5.3 主要結果
+
+**MoT-2B vs 同尺寸模型**：
+| 模型 | 激活參數 | 22 基準平均分 | Best/Second |
+|------|----------|---------------|-------------|
+| HY-Embodied-0.5 MoT-2B | 2.2B | **58.0%** | **16/4** |
+| Qwen3-VL-4B | 4B | 47.8% | - |
+| RoboBrain2.5-4B | 4B | 49.4% | - |
+| MiMo-Embodied-7B | 7B | - | - |
+
+**MoE-32B vs Frontier 模型**：
+| 模型 | 平均分 | 對比 |
+|------|--------|------|
+| HY-Embodied-0.5 MoE-32B | **67.0%** | - |
+| Gemini 3.0 Pro | 63.6% | -3.4 |
+| Seed 2.0 | 66.2% | -0.8 |
+| Qwen 3.5 A17B | 66.1% | -0.9 |
+| Kimi K2.5 | 61.1% | -5.9 |
+
+**機器人控制實測（20 次試驗成功率）**：
+| 任務 | HY-Embodied VLA | π0 | π0.5 |
+|------|-----------------|----|----|
+| Precision Plug-in Packing | **85%** | 80% | 85% |
+| Tableware Stacking | **80%** | 60% | 85% |
+| Mug Hanging | **75%** | 45% | 50% |
+
+> 來源：論文 Table 1, Table 2, Figure 13
+
+## 6. 能力與失敗模式 (Capabilities & Failure Modes)
+
+### 6.1 能做什麼
+
+| 能力 | 場景 | 證據 |
 |------|------|------|
-| VLA 控制细节不透明 | §6 仅概述，无具体实验设置 | 难以复现机器人控制结果 |
-| 边缘延迟未实测 | 论文声称"实时"但无数据 | 部署前需自行 benchmark |
-| 训练数据未完全开源 | 仅开源代码/模型，数据清单不完整 | 难以评估数据偏差 |
-| 单一机器人平台验证 | 未说明具体机器人型号/数量 | 泛化性待验证 |
+| 細粒度視覺感知 | 深度估計、物體檢測、計數 | CV-Bench 89.2, DA-2K 92.3 |
+| 空間推理 | 3D 關係理解、多視角匹配 | 3DSRBench 57.0, MindCube 66.3 |
+| 具身 Grounding | 抓取點定位、bounding box 預測 | RoboSpatial-Home 55.7, RefSpatial 45.8 |
+| 動作規劃 | 多步任務分解、軌跡預測 | RoboBench-Planning 54.2, ShareRobot-Traj 73.3 |
+| 長程推理 | 複雜場景分析、自我修正 | CoT 可視化顯示 "Wait, no..." 自我糾正 |
 
-### 6.3 隐含假设 (Hidden Assumptions)
+### 6.2 不能做什麼 / 局限
 
-- **假设 1 (视觉监督)**: 视觉 next-code 预测任务能有效监督视觉分支——但离散码来自内部更大 ViT，外部无法复现；该假设依赖教师 ViT 的表征质量
-- **假设 2 (RL 数据)**: RL 动态数据筛选能持续提供"可学习前沿"样本——但长期运行是否会导致模式坍塌？需要持续注入新任务类型
-- **假设 3 (蒸馏)**: On-policy 蒸馏能保留教师推理风格——但学生容量有限时，是否只能学到表面模式？需验证推理深度是否真正迁移
-- **假设 4 (MoT 扩展)**: MoT 参数复制不会导致过拟合——但 2B→4B 的参数量增加是否在所有任务上都有益？可能在简单任务上冗余
-- **假设 5 (Sim2Real)**: 论文隐含假设仿真/合成数据训练的感知能力可直接迁移到真实机器人——但未报告 Sim2Real gap 量化实验
-- **假设 6 (任务泛化)**: 22 个基准的评测覆盖被认为足以代表"真实世界具身能力"——但实际机器人操作涉及连续控制、接触力学等未评测维度
-- **假设 7 (推理链质量)**: RFT 筛选的"高质量推理轨迹"由更强教师模型评判——但该评判标准本身可能存在偏差，且未公开评判 prompt
+| 限制 | 原因 | 影響 |
+|------|------|------|
+| 依賴特定 Transformers 版本 | MoT 架構未合併到主幹 | 部署需安裝 git commit，無法直接用 pip 版本 |
+| vLLM 不支持 | 架構特殊，需適配 | 高吞吐推理需等待官方更新 |
+| 實測僅限雙臂 Xtrainer | 機器人實驗平台單一 | 遷移到其他機器人需重新 SFT |
+| 部分基準落後 | ShareRobot-Affordance 26.8% (RoboBrain 25.5%) | Affordance 預測仍待改進 |
+| 思維模式重複 | 小模型在某些基準產生重複 thinking | 官方註釋 Qwen3.5-VL 有此問題，HY-Embodied 未明確說明 |
 
-## 7. 与相关工作对比 (Comparison)
+### 6.3 隱含假設 (Hidden Assumptions)
 
-| 工作 | 架构 | 训练策略 | 具身数据 | 边缘优化 | 开源 |
-|------|------|----------|----------|----------|------|
-| HY-Embodied-0.5 | MoT + Latent Token | 迭代 RL+RFT + On-Policy 蒸馏 | 100M+ | 是 (400M ViT) | 代码/模型 |
-| RoboBrain2.5 | 标准 VLM | 标准 SFT | 未公开 | 否 | 部分 |
-| Qwen3-VL | 标准 VLM | 通用预训练 | 少 | 部分尺寸 | 是 |
-| π0 (VLA) | VLA 专用 | 行为克隆 + 扩散策略 | 机器人轨迹 | 否 | 是 |
-| RT-2 | VLA | 行为克隆 | 机器人 + 网络数据 | 否 | 是 |
+- **假設 1：視覺 - 語言模態分離計算總是有益**  
+  論文未驗證在極小模型（<1B）或超大模型（>100B）下 MoT 是否仍有收益
 
-**关键差异**:
-- HY-Embodied-0.5 是**VLM 基础模型**，不是端到端 VLA——它提供感知和推理基础，VLA 动作头需额外微调
-- 迭代后训练 (RL+RFT 循环) 是独特贡献，其他工作多为一次性 SFT 或纯 RL
-- On-policy 蒸馏方案对小模型部署有参考价值
+- **假設 2：Latent Token 數量 1 個足夠**  
+  未探索多個 latent tokens 對複雜場景的影響
 
-**面试 Tip**: 被问到"小模型如何做具身任务"时，可以答："HY-Embodied-0.5 展示了三个关键点：(1) 用 MoT 分离视觉/语言计算路径避免能力退化，(2) 用迭代 RL+RFT 将偶发成功转化为稳定推理能力，(3) 用 on-policy 蒸馏让小型模型继承大模型的推理风格而非仅模仿输出。"
+- **假設 3：RL 獎勵函數設計覆蓋所有具身能力**  
+  獎勵函數分為 Grounding/Regression/Trajectory/Textual 四類，但未驗證邊界案例（如多模態混合輸出）
 
-## 8. 精读建议 (Reading Guide)
+- **假設 4：5K 小時 UMI 數據足以學習通用表示**  
+  機器人控制實驗先用 5K 小時 UMI 預訓練，再 SFT 300-700 episodes，但未驗證 UMI 數據量對最終性能的影響
 
-### 值得精读原文的人
+## 7. 與相關工作對比 (Comparison)
 
-1. **做多模态具身 Agent 的研究者**: 尤其是关注小模型边缘部署的团队，§2 架构和 §4 后训练有直接参考价值
-2. **要评估迁移到新机器人平台可行性的工程师**: §3 数据构成和 §5 评测结果帮助判断模型是否适合你的任务域
-3. **做模型蒸馏/压缩的研究者**: §4.4 On-Policy Distillation 提供了大→小具身能力迁移的新思路
+| 模型 | 架構 | 參數量 | 具身專用 | 開源 | 關鍵差異 |
+|------|------|--------|----------|------|----------|
+| **HY-Embodied-0.5** | MoT + Latent Tokens | 2B/32B | ✅ | ✅ | 模態分離計算，視覺 latent tokens |
+| Qwen3-VL | Dense/MoE | 2B-72B | ❌ | ✅ | 通用 VLM，非具身優化 |
+| RoboBrain 2.5 | - | 4B | ✅ | ❓ | 專用具身，但性能落後 |
+| π0 / π0.5 | Action Expert | - | ✅ | ✅ | VLA 框架，非基礎模型 |
+| MiMo-Embodied | - | 7B | ✅ | ❓ | 小米具身模型，性能居中 |
 
-### 建议章节路径
+**面試 Tip**：  
+被問到「小模型如何做具身任務」時，可以回答：「HY-Embodied-0.5 用 MoT 架構分離視覺和語言計算路徑，避免視覺訓練污染語言能力，同時用視覺 latent tokens 建立跨模態語義橋樑——這讓 2B 模型在 22 個具身基準上 16 個 SOTA，超越 4B-7B 模型。」
+
+## 8. 精讀建議 (Reading Guide)
+
+### 值得精讀原文的人
+
+1. **做多模態具身 Agent 的研究者**：特別是關注 edge 部署、實時響應的場景
+2. **要評估遷移到新機器人平台可行性的工程師**：論文 Section 6 提供 VLA 整合實戰細節
+3. **對 MoT/MoE 架構感興趣的模型架構師**：MoT 在 VLM 中的應用是較新的探索
+
+### 建議章節路徑
 
 ```
-先读 §1 Introduction → 再看 §2 Model Architecture → §4 Post-training → 可跳 §3.1 (数据细节过多)
+先讀 §1 Introduction → 再看 §2 Model Architecture → §4 Post-training → §5 Evaluation → 可跳 §3 Pre-training（數據細節較瑣碎）→ 最後看 §6 Robot Control（若關心實戰）
 ```
 
-**原因**: §1 给出问题定义和贡献概述；§2 是架构核心；§4 是训练策略创新；§3.1 数据细节对大多数读者过于冗长，需要时再查。
+**理由**：
+- §1 快速理解問題定義和核心貢獻
+- §2 是架構核心，MoT 和 latent tokens 設計在此
+- §4 後訓練策略（RL+RFT+ 蒸餾）是性能關鍵
+- §5 驗證效果，表格密集但信息量大
+- §3 數據細節可選讀，除非你打算復現預訓練
+- §6 僅在需要整合 VLA 時精讀
 
-### 不值得精读的理由
+### 不值得精讀的理由
 
-- 如果你**不做机器人学习**：这篇的具身数据构建和 RL 奖励设计可能过于垂直
-- 如果你**已熟悉类似方法**（如 MoT、GRPO、蒸馏）：可直接看 §5 结果和 §6 VLA 下游
-- 如果你**只想要端到端 VLA 方案**：这篇是 VLM 基础模型，动作头需额外设计
+- 如果你不做機器人學習或具身 Agent，讀摘要 + §1 即可
+- 如果你已熟悉 MoE/MoT 架構，§2 可快速瀏覽
+- 如果你只關心開源模型使用，直接看 GitHub README 和推理示例
 
 ---
 
-[← Back to Theory](./README.md)
+## 🔗 關鍵引用
 
-**关键引用**:
-- 论文: https://arxiv.org/abs/2604.07430
-- 代码: https://github.com/Tencent-Hunyuan/HY-Embodied
-- MoT 架构原文: Liang et al., 2024
-- GRPO: Shao et al., 2024
-- On-Policy Distillation: Agarwal et al., 2024 / Thinking Machines Lab, 2025
+- **論文**: https://arxiv.org/abs/2604.07430
+- **GitHub**: https://github.com/Tencent-Hunyuan/HY-Embodied
+- **HuggingFace**: https://huggingface.co/tencent/HY-Embodied-0.5
+- **技術報告 PDF**: https://github.com/Tencent-Hunyuan/HY-Embodied/blob/master/hy_embodied_tech_report.pdf
+
+---
+[← Back to Theory](./README.md)
