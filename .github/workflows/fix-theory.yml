@@ -2,7 +2,6 @@ name: Fix theory root files
 
 on:
   schedule:
-    # Run daily at 10:00 UTC (18:00 Beijing) — after deep dive pipeline finishes
     - cron: '0 10 * * *'
   workflow_dispatch:
 
@@ -15,20 +14,17 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Download scripts from Pulsar-KenVersion
+      - name: Download scripts
         run: |
           mkdir -p /tmp/scripts
-          for script in _vla_theory_classifier.py fix-theory-root-files.py; do
-            curl -sH "Authorization: token ${{ secrets.DEPLOY_GH_TOKEN }}" \
-              "https://api.github.com/repos/sou350121/Pulsar-KenVersion/contents/scripts/$script" \
-              | python3 -c "import sys,json,base64; print(base64.b64decode(json.load(sys.stdin)['content']).decode())" \
-              > /tmp/scripts/$script
-          done
-          ls -la /tmp/scripts/
+          BASE="https://raw.githubusercontent.com/sou350121/Pulsar-KenVersion/main/scripts"
+          curl -sL "$BASE/_vla_theory_classifier.py" -o /tmp/scripts/_vla_theory_classifier.py
+          curl -sL "$BASE/fix-theory-root-files.py" -o /tmp/scripts/fix-theory-root-files.py
+          wc -c /tmp/scripts/*.py
 
       - name: Run fix
         env:
-          GITHUB_TOKEN: ${{ secrets.DEPLOY_GH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.DEPLOY_GH_TOKEN || secrets.GITHUB_TOKEN }}
         run: |
           cd /tmp/scripts
           python3 fix-theory-root-files.py --verbose
