@@ -12,29 +12,21 @@ jobs:
   fix-theory:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      - name: Download scripts from Pulsar-KenVersion
-        env:
-          GH_TOKEN: ${{ secrets.DEPLOY_GH_TOKEN }}
-        run: |
-          mkdir -p /tmp/scripts
-          API="https://api.github.com/repos/sou350121/Pulsar-KenVersion/contents/scripts"
-          for script in _vla_theory_classifier.py fix-theory-root-files.py; do
-            curl -sH "Authorization: token $GH_TOKEN" "$API/$script" \
-              | python3 -c "import sys,json,base64; d=json.load(sys.stdin); print(base64.b64decode(d['content']).decode())" \
-              > /tmp/scripts/$script
-            echo "Downloaded $script ($(wc -c < /tmp/scripts/$script) bytes)"
-          done
-
       - name: Run fix
         env:
-          GITHUB_TOKEN: ${{ secrets.DEPLOY_GH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          cd /tmp/scripts
+          cd scripts
           python3 fix-theory-root-files.py --verbose
           echo "---"
           python3 fix-theory-root-files.py --apply --verbose
