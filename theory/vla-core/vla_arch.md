@@ -359,4 +359,4 @@ System 2 (慢/语义)                    System 1 (快/运动)
 
 ---
 
-[← Back to Explorer's Map](./README.md)
+[← Back to Explorer's Map](../README.md)
