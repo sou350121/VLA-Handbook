@@ -4,43 +4,33 @@ on:
   schedule:
     # Run daily at 10:00 UTC (18:00 Beijing) — after deep dive pipeline finishes
     - cron: '0 10 * * *'
-  workflow_dispatch:  # Manual trigger
-
-permissions:
-  contents: write
+  workflow_dispatch:
 
 jobs:
   fix-theory:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout VLA-Handbook
-        uses: actions/checkout@v4
-
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      - name: Download classifier from Pulsar-KenVersion
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Download scripts from Pulsar-KenVersion
         run: |
           mkdir -p /tmp/scripts
           for script in _vla_theory_classifier.py fix-theory-root-files.py; do
-            curl -sH "Authorization: token $GH_TOKEN" \
+            curl -sH "Authorization: token ${{ secrets.DEPLOY_GH_TOKEN }}" \
               "https://api.github.com/repos/sou350121/Pulsar-KenVersion/contents/scripts/$script" \
               | python3 -c "import sys,json,base64; print(base64.b64decode(json.load(sys.stdin)['content']).decode())" \
               > /tmp/scripts/$script
           done
-          echo "Downloaded scripts:"
           ls -la /tmp/scripts/
 
-      - name: Run fix (dry-run first)
+      - name: Run fix
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.DEPLOY_GH_TOKEN }}
         run: |
           cd /tmp/scripts
           python3 fix-theory-root-files.py --verbose
           echo "---"
-          echo "Dry run complete. Applying..."
           python3 fix-theory-root-files.py --apply --verbose
