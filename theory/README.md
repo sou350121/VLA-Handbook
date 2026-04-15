@@ -1,7 +1,7 @@
 # 🗺️ VLA Theory — Explorer's Map
 
 > **VLA（Vision-Language-Action）** 让机器人"看懂世界、听懂指令、做出动作"。
-> 这里有 **230 篇深度解析**，是中文世界最完整的 VLA 理论库。
+> 这里有 **231 篇深度解析**，是中文世界最完整的 VLA 理论库。
 >
 > 不知道从哪开始？先选你的角色 ↓
 
@@ -44,7 +44,7 @@ graph TD
 
     DEPLOY --> FRONTIER["🔬 Frontier Wilds<br/>跨域 · 神经科学<br/>14 篇"]
 
-    FOUND["🏗️ Foundation Mines<br/>基础理论 · 工具箱<br/>32 篇"] -.->|随时查阅| CORE
+    FOUND["🏗️ Foundation Mines<br/>基础理论 · 工具箱<br/>33 篇"] -.->|随时查阅| CORE
     FOUND -.-> FLOW
     FOUND -.-> RL
 
@@ -339,7 +339,7 @@ VLA 数学 → Loss Functions → World Model 总纲 → 思维链 → VLA 十�
 
 &nbsp;
 
-**230** articles · **10** zones · Auto-classified by [Pulsar](https://github.com/sou350121/Pulsar-KenVersion) using 15 method-family keywords
+**231** articles · **10** zones · Auto-classified by [Pulsar](https://github.com/sou350121/Pulsar-KenVersion) using 15 method-family keywords
 
 New articles added daily. Explore with sparklines and trends at [VLA Deep Dive](https://sou350121.github.io/pulsar-web/vla-deepdive/).
 
