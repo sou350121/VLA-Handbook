@@ -1,7 +1,7 @@
 # 🗺️ VLA Theory — Explorer's Map
 
 > **VLA（Vision-Language-Action）** 让机器人"看懂世界、听懂指令、做出动作"。
-> 这里有 **232 篇深度解析**，是中文世界最完整的 VLA 理论库。
+> 这里有 **235 篇深度解析**，是中文世界最完整的 VLA 理论库。
 >
 > 不知道从哪开始？先选你的角色 ↓
 
@@ -37,7 +37,7 @@ graph TD
     RL --> PLAN
 
     PLAN --> TOUCH["🤚 Touch Cavern<br/>触觉感知<br/>23 篇"]
-    PLAN --> EYE["👁️ Vision Tower<br/>3D · SLAM<br/>16 篇"]
+    PLAN --> EYE["👁️ Vision Tower<br/>3D · SLAM<br/>19 篇"]
 
     TOUCH --> DEPLOY["🔧 Workshop<br/>部署 · 硬件<br/>19 篇"]
     EYE --> DEPLOY
@@ -339,7 +339,7 @@ VLA 数学 → Loss Functions → World Model 总纲 → 思维链 → VLA 十�
 
 &nbsp;
 
-**232** articles · **10** zones · Auto-classified by [Pulsar](https://github.com/sou350121/Pulsar-KenVersion) using 15 method-family keywords
+**235** articles · **10** zones · Auto-classified by [Pulsar](https://github.com/sou350121/Pulsar-KenVersion) using 15 method-family keywords
 
 New articles added daily. Explore with sparklines and trends at [VLA Deep Dive](https://sou350121.github.io/pulsar-web/vla-deepdive/).
 
