@@ -28,6 +28,7 @@
 | **2025.04** | **π0.5** | Physical Intelligence | **Open-world Generalization**。分层推理 (Hierarchical Inference)，统一高层规划与底层控制。 |
 | **2025.04** | **OpenVLA-OFT** | - | Online Fine-Tuning。提升了 OpenVLA 在新任务上的适应速度。 |
 | **2025.11** | **π0.6 / π*0.6** | Physical Intelligence | **RL (Recap) + 5B Backbone**。引入 Offline RL 自我进化，长序列任务性能翻倍。 |
+| **2026.04** | **π0.7** | Physical Intelligence | **Steerable + Compositional Generalization**。5B 主体（4B Gemma 3 VLM + 400M MEM 视觉编码器 + 860M flow matching action expert）+ 14B BAGEL 世界模型旁路；KI + FAST + RECAP strategy-metadata 蒸馏；主模型 1×H100/38ms，world model 4×H100/1.25s per subgoal。详见 [深度解读](../theory/vla-core/pi0_7_steerable_compositional_generalization_2026.md)。 |
 
 ## 3. 综述 (Surveys)
 - **2025.01**: *Vision-Language-Action Models for Robotics: A Review Towards Real-World Applications* (IEEE Access)

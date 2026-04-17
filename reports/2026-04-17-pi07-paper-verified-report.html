@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>$3,500 的臂、$11B 的公司 — π0.7 深度研究</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,800;9..144,900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/opencc-js@1.0.5/dist/umd/full.js"></script>
+<style>
+  :root{
+    --ink:#14110f;
+    --ink-2:#3a332e;
+    --ink-3:#6b6158;
+    --ink-4:#8e8377;
+    --paper:#f6f1e8;
+    --paper-2:#eee6d6;
+    --card:#ffffff;
+    --rule:#d9cfbc;
+    --rule-soft:#e7deca;
+    --accent:#b8421f;
+    --accent-2:#8c2e18;
+    --accent-wash:#f6e2d4;
+    --ok:#2b6b3a;
+    --ok-wash:#dfeadf;
+    --warn:#a5720d;
+    --warn-wash:#f3e5c2;
+    --err:#9a2626;
+    --err-wash:#f2dcdc;
+    --blue:#264f7a;
+    --blue-wash:#dde6f0;
+    --mono:"JetBrains Mono","SF Mono","Cascadia Code",ui-monospace,monospace;
+    --serif:"Fraunces","Source Serif Pro","Noto Serif TC",Georgia,serif;
+    --sans:"Inter","PingFang TC","Noto Sans CJK TC","Microsoft JhengHei",-apple-system,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:var(--sans);font-size:17px;line-height:1.72;color:var(--ink);background:var(--paper);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+  ::selection{background:var(--accent);color:#fff}
+  .wrap{max-width:1160px;margin:0 auto;padding:0 1.5rem}
+  .col{max-width:720px;margin:0 auto}
+
+  .topbar{position:sticky;top:0;z-index:40;background:rgba(246,241,232,0.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--rule)}
+  .topbar-inner{max-width:1160px;margin:0 auto;padding:.7rem 1.5rem;display:flex;align-items:center;justify-content:space-between;font-size:.82rem}
+  .topbar-left{display:flex;align-items:center;gap:.7rem;color:var(--ink-2);font-weight:600;letter-spacing:.02em}
+  .topbar-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);display:inline-block}
+  .topbar-right{color:var(--ink-3);font-family:var(--mono);font-size:.76rem;display:flex;align-items:center;gap:.8rem}
+  .lang-toggle{display:inline-flex;align-items:center;gap:0;border:1px solid var(--rule);border-radius:14px;padding:1px;background:var(--paper-2);font-family:var(--serif);font-size:.78rem;overflow:hidden;cursor:pointer;user-select:none}
+  .lang-toggle span{padding:.18rem .55rem;border-radius:12px;color:var(--ink-3);font-weight:600;transition:all .15s ease;line-height:1}
+  .lang-toggle span.active{background:var(--ink);color:var(--paper)}
+  .lang-toggle:hover{border-color:var(--accent)}
+
+  .hero{padding:5rem 0 4rem;border-bottom:1px solid var(--rule);background:radial-gradient(ellipse 80% 60% at 80% 0%, rgba(184,66,31,.07), transparent 60%),radial-gradient(ellipse 60% 50% at 10% 20%, rgba(38,79,122,.05), transparent 60%)}
+  .eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);font-weight:500;margin-bottom:1.5rem;display:flex;align-items:center;gap:.7rem}
+  .eyebrow::before{content:"";width:2rem;height:1px;background:var(--accent);display:inline-block}
+  h1.kicker{font-family:var(--serif);font-weight:800;font-size:clamp(2.2rem, 5.5vw, 4.4rem);line-height:1.02;letter-spacing:-0.025em;margin:0 0 1.5rem;color:var(--ink)}
+  h1.kicker em{font-style:italic;font-weight:600;color:var(--accent)}
+  .deck{font-family:var(--serif);font-weight:400;font-size:clamp(1.15rem, 2vw, 1.4rem);line-height:1.5;color:var(--ink-2);max-width:680px;margin:0}
+  .byline{margin-top:2.5rem;padding-top:1.5rem;border-top:1px solid var(--rule);display:flex;flex-wrap:wrap;gap:1.5rem 2.5rem;font-size:.82rem;color:var(--ink-3);font-family:var(--mono)}
+  .byline strong{color:var(--ink);font-weight:600;display:block;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;margin-bottom:.2rem}
+
+  .stat-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin:3rem 0 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+  .stat-strip>div{padding:1.5rem 1.2rem;border-right:1px solid var(--rule)}
+  .stat-strip>div:last-child{border-right:none}
+  .stat-n{font-family:var(--serif);font-weight:700;font-size:2rem;line-height:1;color:var(--ink);letter-spacing:-0.02em}
+  .stat-n small{font-size:1rem;color:var(--ink-3);font-weight:500;margin-left:.15rem}
+  .stat-l{font-size:.75rem;text-transform:uppercase;letter-spacing:.12em;color:var(--ink-3);font-weight:600;margin-top:.5rem}
+  @media (max-width:720px){.stat-strip{grid-template-columns:repeat(2,1fr)}.stat-strip>div:nth-child(2){border-right:none}.stat-strip>div:nth-child(1),.stat-strip>div:nth-child(2){border-bottom:1px solid var(--rule)}}
+
+  section{padding:4.5rem 0;border-bottom:1px solid var(--rule)}
+  section:last-of-type{border-bottom:none}
+  .sec-num{font-family:var(--mono);font-size:.8rem;letter-spacing:.15em;color:var(--accent);font-weight:500;margin-bottom:.6rem}
+  .sec-title{font-family:var(--serif);font-weight:700;font-size:clamp(1.8rem,3.5vw,2.6rem);line-height:1.1;letter-spacing:-0.02em;margin:0 0 1rem;color:var(--ink)}
+  .sec-intro{font-family:var(--serif);font-size:1.18rem;line-height:1.55;color:var(--ink-2);font-weight:400;margin:0 0 2.5rem;max-width:680px}
+
+  .prose p{margin:0 0 1.1rem}
+  .prose .lede::first-letter{font-family:var(--serif);font-weight:800;font-size:3.6rem;float:left;line-height:.9;padding:0.3rem .5rem 0 0;color:var(--accent)}
+  .prose .lede{font-size:1.05rem}
+  .prose h3{font-family:var(--serif);font-weight:700;font-size:1.5rem;line-height:1.25;margin:2.5rem 0 .8rem;letter-spacing:-0.01em}
+  .prose h4{font-family:var(--sans);font-weight:700;font-size:.85rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin:2rem 0 .5rem}
+  .prose ul,.prose ol{padding-left:1.3rem;margin:1rem 0}
+  .prose li{margin:.35rem 0}
+  .prose strong{color:var(--ink);font-weight:700}
+  .prose a{color:var(--accent);text-decoration:underline;text-decoration-color:rgba(184,66,31,.3);text-underline-offset:3px}
+  .prose a:hover{text-decoration-color:var(--accent)}
+
+  .pull{margin:3rem -1rem;padding:2rem 1rem 2rem 2.5rem;border-top:2px solid var(--ink);border-bottom:2px solid var(--ink);font-family:var(--serif);font-size:clamp(1.4rem,2.5vw,1.9rem);line-height:1.35;font-weight:500;letter-spacing:-0.015em;color:var(--ink);position:relative}
+  .pull::before{content:"\201C";font-family:var(--serif);font-size:6rem;line-height:.8;color:var(--accent);position:absolute;left:-.3rem;top:-1rem;font-weight:800;opacity:.22}
+  .pull cite{display:block;margin-top:1rem;font-size:.85rem;font-family:var(--mono);font-style:normal;color:var(--ink-3);letter-spacing:.05em}
+
+  .callout{margin:1.8rem 0;padding:1.2rem 1.4rem;border-radius:4px;border-left:3px solid;font-size:.97rem;line-height:1.6;background:var(--card)}
+  .callout-head{display:flex;align-items:center;gap:.5rem;font-family:var(--mono);font-weight:600;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;margin-bottom:.6rem}
+  .callout-head::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+  .callout.evidence{border-color:var(--ok);background:var(--ok-wash)}.callout.evidence .callout-head{color:var(--ok)}
+  .callout.judgment{border-color:var(--blue);background:var(--blue-wash)}.callout.judgment .callout-head{color:var(--blue)}
+  .callout.estimate{border-color:var(--warn);background:var(--warn-wash)}.callout.estimate .callout-head{color:var(--warn)}
+  .callout.warning{border-color:var(--err);background:var(--err-wash)}.callout.warning .callout-head{color:var(--err)}
+  .callout.key{border-color:var(--accent);background:var(--accent-wash)}.callout.key .callout-head{color:var(--accent)}
+  .callout p:first-child{margin-top:0}
+  .callout p:last-child{margin-bottom:0}
+
+  .tag{display:inline-block;font-family:var(--mono);font-size:.67rem;padding:.15rem .45rem;border-radius:3px;font-weight:600;letter-spacing:.06em;vertical-align:middle;margin:0 .2rem;border:1px solid}
+  .tag-ok{background:var(--ok-wash);color:var(--ok);border-color:#b9d3be}
+  .tag-est{background:var(--warn-wash);color:var(--warn);border-color:#e3cd9a}
+  .tag-judge{background:var(--blue-wash);color:var(--blue);border-color:#b5c5d5}
+  .tag-err{background:var(--err-wash);color:var(--err);border-color:#dbb5b5}
+  .tag-hidden{background:#eae3d2;color:var(--ink-2);border-color:#d4caae}
+  .tag-infer{background:#e9e4d3;color:#5c5134;border-color:#cdc4a3}
+
+  .grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:1.2rem;margin:1.5rem 0}
+  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;margin:1.5rem 0}
+  @media(max-width:720px){.grid-2,.grid-3{grid-template-columns:1fr}}
+  .card{background:var(--card);border:1px solid var(--rule);border-radius:6px;padding:1.4rem}
+  .card h5{margin:0 0 .5rem;font-family:var(--serif);font-size:1.1rem;font-weight:700;line-height:1.25}
+  .card .meta{font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;color:var(--ink-3);text-transform:uppercase;margin-bottom:.8rem}
+
+  .table-wrap{margin:1.5rem 0;overflow-x:auto;border:1px solid var(--rule);border-radius:6px}
+  table{width:100%;border-collapse:collapse;font-size:.92rem;background:var(--card)}
+  th,td{text-align:left;padding:.75rem .9rem;border-bottom:1px solid var(--rule-soft);vertical-align:top}
+  th{font-family:var(--mono);font-weight:600;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);background:var(--paper-2);border-bottom:2px solid var(--rule)}
+  tbody tr:last-child td{border-bottom:none}
+  tbody tr:hover td{background:rgba(184,66,31,.03)}
+  .chk-yes{color:var(--ok);font-weight:700;font-family:var(--mono)}
+  .chk-no{color:var(--err);font-weight:700;font-family:var(--mono)}
+
+  .diagram{background:#1b1816;color:#e8dfcc;padding:1.5rem;border-radius:6px;font-family:var(--mono);font-size:.82rem;line-height:1.7;white-space:pre;overflow-x:auto;margin:1.5rem 0;border:1px solid #2a2520}
+
+  .toc{background:var(--card);border:1px solid var(--rule);border-radius:6px;padding:1.5rem 1.8rem;margin:2rem 0 0}
+  .toc-head{font-family:var(--mono);font-size:.72rem;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-3);margin-bottom:1rem;font-weight:600}
+  .toc ol{list-style:none;padding:0;margin:0;columns:2;column-gap:2rem}
+  @media(max-width:720px){.toc ol{columns:1}}
+  .toc li{display:flex;align-items:baseline;gap:.8rem;padding:.5rem 0;border-bottom:1px solid var(--rule-soft);break-inside:avoid}
+  .toc li:last-child{border-bottom:none}
+  .toc-n{font-family:var(--mono);font-size:.75rem;color:var(--accent);font-weight:600;min-width:2rem}
+  .toc a{color:var(--ink);text-decoration:none;font-weight:500;flex:1}
+  .toc a:hover{color:var(--accent)}
+
+  footer{padding:3rem 0 4rem;background:var(--paper-2);border-top:1px solid var(--rule);color:var(--ink-3);font-size:.87rem}
+  footer h4{font-family:var(--mono);font-size:.72rem;letter-spacing:.15em;text-transform:uppercase;color:var(--ink);margin:0 0 1rem}
+  footer ol{padding-left:1.2rem;margin:0}
+  footer li{margin:.3rem 0}
+  footer a{color:var(--ink-2);text-decoration:underline;text-decoration-color:rgba(107,97,88,.4);text-underline-offset:2px}
+  footer a:hover{color:var(--accent)}
+  .foot-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:3rem}
+  @media(max-width:720px){.foot-grid{grid-template-columns:1fr;gap:2rem}}
+
+  .pred{background:var(--card);border:1px solid var(--rule);border-radius:6px;padding:1.3rem 1.4rem;margin:1rem 0;position:relative}
+  .pred-head{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;margin-bottom:.5rem}
+  .pred-h{font-family:var(--serif);font-size:1.08rem;font-weight:700;line-height:1.3;flex:1}
+  .pred-prob{font-family:var(--mono);font-size:.78rem;font-weight:600;color:var(--accent);white-space:nowrap;background:var(--accent-wash);padding:.25rem .6rem;border-radius:3px}
+  .pred-body{font-size:.9rem;color:var(--ink-2);line-height:1.55;margin:0}
+
+  hr.fancy{border:0;height:1px;background:linear-gradient(90deg,transparent,var(--rule) 20%,var(--rule) 80%,transparent);margin:3rem 0}
+
+  /* Cost comparison bar */
+  .cost-bar{margin:1.5rem 0;display:grid;gap:.7rem}
+  .cost-row{display:grid;grid-template-columns:180px 1fr 110px;align-items:center;gap:1rem;font-size:.92rem}
+  .cost-row-l{font-weight:600;color:var(--ink)}
+  .cost-row-b{height:28px;background:var(--rule-soft);border-radius:3px;overflow:hidden;position:relative}
+  .cost-row-b>div{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-2));display:flex;align-items:center;padding:0 .6rem;color:#fff;font-family:var(--mono);font-size:.75rem;font-weight:600;white-space:nowrap}
+  .cost-row.others .cost-row-b>div{background:linear-gradient(90deg,#7a6d60,#544a40)}
+  .cost-row-r{font-family:var(--mono);font-size:.8rem;color:var(--ink-3);text-align:right}
+
+  /* Hardware diagram cells */
+  .obs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem;margin:1.5rem 0}
+  @media(max-width:720px){.obs-grid{grid-template-columns:1fr 1fr}}
+  .obs-cell{background:var(--card);border:1px solid var(--rule);border-radius:4px;padding:.9rem 1rem;text-align:center}
+  .obs-cell.has{border-color:var(--ok);background:var(--ok-wash)}
+  .obs-cell.no{border-color:var(--err);background:var(--err-wash);opacity:.85}
+  .obs-n{font-family:var(--serif);font-weight:700;font-size:1.5rem;line-height:1;color:var(--ink)}
+  .obs-cell.no .obs-n{color:var(--err);text-decoration:line-through}
+  .obs-l{font-size:.72rem;font-family:var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);margin-top:.4rem}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-left"><span class="topbar-dot"></span>PHYSICAL INTELLIGENCE · π0.7 DEEP DIVE</div>
+    <div class="topbar-right">
+      <span>2026-04-17 · paper verified</span>
+      <div class="lang-toggle" id="lang-toggle" role="button" aria-label="Language toggle">
+        <span class="active" data-lang="tw">繁</span><span data-lang="cn">简</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─────────── HERO ─────────── -->
+<header class="hero">
+  <div class="wrap">
+    <div class="col">
+      <div class="eyebrow">深度研究報告 · ANATOMY OF A $11B BET</div>
+      <h1 class="kicker">$3,500 的臂，<em>$11B 的公司</em> — 缺席的一切，是策略。</h1>
+      <p class="deck">π0.7 不是「更強的模型」，是一次路線賭注：<strong>硬件壓到 1/10、感測器砍到見骨、所有 effort 投到資料與 steerability</strong>。拒絕力覺、觸覺、仿真、深度相機、甚至關節扭矩讀數。一台 $10–12k 桌面雙臂站，疊衣、煮咖啡、連跑 13 小時。</p>
+      <div class="byline">
+        <div><strong>主題</strong>π0.7 · VLA · 硬件 × 策略</div>
+        <div><strong>證據基礎</strong>π0.7 paper (32 頁) + π0.7 官方 blog + π0.6 paper + TechCrunch 採訪 + 產品圖</div>
+        <div><strong>深度</strong>9 章節 · 20 條來源</div>
+        <div><strong>證據標記</strong>CONFIRMED / INFERRED / ESTIMATE / JUDGMENT</div>
+      </div>
+      <div class="stat-strip">
+        <div>
+          <div class="stat-n">$11<small>B</small></div>
+          <div class="stat-l">傳聞估值 · 2026Q1</div>
+        </div>
+        <div>
+          <div class="stat-n">$3.5<small>k</small></div>
+          <div class="stat-l">單臂硬件 · vendor 價</div>
+        </div>
+        <div>
+          <div class="stat-n">$10–12<small>k</small></div>
+          <div class="stat-l">單站總成本</div>
+        </div>
+        <div>
+          <div class="stat-n">1/10</div>
+          <div class="stat-l">vs Humanoid 對手</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Evidence boundary notice -->
+<div class="wrap" style="padding-top:2rem">
+  <div class="col">
+    <div class="callout evidence">
+      <div class="callout-head">證據基礎 · PAPER FETCHED</div>
+      <p>本報告的核心架構與硬件段落，已據 <strong>π0.7 paper</strong>（<a href="https://www.pi.website/download/pi07.pdf">pi07.pdf</a>, 32 頁）原文驗證。平台硬件為 <strong>PI 自研機械臂</strong>（銘牌 <code>π ARM-10xx</code>）<span class="tag tag-infer">INFERRED</span>；paper 僅描述跨平台訓練（UR5e、DROID、home robots、egocentric human video），未給 PI 主力臂廠商，自研判斷依銘牌命名慣例成立。</p>
+    </div>
+
+    <nav class="toc">
+      <div class="toc-head">目錄 · Contents</div>
+      <ol>
+        <li><span class="toc-n">01</span><a href="#tldr">三分鐘看懂 π0.7</a></li>
+        <li><span class="toc-n">02</span><a href="#anatomy">模型解剖</a></li>
+        <li><span class="toc-n">03</span><a href="#steerable">Steerable — π0.7 的真正突破</a></li>
+        <li><span class="toc-n">04</span><a href="#hardware">硬件深潛 — $3,500 的臂</a></li>
+        <li><span class="toc-n">05</span><a href="#absence">觀測空間 — 缺席的一切</a></li>
+        <li><span class="toc-n">06</span><a href="#moats">護城河 — 假的與真的</a></li>
+        <li><span class="toc-n">07</span><a href="#threats">威脅地圖</a></li>
+        <li><span class="toc-n">08</span><a href="#forecast">12 / 24 個月預測</a></li>
+        <li><span class="toc-n">09</span><a href="#audit">審計修正表</a></li>
+      </ol>
+    </nav>
+  </div>
+</div>
+
+<!-- ─────────── 01 TLDR ─────────── -->
+<section id="tldr">
+  <div class="wrap"><div class="col prose">
+    <div class="sec-num">01 / TLDR</div>
+    <h2 class="sec-title">三分鐘看懂 π0.7</h2>
+    <p class="sec-intro">突破不在「模型更強」，在「<em>steerable</em>」— 能被人用自然語言一步步 coach，把單句 5% 成功率推到 95%。發生在 $10k 量級的桌面雙臂上。</p>
+
+    <p class="lede">Physical Intelligence（PI）2026-04-16 發佈 π0.7，同日 TechCrunch 獨家採訪。核心是 <strong>compositional generalization</strong>：組合不同 context 學到的 skill 解訓練資料沒有的任務。氣炸鍋紅薯 demo — 訓練資料只見過「別的機器人推蓋子」和「放瓶子到爐灶」各一次，單句 prompt ~5%，分步 coach（按按鈕 → 開蓋 → 放紅薯 → 關蓋 → 設時間）→ ~95%。<span class="tag tag-ok">CONFIRMED · TechCrunch</span></p>
+
+    <div class="callout key">
+      <div class="callout-head">護城河三層</div>
+      <p>架構不是護城河（Gemma 3 4B + 860M flow matching 都在 π0.6 paper 公開）。真正三層疊加：<strong>（1）硬件極簡</strong> $3.5k/臂、$10–12k/站，humanoid 對手 $100k+；<strong>（2）Steerable 交互</strong> 把 user 變成線上資料回饋源；<strong>（3）任務選擇</strong> 只打視覺能贏的一半戰場，另一半讓給 humanoid-first。</p>
+    </div>
+
+    <div class="pull">
+      Good intelligence compensates for bad hardware.
+      <cite>— Sergey Levine · TechCrunch 2026-04-16 <span class="tag tag-ok">DIRECT QUOTE</span></cite>
+    </div>
+
+    <p>PI 不是被迫用便宜硬件，是<em>主動選擇</em>，然後用模型與資料規模補硬件能力的空缺。賭注現在贏著 — 但邊界清晰。</p>
+  </div></div>
+</section>
+
+<!-- ─────────── 02 ANATOMY ─────────── -->
+<section id="anatomy">
+  <div class="wrap"><div class="col prose">
+    <div class="sec-num">02 / ANATOMY</div>
+    <h2 class="sec-title">模型解剖 — 5B 主體 + 14B 世界模型 + 多模態 Context</h2>
+    <p class="sec-intro">π0.7 不是 π0.6 加資料 — 在<em>輸入端</em>做了三處真架構擴充。</p>
+
+    <p class="lede">總參數 <strong>5B 主模型 + 14B 世界模型 + 400M 視覺編碼器</strong>。關鍵新增不在 action expert，在輸入端：BAGEL-based 世界模型產生視覺子目標圖，MEM 式編碼器壓縮視頻歷史。這兩件讓 steerability 從「prompt trick」升級為「訓練時學到的條件策略」。</p>
+
+    <div class="diagram">  ┌─────────────────────────────────────────────────┐
+  │  OBSERVATION (per step)                         │
+  │  · 3–4× RGB 448×448 (front + 2 wrist [+rear])   │
+  │  · up to 6 history frames/camera, 1 s stride    │
+  │  · joint config q_t + history (本體感知)        │
+  └──────────────────────┬──────────────────────────┘
+                         ▼
+  ┌─────────────────────────────────────────────────┐
+  │  Vision Encoder 400M (MEM 式視頻記憶)           │
+  │  → 壓縮歷史幀為短 token 序列                    │
+  └──────────────────────┬──────────────────────────┘
+                         ▼
+  ┌─────────────────────────────────────────────────┐
+  │  Context (訓練 + 推理時灌入)                    │
+  │  · Language: task + subtasks                    │
+  │  · Metadata: quality / speed / strategy         │
+  │  · Control modality: joint OR end-effector      │
+  │  · Subgoal images (來自 world model 生成)       │
+  └──────────────────────┬──────────────────────────┘
+                         ▼
+  ┌─────────────────────────────────────────────────┐
+  │  VLM Backbone 4B (init from Gemma 3)            │
+  │  · Block-causal attention                       │
+  │  · Knowledge Insulation + FAST tokens           │
+  └──────────────────────┬──────────────────────────┘
+                         ▼
+  ┌─────────────────────────────────────────────────┐
+  │  Action Expert 860M · Flow matching             │
+  │  · Fixed 50-step action chunk                   │
+  │  · joint OR end-effector 輸出                   │
+  └──────────────────────┬──────────────────────────┘
+                         ▼
+  ┌─────────────────────────────────────────────────┐
+  │  [旁路 · 可選] World Model 14B (BAGEL mixture   │
+  │  of transformers) → 生成 subgoal 圖像           │
+  │  · 4× H100 tensor-parallel, 1.25 s/subgoal      │
+  └─────────────────────────────────────────────────┘
+  Main inference: 1× H100, 38 ms latency (3 cameras)</div>
+
+    <h4>相對 π0.6 的三件新增</h4>
+    <ul>
+      <li><strong>14B BAGEL world model</strong>（mixture-of-transformers）：生成多視角 subgoal 圖像，推理時 condition 進 VLM。最大新增件。<span class="tag tag-ok">Paper</span></li>
+      <li><strong>400M MEM 視覺編碼器</strong>：壓縮 ≤6 幀/相機歷史（stride 1 s）為 token 序列，給模型短時記憶。<span class="tag tag-ok">Paper</span></li>
+      <li><strong>多模態 context conditioning with dropout</strong>：訓練同時灌 language + metadata（speed/quality/strategy 數值）+ control modality + subgoal image，推理任一組件可關 — zero-shot 與 coaching 是同一個 conditional policy 的兩個切片。<span class="tag tag-ok">Paper</span></li>
+    </ul>
+
+    <h4>保留自 π0.6</h4>
+    <ul>
+      <li><strong>KI + FAST tokens</strong>：VLM/action expert 梯度隔離 + FAST autoregressive tokenizer co-training。</li>
+      <li><strong>Flow matching head</strong>：860M transformer，fixed <em>50-step</em> action chunk（50 token，非 50 Hz；控制頻率 paper 未揭）。<span class="tag tag-ok">Paper</span></li>
+      <li><strong>RECAP 蒸餾</strong>：π0.6 離線 RL post-training（獨立 670M value VLM + offline advantage conditioning），π0.7 以 strategy metadata 把 specialist 行為蒸餾回通用模型。<span class="tag tag-ok">Paper</span></li>
+    </ul>
+
+    <h4>推理工程（paper 具體數字）</h4>
+    <div class="table-wrap"><table>
+      <thead><tr><th>項目</th><th>數值</th><th>備註</th></tr></thead>
+      <tbody>
+        <tr><td>主模型推理</td><td>1× H100, 38 ms</td><td>3 相機最小配置</td></tr>
+        <tr><td>World model subgoal</td><td>4× H100 tensor-parallel, 1.25 s / 張</td><td>按需觸發，非每步</td></tr>
+        <tr><td>推理優化棧</td><td>8-bit 量化 + SageAttention + RTC</td><td>real-time chunking</td></tr>
+        <tr><td>影像解析度</td><td>448×448 主輸入；world model ViT 448×336、VAE 512×384</td><td>非隨便餵原圖</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="callout judgment">
+      <div class="callout-head">這件事的意義</div>
+      <p>Steerability 是訓練目標，不是 prompt trick。每個 context 組件訓練時可被 dropout，模型學到<em>「給 subgoal 圖就跟；給 metadata 就按那速度；都沒給就憑 task prompt 試」</em>— 一個 <strong>conditional policy distribution</strong>。把「能被 coach」當 ML 目標來訓，這是 π0.7 的核心 insight。</p>
+    </div>
+  </div></div>
+</section>
+
+<!-- ─────────── 03 STEERABLE ─────────── -->
+<section id="steerable">
+  <div class="wrap"><div class="col prose">
+    <div class="sec-num">03 / STEERABLE</div>
+    <h2 class="sec-title">Steerable — π0.7 的真正突破</h2>
+    <p class="sec-intro">相對 π0.6 的唯一明確差異：模型學會「被 coach」。</p>
+
+    <p class="lede">Compositional generalization 老詞談了十年。π0.7 的差異在於<em>不要求模型自主組合</em>（仍不穩），而是運行時讓人類<strong>語言引導</strong>做組合。哲學轉向：從「one-shot 自主」→「human-in-the-loop，user 即線上數據源」。</p>
+
+    <h4>氣炸鍋紅薯 demo</h4>
+    <ul>
+      <li>訓練資料「氣炸鍋」僅 2 樣本：別的機器人推蓋子一次 + 開源資料放瓶子到爐灶一次。</li>
+      <li>單句 prompt 成功率 ~5%；分步 coach（按鈕 → 開蓋 → 放紅薯 → 關蓋 → 設時間）→ ~95%。<span class="tag tag-ok">TechCrunch</span></li>
+      <li>這不是 prompt engineering，是 steerability — 模型能聽懂中途糾正。</li>
+    </ul>
+
+    <div class="callout key">
+      <div class="callout-head">為何 steerable > benchmark 漲分</div>
+      <p>User 成 on-the-fly 數據源（「這步錯了，這樣做」）→ 部署即 free online data collection，每個 B2B pilot 客戶都在免費標 failure case。Google / Figure / Tesla 目前無此機制。</p>
+    </div>
+
+    <h4>部署極限 demo（TechCrunch）</h4>
+    <ul>
+      <li>連續咖啡 <strong>13 小時</strong>不中斷</li>
+      <li>新家庭疊衣 <strong>2 小時</strong>不中斷</li>
+      <li>工廠真實環境包裝裝箱</li>
+    </ul>
+    <p>關鍵不是「能做」，是「能<em>連續</em>做」。VLA 常見失敗是 drift — 誤差累積幾十分鐘後任務崩。13 小時不崩 = 訓練成熟度訊號。<span class="tag tag-judge">JUDGMENT</span></p>
+
+    <div class="callout warning">
+      <div class="callout-head">Steerable 的邊界</div>
+      <p>複雜多步任務（「做個吐司」）仍無法單句完成。π0.7 仍非「通用自主代理」，是「懂得怎麼 coach」的助手。離 Figure/1X 行銷的「humanoid 幫你做所有事」尚遠。</p>
+    </div>
+  </div></div>
+</section>
+
+<!-- ─────────── 04 HARDWARE ─────────── -->
+<section id="hardware">
+  <div class="wrap"><div class="col prose">
+    <div class="sec-num">04 / HARDWARE</div>
+    <h2 class="sec-title">硬件深潛 — $3,500 的臂憑什麼</h2>
+    <p class="sec-intro">整個 π0.7 故事的基石：硬件是 humanoid-first 對手的 1/10；資料規模、flywheel、B2B 部署速度都建立於此。</p>
+
+    <p class="lede">Levine 親口：單臂 vendor ~$3,500，材料 <$1,000。產品圖鉻牌 <code>π ARM-1017</code>、<code>π ARM-1091</code> — 命名慣例「π ARM」= Physical Intelligence Arm，OEM 不會允許客戶覆蓋鉻牌，<strong>PI 自研</strong> + 已序列化量產、fleet ≥ 數十台 <span class="tag tag-infer">INFERRED</span>。AgileX PiPER 同 class（6-DoF 球腕、1.5kg payload、626mm reach、$2,499 零售）— 證明 BOM 是商品化項目，但非 OEM 來源。</p>
+
+    <div class="callout judgment">
+      <div class="callout-head">「自研 + $3,500 vendor 價」如何解</div>
+      <p>最合理解釋：<strong>PI 設計 + 合約製造</strong>。PI 持設計 IP 與命名權，代工廠報價 $3,500（物料 <$1k + 加工 + margin）。同構於 Apple/富士康、Tesla/Panasonic 電芯。<span class="tag tag-judge">JUDGMENT</span></p>
+    </div>
+
+    <h4>平台構型</h4>
+    <ul>
+      <li><strong>雙臂 tabletop</strong>（ALOHA 風格）、<strong>固定基座</strong>（π0.5 曾 mobile，π0.6 轉回固定），工作空間 0.4–0.6m 高桌面。</li>
+    </ul>
+
+    <h3>觀測系統 — π0.7 paper 原文</h3>
+    <p>paper Implementation 段列出 observation vector：</p>
+
+    <div class="obs-grid">
+      <div class="obs-cell has"><div class="obs-n">3–4</div><div class="obs-l">RGB 相機 448×448<br>front + 2 wrist [+rear]</div></div>
+      <div class="obs-cell has"><div class="obs-n">6</div><div class="obs-l">歷史幀 / 相機<br>stride 1 s</div></div>
+      <div class="obs-cell has"><div class="obs-n">q<sub>t</sub></div><div class="obs-l">Joint 本體感知<br>含歷史狀態</div></div>
+      <div class="obs-cell no"><div class="obs-n">0</div><div class="obs-l">力/扭矩</div></div>
+      <div class="obs-cell no"><div class="obs-n">0</div><div class="obs-l">觸覺</div></div>
+      <div class="obs-cell no"><div class="obs-n">0</div><div class="obs-l">深度 / 點雲</div></div>
+      <div class="obs-cell no"><div class="obs-n">0</div><div class="obs-l">速度 / 電流</div></div>
+      <div class="obs-cell no"><div class="obs-n">0</div><div class="obs-l">IMU</div></div>
+      <div class="obs-cell no"><div class="obs-n">0</div><div class="obs-l">接觸麥克風</div></div>
+    </div>
+    <p style="font-size:.9rem;color:var(--ink-3)">相對 π0.6 擴充兩處：（1）可選 rear 相機（第 4 路）；（2）每路 ≤6 幀歷史（stride 1 s）。「零力/扭矩/觸覺/深度」核心判斷不變。</p>
+
+    <div class="table-wrap"><table>
+      <thead><tr><th>感測器類別</th><th>有無</th><th>排除證據</th></tr></thead>
+      <tbody>
+        <tr><td>獨立六軸 F/T 感測器</td><td><span class="chk-no">✗</span></td><td>外形排除 + 單價排除</td></tr>
+        <tr><td>關節扭矩感測器（Franka 式）</td><td><span class="chk-no">✗</span></td><td>同級商品化 BOM 不含 + $300/關節預算排除</td></tr>
+        <tr><td>光學觸覺指尖（GelSight/DIGIT）</td><td><span class="chk-no">✗</span></td><td>所有圖像未見 + spec 不含</td></tr>
+        <tr><td>電容/壓阻觸覺陣列</td><td><span class="chk-no">✗</span></td><td>同上</td></tr>
+        <tr><td>深度相機（observation 內）</td><td><span class="chk-no">✗</span></td><td>paper 只列 3 張 RGB</td></tr>
+        <tr><td>電流估力作為觀測訊號</td><td><span class="chk-no">✗</span></td><td>observation 只有 joint positions</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>腕部大黑圓柱</h3>
+    <p>並非觸覺感測器，是<strong>獨立外掛 roll 軸關節模組</strong>（電機 + 減速器 + 編碼器 + 驅動器 + 制動器一體化）。尺寸大因三個連動原因：</p>
+    <ul>
+      <li><strong>低減速比 ~10:1</strong> — 刻意 backdrivable，operator 可直接推動從臂採 demonstration。</li>
+      <li><strong>模組化共用 SKU</strong> — 跨平台同款 actuator 降 BOM 複雜度。</li>
+      <li><strong>連續 duty cycle 散熱</strong> — 13 小時咖啡不停要 actuator 不過熱。</li>
+    </ul>
+
+    <h3>末端執行器細節</h3>
+    <ul>
+      <li><strong>並指夾爪</strong>，可能快換指端（切菜 demo 見勾形特化指尖）。</li>
+      <li><strong>夾爪側 AprilTag + 可讀字符 ID</strong>：設備標識/標定，不排除跨臂 pose 閉環。</li>
+      <li><strong>刀柄纏綠色防滑套</strong> — 給物加摩擦而<em>不給夾爪加觸覺</em>：用 prop hack 延伸「good intelligence compensates for bad hardware」原則。</li>
+    </ul>
+
+    <h3>單站成本 — 數據飛輪的先決條件</h3>
+    <div class="cost-bar">
+      <div class="cost-row"><div class="cost-row-l">PI 單站（估算）</div><div class="cost-row-b"><div style="width:12%">$10–12k</div></div><div class="cost-row-r">基準 1×</div></div>
+      <div class="cost-row others"><div class="cost-row-l">Franka 單臂</div><div class="cost-row-b"><div style="width:50%">$40–60k</div></div><div class="cost-row-r">4–6×</div></div>
+      <div class="cost-row others"><div class="cost-row-l">Figure humanoid</div><div class="cost-row-b"><div style="width:95%">$100k+</div></div><div class="cost-row-r">10×+</div></div>
+    </div>
+
+    <div class="table-wrap"><table>
+      <thead><tr><th>項目</th><th>成本（估算）</th><th>備註</th></tr></thead>
+      <tbody>
+        <tr><td>單臂本體</td><td>~$3,500</td><td>vendor 價，材料成本 <$1k</td></tr>
+        <tr><td>雙臂</td><td>~$7,000</td><td>ALOHA 構型</td></tr>
+        <tr><td>3 相機</td><td>~$300–800</td><td>商用 USB/IP 相機</td></tr>
+        <tr><td>控制 PC</td><td>~$2,000</td><td>一台工作站級</td></tr>
+        <tr><td>工作台 / 框架</td><td>~$1,000</td><td></td></tr>
+        <tr><td><strong>單站總計</strong></td><td><strong>~$10,000–12,000</strong></td><td>全配</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="callout key">
+      <div class="callout-head">為何單站成本是策略基石</div>
+      <p>π ARM-1017/1091 表 fleet ≥ 數十台。$11k × 100 站 = $1.1M，PI 融資規模可承受；Figure humanoid $100k+ × 100 = $10M，飛輪未轉 runway 已燒光。<strong>硬件 10× 差 = data collection 10× 差 = flywheel 轉速 10× 差。</strong></p>
+    </div>
+  </div></div>
+</section>
+
+<!-- ─────────── 05 ABSENCE ─────────── -->
+<section id="absence">
+  <div class="wrap"><div class="col prose">
+    <div class="sec-num">05 / ABSENCE</div>
+    <h2 class="sec-title">觀測空間 — 缺席的一切，是策略</h2>
+    <p class="sec-intro">PI 缺的不只是感測器 — 還有仿真、深度幾何、主動控制。沒一樣是巧合。</p>
+
+    <p class="lede">其他 VLA 團隊標配的三大類 PI 全部不用：多模態感測（觸覺/力矩/深度）、仿真訓練、主動力控。這是<strong>路線設計</strong>，不是「做不到」。把這三樣從成本結構拿掉 = 10× 硬件便宜的來源，代價是模型能力必須補上缺口。</p>
+
+    <h4>缺席清單 × 為什麼缺席</h4>
+    <div class="table-wrap"><table>
+      <thead><tr><th>缺席項目</th><th>Blog / paper 提及</th><th>PI 的替代方案</th></tr></thead>
+      <tbody>
+        <tr><td><strong>觸覺感測</strong></td><td>0 次</td><td>大量 demonstration 讓模型「看」出接觸狀態</td></tr>
+        <tr><td><strong>力/扭矩感測</strong></td><td>僅 ref [47] TA-VLA 對比 <span class="tag tag-err">CORRECTED</span></td><td>同上，加 prop 調整（綠色防滑套）</td></tr>
+        <tr><td><strong>深度 / 點雲</strong></td><td>0 次進 observation</td><td>純 RGB + VLM 的幾何隱含推斷</td></tr>
+        <tr><td><strong>仿真 / Sim-to-Real</strong></td><td>0 次</td><td>純真實資料，靠 teleop 規模換泛化</td></tr>
+        <tr><td><strong>主動力控 (MPC / impedance)</strong></td><td>0 次</td><td>低階位置控制 + 低減速比機械順從（控制頻率 paper 未揭露）<span class="tag tag-infer">INFERRED</span></td></tr>
+        <tr><td><strong>RL (線上訓練)</strong></td><td>π0.6 有 Recap（離線）</td><td>離線 advantage conditioning，不線上 PPO</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="callout judgment">
+      <div class="callout-head">Coherent 哲學</div>
+      <p>每個「缺席」都有對應「替代」。PI 不是「漏做」，是<em>把傳統機器人學用昂貴感測器/仿真/MPC 解的問題，換成用模型 × 資料規模解</em>。2023 年 LLM 打敗 rule-based NLP 的同一套打法搬到機器人。</p>
+    </div>
+
+    <h4>賭注的邊界</h4>
+    <div class="grid-2">
+      <div class="card">
+        <div class="meta" style="color:var(--ok)">賭贏類別</div>
+        <h5>視覺能推斷的一切</h5>
+        <p style="font-size:.9rem;margin:0">疊衣、裝箱、煮咖啡、切菜、裝盤 — 位置控制 + 大量 demonstration 即可解。Contact-rich 可做，但靠規模學出接觸策略，非 model-based。</p>
+      </div>
+      <div class="card">
+        <div class="meta" style="color:var(--err)">賭不贏類別</div>
+        <h5>需觸覺或主動力控</h5>
+        <p style="font-size:.9rem;margin:0">真蛋 vs 假蛋、滑不滑、燙不燙、毫米級插拔、拋光、握手、餵嬰兒。<strong>PI 透過任務選擇主動規避，是戰場劃分不是 bug。</strong></p>
+      </div>
+    </div>
+  </div></div>
+</section>
+
+<!-- ─────────── 06 MOATS ─────────── -->
+<section id="moats">
+  <div class="wrap"><div class="col prose">
+    <div class="sec-num">06 / MOATS</div>
+    <h2 class="sec-title">護城河 — 假的與真的</h2>
+    <p class="sec-intro">不是一條，是五層疊加。分界線：別人光看 paper 能不能抄？</p>
+
+    <h3>假護城河</h3>
+    <div class="grid-2">
+      <div class="card">
+        <div class="meta">#1</div>
+        <h5 style="text-decoration:line-through;text-decoration-color:var(--err);color:var(--ink-3)">模型架構</h5>
+        <p style="font-size:.92rem;margin:0">Gemma 3、flow matching、KI、Recap 全公開，任何 research team 可復現。</p>
+      </div>
+      <div class="card">
+        <div class="meta">#2</div>
+        <h5 style="text-decoration:line-through;text-decoration-color:var(--err);color:var(--ink-3)">人才密度</h5>
+        <p style="font-size:.92rem;margin:0">Sergey / Chelsea / Karol 強，但 Google / Tesla / Figure 團隊絲毫不遜色。</p>
+      </div>
+      <div class="card">
+        <div class="meta">#3</div>
+        <h5 style="text-decoration:line-through;text-decoration-color:var(--err);color:var(--ink-3)">硬件 IP</h5>
+        <p style="font-size:.92rem;margin:0">自研沒錯，但走商品化 BOM 路線（6-DoF 球腕、並指夾爪、商用相機），有機電團隊半年可複製同型。<strong>自研 ≠ 護城河</strong>。</p>
+      </div>
+      <div class="card">
+        <div class="meta">#4</div>
+        <h5 style="text-decoration:line-through;text-decoration-color:var(--err);color:var(--ink-3)">消費者品牌</h5>
+        <p style="font-size:.92rem;margin:0">投資圈外無認知。B2B 客戶關係才 12 個月，可替代。</p>
+      </div>
+    </div>
+
+    <h3>真護城河（五層）</h3>
+
+    <div class="callout key">
+      <div class="callout-head">1 · 硬件成本結構</div>
+      <p>$10–12k × 100 站 = $1.1M fleet；humanoid 對手同規模需 $10M。這不只是融資差，是<strong>資料飛輪轉速差</strong> — 一年下來 PI 多一個量級有效訓練資料。</p>
+    </div>
+
+    <div class="callout key">
+      <div class="callout-head">2 · Data Factory 生產函數</div>
+      <p>$50–100/hr loaded cost 產高品質示範 = operator × task design × prop mgmt × hardware fleet × QA × labeling 的乘積。任一環節想抄都做不到。<span class="tag tag-judge">JUDGMENT</span></p>
+    </div>
+
+    <div class="callout key">
+      <div class="callout-head">3 · Steerable = 免費 online data 機制</div>
+      <p>π0.7 獨有。B2B user 每次糾正 = 免費標 failure case。Google / Tesla 目前無。<span class="tag tag-judge">JUDGMENT</span></p>
+    </div>
+
+    <div class="callout key">
+      <div class="callout-head">4 · Cross-embodiment 經驗</div>
+      <p>已在 AgileX-class / UR-class / Fetch / Stretch / Aloha 多平台訓練。每多一平台泛化邊際成本下降。</p>
+    </div>
+
+    <div class="callout key">
+      <div class="callout-head">5 · Operations tacit knowledge</div>
+      <p>demo 指令怎麼寫、operator 怎麼訓、什麼失敗標 mistake=1、哪些回收重錄 — 全沒寫在論文。Palantir 式 Forward-Deployed 運營護城河。</p>
+    </div>
+
+    <div class="pull">
+      算法是<em>公開的</em>，硬件是<em>便宜的</em>，資料與運營是<em>隱形的</em>。PI 把護城河建在最便宜也最難抄的那層。
+      <cite>— 本報告核心框架 <span class="tag tag-judge">JUDGMENT</span></cite>
+    </div>
+  </div></div>
+</section>
+
+<!-- ─────────── 07 THREATS ─────────── -->
+<section id="threats">
+  <div class="wrap"><div class="col prose">
+    <div class="sec-num">07 / THREATS</div>
+    <h2 class="sec-title">誰能追上 PI？</h2>
+    <p class="sec-intro">分戰場問題。humanoid-first 與 PI 不打同類任務；真正對手是其他 vision-first VLA。</p>
+
+    <p class="lede">媒體把「Figure / 1X / Tesla vs PI」框成同場競賽是錯的。Humanoid 押注「人形 + 主動力控 + 多模態感測」那一半任務；PI 押注「桌面/固定基座 + 純視覺」另一半。真正對標者是 Google DeepMind 與智元。</p>
+
+    <div class="table-wrap"><table>
+      <thead><tr><th>對手</th><th>同戰場？</th><th>威脅度</th><th>核心差異</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Google DeepMind</strong><br>(Gemini Robotics + RT-X)</td>
+          <td>✓ 同</td>
+          <td><span style="color:var(--err);font-weight:700">極高</span></td>
+          <td>RT-X 規模比 PI 大一個量級；Gemini 底座更強；但 B2B pilot 壓力與 steerable 工程能力可能不如 PI</td>
+        </tr>
+        <tr>
+          <td><strong>Tesla Optimus</strong></td>
+          <td>部分重疊</td>
+          <td><span style="color:var(--warn);font-weight:700">高</span></td>
+          <td>工廠內部 real-world data 飛輪；humanoid 形態 → 可打一些 PI 打不到的任務；但家務場景仍遠</td>
+        </tr>
+        <tr>
+          <td><strong>Figure AI</strong></td>
+          <td>不同戰場</td>
+          <td><span style="color:var(--warn);font-weight:700">中</span></td>
+          <td>humanoid + 自研硬件 = 不同 thesis；價格 10× 的 footprint 會限制 fleet 規模</td>
+        </tr>
+        <tr>
+          <td><strong>1X Technologies</strong></td>
+          <td>不同戰場</td>
+          <td><span style="color:var(--ok);font-weight:700">中低</span></td>
+          <td>消費者品牌「NEO」；面向家庭但 humanoid 硬件密集</td>
+        </tr>
+        <tr>
+          <td><strong>智元 / 宇樹</strong></td>
+          <td>部分重疊</td>
+          <td><span style="color:var(--ok);font-weight:700">中</span></td>
+          <td>硬件成本優勢 + 國內 pilot 市場；可能在「桌面雙臂 + VLA」上正面對標</td>
+        </tr>
+        <tr>
+          <td><strong>Meta / Apple</strong></td>
+          <td>未啟動</td>
+          <td><span style="color:var(--ink-3);font-weight:700">未知</span></td>
+          <td>資金 + 底模；可能 2027 下場</td>
+        </tr>
+      </tbody>
+    </table></div>
+
+    <div class="callout warning">
+      <div class="callout-head">PI 最該害怕 Google</div>
+      <p>RT-X 橫跨 22 實驗室、527 skill、160k+ episodes，每月在長。Gemini Robotics 若把 RT-X 當底座 co-train，「cross-embodiment 泛化」上理論已比 PI 多一個量級。PI 的賭注：自家 instruction ops 資料<em>質量高到抵消量劣</em> + steerable online data 機制持續補量。未被證偽。<span class="tag tag-judge">JUDGMENT</span></p>
+    </div>
+
+    <h3>Bear case — PI 會輸的四種劇本</h3>
+    <ol>
+      <li><strong>Sim-to-real 突破</strong>：NVIDIA GR00T / CMU 在 2026–27 讓仿真 ≈ 真實，PI 的 teleop 投入瞬間折舊。</li>
+      <li><strong>觸覺 unlock 新類別</strong>：倒咖啡、插插頭、折毛巾 purely visual 卡 70%，觸覺能推 95%+，「硬件極簡」變主要技術債。</li>
+      <li><strong>Google open weight</strong>：Gemini Robotics 某版開權重，B2B 客戶先試免費的。</li>
+      <li><strong>Humanoid 突破純視覺極限</strong>：Figure / Tesla 以主動力控 + 觸覺把 humanoid 家務做到 80%+，「桌面雙臂」形態受限。</li>
+    </ol>
+  </div></div>
+</section>
+
+<!-- ─────────── 08 FORECAST ─────────── -->
+<section id="forecast">
+  <div class="wrap"><div class="col prose">
+    <div class="sec-num">08 / FORECAST</div>
+    <h2 class="sec-title">12 / 24 個月會怎樣</h2>
+    <p class="sec-intro">每條附機率。不是算命 — 是把判斷暴露出來，便於事後打臉對照。</p>
+
+    <h4>6 個月內（~2026-10）</h4>
+    <div class="pred">
+      <div class="pred-head"><div class="pred-h">PI 以 $9–13B 估值完成 $1B 融資輪</div><div class="pred-prob">ESTIMATE 70%</div></div>
+      <p class="pred-body">Bloomberg 已放風，主要 downside 是宏觀。</p>
+    </div>
+    <div class="pred">
+      <div class="pred-head"><div class="pred-h">π0.7 paper 正式釋出，細節大致吻合本報告假設</div><div class="pred-prob">JUDGMENT 65%</div></div>
+      <p class="pred-body">Paper 已寫完未公開；意外最可能出在 steerable 訓練機制。</p>
+    </div>
+    <div class="pred">
+      <div class="pred-head"><div class="pred-h">至少 1 起高調 B2B 客戶案例公開發佈</div><div class="pred-prob">JUDGMENT 55%</div></div>
+      <p class="pred-body">12 個 pilot 中總有 1–2 家願意站台。</p>
+    </div>
+
+    <h4>12 個月內（~2027-04）</h4>
+    <div class="pred">
+      <div class="pred-head"><div class="pred-h">Google DeepMind 發佈 Gemini Robotics v2，benchmark 追平或超越 π0.7</div><div class="pred-prob">JUDGMENT 65%</div></div>
+      <p class="pred-body">RT-X + Gemini 底座追上只是時間問題。</p>
+    </div>
+    <div class="pred">
+      <div class="pred-head"><div class="pred-h">至少一家對手（Figure 或 1X）公開模仿 steerable 式交互</div><div class="pred-prob">JUDGMENT 75%</div></div>
+      <p class="pred-body">一旦證明 user coaching 可當 online data source，所有人會抄。</p>
+    </div>
+    <div class="pred">
+      <div class="pred-head"><div class="pred-h">PI 推客戶定制 fine-tuned SKU（機器人版 enterprise tier）</div><div class="pred-prob">JUDGMENT 60%</div></div>
+      <p class="pred-body">商業化必需，data flywheel 收割期。</p>
+    </div>
+
+    <h4>24 個月內（~2028-04）</h4>
+    <div class="pred">
+      <div class="pred-head"><div class="pred-h">VLA「底座 vs 應用」分化成型</div><div class="pred-prob">JUDGMENT 70%</div></div>
+      <p class="pred-body">2–3 家底座（PI / Google / Tesla），其餘做垂直應用 — OpenAI API 生態同構。</p>
+    </div>
+    <div class="pred">
+      <div class="pred-head"><div class="pred-h">PI 達 ARR $200M+ 或 IPO 備案</div><div class="pred-prob">ESTIMATE 35%</div></div>
+      <p class="pred-body">B2B 落地比想像慢；pilot 轉化 30%+ 可觸發。</p>
+    </div>
+
+    <h4>尾部風險</h4>
+    <div class="pred" style="border-left:3px solid var(--err)">
+      <div class="pred-head"><div class="pred-h">純視覺觸頂 — 必須回裝觸覺/本體感知</div><div class="pred-prob">JUDGMENT 20%</div></div>
+      <p class="pred-body">π0.8 / π0.9 發現 vision-only 卡 70%，PI 被迫轉多模態 — 數十台 fleet 要重部署。最黑黑天鵝。</p>
+    </div>
+    <div class="pred" style="border-left:3px solid var(--err)">
+      <div class="pred-head"><div class="pred-h">關鍵 co-founder 離職</div><div class="pred-prob">ESTIMATE 15%</div></div>
+      <p class="pred-body">以 hype 壓力，任一 co-founder 離開都是實質性事件。</p>
+    </div>
+  </div></div>
+</section>
+
+<!-- ─────────── 09 AUDIT ─────────── -->
+<section id="audit">
+  <div class="wrap"><div class="col prose">
+    <div class="sec-num">09 / AUDIT</div>
+    <h2 class="sec-title">審計修正表 — 我錯了什麼</h2>
+    <p class="sec-intro">可量化錯誤的透明記錄 — 讓這份報告 6 個月後能再被審查一次。</p>
+
+    <div class="table-wrap"><table>
+      <thead><tr><th>原判斷（v1/v2）</th><th>修正（v3）</th><th>發現方法</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>硬件：Franka Panda / UR5e</strong> (v1/v2)<br><strong>→ AgileX PiPER OEM</strong> (v3)</td>
+          <td><strong>PI 自研機械臂</strong> <span class="tag tag-err">CORRECTED</span>；銘牌 <code>π ARM-1017</code>/<code>1091</code> 顯示 PI 擁有設計 IP 與序列號命名權；大概率走設計 + 合約製造模式。PiPER 僅作規格對標。</td>
+          <td>產品圖鉻牌「π ARM」命名慣例（OEM 不會允許客戶改名稱）+ 序列化編號跨產品線連續</td>
+        </tr>
+        <tr>
+          <td><strong>觀測空間包含 joint torque</strong></td>
+          <td>observation 只含 3 RGB + 12 joint pos + 2 gripper pos；<strong>無</strong>任何力/扭矩/觸覺/深度</td>
+          <td>π0.6 paper Figure 5 原文</td>
+        </tr>
+        <tr>
+          <td><strong>"0 次提到 RL"</strong></td>
+          <td>π0.7 blog 未明言；但 π0.6 有 <strong>Recap</strong>（離線 RL post-training），value function 用獨立 670M VLM 估計</td>
+          <td>π0.6 paper</td>
+        </tr>
+        <tr>
+          <td>Torque blog 出現 0 次</td>
+          <td>1 次，ref [47] TA-VLA 對比</td>
+          <td><code>grep -iw</code> 修正</td>
+        </tr>
+        <tr>
+          <td>Instruction Writing Lead = prompt engineer</td>
+          <td>實際是為 operator 團隊寫示範指令的運營崗</td>
+          <td>讀 JD 全文</td>
+        </tr>
+        <tr>
+          <td>Teleop 成本 $100–200/hr</td>
+          <td>$50–100/hr loaded cost（SVRC 2026）；真正的成本單位是「單站 $10–12k + 連續 duty cycle」</td>
+          <td>硬件總價估算</td>
+        </tr>
+        <tr>
+          <td>PI 估值 $5.6B</td>
+          <td>$11B（2026-03 Bloomberg）</td>
+          <td>近期新聞</td>
+        </tr>
+        <tr>
+          <td>Penn PAL 測的是 π0</td>
+          <td>π0-FAST-DROID checkpoint</td>
+          <td>PAL Lab 博文全文</td>
+        </tr>
+        <tr>
+          <td><strong>遺漏：compositional generalization / steerable</strong></td>
+          <td>π0.7 相對 π0.6 的<strong>核心差異</strong>就在此；不是「更大模型」，是「可被 coach」</td>
+          <td>TechCrunch 2026-04-16 採訪</td>
+        </tr>
+      </tbody>
+    </table></div>
+
+    <div class="callout judgment">
+      <div class="callout-head">方法論反思 · 硬件判斷的三次修正</div>
+      <p><strong>一階</strong>：誤標 Franka Panda / UR5e（π0.5 移動雙臂記憶誤遷）。<strong>二階</strong>：修正為 AgileX PiPER OEM（$3,500 vendor 價 + 6-DoF 球腕 spec 匹配）。<strong>三階</strong>：修正為 <strong>PI 自研</strong>（銘牌 <code>π ARM-1017/1091</code> — OEM 不允許客戶覆蓋鉻牌命名）。<br><br>
+      修正流程：（1）先用所有工具取得原始 source（paper、產品圖、鉻牌），別因單次請求失敗退回推論。（2）硬件主張先看 paper 原圖 / 產品圖 — 尤其銘牌、序列號、品牌。（3）不要把 spec 吻合當作 OEM 證據（同 class 的臂 spec 都差不多）。（4）清楚區分 <span class="tag tag-ok">CONFIRMED</span> / <span class="tag tag-infer">INFERRED</span> / <span class="tag tag-est">ESTIMATE</span> / <span class="tag tag-judge">JUDGMENT</span>。</p>
+    </div>
+
+    <p>有錯歡迎指正。目標是<em>能被證偽</em>，不是看起來權威。</p>
+  </div></div>
+</section>
+
+<!-- ─────────── FOOTER ─────────── -->
+<footer>
+  <div class="wrap">
+    <div class="col">
+      <div class="foot-grid">
+        <div>
+          <h4>來源 · Sources</h4>
+          <ol>
+            <li><a href="https://www.pi.website/download/pi07.pdf">Physical Intelligence, "π0.7" paper, 32 pp.</a>（主要依據）</li>
+            <li><a href="https://www.pi.website/blog/pi07">Physical Intelligence, "π0.7" blog</a>（2026-04-16）</li>
+            <li>Physical Intelligence, "π0.6" paper（π0.7 直接前身）</li>
+            <li><a href="https://techcrunch.com/2026/04/16/physical-intelligence-a-hot-robotics-startup-says-its-new-robot-brain-can-figure-out-tasks-it-was-never-taught/">TechCrunch, Sergey Levine interview</a>（2026-04-16）</li>
+            <li>Physical Intelligence 產品圖 × 3（鉻牌 π ARM-1017 / 1091）</li>
+            <li>BAGEL: mixture-of-transformers image generation（π0.7 world model 基礎）</li>
+            <li>MEM: Multi-Scale Embodied Memory（π0.7 vision encoder 基礎）</li>
+            <li>FAST: Efficient Robot Action Tokenization（PI 2025-01）</li>
+            <li>Knowledge Insulating VLAs, Driess et al. 2025</li>
+            <li>DROID dataset（跨平台訓練資料之一，含 Franka 數據）</li>
+            <li>AgileX PiPER 規格頁（硬件比對基準）</li>
+            <li>arXiv:2509.07962 — TA-VLA (torque 對照)</li>
+            <li>Open X-Embodiment (RT-X) dataset</li>
+            <li>Bloomberg, "PI in $1B raise at $11B valuation" (2026-03)</li>
+            <li>Penn PAL Lab, "Failure modes of π0-FAST-DROID"</li>
+            <li>SVRC 2026 Industry Report (teleop 成本)</li>
+            <li>Google DeepMind Gemini Robotics blog</li>
+            <li>Figure AI Helix VLA blog</li>
+            <li>π0.5 paper (mobile manipulation 對照)</li>
+            <li>ALOHA 論文（雙臂 tabletop 構型原型）</li>
+          </ol>
+        </div>
+        <div>
+          <h4>圖例 · Legend</h4>
+          <p><span class="tag tag-ok">CONFIRMED</span> 原文或外部來源可查<br>
+          <span class="tag tag-infer">INFERRED</span> 根據交叉證據推論<br>
+          <span class="tag tag-est">ESTIMATE</span> 推估，附機率或區間<br>
+          <span class="tag tag-judge">JUDGMENT</span> 我的分析判斷<br>
+          <span class="tag tag-err">CORRECTED</span> 審計階段修正<br>
+          <span class="tag tag-hidden">HIDDEN</span> 策略性未公開</p>
+
+          <h4 style="margin-top:2rem">方法論</h4>
+          <p>π0.6 paper 原文 → TechCrunch 採訪 → 產品圖比對 → 硬件供應商交叉驗證 → 四象限缺席分析 → 護城河拆解 → 威脅地圖 → 機率預測 → 審計修正。</p>
+        </div>
+      </div>
+      <hr class="fancy">
+      <p style="font-size:.78rem;color:var(--ink-4);font-family:var(--mono);margin:0">Drafted 2026-04-17 · paper verified against pi07.pdf · All estimates are mine unless cited · This document can be revised upon new evidence</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  const toggle = document.getElementById('lang-toggle');
+  if (!toggle) return;
+  const labels = toggle.querySelectorAll('span[data-lang]');
+
+  // cache original trad text of every text node (once)
+  const origMap = new Map();
+  const simpMap = new Map();
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+    acceptNode(node){
+      // skip script/style and the toggle button itself
+      const p = node.parentElement;
+      if (!p) return NodeFilter.FILTER_REJECT;
+      const tag = p.tagName;
+      if (tag === 'SCRIPT' || tag === 'STYLE') return NodeFilter.FILTER_REJECT;
+      if (p.closest && p.closest('#lang-toggle')) return NodeFilter.FILTER_REJECT;
+      if (!/[\u3400-\u9FFF\uF900-\uFAFF]/.test(node.nodeValue)) return NodeFilter.FILTER_REJECT;
+      return NodeFilter.FILTER_ACCEPT;
+    }
+  });
+  let n;
+  while ((n = walker.nextNode())) origMap.set(n, n.nodeValue);
+
+  const origTitle = document.title;
+  let mode = 'tw';
+  let converter = null;
+
+  function ensureConverter(){
+    if (converter) return converter;
+    if (typeof OpenCC === 'undefined' || !OpenCC.Converter){
+      return null;
+    }
+    converter = OpenCC.Converter({from: 'tw', to: 'cn'});
+    return converter;
+  }
+
+  function applySimp(){
+    const conv = ensureConverter();
+    if (!conv) { alert('转换器载入中，请稍后再试'); return; }
+    if (simpMap.size === 0){
+      origMap.forEach((text, node) => simpMap.set(node, conv(text)));
+    }
+    origMap.forEach((_, node) => { node.nodeValue = simpMap.get(node); });
+    document.title = conv(origTitle);
+    document.documentElement.lang = 'zh-Hans';
+  }
+
+  function applyTrad(){
+    origMap.forEach((text, node) => { node.nodeValue = text; });
+    document.title = origTitle;
+    document.documentElement.lang = 'zh-Hant';
+  }
+
+  function setMode(next){
+    if (next === mode) return;
+    if (next === 'cn') applySimp(); else applyTrad();
+    mode = next;
+    labels.forEach(l => l.classList.toggle('active', l.dataset.lang === mode));
+  }
+
+  toggle.addEventListener('click', (e) => {
+    const target = e.target.closest('span[data-lang]');
+    if (target) setMode(target.dataset.lang);
+    else setMode(mode === 'tw' ? 'cn' : 'tw');
+  });
+})();
+</script>
+</body>
+</html>

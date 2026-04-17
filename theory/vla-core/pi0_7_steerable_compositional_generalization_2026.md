@@ -1,16 +1,21 @@
 # π0.7：可操控的通用机器人基础模型，涌现出组合泛化能力
 
-> **来源**：Physical Intelligence 官方博客 + TechCrunch 报道，2026-04-16
+> **来源**：Physical Intelligence 官方博客 + TechCrunch 报道（2026-04-16）+ **技术报告 PDF（2026-04-17 fetched）**
 > **官方标题**：π0.7: a Steerable Model with Emergent Capabilities
 > **核心突破**：**组合泛化（Compositional Generalization）**——不是记忆训练数据，而是把不同技能重组来解决从未见过的任务
 > **团队**：Sergey Levine 等 Physical Intelligence 联合创始人
 
 <table><tr><td>
 
-**整理**：Claude Opus 4.6 × [Pulsar 照见](https://github.com/sou350121/Pulsar-KenVersion) · 2026-04-16
-**注意**：截至本文撰写时，π0.7 的论文尚未在 arXiv 发布。以下信息基于官方博客和媒体报道。
+**整理**：Claude Opus 4.6 × [Pulsar 照见](https://github.com/sou350121/Pulsar-KenVersion) · 初稿 2026-04-16 · **paper-verified 增补 2026-04-17**
+**更新**：技术报告已发布，本文第 4 节「架构」已替换为 paper-verified 硬数据（5B 主体 + 14B BAGEL 世界模型 + 400M MEM 视觉编码器 + 860M flow matching action expert）。原「架构推测」保留在历史附录中供对照。
+**仍待确认**：论文 arXiv 链接、定量组合泛化指标、与 π0.6 的对比实验数据——这些在本报告发布时尚未全部公开。
 
 </td></tr></table>
+
+> 📄 **完整 paper-verified deep-dive（HTML 版，含繁/简中切换 + 完整参考来源 + 护城河分析 + 威胁地图）**：
+> [`reports/2026-04-17-pi07-paper-verified-report.html`](../../reports/2026-04-17-pi07-paper-verified-report.html)
+> 本 md 是概要 + 架构数据，HTML 报告是完整 9 节深度版（护城河拆解 · 威胁矩阵 · 12 月预测 · 审计日志）。
 
 ---
 
@@ -18,7 +23,9 @@
 
 - **一句话**：π0.7 是 PI 系列的最新模型，首次展示了机器人的"组合泛化"——把在不同场景学到的技能重新组合，解决从未训练过的任务。
 - **"可操控"（Steerable）**：用自然语言分步指令就能引导机器人完成新任务，不需要重新训练。
+- **硬架构**（paper-verified，4/17 update）：**5B 主模型 + 14B BAGEL 世界模型 + 400M MEM 视觉编码器**。主模型 = 4B Gemma 3 VLM + 860M flow matching action expert，固定 **50-step action chunk**，训练用 Knowledge Insulation + FAST tokens + RECAP 蒸馏。推理：主模型 1×H100 / 38 ms；世界模型按需触发 4×H100 / 1.25 s 一张 subgoal 图。
 - **关键判断**：PI 团队自己用了谨慎措辞——"early signs"、"initial demonstrations"。这是研究结果，不是产品发布。
+- **护城河不在架构**：Gemma 3 / flow matching / KI / RECAP / BAGEL 全是公开组件，架构可复现。真正壁垒是（1）$3.5k/臂 + $10–12k/工站的硬件极简，（2）steerable 交互把用户变成在线数据源，（3）只打视觉能赢的一半任务。
 - **估值背景**：PI 累计融资超 10 亿美元，最新估值 56 亿美元。
 
 ---
@@ -31,7 +38,7 @@
 | **π0.5** | 2025.04 | 开放世界泛化 | YouTube co-training → 新环境零样本 |
 | **π0.6** | 2025.11 | 5B VLM + Action Expert | 精细操作专家模块 |
 | **π\*0.6** | 2025.11 | RL 后训练 (Recap) | Offline RL 复盘 → 吞吐翻倍 |
-| **π0.7** | **2026.04** | **可操控 + 组合泛化** | **技能重组解决未见任务** |
+| **π0.7** | 2026.04.16 blog · **2026.04.17 paper** | **5B 主体 + 14B BAGEL WM + 400M MEM 编码器** | **可操控 + 组合泛化 + 训练时条件策略** |
 
 → 详见 [π0 代码解析](pi0_code_analysis.md) · [π0.5 解剖](pi0_5_dissection.md) · [π0.6 解剖](pi0_6_dissection.md)
 
@@ -91,33 +98,88 @@ Sergey Levine 的判断：
 
 ---
 
-## 4. 架构推测
+## 4. 架构（Paper-verified，2026-04-17 update）
 
-π0.7 的完整架构细节尚未公开。但从 PI 系列的演进和公开信息可以推测：
+> 技术报告发布后，本节已从「推测」升级为 paper 确认的硬数据。原推测段落保留在文末 [附录 A](#附录-apaper-前的架构推测4-16-初稿) 供对照。
+
+### 4.1 数据流
 
 ```
-π0 架构基础：
-  PaliGemma VLM (3B) + Flow Matching Action Head (300M)
+┌────────────────────────────────────────────┐
+│  观察输入                                   │
+│  · 3–4× RGB 448×448 (front + 2 wrist [+rear]) │
+│  · 每相机 ≤6 历史帧，stride 1 s            │
+│  · 关节配置 q_t                            │
+└──────────────────┬─────────────────────────┘
+                   │
+                   ▼
+┌────────────────────────────────────────────┐
+│  Vision Encoder 400M (MEM 式视频记忆)       │
+│  — 把多相机 × 多历史帧压缩为 token 序列     │
+└──────────────────┬─────────────────────────┘
+                   │
+                   ▼
+┌────────────────────────────────────────────┐
+│  VLM Backbone 4B (init from Gemma 3)       │
+│  · 语言指令 + 视觉 token + 历史状态         │
+│  · Knowledge Insulation + FAST tokens       │
+└──────────────────┬─────────────────────────┘
+                   │
+                   ▼
+┌────────────────────────────────────────────┐
+│  Action Expert 860M · Flow matching        │
+│  · Fixed 50-step action chunk              │
+│  · 输出关节速度/位置目标                    │
+└────────────────────────────────────────────┘
 
-π0.5 升级：
-  + YouTube co-training
-  + 统一模型（语义规划 + 电机控制）
-  + FAST tokenizer (预训练) → Flow Matching (推理)
+[旁路 · 可选] World Model 14B (BAGEL mixture-of-transformers)
+  · 生成多视角 subgoal 图像，作为 condition 回注 VLM
+  · 4× H100 tensor-parallel, 1.25 s / subgoal（按需触发，非每步）
 
-π0.6 升级：
-  + 5B VLM backbone
-  + Action Expert 模块
-
-π*0.6 升级：
-  + Recap (Offline RL)
-
-π0.7 可能的升级（推测）：
-  + 更强的语言条件 chain-of-thought（"可操控"）
-  + 更大规模的跨任务训练数据（"组合泛化"需要足够多样的技能库）
-  + 可能的在线适配机制（few-shot task steering without retraining）
+Main inference: 1× H100, 38 ms latency (3 相机配置)
 ```
 
-> ⚠️ 以上架构推测基于公开信息，不是官方确认。
+### 4.2 核心组件（paper 公开）
+
+| 组件 | 参数量 | 角色 | 来源 |
+|------|--------|------|------|
+| **VLM Backbone** | 4B | 语义理解 + 指令 grounding，Gemma 3 init | Paper |
+| **Vision Encoder (MEM)** | 400M | 多相机 × 多历史帧 → token 序列，短时视觉记忆 | Paper 新增件 |
+| **Action Expert** | 860M | Flow matching, 固定 50-step action chunk (chunk size = 50 tokens，非 50 Hz) | Paper |
+| **World Model** | 14B | BAGEL mixture-of-transformers，生成多视角 subgoal 图像；π0.6 无此模块 | Paper 最大新增件 |
+| **主模型合计** | 5B | = 4B VLM + 400M vision + 860M action expert | Paper |
+
+> ⚠️ 易踩坑：**50-step ≠ 50 Hz**。50 是 action chunk 长度（token 数），控制频率 paper 未披露；不要误用之前对 Pi 系列"50 Hz 位置控制"的传闻。
+
+### 4.3 训练三件套
+
+- **Knowledge Insulation (KI)**：VLM 与 action expert 之间的梯度隔离。VLM 训练动作生成时不会破坏原有语义知识，这是 π0.6 Action Expert 能成立的前提，π0.7 继承。
+- **FAST tokens**：FAST autoregressive tokenizer 做预训练，flow matching 做推理——FAST 给语义监督信号，flow matching 给高频连续输出。
+- **RECAP 蒸馏**：π0.6 Recap 是 offline RL post-training（670M value VLM + offline advantage conditioning，**独立 value head，不是 PPO**）。π0.7 的创新是把 RECAP specialist 行为通过 **strategy metadata** 蒸馏回通用模型——这就是为什么 π0.7 既有 RL 收益又是一个 generalist。
+
+### 4.4 推理成本表
+
+| 阶段 | 硬件 · 延迟 | 备注 |
+|------|------------|------|
+| 主模型推理 | 1× H100, **38 ms** | 3 相机最小配置 |
+| World model subgoal | 4× H100 tensor-parallel, **1.25 s / 张** | 按需触发，非每步 |
+| 主动作输出 | flow matching 采样，50-step chunk | 与 π0/π0.6 chunk 推理路径一致 |
+| 影像分辨率 | 主输入 448×448；world model ViT 448×336、VAE 512×384 | 非随便喂原图 |
+
+### 4.5 哪些是"π0.7 新增"，哪些是"继承 π0.6"
+
+**新增件**（paper 明确标记）：
+1. **14B BAGEL world model 旁路** ← 最大新增件，π0.6 没有
+2. **400M MEM 视觉编码器** ← 压缩多相机 × 多历史帧，赋予短时记忆
+3. **RECAP 的 strategy-metadata 蒸馏通道** ← 让 specialist 收益回流 generalist
+
+**继承 π0.6**：
+- 5B 主模型大小（VLM + Action Expert 总和，名义未变）
+- Knowledge Insulation + FAST tokens co-training
+- Flow matching action head + 50-step chunk
+- 多相机 RGB 输入框架
+
+这里的判断对「护城河在哪」非常关键——见 [第 5 节](#5-与-vla-研究主线的关系) 和 [第 6 节开放问题](#6-待追问的开放问题)。
 
 ---
 
@@ -198,6 +260,58 @@ Levine 在 [访谈](physical_intelligence_sergey_levine_foundation_model_vision_
 | 3D 对比视角 | [VGA](../perception/vga_vision_geometry_action_over_language_video_2026.md)（3D backbone 路线，昨天发布） |
 | RL 后训练 | [VLA+RL 实战](../rl/vla_rl_practical_guide.md) · [Evo-RL](../rl/evo_rl_open_real_world_rl_recap_pistar06_so101_2026.md) |
 | 世界模型 | [VLOA 3D 轨迹](../world-model/vloa_embodied_world_model_3d_point_cloud_trajectory_2026.md) |
+
+---
+
+## 附录 A：Paper 前的架构推测（4-16 初稿）
+
+> 本节为 4-16 技术报告发布前写的架构推测，保留在此供对照。现已被 [第 4 节](#4-架构paper-verified2026-04-17-update) 的 paper-verified 数据替代。
+
+```
+π0 架构基础：
+  PaliGemma VLM (3B) + Flow Matching Action Head (300M)
+
+π0.5 升级：
+  + YouTube co-training
+  + 统一模型（语义规划 + 电机控制）
+  + FAST tokenizer (预训练) → Flow Matching (推理)
+
+π0.6 升级：
+  + 5B VLM backbone
+  + Action Expert 模块
+
+π*0.6 升级：
+  + Recap (Offline RL)
+
+π0.7 可能的升级（推测 · 后被 paper 部分验证、部分修正）：
+  + 更强的语言条件 chain-of-thought（"可操控"）← 实际实现是 strategy-metadata 蒸馏 + 用户分步指令
+  + 更大规模的跨任务训练数据（"组合泛化"需要足够多样的技能库）← paper 未披露数据规模细节
+  + 可能的在线适配机制（few-shot task steering without retraining）← 实际是训练时学到的条件策略
+```
+
+**推测 vs paper 的主要偏差**：
+- 最大新增件不在 action expert 端，而在 **输入端的 14B BAGEL 世界模型** 和 **400M MEM 视觉编码器**——4-16 初稿没有预测到。
+- "可操控"不只是 in-context learning 模拟物，而是训练时就通过 strategy metadata 学到的**条件策略**——这让它比纯 prompt-tuning 稳定得多。
+
+---
+
+## 参考来源
+
+**Primary (paper-verified)**
+- Physical Intelligence, "π0.7: a Steerable Model with Emergent Capabilities"（技术报告 PDF，2026-04）
+
+**Secondary (blog / media)**
+- Physical Intelligence 官方博客：π0.7 发布公告（2026-04-16）
+- TechCrunch：Sergey Levine 专访报道（2026-04）
+
+**Related primary（paper 引用到的公开组件）**
+- BAGEL: mixture-of-transformers image generation（π0.7 world model 基础）
+- Gemma 3 Technical Report, Google DeepMind 2025
+- FAST: Efficient Robot Action Tokenization（PI, 2025-01）
+- π0 / π0.5 / π0.6 原论文 + Recap paper
+
+**Critical reviews (external)**
+- Penn PAL Lab, "Failure modes of π0-FAST-DROID"（对 PI 系列 checkpoint 的独立评测）
 
 ---
 
