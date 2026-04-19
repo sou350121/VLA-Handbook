@@ -370,23 +370,54 @@ LIBERO benchmark 已饱和——多数方法 95-99%，1-2% 的差异可能只是
 
 ## 模型全景对比
 
-| 模型 | 年份 | 参数 | VLM Backbone | Action Head | 训练数据 | 开源 | 特色 |
-|------|:----:|-----:|-------------|------------|---------|:----:|------|
-| RT-1 | 2022 | ~35M | EfficientNet | Token (256 bins) | Robot only | ❌ | 开山之作 |
-| RT-2 | 2023 | 55B | PaLI-X | Text Token | Web + Robot | ❌ | 涌现语义能力 |
-| ACT | 2023 | ~80M | — | CVAE Chunk | ALOHA Demo | ✅ | 动作分块，$20K 硬件 |
-| Octo | 2024 | ~93M | — | Diffusion | OXE | ✅ | 多形态 Diffusion |
-| OpenVLA | 2024 | 7B | Llama 2 + SigLIP | Linear Head | OXE | ✅ | 4-bit QLoRA |
-| RDT-1B | 2024 | 1B | — | Diffusion Transformer | OXE | ✅ | 首个 1B 扩散策略 |
-| π0 | 2024 | 3B | Gemma | Flow Matching | Cross-Embodiment | ✅ | 首个 FM VLA |
-| π0.5 | 2025 | 3B | Gemma | FAST + FM | + YouTube | ✅ | 开放世界泛化 |
-| π\*0.6 | 2025 | 5B | Gemma 3 | FM + Action Expert | + RL Data | ✅ | **Recap RL** |
-| GR00T-N1.6 | 2025 | ~2B | Custom VLM | Diffusion Transformer | Humanoid Multi | ✅ | 双系统 100Hz |
-| WALL-OSS | 2025 | ~7B | Qwen2.5 VLMoE | Dual (Flow + FAST) | Cross-Embodiment | ✅ | CoT + 双分支 |
-| Helix 02 | 2026 | ? | Custom | S0/S1/S2 分层 | Humanoid | ❌ | 全身 loco-manipulation |
-| **π0.7** | **2026** | ~5B | Gemma 3 | FM + Action Expert | + Compositional | ✅ | **组合泛化 · 可操控** |
-| **VGA** | 2026 | 987M | **VGGT (3D)** | 回归 Transformer | 36K 3D scenes | ❌ | **3D backbone > VLM** |
-| **WVA** | 2026 | 2.2B | DiT | FM + Value Function | LIBERO + Real | ❌ | **隐式规划 · 99.6%** |
+| 模型 | 年份 | 参数 | Action Head | 开源 | 特色 |
+|------|:----:|-----:|------------|:----:|------|
+| RT-1 | 2022 | ~35M | Token (256 bins) | ❌ | 开山之作 |
+| RT-2 | 2023 | 55B | Text Token | ❌ | 涌现语义能力 |
+| ACT | 2023 | ~80M | CVAE Chunk | ✅ 全 | 动作分块，$20K 硬件 |
+| Octo | 2024 | ~93M | Diffusion | ✅ 全 | 多形态 Diffusion |
+| OpenVLA | 2024 | 7B | Linear Head | ✅ 全 | 4-bit QLoRA |
+| RDT-1B | 2024 | 1B | Diffusion Transformer | ✅ 全 | 首个 1B 扩散策略 |
+| π0 | 2024 | 3B | Flow Matching | ⚠️ 部分 | 首个 FM VLA |
+| π0.5 | 2025 | 3B | FAST + FM | ⚠️ 部分 | 开放世界泛化 |
+| π\*0.6 | 2025 | 5B | FM + Action Expert | ❌ | **Recap RL** |
+| GR00T-N1.7 | 2025 | ~2B | Diffusion Transformer | ✅ 全 | 双系统 100Hz |
+| WALL-OSS | 2025 | ~7B | Dual (Flow + FAST) | ⚠️ 部分 | CoT + 双分支 |
+| Helix 02 | 2026 | ? | S0/S1/S2 分层 | ❌ | 全身 loco-manipulation |
+| **π0.7** | **2026** | ~5B | FM + Action Expert | ❌ | **组合泛化 · 可操控** |
+| **VGA** | 2026 | 987M | 回归 Transformer | ❌ | **3D backbone > VLM** |
+| **WVA** | 2026 | 2.2B | FM + Value Function | ❌ | **隐式规划 · 99.6%** |
+
+### 开源状态详解（⚠️ 细看——"开源"不等于"全部开放"）
+
+| 模型 | 权重 | 训练代码 | 推理代码 | 训练数据 | 许可证 | 实际能做什么 |
+|------|:----:|:------:|:------:|:------:|--------|-----------|
+| **ACT** | ✅ | ✅ | ✅ | ✅ demo | MIT | **完全可复现**。代码干净，社区最大。金标准。 |
+| **Octo** | ✅ | ✅ | ✅ | ✅ OXE | MIT | **完全可复现**。OXE 数据集公开。 |
+| **OpenVLA** | ✅ | ✅ | ✅ | ✅ OXE | MIT | **完全可复现**。支持 QLoRA 微调。但 2025-03 后停更。 |
+| **RDT-1B** | ✅ | ✅ | ✅ | ✅ OXE | MIT | **完全可复现**。清华 MARS Lab 维护积极。 |
+| **GR00T-N1.7** | ✅ | ✅ 微调 | ✅ | ⚠️ 部分 | Apache-2.0 | **可微调**。NVIDIA 提供微调脚本 + LeRobot 格式数据。预训练数据未公开。6.7K stars。 |
+| **StarVLA** | ✅ | ✅ | ✅ | ⚠️ 部分 | 未声明 | **可微调**。模块化框架。许可证不明确——商用前需确认。 |
+| **π0 (openpi)** | ✅ π0+π0.5 | ⚠️ 仅微调 | ✅ | ❌ | Apache-2.0 | **可微调但不可从头训**。提供 LIBERO 微调验证。预训练代码/数据不公开。π0-FAST 的 PyTorch 支持不完整。11K stars。 |
+| **WALL-OSS** | ✅ Flow+FAST | ⚠️ 有限 | ✅ | ❌ | 未声明 | **可推理/微调**。HuggingFace 有权重（wall-oss-flow/fast）。训练代码有限。许可证不明确。 |
+| **π\*0.6** | ❌ | ❌ | ❌ | ❌ | — | **完全不可用**。Recap RL 只有论文描述。 |
+| **π0.7** | ❌ | ❌ | ❌ | ❌ | — | **完全不可用**。只有博客+媒体报道，连论文都还没发。 |
+| **Helix 02** | ❌ | ❌ | ❌ | ❌ | — | **完全不可用**。Figure AI 闭源。 |
+| **VGA** | ❌ | ❌ | ❌ | ❌ | — | **完全不可用**。但 VGGT backbone 本身开源（Meta，Apache-2.0）。 |
+| **WVA** | ❌ | ❌ | ❌ | ❌ | — | **完全不可用**。刚发论文。 |
+
+### 开源等级总结
+
+| 等级 | 含义 | 模型 |
+|:----:|------|------|
+| 🟢 **完全开源** | 权重+训练+推理+数据+宽松许可 | ACT, Octo, OpenVLA, RDT-1B |
+| 🟡 **可微调** | 有权重+推理+微调代码，但预训练不可复现 | π0 (openpi), GR00T-N1.7, WALL-OSS, StarVLA |
+| 🔴 **闭源** | 只有论文/博客，无法使用 | π\*0.6, π0.7, Helix 02, VGA, WVA |
+
+> 💡 **选型建议**：
+> - 学术复现 → 🟢 等级（ACT/RDT-1B）
+> - 工程部署 → 🟡 等级（π0 openpi / GR00T）
+> - 了解前沿 → 🔴 等级的论文有参考价值但不可执行
 
 &nbsp;
 
