@@ -248,6 +248,22 @@ def check_episode_quality(episode):
 | **[GM-100](https://huggingface.co/datasets/robbyant/lingbot-GM-100)** | 100 任务 × 3 平台 | 双臂 | RGB + action | Apache-2.0 ✅ | 真机评测 · **商用安全** |
 | **[TaF-Dataset](https://arxiv.org/abs/2601.20321)** | 10M 触觉-力配对 | 6 种触觉传感器 | 触觉 + 6 轴 F/T | 未明确 ⚠️ | 触觉预训练 |
 
+### 2025-2026 新发布的大规模数据集
+
+| 数据集 | 规模 | 形态 | 模态 | 许可证 | 亮点 |
+|--------|------|------|------|--------|------|
+| **[AgiBot World 2026](https://github.com/OpenDriveLab/AgiBot-World)** | **1M+ 轨迹** · 2976 hrs | AgiBot G2 | RGB-D + 触觉 + LiDAR + IMU | **CC BY-NC-SA** ⚠️ | 最大多模态 · 5 个研究方向 · IROS'25 Best Paper 提名 |
+| **[RoboMIND 2.0](https://x-humanoid-robomind.github.io/)** | **310K 轨迹** | 6 种形态含人形 | RGB + 本体 + 触觉(12K) + 移动(20K) | 未明确 ⚠️ | 739 任务 · 含 5K 失败案例 · 双臂+灵巧手 · RSS'25 |
+| **[OXE-AugE](https://arxiv.org/abs/2512.13100)** | **4.4M 轨迹** | OXE 3x 扩展 | RGB + action | CC BY 4.0 ✅ | OXE 增强版 · **商用安全** |
+| **[OmniAction](https://huggingface.co/datasets/OpenMOSS-Team/OmniAction)** | 140K episodes | 多种 | RGB + 音频 + 语音 | 未明确 ⚠️ | 5096 种语音 · 2482 种环境音 · 多模态 |
+| **[Humanoid Everyday](https://arxiv.org/abs/2510.08807)** | 10.3K 轨迹 · 3M+ 帧 | 人形 | RGB + depth + LiDAR + 触觉 | 未明确 ⚠️ | 260 任务 · 全传感器人形 |
+| **[Hoi!](https://arxiv.org/abs/2512.04884)** | 3048 序列 | 4 种末端 | RGB + 力 + 触觉(Digit) + F/T | 未明确 ⚠️ | 力感知铰接操作 · 381 物体 |
+| **[HRDexDB](https://arxiv.org/abs/2604.14944)** | 大规模 | 人手 + 多种机器人手 | 多模态 | 未明确 ⚠️ | 灵巧手抓取 · 多手型对比 |
+
+> 💡 **2025-2026 趋势**：数据集从"RGB + 动作"向**多模态**演进（触觉 + 力 + LiDAR + 音频）。但新数据集的许可证普遍不明确——**用之前一定要确认**。
+>
+> **HuggingFace 机器人数据集从 2024 年的 1,145 个增长到 2025 年的 26,991 个**——增长 23 倍。
+
 ### 仿真数据集 / Benchmark
 
 | 数据集 | 类型 | 任务 | 许可证 | 状态 |
