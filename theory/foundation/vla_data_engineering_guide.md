@@ -221,21 +221,77 @@ def check_episode_quality(episode):
 
 ## 6. 开放数据集地图
 
-| 数据集 | 规模 | 形态 | 模态 | 开放 | 适用 |
-|--------|------|------|------|:----:|------|
-| **OXE** | 970K episodes | 22 形态 | RGB + action | ✅ | 跨形态预训练 |
-| **DROID** | 76K demos | 1 平台 | RGB + depth + action | ✅ | 多环境泛化 |
-| **Bridge v2** | 60K demos | WidowX | RGB + action | ✅ | 桌面操作 |
-| **GM-100** | 100 任务 × 3 平台 | 双臂 | RGB + action | ✅ | 真机评测 |
-| **TaF-Dataset** | 10M 触觉-力配对 | 多种 | 触觉 + F/T | ✅ | 触觉预训练 |
-| **LIBERO** | 4×10 任务 | Franka | RGB + action | ✅ | 仿真评测（⚠️ 已饱和） |
-| **RoboTwin 2.0** | 仿真 | 双臂 | RGB + action | ✅ | 仿真评测 |
+### ⚠️ 许可证决定了你能做什么——不是所有"开源"数据都能商用
 
-> 💡 **选数据集的原则**：
-> - 做 baseline 对比 → LIBERO（但注意仿真饱和）或 GM-100（真机）
-> - 做跨形态预训练 → OXE
-> - 做双臂 → GM-100 + RoboTwin
-> - 做触觉 → TaF-Dataset
+| 许可证 | 学术论文 | 商用 | 修改再分发 | 代表数据集 |
+|--------|:-------:|:----:|:---------:|-----------|
+| **CC BY 4.0** | ✅ | ✅ | ✅ 需署名 | OXE, DROID, Bridge v2 |
+| **MIT** | ✅ | ✅ | ✅ | RoboSet, CALVIN, LIBERO |
+| **Apache-2.0** | ✅ | ✅ | ✅ | GM-100, LingBot 数据 |
+| **CC BY-NC-SA 4.0** | ✅ | ❌ **禁止商用** | ⚠️ 需相同许可 | **AgiBot World 2026** |
+| **CC BY-NC 4.0** | ✅ | ❌ **禁止商用** | ✅ 需署名 | RH20T |
+| **未声明** | ⚠️ 风险 | ❌ 默认不可 | ❌ | 部分 HF 上的数据 |
+
+> 🔴 **CC BY-NC = 不能商用。** 在这个许可下训练的模型，法律上也不能商用。AgiBot World 2026 数据量大（1M+ 轨迹）但**禁止商用**——用之前看清许可证。
+
+### 真实机器人操作数据集
+
+| 数据集 | 规模 | 形态 | 模态 | 许可证 | 适用 |
+|--------|------|------|------|--------|------|
+| **[OXE](https://github.com/google-deepmind/open_x_embodiment)** | 1M+ episodes | 22 形态 | RGB + action | CC BY 4.0 ✅ | 跨形态预训练 · **商用安全** |
+| **[OXE-AugE](https://arxiv.org/abs/2512.13100)** | 4.4M trajectories | 扩展 OXE 3x | RGB + action | CC BY 4.0 ✅ | OXE 的增强版 |
+| **[DROID](https://droid-dataset.github.io/)** | 76K demos · 350hrs | Franka · 564 场景 | RGB + depth | CC BY 4.0 ✅ | 多环境泛化 · **商用安全** |
+| **[Bridge v2](https://rail-berkeley.github.io/bridgedata/)** | 54K trajectories | WidowX · 24 环境 | RGB + action | CC BY 4.0 ✅ | 桌面操作 · **商用安全** |
+| **[RoboSet](https://robopen.github.io/roboset/)** | 多任务 · 厨房 | 多种 | RGB × 4 视角 | MIT ✅ | 多任务家庭 · **商用安全** |
+| **[RH20T](https://rh20t.github.io/)** | 大规模 · 多技能 | 多种 | RGB + depth + F/T | **CC BY-NC** ⚠️ | 学术研究 · **禁止商用** |
+| **[AgiBot World 2026](https://github.com/OpenDriveLab/AgiBot-World)** | **1M+ trajectories** · 2976 hrs | AgiBot G2 | RGB-D + 触觉 + LiDAR + IMU | **CC BY-NC-SA** ⚠️ | 最大多模态 · **禁止商用** |
+| **[GM-100](https://huggingface.co/datasets/robbyant/lingbot-GM-100)** | 100 任务 × 3 平台 | 双臂 | RGB + action | Apache-2.0 ✅ | 真机评测 · **商用安全** |
+| **[TaF-Dataset](https://arxiv.org/abs/2601.20321)** | 10M 触觉-力配对 | 6 种触觉传感器 | 触觉 + 6 轴 F/T | 未明确 ⚠️ | 触觉预训练 |
+
+### 仿真数据集 / Benchmark
+
+| 数据集 | 类型 | 任务 | 许可证 | 状态 |
+|--------|------|------|--------|------|
+| **[LIBERO](https://github.com/Lifelong-Robot-Learning/LIBERO)** | 仿真 benchmark | 4×10 任务 · Franka | MIT ✅ | ⚠️ **已饱和**（95-99%） |
+| **[CALVIN](https://github.com/mees/calvin)** | 仿真 · 长程语言 | 34 任务 · 连续 | MIT ✅ | 活跃 |
+| **[RoboTwin 2.0](https://robotwin-benchmark.github.io/)** | 仿真 · 双臂 | 多任务 | MIT ✅ | 活跃 |
+| **[ManiSkill v3](https://github.com/haosulab/ManiSkill)** | 仿真 · GPU 加速 | 多种操作 | Apache-2.0 ✅ | 活跃 (RSS 2025) |
+| **[RoboCasa](https://robocasa.ai/)** | 仿真 · 家庭 | 厨房场景 | MIT ✅ | 活跃 |
+
+### 数据集选型决策树
+
+```
+你要做什么？
+│
+├─ 学术论文 baseline
+│   ├─ 仿真评测 → LIBERO（⚠️饱和）或 CALVIN（长程）
+│   └─ 真机评测 → GM-100
+│
+├─ 跨形态预训练
+│   ├─ 可商用 → OXE / OXE-AugE / Bridge v2
+│   └─ 仅学术 → + AgiBot World 2026（最大多模态）
+│
+├─ 多环境泛化
+│   └─ DROID（564 场景，CC BY 4.0）
+│
+├─ 双臂操作
+│   └─ GM-100 + RoboTwin 2.0
+│
+├─ 触觉研究
+│   └─ TaF-Dataset（许可证待确认）
+│
+├─ 多模态（RGB-D + 触觉 + LiDAR）
+│   └─ AgiBot World 2026（⚠️ 禁止商用）
+│
+└─ 商用产品
+    └─ **只能用 CC BY / MIT / Apache 的数据**
+       OXE + DROID + Bridge + RoboSet + GM-100
+```
+
+> 💡 **关键提醒**：
+> - **模型继承数据的许可证**。用 CC BY-NC 数据训练的模型，不能商用——即使模型代码是 MIT
+> - **混合数据需看最严的**。如果训练数据中有一部分是 CC BY-NC，整个模型都受限
+> - **仿真数据通常无限制**。LIBERO/CALVIN/ManiSkill 等仿真数据可自由使用
 
 ---
 
