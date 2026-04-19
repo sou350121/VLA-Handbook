@@ -428,7 +428,7 @@ LIBERO benchmark 已饱和——多数方法 95-99%，1-2% 的差异可能只是
 > - **学术研究 baseline** → RDT-1B（1B 扩散，MIT）或 OpenVLA-OFT（推理最快）
 > - **跨形态预训练** → CrossFormer（30 形态）或 HPT（异构 Transformer）
 > - **工程部署/产品** → GR00T-N1.7（NVIDIA 生态）或 LingBot-VLA（20K 小时数据，生产级）
-> - **加新模态（触觉/红外/力）** → LeRobot 框架最容易扩展，ACT 代码最好改
+> - **加新模态（触觉等）** → LeRobot 框架最容易扩展，ACT 代码最好改
 > - **了解前沿** → 🔴 等级的论文有参考价值但不可执行
 
 &nbsp;
