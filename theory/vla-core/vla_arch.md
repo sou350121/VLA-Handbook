@@ -2,7 +2,14 @@
 
 > **VLA = Vision + Language + Action**。把一个视觉语言模型（VLM）装上"手"，让机器人看懂世界、听懂指令、做出动作。
 >
-> 本文是 VLA 架构的**全景导航**，从 2022 年的 RT-1 到 2026 年的最新模型。每个模型附有深度解析链接。
+> 本文是 VLA 架构的**全景导航**，从 2022 年的 RT-1 到 2026 年 4 月的最新模型。每个模型附有深度解析链接。
+
+<table><tr><td>
+
+**上次更新**：2026-04-17 · Claude Opus 4.6 × [Pulsar 照见](https://github.com/sou350121/Pulsar-KenVersion)
+**⚠️ 仿真饱和警告**：LIBERO benchmark 已饱和（95-99%），本文标注了各模型的真机验证状态
+
+</td></tr></table>
 
 ---
 
@@ -161,9 +168,10 @@ graph TD
 | π0.5 | 开放世界泛化 | FAST (pretrain) + FM (infer) | 统一模型同时做语义规划和电机控制 |
 | π0.6 | 5B 参数 VLM 升级 | Flow + Action Expert | 专门的"动作专家"模块解决大模型"手笨" |
 | π\*0.6 | **RL 后训练** | 同上 + Recap | Offline RL 复盘成功/失败，吞吐量翻倍 |
+| **π0.7** | **组合泛化 + 可操控** | 同上（推测） | **技能重组解决未见任务 · 语言指令实时引导** |
 
-> 💡 **π\*0.6 的 Recap 算法是一个里程碑**：它证明了 VLA 可以通过 RL 自我提升，而不仅仅是模仿人类示范。
-> → 详见 [π0.6 / RECAP 解析](../rl/pi0_6_recap_rl_as_supervised_learning.md)
+> 💡 **π0.7（2026-04-16 发布）是 PI 系列的最新突破**：首次展示组合泛化——把不同场景学到的技能重新组合解决从未训练过的任务（如用空气炸锅烤红薯，训练数据中从未出现过这个完整任务）。Levine 称"一旦跨过这个门槛，能力的增长是超线性的"。
+> → 详见 [π0.7 深度解析](pi0_7_steerable_compositional_generalization_2026.md) · [Sergey Levine 访谈](physical_intelligence_sergey_levine_foundation_model_vision_2026.md)
 
 &nbsp;
 
@@ -201,6 +209,39 @@ graph TD
   - **FAST 分支**：粗粒度快速动作（离散 token）
 - **CoT 推理**：模型先输出中间推理步骤，再生成动作——VLA 级别的思维链
 - **定位**："具身 AI 的 Linux"——完全开源，支持 Cross-Embodiment
+
+&nbsp;
+
+#### VGA — 挑战 VLM Backbone 的"异端"
+
+> 📖 **[Deep Dive: VGA 解析](../perception/vga_vision_geometry_action_over_language_video_2026.md)** · [3D 优先原则](../perception/3d_first_principle_vga_spark_embodied_representation_revolution.md)
+
+**VGA 不是 VLA**——它主张用 3D 几何 backbone（VGGT）**替代** VLM backbone：
+
+| | VLA (π₀.₅) | VGA |
+|--|-----------|-----|
+| Backbone | VLM（2D 预训练） | **VGGT（3D 预训练）** |
+| 预训练数据 | 万亿 token | **36K 3D 场景** |
+| LIBERO | 96.9% | **98.1%** |
+| 零样本跨视角 | 52% | **58%** |
+
+**最惊人的消融**：去掉 3D 预训练 → 98.1% 暴跌到 6.4%。能力几乎全部来自 3D 先验。
+**⚠️ 真机**：75%（in-dist），58%（OOD）——仿真优势在真机上缩小。
+
+&nbsp;
+
+#### WVA — 价值函数隐式规划
+
+> **论文**：World-Value-Action Model · [arXiv:2604.14732](https://arxiv.org/abs/2604.14732) · 2026-04-18 · ⚡
+
+WVA 在 VLA 中引入**价值函数做隐式规划**：世界模型预测未来状态 → 价值函数评估轨迹好坏 → 在潜空间中渐进优化。
+
+- **LIBERO**：**99.6%**（当前最高，但 ⚠️ 仿真已饱和）
+- **LIBERO-Long**：98.1%（长程推理最优）
+- **真机**：75.6%（双臂 Piper，⚠️ 非实时闭环）
+- **参数**：2.2B（对比表中最小）
+
+→ 详见 [VLA 研究主线](vla_research_mainline.md)
 
 &nbsp;
 
@@ -280,6 +321,53 @@ System 2 (慢/语义)                    System 1 (快/运动)
 
 ---
 
+### 趋势 4：3D Backbone 挑战 VLM Backbone（2026.04 新方向）
+
+VGA 证明了 3D 几何 backbone 可以用**小几个量级**的预训练数据超越 VLM backbone。核心论点：
+
+> 机器人操作是 Vision→Geometry 映射（f(v)→G），不是 Vision→Language→Action 映射。
+
+VLM 的 2D 表征存在"3D→2D→3D 瓶颈"——3D 世界被压成 2D 潜空间再解码回 3D 动作，信息丢失。
+
+**这是否意味着 VLM backbone 会被淘汰？** 不一定。π₀.₇ 用 VLM 实现了组合泛化——这依赖 VLM 的**语义知识**（"空气炸锅是什么"），3D backbone 做不到。最终可能是融合：**3D backbone 做几何 + VLM 做语义**。
+
+→ 详见 [VGA 解析](../perception/vga_vision_geometry_action_over_language_video_2026.md) · [3D 优先原则](../perception/3d_first_principle_vga_spark_embodied_representation_revolution.md)
+
+&nbsp;
+
+### 趋势 5：从 Token 空间到潜空间（全面迁移）
+
+VLA 的演进本质上是一个**从离散 token 空间到连续潜空间**的迁移过程：
+
+| 组件 | Token 空间（旧） | 潜空间（新） |
+|------|------------|-----------|
+| 动作 | RT-2 的 256 bins | Flow Matching（π₀） |
+| 推理 | CoT 文字输出 | 潜思维链（π₀.₇ 可能已在用） |
+| 规划 | 语言子目标 | 潜空间价值函数（WVA） |
+| 记忆 | 无 | 潜空间记忆向量（未来方向） |
+
+Token 是人类的语言，不是机器的语言。模型的"母语"是连续向量。
+
+→ 详见 [潜空间综述](../foundation/latent_space_survey_foundation_evolution_mechanism_ability_2026.md)
+
+&nbsp;
+
+---
+
+## ⚠️ 仿真饱和警告（2026-04）
+
+LIBERO benchmark 已饱和——多数方法 95-99%，1-2% 的差异可能只是随机种子的区别。
+
+| 模型 | LIBERO Avg | 真机 | **Sim→Real 跌幅** |
+|------|:---------:|:----:|:--:|
+| π₀.₅ | 96.9% | 77% / 52%(OOD) | -20~-45 |
+| VGA | 98.1% | 75% / 58%(OOD) | -23~-40 |
+| WVA | 99.6% | 75.6% | -24 |
+
+**读这张表要看右边两列，不是左边。** 仿真 99.6% 和 96.9% 的差距（2.7%）在真机上可能完全不存在。
+
+---
+
 ## 模型全景对比
 
 | 模型 | 年份 | 参数 | VLM Backbone | Action Head | 训练数据 | 开源 | 特色 |
@@ -296,6 +384,9 @@ System 2 (慢/语义)                    System 1 (快/运动)
 | GR00T-N1.6 | 2025 | ~2B | Custom VLM | Diffusion Transformer | Humanoid Multi | ✅ | 双系统 100Hz |
 | WALL-OSS | 2025 | ~7B | Qwen2.5 VLMoE | Dual (Flow + FAST) | Cross-Embodiment | ✅ | CoT + 双分支 |
 | Helix 02 | 2026 | ? | Custom | S0/S1/S2 分层 | Humanoid | ❌ | 全身 loco-manipulation |
+| **π0.7** | **2026** | ~5B | Gemma 3 | FM + Action Expert | + Compositional | ✅ | **组合泛化 · 可操控** |
+| **VGA** | 2026 | 987M | **VGGT (3D)** | 回归 Transformer | 36K 3D scenes | ❌ | **3D backbone > VLM** |
+| **WVA** | 2026 | 2.2B | DiT | FM + Value Function | LIBERO + Real | ❌ | **隐式规划 · 99.6%** |
 
 &nbsp;
 
@@ -341,6 +432,30 @@ System 2 (慢/语义)                    System 1 (快/运动)
 简要：泛化、实时性、安全、长程任务、多模态融合、数据效率、Sim2Real、评估标准、可解释性、跨形态迁移。
 </details>
 
+<details>
+<summary><b>LIBERO 99% 了还有意义吗？</b></summary>
+
+**对仿真 benchmark 的排名——意义不大了。** 95-99% 区间的差异可能只是超参数调优。
+
+**真正有意义的是**：
+1. 真机成功率（典型 Sim→Real 跌幅 20-40%）
+2. 零样本跨视角/跨物体泛化
+3. 长程任务（>10 步）的成功率
+4. 组合泛化（做训练中从未出现的任务组合）
+
+→ 2026-04 起，本文标注了各模型的真机验证状态
+</details>
+
+<details>
+<summary><b>VLA 还是 VGA？VLM backbone 会被 3D backbone 替代吗？</b></summary>
+
+**短期不会。** VGA 在几何精度上更强（跨视角 +6%），但 π₀.₇ 用 VLM 实现了组合泛化——这需要互联网语义知识，3D backbone 提供不了。
+
+**最可能的方向**：两者融合。3D backbone 做空间推理（"杯子在哪、怎么抓"），VLM 做语义推理（"这是空气炸锅、应该先打开盖子"）。
+
+→ 详见 [VGA 解析](../perception/vga_vision_geometry_action_over_language_video_2026.md) · [3D 优先原则](../perception/3d_first_principle_vga_spark_embodied_representation_revolution.md)
+</details>
+
 &nbsp;
 
 ---
@@ -349,13 +464,14 @@ System 2 (慢/语义)                    System 1 (快/运动)
 
 | 方向 | 推荐 |
 |------|------|
-| 研究主线总览 | [VLA 研究主线梳理](vla_research_mainline.md) |
-| 动作生成细节 | [动作生成范式详解](../diffusion-flow/action_representations.md) |
-| 小模型路线 | [小模型 VLA 深度分析](small_vla_models.md) — 40 页长文 |
-| 视觉接地 | [ReconVLA](reconvla_implicit_grounding_by_reconstruction.md) · [FocusVLA](focusvla_focused_visual_utilization_for_vision_language_acti_dissection.md) |
-| 语言理解缺口 | [LangGap](langgap_diagnosing_and_closing_the_language_gap_in_vision_la_dissection.md) |
-| 双臂操作 | [TwinVLA](twinvla_data_efficient_bimanual_manipulation_with_twin_singl_dissection.md) |
-| 效率优化 | [Beyond Attention Magnitude](beyond_attention_magnitude_leveraging_inter_layer_rank_consi_dissection.md) |
+| 研究主线 | [VLA 赌注清单](vla_research_mainline.md) |
+| π0.7 | [组合泛化 · 可操控](pi0_7_steerable_compositional_generalization_2026.md) |
+| PI 访谈 | [Sergey Levine 深度访谈](physical_intelligence_sergey_levine_foundation_model_vision_2026.md) |
+| 3D backbone | [VGA](../perception/vga_vision_geometry_action_over_language_video_2026.md) · [3D 优先原则](../perception/3d_first_principle_vga_spark_embodied_representation_revolution.md) |
+| 潜空间理论 | [潜空间综述](../foundation/latent_space_survey_foundation_evolution_mechanism_ability_2026.md) |
+| 动作生成 | [动作生成范式](../diffusion-flow/action_representations.md) · [Compression Gap](../diffusion-flow/the_compression_gap_why_discrete_tokenization_limits_vision_dissection.md) |
+| 小模型 | [小模型 VLA 深度分析](small_vla_models.md) |
+| 3D 工具 | [点云与 SLAM](../perception/pointcloud_slam.md)（60+ 工具） · [Spark 2.0](../perception/spark_2_0_3dgs_web_renderer_world_labs_2026.md) |
 
 ---
 
