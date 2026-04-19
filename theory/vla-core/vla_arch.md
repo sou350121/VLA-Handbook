@@ -395,11 +395,18 @@ LIBERO benchmark 已饱和——多数方法 95-99%，1-2% 的差异可能只是
 | **ACT** | ✅ | ✅ | ✅ | ✅ demo | MIT | **完全可复现**。代码干净，社区最大。金标准。 |
 | **Octo** | ✅ | ✅ | ✅ | ✅ OXE | MIT | **完全可复现**。OXE 数据集公开。 |
 | **OpenVLA** | ✅ | ✅ | ✅ | ✅ OXE | MIT | **完全可复现**。支持 QLoRA 微调。但 2025-03 后停更。 |
+| **OpenVLA-OFT** | ✅ | ✅ | ✅ | ✅ OXE | MIT | 推理 25-50x 加速。多图输入 + 双臂。1.1K stars。 |
 | **RDT-1B** | ✅ | ✅ | ✅ | ✅ OXE | MIT | **完全可复现**。清华 MARS Lab 维护积极。 |
-| **GR00T-N1.7** | ✅ | ✅ 微调 | ✅ | ⚠️ 部分 | Apache-2.0 | **可微调**。NVIDIA 提供微调脚本 + LeRobot 格式数据。预训练数据未公开。6.7K stars。 |
-| **StarVLA** | ✅ | ✅ | ✅ | ⚠️ 部分 | 未声明 | **可微调**。模块化框架。许可证不明确——商用前需确认。 |
-| **π0 (openpi)** | ✅ π0+π0.5 | ⚠️ 仅微调 | ✅ | ❌ | Apache-2.0 | **可微调但不可从头训**。提供 LIBERO 微调验证。预训练代码/数据不公开。π0-FAST 的 PyTorch 支持不完整。11K stars。 |
-| **WALL-OSS** | ✅ Flow+FAST | ⚠️ 有限 | ✅ | ❌ | 未声明 | **可推理/微调**。HuggingFace 有权重（wall-oss-flow/fast）。训练代码有限。许可证不明确。 |
+| **SmolVLA (LeRobot)** | ✅ | ✅ | ✅ | ✅ 社区 | Apache-2.0 | **450M 参数，消费级 GPU 可训**。LIBERO 82-90%。**23K stars，最大社区**。 |
+| **CogACT** | ✅ S/M/L | ✅ | ✅ | ⚠️ 部分 | MIT | Microsoft。认知+动作协同。HuggingFace 完整权重。419 stars。 |
+| **CrossFormer** | ✅ | ✅ | ✅ | ✅ OXE | MIT | Berkeley。30 种形态跨形态策略。282 stars。 |
+| **HybridVLA** | ✅ | ✅ | ✅ | ⚠️ 部分 | MIT | 北大。Diffusion + Autoregressive 混合。346 stars。 |
+| **HPT** | ✅ | ✅ | ✅ | ✅ 多源 | MIT | 异构预训练 Transformer。534 stars。 |
+| **LingBot-VLA** | ✅ | ✅ | ✅ | ✅ 20K hrs | Apache-2.0 | **20K 小时真实数据**。9 种双臂。生产级工具链。1.1K stars。 |
+| **GR00T-N1.7** | ✅ | ✅ 微调 | ✅ | ⚠️ 部分 | Apache-2.0 | **可微调**。NVIDIA 官方 + LeRobot 格式。6.7K stars。 |
+| **StarVLA** | ✅ | ✅ | ✅ | ⚠️ 部分 | 未声明⚠️ | Lego 框架。Qwen3.5 backbone。许可证不明确。1.9K stars。 |
+| **π0 (openpi)** | ✅ π0+π0.5 | ⚠️ 仅微调 | ✅ | ❌ | Apache-2.0 | **可微调但不可从头训**。预训练代码/数据不公开。11K stars。 |
+| **WALL-OSS** | ✅ Flow+FAST | ⚠️ 有限 | ✅ | ❌ | 未声明⚠️ | HuggingFace 有权重。训练代码有限。许可证不明确。 |
 | **π\*0.6** | ❌ | ❌ | ❌ | ❌ | — | **完全不可用**。Recap RL 只有论文描述。 |
 | **π0.7** | ❌ | ❌ | ❌ | ❌ | — | **完全不可用**。只有博客+媒体报道，连论文都还没发。 |
 | **Helix 02** | ❌ | ❌ | ❌ | ❌ | — | **完全不可用**。Figure AI 闭源。 |
@@ -410,14 +417,19 @@ LIBERO benchmark 已饱和——多数方法 95-99%，1-2% 的差异可能只是
 
 | 等级 | 含义 | 模型 |
 |:----:|------|------|
-| 🟢 **完全开源** | 权重+训练+推理+数据+宽松许可 | ACT, Octo, OpenVLA, RDT-1B |
-| 🟡 **可微调** | 有权重+推理+微调代码，但预训练不可复现 | π0 (openpi), GR00T-N1.7, WALL-OSS, StarVLA |
+| 🟢 **完全开源** | 权重+训练+推理+数据+宽松许可 | ACT, Octo, OpenVLA(-OFT), RDT-1B, **SmolVLA/LeRobot**, CrossFormer, HPT, HybridVLA, **LingBot-VLA**, CogACT |
+| 🟡 **可微调** | 有权重+推理+微调代码，但预训练不可复现 | π0 (openpi), GR00T-N1.7, WALL-OSS, StarVLA⚠️ |
 | 🔴 **闭源** | 只有论文/博客，无法使用 | π\*0.6, π0.7, Helix 02, VGA, WVA |
 
+> ⚠️ = 许可证未声明，商用前需确认
+
 > 💡 **选型建议**：
-> - 学术复现 → 🟢 等级（ACT/RDT-1B）
-> - 工程部署 → 🟡 等级（π0 openpi / GR00T）
-> - 了解前沿 → 🔴 等级的论文有参考价值但不可执行
+> - **初学/快速原型** → SmolVLA（450M，消费级 GPU，23K 社区）或 ACT（代码最干净）
+> - **学术研究 baseline** → RDT-1B（1B 扩散，MIT）或 OpenVLA-OFT（推理最快）
+> - **跨形态预训练** → CrossFormer（30 形态）或 HPT（异构 Transformer）
+> - **工程部署/产品** → GR00T-N1.7（NVIDIA 生态）或 LingBot-VLA（20K 小时数据，生产级）
+> - **加新模态（触觉/红外/力）** → LeRobot 框架最容易扩展，ACT 代码最好改
+> - **了解前沿** → 🔴 等级的论文有参考价值但不可执行
 
 &nbsp;
 
