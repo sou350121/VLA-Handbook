@@ -176,15 +176,48 @@ def check_episode_quality(episode):
 > - 跨形态预训练：**10K+ hours**（LingBot/π₀ 级别）
 > - 接触操作：**200+ demos**（力信号稀疏，需要更多覆盖）
 
-### 数据效率技巧
+### 数据 Scaling Law（有定量证据）
 
-| 技巧 | 效果 | 适用 |
-|------|------|------|
-| **图像增强**（颜色/裁剪/噪声） | 节省 2-5x 数据 | 所有场景 |
-| **动作平滑** | 减少抖动 demo 的负面影响 | 遥操采集 |
-| **仿真补充** | 节省 5-50x 真实数据 | 有 Isaac Lab 的场景 |
-| **深度蒸馏** | 训练时用 RGB-D，部署时只需 RGB | [LingBot 方案](lingbot_vla_pragmatic_foundation_model_2026.md) |
-| **语言增强** | 用 LLM 给同一 demo 生成多种指令 | 语言泛化 |
+> 参考：[Data Scaling Laws in Imitation Learning for Robotic Manipulation](https://data-scaling-laws.github.io/)（ICLR 2025 Oral）
+
+**关键发现**：
+- 泛化性能与环境/物体数量呈**幂律关系**
+- **多样性比数量更重要**：10 个环境各 5 条 demo > 1 个环境 50 条 demo
+- 4 个采集员 1 个下午的数据 → 2 个任务在新环境/新物体上 ~90% 成功率
+
+| 数据量 | 典型效果 | 参考 |
+|--------|---------|------|
+| 50 demos/task | 单任务 80%+（ACT baseline） | [ACT 论文](../vla-core/act.md) |
+| 260 demos（全任务） | 真机接触操作 80.8%（1× A100, 6hrs） | [FAVLA](../tactile/favla_a_force_adaptive_fast_slow_vla_model_for_contact_rich_dissection.md) |
+| 100 demos + 触觉 | 等效 200 demos 纯视觉（2x 数据效率） | [TaF-VLA](../tactile/taf_vla_tactile_force_alignment_2026.md) |
+| 1 hr 数据 | 99% 成功率（特定任务，GEN-1 级别） | [GEN-1 报告](https://generalistai.com/blog/apr-02-2026-GEN-1) |
+| 20K hrs | 真机 100 任务 18%（GM-100，比 π₀.₅ +7.76%） | [LingBot-VLA](../vla-core/lingbot_vla_pragmatic_foundation_model_2026.md) |
+
+### 数据增强：有效性定量证据
+
+| 增强方法 | 效果（有数字） | 来源 |
+|---------|-------------|------|
+| **RoboEngine**（背景替换+语义分割） | **+210%** vs 无增强；+20% vs 最佳 baseline | [arXiv:2503.18738](https://arxiv.org/abs/2503.18738)（ICRA 2026） |
+| **TraceVLA**（视觉轨迹提示） | 视角变化下 **+20%** | TraceVLA 2025 |
+| **VLA²**（Agentic 框架增强） | 困难任务 **+44.2%** 成功率 | VLA² 2025 |
+| **自我改进 VLA** | LIBERO 99% · SimplerEnv **+50%** | [Self-Improving VLA](https://wenlixiao.com/self-improve-VLA-PLD/) |
+| **深度蒸馏** | RoboTwin +2%（86.5→88.6%）| [LingBot-VLA](../vla-core/lingbot_vla_pragmatic_foundation_model_2026.md) |
+| **语言重写**（LLM 生成多种指令） | 语言泛化显著提升（定性） | 多篇 VLA 论文 |
+
+> 💡 **最高 ROI 的增强**：RoboEngine 的背景替换。只需 1 个场景的 demo，就能泛化到 6 个新场景。成本几乎为零。
+
+### 数据采集成本参考
+
+| 方式 | 每条轨迹成本 | 每条时间 | 适用 |
+|------|:----------:|:-------:|------|
+| 传统遥操作 | $0.42-0.70 | ~50s | 精细操作 |
+| **FastUMI Pro** | **<$0.08** | ~10s | 快速采集（5x 效率） |
+| ALOHA 双臂 | ~$1 | ~60s | 双臂协同 |
+| VR 遥操作 | ~$0.50 | ~45s | 空间操作 |
+| 仿真自动生成 | **~$0** | <1s | 大规模补充 |
+
+> DROID 数据集（76K episodes）= 13 个机构 × 18 个月的协调采集。这是"暴力采集"路线。
+> 相比之下：4 个人 × 1 个下午 → 2 个任务 90%（Scaling Law 论文）。这是"聪明采集"路线。
 
 ---
 
