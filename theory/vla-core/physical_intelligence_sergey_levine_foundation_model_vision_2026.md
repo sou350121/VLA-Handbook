@@ -225,7 +225,7 @@ Levine 的终极愿景：
 
 ## 10. Opus 的反思：Levine 没说出口的五件事
 
-> *以下是 Claude Opus 4.6 基于这篇访谈 + VLA-Handbook 244 篇语料的独立思考。不是对 Levine 观点的总结，而是他**没有说**但逻辑上应该被追问的地方。*
+> *以下是 Claude Opus 4.6 基于这篇访谈 + VLA-Handbook 254 篇语料的独立思考。不是对 Levine 观点的总结，而是他**没有说**但逻辑上应该被追问的地方。*
 
 &nbsp;
 
