@@ -297,15 +297,42 @@ def check_episode_quality(episode):
 >
 > **HuggingFace 机器人数据集从 2024 年的 1,145 个增长到 2025 年的 26,991 个**——增长 23 倍。
 
-### 仿真数据集 / Benchmark
+### Benchmark 全景地图（仿真 + 真机）
 
-| 数据集 | 类型 | 任务 | 许可证 | 状态 |
-|--------|------|------|--------|------|
-| **[LIBERO](https://github.com/Lifelong-Robot-Learning/LIBERO)** | 仿真 benchmark | 4×10 任务 · Franka | MIT ✅ | ⚠️ **已饱和**（95-99%） |
-| **[CALVIN](https://github.com/mees/calvin)** | 仿真 · 长程语言 | 34 任务 · 连续 | MIT ✅ | 活跃 |
-| **[RoboTwin 2.0](https://robotwin-benchmark.github.io/)** | 仿真 · 双臂 | 多任务 | MIT ✅ | 活跃 |
-| **[ManiSkill v3](https://github.com/haosulab/ManiSkill)** | 仿真 · GPU 加速 | 多种操作 | Apache-2.0 ✅ | 活跃 (RSS 2025) |
-| **[RoboCasa](https://robocasa.ai/)** | 仿真 · 家庭 | 厨房场景 | MIT ✅ | 活跃 |
+> ⚠️ **LIBERO-PRO 的警告**：现有模型在 LIBERO 上 90%+，但在轻微扰动（换物体/换初始位置/换指令措辞/换环境）下**跌到 0%**。LIBERO 的高分可能是"记忆"而不是"泛化"。
+> → [LIBERO-PRO](https://arxiv.org/abs/2510.03827)
+
+#### 仿真 Benchmark
+
+| Benchmark | 任务数 | 机器人 | 测试什么 | 许可证 | 状态 |
+|-----------|:-----:|--------|---------|--------|:----:|
+| **[LIBERO](https://github.com/Lifelong-Robot-Learning/LIBERO)** | 4×10 | Franka | 知识迁移 · 终身学习 | MIT ✅ | ⚠️ **饱和** |
+| **[LIBERO-PRO](https://arxiv.org/abs/2510.03827)** | LIBERO 扩展 | Franka | **鲁棒性**：扰动下泛化 | MIT ✅ | 2025 新 |
+| **[CALVIN](https://github.com/mees/calvin)** | 34 | 桌面 | **长程语言条件** · 技能组合 | MIT ✅ | 活跃 |
+| **[RLBench](https://github.com/stepjam/RLBench)** | **100** | Franka | 手工设计多样任务 | MIT ✅ | 经典 |
+| **[SimplerEnv](https://simpler-env.github.io/)** | 25 | 多种 | **Sim2Real 可信度验证** | MIT ✅ | 活跃 |
+| **[RoboTwin 2.0](https://robotwin-benchmark.github.io/)** | 多任务 | 双臂 | 双臂 · Sim2Real | MIT ✅ | 活跃 |
+| **[ManiSkill v3](https://github.com/haosulab/ManiSkill)** | 多种 | 多种 | GPU 加速仿真 | Apache-2.0 ✅ | RSS'25 |
+| **[RoboCasa](https://robocasa.ai/)** | 厨房 | 移动操作 | 家庭场景泛化 | MIT ✅ | 活跃 |
+| **[BEHAVIOR-1K](https://behavior.stanford.edu/)** | **1000** | 多种 | 开放世界 · 最全面 | 未明确 ⚠️ | 活跃 |
+| **[VLABench](https://arxiv.org/abs/2502.09587)** | 大规模 | 多种 | 长程语言条件操作 | 未明确 ⚠️ | ICCV'25 |
+
+#### 真机 Benchmark
+
+| Benchmark | 任务数 | 机器人 | 测试什么 | 许可证 | 为什么重要 |
+|-----------|:-----:|--------|---------|--------|-----------|
+| **[RoboChallenge Table30](https://robochallenge.ai/)** | **30** | 标准化平台 | 精确 3D 定位 · 遮挡 · 多视角 · 时序依赖 | 未明确 ⚠️ | **首个在线真机评测平台**，可远程提交模型 |
+| **[GM-100](https://huggingface.co/datasets/robbyant/lingbot-GM-100)** | **100** | 3 平台（双臂） | 跨平台真机泛化 | Apache-2.0 ✅ | 最多任务的真机 benchmark |
+| **[RoCo Challenge](https://arxiv.org/abs/2603.15469)** | 多任务 | 协作双臂 | **协作装配** · 工业场景 | 未明确 ⚠️ | AAAI 2026 竞赛 |
+
+> 💡 **Benchmark 选型建议**：
+> - 快速验证想法 → LIBERO（⚠️ 注意饱和 + LIBERO-PRO 验证鲁棒性）
+> - 长程任务 → CALVIN
+> - 全面评估 → RLBench（100 任务）或 BEHAVIOR-1K（1000 任务）
+> - Sim2Real 可信度 → SimplerEnv
+> - **真机排名** → RoboChallenge Table30（在线提交）或 GM-100（本地评测）
+> - 双臂 → RoboTwin 2.0 + GM-100
+> - 工业协作 → RoCo Challenge
 
 ### 数据集选型决策树
 
