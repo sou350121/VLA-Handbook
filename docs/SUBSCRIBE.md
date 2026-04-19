@@ -56,50 +56,48 @@ AI Agent 生态每日精选（3 条）+ AI 深度解读文章。
 
 ---
 
-## 🎁 一键订阅全部（OPML）
+## 🎁 一键订阅（最快）
 
-**下载 OPML 文件**：https://sou350121.github.io/pulsar-web/rss/opml.xml
+到 **[订阅页](https://sou350121.github.io/pulsar-web/subscribe)** — 每个 feed 都有：
 
-导入任何支持 OPML 的阅读器（基本都支持），一次性订阅 4 个 feed。
+- **[Feedly]** 按钮 — 点击即跳转到 Feedly 订阅对话框
+- **[Inoreader]** 按钮 — 同上
+- **[复制 URL]** 按钮 — 给其他阅读器用
+
+**一键订阅全部**：下载 [OPML 文件](https://sou350121.github.io/pulsar-web/rss/opml.xml) 导入任何支持 OPML 的阅读器（基本都支持），一次性订阅 4 个 feed。
 
 ---
 
-## 怎么开始订阅？
+## 分阅读器教学
 
-### 1. 桌面浏览器（最简单）
+### 桌面浏览器
 
-推荐 **Feedly**（https://feedly.com）或 **Inoreader**（https://www.inoreader.com/）：
+- **Feedly / Inoreader**：到 [订阅页](https://sou350121.github.io/pulsar-web/subscribe) 点对应按钮即可
+- **其他**：复制 feed URL → 阅读器的「Add Subscription」→ 粘贴
 
-1. 注册账号
-2. 点 "Add Content" / "订阅源"
-3. 粘贴上面任一 RSS URL
-4. 完成 ✅
+**最懒方式**：Feedly / Inoreader 支持直接贴**网站首页** `https://sou350121.github.io/pulsar-web/`，阅读器会自动发现 4 个 feed（我们在 HTML `<head>` 里标注了 `<link rel="alternate">`）。
 
-**或者更简单**：
-- Feedly / Inoreader 支持直接贴**网站首页** `https://sou350121.github.io/pulsar-web/`
-- 阅读器自动发现 4 个 feed（我们在 HTML `<head>` 里标注了 `<link rel="alternate">`）
-- 选你要的订阅即可
-
-### 2. macOS 原生
+### macOS 原生
 
 **NetNewsWire**（https://netnewswire.com/）免费开源，原生支持 OPML：
-- 下载 → File → Import Feeds → 选 opml.xml
+- 下载 → File → Import Feeds → 选 `opml.xml`
 - 4 个 feed 瞬间出现
 
-### 3. iOS / Android
+### iOS / Android
 
 - **iOS**：Reeder 5 / NetNewsWire / Feedly app
 - **Android**：FeedMe / Readably / Feedly app
+- 都支持 OPML 导入
 
-### 4. 命令行 / 自动化
+### 命令行 / 自动化
 
 ```bash
-# 用 curl 测试
+# 用 curl 测试 feed
 curl https://sou350121.github.io/pulsar-web/rss/vla-theory.xml | head -50
 
-# 用 Zapier / n8n 连到 Slack / Discord / Telegram
-# 用 rss2email 转邮件
-# 用 Feedburner / Buttondown 做邮件日报
+# Zapier / n8n 可把 feed 接到 Slack / Discord / Telegram
+# rss2email 可转邮件日报
+# Buttondown / Feedburner 做广播邮件
 ```
 
 ---
@@ -142,6 +140,14 @@ curl https://sou350121.github.io/pulsar-web/rss/vla-theory.xml | head -50
 ### Q: RSS 会消失吗？
 
 **A**: 只要 pulsar-web 站点还在就会在。`/rss/*` 路径在 CI smoke test 保护下，pipeline 架构变动不会让 feed 静默失效（会直接 CI fail）。
+
+### Q: 链接里的 `?utm_source=rss&utm_medium=feed&...` 是什么？
+
+**A**: 是 **UTM 追踪参数**。目的是未来如果接入 Umami/Plausible 等轻量分析，可以区分「读者从 RSS 过来」vs「直接访问网站」。不收集任何个人信息，arxiv / DOI 等永久链接不会加。现在没有分析后端，加了只是给未来留数据。
+
+### Q: 偶尔会遇到点击后 404 的链接吗？
+
+**A**: 可能会，但很少。Pulsar 管道若更新文章路径但 feed 侧数据同步有延迟，会出现短暂 404。我们的 CI 有**链接健康度抽样**，每次部署会警告（不阻塞）。若你遇到，欢迎[提 Issue](https://github.com/sou350121/VLA-Handbook/issues) 告知。
 
 ---
 
