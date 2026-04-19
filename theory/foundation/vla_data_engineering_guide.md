@@ -14,6 +14,55 @@
 
 ---
 
+## 目录
+
+**概念篇**
+- [§0 · VLA 数据的独特挑战](#0-vla-数据的独特挑战)
+- [§0.1 · 第一性原理：为什么数据是瓶颈](#01-第一性原理为什么数据是当前-vla-的真正瓶颈)
+
+**采集篇**
+- [§1 · 数据采集硬件](#1-数据采集硬件)
+- [§1.5 · 三大沉默杀手：坐标系、动作表示、归一化](#15-三大沉默杀手坐标系动作表示归一化)
+
+**格式与质量篇**
+- [§2 · 数据格式标准](#2-数据格式标准)
+- [§3 · 数据质量](#3-数据质量)
+- [§3.5 · 数据失效模式分类学（F1-F6）](#35-数据失效模式分类学)
+
+**规模篇**
+- [§4 · 数据规模：需要多少数据](#4-数据规模需要多少数据)
+  - 含：经验法则 · Scaling Law · 数据增强 · 成本 · **EgoScale 人类视频路线** · 边际效用曲线
+
+**模态与处理篇**
+- [§5 · 数据模态概览](#5-数据模态)
+- [§5.5 · 按数据类型的处理规范（11 种模态）](#55-按数据类型的处理规范)
+
+**数据集与 Benchmark 篇**
+- [§6 · 开放数据集地图](#6-开放数据集地图)
+  - 含：许可证矩阵 · 主流数据集 · 2025-2026 新集 · Benchmark · **6 条可信度警告** · 数据集选型决策树
+
+**工程篇**
+- [§7 · 仿真数据](#7-仿真数据)
+- [§8 · 数据管道工程](#8-数据管道工程)
+
+**实战篇**
+- [§9 · MVP 数据集配方](#9-mvp-数据集配方从零到可用)
+- [§10 · 如何批判性阅读 VLA 论文的数据章节](#10-如何批判性阅读-vla-论文的数据章节)
+
+---
+
+## 阅读路径建议
+
+| 你是谁 | 建议阅读顺序 |
+|--------|-------------|
+| 🎓 **学生 / 新人** | §0 → §0.1 → §1 → §4（经验法则）→ §5 → §6（选型） → §9 |
+| 🔬 **研究员（要写论文）** | §3.5（失效模式）→ §6 警告 1-6 → §10 批判性阅读 → §0.1（原理） |
+| 🏗️ **工程师（要落地）** | §1.5（沉默杀手）→ §2 格式 → §3 质量 → §5.5 处理规范 → §8 管道 |
+| 💼 **团队 lead（选型）** | §4 规模 → §6 数据集/许可证 → §7 仿真 → §9 MVP |
+| 💡 **前沿探索者** | §0.1 原理 → §4 EgoScale → §6 警告 6 污染 → §3.5 失效 |
+
+---
+
 ## 0. VLA 数据的独特挑战
 
 VLA 数据不是"图文对"也不是"视频标注"——它是**多模态时序信号的精密同步采集**：
@@ -404,13 +453,15 @@ def check_episode_quality(episode):
 
 ### 数据采集成本参考
 
-| 方式 | 每条轨迹成本 | 每条时间 | 适用 |
-|------|:----------:|:-------:|------|
-| 传统遥操作 | $0.42-0.70 | ~50s | 精细操作 |
-| **FastUMI Pro** | **<$0.08** | ~10s | 快速采集（5x 效率） |
-| ALOHA 双臂 | ~$1 | ~60s | 双臂协同 |
-| VR 遥操作 | ~$0.50 | ~45s | 空间操作 |
-| 仿真自动生成 | **~$0** | <1s | 大规模补充 |
+🧠 **以下数字为作者按"采集员时薪 + 设备折旧"估算**。FastUMI Pro 的 `<$0.08` 来自其论文的对比图；其他为业界经验范围，具体因人工成本/地区/设备差异很大，可能 ±2x。
+
+| 方式 | 每条轨迹成本 | 每条时间 | 适用 | 标注 |
+|------|:----------:|:-------:|------|:----:|
+| 传统遥操作 | $0.42-0.70 | ~50s | 精细操作 | 🧠 估算 |
+| **FastUMI Pro** | **<$0.08** | ~10s | 快速采集（5x 效率） | 📎 论文 |
+| ALOHA 双臂 | ~$1 | ~60s | 双臂协同 | 🧠 估算 |
+| VR 遥操作 | ~$0.50 | ~45s | 空间操作 | 🧠 估算 |
+| 仿真自动生成 | **~$0** | <1s | 大规模补充 | 📎 事实 |
 
 > DROID 数据集（76K episodes）= 13 个机构 × 18 个月的协调采集。这是"暴力采集"路线。
 > 相比之下：4 个人 × 1 个下午 → 2 个任务 90%（Scaling Law 论文）。这是"聪明采集"路线。
@@ -497,6 +548,8 @@ def check_episode_quality(episode):
 ---
 
 ## 5. 数据模态
+
+> 本节给**模态一览**；[§5.5 按数据类型的处理规范](#55-按数据类型的处理规范) 给 11 种模态的**具体处理方法**。
 
 ### 核心模态
 
@@ -738,31 +791,33 @@ def check_episode_quality(episode):
 
 > 🔴 **CC BY-NC = 不能商用。** 在这个许可下训练的模型，法律上也不能商用。AgiBot World 2026 数据量大（1M+ 轨迹）但**禁止商用**——用之前看清许可证。
 
-### 真实机器人操作数据集
+### 数据集总表（按发布时间 + 可商用性排序）
+
+> 🧠 去重后的完整数据集一览。`✅` = CC BY / MIT / Apache 可商用；`⚠️` = NC 或未明确许可。
+
+**经典基础层（2023-2024）**
 
 | 数据集 | 规模 | 形态 | 模态 | 许可证 | 适用 |
 |--------|------|------|------|--------|------|
-| **[OXE](https://github.com/google-deepmind/open_x_embodiment)** | 1M+ episodes | 22 形态 | RGB + action | CC BY 4.0 ✅ | 跨形态预训练 · **商用安全** |
-| **[OXE-AugE](https://arxiv.org/abs/2512.13100)** | 4.4M trajectories | 扩展 OXE 3x | RGB + action | CC BY 4.0 ✅ | OXE 的增强版 |
-| **[DROID](https://droid-dataset.github.io/)** | 76K demos · 350hrs | Franka · 564 场景 | RGB + depth | CC BY 4.0 ✅ | 多环境泛化 · **商用安全** |
-| **[Bridge v2](https://rail-berkeley.github.io/bridgedata/)** | 54K trajectories | WidowX · 24 环境 | RGB + action | CC BY 4.0 ✅ | 桌面操作 · **商用安全** |
-| **[RoboSet](https://robopen.github.io/roboset/)** | 多任务 · 厨房 | 多种 | RGB × 4 视角 | MIT ✅ | 多任务家庭 · **商用安全** |
-| **[RH20T](https://rh20t.github.io/)** | 大规模 · 多技能 | 多种 | RGB + depth + F/T | **CC BY-NC** ⚠️ | 学术研究 · **禁止商用** |
-| **[AgiBot World 2026](https://github.com/OpenDriveLab/AgiBot-World)** | **1M+ trajectories** · 2976 hrs | AgiBot G2 | RGB-D + 触觉 + LiDAR + IMU | **CC BY-NC-SA** ⚠️ | 最大多模态 · **禁止商用** |
-| **[GM-100](https://huggingface.co/datasets/robbyant/lingbot-GM-100)** | 100 任务 × 3 平台 | 双臂 | RGB + action | Apache-2.0 ✅ | 真机评测 · **商用安全** |
+| **[OXE](https://github.com/google-deepmind/open_x_embodiment)** | 1M+ episodes | 22 形态 | RGB + action | CC BY 4.0 ✅ | 跨形态预训练 · 商用 |
+| **[DROID](https://droid-dataset.github.io/)** | 76K demos · 350hrs | Franka · 564 场景 | RGB + depth | CC BY 4.0 ✅ | 多环境泛化 · 商用 |
+| **[Bridge v2](https://rail-berkeley.github.io/bridgedata/)** | 54K trajectories | WidowX · 24 环境 | RGB + action | CC BY 4.0 ✅ | 桌面操作 · 商用 |
+| **[RoboSet](https://robopen.github.io/roboset/)** | 多任务 · 厨房 | 多种 | RGB × 4 视角 | MIT ✅ | 多任务家庭 · 商用 |
+| **[RH20T](https://rh20t.github.io/)** | 大规模 · 多技能 | 多种 | RGB + depth + F/T | **CC BY-NC** ⚠️ | 学术研究 · 禁止商用 |
+| **[GM-100](https://huggingface.co/datasets/robbyant/lingbot-GM-100)** | 100 任务 × 3 平台 | 双臂 | RGB + action | Apache-2.0 ✅ | 真机评测 · 商用 |
 | **[TaF-Dataset](https://arxiv.org/abs/2601.20321)** | 10M 触觉-力配对 | 6 种触觉传感器 | 触觉 + 6 轴 F/T | 未明确 ⚠️ | 触觉预训练 |
 
-### 2025-2026 新发布的大规模数据集
+**2025-2026 新发布（多模态 / 大规模 / 人类视频）**
 
 | 数据集 | 规模 | 形态 | 模态 | 许可证 | 亮点 |
 |--------|------|------|------|--------|------|
-| **[AgiBot World 2026](https://github.com/OpenDriveLab/AgiBot-World)** | **1M+ 轨迹** · 2976 hrs | AgiBot G2 | RGB-D + 触觉 + LiDAR + IMU | **CC BY-NC-SA** ⚠️ | 最大多模态 · 5 个研究方向 · IROS'25 Best Paper 提名 |
-| **[RoboMIND 2.0](https://x-humanoid-robomind.github.io/)** | **310K 轨迹** | 6 种形态含人形 | RGB + 本体 + 触觉(12K) + 移动(20K) | 未明确 ⚠️ | 739 任务 · 含 5K 失败案例 · 双臂+灵巧手 · RSS'25 |
-| **[OXE-AugE](https://arxiv.org/abs/2512.13100)** | **4.4M 轨迹** | OXE 3x 扩展 | RGB + action | CC BY 4.0 ✅ | OXE 增强版 · **商用安全** |
-| **[OmniAction](https://huggingface.co/datasets/OpenMOSS-Team/OmniAction)** | 140K episodes | 多种 | RGB + 音频 + 语音 | 未明确 ⚠️ | 5096 种语音 · 2482 种环境音 · 多模态 |
-| **[Humanoid Everyday](https://arxiv.org/abs/2510.08807)** | 10.3K 轨迹 · 3M+ 帧 | 人形 | RGB + depth + LiDAR + 触觉 | 未明确 ⚠️ | 260 任务 · 全传感器人形 |
+| **[OXE-AugE](https://arxiv.org/abs/2512.13100)** | **4.4M 轨迹** | OXE 3x 扩展 | RGB + action | CC BY 4.0 ✅ | OXE 增强版 · 商用 |
+| **[AgiBot World 2026](https://github.com/OpenDriveLab/AgiBot-World)** | **1M+ 轨迹** · 2976 hrs | AgiBot G2 | RGB-D + 触觉 + LiDAR + IMU | **CC BY-NC-SA** ⚠️ | 最大多模态 · IROS'25 Best Paper 提名 · 禁止商用 |
+| **[RoboMIND 2.0](https://x-humanoid-robomind.github.io/)** | **310K 轨迹** | 6 种形态含人形 | RGB + 本体 + 触觉(12K) + 移动(20K) | 未明确 ⚠️ | 739 任务 · 5K 失败案例 · RSS'25 |
+| **[OmniAction](https://huggingface.co/datasets/OpenMOSS-Team/OmniAction)** | 140K episodes | 多种 | RGB + 音频 + 语音 | 未明确 ⚠️ | 5096 种语音 · 2482 种环境音 |
+| **[Humanoid Everyday](https://arxiv.org/abs/2510.08807)** | 10.3K 轨迹 · 3M+ 帧 | 人形 | RGB + depth + LiDAR + 触觉 | 未明确 ⚠️ | 260 任务 · 全传感器 |
 | **[Hoi!](https://arxiv.org/abs/2512.04884)** | 3048 序列 | 4 种末端 | RGB + 力 + 触觉(Digit) + F/T | 未明确 ⚠️ | 力感知铰接操作 · 381 物体 |
-| **[HRDexDB](https://arxiv.org/abs/2604.14944)** | 大规模 | 人手 + 多种机器人手 | 多模态 | 未明确 ⚠️ | 灵巧手抓取 · 多手型对比 |
+| **[HRDexDB](https://arxiv.org/abs/2604.14944)** | 大规模 | 人手 + 多种机器人手 | 多模态 | 未明确 ⚠️ | 灵巧手抓取 · 多手型 |
 | **[EgoScale](https://arxiv.org/abs/2602.16710)** | **20,854 小时** 人类视频 | 人类第一视角 → 机器人手 | 自中心 RGB + 手部动作（MANUS 手套） | 未明确 ⚠️ | 📎 log-linear scaling (R²=0.9983) · 真机 **+54%** · NVIDIA GEAR · 2026 |
 
 > 💡 **2025-2026 趋势**：数据集从"RGB + 动作"向**多模态**演进（触觉 + 力 + LiDAR + 音频）。但新数据集的许可证普遍不明确——**用之前一定要确认**。
@@ -1081,6 +1136,8 @@ huggingface-cli upload your-org/your-dataset ./local_dataset
 
 ## 延伸阅读
 
+### 内部文章
+
 | 方向 | 推荐 |
 |------|------|
 | 数据飞轮 | [数据飞轮与跨模态](data_flywheel_and_cross_modal.md) |
@@ -1090,6 +1147,21 @@ huggingface-cli upload your-org/your-dataset ./local_dataset
 | 仿真 | [Isaac Lab](../deployment/isaac_lab.md) |
 | 触觉数据 | [TaF-VLA](../tactile/taf_vla_tactile_force_alignment_2026.md) · [触觉主线](../tactile/tactile_mainline.md) |
 | VLA 数学 | [VLA 数学必备](math_for_vla.md)（含动作表示的数学） |
+
+### 关键外部论文（本文引用的）
+
+| 主题 | 论文 |
+|------|------|
+| Scaling Law（机器人数据） | [Data Scaling Laws in Imitation Learning (ICLR 2025 Oral)](https://data-scaling-laws.github.io/) |
+| Scaling Law（人类视频） | [EgoScale (NVIDIA GEAR, arXiv:2602.16710)](https://arxiv.org/abs/2602.16710) |
+| LIBERO 记忆化 | [LIBERO-PRO (arXiv:2510.03827)](https://arxiv.org/abs/2510.03827) |
+| 语言-动作解耦 | [LIBERO-Para (arXiv:2603.28301)](https://arxiv.org/abs/2603.28301) |
+| 扰动鲁棒性 | [LIBERO-Plus (arXiv:2510.13626)](https://arxiv.org/abs/2510.13626) · [LIBERO-X (arXiv:2602.06556)](https://arxiv.org/abs/2602.06556) |
+| 数据增强 ROI | [RoboEngine (arXiv:2503.18738)](https://arxiv.org/abs/2503.18738) |
+| π₀ 架构 + 动作空间 | [π₀ paper](https://www.pi.website/download/pi0.pdf) · [π₀.₅ (arXiv:2504.16054)](https://arxiv.org/html/2504.16054v1) |
+| OpenVLA 实现 | [OpenVLA GitHub](https://github.com/openvla/openvla) |
+| 6D 旋转表示 | [Zhou et al. 2019 (arXiv:1812.07035)](https://arxiv.org/abs/1812.07035) |
+| LLM 数据污染方法 | [How Contaminated Is Your Benchmark (arXiv:2502.00678)](https://arxiv.org/abs/2502.00678) |
 
 ---
 
