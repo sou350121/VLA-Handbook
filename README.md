@@ -12,7 +12,7 @@
 
 📊 **[PULSAR 照见](https://sou350121.github.io/pulsar-web/)** · 每日北京时间 12:00 更新，减少信息焦虑 — `sou350121.github.io/pulsar-web`
 
-📡 **[RSS 订阅](https://sou350121.github.io/pulsar-web/subscribe)** · 4 个主题 feed + 一键 OPML 导入 — 新文章/⚡🔧 论文/SOTA/周报直达你的阅读器
+📡 **[RSS 订阅](https://sou350121.github.io/pulsar-web/subscribe)** · 4 个主题 feed + 一键 OPML 导入 — 新文章/⚡🔧 论文/SOTA/周报直达你的阅读器 · [完整使用说明](docs/SUBSCRIBE.md)
 
 🤖 **[VLA Expert Skill](https://github.com/sou350121/VLA-expert-skill)** · 一键让 AI 编程助手变成 VLA 专家 — 支持 Claude Code / Cursor / Codex / OpenCode
 
@@ -40,6 +40,23 @@ VLA 论文每天几十篇，真正能用的工程细节零散在 GitHub Issue �
 | **[📕 中文社区（小红书）](deployment/community_field_notes_xiaohongshu.md)** | 300+ 条中文社区蒸馏（帖1-200 + 可追溯索引 40 条 + 黑话辞典 28 条） | LingBot-VLA / UnifoLM / π0.6 真机 RL / Figure Helix / GR00T N2 + ACT 训练成本实测 + 国标发布 + 薪资 80-120 万 + 社区黑话辞典。 | 每 3 天自动增量 |
 | **[📘 英文社区（HF Blog / Discord）](deployment/community_field_notes_english.md)** | 165 篇可追溯条目（HF Blog · 厂商博客 · LeRobot Discord） | SmolVLA / DiffusionVLA / π0-FAST / GR00T N1.5 / OpenVLA-OFT / Figure Helix / Cosmos Policy / ACTSmooth 等前沿论文 + 真实部署经验。 | 每周五 11:00 |
 | **[🔧 GitHub Issues](deployment/community_field_notes_github.md)** | 6 大核心仓库 47 条高互动 Issues 蒸馏 | GPU 兼容矩阵（RTX 50 系列 / Jetson）、Pi0 微调陷阱、GR00T 显存优化、训练收敛失败根因、跨仓库收敛信号。 | 每周自动扫描 |
+
+## 📡 订阅（让新内容主动找到你）
+
+不想每天来刷网站？订阅 RSS feed，新内容自动推送到你的阅读器：
+
+| Feed | 内容 | 链接 |
+|------|------|------|
+| 🧠 **VLA 新文章** | theory/ 每日新增深度解读 | [vla-theory.xml](https://sou350121.github.io/pulsar-web/rss/vla-theory.xml) |
+| ⚡ **VLA 每日信号** | ⚡🔧 级论文 + SOTA 榜（过滤 ❌📖） | [vla-daily.xml](https://sou350121.github.io/pulsar-web/rss/vla-daily.xml) |
+| 📘 **AI 每日** | AI Agent 生态精选 + 深度解读 | [ai-daily.xml](https://sou350121.github.io/pulsar-web/rss/ai-daily.xml) |
+| 📚 **周/双周报告** | 前瞻侦察 + 回顾分析 | [weekly.xml](https://sou350121.github.io/pulsar-web/rss/weekly.xml) |
+
+**🎁 一键全订阅**：[OPML 导入文件](https://sou350121.github.io/pulsar-web/rss/opml.xml)（支持 Feedly / Inoreader / NetNewsWire 等）
+
+**📖 完整使用说明**：[docs/SUBSCRIBE.md](docs/SUBSCRIBE.md) — 含各阅读器教学、CC BY 4.0 说明、FAQ
+
+---
 
 ## 和这些方式相比
 
