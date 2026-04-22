@@ -134,6 +134,84 @@
 |-----------|------|------|
 | **[VLA-Arena](https://vla-arena.github.io/)** ⭐ | 4 维评测：Safety / Distractor / Extrapolation / Long Horizon | **综合 leaderboard** + task store · 2026 |
 
+---
+
+## 🧠 十、**智能 / 推理 / 长程规划**（最新方向 · 2025-2026）
+
+> **为什么单列**：传统 benchmark 测"机器人能不能把动作做对"——这些测"机器人能不能**像智能体**一样思考、规划、自我修正"。
+
+### 10.1 具身推理（Embodied Reasoning）
+
+| Benchmark | 任务 | 价值 |
+|-----------|------|------|
+| **ERIQ**（Embodied Reasoning Intelligence Quotient）⭐ | **6K+ QA 对** · 4 维推理 | 解耦推理与执行 · 📎 发现**推理能力与 VLA 泛化强相关** |
+| **[COIN (arXiv:2604.16886)](https://arxiv.org/html/2604.16886)** ⭐ | Chain of Interaction · 推理 × 具身交互 | 2026 · 长程 state maintenance + 自适应规划 |
+| **[RoboBench (arXiv:2510.17801)](https://arxiv.org/html/2510.17801v1)** ⭐ | MLLM 作为 **embodied brain** | 📎 评测"符号规划 + 具身可行性"双维度 · 暴露 affordance reasoning / failure diagnosis 的空白 |
+| **[ECoT (OpenReview)](https://openreview.net/forum?id=S70MgnIA0v)** ⭐ | Embodied Chain-of-Thought | 📎 **+28% OpenVLA** 泛化任务 · 推理中间态（bbox/EE pos）作为监督 |
+
+### 10.2 长程任务（Long-Horizon）
+
+| Benchmark | 特点 | 价值 |
+|-----------|------|------|
+| **[LoHoVLA (arXiv:2506.00411)](https://arxiv.org/html/2506.00411v1)** ⭐ | 统一架构 · 长程任务 | 📎 超越 hierarchical VLA baseline |
+| **VLABench**（已列 §1） | **复合任务 >500 步**（vs primitive 120 步）| ICCV 2025 · 多技能 + 多步逻辑推理 |
+| **PsiBot R1（Psi R1）**⭐ | Chain of Action Thought (CoAT) | 📎 麻将 demo **30+ 分钟连续推理** · 真机长程 |
+
+### 10.3 世界模型智能（World Model Intelligence）
+
+| Benchmark | 测什么 | 价值 |
+|-----------|--------|------|
+| **PhysicsMind**（2026.01）⭐ | Sim + Real 机械学 · 物理推理 + 预测 | 评测**基础 VLM + 世界模型**的物理理解 |
+| **RBench**（2026.01）⭐ | Video 生成模型作为 embodied world | 📎 "Rethinking Video Generation Model for the Embodied World" |
+| **MobileWorldBench**（2025.12）⭐ | **语义世界建模** × 移动 agent | 从视觉预测跨越到语义级世界理解 |
+| **[World Model Bench](https://worldmodelbench.github.io/)**（CVPR 2025）⭐ | 通用世界模型 benchmark | CVPR 2025 workshop 正式 benchmark |
+| **PointWorld** ⭐ | 3D 世界模型 scaling | ICLR 2026 · 3D 表示路线 |
+
+### 10.4 组合泛化（Compositional Generalization · π0.7 路线）
+
+> 🧠 **为什么重要**：真智能 = 技能组合成新任务。测试模型能不能把学过的基元 **重组**出未见过的任务。
+
+| 评测维度 | 代表工作 |
+|---------|---------|
+| **Steerable** 可引导性 | 📎 [π0.7](../theory/vla-core/pi0_7_steerable_compositional_generalization_2026.md)——通过 metadata 引导行为方向 |
+| **Compositional** 技能组合 | π0.7 · LoHoVLA · VLABench composite tasks |
+| **Causal / Recovery** 因果 + 自我修正 | F6 动作偏斜测试（见 [failure-modes](./failure-modes.md)）+ RoboMIND 2.0 失败数据 |
+
+### 10.5 真世界持续评测基础设施
+
+| 平台 | 定位 |
+|------|------|
+| **[ManipulationNet](https://manipulation-net.org/)** ⭐ | **社区治理** · 全球真实世界持续 benchmark · 物理操作 + 多模态推理 |
+
+---
+
+## 📐 "智能"层次的分层评测建议
+
+```
+L1  基础动作正确              →  LIBERO（标准）/ CALVIN / RLBench
+     （能不能抓起来）
+     │
+L2  扰动下稳定                 →  LIBERO-PRO / Plus / X / Para
+     （换个物体还能不能抓）           VLA-Arena Distractor
+     │
+L3  真机验证                   →  GM-100 / Table30 / AutoEval / RoboArena
+     （仿真到真机不崩）
+     │
+L4  长程 + 多步                →  CALVIN / VLABench 复合 / LoHoVLA
+     （能不能做 500 步的任务）
+     │
+L5  推理 × 规划               →  ERIQ / COIN / RoboBench / ECoT
+     （能不能对未见任务推理）
+     │
+L6  世界理解                  →  PhysicsMind / RBench / World Model Bench
+     （物理 / 语义 / 3D 建模正确）
+     │
+L7  自主智能体                →  PsiBot R1 CoAT / ManipulationNet
+     （30 分钟连续推理 + 自我修正）
+```
+
+**关键洞察**：论文常在 L1-L2 刷分，L5-L7 才是通往"真正智能"的北极星 benchmark。2025-2026 的趋势是从 L1 往 L5+ 迁移。
+
 ⭐ 表示 2025-2026 新增。
 
 ---
@@ -194,8 +272,28 @@
 │   ├─ 分布式联合 → RoboArena
 │   └─ 自动评测 → AutoEval
 │
-└─ 语义安全
-    └─ HazardArena · VLA-Arena Safety 维度
+├─ 语义安全
+│   └─ HazardArena · VLA-Arena Safety 维度
+│
+├─ 具身推理能力
+│   ├─ QA 级别 → ERIQ（6K+ QA 对）
+│   ├─ 交互级 → COIN
+│   ├─ MLLM brain → RoboBench
+│   └─ CoT 效果测 → ECoT
+│
+├─ 长程 + 多步智能
+│   ├─ 30+ 分钟推理 → PsiBot R1（CoAT）
+│   ├─ 统一架构 → LoHoVLA
+│   └─ 复合任务（500+ 步）→ VLABench composite
+│
+├─ 世界模型智能测评
+│   ├─ 物理预测 → PhysicsMind
+│   ├─ 视频生成质量 → RBench
+│   ├─ 语义世界 → MobileWorldBench
+│   └─ 通用 WM → World Model Bench
+│
+└─ 真世界社区级持续评测
+    └─ ManipulationNet（全球社区治理）
 ```
 
 ---
@@ -240,9 +338,10 @@
 
 | 层级 | benchmark | 特点 |
 |------|----------|------|
-| **S 级**（可信+广） | AutoEval · RobotArena ∞ · REALM | 2025-2026 最新 · 真机或数字孪生 · 规模化 |
-| **A 级**（广但仿真） | RLBench · BEHAVIOR-1K · VLA-Arena · ManiSkill v3 | 成熟、覆盖广、社区接受 |
-| **B 级**（细分领域强） | DexArt · HumanoidBench · OVMM · PlasticineLab | 各自领域内的经典 |
+| **S 级**（可信+广） | AutoEval · RobotArena ∞ · REALM · ManipulationNet | 2025-2026 最新 · 真机或数字孪生 · 规模化 |
+| **A 级**（广但仿真） | RLBench · BEHAVIOR-1K · VLA-Arena · ManiSkill v3 · VLABench composite | 成熟、覆盖广、社区接受 |
+| **B 级**（细分领域强） | DexArt · HumanoidBench · OVMM · PlasticineLab | 各自领域内经典 |
+| **智能级**（🧠 新前沿） | ERIQ · COIN · RoboBench · LoHoVLA · PhysicsMind · RBench · ECoT | 2025-2026 · 推理 / 长程 / 世界模型 |
 | **C 级**（⚠️ 已饱和） | LIBERO（纯）· CALVIN（纯）| 仍可用但需搭配扰动版本 |
 
 ---
