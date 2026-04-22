@@ -63,7 +63,7 @@
 | **[Meta-World](https://meta-world.github.io/)** | 50 | Sawyer | RL + 多任务标准 | MIT ✅ | 经典 RL 测试 |
 | **[ManiSkill v3](https://github.com/haosulab/ManiSkill)** | 多种 | 多种 | GPU 加速仿真 | Apache-2.0 ✅ | RSS'25 |
 | **[RoboCasa](https://robocasa.ai/)** | 厨房 | 移动操作 | 家庭场景泛化 | MIT ✅ | 活跃 |
-| **[BEHAVIOR-1K](https://behavior.stanford.edu/)** | **1000** | 多种 | 开放世界最全面 | 未明确 ⚠️ | 活跃 |
+| **[BEHAVIOR-1K](https://behavior.stanford.edu/)** | **1000** | Galaxea R1 Pro 等 | 开放世界最全面（见下方专节）| 未明确 ⚠️ | NeurIPS'25 Challenge |
 | **[VLABench](https://arxiv.org/abs/2502.09587)** | 大规模 | 多种 | 长程语言条件 | 未明确 ⚠️ | ICCV'25 |
 | **[HazardArena](https://arxiv.org/abs/2604.XXXXX)** | 语义安全 | 多种 | ⚡ 安全评估（填补空白）| 未明确 ⚠️ | 2026 |
 
@@ -184,6 +184,86 @@
 | **[ManipulationNet](https://manipulation-net.org/)** ⭐ | **社区治理** · 全球真实世界持续 benchmark · 物理操作 + 多模态推理 |
 
 ---
+
+## 🏛️ 专节：BEHAVIOR-1K 深度拆解
+
+> **为什么值得单列**：目前最接近"真实家务"的仿真 benchmark，规模 × 多样性 × 物理保真度都最高；NeurIPS 2025 正式 Challenge 的目标平台。
+
+### 基础数据
+
+| 维度 | 数值 |
+|------|------|
+| **任务数** | **1,000** 个日常家务（📎 基于真人问卷："你希望机器人帮你做什么？"）|
+| **场景数** | **50** 个完全交互式场景（厨房/卧室/花园/餐厅/办公室等）|
+| **物体数** | **9,000-10,000+** 个带有物理 + 语义属性的 asset |
+| **仿真引擎** | **OmniGibson**（基于 NVIDIA Omniverse / Isaac Sim）|
+| **任务定义语言** | **BDDL**（Behavior Domain Definition Language）|
+| **物体状态** | **50+ 种**（heated / cut / soaked / frozen / dusty / etc.） |
+| **论文** | 📎 [arXiv:2403.09227](https://arxiv.org/abs/2403.09227)（CoRL 2022）|
+| **GitHub** | [StanfordVL/BEHAVIOR-1K](https://github.com/StanfordVL/BEHAVIOR-1K) |
+
+### 物理保真度（区别于 LIBERO/RLBench）
+
+OmniGibson 支持以下**其他 benchmark 没有的物理现象**：
+- 🔥 **热传导**：加热 / 冷却 / 冷冻（状态变化影响任务成功判定）
+- 💧 **流体交互**：倒水、洒液、吸附（浸湿 sponge）
+- 🧵 **可变形物体**：布料、衣物、绳索
+- ✂️ **切割**：刀 × 食材 → 切片状态
+- 🌫️ **透明 / 半透明材质**
+- 🤝 **双臂协同 + 全身移动**
+
+→ 这意味着 "make pizza"、"wash dog toys"、"spray for bugs" 这类任务真的可以**在物理层面模拟**，不只是"伪装"的抓放操作。
+
+### NeurIPS 2025 Challenge 规格
+
+| 项 | 详情 |
+|----|------|
+| **任务子集** | **50 个 full-length 任务**（从 1,000 中选） |
+| **目标机器人** | **Galaxea R1 Pro**（轮式人形，双臂，具备 bimanual 协调）|
+| **数据** | **10,000 teleoperated demos · 1,200+ 小时**（JoyLo 遥操接口）|
+| **技能粒度** | **30+ 原子技能**（加热/切片/烹饪/清洁等）|
+| **评测指标** | 主：**任务成功率 + 部分成功**；副：**效率**（时间/距离/关节移动）· **数据效率**（使用多少帧训练）|
+| **时间线** | 2025-09-02 launch · 2025-11-16 隐藏测试 · 2025-12-06~07 NeurIPS 颁奖 |
+| **奖金** | 🥇 $1,000 · 🥈 $500 · 🥉 $300 |
+| **Baselines** | ACT · Diffusion Policy · BC-RNN · WB-VIMA · **OpenVLA** · **π0** |
+
+📎 Challenge 页面：https://behavior.stanford.edu/challenge/call_for_participation.html
+
+### BEHAVIOR-1K 的独特定位
+
+```
+传统 benchmark          BEHAVIOR-1K
+─────────────────       ─────────────────
+抓放单一物体      ─→    做披萨、洗狗玩具、喷洒杀虫剂
+固定桌面          ─→    50 个完整家庭场景（厨房+卧室+院子）
+刚性物理          ─→    + 流体 + 布料 + 热 + 切割 + 状态变化
+2-3 秒任务        ─→    几分钟级长程任务
+单一技能          ─→    30+ 原子技能 + 复合组合
+```
+
+### 对你的意义
+
+**✅ 如果你做这些方向**：
+- **家庭服务机器人** — 几乎是唯一公认的综合 benchmark
+- **长程任务 / 多步规划** — 任务长度和复杂度真实
+- **复合物理理解** — 热 / 流体 / 可变形混合的唯一仿真选择
+- **人形 + bimanual + 移动** — Galaxea R1 Pro 测试台
+- **数据效率研究** — 1,200+ 小时 JoyLo 示范是宝贵资源
+
+**⚠️ 注意事项**：
+- **算力门槛高** — OmniGibson 比 LIBERO 重非常多（实时高保真渲染 + 复杂物理）
+- **License 未明** — GitHub repo 要自己查 · 目前仍"学术可用"模糊定位
+- **Challenge 子集 ≠ 全集** — 50 / 1000 的任务才是竞赛考核，全 1000 是资源库
+- **JoyLo 数据可能不公开** — 1,200 小时 demos 的公开部分需向 Stanford 申请
+
+### 🧠 作者观察
+
+- BEHAVIOR-1K 是第一个把 "AGI + 真实家务" 当回事的 benchmark — 从问卷出发而不是研究者拍脑袋选
+- 📎 Baselines 里 **ACT / Diffusion Policy / OpenVLA / π0** 的横评结果会是 2025-2026 最有价值的对比数据点之一
+- 🧠 一旦某个 VLA 在 BEHAVIOR-1K Challenge 拿到 50%+ 成功率，基本可以宣称"家用机器人原型就绪"——这是目前最接近的公认标准
+
+---
+
 
 ## 📐 "智能"层次的分层评测建议
 
