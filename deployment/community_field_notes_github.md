@@ -188,36 +188,36 @@
 
 ---
 
-## 7. 框架采纳度信号（2026-04-17 快照）
+## 7. 框架采纳度信号（2026-04-24 快照）
 
 | 框架 | 7d Issues | 采纳阶段 | DFI | 信号 |
 |------|-----------|---------|-----|------|
-| **lerobot** | 52 | 早期探索 | 0.02 (low) | 主要摩擦: data |
-| **isaaclab** | 36 | 早期探索 | 0.06 (low) | 主要摩擦: install |
-| **genesis** | 13 | 早期探索 | 0.00 (low) | 主要摩擦: deploy |
-| **openpi** | 7 | 早期探索 | 0.11 (low) | 主要摩擦: hardware |
-| **gr00t** | 3 | 早期探索 | 0.18 (low) | 主要摩擦: deploy |
-| **maniskill** | 3 | 早期探索 | 0.12 (low) | 主要摩擦: install |
-| **unitree-rl** | 1 | 混合 | 0.15 (low) | 主要摩擦: train |
-| **openvla** | 0 | **停滞** | 0.00 (low) | 几乎无活动 |
+| **lerobot** | 54 | 早期探索 | 0.05 (low) | 主要摩擦: deploy |
+| **isaaclab** | 54 | 早期探索 | 0.04 (low) | 主要摩擦: install |
+| **gr00t** | 11 | 早期探索 | 0.09 (low) | 主要摩擦: install |
+| **openpi** | 8 | 生产部署 | 0.17 (low) | 主要摩擦: hardware |
+| **genesis** | 5 | 早期探索 | 0.00 (low) | 主要摩擦: deploy |
+| **maniskill** | 3 | 早期探索 | 0.08 (low) | 主要摩擦: hardware |
+| **openvla** | 2 | 混合 | 0.23 (low) | 主要摩擦: deploy |
+| **internvla** | 1 | 混合 | 0.15 (low) | 主要摩擦: train |
+| **act** | 1 | 混合 | 0.20 (low) | 主要摩擦: install |
 | **rdt** | 0 | **停滞** | 0.00 (low) | 几乎无活动 |
 | **octo** | 0 | **停滞** | 0.00 (low) | 几乎无活动 |
 | **magma** | 0 | **停滞** | 0.00 (low) | 几乎无活动 |
-| **internvla** | 0 | **停滞** | 0.00 (low) | 几乎无活动 |
 | **evo-rl** | 0 | **停滞** | 0.00 (low) | 几乎无活动 |
-| **act** | 0 | **停滞** | 0.00 (low) | 几乎无活动 |
 | **aloha** | 0 | **停滞** | 0.00 (low) | 几乎无活动 |
 | **diffpol** | 0 | **停滞** | 0.00 (low) | 几乎无活动 |
 | **mujoco** | 0 | **停滞** | 0.00 (low) | 几乎无活动 |
 | **libero** | 0 | **停滞** | 0.00 (low) | 几乎无活动 |
 | **robosuite** | 0 | **停滞** | 0.00 (low) | 几乎无活动 |
 | **simplerenv** | 0 | **停滞** | 0.00 (low) | 几乎无活动 |
+| **unitree-rl** | 0 | **停滞** | 0.00 (low) | 几乎无活动 |
 | **gello** | 0 | **停滞** | 0.00 (low) | 几乎无活动 |
 
-> 数据来源: Pulsar GitHub Issues Sensor, 115 issues analyzed in 7-day window
+> 数据来源: Pulsar GitHub Issues Sensor, 139 issues analyzed in 7-day window
 
 ---
 
 *本文档由 Pulsar GitHub Issues Sensor 自动采集 + 人工蒸馏。Issue 链接为 evidence，可直接点击查看原始讨论。*
 
-*最后更新: 2026-04-17*
+*最后更新: 2026-04-24*
