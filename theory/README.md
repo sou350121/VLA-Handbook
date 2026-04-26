@@ -7,20 +7,6 @@
 
 &nbsp;
 
-## 📊 方法族趋势脉搏（每日自动更新）
-
-![Method Family Trends](../assets/method-family-trends.svg)
-
-> 15 个 VLA 方法族 × 7d/14d/30d 论文数 × 加速度（Δ 色码 · 🟢 加速 / 🔴 减速 / · 稳定）· 每日从 Pulsar 照見 pipeline 自动生成
->
-> 👉 [完整数据明细 + Unicode sparkline](../assets/method-family-trends.md) · [实时看板](https://sou350121.github.io/pulsar-web/vla-deepdive/)
-
-&nbsp;
-
----
-
-&nbsp;
-
 ## 🎭 你是谁？
 
 | | 角色 | 你的背景 | 👉 推荐起点 |
