@@ -1,6 +1,6 @@
 # 社区实战笔记：小红书 VLA 从业者经验蒸馏 (Community Field Notes)
 
-> **来源**：300+ 条小红书社区蒸馏（帖1-200 + 可追溯索引 40 条 + 黑话辞典 28 条），2026-03-14 起持续收集
+> **来源**：332+ 条小红书社区蒸馏（帖1-232 + 可追溯索引 40 条 + 黑话辞典 28 条），2026-03-14 起持续收集
 > **原始数据**：[memory/blog/archives/xiaohongshu-community/](../../memory/blog/archives/xiaohongshu-community/)
 > **定位**：论文不会告诉你的东西——社区实战者的真实参数、真实失败和真实吐槽。每条结论附「帖N」编号，可在原始数据中回溯验证。
 > **更新频率**：每 3 天自动增量收集
@@ -11,6 +11,7 @@
 > - **帖1-60**（§1-§7）：有原始档案 + 大部分有真实 URL，经 Chrome 抽样验证。**高可靠**。
 > - **帖61-131+**（§9-§10）：来自扩展收集轮次，无独立原始档案备份。帖子标题和作者经 XHS 搜索抽样确认存在，但互动数（赞数）和具体引述内容可能存在偏差。**中可靠——建议对关键数据回原帖核实**。
 > - **帖6-17**（第一轮部分帖子）：有详细内容摘要但缺少直链 URL（标记为「搜索可见」），无法直接跳转验证。**中可靠**。
+> - **帖201-232**（§14）：2026-04-17 / 2026-04-28 自动采集，全部带 xiaohongshu.com/explore/ 直链，正文+评论经 DOM 实时抓取。**高可靠**。
 
 ---
 
@@ -57,6 +58,19 @@
 | 触觉怎么接入 VLA？ | VLA-Touch(NUS)、TaF-VLA(触力对齐)、VTLA-RL(触觉+RL) | [§10.10](#1010-触觉传感与力控) |
 | 移动操作怎么做？ | MoManipVLA(50条)、Mobi-π(固定→移动)、ODYSSEY(四足) | [§10.11](#1011-移动操作与导航) |
 | 具身智能融资热度？ | 2025Q1国内37笔35亿，9家估值破百亿，星海图/无界动力领跑 | [§10.12](#1012-产业融资与公司动态) |
+| 想做 visual-guide 替代 language？ | VISTA：2h数据/5物体→OOD 21物体 69%（pi0 仅 14%） | [§14.1](#141-vision-guide-替代-language-guide) |
+| HF 叠衣服怎么做到 90%？ | 1200 条高质量数据微调 40%→90% + SARM/RABC/RTC + DAgger | [§14.3](#143-huggingface-叠衣服-90-完整工程开源) |
+| WAM 架构真的优于 VLA 吗？ | 是。VLA 27 层 vision tower 只用 last hidden state（"长瘤子的 VLM"） | [§14.4](#144-wam-vs-vla-架构争议升级) |
+| WAM robustness 实测数据？ | LingBot-VA RoboTwin 2.0-Plus 74.2% / Cosmos LIBERO-Plus 82.2%（华为） | [§14.4](#144-wam-vs-vla-架构争议升级) |
+| 真机 RL = DAgger 包装？ | 大概率是。强如 PI 0.6\* 都拒绝做"无 DAgger ablation" | [§14.5](#145-dagger-是真机-rl-的真相) |
+| 触觉怎么接入 VLA 最好？ | 残差策略 + 安全感知（不是主决策模态） | [§14.6](#146-触觉应该是-vla-的残差安全层) |
+| LeRobot 还能用吗？ | ⚠️ 维护降级。Remi 离开 + HF 重心转移；考虑 fork 或迁移 FluxVLA | [§14.7](#147-lerobot-维护降级--fluxvla-补位) |
+| sim2sim 角速度对不上？ | mujoco root 角速度=local，isaac gym=global（节省一周调试） | [§14.8](#148-sim2real-工程级-pin-points) |
+| Sunday 机器人硬件 spec？ | 七轴 0.8m + 三节升降 2.1m + 三轮三转 1.7w 底盘（2026 新标配） | [§14.9](#149-sunday-机器人硬件--so101-bom) |
+| SO101 双臂 BOM 多少钱？ | 主从 ~3400 元（电机1200/摄像头700/零件1250） | [§14.9](#149-sunday-机器人硬件--so101-bom) |
+| Libero action space 是什么？ | osc controller (dx,dy,dz,dyaw,dpitch,droll)+gripper，7 维 delta | [§14.10](#1410-vla-action-space-技术答案) |
+| PI0 OOD 极限多少？ | 5000 条数据 / 分布外 97% / 分布内 100%（社区实测） | [§14.11](#1411-pi0-ood-极限实测) |
+| VLA 论文真上过真机吗？ | A12 178 赞神回："填个表格完事了"——逆共识已成共识 | [§14.12](#1412-vla--paper-factory-逆共识升格) |
 
 ---
 
@@ -1427,6 +1441,308 @@ Kivy 的分析（帖17）：Diffusion Policy 有效的核心不是"多模态分�
 
 ---
 
+## 14. 2026-04 新增（帖201-232）
+
+> 2026-04-17 + 2026-04-28 双轮自动采集，10 个关键词共 32 篇新帖。**全部带 xiaohongshu.com/explore/<id> 直链**，正文/作者/日期/评论/IP 经 DOM 实时抓取。原始档案：[2026-04-17-auto.md](../../memory/blog/archives/xiaohongshu-community/2026-04-17-auto.md) + [2026-04-28-auto.md](../../memory/blog/archives/xiaohongshu-community/2026-04-28-auto.md)。
+
+### 14.1 Vision-guide 替代 Language-guide
+
+**李兴航 VISTA：pi0.7 之前 2 个月的视觉引导方案**（帖201，李兴航/北京，157 赞）：
+- VLA 只靠语言引导**非常脆弱**：微调后 VLM 视觉特征被破坏 + 机器人数据里 V/L 不对等 + 遇到 OOD 任务不知道怎么写 instruction
+- 答案："**不用 language guide，用 vision guide**。instruction 没有 ground truth 但 vision 有"
+- VISTA = VIsual Subgoal TAsk decomposition：借助 **Emu3.5** 交替生成 subtask + goal image
+- **实测**：2 小时数据 / 5 物体 SFT → OOD 21 物体成功率 **69%** vs **pi0 仅 14%**
+- 比 pi0.7 单独构建 high-level policy 更简单更统一（planning + generation 一体化）
+- 🔗 https://www.xiaohongshu.com/explore/69e1ee92000000001a028e98
+
+**AGI Robot：PI0 部署实测确认"语言指令完全无效"**（帖202，172 赞）：
+- 100 条抓笔数据微调 PI0 → 视频中抓取效果
+- 实测 3 条结论：
+  - PI0 作为预训练模型还不错（抓笔 OK）
+  - 大量 manipulation 预训练 → 见到鼠标也能抓（基于抓笔经验泛化），但碗（要抓边缘）失败
+  - **🔥 换不同语言指令对抓取结果基本无影响**——验证作者 ICML2025 论文 **VIP** 观点："在当前数据规模下不适合用语言和具身智能模型交流"
+- 🔗 https://www.xiaohongshu.com/explore/682bf37b00000000230031ff
+
+**3 方独立印证收敛**：李兴航（帖201）+ AGI Robot 实测（帖202） + AGI Robot ICML2025 VIP 论文 = "language → vision-guided" 共识形成。**pi0.7 押注 language steerability 路线可能在 6 个月内被 visual subgoal + WAM 路线超越**。
+
+### 14.2 SmolVLA 复现失败模式集锦
+
+**Scrat 笔记本训 SmolVLA 寄录**（帖203，59 赞，详细复现）：
+- 配置：Isaac Sim + Curobo / 1280×720 RGB / Franka Panda 7关节 / batch 24 / **20K steps / loss 0.002**
+- **4 类推理失败模式**：
+  1. 推理发散
+  2. 陷入动作死循环
+  3. **gripper width 推理滞后**（认为只有闭合后才认为该闭合）
+  4. 抓和放成功率极低 + 泛化性差
+- **核心信号**：loss 数值好（0.002）但真机表现差——**loss 与成功率不相关在 SmolVLA 上是系统现象**
+- 🔗 https://www.xiaohongshu.com/explore/68577378000000000b02cc8f
+
+**Lisette_ 双臂 pi0.5 vs SmolVLA 对比**（帖204，28 赞，但评论金）：
+- 50 条双臂遥操，"put eraser in the drawer"
+- **SmolVLA**：20K 步本地推理，**动作流畅但臂很抖**
+- **pi0.5**：30K 步异步推理，**臂没那么抖但动作老是一卡一卡**（推理实际用 25K 步——25K loss 比 30K 小，作者吐槽"loss 值无参考性"）
+- 评论凉了个凉（中国澳门）独立印证："我用 smolvla 也是很抖"
+- 🔗 https://www.xiaohongshu.com/explore/6967b7f7000000000a02c791
+
+**尤里卡 SmolVLA 缝合怪吐槽**（帖205）：
+- HF SmolVLA "毫无创新，妥妥缝合怪。最离谱的是它把 ACT 算法的动作块（action chunk）换了个名字叫**异步推理**，然后说是自己的东西"
+- 评论 Rorschach 印证："效果也就是 act 水平"
+- **共识漂移**：HF SmolVLA 在社区舆论中已从"消费级 VLA 平民化"贬值为"缝合怪标题党"
+- 🔗 https://www.xiaohongshu.com/explore/6845812b000000002001eb01
+
+### 14.3 HuggingFace 叠衣服 90% 完整工程开源 🔺🔺
+
+**帖206**（Hugging Face 法国官方，194 赞，2026-04-08）—— 本批次最完整工程报告：
+
+| 维度 | 配置 |
+|------|------|
+| 硬件 | 开源双臂 **OpenArm**（不用人形机器人）|
+| 遥操作 | 自研低成本设备 **约 120 欧元** |
+| 感知 | **3 个 RGB + 关节数据**（无力传感器、无深度） |
+| 数据采集 | **8 套设备并行** |
+| 数据规模 | **131 小时 / 5688 条轨迹** |
+| 关键发现 | **数据质量远比数量重要**——1200 条高质量微调使成功率从 **40% → 90%** |
+
+**三个工程 trick**：
+- **SARM**：自动判断"任务进度"，帮筛选好数据
+- **RABC**：让模型更关注"有效动作"，忽略低质量操作
+- **RTC**：边执行边预测，动作更流畅不卡顿
+
+**人类辅助学习（DAgger）**：机器失败时人类接管纠正 → 错误场景变成新训练数据。
+
+**最终成功率**：平铺折叠 100% / 乱衣整理+折叠 80% / **总体 90%**。
+
+**最重要结论（HF 团队亲口）**：
+- 瓶颈不是模型，而是数据
+- **高质量 + 一致性数据 = 决定性优势**
+- 开源工具已经足够支撑真实机器人系统
+
+🔗 https://www.xiaohongshu.com/explore/69d55e62000000001a0237b4
+
+### 14.4 WAM vs VLA 架构争议升级
+
+**Ivory Seagull 源码层面论证 WAM 比 VLA 少冗余**（帖207，226 赞）：
+> VLA 都是从 VLM 上长出来的——仔细观察可以发现 Vision 部分一个**巨大的 vision tower（27 层）**不知道在自注意力什么东西，然后到了**最后一层突然和 text embedding 硬拼接**了，到了 language tower 才开始和 action tower 做 mixture of transformer。
+> （**而最近人们又发现其实只需要 last hidden state，那么前面三十多层真的很必要吗？**）
+> 到了 VA，VA 实际上是**视频生成模型长出来的**——VM 设计重点在 Video 而不是 Language，所以 language 只是在每一个 block 的最后以 cross attention 参与一下 video。
+> 至少少了 VLM 里参与感不高的 vision tower，**VA 看起来还是更有效率一些**。
+
+评论 legnAray 关键追问："VA 没有 language condition 时多任务泛化怎么保证？" — 仍是 VA 阵营开放问题。
+🔗 https://www.xiaohongshu.com/explore/69d7a284000000001d01e180
+
+**华为研究 + LingBot-VA / Cosmos-Policy 实测数据**（帖208，具身智能之心解读，75 赞）：
+- 论文：*Do World Action Models Generalize Better than VLAs? A Robustness Study*（华为团队）
+- benchmark：LIBERO-Plus / RoboTwin 2.0-Plus 多种视觉与语言扰动
+- **实测数据**：
+  - **LingBot-VA on RoboTwin 2.0-Plus：74.2%**
+  - **Cosmos-Policy on LIBERO-Plus：82.2%**
+  - π0.5 等 VLA 在部分任务可达相近 robustness，但需大规模多目标训练
+  - 混合方法 robustness 介于二者之间
+- **第一份实证 WAM > VLA robustness 的同条件对比（华为出品，可信度高）**
+- 🔗 https://www.xiaohongshu.com/explore/69c33ff3000000001a02cdc1
+
+**银河通用 DAPL + LDA 双中 RSS 2026**（帖209，459 赞 ⭐）：
+- DAPL：小模型 World Model + RL，探索机器人"借力环境"灵巧操作
+- LDA：foundation 级 Latent WAM，让 **3 万小时高低质量异构数据**真正物尽其用
+- 关键回应："24 年就开始探索 WAM"（搜 dywa） — **银河 WAM 路线 ≥ 18 个月预热，不是热点跟风**
+- 🔗 https://www.xiaohongshu.com/explore/69eee64d0000000022025d7c
+
+**HWM 分层规划真机实测**（帖210，84 赞）：
+- 论文：*Hierarchical Planning with Latent World Models*
+- 把 world model 规划拆成两层：高层长时程目标 + 低层短时程动作
+- **真实机器人抓放：端到端 0% → 70%**
+- **Push-T 长时程：17% → 61%**
+- **测试时算力：降到约 1/3 - 1/4**
+- HWM 作为 planning layer，能接在 **VJEPA2-AC / DINO-WM / PLDM** 等不同 latent world model 上
+- 🔗 https://www.xiaohongshu.com/explore/69d73f53000000001a033fd6
+
+**Awesome World Models 仓库**（帖211，Arthur12137，259 赞）：
+- GitHub: **Bowen12137/Awesome-World-Models**
+- 严格分类：Survey / Theory / Primary Research / Benchmark
+- 覆盖：General → Autonomous Driving → Embodied AI & Robotics → Interactive Digital Environments → Social & Multi-Agent → Scientific
+- 🔗 https://www.xiaohongshu.com/explore/69d6c50b000000001a029ba6
+
+### 14.5 DAgger 是真机 RL 的真相 🔺
+
+**ronfjkks：DAgger 是真机 RL 的唯一可行路径吗？**（帖212，245 赞，必读）：
+- 真机 RL 实践面临惊人困难：极少数据量 + 极端稀疏 reward + 无法读档重来
+- **DAgger 拯救了世界**：人类在出错时介入提供纠错数据 → 样本效率 ×100 + 隐含复杂偏好（不是简单 reward 能涵盖）
+- DAgger 唯一缺憾：**不够 "RL"**——没有 reward model、value function、advantage
+- 🔥 **关键观察**："因此我们看到大量真机 RL 工作都在组合 DAgger 和经典 RL 算法，并且**通常拒绝做消融实验**。没有 DAgger 你的算法还 work 吗？强如 **PI 0.6\* 都选择不回答这个问题**。"
+- **建议**：放下对 PPO/SAC/GRPO 的执念，回到策略提升的框架重新看待自己的方法
+- 🔗 https://www.xiaohongshu.com/explore/69685f45000000001a023d45
+
+**与 §1.6 Evo-RL 范式相互印证**：Evo-RL 的"示教→部署→犯错→人工纠偏→数据回流→再训练"本质就是 DAgger 闭环。**residual RL + DAgger 是 PI 系列的真实底色，pure RL 是营销叙事**。
+
+### 14.6 触觉应该是 VLA 的残差/安全层
+
+**R&B All Night 真机 VTLA-RL 系统论述**（帖213，185 赞）：
+
+**问题**：默认思路把 tactile 作为新模态喂给 VLA，但触觉表征没有统一共识（pressure map / force-torque / binary contact / GelSight），数据集规模偏小、多闭源。**直接当 RGB 用，收益与系统复杂度不成正比**。
+
+**应该怎么做**：
+- 触觉是**高频、闭环、对接触敏感、脆弱**的信号——不适合"决定动作"，更适合"修正动作"
+- **VLA 负责低频、语义层面决策**（要做什么、朝哪个目标推进）
+- **触觉残差策略网络在高频闭环中微调**（处理滑移、过载、不稳定接触）
+
+**触觉 World Model 的真实价值**：
+- 不是"精确模拟接下来发生什么"
+- 而是**安全 / 失败预警**——预测打滑风险、超过安全力阈值、接触是否趋于不稳定
+- "**一个'足够好'、以安全为导向的触觉 world model，可能比一个高保真但难以部署的物理仿真模型更有实际价值**"
+
+🔗 https://www.xiaohongshu.com/explore/695bbb8e000000000e03f6fe
+
+### 14.7 LeRobot 维护降级 + FluxVLA 补位
+
+**蓝瘦纸 lerobot 项目官方还维护么？**（帖214，142 赞，内部信号 🔺）：
+- "提的 PR 没人 review，issue 也没人解决。代码一更新就遇到新 bug。**没动力继续用下去了**"
+- 评论 **kkkkkk（英国，17 赞）**："**我认识 lerobot 的人。自从 Remi 走了以后他们人变少了，加上他们最近在搞另外一个大新闻，对已有代码维护就不太上心了**"
+- 评论 maomao（北京，9 赞）："我是直接放弃了"
+- **实操含义**：HF 主力 Remi 离开 + 重心转向"另一个大新闻"（大概率就是叠衣服项目，帖206 法国官方账号）；**依赖 LeRobot 的研究者应评估迁移成本**
+- 🔗 https://www.xiaohongshu.com/explore/6959fc5c000000001e027241
+
+**逐际动力 FluxVLA Engine（魔搭社区开源通告）**（帖215，16 赞但工程价值高）：
+- @逐际动力 开源的 VLA 工程化基建
+- 解决 VLA 落地"工程层"三大问题：数据格式碎片化 / 代码耦合太重 / 仿真到真机迁移难
+- 核心理念：**统一配置 / 标准接口 / 模块解耦 / 快速部署**
+- 一份配置管全流程；视觉编码器/语言主干/动作头/数据集独立替换；推理加速 + 轨迹平滑
+- 同时支持 VLM 和 VLA，覆盖训练/仿真/真机；兼容主流模型/仿真器/硬件
+- GitHub：https://github.com/FluxVLA/FluxVLA
+- 🔗 https://www.xiaohongshu.com/explore/69e266fc0000000021011c24
+
+**接力信号**：LeRobot 维护降级 + 逐际动力 FluxVLA 补位 → **国内具身工程化基建有可能填补 HF 空缺**。
+
+### 14.8 sim2real 工程级 pin-points
+
+**人形蘑菇：sim2real gap 从何而来 + Real2Sim2Real 三阶段**（帖216，628 赞）：
+1. **Real-to-Sim**：多视角视频 + 传感器数据 + **3D 高斯溅射**重建场景视觉外观 + **可微分物理引擎**辨识物理参数 → "数字孪生"
+2. **Sim**：在数字孪生中用 RL/IL 高效安全训练
+3. **Sim-to-Real**：直接部署，环境一致性高 → 迁移成功率显著提升
+
+评论反对意见（爱狗小张/江苏）："**根本不可能。固体力学的数字孪生关注点在那些应力集中的地方，不是连续变化的过程，神经网络根本捕捉不到那里发生了什么**" — 提示精密接触/装配任务上 Real2Sim2Real 仍有上限。
+🔗 https://www.xiaohongshu.com/explore/692ae8d1000000001e03a9d7
+
+**🐱 mujoco / isaac gym 角速度坐标系陷阱**（帖217，92 赞，pin-point 工程救命贴）：
+
+| 仿真器 | 线速度坐标系 | 角速度坐标系 |
+|--------|------------|------------|
+| **mujoco** | `qvel[:3]` = **global** | `qvel[3:6]` = **local** ⚠️ |
+| **isaac gym** | `[7:10]` = global | `[10:13]` = global |
+
+**实操建议**：sim2sim 迁移时**先检查 root state 坐标系**比检查 PD 参数更优先。
+🔗 https://www.xiaohongshu.com/explore/684ce1960000000021008935
+
+### 14.9 Sunday 机器人硬件 + SO101 BOM
+
+**小白学具身：Sunday 机器人完整 spec sheet**（帖218，370 赞，2026 中端人形参考）：
+
+| 部位 | 配置 | 关键观察 |
+|------|------|---------|
+| 头部相机 | RGB 鱼眼 | 边缘扭曲明显，斜向前不垂直，**头部无自由度全靠超广角** |
+| 手臂 | 七轴球形末端 | **水平可达 0.8 米**——π/星海图/松灵都是六轴，**松灵这几天将发七轴版本** |
+| 手 | 两指四自由度 | 大拇指固定，食指控两轴 + 中指/无名/小指控两轴 |
+| 手部相机 | 上下各一个 | 大拇指 + 小指位置 |
+| 手部防水 | **IP67** | 深水可泡 30 分钟 |
+| 数采手套 | **500 个人在家戴手套采** | 比 π0.5 的 100 套强很多，**集成 Cheng Chi 2024 UMI** |
+| 升降柱 | **三节，垂直 2.1 米** | 与宇树前几天发布的底盘版本一样，可能引起跟风 |
+| 底盘 | 三轮三转全向 | 与松灵 Ranger Delta 一样，**定价 1.7 万**；星海图/π 都是这一类型 |
+
+**社区共识**：**七轴 + 三节升降柱 + 三轮三转底盘 = 2026 中端人形新标配**。
+🔗 https://www.xiaohongshu.com/explore/691ea963000000001e00b725
+
+**具身薯风啸：MacBook Pro + SO101 双臂 BOM**（帖219，127 赞）：
+- 单 MacBook Pro 即可闭环训推 ACT 控制真机抓香蕉
+
+| 配件 | 价格（元）|
+|------|----------|
+| 电机 | 1200 |
+| 控制板 | 55 |
+| USB 线 | 20 |
+| 电源适配器 | 50 |
+| 桌面固定器 | 40 |
+| 螺丝刀套装 | 30 |
+| 摄像头 | 700 |
+| 本体零件 | 1250 |
+| 剩余打赏 | 55 |
+| **合计** | **~3400 元（双臂主从）** |
+
+**对入门门槛的影响**：与帖206 HF 叠衣服 OpenArm + 120 欧元遥操共同形成**"低成本 VLA 全套方案"图景**——VLA 入门门槛进一步降低。
+🔗 https://www.xiaohongshu.com/explore/69bba73f000000002301435b
+
+### 14.10 VLA action space 技术答案
+
+**郁郁葱葱：vla 训练的 action space 是什么？**（帖220，159 赞，**评论是金矿**）：
+
+作者疑问：
+1. pi0 等用 OpenX 数据集预训练时，OpenX 不同子数据集 action space 不同（eef pose / eef velocity / joint angle），训练时是混合还是统一？
+2. lerobot Libero 数据集的 actions 是什么物理含义？
+
+**评论权威答案**：
+- **诺德皇家侍卫（英国）**："**Libero 默认用 osc controller，action 定义为 (dx, dy, dz, dyaw, dpitch, droll) + gripper_state**"（精确 6 维 delta + gripper）
+- **dare（北京）**："**预训练一般混合不同数据集，统一用一个动作空间——一般是 eef pose，也有 qpos。Libero 确实是 delta，印象中动作是七维，state 是八维，最后两维是夹爪。Velocity 训练阶段不大，可以不用**"
+
+🔗 https://www.xiaohongshu.com/explore/68712af700000000120235a0
+
+### 14.11 PI0 OOD 极限实测
+
+**Jovis Wang 帖评论（e 个小目标 / 广东，19 赞，帖226 评论区）**：
+> **pi0 是这些方法里最强的，5000 条真机数据微调，分布内 100% 成功率，分布外 97% 成功率，还是长程任务**
+
+**配套结论（nysa / 上海，23 赞）**：
+> **如果你的机械臂不在论文提到的里面，存在分布偏移，肯定要真机微调啊。实测如果是 Franka 和 Aloha，直接真机部署，效果惊人。部署前还是看看论文吧**
+
+**关键校准**：
+- PI0 OOD 97% 不是免费的——**门槛是 5000 条真机数据**（远超 100-200 条的入门级）
+- Franka / Aloha **直接部署**已可用（不需要微调），**主流硬件覆盖度仍是 PI0 success 的隐藏前提**
+
+🔗 帖226 https://www.xiaohongshu.com/explore/68a7e92e000000001d034f41
+
+### 14.12 VLA = paper factory 逆共识升格 🔺
+
+**曾经的你：VLA 论文真上过真机吗？**（帖225，244 赞，2026-03-31 上海）：
+> 看了不少 vla 相关的论文，好多都是在仿真中进行训练优化，最后刷个 libero 的指标，然后给个真机演示的漂亮 demo，**但打开 GitHub，真机部署的教程也都没有，所以他们的模型真的上过真机吗？**
+
+**评论金矿**：
+
+| 用户 | IP | 赞 | 评论 |
+|------|------|------|------|
+| **A12** | **上海** | **178** | **填个表格完事了**（本批最高赞神回） |
+| AA111AEIOU | 广东 | 23 | 完形填空说是 |
+| momo | 上海 | 9 | 现在 vla 还不如小模型 |
+| Jeanne | 上海 | 36 | 小模型没泛化，换个位置就废了 |
+
+**升格判定**：
+- "VLA 论文 ≠ 真机能跑" 已从少数派吐槽变成评论区**高赞共识**（A12 178 赞 + Jovis Wang 帖 117 赞 + 尤里卡帖 4 赞但内容犀利）
+- 178 赞的"填个表格完事了"暗示**学术 review 已经无法甄别 VLA 论文真伪**
+- §6（少数派观点）的"VLA 落地很难" 在本批升格为**正式逆共识 C?**（置信度 ~50%）
+
+🔗 https://www.xiaohongshu.com/explore/69cb41bf000000001a025616
+
+### 14.13 EfficientVLA 量化部署
+
+**具身智能之心：EfficientVLA（上交）**（帖223，78 赞，2025-06-15）：
+- **三件套**：层间冗余分析剪除语言模块功能无关层 + 任务感知策略选择紧凑视觉 token 集 + 策略性缓存复用关键中间特征（缓解 diffusion action head 时间冗余）
+- **实测数据（CogACT 基线 + SIMPLER）**：
+  - 推理加速：**1.93×**
+  - FLOPs 下降到：**28.9%**（节省 71.1%）
+  - 成功率仅下降：**0.6%**
+- **对 §11 空白的填补**：VLA 量化/剪枝/缓存这条工程化路径已有可复现方案
+- 🔗 https://www.xiaohongshu.com/explore/684e93b00000000021019280
+
+### 14.14 信念网络更新（合并双轮采集）
+
+| 信念 | 状态 | 校准置信度 | 致命实验 / 截止日 |
+|------|------|----------|------------------|
+| **B11**：数据工程 > 架构创新 是 VLA 进入 GPT3 时刻的关键 | 强化 | **~70%** | HF 1200 条质量数据 → 90% 印证 |
+| **B12**：visual subgoal + world model 是 VLA 进入 OOD 泛化的最稳定接口 | 新增 | **~66%** | VISTA 开源后第三方复现失败 / pi0.7 反超 → 撤销（截止 2026-08-31） |
+| **B13**（新）：触觉应该是 VLA 的残差/安全层，不是主决策模态 | 新增 | **54%** | 若"触觉直接驱动决策"路线在真机击败"residual+safety" → 撤销 |
+| **C? 升格**："VLA + RL 多数是 DAgger + 经典 RL 的包装" | 升格 | **~55%** | PI 0.6\* 拒绝 ablation 是认知偏差/营销策略 |
+| **C? 升格**："开源 VLA 多数是 paper factory" | 升格 | **~50%** | 帖225 A12 178 赞共识 |
+| **新观察**：LeRobot 官方维护降级 | 警报 | — | Remi 走 + HF 重心转移叠衣服 → 评估迁移 |
+| **新产业判断**：2026 VLA 落地护城河在工程层而非模型层 | 新增 | **~65%** | 帖206 + 帖215 + 帖218 三方共振 |
+
+---
+
 ## 13. VLA 社区黑话辞典 🗣️
 
 > 在小红书 VLA 社区摸爬滚打几百篇帖子，你会发现一套独特的"黑话"体系。
@@ -1471,18 +1787,18 @@ Kivy 的分析（帖17）：Diffusion Policy 有效的核心不是"多模态分�
 
 ## 11. 小红书上找不到的东西
 
-以下话题搜遍 220 篇帖子仍然缺少实操经验分享。如果你正在做这些方向，建议去 GitHub Issues（LeRobot/openpi/SmolVLA）、知乎专栏、或直接联系论文作者：
+以下话题搜遍 232+ 篇帖子仍然缺少实操经验分享。如果你正在做这些方向，建议去 GitHub Issues（LeRobot/openpi/SmolVLA）、知乎专栏、或直接联系论文作者：
 
 1. ~~**FAST tokenization**~~ → 部分填补：π0-FAST 5× 加速的中文解读已出现（帖138），但社区自己的调参经验仍少
 2. **Co-training 数据混合比例**——机器人数据 vs 互联网视频 vs 仿真数据的配比怎么调
-3. ~~**视觉编码器选型**~~ → 部分填补：SigLIP-2、VGGT vs DINO 讨论已出现（§9.8），但缺乏定量 A/B 对比
-4. ~~**量化/蒸馏到边缘设备**~~ → 部分填补：知识蒸馏（Shallow-π）和 ActionFlow 有初步信号，但 VLA 专属量化实操仍为零
-5. ~~**World Model 训练工程细节**~~ → 部分填补：四大技术路线已有框架（§9.6），但具体训练参数/数据配比仍缺
+3. ~~**视觉编码器选型**~~ → 部分填补：SigLIP-2、VGGT vs DINO 讨论已出现（§9.8），但缺乏定量 A/B 对比；新增：Ivory Seagull（帖207）从源码层面论证 VLA vision tower 27 层只用 last hidden state，但仍缺定量 A/B
+4. ~~**量化/蒸馏到边缘设备**~~ → 部分填补：知识蒸馏（Shallow-π）+ ActionFlow + EfficientVLA（帖223，1.93x/-0.6% SR）有初步信号
+5. ~~**World Model 训练工程细节**~~ → 部分填补：四大技术路线已有框架（§9.6）+ HWM 分层规划实测（帖210，0%→70%）+ 银河 DAPL/LDA RSS 中稿（帖209）；具体训练参数/数据配比仍缺
 6. **多机器人协同部署**——完全空白
 7. **Base LLM 选型对比**（Gemma vs Llama vs Qwen 作为 VLA 底座）——没有定量对比
 8. **VLA 推理在 Jetson/RK3588 等嵌入式平台**——完全空白
-9. **真机数据自动清洗工具**——社区强烈呼声但无成熟方案（§4.3）
-10. **触觉数据标准化格式**——各团队自定义，无统一标准
+9. **真机数据自动清洗工具**——社区强烈呼声但无成熟方案（§4.3）；HF 叠衣服 SARM 自动判断任务进度（帖206）是部分启发
+10. ~~**触觉数据标准化格式**~~ → 部分填补：R&B All Night（帖213）系统论证触觉应该是残差/安全层而非主决策模态，五大方案各有取舍但未统一
 
 ---
 
@@ -1526,6 +1842,6 @@ Kivy 的分析（帖17）：Diffusion Policy 有效的核心不是"多模态分�
 
 ---
 
-*本文件由定时收集器自动更新（v2，帖 1-200 + 可追溯索引 40 条 + 黑话辞典 28 条，共 300+ 条）。原始数据和方法论详见 [收集流程复盘](../../memory/blog/archives/xiaohongshu-community/workflow-and-automation.md)。*
+*本文件由定时收集器自动更新（v2.1，帖 1-232 + 可追溯索引 40 条 + 黑话辞典 28 条，共 332+ 条）。最近更新：2026-04-28 双轮自动采集（10 关键词 / 32 新帖）。原始数据和方法论详见 [收集流程复盘](../../memory/blog/archives/xiaohongshu-community/workflow-and-automation.md)。*
 
 [← Back to Deployment](./README.md)
