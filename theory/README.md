@@ -74,7 +74,7 @@ graph TD
 &nbsp;
 
 <details open>
-<summary><h3>🏛️ Central Keep — VLA 核心架构 &nbsp;<code>33 篇</code></h3></summary>
+<summary><h3>🏛️ Central Keep — VLA 核心架构 &nbsp;<code>34 篇</code></h3></summary>
 
 **一句话**：所有 VLA 模型的"解剖室"。
 
@@ -87,6 +87,7 @@ VLA 的核心思想很简单：拿一个视觉语言模型（VLM），给它装�
 | [VLA 核心架构总览](vla-core/vla_arch.md) | 一篇看完所有 VLA 的共同设计模式 |
 | [🆓 完全开源 VLA 选型指南](vla-core/open_source_vla_guide.md) | **10 个真开源 vs 假开源拆解 + 按场景选型** |
 | [研究主线梳理](vla-core/vla_research_mainline.md) | 赌注清单：该赌哪条路 |
+| [Xiaomi-Robotics-0](vla-core/xiaomi_robotics_0_dissection.md) | 4.7B Qwen3-VL+DiT，三技巧封住异步推理的 shortcut（Apache 2.0） |
 
 </details>
 
