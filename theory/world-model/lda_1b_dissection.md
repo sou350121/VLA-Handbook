@@ -22,8 +22,8 @@
 2024 ─ UniSim / DreamGen ───────► 世界模型派，pixel-level video
                                  │  缺點：動力學被視覺細節稀釋
                                  │
-2025-03 ─ DexGraspVLA / WAM (PKU+Galbot) ★
-                                 │  首次系統化「World-Action Model」概念
+2025-03 ─ PKU+Galbot 非抓握技能論文 ★（營銷稿引述）
+                                 │  ⚠️ 「首次系統化 WAM 概念」為營銷稿說法，未獨立驗證
                                  │
 2025 ─ UWM (Unified World Model)─► 嘗試 policy+dynamics 共學，但 VAE 為主
                                  │  論文自己的 baseline：UWM-1B 在 RoboCasa 僅 19.3%
@@ -39,7 +39,7 @@
         • 自動化「按質分工」
 ```
 
-**本文在演進中的位置**：把 2025 年的 WAM 概念（同隊伍提出）做到 1B + 33.8k 小時，並用 ablation 證明「**像素 vs 語義特徵**才是 scaling 跑通的分水嶺」——VAE 路線在這篇被當作 baseline 公開「打死」（LDA 55.4% vs UWM 20.0%）。
+**本文在演進中的位置**：在 UWM 試圖統一 policy + dynamics 但仍卡在 VAE 像素層（RoboCasa 19~20%）的背景下，本文用 DINO 隱空間 + 4 head 任務 routing 把同樣的「unified world-action model」想法做到 1B + 33.8k 小時，並用 ablation 把「**像素 vs 語義特徵**」這條 scaling 分水嶺直接展示出來（LDA 55.4% vs UWM 20.0%）。
 
 ---
 
@@ -63,7 +63,7 @@
 
 四個設計選擇的因果鏈：
 
-1. **為什麼 DINO 不 VAE？** —— Ablation 直接打臉：同樣 MM-DiT、同樣 1B、同樣數據，VAE 拿 20.0%、DINO 拿 55.4%（**Δ = +35.4 pp**）。VAE 的重構目標逼模型學「像素如何變化」，DINO 的判別性訓練讓特徵對背景不變、對物件結構敏感——後者才是動力學的本質。
+1. **為什麼 DINO 不 VAE？** —— Ablation 直接打臉：相近設置下（MM-DiT + Qwen3vl + EI-30K），VAE 路線的 `UWM(MM-DiT)` 拿 20.0%、`LDA-1B`（DINO）拿 55.4%（**Δ ≈ +35 pp，注意 UWM(MM-DiT) 確切參數量論文未明列**）。VAE 的重構目標把算力消耗在像素細節，DINO 的判別性訓練讓特徵對背景不變、對物件結構敏感——**作者主張**後者才是動力學該住的空間（論文未給「DINO 重構訓練 / VAE 判別訓練」的中間態 ablation 來孤立證明這條因果）。
 2. **為什麼要 4 個 head 而不是只訓 policy？** —— 只訓 policy 時，加更多髒數據反而下降（π0.5 在 mixed-quality 下成功率掉 –10~–20 pp）。把 4 個任務統一後，髒數據可以走「dynamics 分支」做後門訓練，不污染 policy。
 3. **為什麼用 Task Embedding + Register Token？** —— 一張網路要同時會 4 件事，需要明確的「**模式開關**」。Register token 的設計很巧：訓 policy 時用 visual register 占未來畫面的位（不預測未來），訓 visual forecasting 時用 action register 占動作的位——把 4 種任務轉成同一個「填空題」的不同 mask 模式。
 4. **為什麼用統一末端執行器空間？** —— 不同機器人關節空間沒法共用；但「**手腕 6-DoF + 手指狀態**」是物理通用的——人類也用 MANO 描述手部，跨本體共享。
@@ -254,9 +254,9 @@ camera_extrinsics: 保留以解耦頭部 ego-motion 與手部運動
 | LDA-0.5B | DINO | ✓ | 50.7 | DINO + MM-DiT, 0.5B |
 | **LDA-1B** | DINO | ✓ | **55.4** | **本文** |
 
-**ablation 拆解**：
-- VAE → DINO（控制 MM-DiT）：20.0 → 50.7（**+30.7 pp**，最大單一變因）
-- DiT → MM-DiT（控制 DINO，0.5B）：48.9 → 50.7（+1.8 pp）
+**ablation 拆解**（注意：UWM(MM-DiT) 論文未明列參數量，可能與 UWM-1B 相當）：
+- 表徵空間：UWM(MM-DiT) VAE 20.0 → LDA-1B DINO 55.4（**Δ ≈ +35 pp**，但混雜了表徵 + 數據策略 + 訓練細節差異）
+- DiT → MM-DiT（控制 DINO 與 0.5B）：48.9 → 50.7（+1.8 pp）
 - 0.5B → 1B（控制其他）：50.7 → 55.4（+4.7 pp，**模型 scaling 真的給力**）
 - 對比 GR00T-EI30k（同數據、不同架構）：51.3 → 55.4（+4.1 pp，架構也有貢獻）
 
@@ -316,7 +316,7 @@ camera_extrinsics: 保留以解耦頭部 ego-motion 與手部運動
 | π₀ / π₀.₅ | policy | 像素 + token | 只用高質 | 弱 | 短程強、長程/接觸弱 |
 | Gr00T-N1.x | policy + 視訊預測 | pixel-VAE | 部分異構 | 中 | 主流 baseline |
 | UWM | policy + dynamics | **VAE** | 試圖統一 | 中 | RoboCasa 19~20% |
-| WAM (PKU 2025-03) | World+Action 概念定義 | latent | 概念框架 | — | 概念論文 |
+| WAM 概念類論文（PKU+Galbot 2025） | World+Action 範式（⚠️ 「首次定義」為營銷稿說法） | latent | 概念框架 | — | 概念論文 |
 | **LDA-1B（本文）** | **policy + 4 head** | **DINO** | **按質分工 4 角色** | **強（多平台 fine-tune）** | **RoboCasa 55.4%；接觸任務 80~90%** |
 
 ### 🎤 面試 Tip
@@ -354,7 +354,7 @@ camera_extrinsics: 保留以解耦頭部 ego-motion 與手部運動
 - HTML: https://arxiv.org/html/2602.12215v1
 - 項目: https://pku-epic.github.io/LDA/
 - 代碼: https://github.com/jiangranlv/latent-dynamics-action（**注意**：營銷稿給的 `LDA-1B` 路徑 ≠ 實際 repo 名）
-- 對比基線: π₀.₅ (Black et al., 2025) · GR00T-N1.6 (NVIDIA, 2025) · UWM (2025) · WAM (PKU+Galbot, 2025-03)
+- 對比基線: π₀.₅ (Black et al., 2025) · GR00T-N1.6 (NVIDIA, 2025) · UWM (2025) · StarVLA · 早期 WAM 概念類工作（PKU+Galbot, 2025；具體論文名以原文 Related Work 為準）
 
 🧠 **本文判讀（作者觀點）**：
 這是 2026 春季少見的**「用 ablation 把整條主流路線（pixel-VAE 世界模型）打死」**的論文——20.0% vs 55.4% 不是優化問題，是路線問題。`「VLA vs 世界模型」是假二分` 這一論斷如果經得起獨立復現，會直接影響未來 12 個月的具身 foundation model 設計。**但要老實看到限制**：DINO/VLM 全凍結意味著視覺學的天花板被外部工具決定，「按質分工」需要人工標註數據質量——scaling 之路還沒到「壓進去就能煉」的 GPT-2 時刻。**🔧 級評估**（未到 ⚡，因 RSS 接收未驗證 + checkpoint 未開源），但若 3 個月內模型權重發布且能被獨立復現，可升級。
