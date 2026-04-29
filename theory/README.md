@@ -110,7 +110,7 @@ VLA 的核心思想很简单：拿一个视觉语言模型（VLM），给它装�
 &nbsp;
 
 <details>
-<summary><h3>🌍 World Realm — 世界模型与仿真 &nbsp;<code>23 篇</code></h3></summary>
+<summary><h3>🌍 World Realm — 世界模型与仿真 &nbsp;<code>24 篇</code></h3></summary>
 
 **一句话**：让机器人在"脑子里"先试一遍，再决定怎么做。
 
@@ -121,6 +121,7 @@ VLA 的核心思想很简单：拿一个视觉语言模型（VLM），给它装�
 | [**主线总纲**](world-model/world_model_mainline.md) | 从 evaluator 到 planner 到 world action model |
 | [DreamZero](world-model/dreamzero_world_action_models_zero_shot_policies_2026.md) | 世界模型 = 零样本策略 |
 | [EgoSim](world-model/egosim_egocentric_world_simulator_for_embodied_interaction_g_dissection.md) | 第一人称闭环世界模拟器 |
+| [LDA-1B](world-model/lda_1b_dissection.md) | DINO 隐空间统一 World+Action Model，3.4 万小时异构数据 scaling |
 
 </details>
 
@@ -177,7 +178,7 @@ VLA 的 V 代表 Vision，但机器人视觉远不止图像分类。需要从 2D
 &nbsp;
 
 <details>
-<summary><h3>🧠 Strategy Hall — 推理、规划与安全 &nbsp;<code>27 篇</code></h3></summary>
+<summary><h3>🧠 Strategy Hall — 推理、规划与安全 &nbsp;<code>29 篇</code></h3></summary>
 
 **一句话**：让机器人"先想再做"，而且不伤害人。
 
@@ -188,6 +189,8 @@ VLA 的 V 代表 Vision，但机器人视觉远不止图像分类。需要从 2D
 | [Benchmark 主线](planning/benchmark_mainline.md) | 评测体系的演进 |
 | [思维链推理](planning/chain_of_thought.md) | 让 VLA 先"想清楚"再动手 |
 | [VLA 十大挑战](planning/vla_challenges.md) | 目前还没解决的 10 个难题 |
+| [CodeGraphVLP](planning/codegraphvlp_dissection.md) | 持久语义图 + Code-as-Planner，把 VLA 的 Markovian 假设拆掉 |
+| [ManiDreams](planning/manidreams_dissection.md) | 不押注 backend，把"预测模糊"显式建模并约束到规划器 |
 
 </details>
 
