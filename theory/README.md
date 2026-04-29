@@ -111,7 +111,7 @@ VLA 的核心思想很简单：拿一个视觉语言模型（VLM），给它装�
 &nbsp;
 
 <details>
-<summary><h3>🌍 World Realm — 世界模型与仿真 &nbsp;<code>24 篇</code></h3></summary>
+<summary><h3>🌍 World Realm — 世界模型与仿真 &nbsp;<code>25 篇</code></h3></summary>
 
 **一句话**：让机器人在"脑子里"先试一遍，再决定怎么做。
 
@@ -123,6 +123,7 @@ VLA 的核心思想很简单：拿一个视觉语言模型（VLM），给它装�
 | [DreamZero](world-model/dreamzero_world_action_models_zero_shot_policies_2026.md) | 世界模型 = 零样本策略 |
 | [EgoSim](world-model/egosim_egocentric_world_simulator_for_embodied_interaction_g_dissection.md) | 第一人称闭环世界模拟器 |
 | [LDA-1B](world-model/lda_1b_dissection.md) | DINO 隐空间统一 World+Action Model，3.4 万小时异构数据 scaling |
+| [Lyra 2.0](world-model/lyra2_dissection.md) | 3D 缓存路由 + 自污染训练，对抗长轨迹 spatial forgetting / temporal drifting（Apache 2.0） |
 
 </details>
 
