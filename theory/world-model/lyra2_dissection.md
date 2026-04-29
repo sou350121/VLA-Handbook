@@ -127,6 +127,36 @@ VLA 真機調試最大的瓶頸之一是「**沒有夠多樣的高擬真 3D 場�
 
 ---
 
+### 1.4 為什麼用 Wan 2.1-14B 而非 NVIDIA 自家 Cosmos？
+
+這是一個值得單獨拆的設計決定——**NVIDIA SIL 的工作竟然不用 NVIDIA Cosmos**。
+
+📜 **論文原話（§3 Preliminaries + Appendix A.1）**：
+> *「We adopt the Wan 2.1 VAE [wan2025wan], which downsamples 8×8 spatially and 4×4 temporally...」*
+>
+> *「We build upon the Wan 2.1-14B DiT [wan2025wan] as our backbone video diffusion model.」*
+>
+> ⭐ *「**We find that within Wan 2.1, this mechanism alone already delivers accurate camera control even along long trajectories.**」*
+
+Cosmos（`agarwal2025cosmos`）在論文中**只在 intro 引用一次**作為「video-to-3D 範式」的脈絡背景，**未當 baseline 也未做對照**。
+
+**論點背後的技術理由**（部分論文明說，部分為合理推論）：
+
+| 理由 | 證據強度 | 說明 |
+|------|:------:|------|
+| **相機控制成熟度** | ✅ 論文明說 | Wan 2.1 內建的 camera conditioning 在長軌跡下「**alone already delivers accurate camera control**」——意味著作者**實測過**這條 baseline 已夠用，3D cache 是錦上添花 |
+| **VAE 規格匹配** | ✅ 論文需要 | 論文方法強依賴 8×8 空間 / 4×4 時間下採樣的 VAE；Wan 2.1 VAE 自帶此規格 |
+| **方法 backbone-agnostic 主張** | 🟡 推論 | 用非 NVIDIA backbone 證明「3D cache 路由 + self-aug 訓練」**對 backbone 中立**——這是更強的科學論點：換 Cosmos / Sora-style 都應該適用 |
+| **開源生態與 License** | 🟡 推論 | Wan 2.1 是 Apache 2.0 全開源權重，社群有大量 finetune 食譜（CameraCtrl-on-Wan 等）；Cosmos 是 NVIDIA 為 physical AI 推出的閉/半閉模型，外部 fine-tune 友善度待檢驗 |
+| **時序問題** | 🟡 推論 | Lyra 2 工作 likely 始於 2025 中後段；當時 Cosmos-1 → Cosmos-2 仍在迭代，Wan 2.1 已穩定 |
+
+🧠 **核心啟示**：
+NVIDIA 自家 SIL Lab 公開用阿里巴巴的 backbone 不是政治表態，而是**研究誠實**的展示——「我的方法值得被 mainstream backbone 採用，所以我先在最成熟的開源 video DiT 上驗證」。對 VLA / 3D 研究者意味著：**方法論的 reusability 比 backbone 一致性重要**——將來換 backbone 不是 risk，是 feature。
+
+⚠️ **隱含限制**：Wan 2.1 的訓練數據偏向通用視訊（電影 / 動畫風格） + DL3DV finetune（室內房屋）；若日後底層換 Cosmos（physical AI 預訓），對工業 / 戶外場景可能反而更友善——這是論文沒探索的「未來潛力」軸。
+
+---
+
 ## 2. 數學核心：3D 緩存 + flow matching (Math Core)
 
 📌 **Napkin Formula**：
