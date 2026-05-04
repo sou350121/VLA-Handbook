@@ -114,6 +114,45 @@
 
 ---
 
+### 1.4 從論文到代碼：實作分解（GitHub 取證後新增）
+
+論文層的 3 個模組（M1/M2/M3）對應 GitHub repo 的**4 步腳本管線**——粒度更細：
+
+📦 **代碼倉庫**：[`RetrievalManip/Retrieval-augmented-Manipulation`](https://github.com/RetrievalManip/Retrieval-augmented-Manipulation)（Stars=4 / Forks=0，**新發佈，社群尚未驗證**）
+
+```
+論文模組          ↓                      實作腳本（執行順序）
+──────────────────────────────────────────────────────────
+M2.偵測       ↦  step1_grounding.py    GroundingDINO + SAM2.1
+M2.重建       ↦  step1+step2 中        VGGT (point cloud)
+M2.姿態+抓取  ↦  step2_ram.py          RAM 模組（核心 IP）
+M3.規劃        ↦  step3_planning.py    VLM API 呼叫 + JSON parse
+M3.執行        ↦  step4_conducting.py  trajectory + Fairino arm
+```
+
+**外部依賴清單**（這是「真開源」與否的關鍵判斷）：
+
+| 元件 | 角色 | License | 訓練狀態 |
+|------|------|:------:|:------:|
+| **GroundingDINO** | 開放詞彙物體偵測 | Apache 2.0 | 預訓 |
+| **SAM2.1** | 分割（每物體 mask） | Apache 2.0 | 預訓 |
+| **VGGT** | 點雲重建（NVIDIA 2025） | 各自 | 預訓 |
+| **DINOv2** | 視覺語意特徵 | 各自 | 預訓 |
+| **VLM API** | 任務規劃（GPT/Gemini/Claude 任選） | 第三方 | API 調用 |
+| **RAM 訓練** | `tools/ram_training/train_bop.py` | 待確認 | **本文唯一從零訓練的部分** |
+| **CAD meshes** | 物體模板（11 類） | SharePoint 連結 | 人工建模 |
+
+🧠 **觀察**：本論文「**不訓 VLM、不訓 3D foundation**」是真的——RAM 模組本身用 BOP-style 合成數據訓（BlenderProc）。其他全是預訓模型 + API 呼叫。**框架本質是 6 個成熟元件的智能組合**，創新在於**「組合方式 + RAG 範式遷移」**。
+
+⚠️ **License 風險**：repo 主代碼**未指定 license**（README 說「外部元件依各自 license」）。商用前必須逐個元件審查 + 自行洽詢作者。
+
+🔧 **硬體棧**（從 README 確認）：
+- 機械臂：**Fairino**（國產，非 Franka / UR）— IP 配置
+- 相機：**ZED + RealSense D435/D455**（雙相機，RGB-D）
+- OS：Ubuntu 22.04 / Python 3.10 / CUDA 12.8
+
+---
+
 ## 2. 數學核心：從模板到約束 (Math Core)
 
 ⚠️ **本節為作者推論結構**——具體公式 / 符號等待原文確認。
@@ -226,9 +265,13 @@ Step 3: TrajOpt
 | **圖像引導 - 平面** | **92%** | 餐具擺放類 |
 | **圖像引導 - 高低平面** | **72%** | 立體場景仍有約 25% 提升空間 |
 | **桌面清掃 + 工具選擇** | **65%** | 自主規劃借助簸箕等中介工具 |
-| **VLM 兼容性** | 接入「多種代表性 VLM」 | ⚠️ 具體型號（GPT-4o/Gemini/Claude）論文未明列 |
-| **訓練資源** | 主要用合成數據訓 M2 | M1/M3 不訓——成本主要在 M2 |
-| **代碼/資料** | ⚠️ DeepTech 訪談未提及 | **未驗證是否開源** |
+| **VLM 兼容性** | API 模式（GitHub `languages/` 目錄） | 任意支援 OpenAI-compat 的模型可接入 |
+| **訓練資源** | 只訓 RAM 模組（BOP-style 合成數據 via BlenderProc） | 其餘 6 個元件全預訓 — 訓練成本極低 |
+| **代碼/資料** | ✅ **已開源**（[RetrievalManip 組織](https://github.com/RetrievalManip/Retrieval-augmented-Manipulation)） | ⚠️ License 未明列；CAD meshes via SharePoint |
+| **機械臂** | **Fairino**（國產） | 非 Franka/UR — 跨形態遷移待驗證 |
+| **相機棧** | **ZED + RealSense D435/D455** | 雙相機 RGB-D |
+| **OS / Python** | Ubuntu 22.04 / Python 3.10 / CUDA 12.8 | 硬性依賴 |
+| **倉庫成熟度** | Stars=4, Forks=0 (release 後不久) | 社群驗證尚未發生 |
 
 **部署約束**：
 - 11 類起步——日常物體覆蓋夠用，**但開放世界（廚房特殊器具、工業零件）需擴模板庫**
@@ -322,33 +365,42 @@ Step 3: TrajOpt
 
 ## 8. 待追問的開放問題
 
-> 來源混合（DeepTech 訪談 + 期刊摘要 + Science Robotics paywall）。**未取得 PDF 原文**，下列為可信度標記後的問題：
+> 取得 GitHub repo 後，部分問題已答；剩餘待**原 PDF + 補充材料**確認：
 
-1. **代碼是否開源**？訪談未提；Science Robotics 通常要求 data/code availability statement——需查原文補充材料
-2. **VLM 對比**：「接入多種代表性 VLM」具體是哪幾個（GPT-4o vs Gemini vs Claude vs Qwen）？相對表現差異？
-3. **Baseline 定量對比**：RAM vs VoxPoser / ReKep / π0.5 在同一個 task suite 的成功率差幾個百分點？訪談沒提
-4. **成功率細粒度**：89.17% 中單步 vs 多步分別是多少？訪談給總體 89.17 + 多步 80，**單步單物體未列**
-5. **Sim2real gap**：M2 用合成數據訓，論文聲稱「展現對未見物體實例的泛化能力」——但有沒有量化「合成→真實」的性能下降？
-6. **觸覺整合的成功率**：訪談提及，但無數字
-7. **VLM context 長度**：當場景 10+ 物體時，retrieved JSON 多大？會不會吃到 context window 上限？
-8. **TrajOpt 求解器**：用 OMPL? CHOMP? Differentiable optimization? 收斂率多少？
-9. **長程任務上限**：80% 是「多物體多步」最高難度——具體幾步？10 步以上的長程任務有沒有測？
-10. **failure mode 統計**：失敗的那 11% / 20% / 35% 各自是什麼類型（grounding 錯、規劃錯、執行錯）？
+**已答（從 GitHub README 確認）**：
+- ~~代碼是否開源~~ → ✅ **已開源**（[RetrievalManip 組織](https://github.com/RetrievalManip/Retrieval-augmented-Manipulation)，但 license 未明列）
+- ~~VLM API 形式~~ → ✅ **`languages/` 目錄做 API client + prompt**——任意 OpenAI-compat 模型可換
+- ~~硬體~~ → ✅ **Fairino arm + ZED + RealSense D435/D455**
+
+**仍未答**（待 PDF / 補材確認）：
+1. **VLM 對比定量**：repo 是 API 介面，但**論文是否報告 GPT-4o vs Gemini 的成功率差異**？
+2. **Baseline 定量對比**：RAM vs VoxPoser / ReKep / π0.5 / CodeGraphVLP 在 same task suite 的成功率差？訪談沒提
+3. **成功率細粒度**：89.17% 中**單步 vs 多步**分布；多步 80% **是 2 步、3 步還是 5 步**？
+4. **Sim2real gap 量化**：BOP-style 合成數據訓 RAM → 真實場景**性能下降百分比**？
+5. **觸覺整合成功率**：訪談提及，無數字
+6. **VLM context 長度**：場景 10+ 物體時 retrieved JSON 多大？會吃到 context window 上限嗎？
+7. **TrajOpt 求解器**：repo `planner/` 目錄但具體用 OMPL / CHOMP / 可微分優化哪一個？收斂率？
+8. **長程任務上限**：80% 是「多步」最高難度——具體**幾步**？10 步以上有測嗎？
+9. **failure mode 統計**：失敗的 11% / 20% / 35% 各自是 grounding 錯 / 規劃錯 / 執行錯？哪個是主因？
+10. **License 商用風險**：repo 未指定 license——是否 MIT/Apache？商用前必須與 CUHK 確認
 
 📎 **內容類型可信度**：
 
 | 來源 | 可信度 | 對應內容 |
 |------|--------|---------|
 | Science Robotics（peer-reviewed） | 🟢 **高**（但未直接讀到原文） | 論文存在性、3 模組架構、實驗規模 |
+| **GitHub 代碼倉庫** | **🟢 高（直接源碼）** | **4 步管線、Fairino 硬體、外部依賴清單、訓練腳本路徑** |
 | DeepTech 第一作者訪談 | 🟡 中高 | 具體數字 89.17/80/92/72/65、擴展（鉸接/柔性/觸覺） |
 | 期刊封面/標題 | 🟢 高 | 論文題目、DOI、Issue |
 
 ---
 
 📎 **來源**：
-- 期刊: https://www.science.org/doi/10.1126/scirobotics.aea2092 （**訂閱牆**，本文未直接核對）
+- 期刊: https://www.science.org/doi/10.1126/scirobotics.aea2092 （**訂閱牆**，本文未直接核對 PDF）
 - Cite: Chen K, Li C, Tu C, et al. *Science Robotics*. 2026; 11(113):eaea2092
+- **代碼**: https://github.com/RetrievalManip/Retrieval-augmented-Manipulation （Stars=4, Forks=0；license 未指定）
 - 媒體訪談: DeepTech 第一作者陳凱訪談（2026 年）
+- 上游依賴: GroundingDINO · SAM2.1 · DINOv2 · VGGT (NVIDIA) · BlenderProc · Fairino SDK · ZED/RealSense bindings
 - 對比基線: Code-as-Policies (Liang 2023) · ReKep (Huang 2024) · VoxPoser (Huang 2023) · π0.5 (Black 2025) · CodeGraphVLP (2026) · Hi-Robot
 
 🧠 **本文判讀（作者觀點）**：
