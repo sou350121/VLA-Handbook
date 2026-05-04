@@ -89,6 +89,9 @@ VLA 的核心思想很简单：拿一个视觉语言模型（VLM），给它装�
 | [研究主线梳理](vla-core/vla_research_mainline.md) | 赌注清单：该赌哪条路 |
 | [Xiaomi-Robotics-0](vla-core/xiaomi_robotics_0_dissection.md) | 4.7B Qwen3-VL+DiT，三技巧封住异步推理的 shortcut（Apache 2.0） |
 
+
+📂 **完整目錄**：[vla-core/README.md](./vla-core/README.md) — 含「從哪裡開始」+ 主題分組
+
 </details>
 
 &nbsp;
@@ -105,6 +108,9 @@ VLA 的核心思想很简单：拿一个视觉语言模型（VLM），给它装�
 | [**主线总纲**](diffusion-flow/diffusion_flow_mainline.md) | 动作生成的完整研究地图 |
 | [Diffusion Policy 详解](diffusion-flow/diffusion_policy.md) | 从 DDPM 到机器人动作生成 |
 | [动作生成范式详解](diffusion-flow/action_representations.md) | 离散 vs 连续、分块 vs 流式 |
+
+
+📂 **完整目錄**：[diffusion-flow/README.md](./diffusion-flow/README.md) — 含「從哪裡開始」+ 主題分組
 
 </details>
 
@@ -125,6 +131,9 @@ VLA 的核心思想很简单：拿一个视觉语言模型（VLM），给它装�
 | [LDA-1B](world-model/lda_1b_dissection.md) | DINO 隐空间统一 World+Action Model，3.4 万小时异构数据 scaling |
 | [Lyra 2.0](world-model/lyra2_dissection.md) | 3D 缓存路由 + 自污染训练，对抗长轨迹 spatial forgetting / temporal drifting（Apache 2.0） |
 
+
+📂 **完整目錄**：[world-model/README.md](./world-model/README.md) — 含「從哪裡開始」+ 主題分組
+
 </details>
 
 &nbsp;
@@ -143,6 +152,9 @@ VLA 的核心思想很简单：拿一个视觉语言模型（VLM），给它装�
 | [VLA+RL 实战教程](rl/vla_rl_practical_guide.md) | 架构选型、算法选择、工具链搭建 |
 | [π0.6 / RECAP](rl/pi0_6_recap_rl_as_supervised_learning.md) | 披着 RL 外衣的 Supervised Learning？ |
 
+
+📂 **完整目錄**：[rl/README.md](./rl/README.md) — 含「從哪裡開始」+ 主題分組
+
 </details>
 
 &nbsp;
@@ -159,6 +171,9 @@ VLA 的核心思想很简单：拿一个视觉语言模型（VLM），给它装�
 | [**主线总纲**](tactile/tactile_mainline.md) | 触觉研究的完整地图 |
 | [触觉感知与 VLA](tactile/tactile_vla.md) | 为什么触觉是 VLA 的"最后一公里" |
 
+
+📂 **完整目錄**：[tactile/README.md](./tactile/README.md) — 含「從哪裡開始」+ 主題分組
+
 </details>
 
 &nbsp;
@@ -174,6 +189,9 @@ VLA 的 V 代表 Vision，但机器人视觉远不止图像分类。需要从 2D
 |---------|------|
 | [**主线总纲**](perception/perception_mainline.md) | 感知研究的完整地图 |
 | [视觉与多模态感知](perception/perception_techniques.md) | VLA 的眼睛怎么工作 |
+
+
+📂 **完整目錄**：[perception/README.md](./perception/README.md) — 含「從哪裡開始」+ 主題分組
 
 </details>
 
@@ -195,6 +213,9 @@ VLA 的 V 代表 Vision，但机器人视觉远不止图像分类。需要从 2D
 | [ManiDreams](planning/manidreams_dissection.md) | 不押注 backend，把"预测模糊"显式建模并约束到规划器 |
 | [RAM ⚡](planning/ram_dissection.md) | RAG meets manipulation：类别级 3D 知识库外挂给 VLM（**Science Robotics 2026**） |
 
+
+📂 **完整目錄**：[planning/README.md](./planning/README.md) — 含「從哪裡開始」+ 主題分組
+
 </details>
 
 &nbsp;
@@ -211,6 +232,9 @@ VLA 的 V 代表 Vision，但机器人视觉远不止图像分类。需要从 2D
 | [**主线总纲**](foundation/foundation_mainline.md) | 基础技术工具箱地图 |
 | [VLA 数学必备](foundation/math_for_vla.md) | 张量、旋转矩阵、SE(3)——VLA 的数学语言 |
 | [Loss Functions 手册](foundation/vla_loss_functions_handbook.md) | 每种训练目标的直觉解释 |
+
+
+📂 **完整目錄**：[foundation/README.md](./foundation/README.md) — 含「從哪裡開始」+ 主題分組
 
 </details>
 
@@ -229,6 +253,9 @@ VLA 的 V 代表 Vision，但机器人视觉远不止图像分类。需要从 2D
 | [机械臂控制](deployment/robot_control.md) | 运动学、动力学与控制的工程入门 |
 | [Isaac Lab](deployment/isaac_lab.md) | NVIDIA 的 GPU 加速仿真平台 |
 
+
+📂 **完整目錄**：[deployment/README.md](./deployment/README.md) — 含「從哪裡開始」+ 主題分組
+
 </details>
 
 &nbsp;
@@ -244,6 +271,9 @@ VLA 的 V 代表 Vision，但机器人视觉远不止图像分类。需要从 2D
 |---------|------|
 | [**主线总纲**](frontier/frontier_mainline.md) | 跨域灵感的完整地图 |
 | [Physics of AI](frontier/physics_of_ai_liuziming.md) | 不赌规模，把神经网络当物理系统 |
+
+
+📂 **完整目錄**：[frontier/README.md](./frontier/README.md) — 含「從哪裡開始」+ 主題分組
 
 </details>
 
