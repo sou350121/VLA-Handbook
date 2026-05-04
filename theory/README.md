@@ -26,25 +26,25 @@
 
 ```mermaid
 graph TD
-    START["⚔️ START HERE"] --> CORE["🏛️ Central Keep<br/>VLA 核心架构<br/><b>45 篇</b>"]
+    START["⚔️ START HERE"] --> CORE["🏛️ Central Keep<br/>VLA 核心架构<br/><b>51 篇</b>"]
 
     CORE --> FLOW["🌊 Flow River<br/>扩散 · Flow Matching<br/>16 篇"]
-    CORE --> WORLD["🌍 World Realm<br/>世界模型 · 仿真<br/>26 篇"]
-    CORE --> RL["🎮 Training Arena<br/>强化学习 · 奖励<br/>17 篇"]
+    CORE --> WORLD["🌍 World Realm<br/>世界模型 · 仿真<br/>38 篇"]
+    CORE --> RL["🎮 Training Arena<br/>强化学习 · 奖励<br/>19 篇"]
 
-    FLOW --> PLAN["🧠 Strategy Hall<br/>推理 · 安全 · 规划<br/>31 篇"]
+    FLOW --> PLAN["🧠 Strategy Hall<br/>推理 · 安全 · 规划<br/>41 篇"]
     WORLD --> PLAN
     RL --> PLAN
 
-    PLAN --> TOUCH["🤚 Touch Cavern<br/>触觉感知<br/>24 篇"]
-    PLAN --> EYE["👁️ Vision Tower<br/>3D · SLAM<br/>19 篇"]
+    PLAN --> TOUCH["🤚 Touch Cavern<br/>触觉感知<br/>26 篇"]
+    PLAN --> EYE["👁️ Vision Tower<br/>3D · SLAM<br/>20 篇"]
 
-    TOUCH --> DEPLOY["🔧 Workshop<br/>部署 · 硬件<br/>22 篇"]
+    TOUCH --> DEPLOY["🔧 Workshop<br/>部署 · 硬件<br/>25 篇"]
     EYE --> DEPLOY
 
     DEPLOY --> FRONTIER["🔬 Frontier Wilds<br/>跨域 · 神经科学<br/>19 篇"]
 
-    FOUND["🏗️ Foundation Mines<br/>基础理论 · 工具箱<br/>35 篇"] -.->|随时查阅| CORE
+    FOUND["🏗️ Foundation Mines<br/>基础理论 · 工具箱<br/>42 篇"] -.->|随时查阅| CORE
     FOUND -.-> FLOW
     FOUND -.-> RL
 
@@ -74,7 +74,7 @@ graph TD
 &nbsp;
 
 <details open>
-<summary><h3>🏛️ Central Keep — VLA 核心架构 &nbsp;<code>34 篇</code></h3></summary>
+<summary><h3>🏛️ Central Keep — VLA 核心架构 &nbsp;<code>51 篇</code></h3></summary>
 
 **一句话**：所有 VLA 模型的"解剖室"。
 
@@ -94,7 +94,7 @@ VLA 的核心思想很简单：拿一个视觉语言模型（VLM），给它装�
 &nbsp;
 
 <details>
-<summary><h3>🌊 Flow River — 扩散策略与 Flow Matching &nbsp;<code>12 篇</code></h3></summary>
+<summary><h3>🌊 Flow River — 扩散策略与 Flow Matching &nbsp;<code>16 篇</code></h3></summary>
 
 **一句话**：机器人的动作是"画"出来的，不是"算"出来的。
 
@@ -111,7 +111,7 @@ VLA 的核心思想很简单：拿一个视觉语言模型（VLM），给它装�
 &nbsp;
 
 <details>
-<summary><h3>🌍 World Realm — 世界模型与仿真 &nbsp;<code>25 篇</code></h3></summary>
+<summary><h3>🌍 World Realm — 世界模型与仿真 &nbsp;<code>38 篇</code></h3></summary>
 
 **一句话**：让机器人在"脑子里"先试一遍，再决定怎么做。
 
@@ -130,7 +130,7 @@ VLA 的核心思想很简单：拿一个视觉语言模型（VLM），给它装�
 &nbsp;
 
 <details>
-<summary><h3>🎮 Training Arena — 强化学习 &nbsp;<code>15 篇</code></h3></summary>
+<summary><h3>🎮 Training Arena — 强化学习 &nbsp;<code>19 篇</code></h3></summary>
 
 **一句话**：模仿学习有天花板，RL 帮 VLA 突破它。
 
@@ -148,7 +148,7 @@ VLA 的核心思想很简单：拿一个视觉语言模型（VLM），给它装�
 &nbsp;
 
 <details>
-<summary><h3>🤚 Touch Cavern — 触觉感知 &nbsp;<code>21 篇</code></h3></summary>
+<summary><h3>🤚 Touch Cavern — 触觉感知 &nbsp;<code>26 篇</code></h3></summary>
 
 **一句话**：闭上眼睛你也能系鞋带——因为手指在"看"。
 
@@ -164,7 +164,7 @@ VLA 的核心思想很简单：拿一个视觉语言模型（VLM），给它装�
 &nbsp;
 
 <details>
-<summary><h3>👁️ Vision Tower — 视觉与 3D 感知 &nbsp;<code>15 篇</code></h3></summary>
+<summary><h3>👁️ Vision Tower — 视觉与 3D 感知 &nbsp;<code>20 篇</code></h3></summary>
 
 **一句话**：机器人的"眼睛"不只是拍照——要理解深度、空间和运动。
 
@@ -180,7 +180,7 @@ VLA 的 V 代表 Vision，但机器人视觉远不止图像分类。需要从 2D
 &nbsp;
 
 <details>
-<summary><h3>🧠 Strategy Hall — 推理、规划与安全 &nbsp;<code>30 篇</code></h3></summary>
+<summary><h3>🧠 Strategy Hall — 推理、规划与安全 &nbsp;<code>41 篇</code></h3></summary>
 
 **一句话**：让机器人"先想再做"，而且不伤害人。
 
@@ -200,7 +200,7 @@ VLA 的 V 代表 Vision，但机器人视觉远不止图像分类。需要从 2D
 &nbsp;
 
 <details>
-<summary><h3>🏗️ Foundation Mines — 基础理论 &nbsp;<code>30 篇</code></h3></summary>
+<summary><h3>🏗️ Foundation Mines — 基础理论 &nbsp;<code>42 篇</code></h3></summary>
 
 **一句话**：不按顺序读——当你在其他区域遇到"这是什么？"时，回来查。
 
@@ -217,7 +217,7 @@ VLA 的 V 代表 Vision，但机器人视觉远不止图像分类。需要从 2D
 &nbsp;
 
 <details>
-<summary><h3>🔧 Workshop — 部署与硬件 &nbsp;<code>18 篇</code></h3></summary>
+<summary><h3>🔧 Workshop — 部署与硬件 &nbsp;<code>25 篇</code></h3></summary>
 
 **一句话**：仿真里成功率 95% 的模型，到真机上可能只有 30%。
 
@@ -234,7 +234,7 @@ VLA 的 V 代表 Vision，但机器人视觉远不止图像分类。需要从 2D
 &nbsp;
 
 <details>
-<summary><h3>🔬 Frontier Wilds — 前沿与跨域 &nbsp;<code>9 篇</code></h3></summary>
+<summary><h3>🔬 Frontier Wilds — 前沿与跨域 &nbsp;<code>19 篇</code></h3></summary>
 
 **一句话**：VLA 的下一步灵感，可能来自鸽子的内耳。
 
