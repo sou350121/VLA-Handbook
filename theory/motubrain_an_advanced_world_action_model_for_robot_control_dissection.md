@@ -1,352 +1,279 @@
-# MotuBrain：面向机器人控制的世界-动作统一模型 (MotuBrain: An Advanced World Action Model for Robot Control)
+# MotuBrain：面向机器人控制的世界-动作统一生成模型 (MotuBrain: An Advanced World Action Model for Robot Control)
 
 > ⚙️ 本文由 Moltbot 自动生成 | 2026-05-04
 >
 > **论文**: MotuBrain: An Advanced World Action Model for Robot Control
 > **链接**: https://arxiv.org/abs/2604.27792
-> **核心定位**: 在 UniDiffuser 框架下将视频生成与动作预测统一到单一模型，用一套权重同时实现 VLA 策略、世界模型、视频生成、逆动力学和联合预测五种推理模式，并通过系统级推理优化实现 54x 加速至 11 Hz 实时控制。
+> **核心定位**: 在 UniDiffuser 框架下将视频生成与动作预测统一到单一 MoT 架构中，一个模型同时胜任 VLA 策略、世界模型、视频生成、逆动力学、联合预测五种推理模式，并通过 V2A 非对称注意力 + 推理栈优化实现 54× 加速至 11 Hz。
 
-## ⚡ 快速判斷
+## ⚡ 快速判斷（30 秒讀完這段就夠了）
 
 | 維度 | 判斷 |
 |------|------|
-| 核心結論 | 用 UniDiffuser + 三流 MoT 架构将视频生成与动作预测统一建模，单一模型同时胜任策略执行与世界预测，RoboTwin 2.0 上 95.8%/96.1%（clean/randomized），WorldArena EWMScore 63.77 第一 |
-| 適合精讀 | 做多模态具身 Agent 的研究者；需要评估世界模型+策略统一架构可行性的工程师；关注推理加速（FP8/DiT Cache/V2A）的部署团队 |
-| 可以跳過 | 只做纯 VLA 策略学习、不关心世界建模或推理效率的研究者 |
-| 落地可行性 | 中（需 Vidu VAE 作为基础模型 + FP8 -capable GPU；预训练权重未开源） |
-| 主要風險 | 预训练依赖闭源 Vidu 视频生成模型；实验仅在双臂桌面操作和人形机器人上验证，泛化性待考察 |
+| 核心結論 | 世界模型与动作预测可在同一扩散架构下联合建模，无需 VGM+IDM 两阶段解耦 |
+| 適合精讀 | 做具身智能基础模型、世界模型驱动策略、扩散策略推理加速的研究者 |
+| 可以跳過 | 只关心纯视觉语言推理（不涉及动作生成）或纯模仿学习的场景 |
+| 落地可行性 | 中（需要 Vidu VAE 基础模型 + FP8 GPU；推理栈优化方案可迁移） |
+| 主要風險 | 依赖闭源 Vidu 基础模型；实验仅在 RoboTwin 2.0 和单一双臂平台验证 |
 
 💡 **X-Ray 开场**
-传统 VLA 模型从静态图像-文本数据预训练，缺乏对世界动态的细粒度建模。MotuBrain 的核心发现是：视频生成模型天然适合做世界模型——因为它们已经在海量视频上学会了物理世界的时空先验。通过将视频生成和动作预测统一到一个 UniDiffuser 框架中，MotuBrain 用同一套参数同时学会了"预测世界会怎样变化"和"我该做什么"，在 50 项 RoboTwin 任务上达到 95.8% 成功率，同时是世界建模基准 WorldArena 上得分最高的具身模型。对 VLA 研究者的启示：世界建模与策略学习不是两个问题，而是一个统一生成过程的两个侧面。
+
+传统 VLA 模型（如 OpenVLA、RT-2）在静态图像-文本对上预训练，缺乏对物理世界动态的细粒度理解。MotuBrain 的核心发现是：视频生成模型天然具备世界建模能力，通过在 UniDiffuser 框架下联合建模视频和动作两个连续模态，一个模型可以同时学会"预测未来"和"产生动作"。对 VLA 研究者的意义在于——世界模型和策略模型不再需要分别训练，统一架构既能提升预测精度，又能通过 V2A 非对称注意力实现推理加速。
 
 📍 **研究全景时间线**
+
 ```
-[2023] VLA 范式兴起 (RT-2, Octo)
-   ↓ 静态图像预训练 → 缺乏世界动态建模
-[2024-25] VGM + IDM 两阶段范式 (RoboDreamer, Vidar)
-   ↓ 视频预测误差累积 → 动作精度下降
-[2025] WAM 统一范式萌芽 (Motus, Cosmos-World, Genie)
-   ↓ 首次统一视频+动作，但功能有限
-[2026-04] ← MotuBrain [本文]
-   → 三流 MoT + H-Bridge + V2A 推理 + 完整部署栈
-   ← 局限：闭源基础模型、仅双臂/人形验证
+[2023] RT-2 (VLA 开山) → [2024] OpenVLA (开源 VLA) → [2025] VGM+IDM 两阶段范式 (Vidar/RoboDreamer)
+→ [2025] Motus (首个 WAM，UniDiffuser + MoT) → [2026-04] MotuBrain (本文) ← 当前位置
+                                                                    ↑
+                                    改进：多视角统一 + 独立文本流 + 跨具身动作表征
+                                    + V2A 非对称注意力 + 54× 推理加速
 ```
 
-## 1. 核心架构/方法总览
+## 1. 核心架构/方法总览 (Overview / Architecture)
 
-### 1.1 系统对比概览
+### 1.1 系统对比概览 (System Component Comparison)
 
-| 组件 | 输入 | 输出 | 训练方式 | 推理模式 |
+| 组件 | 输入 | 输出 | 训练方式 | 推理角色 |
 |------|------|------|----------|----------|
-| Text Stream | 语言指令 tokens | 隐藏状态（无输出头） | 参与 cross-attention | 全模式共享 |
-| Video Stream | Vidu VAE 编码的条件帧 + 噪声视频潜变量 | 视频速度场（flow matching） | 仅视频 loss (Stage 1) / 联合 loss (Stage 2) | VLA / WM / VGM / IDM / Joint |
-| Action Stream | 噪声动作 tokens | 动作速度场（flow matching） | 仅动作 loss (Stage 2) / 联合 loss | VLA / IDM / Joint |
-| H-Bridge Attention | 三流 tokens | 分层注意力掩码 | 固定设计 | 全模式共享 |
+| **Text Stream** | 语言指令 tokens | 隐藏态（无输出头） | 参与 Cross-Attention | 条件分支，提升语义理解 |
+| **Video Stream** | 条件图像 VAE latent + 噪声视频 latent | 视频 latent 速度场 | Flow Matching (MSE) | 世界模型 / 视频生成 |
+| **Action Stream** | 噪声动作 tokens | 动作 tokens 速度场 | Flow Matching (MSE) | VLA 策略 / 逆动力学 |
+| **H-Bridge Attention** | 三层注意力掩码 | 跨模态交互控制 | 固定结构 | 中层 50% 全联合，上下 25% 解耦 |
+| **UniDiffuser Scheduler** | 双模态 SNR 采样 | 联合去噪调度 | 独立 timeshift | 视频 timeshift=6，动作 timeshift=1 |
 
-**五种推理模式**（同一模型，不同 conditioning）：
+### 1.2 关键机制 (Key Mechanism)
 
-| 模式 | 目标分布 | 用途 |
-|------|----------|------|
-| VLA | p(a\_{t+1:t+k} \| o\_t, ℓ) | 策略执行 |
-| 世界模型 | p(o\_{t+1:t+k} \| o\_t, a\_{t+1:t+k}) | 前向动力学预测 |
-| 逆动力学 | p(a\_{t+1:t+k} \| o\_{t:t+k}) | 从观测反推动作 |
-| 视频生成 | p(o\_{t+1:t+k} \| o\_t, ℓ) | 纯视频生成 |
-| 联合预测 | p(o\_{t+1:t+k}, a\_{t+1:t+k} \| o\_t, ℓ) | 同时预测视频+动作 |
+**五合一推理模式**：基于 UniDiffuser 的统一视频-动作建模范式，同一模型通过不同的条件-目标组合支持五种推理模式：
 
-### 1.2 关键机制
+| 模式 | 条件 | 目标 | 公式 |
+|------|------|------|------|
+| VLA 策略 | 观测 o_t + 语言 ℓ | 未来动作 a_{t+1:t+k} | p(a\|o, ℓ) |
+| 世界模型 | 观测 o_t + 动作 a_{t+1:t+k} | 未来视频 o_{t+1:t+k} | p(o\|o, a) |
+| 逆动力学 | 观测序列 o_{t:t+k} | 动作 a_{t+1:t+k} | p(a\|o) |
+| 视频生成 | 观测 o_t + 语言 ℓ | 未来视频 o_{t+1:t+k} | p(o\|o, ℓ) |
+| 联合预测 | 观测 o_t + 语言 ℓ | 视频 + 动作 | p(o, a\|o, ℓ) |
 
-**三流 Mixture-of-Transformers (MoT)**：
-- Text stream：纯 conditioning 分支，不参与输出，但通过 cross-attention 影响 video/action
-- Video stream：flow matching 预测视频潜变量速度场
-- Action stream：flow matching 预测动作 tokens 速度场
+**H-Bridge 注意力设计**：不采用全层视频-动作联合注意力，而是将 Transformer 层分为三段——底层 25% 解耦（各模态独立处理）、中层 50% 全联合（跨模态交互）、顶层 25% 解耦（模态特异性精炼）。这减少了密集跨模态注意力的计算开销，同时保留了中间层的语义对齐能力。
 
-**H-Bridge Attention 设计**（关键效率创新）：
-- 底层 25% 层：video 和 action 独立处理（解耦注意力）
-- 中间 50% 层：video-action 联合注意力（跨模态交互）
-- 顶层 25% 层：再次解耦（保留模态特异性表示）
-- 效果：减少密集 cross-modal attention 成本，同时保持中间层的语义对齐
+**多视角统一表示**：每个相机视角独立通过 Vidu VAE 编码后在 token 级拼接，利用 3D RoPE 在空间维度引入视角相关偏移（时间维度不变），将不同视角映射到共享空间位置编码的不同区域，无需修改骨干架构即可支持任意数量相机。
 
-**统一多视角表示**：
-- 每个视角独立经 Vidu VAE 编码，在 token 级拼接
-- 利用 3D RoPE，仅在空间维度引入视角相关偏移，时间维度不变
-- 支持任意数量相机视角，无需修改 backbone
+**统一跨具身动作表征**：将所有机器人的末端执行器动作转换为相对于条件帧的相对坐标——位置直接相减、旋转用参考旋转的逆做复合、夹爪状态保持不变。这使不同机器人平台的动作空间对齐，减少目标具身适配所需的数据量。
 
-⚡ **Eureka Moment**：视频生成和动作预测不是两个独立任务——它们是一个统一生成过程的两个侧面。通过 UniDiffuser 在同一个连续潜空间中联合建模视频和动作，模型可以同时学会"预测世界"和"控制世界"，且能从视频-only、任务无关、跨具身等异构数据中受益。
+⚡ **Eureka Moment**：视频生成模型本质上是世界模型——当它被动作条件化时，联合建模视频和动作比先预测视频再反推动作（VGM+IDM）更准确、更高效，因为避免了误差级联。
 
-### 1.3 信息流/架构图
+### 1.3 信息流/架构图 (Flow / Diagram)
 
 ```
-                    ┌─────────────────────────────────────────────┐
-                    │              MotuBrain (Unified WAM)         │
-                    │                                             │
-  Text (ℓ) ──────→  │  ┌──────────┐    ┌──────────┐              │
-                    │  │   Text   │───▶│   H-     │              │
-                    │  │  Stream  │    │  Bridge  │              │
-                    │  │(cond only)│   │ Attention│              │
-  Obs (o_t) ──────▶ │  └──────────┘    └────┬─────┘              │
-  (Vidu VAE)        │                       │                    │
-       │            │         ┌─────────────┼─────────────┐      │
-       ▼            │         ▼             ▼             ▼      │
-  Cond Image ────▶  │   ┌──────────┐  ┌──────────┐  ┌──────────┐│
-  (z_0, forced)    │   │ Video    │  │  Action  │  │  (Text   ││
-                    │   │ Stream   │  │  Stream  │  │  hidden) ││
-  Noisy (z_v, z_a)─▶│   │(flow    │  │ (flow    │  │          ││
-                    │   │ match)  │  │ match)   │  │          ││
-       │            │   └────┬───┘  └────┬─────┘  └──────────┘│
-       ▼            │        │           │                     │
-  Future Frames ──  │   ŷ_v  │           │  â                  │
-  (optional)        │        ▼           ▼                     │
-                    │    Video Decode   Action Execute          │
-                    └─────────────────────────────────────────────┘
-
-  推理模式切换通过 UniDiffuser 的独立 SNR timestep scheduling 实现：
-  - VLA: 仅采样 action stream (video 被 obs 条件化)
-  - WM:  仅采样 video stream (action 被条件化)
-  - 依此类推...
+┌─────────────────────────────────────────────────────────────────┐
+│                    MotuBrain 端到端信息流                        │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│  语言指令 ℓ  ──→ [Text Stream]                                  │
+│                       │                                         │
+│  条件图像 o_t  ──→ [Vidu VAE] ──→ z_0 (condition latent)        │
+│                       │                                         │
+│  噪声视频 z_v  ──→ [Video Stream] ←── Flow Matching (timeshift=6)│
+│                       │                                         │
+│  噪声动作 z_a  ──→ [Action Stream] ←── Flow Matching (timeshift=1)│
+│                       │                                         │
+│              ┌────────┴────────┐                                │
+│              │  H-Bridge Attn  │                                │
+│              │  ┌───────────┐  │                                │
+│              │  │ Bottom 25% │→│ 解耦: V-only, A-only           │
+│              │  │ Middle 50% │→│ 联合: V↔A cross-attn           │
+│              │  │ Top 25%    │→│ 解耦: V-only, A-only           │
+│              │  └───────────┘  │                                │
+│              └────────┬────────┘                                │
+│                       │                                         │
+│              [UniDiffuser Scheduler]                            │
+│                       │                                         │
+│              ┌────────┴────────┐                                │
+│              ▼                 ▼                                │
+│        v_out (速度场)    a_out (速度场)                         │
+│              │                 │                                │
+│        [去噪积分]         [去噪积分]                            │
+│              │                 │                                │
+│        未来视频帧        未来动作序列                             │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
 ```
 
-## 2. 数学核心
+## 2. 数学核心 (Math Core)
 
-### 📌 Napkin Formula
+📌 **Napkin Formula**（一行抓住本质）：
 
 ```
-L = λ_v · MSE(v_out, v_target) + λ_a · MSE(a_out, a_target)
+L = λ_v · MSE(v_θ(z_v^t, t_v | z_0, ℓ), v_target)
+  + λ_a · MSE(a_θ(z_a^t, t_a | z_0, ℓ), a_target)
 ```
 
-**目标**：在 UniDiffuser 统一框架下，用 flow matching 同时学习视频和动作的速度场预测，使单一模型支持五种推理模式。
+**目标**：在 UniDiffuser 框架下，用两个独立的 Flow Matching 速度场预测器（视频流 + 动作流）联合建模视频和动作的连续模态分布，通过独立 SNR 采样调度实现多模态联合去噪。
 
 **公式分解**：
 
 | 符号 | 含义 |
 |------|------|
-| L | 总损失（Stage 2） |
+| z_v^t, z_a^t | 第 t 步的视频/动作噪声 latent |
+| z_0 | 条件帧 latent（teacher-forced） |
+| ℓ | 语言指令 tokens |
+| v_θ, a_θ | 视频/动作速度场预测网络 |
+| v_target, a_target | 对应的目标速度场（ground truth） |
+| t_v, t_a | 独立采样的视频/动作扩散时间步 |
+| timeshift=6/1 | 视频倾向于更噪声区域采样，动作更均匀采样 |
 | λ_v, λ_a | 视频/动作损失权重 |
-| v_out, a_out | 模型预测的视频/动作速度场 |
-| v_target, a_target | 真实速度场（从数据构造） |
-| MSE | 均方误差（flow matching 的标准损失） |
 
-**两阶段预训练**：
+**直觉**：视频和动作共享同一个 Transformer  backbone，但各自有独立的去噪时间和速度场预测。视频用更大的 timeshift（更噪声）让模型学会在模糊视觉条件下依然预测准确动作——这本质上是在做"鲁棒的条件化动作生成"。
 
-Stage 1（仅视频分支）：
-```
-L_stage1 = L_v = MSE(v_out, v_target)
-```
-- 从预训练 Vidu 权重初始化
-- 在 ego-centric + 异构具身数据上训练视频分支
-- 动作分支随机初始化，不参与更新
+> 符号与本文保持一致：z 表示 VAE latent，o 表示原始观测，a 表示动作，ℓ 表示语言指令。动作维度为 10D（3D 位置 + 6D 旋转 + 1D 夹爪），采用相对于条件帧的相对坐标表示。
 
-Stage 2（联合训练）：
-```
-L_stage2 = λ_v · L_v + λ_a · L_a
-```
-- 冻结视频分支，仅更新动作分支
-- 使用统一相对末端执行器动作表示
+## 3. 带数字走一遍：玩具例子 (Worked Example)
 
-**相对末端执行器动作表示**（跨具身泛化的关键）：
-```
-e_rel_i = e_abs_i ⊖ s
-      = (p_i - p_s,  R_s^{-1} · R_i,  g_i)
-```
-其中 s 是条件帧的末端执行器状态，⊖ 表示分量级位姿差。
+假设一个简化的 2D 机械臂抓取场景：
 
-**独立 SNR timestep sampling**（鲁棒性关键）：
-```
-timeshift_video = 6    → 视频 timestep 偏向更噪声区域
-timeshift_action = 1   → 动作 timestep 更均匀分布
-```
+**初始状态**：
+- 条件帧 o_t：机械臂在位置 (0, 0)，夹爪打开
+- 语言指令 ℓ："把红色方块移到左边"
+- 未来 K=4 帧视频需要预测
 
-> 符号与本文保持一致：o_t 为观测，a_t 为动作，ℓ 为语言指令，z 为 VAE 潜变量，v/a 为速度场。
+**Step 1 — 编码**：
+- z_0 = Vidu VAE(o_t) → 假设 latent 维度 [4, 64, 64]
+- ℓ 通过 tokenizer → 16 个 tokens
 
-## 3. 带数字走一遍：玩具例子
+**Step 2 — 加噪**：
+- 视频 latent：从 t_v ~ U(noisy region, timeshift=6) 采样，假设 t_v = 45/50
+- 动作 latent：从 t_a ~ U(uniform, timeshift=1) 采样，假设 t_a = 25/50
+- z_v^t = sqrt(α_t) · z_target + sqrt(1-α_t) · ε
 
-假设一个简化的 2D 桌面操作场景：
+**Step 3 — 前向传播**：
+- Text tokens 进入 text stream → 16 个 hidden states
+- z_0 作为 condition 在 video stream 中 teacher-forced
+- z_v^t 和 z_a^t 分别进入 video/action stream
+- H-Bridge: 底层 25% 独立处理 → 中层 50% V↔A cross-attn → 顶层 25% 独立精炼
 
-**设定**：
-- 条件帧 o_t：机械臂在 (x=0.1, y=0.2) 处，目标物体在 (x=0.5, y=0.3)
-- 语言指令 ℓ："把物体移到左边"
-- 预测 horizon：K=3 个视频帧，每帧对应 S_a=5 个动作 token
+**Step 4 — 速度场预测**：
+- v_out = VideoStream(z_v^t, t_v, z_0, ℓ) → 预测速度场
+- a_out = ActionStream(z_a^t, t_a, z_0, ℓ) → 预测速度场
 
-**Stage 2 训练中的一步**：
+**Step 5 — 损失计算**（假设值）：
+- L_v = MSE(v_out, v_target) = 0.023
+- L_a = MSE(a_out, a_target) = 0.015
+- L = 1.0 × 0.023 + 1.0 × 0.015 = 0.038
 
-1. **编码**：条件帧经 Vidu VAE → z_0（视频流 teacher-forced）
-2. **加噪**：对 K=3 个未来视频帧 + K·S_a=15 个动作 token 加噪到 timestep t
-   - 视频 timestep：从 timeshift=6 的 SNR 分布采样 → 较噪声
-   - 动作 timestep：从 timeshift=1 的 SNR 分布采样 → 较干净
-3. **前向传播**：三流 MoT 处理噪声输入
-   - Text stream 编码 ℓ
-   - Video stream 预测速度场 v_out ∈ R^{3×d_v}
-   - Action stream 预测速度场 a_out ∈ R^{15×d_a}
-4. **损失计算**：
-   ```
-   L_v = MSE(v_out, v_target) = 0.0234    （视频速度场误差）
-   L_a = MSE(a_out, a_target) = 0.0156    （动作速度场误差）
-   L = 1.0 × 0.0234 + 1.0 × 0.0156 = 0.0390
-   ```
-5. **梯度更新**：仅更新 action branch 参数（video branch 冻结）
+**Step 6 — 推理（V2A 加速后）**：
+- 前 N=5 步：联合去噪 (z_v, z_a)
+- 后 25 步：仅更新 z_a，z_v 冻结 + KV cache
+- 最终动作序列：4 帧 × 每帧 2 个动作 = 8 个 10D 动作
 
-**推理时（VLA 模式）**：
+## 4. 工程视角 (Engineering View)
 
-假设使用全部推理优化后的配置：
-```
-Baseline:  50 steps × 95ms/step = 4.90s  (0.20 Hz)
-Optimized: 30 steps × (joint prefix + action-only suffix) = 0.09s  (11.11 Hz)
-```
+### 推理加速栈（来自论文 Table 2）
 
-具体加速链：
-- Noise sampling: 50→30 steps → 2.90s (1.69x)
-- torch.compile: 2.90→0.98s (5.00x)
-- FP8: 0.98→0.88s (5.57x)
-- DiT Cache: 0.88→0.20s (24.5x)
-- V2A-style: 0.20→0.09s (54.4x, 11.11 Hz)
-
-## 4. 工程视角
-
-### 推理延迟优化栈（从论文 Table 2）
-
-| 优化技术 | 步骤数 | 每步延迟 | 总延迟 | 频率 | 累计加速 |
+| 优化手段 | 步骤数 | 每步延迟 | 总延迟 | 频率 | 累计加速 |
 |----------|--------|----------|--------|------|----------|
-| Baseline | 50 | 95.0 ms | 4.90 s | 0.20 Hz | 1.00x |
-| + Noise sampling | 30 | 95.0 ms | 2.90 s | 0.34 Hz | 1.69x |
-| + torch.compile | 30 | 32.7 ms | 0.98 s | 1.02 Hz | 5.00x |
-| + FP8 quantization | 30 | 29.3 ms | 0.88 s | 1.14 Hz | 5.57x |
-| + DiT Cache | 30 | — | 0.20 s | 5.00 Hz | 24.5x |
-| + V2A-style | 30 (action-only) | — | 0.09 s | 11.11 Hz | 54.4x |
+| Baseline | 50 | 95.0 ms | 4.90 s | 0.20 Hz | 1× |
+| + Noise sampling | 30 | 95.0 ms | 2.90 s | 0.34 Hz | 1.69× |
+| + torch.compile | 30 | 32.7 ms | 0.98 s | 1.02 Hz | 5.00× |
+| + FP8 quantization | 30 | 29.3 ms | 0.88 s | 1.14 Hz | 5.57× |
+| + DiT cache | 30 | — | 0.20 s | 5.00 Hz | 24.5× |
+| + V2A-style | 30 (action-only) | — | 0.09 s | **11.11 Hz** | **54.4×** |
 
 **关键工程含义**：
 
-1. **V2A-style 推理是最大加速源**（24.5x → 54.4x）：通过训练时禁止 video→action 注意力，推理时可以在短 joint prefix 后冻结 video stream，仅更新 action tokens，消除重复的视频流计算。
+1. **torch.compile 贡献最大单步加速**（95→32.7 ms，2.9×），说明重复 DiT 前向的传播开销是主要瓶颈
+2. **DiT cache 贡献最大累计加速**（0.20s vs 0.88s，4.4×），利用去噪步骤间的时序冗余跳过部分计算
+3. **V2A-style 是质变点**：将视频流从后半程完全移除，达到 11 Hz 超过人类反应速度
+4. **FP8 量化损失可控**：论文声称在 RoboTwin 2.0 上成功率波动在亚百分级，说明量化后模型保真度基本不变
 
-2. **DiT Cache 利用时序冗余**：当连续两步速度预测余弦相似度 s_t > γ 时，跳过后续 DiT 评估并用历史预测近似。这在扩散采样的后期尤其有效（预测趋于稳定）。
+**部署约束**：
+- 需要 FP8 支持的 GPU（如 H100/Ada）
+- 模型为纯 PyTorch 单 GPU 推理架构
+- 推理循环与执行循环解耦：异步生成下一 chunk，当前 chunk 继续执行
+- Chunk 边界不连续问题通过 RTC 风格约束融合缓解
 
-3. **FP8 量化几乎无损**：在 float8_e4m3fn 格式下，论文报告 RoboTwin 成功率在优化/非优化配置间波动在 sub-percent 范围内。
+## 5. 数据与评测 (Data & Eval)
 
-4. **实时 chunked 执行**：推理循环与执行循环解耦。控制器以目标控制频率执行当前 chunk，模型异步生成下一个 chunk。采用 RTC 风格融合策略减少 chunk 边界不连续性——未执行部分作为约束，重叠区域用指数衰减权重融合：
-   ```
-   w_i = 1                  (0 ≤ i < d, 完全约束)
-   w_i = 1 - g(ρ_i)         (d ≤ i < L, 平滑过渡)
-   w_i = 0                  (i ≥ L, 完全新预测)
-   ```
-
-5. **部署约束**：需要 FP8-capable GPU（如 H100/Ada）；Vidu VAE 作为视频编码器（闭源）；模型参数量未公开（TODO）。
-
-## 5. 数据与评测
-
-### 预训练数据金字塔（四层）
+### 数据金字塔（四层）
 
 | 层级 | 数据类型 | 规模 | 用途 |
 |------|----------|------|------|
-| L1（底层） | Internet 视频 | 大规模 | 训练 Vidu 基础模型 |
-| L2 | Ego-centric 视频 | — | 适应具身操作动态（Stage 1） |
-| L3 | 异构具身数据（仅双臂） | — | 统一动作表示预训练（Stage 2） |
-| L4（顶层） | 特定具身数据 | 50-100 trajectories | Post-training 适配目标机器人 |
+| L1 | 互联网视频 | 最大 | 预训练 Vidu 基础模型 |
+| L2 | 第一人称视频 | 中等 | Stage 1：适应具身操作动态 |
+| L3 | 异构具身数据（仅双臂） | 较小 | Stage 2：跨具身动作对齐 |
+| L4 | 目标具身数据 | 最小 | Post-training：目标平台适配 |
 
-### RoboTwin 2.0 评测设置
+### 评测基准
 
-- **训练数据**：2,500 clean demos（每任务 50）+ 25,000 randomized demos（每任务 500）
-- **视频降采样**：5 Hz；**动作降采样**：10 Hz
-- **评估指标**：平均成功率（50 任务）
+| 基准 | 设置 | 结果 | 对比基线 |
+|------|------|------|----------|
+| RoboTwin 2.0 (clean) | 标准设置 | **95.8%** 平均成功率 | TODO: 待补充基线对比 |
+| RoboTwin 2.0 (randomized) | 随机化设置 | **96.1%** 平均成功率（>95%） | TODO: 待补充基线对比 |
+| WorldArena | 世界模型评测 | 最强报告 EWMScore | TODO: 待补充具体分数 |
+| 人形机器人适配 | 50-100 轨迹 | 可解决长程灵巧操作 | 无需额外 VLM 规划器 |
 
-### 核心结果
+> TODO: 论文实验细节（具体基线对比、任务数量、训练时长）未在 HTML 版本中完整获取，待从 PDF 补充。
 
-| 模型 | Clean | Randomized |
-|------|-------|------------|
-| π_0.5 | 82.7 | 76.8 |
-| starVLA | 88.2 | 88.3 |
-| Motus | 88.7 | 87.0 |
-| LingBot-VA | 92.9 | 91.5 |
-| Fast-WAM | 91.9 | 91.8 |
-| **MotuBrain** | **95.8** | **96.1** |
+## 6. 能力与失败模式 (Capabilities & Failure Modes)
 
-**关键发现**：
-- MotuBrain 是唯一在 randomized 设置下平均得分超过 95% 的模型
-- 50 个任务中，clean 设置下 24 个任务 100% 成功，randomized 下 25 个任务 100% 成功
-- 最大增益集中在多阶段操作、关节物体交互、精细空间排列类任务
-- 多任务扩展趋势良好：任务数增加 → 平均成功率持续提升，优于传统 VLA
-
-### WorldArena 世界建模评测
-
-| 模型 | EWMScore |
-|------|----------|
-| MotuBrain | **63.77** |
-| GigaWorld-1 | 62.34 |
-| Ctrl-World | 59.98 |
-| Wan2.6 | 59.80 |
-| Veo3.1 | 57.77 |
-
-- 在 Motion Quality 维度（Dynamic Degree 0.51, Flow Score 0.49, Motion Smoothness 0.86）领先显著
-- 论文指出 EWMScore 与下游动作规划成功率仅弱相关（r=0.36），MotuBrain 在感知和功能两端都强
-
-### 真实世界实验
-
-- **新具身适配**：仅需 50-100 条同具身轨迹
-- **Making Oden**（双臂同时操作，7 原子动作）：98.54/100，33 秒
-- **Mixing Cocktails**（长程 15 原子动作）：97.34/100，124 秒
-- **Flower Arrangement**（精细操作 10 原子动作）：83.30/100，138 秒
-- 无需 VLM 规划器、双系统分解、外部记忆或 retry 数据
-
-## 6. 能力与失败模式
-
-### 能做什么
+### 能力
 
 | 能力 | 场景 | 证据 |
 |------|------|------|
-| 多任务策略执行 | RoboTwin 50 任务 | 95.8%/96.1% 平均成功率 |
-| 世界动态预测 | WorldArena 前向动力学 | EWMScore 63.77 第一 |
-| 跨具身迁移 | 新人形机器人 50-100 轨迹 | Making Oden 98.54 分 |
-| 长程任务 | 15 原子动作序列 | Mixing Cocktails 97.34 分 |
-| 隐式 retry | Flower Arrangement 重复失败 | 无 explicit recovery 监督 |
-| 多视角输入 | 任意相机布局 | 3D RoPE 视角偏移 |
+| 多模式推理 | 同一模型切换 VLA/WM/VGM/IDM/联合预测 | 表 1 五种分布 |
+| 多视角灵活输入 | 任意数量相机，不同布局 | 3D RoPE 视角偏移 |
+| 跨具身迁移 | 新机器人仅需 50-100 轨迹 | 相对 EEF 动作表征 |
+| 长程任务 | 多步骤操作无需外部规划器 | AR chunk-level factorization |
+| 实时控制 | 11 Hz 推理频率 | 54× 加速栈 |
 
-### 不能做什么（已知局限）
+### 失败模式
 
-| 局限 | 原因 |
-|------|------|
-| 泛化到非双臂/非人形机器人 | 实验仅验证双臂桌面操作和人形；异构预训练仅用双臂数据 |
-| 独立部署（无闭源依赖） | 依赖 Vidu VAE（闭源视频生成模型）作为基础 |
-| 极高速操作（>11 Hz） | 当前上限 11.11 Hz，受扩散采样本质限制 |
-| 无视觉条件下的操作 | 完全依赖视觉观测；无 proprioception-only 模式 |
-| 模型规模/计算需求透明 | 论文未公开参数量、显存占用、训练成本 |
+| 失败场景 | 原因 |
+|----------|------|
+| 非双臂机器人直接部署 | L3 仅用双臂数据预训练；新具身需 post-training |
+| 极端视角变化 | 3D RoPE 偏移仅在空间维度，极端视角可能超出训练分布 |
+| 高频精细操作 | 10D 相对 EEF 动作表征可能不足以表达复杂手指操作 |
+| 无语言指令场景 | 独立 text stream 在无条件时成为冗余计算 |
+| 单目相机部署 | 多视角 dropout (p=0.1) 支持单目，但性能可能下降 |
 
 ### 6.1 隐含假设 (Hidden Assumptions)
 
-1. **Vidu VAE 的泛化性足够**：假设 Vidu 在 Internet 视频上训练的视觉编码器能充分表征机器人操作场景的细粒度几何和材质信息。如果 Vidu 对合成/机器人视角的表征能力不足，后续所有模块都会受影响。
+1. **Vidu VAE 的表征足够通用**：假设 Vidu 在通用视频上训练的 VAE 编码能充分保留机器人操作所需的空间细节——但未在文中看到对 VAE 重建误差的量化分析
+2. **相对 EEF 坐标的跨具身通用性**：假设所有机器人都能映射到 10D 相对末端坐标——但忽略了自由度差异（如 7-DOF vs 6-DOF 手臂）
+3. **V2A 非对称注意力无损**：假设视频不依赖动作信息不影响策略质量——在需要"根据动作效果调整视觉关注"的任务中可能不成立
+4. **DiT cache 的平滑性假设**：假设相邻去噪步骤的速度场变化缓慢（s_t > γ）——在扩散早期可能不成立
+5. **FP8 量化对生成质量影响可忽略**：论文声称"亚百分级波动"，但未报告对视频生成质量的独立评估
 
-2. **相对末端执行器表示的跨具身充分性**：假设 (p_i - p_s, R_s^{-1}R_i, g_i) 这种 10D 相对表示足以捕获不同机器人之间的控制共性。但对于自由度差异大的具身（如 6-DOF vs 7-DOF 臂），这种表示可能不够。
+## 7. 与相关工作对比 (Comparison)
 
-3. **V2A 注意力不会损害视频预测质量**：训练时禁止 video→action 注意力是为了推理效率。但这可能意味着视频分支无法从动作信息中受益（例如在 action-conditioned 视频生成时），论文未对此做消融。
+| 模型 | 核心关注点 | 架构 | 训练方式 | 适用场景 |
+|------|------------|------|----------|----------|
+| **RT-2 (2023)** | VLA 概念验证 | VLM + action head | 静态图像-动作配对 | 桌面操作 |
+| **OpenVLA (2024)** | 开源 VLA | SigLIP + LM + action head | IL + DPO | 通用机器人 |
+| **Vidar (2025)** | VGM+IDM 两阶段 | 视频生成 + 逆动力学 | 分阶段训练 | 视频条件策略 |
+| **Motus (2025)** | 首个 WAM | UniDiffuser + MoT | 统一训练 | 多模式推理 |
+| **Cosmos World-Action (2026)** | NVIDIA 世界动作模型 | 扩散 Transformer | 统一训练 | 具身基础模型 |
+| **DreamZero (2026)** | 世界模型策略 | 扩散 + 缓存加速 | 统一训练 | 推理加速 |
+| **MotuBrain (2026)** | 高级 WAM + 部署 | UniDiffuser + MoT + H-Bridge | 两阶段预训练 + 双模式 post-training | 多视角/跨具身/实时控制 |
 
-4. **DiT Cache 的阈值 γ 可通用**：缓存策略依赖固定的相似度阈值 γ，但不同任务/模态的最优阈值可能不同。论文未报告 γ 的敏感性分析。
+**面试 Tip**：当被问到 "WAM 和传统 VLA 的区别" 时，核心回答是：VLA 将视觉特征映射到动作（单向），WAM 联合建模视觉和动作（双向），因此 WAM 具备世界建模能力，能理解物理动态而非单纯模仿行为。
 
-5. **仿真到真实迁移的 gap 可被 50-100 条轨迹填补**：真实世界实验结果优秀，但仅报告了少数任务的定性结果，缺乏系统化的 sim2real gap 量化分析。
+## 8. 精讀建議 (Reading Guide)
 
-## 7. 与相关工作对比
+- **值得精讀原文的人**：
+  1. 研究世界模型驱动策略的具身智能研究者——本文展示了 WAM 架构的最新演进
+  2. 需要部署扩散策略到真实机器人的工程师——推理加速栈（54×）有直接参考价值
+  3. 探索跨具身迁移的研究者——统一相对 EEF 动作表征方案可借鉴
 
-| 维度 | VLA (π_0.5, OpenVLA) | VGM+IDM (RoboDreamer) | WAM (Motus, Fast-WAM) | MotuBrain |
-|------|----------------------|----------------------|----------------------|-----------|
-| 核心关注点 | 语义泛化 | 世界动态建模 | 统一视频+动作 | 统一+部署效率 |
-| 架构 | VLM + action head | 两阶段：VGM→IDM | UniDiffuser + MoT | UniDiffuser + 3-stream MoT + H-Bridge |
-| 训练方式 | 静态图像-文本预训练 | 视频预训练 + 动作微调 | 两阶段统一预训练 | 两阶段 + V2A attention + 完整部署栈 |
-| 异构数据 | ❌ 仅机器人轨迹 | ❌ 仅视频 | ✅ 视频-only/任务无关/跨具身 | ✅ 同左 + 多视角 + 相对动作表示 |
-| 推理频率 | ~30 Hz（非扩散） | ~1-2 Hz | ~5 Hz | **11 Hz** |
-| 适用场景 | 语义理解强的任务 | 需要世界预测的任务 | 统一场景 | 需要策略+预测+效率的全栈场景 |
+- **建議章節路徑**：先读 §2.1（架构总览）→ 再看 §2.4（推理加速，工程价值最高）→ §2.2-2.3（训练细节，按需）→ 可跳 §3（实验细节，HTML 版本不完整）
 
-**面试 Tip**：当被问到"MotuBrain 和 Motus 的区别"时，回答："MotuBrain 在 Motus 的基础上引入了三个关键改进——独立文本流增强语言-动作耦合、H-Bridge 注意力平衡效率与跨模态交互、以及完整的推理加速栈（V2A/DiT Cache/FP8）将频率从约 5 Hz 提升到 11 Hz。本质上，Motus 证明了统一世界-动作建模的可行性，MotuBrain 证明了它的可扩展性和可部署性。"
-
-## 8. 精讀建議
-
-**值得精讀原文的人**：
-- 做多模态具身 Agent 的研究者——需要理解 V2A attention 如何同时服务训练目标和推理效率
-- 要评估世界模型+策略统一架构可行性的工程师——RoboTwin 2.0 的 50 任务 per-task 结果（Table 4）提供了详细的性能画像
-- 关注推理加速的部署团队——Section 2.4 的六层优化栈（noise sampling → compile → FP8 → DiT cache → V2A → smoothing）是可直接复用的工程知识
-
-**建議章節路徑**：
-1. 先讀 §2.1（架构）+ §2.4（推理优化）——理解核心设计和部署方案
-2. 再看 §3.1（RoboTwin 结果）+ Table 4（per-task 分解）——评估实际性能
-3. 可跳 §2.2 预训练细节（除非你打算复现）和 §3.2 WorldArena（除非你关注世界建模）
-
-**不值得精讀的理由**：
-- 如果你不做机器人学习或具身智能，这篇论文的技术细节与你的工作距离较远
-- 如果你已熟悉 Motus / UniDiffuser 框架，本文的方法论增量主要在工程层面（H-Bridge、V2A、推理栈），而非理论创新
+- **不值得精讀的理由**：如果你不做扩散策略/世界模型方向，或者你的场景只需要纯模仿学习（不需要世界建模能力），读摘要和 §1 即可——本文的核心贡献在于统一架构和推理加速，这两者对非 WAM 方向的直接价值有限。
 
 ---
 [← Back to Theory](./README.md)
+
+**关键引用**：
+- 论文: https://arxiv.org/abs/2604.27792
+- UniDiffuser: https://arxiv.org/abs/2303.14455
+- Motus (前身): https://arxiv.org/abs/2504.xxxx (bi2025motusunifiedlatentaction)
+- HBridge: https://arxiv.org/abs/2504.xxxx (wang2025hbridge)
+- DreamZero: https://arxiv.org/abs/2604.xxxx (ye2026world)
