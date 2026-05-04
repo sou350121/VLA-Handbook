@@ -180,7 +180,7 @@ VLA 的 V 代表 Vision，但机器人视觉远不止图像分类。需要从 2D
 &nbsp;
 
 <details>
-<summary><h3>🧠 Strategy Hall — 推理、规划与安全 &nbsp;<code>29 篇</code></h3></summary>
+<summary><h3>🧠 Strategy Hall — 推理、规划与安全 &nbsp;<code>30 篇</code></h3></summary>
 
 **一句话**：让机器人"先想再做"，而且不伤害人。
 
@@ -193,6 +193,7 @@ VLA 的 V 代表 Vision，但机器人视觉远不止图像分类。需要从 2D
 | [VLA 十大挑战](planning/vla_challenges.md) | 目前还没解决的 10 个难题 |
 | [CodeGraphVLP](planning/codegraphvlp_dissection.md) | 持久语义图 + Code-as-Planner，把 VLA 的 Markovian 假设拆掉 |
 | [ManiDreams](planning/manidreams_dissection.md) | 不押注 backend，把"预测模糊"显式建模并约束到规划器 |
+| [RAM ⚡](planning/ram_dissection.md) | RAG meets manipulation：类别级 3D 知识库外挂给 VLM（**Science Robotics 2026**） |
 
 </details>
 
