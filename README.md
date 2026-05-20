@@ -10,6 +10,7 @@
 [![VLA Expert Skill](https://img.shields.io/badge/VLA_Expert_Skill-Claude_×_Cursor-00C7B7.svg?logo=github&logoColor=white)](https://github.com/sou350121/VLA-expert-skill)
 [![RSS 订阅](https://img.shields.io/badge/RSS-订阅-FFA500.svg?logo=rss&logoColor=white)](https://sou350121.github.io/pulsar-web/subscribe)
 [![Daily Pulse](https://img.shields.io/badge/📊_Daily_Pulse-15方法族趋势-D4910A.svg)](PULSE.md)
+[![Spatial-Intelligence-Handbook](https://img.shields.io/badge/姊妹仓库-Spatial_Intelligence_Handbook-6B8AFE.svg?logo=github&logoColor=white)](https://github.com/sou350121/Spatial-Intelligence-Handbook)
 
 📊 **[PULSAR 照见](https://sou350121.github.io/pulsar-web/)** · 每日北京时间 12:00 更新，减少信息焦虑 — `sou350121.github.io/pulsar-web`
 
@@ -18,6 +19,8 @@
 📡 **[RSS 订阅](https://sou350121.github.io/pulsar-web/subscribe)** · 4 个主题 feed + 一键 OPML 导入 — 新文章/⚡🔧 论文/SOTA/周报直达你的阅读器 · [完整使用说明](docs/SUBSCRIBE.md)
 
 🤖 **[VLA Expert Skill](https://github.com/sou350121/VLA-expert-skill)** · 一键让 AI 编程助手变成 VLA 专家 — 支持 Claude Code / Cursor / Codex / OpenCode
+
+🛰️ **[Spatial-Intelligence-Handbook](https://github.com/sou350121/Spatial-Intelligence-Handbook)** · 姊妹仓库 — VLA 管 action policy，Spatial 管 world representation（3DGS / VGGT / depth foundation + 跨 embodiment 横向对比）。两者交集是 3D-aware VLA。
 
 ### 全中文 · 工程实战导向的 VLA 知识库
 
