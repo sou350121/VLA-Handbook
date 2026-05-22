@@ -188,17 +188,17 @@
 
 ---
 
-## 7. 框架采纳度信号（2026-05-08 快照）
+## 7. 框架采纳度信号（2026-05-22 快照）
 
 | 框架 | 7d Issues | 采纳阶段 | DFI | 信号 |
 |------|-----------|---------|-----|------|
-| **lerobot** | 38 | 早期探索 | 0.07 (low) | 主要摩擦: deploy |
-| **isaaclab** | 28 | 早期探索 | 0.05 (low) | 主要摩擦: install |
-| **gr00t** | 12 | 开发整合 | 0.17 (low) | 主要摩擦: deploy |
-| **openpi** | 5 | 生产部署 | 0.17 (low) | 主要摩擦: deploy |
-| **genesis** | 5 | 早期探索 | 0.00 (low) | 主要摩擦: deploy |
-| **openvla** | 2 | 早期探索 | 0.10 (low) | 主要摩擦: data |
-| **mujoco** | 1 | 混合 | 0.25 (low) | 主要摩擦: hardware |
+| **isaaclab** | 58 | 早期探索 | 0.07 (low) | 主要摩擦: install |
+| **lerobot** | 20 | 早期探索 | 0.06 (low) | 主要摩擦: hardware |
+| **genesis** | 9 | 早期探索 | 0.00 (low) | 主要摩擦: deploy |
+| **maniskill** | 5 | 混合 | 0.00 (low) | 主要摩擦: deploy |
+| **gr00t** | 4 | 早期探索 | 0.17 (low) | 主要摩擦: deploy |
+| **openpi** | 2 | 早期探索 | 0.07 (low) | 主要摩擦: train |
+| **openvla** | 1 | 混合 | 0.15 (low) | 主要摩擦: train |
 | **rdt** | 0 | **停滞** | 0.00 (low) | 几乎无活动 |
 | **octo** | 0 | **停滞** | 0.00 (low) | 几乎无活动 |
 | **magma** | 0 | **停滞** | 0.00 (low) | 几乎无活动 |
@@ -207,17 +207,17 @@
 | **act** | 0 | **停滞** | 0.00 (low) | 几乎无活动 |
 | **aloha** | 0 | **停滞** | 0.00 (low) | 几乎无活动 |
 | **diffpol** | 0 | **停滞** | 0.00 (low) | 几乎无活动 |
-| **maniskill** | 0 | **停滞** | 0.00 (low) | 几乎无活动 |
+| **mujoco** | 0 | **停滞** | 0.00 (low) | 几乎无活动 |
 | **libero** | 0 | **停滞** | 0.00 (low) | 几乎无活动 |
 | **robosuite** | 0 | **停滞** | 0.00 (low) | 几乎无活动 |
 | **simplerenv** | 0 | **停滞** | 0.00 (low) | 几乎无活动 |
 | **unitree-rl** | 0 | **停滞** | 0.00 (low) | 几乎无活动 |
 | **gello** | 0 | **停滞** | 0.00 (low) | 几乎无活动 |
 
-> 数据来源: Pulsar GitHub Issues Sensor, 91 issues analyzed in 7-day window
+> 数据来源: Pulsar GitHub Issues Sensor, 99 issues analyzed in 7-day window
 
 ---
 
 *本文档由 Pulsar GitHub Issues Sensor 自动采集 + 人工蒸馏。Issue 链接为 evidence，可直接点击查看原始讨论。*
 
-*最后更新: 2026-05-08*
+*最后更新: 2026-05-22*
