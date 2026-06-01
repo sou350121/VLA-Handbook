@@ -91,10 +91,30 @@
     "https://www.xiaohongshu.com/explore/69e266fc0000000021011c24",
     "https://www.xiaohongshu.com/explore/69ececd6000000003601e4d7",
     "https://www.xiaohongshu.com/explore/69eee64d0000000022025d7c",
-    "https://www.xiaohongshu.com/explore/69ef2eb6000000003700e378"
+    "https://www.xiaohongshu.com/explore/69ef2eb6000000003700e378",
+    "https://www.xiaohongshu.com/explore/698d494d000000002800bb26",
+    "https://www.xiaohongshu.com/explore/69b7b9af000000002103aa0d",
+    "https://www.xiaohongshu.com/explore/69ccb7a4000000002301c847",
+    "https://www.xiaohongshu.com/explore/68689d6c000000002001b15f",
+    "https://www.xiaohongshu.com/explore/6864ff49000000002400cc69",
+    "https://www.xiaohongshu.com/explore/690a2e9d000000000303989f",
+    "https://www.xiaohongshu.com/explore/69c68e8200000000230047c0",
+    "https://www.xiaohongshu.com/explore/69538385000000001e028c3d",
+    "https://www.xiaohongshu.com/explore/69310a1c000000000d03c37e",
+    "https://www.xiaohongshu.com/explore/688d42330000000022021d66",
+    "https://www.xiaohongshu.com/explore/692433b7000000001e029ad6",
+    "https://www.xiaohongshu.com/explore/6a1940b5000000003501dc15",
+    "https://www.xiaohongshu.com/explore/6a14d5790000000007013b40",
+    "https://www.xiaohongshu.com/explore/691175cc0000000004007565",
+    "https://www.xiaohongshu.com/explore/6967891e000000002103d67b",
+    "https://www.xiaohongshu.com/explore/69a30dcf000000001b016409",
+    "https://www.xiaohongshu.com/explore/698a9c3a000000000a033314",
+    "https://www.xiaohongshu.com/explore/69f9a4490000000022028a56",
+    "https://www.xiaohongshu.com/explore/6a16ba73000000000803c9ca",
+    "https://www.xiaohongshu.com/explore/6a04a40c000000000802591f"
   ],
-  "count": 92,
-  "last_updated": "2026-04-28",
+  "count": 112,
+  "last_updated": "2026-05-29",
   "runs": [
     {
       "date": "2026-04-17",
@@ -147,6 +167,40 @@
       "detail_kept": 11,
       "title_only": 6,
       "report": "2026-04-28-auto.md (appended round 2)"
+    },
+    {
+      "date": "2026-05-29",
+      "kind": "manual-trigger",
+      "keywords": [
+        "VLA 推理 卡顿 优化",
+        "仿真环境 搭建 坑",
+        "数据采集 遥操作",
+        "ALOHA 组装",
+        "VLA 泛化 失败"
+      ],
+      "new_added": 11,
+      "detail_kept": 10,
+      "title_only": 1,
+      "skipped": 0,
+      "report": "2026-05-29-auto.md"
+    },
+    {
+      "date": "2026-05-29-round2",
+      "kind": "manual-trigger (狂找)",
+      "keywords": [
+        "VGGT VLA",
+        "JEPA 机器人",
+        "Diffusion Policy 踩坑",
+        "灵巧手 触觉",
+        "pi05 复现",
+        "Flow Matching 机器人",
+        "具身 数据飞轮"
+      ],
+      "new_added": 9,
+      "detail_kept": 9,
+      "title_only": 0,
+      "skipped": 0,
+      "report": "2026-05-29-auto.md (appended round 2)"
     }
   ]
 }

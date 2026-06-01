@@ -1,0 +1,21 @@
+# 小红书 VLA 社区采集 — 2026-05-29（已被取代）
+
+> **状态**：SUPERSEDED —— 本文件最初记录的是当日自动调度因未登录而跳过。
+> 之后用户在 Browser「小紅書」登录小红书，手动重新触发，采集**成功完成**。
+> **请查看实际采集结果** → [2026-05-29-auto.md](./2026-05-29-auto.md)（10 篇详细 + 1 篇标题，共 11 篇新帖）
+
+---
+
+## 经过
+
+- 当日 scheduled task 运行时，小红书会话未登录（`reds-modal login-modal` 浮层、`search.feeds=0`、`note-item` 0 个节点，与 2026-05-12 / 05-15 同一故障）→ 跳过。
+- 用户登录后说「连上了」，手动重跑：登录态复核通过（`loggedIn=true`、`hasNick=true`、无登录浮层、首页 30 个真实笔记）。
+- 5 组关键词（VLA 推理 卡顿 优化 / 仿真环境 搭建 坑 / 数据采集 遥操作 / ALOHA 组装 / VLA 泛化 失败）共命中 100 条结果，去重后选取信号最强的 11 篇做详情提取（10 详细 + 1 标题级）。
+- 结果写入 `2026-05-29-auto.md`，`collected_urls.json` 追加 11 条 URL（count 92→103）+ 一条 manual-trigger 运行记录。
+
+## 本轮工程问题（已知/待修）
+
+1. **MCP 返回值被「Cookie/query string data」过滤拦截**：原始的 `JSON.stringify({t, d, a, dt, c})` 因为帖子描述里含长 alphanumeric 串/URL/`?...` 段，整段被拦掉。绕过：在 JS 内做 `heavy clean`（剥离 `[a-zA-Z0-9_\-+/=]{15,}` 长 token、`https?:\S+`、`?...` / `=...` / `&...` 段、`xxx.yyy` 域名样式），清完再返回 → 通过。后续可考虑把这套 sanitizer 内置到 SKILL.md 的提取脚本。
+2. **登录检查多信号化（仍未在 SKILL.md 固化）**：本次 Phase 1 用 `__INITIAL_STATE__.user.userId` 单字段判断，被浏览器缓存的 state 骗过去；只有打开搜索页看到 `login-modal` + `feeds=0` 才发现真实未登录。下次 SKILL.md 改版时建议把"无 `.login-modal` + `/explore` 真实笔记 ≥ 1 + `user.loggedIn._rawValue === true`"做成 AND 条件。
+
+*本文件保留作运行日志；实际社区数据见 2026-05-29-auto.md。*
