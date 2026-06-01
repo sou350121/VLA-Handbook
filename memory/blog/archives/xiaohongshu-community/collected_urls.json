@@ -135,7 +135,7 @@
       "date": "2026-04-24",
       "kind": "scheduled",
       "result": "skipped — Chrome MCP unreachable",
-      "report": "2026-04-24-auto-skipped.md"
+      "report": "2026-04-24-skipped.md"
     },
     {
       "date": "2026-04-28-round1",
@@ -151,7 +151,7 @@
       "detail_kept": 13,
       "title_only": 2,
       "skipped": 1,
-      "report": "2026-04-28-auto.md"
+      "report": "2026-04-28-manual.md"
     },
     {
       "date": "2026-04-28-round2",
@@ -166,7 +166,7 @@
       "new_added": 17,
       "detail_kept": 11,
       "title_only": 6,
-      "report": "2026-04-28-auto.md (appended round 2)"
+      "report": "2026-04-28-manual.md (appended round 2)"
     },
     {
       "date": "2026-05-29",
@@ -182,7 +182,7 @@
       "detail_kept": 10,
       "title_only": 1,
       "skipped": 0,
-      "report": "2026-05-29-auto.md"
+      "report": "2026-05-29-manual.md"
     },
     {
       "date": "2026-05-29-round2",
@@ -200,7 +200,7 @@
       "detail_kept": 9,
       "title_only": 0,
       "skipped": 0,
-      "report": "2026-05-29-auto.md (appended round 2)"
+      "report": "2026-05-29-manual.md (appended round 2)"
     }
   ]
 }
