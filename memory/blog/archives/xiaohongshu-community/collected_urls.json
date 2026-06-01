@@ -111,10 +111,17 @@
     "https://www.xiaohongshu.com/explore/698a9c3a000000000a033314",
     "https://www.xiaohongshu.com/explore/69f9a4490000000022028a56",
     "https://www.xiaohongshu.com/explore/6a16ba73000000000803c9ca",
-    "https://www.xiaohongshu.com/explore/6a04a40c000000000802591f"
+    "https://www.xiaohongshu.com/explore/6a04a40c000000000802591f",
+    "https://www.xiaohongshu.com/explore/69b3fab400000000230055de",
+    "https://www.xiaohongshu.com/explore/69f1fb540000000035025f90",
+    "https://www.xiaohongshu.com/explore/6a0aa02e000000003503b4fd",
+    "https://www.xiaohongshu.com/explore/6a1d5ef0000000000702774b",
+    "https://www.xiaohongshu.com/explore/698071b4000000001a036d97",
+    "https://www.xiaohongshu.com/explore/6a1d8c28000000003503828f",
+    "https://www.xiaohongshu.com/explore/6984695d000000000b013968"
   ],
-  "count": 112,
-  "last_updated": "2026-05-29",
+  "count": 119,
+  "last_updated": "2026-06-01",
   "runs": [
     {
       "date": "2026-04-17",
@@ -201,6 +208,24 @@
       "title_only": 0,
       "skipped": 0,
       "report": "2026-05-29-manual.md (appended round 2)"
+    },
+    {
+      "date": "2026-06-01-round3",
+      "kind": "manual-trigger (用户指令再去抓有用经验)",
+      "keywords": [
+        "机械臂 标定 踩坑",
+        "灾难性遗忘 VLA",
+        "OpenPI 真机",
+        "GR00T 微调",
+        "RoboTwin 复现",
+        "FAST tokenizer 动作",
+        "ACT 机械臂 真机 成功率"
+      ],
+      "new_added": 7,
+      "detail_kept": 7,
+      "title_only": 0,
+      "skipped": 0,
+      "report": "2026-06-01-round3-manual.md"
     }
   ]
 }
