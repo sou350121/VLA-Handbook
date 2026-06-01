@@ -118,9 +118,16 @@
     "https://www.xiaohongshu.com/explore/6a1d5ef0000000000702774b",
     "https://www.xiaohongshu.com/explore/698071b4000000001a036d97",
     "https://www.xiaohongshu.com/explore/6a1d8c28000000003503828f",
-    "https://www.xiaohongshu.com/explore/6984695d000000000b013968"
+    "https://www.xiaohongshu.com/explore/6984695d000000000b013968",
+    "https://www.xiaohongshu.com/explore/6a04a1c60000000007013af0",
+    "https://www.xiaohongshu.com/explore/67cd7b7d0000000029012c40",
+    "https://www.xiaohongshu.com/explore/6a0affbf0000000036002cc4",
+    "https://www.xiaohongshu.com/explore/6a1d204000000000350262f5",
+    "https://www.xiaohongshu.com/explore/69fddd2c000000002301d21d",
+    "https://www.xiaohongshu.com/explore/6a1bc476000000000603230b",
+    "https://www.xiaohongshu.com/explore/6a18f8670000000035025916"
   ],
-  "count": 119,
+  "count": 126,
   "last_updated": "2026-06-01",
   "runs": [
     {
@@ -226,6 +233,23 @@
       "title_only": 0,
       "skipped": 0,
       "report": "2026-06-01-round3-manual.md"
+    },
+    {
+      "date": "2026-06-01-round4",
+      "kind": "manual-trigger (用户指令 continue 加)",
+      "keywords": [
+        "lerobot 训练 卡顿",
+        "Isaac Lab 报错 坑",
+        "VLA 数据增强 抖动",
+        "VLA 微调 显存 OOM",
+        "开源 VLA 翻车",
+        "VLA 真机 debug 日常"
+      ],
+      "new_added": 7,
+      "detail_kept": 7,
+      "title_only": 0,
+      "skipped": 0,
+      "report": "2026-06-01-round4-manual.md"
     }
   ]
 }
