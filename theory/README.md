@@ -1,7 +1,7 @@
 # 🗺️ VLA Theory — Explorer's Map
 
 > **VLA（Vision-Language-Action）** 让机器人"看懂世界、听懂指令、做出动作"。
-> 这里有 **254 篇深度解析**，是中文世界最完整的 VLA 理论库。
+> 这里有 **380 篇深度解析**，是中文世界最完整的 VLA 理论库。
 >
 > 不知道从哪开始？先选你的角色 ↓
 
@@ -26,25 +26,25 @@
 
 ```mermaid
 graph TD
-    START["⚔️ START HERE"] --> CORE["🏛️ Central Keep<br/>VLA 核心架构<br/><b>51 篇</b>"]
+    START["⚔️ START HERE"] --> CORE["🏛️ Central Keep<br/>VLA 核心架构<br/><b>74 篇</b>"]
 
-    CORE --> FLOW["🌊 Flow River<br/>扩散 · Flow Matching<br/>16 篇"]
-    CORE --> WORLD["🌍 World Realm<br/>世界模型 · 仿真<br/>38 篇"]
-    CORE --> RL["🎮 Training Arena<br/>强化学习 · 奖励<br/>19 篇"]
+    CORE --> FLOW["🌊 Flow River<br/>扩散 · Flow Matching<br/>28 篇"]
+    CORE --> WORLD["🌍 World Realm<br/>世界模型 · 仿真<br/>50 篇"]
+    CORE --> RL["🎮 Training Arena<br/>强化学习 · 奖励<br/>24 篇"]
 
-    FLOW --> PLAN["🧠 Strategy Hall<br/>推理 · 安全 · 规划<br/>41 篇"]
+    FLOW --> PLAN["🧠 Strategy Hall<br/>推理 · 安全 · 规划<br/>47 篇"]
     WORLD --> PLAN
     RL --> PLAN
 
-    PLAN --> TOUCH["🤚 Touch Cavern<br/>触觉感知<br/>26 篇"]
-    PLAN --> EYE["👁️ Vision Tower<br/>3D · SLAM<br/>20 篇"]
+    PLAN --> TOUCH["🤚 Touch Cavern<br/>触觉感知<br/>30 篇"]
+    PLAN --> EYE["👁️ Vision Tower<br/>3D · SLAM<br/>23 篇"]
 
-    TOUCH --> DEPLOY["🔧 Workshop<br/>部署 · 硬件<br/>25 篇"]
+    TOUCH --> DEPLOY["🔧 Workshop<br/>部署 · 硬件<br/>29 篇"]
     EYE --> DEPLOY
 
     DEPLOY --> FRONTIER["🔬 Frontier Wilds<br/>跨域 · 神经科学<br/>19 篇"]
 
-    FOUND["🏗️ Foundation Mines<br/>基础理论 · 工具箱<br/>42 篇"] -.->|随时查阅| CORE
+    FOUND["🏗️ Foundation Mines<br/>基础理论 · 工具箱<br/>56 篇"] -.->|随时查阅| CORE
     FOUND -.-> FLOW
     FOUND -.-> RL
 
@@ -74,7 +74,7 @@ graph TD
 &nbsp;
 
 <details open>
-<summary><h3>🏛️ Central Keep — VLA 核心架构 &nbsp;<code>51 篇</code></h3></summary>
+<summary><h3>🏛️ Central Keep — VLA 核心架构 &nbsp;<code>74 篇</code></h3></summary>
 
 **一句话**：所有 VLA 模型的"解剖室"。
 
@@ -97,7 +97,7 @@ VLA 的核心思想很简单：拿一个视觉语言模型（VLM），给它装�
 &nbsp;
 
 <details>
-<summary><h3>🌊 Flow River — 扩散策略与 Flow Matching &nbsp;<code>16 篇</code></h3></summary>
+<summary><h3>🌊 Flow River — 扩散策略与 Flow Matching &nbsp;<code>28 篇</code></h3></summary>
 
 **一句话**：机器人的动作是"画"出来的，不是"算"出来的。
 
@@ -117,7 +117,7 @@ VLA 的核心思想很简单：拿一个视觉语言模型（VLM），给它装�
 &nbsp;
 
 <details>
-<summary><h3>🌍 World Realm — 世界模型与仿真 &nbsp;<code>38 篇</code></h3></summary>
+<summary><h3>🌍 World Realm — 世界模型与仿真 &nbsp;<code>50 篇</code></h3></summary>
 
 **一句话**：让机器人在"脑子里"先试一遍，再决定怎么做。
 
@@ -139,7 +139,7 @@ VLA 的核心思想很简单：拿一个视觉语言模型（VLM），给它装�
 &nbsp;
 
 <details>
-<summary><h3>🎮 Training Arena — 强化学习 &nbsp;<code>19 篇</code></h3></summary>
+<summary><h3>🎮 Training Arena — 强化学习 &nbsp;<code>24 篇</code></h3></summary>
 
 **一句话**：模仿学习有天花板，RL 帮 VLA 突破它。
 
@@ -160,7 +160,7 @@ VLA 的核心思想很简单：拿一个视觉语言模型（VLM），给它装�
 &nbsp;
 
 <details>
-<summary><h3>🤚 Touch Cavern — 触觉感知 &nbsp;<code>26 篇</code></h3></summary>
+<summary><h3>🤚 Touch Cavern — 触觉感知 &nbsp;<code>30 篇</code></h3></summary>
 
 **一句话**：闭上眼睛你也能系鞋带——因为手指在"看"。
 
@@ -179,7 +179,7 @@ VLA 的核心思想很简单：拿一个视觉语言模型（VLM），给它装�
 &nbsp;
 
 <details>
-<summary><h3>👁️ Vision Tower — 视觉与 3D 感知 &nbsp;<code>20 篇</code></h3></summary>
+<summary><h3>👁️ Vision Tower — 视觉与 3D 感知 &nbsp;<code>23 篇</code></h3></summary>
 
 **一句话**：机器人的"眼睛"不只是拍照——要理解深度、空间和运动。
 
@@ -198,7 +198,7 @@ VLA 的 V 代表 Vision，但机器人视觉远不止图像分类。需要从 2D
 &nbsp;
 
 <details>
-<summary><h3>🧠 Strategy Hall — 推理、规划与安全 &nbsp;<code>41 篇</code></h3></summary>
+<summary><h3>🧠 Strategy Hall — 推理、规划与安全 &nbsp;<code>47 篇</code></h3></summary>
 
 **一句话**：让机器人"先想再做"，而且不伤害人。
 
@@ -221,7 +221,7 @@ VLA 的 V 代表 Vision，但机器人视觉远不止图像分类。需要从 2D
 &nbsp;
 
 <details>
-<summary><h3>🏗️ Foundation Mines — 基础理论 &nbsp;<code>42 篇</code></h3></summary>
+<summary><h3>🏗️ Foundation Mines — 基础理论 &nbsp;<code>56 篇</code></h3></summary>
 
 **一句话**：不按顺序读——当你在其他区域遇到"这是什么？"时，回来查。
 
@@ -241,7 +241,7 @@ VLA 的 V 代表 Vision，但机器人视觉远不止图像分类。需要从 2D
 &nbsp;
 
 <details>
-<summary><h3>🔧 Workshop — 部署与硬件 &nbsp;<code>25 篇</code></h3></summary>
+<summary><h3>🔧 Workshop — 部署与硬件 &nbsp;<code>29 篇</code></h3></summary>
 
 **一句话**：仿真里成功率 95% 的模型，到真机上可能只有 30%。
 
@@ -354,7 +354,7 @@ VLA 数学 → Loss Functions → World Model 总纲 → 思维链 → VLA 十�
 | 🏛️ Central Keep | [π0.6 解剖](vla-core/pi0_6_dissection.md) | RECAP RL + 双系统架构 |
 | 🌊 Flow River | [Compression Gap](diffusion-flow/the_compression_gap_why_discrete_tokenization_limits_vision_dissection.md) | 信息论 + VLA scaling 的深层矛盾 |
 | 🌍 World Realm | [Simulation Distillation](world-model/simulation_distillation_pretraining_world_models_in_simulati_dissection.md) | 仿真→真实的世界模型蒸馏 |
-| 🎮 Training Arena | [GigaBrain-0.5M*](rl/gigabrain_0_5m_star_world_model_based_rl_ramp_2026.md) | 世界模型原生 RL |
+| 🎮 Training Arena | [GigaBrain-0.5M*](./world-model/gigabrain_0_5m_star_world_model_based_rl_ramp_2026.md) | 世界模型原生 RL |
 | 🤚 Touch Cavern | [OmniVTA](tactile/omnivta_visuo_tactile_world_modeling_for_contact_rich_roboti_dissection.md) | 视触觉世界模型 |
 | 🧠 Strategy Hall | [BEHAVIOR-1K](planning/behavior_1k_human_centered_embodied_ai_benchmark_omnigibson_2024.md) | 1000 任务 benchmark |
 | 🏗️ Foundation | [DCP 凸优化](foundation/dcp_convexity_rules.md) | 纯数学，但非常实用 |

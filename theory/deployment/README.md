@@ -8,9 +8,9 @@
 
 | 你是誰 | 推薦 | 為什麼 |
 |--------|------|--------|
-| 🆕 新手 | [Robot Hardware Selection Pricing](./robot_hardware_selection_pricing.md) | 硬件选型 + 成本 |
-| 🛠️ 工程师 | [Rviz For VLA Engineering](./rviz_for_vla_engineering.md) | 🆕 RViz 真机调试显微镜 |
-| 🔬 研究者 | [Agent Architecture Deployment Guide](./agent_architecture_deployment_guide.md) | 完整部署指南 |
+| 🆕 新手 | [Robot Hardware Selection Pricing](../../deployment/robot_hardware_selection_pricing.md) | 硬件选型 + 成本 |
+| 🛠️ 工程师 | [Rviz For VL../../deployment/rviz_for_vla_engineering.md_engineering.md) | 🆕 RViz 真机调试显微镜 |
+| 🔬 研究者 | [Agent A../../deployment/agent_architecture_deployment_guide.mdchitecture_deployment_guide.md) | 完整部署指南 |
 
 ## 📚 主線 / 工具文章
 

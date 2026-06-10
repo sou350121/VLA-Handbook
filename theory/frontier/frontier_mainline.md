@@ -104,4 +104,4 @@ Jim Fan 的 2025 机器人教训和 Ken Goldberg 对数据质量基础设施的�
 - 🤚 [触觉感知区](../tactile/) — 生物触觉 → 机器人触觉
 - 🧠 [推理与规划区](../reasoning/) — 层级控制与神经科学的连接
 - 🏗️ [基础理论区](../foundation/) — GNN、对称性的数学基础
-- 🗺️ [返回 Explorer's Map](../theory-readme.md)
+- 🗺️ [返回 Explorer's Map](../README.md)

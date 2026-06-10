@@ -146,7 +146,7 @@ ASCII 图：VLA+RL 训练-评测主干逻辑
 - 强化学习总览：`theory/reinforcement_learning.md`  
 - VLA 架构：`theory/vla_arch.md`  
 - VLA 研究主线：`theory/vla_research_mainline.md`  
-- RL 训练基础设施：`theory/frontier/rlinf_vla_rl_training.md`  
+- RL 训练基础设施：`theory/rl/rlinf_vla_rl_training.md`  
 - 仿真与工具链：`deployment/simulation_benchmarks_and_tools.md`
 
 ---

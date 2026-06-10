@@ -2,15 +2,18 @@
 
 > 这页的目标不是重复每篇文章的细节，而是把当前 benchmark 专题里最关键的 6 篇笔记串成一条主线，回答一个更“全局”的问题：**如果你想理解具身系统到底该怎么被定义、诊断、比赛、约束和评测，应该按什么顺序看？**
 
+> **最后更新：2026-06-10。** 六层骨架不变。本次把 2026 年 4-6 月新进的 10 篇深度笔记综合进来：系统解法层出现「显式结构外挂」新范式，安全层从检测推进到运行时恢复，评测器层多了一条「分布 vs 点估计」的新张力——见第 8 节新增张力与第 12 节增量地图。
+
 ## 相关导读（本专题内）
 
 - **BEHAVIOR-1K**：[`./behavior_1k_human_centered_embodied_ai_benchmark_omnigibson_2024.md`](./behavior_1k_human_centered_embodied_ai_benchmark_omnigibson_2024.md)
 - **ENACT**：[`./enact_embodied_cognition_world_modeling_egocentric_interaction_2025.md`](./enact_embodied_cognition_world_modeling_egocentric_interaction_2025.md)
 - **2025 BEHAVIOR Challenge 冠军方案**：[`./behavior_challenge_2025_first_place_solution_task_adaptation_vla_2025.md`](./behavior_challenge_2025_first_place_solution_task_adaptation_vla_2025.md)
 - **IS-Bench**：[`./is_bench_interactive_safety_vlm_embodied_agents_household_tasks_2025.md`](./is_bench_interactive_safety_vlm_embodied_agents_household_tasks_2025.md)
-- **WorldEval**：[`./worldeval_world_model_policy_evaluator_2025.md`](./worldeval_world_model_policy_evaluator_2025.md)
-- **Ctrl-World × WorldArena**：[`./ctrl_world_worldarena_embodied_world_model_benchmark_2026.md`](./ctrl_world_worldarena_embodied_world_model_benchmark_2026.md)
-- **World Model 主线总纲**：[`../../world_model_mainline.md`](../../world_model_mainline.md)
+- **WorldEval**：[`../world-model/worldeval_world_model_policy_evaluator_2025.md`](../world-model/worldeval_world_model_policy_evaluator_2025.md)
+- **Ctrl-World × WorldArena**：[`../world-model/ctrl_world_worldarena_embodied_world_model_benchmark_2026.md`](../world-model/ctrl_world_worldarena_embodied_world_model_benchmark_2026.md)
+- **World Model 主线总纲**：[`../world-model/world_model_mainline.md`](../world-model/world_model_mainline.md)
+- **2026 年 4-6 月新进笔记**：不在此逐篇罗列，按主题归入第 12 节增量地图（代表作链接在各判断处给出）。
 
 ---
 
@@ -18,14 +21,14 @@
 
 | 维度 | 内容 |
 |---|---|
-| 所属位置 | `theory/frontier/benchmarks/` 下的专题总纲页 |
+| 所属位置 | `theory/planning/` 下的专题总纲页 |
 | 上游入口 | [`./README.md`](./README.md)、[`../../README.md`](../../README.md) |
-| 平行主线 | [`../../vla_research_mainline.md`](../../vla_research_mainline.md) |
-| 相邻页面 | [`../../evaluation.md`](../../evaluation.md)、[`../../benchmark_tracker.md`](../../benchmark_tracker.md)、[`../../paper_index.md`](../../paper_index.md)、[`../../literature_review.md`](../../literature_review.md)、[`../../world_model_mainline.md`](../../world_model_mainline.md) |
+| 平行主线 | [`../vla-core/vla_research_mainline.md`](../vla-core/vla_research_mainline.md) |
+| 相邻页面 | [`../foundation/evaluation.md`](../foundation/evaluation.md)、[`../benchmark_tracker.md`](../benchmark_tracker.md)、[`../foundation/paper_index.md`](../foundation/paper_index.md)、[`../foundation/literature_review.md`](../foundation/literature_review.md)、[`../world-model/world_model_mainline.md`](../world-model/world_model_mainline.md) |
 | 最适合谁看 | 想先抓整体 benchmark 结构，再决定读哪篇单文的人 |
 | 最重要用途 | 导航页、复述稿、专题总图 |
 
-这页在全局 `vla-handbook` 里的定位，不是和 [`../../vla_research_mainline.md`](../../vla_research_mainline.md) 平级竞争“谁是总主线”，而是：
+这页在全局 `vla-handbook` 里的定位，不是和 [`../vla-core/vla_research_mainline.md`](../vla-core/vla_research_mainline.md) 平级竞争“谁是总主线”，而是：
 
 - `benchmark / evaluator` 子域里的**二级主线页**
 - 单篇 benchmark 笔记之间的**桥接页**
@@ -133,7 +136,7 @@ BEHAVIOR-1K  --->  ENACT  --->  Challenge  --->  IS-Bench  --->  WorldEval / Wor
 
 ## 4. 它和全局 VLA 主线是什么关系？
 
-`vla-handbook` 里已经有一条更偏“模型能力增长”的研究主线：[`../../vla_research_mainline.md`](../../vla_research_mainline.md)。
+`vla-handbook` 里已经有一条更偏“模型能力增长”的研究主线：[`../vla-core/vla_research_mainline.md`](../vla-core/vla_research_mainline.md)。
 
 那条线主要在回答：
 
@@ -158,10 +161,12 @@ BEHAVIOR-1K  --->  ENACT  --->  Challenge  --->  IS-Bench  --->  WorldEval / Wor
 
 一句话说：
 
-- [`../../vla_research_mainline.md`](../../vla_research_mainline.md) 更像“怎么把 agent 做强”
+- [`../vla-core/vla_research_mainline.md`](../vla-core/vla_research_mainline.md) 更像“怎么把 agent 做强”
 - `benchmark_mainline.md` 更像“怎么知道 agent 到底强在哪、弱在哪、安不安全、值不值得信”
 
 所以这页不是另起炉灶，而是在全局手册里补上 **评估与约束轴**。
+
+**两轴正在合流（2026-06 补充）**：4 月时这两条轴还能干净地分开，5-6 月的一批工作表明「能力轴」开始直接消费「评测轴」的产出——诊断层暴露的认知缺陷正被内化成训练目标。三个代表：[VEGA](vega_visual_encoder_grounding_alignment_for_spatially_aware_dissection.md) 把 3D 空间感知在视觉编码器输出层用对齐损失注入（推理零开销，免去 LLM 层的经验性层搜索）；[LARA](lara_latent_action_representation_alignment_for_vision_langu_dissection.md) 让潜在动作模型与 VLA 双向对齐、联合共进化（数据受限设置下 SIMPLER +16.8%，但对已经很强的基座只剩 +1.3%——对齐红利随基座变强而递减）；[LaST-R1](last_r1_reinforcing_robotic_manipulation_via_adaptive_physic_dissection.md) 更进一步，把 RL 奖励直接作用于潜在推理嵌入而非只优化动作（LIBERO 单轨迹 warm-up 达 99.9%）——**评测信号（reward）开始直接雕刻模型的「思考方式」**。这意味着 benchmark 主线不再只是「事后评」，它的信号正在变成训练时的一级输入。
 
 ---
 
@@ -250,9 +255,9 @@ task world
 这页暂时**不直接覆盖**的是：
 
 - 模型 baseline 细拆：这类内容更适合看 `SimVLA` 等 baseline 分析页
-- 通用评估协议细节：建议去看 [`../../evaluation.md`](../../evaluation.md)
-- 持续榜单追踪：建议去看 [`../../benchmark_tracker.md`](../../benchmark_tracker.md)
-- 大范围论文检索：建议去看 [`../../paper_index.md`](../../paper_index.md) 与 [`../../literature_review.md`](../../literature_review.md)
+- 通用评估协议细节：建议去看 [`../foundation/evaluation.md`](../foundation/evaluation.md)
+- 持续榜单追踪：建议去看 [`../benchmark_tracker.md`](../benchmark_tracker.md)
+- 大范围论文检索：建议去看 [`../foundation/paper_index.md`](../foundation/paper_index.md) 与 [`../foundation/literature_review.md`](../foundation/literature_review.md)
 
 也就是说，这页是“结构页”，不是“协议手册”或“追踪表”。
 
@@ -280,7 +285,7 @@ task world
 
 1. [`2025 BEHAVIOR Challenge 冠军方案`](./behavior_challenge_2025_first_place_solution_task_adaptation_vla_2025.md)
 2. [`IS-Bench`](./is_bench_interactive_safety_vlm_embodied_agents_household_tasks_2025.md)
-3. [`WorldEval`](./worldeval_world_model_policy_evaluator_2025.md)
+3. [`WorldEval`](../world-model/worldeval_world_model_policy_evaluator_2025.md)
 
 这条线更像 deployment 视角：
 
@@ -293,8 +298,8 @@ task world
 建议顺序：
 
 1. [`ENACT`](./enact_embodied_cognition_world_modeling_egocentric_interaction_2025.md)
-2. [`WorldEval`](./worldeval_world_model_policy_evaluator_2025.md)
-3. [`Ctrl-World × WorldArena`](./ctrl_world_worldarena_embodied_world_model_benchmark_2026.md)
+2. [`WorldEval`](../world-model/worldeval_world_model_policy_evaluator_2025.md)
+3. [`Ctrl-World × WorldArena`](../world-model/ctrl_world_worldarena_embodied_world_model_benchmark_2026.md)
 
 这条线的重点是：
 
@@ -345,6 +350,14 @@ task world
   != 可靠评估任务
 ```
 
+### 5.5 `risk detection` 不等于 `risk recovery`（2026-06 新增）
+
+4 月时 IS-Bench 层的判断是「把安全从终局检查推进到过程检查」；5 月的 [TAIL-Safe](tail_safe_task_agnostic_safety_monitoring_for_imitation_lear_dissection.md) 表明过程检查仍不够——检测到危险之后还得能**拉回来**。它用三个任务无关指标（可见性/可识别性/可抓取性）+ Lipschitz 连续 Q 函数 + 在线梯度上升，给任意已训练的 IL/VLA 策略加装即插即用的恢复层，不改策略、不需动力学模型。但要看清边界：安全保证是**经验性的**（非 CBF/HJ 级形式化），且只验证了单臂桌面抓取——「benchmark 里的安全分数」与「部署协议级的安全保证」之间还差形式化这一步。
+
+### 5.6 `选对 backend` 不等于 `规划稳`（2026-06 新增）
+
+4 月时 5.4 的张力停在「视频更真不代表 evaluator 更可靠」；[ManiDreams](manidreams_dissection.md) 把这条张力再推进一层：**即使 evaluator/world model 选对了，只要它输出单一确定轨迹，下游规划器仍会被「虚假确定性」骗过去**。它的控制变量 ablation 很干净——同一 backend 同一约束，只把采样实例数从 1 提到 16，成功率 58%→86%（+28pp）。判断：不确定性传播是规划器的责任，不是 backend 的责任；这把「world model 三派之争」（仿真/视频/JEPA）部分消解成了工程权衡。保留怀疑：实测只覆盖 2 种 backend，「三派都能挂」目前是设计目标而非已验证事实。
+
 ---
 
 ## 9. 如果你要把这条线讲给面试官，怎么讲最顺？
@@ -372,9 +385,13 @@ IS-Bench 再补上执行过程里的安全约束，
 当前这 6 篇已经能形成闭环，但还可以继续补三类节点：
 
 - **competition / challenge solution 系列**：继续补更多系统解法层案例
+  - *进展（2026-06）*：已部分补上——系统解法层在 4-6 月出现一批结构化方案（见第 12 节），但「leaderboard 压力下的完整 system recipe」案例仍只有一篇。
 - **interactive safety / policy governance**：把 safety 从 benchmark 推向 deployment protocol
+  - *进展（2026-06）*：[TAIL-Safe](tail_safe_task_agnostic_safety_monitoring_for_imitation_lear_dissection.md) 正是这一步（运行时安全监控 + 恢复），但只给经验性保证；「形式化的部署协议」仍是空位。
 - **world model evaluator / planner 系列**：继续追踪 evaluator 是否真正能替代部分真机回归
-- **真实评测协议 / sim2real predictivity 系列**：把这条专题更明确接到 [`../../evaluation.md`](../../evaluation.md)
+  - *进展（2026-06）*：[ManiDreams](manidreams_dissection.md) 补上了「分布传播」这一环（见 5.6）；「替代真机回归」本身仍未被任何一篇定量证明。
+- **真实评测协议 / sim2real predictivity 系列**：把这条专题更明确接到 [`../foundation/evaluation.md`](../foundation/evaluation.md)
+  - *进展（2026-06）*：仍空缺。值得注意的反例信号：[IVLR](thinking_in_text_and_images_interleaved_vision_language_reas_dissection.md) 与 [LARA](lara_latent_action_representation_alignment_for_vision_langu_dissection.md) 都是纯仿真或极少真机验证就给出强结论——sim2real predictivity 的缺位正在让这类强数字难以采信。
 
 也就是说，这条线还可以继续延长，但骨架已经有了。
 
@@ -393,6 +410,34 @@ IS-Bench 再补上执行过程里的安全约束，
 - 每篇到底在主线里补哪一层
 - 各层之间的张力是什么
 - 未来应该继续补哪类 paper
+
+---
+
+## 12. 2026 年 4-6 月增量：新证据落在哪一层？
+
+这两个月新进 10 篇笔记。它们不改变六层骨架，但在三层上各形成一个可命名的趋势，并给「能力轴」带来一条合流判断（见第 4 节末）。按主题归纳，不逐篇罗列。
+
+### 12.1 系统解法层：「显式结构外挂」成为新主流 ⚡
+
+4 月时这一层只有一个 Challenge 冠军案例，结论停在「system recipe 不可避免」；5-6 月的证据让 recipe 的形态清晰起来：**赢的不是更大的端到端模型，而是给现成 VLA 外挂显式结构——给它更少、但更精准的输入**。三个代表，三种结构：
+
+- [CodeGraphVLP](codegraphvlp_dissection.md)：持久语义图 + 一次合成的 Python 规划器，正面拆掉 VLA 的 Markovian 假设。π₀ 完全不改，历史相关长程任务平均 30%→81.7%，规划延迟比 VLM-in-loop 低 9 倍。这直接回应了 5.2 张力里「non-Markovian state 把系统狠狠干翻」的判断——答案不是堆 memory token，而是把状态显式写成图。
+- [RAM](ram_dissection.md)（Science Robotics）⚡：把 NLP 的 RAG 范式搬到 manipulation——类别级 3D 物体模板库做成可检索的外部知识，不训 VLM、不训 3D 模型，14 项真机任务语言驱动 89.17%、多步 80%。证明了「外部知识库 + retrieval」是微调之外的第三条路；但模板靠人工标注（11 类起步），scale 没被证明容易。
+- [IVLR](thinking_in_text_and_images_interleaved_vision_language_reas_dissection.md)：长程任务的中间表示之争有了消融级答案——交错「文本子目标 + 视觉关键帧」轨迹缓存后闭环执行，LIBERO-Long 从 37.7%（无轨迹）提到 92.4%，而 text-only 62.0%、vision-only 68.4%——**两种模态互补而非可替代**。代价是 10 秒前置推理与静态场景假设。
+
+一句话判断：系统解法层正在从「比赛补丁」走向「结构化外挂范式」——共同信条是底层 VLA 不动，改变它看到什么、被告知什么。
+
+### 12.2 部署可行性进入评测话语 🔧
+
+evaluator 层 4 月时只问「能不能便宜地评」；现在「能不能便宜地跑」成为同级问题。[MolmoAct2](molmoact2_action_reasoning_models_for_real_world_deployment_dissection.md) 用 Per-Layer KV 桥接 + Flow Matching 专家把开源 VLA 的「开源/性能/延迟不可能三角」打破：推理 6700ms→180ms（37 倍），7 个基准上超过闭源 π0.5，且权重+数据+代码全开源——开源基线第一次在「可部署」维度追平闭源。更底层的，[OMP](../diffusion-flow/omp_one_step_meanflow_policy_with_directional_alignment_dissection.md)（ICML 2026）把一步推理策略的三大病理（谱偏置/梯度饥饿/内存爆炸）做了理论诊断并给出方向对齐解法，NFE=1、约 6.8ms。判断：当开源系统可复现、推理进入实时区间，benchmark 数字的可信度与可比性都会被抬高——这对评测轴是结构性利好。
+
+### 12.3 安全层与评测器层：见 5.5 / 5.6 新张力
+
+[TAIL-Safe](tail_safe_task_agnostic_safety_monitoring_for_imitation_lear_dissection.md)（检测→运行时恢复）与 [ManiDreams](manidreams_dissection.md)（点估计→分布传播）分别把第 4 层和第 5-6 层向前推了一步，详见 5.5 与 5.6，此处不重复。
+
+### 12.4 增量后的主线一句话
+
+**4 月版本的结论是「定义→诊断→解法→安全→评测」五步闭环；6 月版本的修正是：解法层有了可命名的范式（显式结构外挂），安全层多了恢复一环，评测层多了分布一环——闭环没有被推翻，而是每一环都更厚了。**
 
 ---
 [← Back to Benchmark Hub](./README.md)

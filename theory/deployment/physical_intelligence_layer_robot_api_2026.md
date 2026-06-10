@@ -141,7 +141,7 @@ PI 的 π0.6 model card 提到：在 **5 denoising steps**、**3 camera inputs**
 
 ### 4.2 三个 Contract：Observation / Action / Timing（先定协议，再谈模型）
 
-这与仓库里 `RLinf` 的建议一致：跨 sim/real 的 contract 没定死前，不要急着押注某个动作生成范式。（见 [`theory/frontier/rlinf_vla_rl_training.md`](./rlinf_vla_rl_training.md)）  
+这与仓库里 `RLinf` 的建议一致：跨 sim/real 的 contract 没定死前，不要急着押注某个动作生成范式。（见 [`theory/rl/rlinf_vla_rl_training.md`](../rl/rlinf_vla_rl_training.md)）  
 
 - **Observation contract**：摄像头数量/分辨率/时序对齐、是否带深度、是否带触觉/力觉；窗口长度。  
 - **Action contract**：joint space / Δpose / torque？chunk 长度与执行频率如何桥接。  
@@ -154,7 +154,7 @@ Weave/Ultra 的共同点是：
 - 人类干预用于保证线上质量（SLO）。  
 - 这些干预与失败案例同时反哺训练（数据飞轮）。  
 
-这与 π*0.6（Recap）所强调的“从经验与纠错学习”的路径一致，但在这里被重新表述为“可运营系统的必备组件”。（见 [`theory/pi0_6_dissection.md`](../pi0_6_dissection.md) 与 [π*0.6 Blog](https://www.pi.website/blog/pistar06)）  
+这与 π*0.6（Recap）所强调的“从经验与纠错学习”的路径一致，但在这里被重新表述为“可运营系统的必备组件”。（见 [`theory/pi0_6_dissection.m../vla-core/pi0_6_dissection.mdn.md) 与 [π*0.6 Blog](https://www.pi.website/blog/pistar06)）  
 
 ### 4.4 版本化与回归：模型升级要能“像 SDK 一样”交付
 
