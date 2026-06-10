@@ -4,6 +4,21 @@ All notable changes to the **VLA Handbook** project are documented here, derived
 
 ---
 
+## 2026-06-10 — 综合层大修（人工 + agent swarm）
+
+### Changed (Theory Mainlines — 全部 10 个总纲两个月来首次同步)
+- 9 个 `theory/*/ *_mainline.md` 综合了 2026-04-09 之后的 ~109 篇新文章：主题归纳 + 判断更新 + 新旧张力显式记录（每份经对抗审查）。
+- `theory/README.md` Explorer's Map 与各分区计数更新（254 → 380 篇）；根 README 统计同步。
+
+### Fixed (结构与链接)
+- 71 篇散落在 `theory/` 根目录的文章按生产分类器归位至 10 个主题目录（自 4 月分类链路静默中断以来的堆积）。
+- 去重 4 组同论文重复解剖（Hydra/Hyper-DP3、ALAM×2、3DThinkVLA、Potential-Guided FM）；修复 `frontier/rl/` 误嵌套。
+- 修复 200+ 条 4 月目录重组遗留的失效内链（paper_index.md 155 条、benchmark/world-model 总纲互链、theory-readme 引用等），机械扫描归零。
+- 恢复 4 月重组中被误删的 `theory/benchmark_tracker.md`（自动 SOTA 追踪的协议目标文件）。
+- 4 篇明确错放的文章重新归位（OMP、MotionWAM、Mask World Model、GeCO，独立审计发现）。
+
+---
+
 ## 2026-02-15 to 2026-02-27 🆕
 ### Added (Theory Deep Dives - Auto Pipeline)
 - **Agent World Model & Infinity Env**: [`theory/agent_world_model_infinity_synthetic_environments_for_agenti_dissection.md`](./theory/agent_world_model_infinity_synthetic_environments_for_agenti_dissection.md) — 無限合成環境對 VLA 泛化的影響
