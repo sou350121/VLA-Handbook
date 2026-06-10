@@ -37,6 +37,8 @@ Moltbot（自动化 AI agent）通过 GitHub Contents API 向本仓库写入内�
 | `reports/biweekly/README.md` | 追加索引行；同日允许 upsert（替换同日行并清理重复） | 修改其他日期索引行、改文件结构 |
 | `CHANGELOG.md` | 在顶部追加条目 | 修改已有条目 |
 | `deployment/robot_hardware_selection_pricing.md` / `product/*.md` / `companies/*.md`（条件触发） | 仅在文末“自动追踪区”追加（见下） | 修改/删除既有正文、在非自动区写入 |
+| `memory/blog/archives/industry-radar/{YYYY-MM-DD}.md` | 创建新文件（同日重跑允许覆盖，仅自动生成内容） | 修改人工内容、改目录结构 |
+| `companies/industry_mainline.md` | 创建/整体重写（⚙️ 自动生成文件，每周 upsert） | — 该文件全程自动维护，无人工内容 |
 | **其他所有文件** | **❌ 默认不可触碰** | 包括 theory/ 主目录深度笔记、deployment/ 其他文件、README.md 等 |
 
 **核心原则：Moltbot 默认只做“追加行/创建新文件”。仅在权限矩阵明确允许时，才可对“自动生成文件”做同日 upsert（用于重跑修复）；永远不修改、不删除人工内容。**
@@ -54,6 +56,26 @@ Moltbot（自动化 AI agent）通过 GitHub Contents API 向本仓库写入内�
 - 只允许在目标文件**文末**创建或使用固定 section：`## 🤖 Moltbot Updates`
 - 只做追加（append-only），每条追加必须包含：日期 + 事件一句话 + 影响一句话 + 一手来源 URL
 - 永远不修改/删除既有人工内容（包括标题、表格结构、排序）
+
+**`## 🤖 Moltbot Updates` section 固定格式**（由 industry-radar 任务维护）：
+
+```markdown
+---
+
+## 🤖 Moltbot Updates
+
+> ⚙️ 本节由 industry-radar 自动追加 | 人工内容止于上方分隔线 | 协议见 AGENTS.md
+
+| 日期 | 标记 | 公司 | 事件 | 影响 | 来源 |
+|---|---|---|---|---|---|
+| 2026-06-11 | ⚡ | Unitree | 完成新一轮融资 X 亿元 | 量产提速，关注招聘扩张 | [官方公告](https://...) |
+```
+
+- 标记列只用 ⚡（战略级）/ 🔧（可操作）；📖 级别只进 `archives/industry-radar/` 日档，不进业务文档。
+- 单一公司文件（如 `companies/limx_dynamics_series_b_200m_2026.md`）可省略「公司」列。
+- 追加前格式守卫：表格最后一行必须匹配 `^\|.*\|$` 且列数一致，否则跳过本次追加并告警（见上「失败处理」）。
+- 不做自动轮转/压缩（违反 append-only）；section 超过约 25 行时告警，由人工压缩。
+- `deployment/release_tracker.md` 接收 news 类事件时，`layer` 列填固定值 `news`（区别于 `github_release`）。
 
 ### paper_index.md 写入规则
 
@@ -77,6 +99,8 @@ Moltbot（自动化 AI agent）通过 GitHub Contents API 向本仓库写入内�
 | Task 4（双周报告） | `📊 biweekly report: {起始} to {结束}` | `📊 biweekly report: 2026-02-01 to 2026-02-14` |
 | 代码分析 | `📝 code analysis: {项目名}` | `📝 code analysis: OpenVLA-2` |
 | 索引更新 | `📋 update index: {文件名}` | `📋 update index: biweekly/README.md` |
+| 行业雷达（每日） | `🏭 industry-radar: {日期} (+N)` | `🏭 industry-radar: 2026-06-11 (+3)` |
+| 行业判断地图（每周） | `🏭 industry-mainline: {YYYY-Www}` | `🏭 industry-mainline: 2026-W24` |
 
 人工提交不使用以上 emoji 前缀，默认即人工。
 
@@ -146,6 +170,9 @@ Moltbot（自动化 AI agent）通过 GitHub Contents API 向本仓库写入内�
 | 双周前沿报告 | `reports/biweekly/{YYYY-MM-DD}.md` | Moltbot Task 4（双周推理） | 创建新文件 / 同日重跑允许覆盖 |
 | 双周索引更新 | `reports/biweekly/README.md`（追加/同日 upsert） | Moltbot Task 4（双周推理） | 追加行 / 同日 upsert |
 | 代码级分析速记 | `theory/code-notes/{project}_analysis.md` | Moltbot 代码分析任务 | 创建新文件 |
+| 行业雷达日档 | `memory/blog/archives/industry-radar/{YYYY-MM-DD}.md` | industry-radar（每日 22:30） | 创建新文件 / 同日覆盖 |
+| 业务文档行业追加 | `companies/*.md` / `product/*.md` / `deployment/release_tracker.md`（文末 🤖 区） | industry-radar（每日 22:30） | 追加行 |
+| 行业判断地图 | `companies/industry_mainline.md` | industry-radar（每周五 23:00） | 整体重写 / 每周 upsert |
 
 ---
 
