@@ -111,3 +111,19 @@ FastUMI Pro 是从学术界 FastUMI 升级而来的工业级、无本体数据�
 ---
 [← Back to Companies](./README.md)
 
+---
+
+## 🤖 Moltbot Updates
+
+> ⚙️ 本节由 industry-radar 自动追加 | 人工内容止于上方分隔线 | 协议见 AGENTS.md
+
+| 日期 | 标记 | 公司 | 事件 | 影响 | 来源 |
+|---|---|---|---|---|---|
+| 2026-06-08 | ⚡ | Unitree | 截至2026年6月8日，宇树科技官网及新闻中心将H2与H2 Plus列为‘天命觉醒’‘产研一体 全栈启航’新一代通用人形机器人，并置于G1、H1等型号之首。 | 确立技术代际升级路线，强化全栈自研定位，为IPO前产品叙事提供核心支撑。 | [来源](https://www.unitree.com/) |
+| 2026-06-04 | 🔧 | Unitree | 2026年6月4日至8日期间，宇树科技官网‘关于宇树’栏目持续将5月发布的GD01载人机甲（双足/四足切换，起售价390万元）列为最新重大产品动态。 | 巩固高端技术形象，支撑估值叙事，但属5月发布后的延续性传播，非6月内首发。 | [来源](https://www.unitree.com/about/) |
+| 2026-06-10 | ⚡ | Agibot | 智元于2026年6月10日正式发布‘元苼生态发展计划’，明确首期投入1亿元支持科研创新、教育培养、生态伙伴发展与社区运营四大方向。 | 确立具身智能产业首个规模化、体系化生态投入机制，加速AIMA技术栈的产学研协同落地。 | [来源](https://www.cnstock.com/commonDetail/727576) |
+| 2026-06-09 | ⚡ | Agibot | 智元于2026年6月9日发布公开信，首次提出‘部署态元年’概念，并正式开源具身智能生态技术体系AIMA，含Link-U OS、LinkCraft、LinkSoul、Genie Studio四大平台。 | 标志着具身智能从算法验证迈入系统化部署阶段，为开发者提供全栈开源工具链。 | [来源](http://finance.sina.com.cn/jjxw/2026-06-09/doc-iniauquu6557482.shtml) |
+| 2026-06-05 | 🔧 | Agibot | 2026年6月5日，智元主办的AGIBOT WORLD CHALLENGE 2026随ICRA 2026在维也纳收官，采用R2A+世界模型双赛道及统一‘精灵G2’真机闭环测试。 | 建立首个融合线上评测与物理世界真实任务验证的具身智能评估范式，推动行业测试标准统一。 | [来源](https://www.163.com/dy/article/KUOKG9I90514R9OJ.html) |
+| 2026-06-10 | 🔧 | Agibot | 智元于2026年6月10日开源发布AGIBOT WORLD 2026数据集，聚焦‘多样交互’场景，支撑世界模型训练。 | 填补具身智能领域高质量、多模态物理交互数据空白，降低世界模型研发门槛。 | [来源](http://finance.sina.com.cn/jjxw/2026-06-09/doc-iniauquu6557482.shtml) |
+| 2026-06-08 | 🔧 | Galbot | DAIMON Robotics与Galbot联合发布RobOmni基准测试平台，用于评估触觉感知与灵巧操作能力。 | 填补具身智能中触觉-操作闭环的标准化评测空白，推动VLA（视觉-语言-动作）向多模态物理交互演进。 | [来源](https://www.therobotreport.com/daimon-robotics-and-galbot-jointly-launches-robomni-for-benchmarking-tactile-perception-and-dexterous-manipulation/) |
+| 2026-06-07 | ⚡ | Agibot | AGIBOT举办World Challenge 2026，推动AI模型在真实机器人上执行闭环任务的实测评估。 | 标志行业重心从仿真分数转向真实世界任务性能验证，是VLA/具身智能落地的关键里程碑。 | [来源](https://www.therobotreport.com/agibot-holds-world-challenge-2026-see-how-ai-models-perform-real-tasks/) |
