@@ -22,12 +22,18 @@
 
 🛰️ **[Spatial-Intelligence-Handbook](https://github.com/sou350121/Spatial-Intelligence-Handbook)** · 姊妹仓库 — VLA 管 action policy，Spatial 管 world representation（3DGS / VGGT / depth foundation + 跨 embodiment 横向对比）。两者交集是 3D-aware VLA。
 
+🏭 **[行业情报雷达](companies/industry_mainline.md)** · 🆕 每日扫描机器人/具身公司动态（融资 · 产品 · IPO · 合作）→ qwen 联网搜索 + 机械核验后追加到公司档案；周五出[行业判断地图](companies/industry_mainline.md)，原始记录见 [`memory/blog/archives/industry-radar/`](memory/blog/archives/industry-radar)。
+
+> **🆕 2026-06-11 重大更新**
+> - **理论总纲两个月来首次全面同步**：10 个主题 `*_mainline.md` 综合了 4-6 月新进的 ~109 篇深度解析（保留旧判断并显式记录张力），71 篇散落文章归位，200+ 失效内链修复，全库 254 → **380 篇**。
+> - **行业情报层上线**：`companies/*.md` 不再静态——新增自动雷达每日补充融资/产品/IPO 动态（已回填过去 2 个月积压），周度生成行业判断地图。
+
 ### 全中文 · 工程实战导向的 VLA 知识库
 
 VLA 论文每天几十篇，真正能用的工程细节零散在 GitHub Issue 和论文附录里。
 这个 Handbook 做一件事：**把"看懂论文"和"跑通代码"之间的坑，全部填平。**
 
-> 380 篇理论文档（10 个主题目录，每日自动新增 2-3 篇深度解析） · 165 篇英文社区实战笔记 · 300+ 条中文社区蒸馏 · 47 条 GitHub Issues 工程经验 · 12 期双周推理报告 · 每日自动 pipeline（⚡ 论文评分 · 深度拆解 · 社交情报）
+> 380 篇理论文档（10 个主题目录，每日自动新增 2-3 篇深度解析） · 165 篇英文社区实战笔记 · 300+ 条中文社区蒸馏 · 47 条 GitHub Issues 工程经验 · 12 期双周推理报告 · **行业情报雷达**（公司动态 · 融资 · IPO 每日追踪） · 每日自动 pipeline（⚡ 论文评分 · 深度拆解 · 社交情报）
 
 ---
 

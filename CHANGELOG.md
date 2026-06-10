@@ -4,6 +4,15 @@ All notable changes to the **VLA Handbook** project are documented here, derived
 
 ---
 
+## 2026-06-11 — 行业情报雷达上线
+
+### Added（行业情报层）
+- 新增**自动行业雷达**：每日 qwen 联网搜索 + 机器人媒体 RSS → 机械 URL 核验 → append-only 写入 `companies/*.md` 文末「🤖 Moltbot Updates」区与每日 `memory/blog/archives/industry-radar/` 日档；周五综合生成 `companies/industry_mainline.md` 行业判断地图。
+- **回填过去 2 个月**积压的融资/产品/IPO 动态（智元合作伙伴大会、Booster/Robot Era/Galbot 融资、Tesla Optimus Gen3、Unitree IPO 过会→提交注册、LimX Luna、Galaxea G0.5 等）。
+- `AGENTS.md` 增补该自动化的写入权限矩阵与格式协议；修复 AGENTS.md 损坏的 symlink（曾导致 clone 报 File-name-too-long）。
+
+---
+
 ## 2026-06-10 — 综合层大修（人工 + agent swarm）
 
 ### Changed (Theory Mainlines — 全部 10 个总纲两个月来首次同步)
