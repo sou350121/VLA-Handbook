@@ -127,3 +127,20 @@ FastUMI Pro 是从学术界 FastUMI 升级而来的工业级、无本体数据�
 | 2026-06-10 | 🔧 | Agibot | 智元于2026年6月10日开源发布AGIBOT WORLD 2026数据集，聚焦‘多样交互’场景，支撑世界模型训练。 | 填补具身智能领域高质量、多模态物理交互数据空白，降低世界模型研发门槛。 | [来源](http://finance.sina.com.cn/jjxw/2026-06-09/doc-iniauquu6557482.shtml) |
 | 2026-06-08 | 🔧 | Galbot | DAIMON Robotics与Galbot联合发布RobOmni基准测试平台，用于评估触觉感知与灵巧操作能力。 | 填补具身智能中触觉-操作闭环的标准化评测空白，推动VLA（视觉-语言-动作）向多模态物理交互演进。 | [来源](https://www.therobotreport.com/daimon-robotics-and-galbot-jointly-launches-robomni-for-benchmarking-tactile-perception-and-dexterous-manipulation/) |
 | 2026-06-07 | ⚡ | Agibot | AGIBOT举办World Challenge 2026，推动AI模型在真实机器人上执行闭环任务的实测评估。 | 标志行业重心从仿真分数转向真实世界任务性能验证，是VLA/具身智能落地的关键里程碑。 | [来源](https://www.therobotreport.com/agibot-holds-world-challenge-2026-see-how-ai-models-perform-real-tasks/) |
+| 2026-04-17 | ⚡ | Agibot | 智元机器人于2026年4月17日召开合作伙伴大会，官宣2025年营收达10.5亿元，并发布4款新本体、4个AI大模型、7套行业解决方案及1个开放数据集。 | 确立国内最快达成10亿营收的机器人公司地位，全面展示技术-产品-商业闭环能力。 | [来源](https://news.17173.com/content/04172026/120632155.shtml) |
+| 2026-04-27 | 🔧 | Xiaomi Robotics | 2026年4月27日，新款小米机器人在小米投资者日现场亮相，博主@粮厂研究员Will发布的动作视频显示其手部灵活性显著提升。 | 确认硬件迭代进展，为后续量产及场景适配提供动作能力基础。 | [来源](https://post.smzdm.com/p/adoev0gk/) |
+| 2026-05-11 | ⚡ | Lumos Robot | Lumos Robot（鹿明机器人）于2026年5月11日宣布连续完成A1及A2轮融资，累计融资近10亿元，由三菱电机智能制造科技（中国）集团有限公司两轮领投，普华资本、吴中金控、恒生电子、海高集团、昆石投资等跟投。 | 为具身智能大模型研发、多场景商业化及产品规模化落地提供关键资金支持，标志外资产业资本深度介入中国具身智能赛道。 | [来源](https://new.qq.com/rain/a/20260511A04PL400) |
+| 2026-05-12 | ⚡ | Lumos Robot | 2026年5月12日披露，Lumos Robot自研Lumos Nexcore物理AI引擎已在三菱电机PLC产线实际部署，支撑MOS重载轮臂式机器人开展AI外观检测等柔性作业，系双方2025年6月战略合作后的首个规模化产线落地成果。 | 验证其物理AI技术在工业真实场景的工程化能力，确立与国际头部制造企业的深度协同范式。 | [来源](http://xinsanban.10jqka.com.cn/20250530/c668560786.shtml) |
+| 2026-05-13 | ⚡ | Dreame | 追觅科技官宣AURORA手机将于2026年第四季度发布，涵盖旗舰版、模块化摄影旗舰版与高奢定制版。 | 标志公司正式进军高端智能手机赛道，拓展全场景AI硬件生态边界。 | [来源](https://finance.sina.com.cn/stock/estate/integration/2026-05-13/doc-inhxtvfp4564608.shtml) |
+| 2026-05-25 | ⚡ | LimX Dynamics | 逐际动力于2026年5月25日正式发布面向商业服务场景的全尺寸人形机器人 LimX Luna | 首次将全尺寸人形机器人国内零售价定为29.8万元，拉入30万元价格区间，显著降低商业化门槛 | [来源](https://news.sohu.com/a/1032739190_554588) |
+| 2026-05-25 | 🔧 | LimX Dynamics | 逐际动力为全尺寸人形机器人 LimX Luna 公布国内零售价29.8万元 | 确立行业首个明确量产定价锚点，推动人形机器人商业化路径具象化 | [来源](https://news.sohu.com/a/1032739190_554588) |
+| 2026-05-30 | 🔧 | Xiaomi Robotics | 小米于2026年5月30日在海外发布会公开新一代CyberOne机器人在工厂环境中的实际作业视频。 | 证实产品已进入真实工业场景验证阶段，强化具身智能落地可信度。 | [来源](https://weibo.com/1642634100/QCKlb8IcV) |
+| 2026-06-01 | ⚡ | Unitree | 上交所上市审核委员会召开2026年第31次会议，审议通过宇树科技股份有限公司首发申请 | 标志其正式通过交易所实质性审核，进入注册阶段，为国内人形机器人领域首家过会企业 | [来源](https://www.163.com/dy/article/KUCHIJGL051481US.html) |
+| 2026-06-02 | ⚡ | Unitree | 上交所官网显示宇树科技IPO状态变更为“提交注册” | 意味着已通过交易所全部审核流程，转入证监会注册环节，上市进程关键提速 | [来源](http://mbd.baidu.com/newspage/data/dtlandingsuper?nid=dt_5221027735643971016) |
+| 2026-06-02 | ⚡ | Galaxea | Galaxea于2026年6月2日正式发布全新双足人形机器人Kengo。 | 标志其从模型与平台层迈向实体机器人量产落地的关键进展。 | [来源](https://maimai.cn/article/detail?fid=1904974173&efid=IErjyI8Oiv4DElYSmAY1wA) |
+| 2026-06-04 | ⚡ | Galaxea | Galaxea于2026年6月4日发布VLA基础模型Galaxea G0.5，升级‘VLA自回归建模’范式，支持推理与动作共序列生成。 | 推动具身智能从模块化架构转向统一权重、端到端生成范式，提升泛化与部署效率。 | [来源](https://blog.csdn.net/v_JULY_v/article/details/161690445) |
+| 2026-06-08 | ⚡ | Xiaomi Robotics | 2026年6月8日，小米机器人在小米17T系列新品发布会上登台，手持小米17T Pro手机，通过音量键变焦完成拍照演示。 | 首次公开展示高精度手眼协同能力，确立其作为小米AIoT生态关键交互节点的战略定位。 | [来源](http://finance.sina.com.cn/wm/2026-06-09/doc-iniauefc5290210.shtml) |
+| 2026-06-08 | ⚡ | Lumos Robot | Lumos Robot于2026年6月8日正式发布FastUMI Pro，定位为低成本、高效率、高精度的全域覆盖多模态无本体数据采集软硬件系统，口号为‘从实验室，到全世界’。 | 填补具身智能训练数据采集基础设施空白，有望成为其物理AI引擎持续迭代的核心数据底座。 | [来源](https://weibo.com/u/8006652968) |
+| 2026-06-09 | 🔧 | Unitree | 国际机构SemiAnalysis发布报告，指出G1人形机器人税前售价2.73万美元，毛利率67%，物料成本仅8976美元 | 首次由第三方权威信源量化验证其成本优势与量产能力，支撑工业级商业化可信度 | [来源](https://www.163.com/dy/article/KUVQ6PSQ05198NMR.html) |
+| 2026-06-09 | 🔧 | Unitree | 报告指出宇树核心执行器全部自研，关键零部件成本为西方同类产品的3–4折 | 印证其技术垂直整合能力，构成对海外竞品的结构性成本壁垒 | [来源](https://www.163.com/dy/article/KUVQ6PSQ05198NMR.html) |
+| 2026-06-10 | ⚡ | Agibot | 智元机器人于2026年6月10日正式发布‘2026元苼生态共建行动计划’，宣布先行投入1亿元生态扶持资金。 | 启动系统性生态建设，为开发者、高校及伙伴提供可落地的资源支持。 | [来源](https://flash.jin10.com/detail/20260610112116519800) |

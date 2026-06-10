@@ -74,3 +74,24 @@ DYNA 的公开指标设计非常“部署导向”，值得当作你评估任何
 ---
 [← Back to Companies](./README.md)
 
+---
+
+## 🤖 Moltbot Updates
+
+> ⚙️ 本节由 industry-radar 自动追加 | 人工内容止于上方分隔线 | 协议见 AGENTS.md
+
+| 日期 | 标记 | 公司 | 事件 | 影响 | 来源 |
+|---|---|---|---|---|---|
+| 2026-06-10 | 🔧 | Boston Dynamics | 首席财务官Amanda McMaster临时接任Boston Dynamics首席执行官职务 | 保障量产交付与商业化节奏下的治理连续性，未出现管理层真空 | [来源](https://www.163.com/dy/article/KRJ82P8605568W0A.html) |
+| 2026-06-10 | ⚡ | Boston Dynamics | 现代汽车宣布投资260亿美元在美国建设新工厂，目标年产3万台Boston Dynamics Atlas机器人 | 形成全球最大规模人形机器人制造基础设施，深度绑定Boston Dynamics产能与技术输出 | [来源](https://www.163.com/dy/article/KRJ82P8605568W0A.html) |
+| 2026-06-10 | 🔧 | Boston Dynamics | Boston Dynamics Atlas机器人已集成物理AI能力，并通过Orbit软件实现自主导航与换电功能 | 提升工业场景连续作业能力，支撑现代汽车等客户产线级规模化部署需求 | [来源](https://www.163.com/dy/article/KRJ82P8605568W0A.html) |
+| 2026-06-10 | 🔧 | Boston Dynamics | Boston Dynamics与谷歌DeepMind持续推进Orbit软件集成及物理AI联合研发 | 加速具身智能底层模型与硬件闭环迭代，强化Atlas在复杂任务泛化能力 | [来源](https://www.163.com/dy/article/KRJ82P8605568W0A.html) |
+| 2026-04-22 | ⚡ | Boston Dynamics | 截至2026年4月22日，Boston Dynamics估值被重估至约210亿美元 | 反映其从研发阶段迈入商业化拐点，显著提升市场与产业界对其商业可行性的认可 | [来源](https://www.163.com/dy/article/KUVMD0PU05198NMR.html) |
+| 2026-05-07 | ⚡ | Agility Robotics | CEO Peggy Johnson在2026年丰盛峰会炉边谈话中宣布公司当前估值约20亿美元，并计划于2026年晚些时候启动新一轮融资。 | 释放明确资本扩张信号，支撑Robofab工厂产能提升至年产10,000台，强化商业化落地节奏。 | [来源](https://www.cet.com.cn/xwsd/10392643.shtml) |
+| 2026-05-07 | 🔧 | Agility Robotics | CEO Peggy Johnson在2026年丰盛峰会披露第五代双足机器人Digit载重能力达50磅，当前运营成本为10–25美元/小时，目标降至2–3美元/小时。 | 明确成本收敛路径，为物流仓储等B端场景规模化部署提供关键经济性依据。 | [来源](https://www.cet.com.cn/xwsd/10392643.shtml) |
+| 2026-05-07 | ⚡ | Agility Robotics | CEO Peggy Johnson在2026年丰盛峰会宣布将扩充Robofab机器人工厂产能至年产10,000台。 | 标志从原型验证转向工业化量产阶段，是人形机器人硬件制造能力的关键里程碑。 | [来源](https://www.cet.com.cn/xwsd/10392643.shtml) |
+| 2026-05-11 | ⚡ | Apptronik | 2026年5月11日，专注于机器人及物理人工智能的封闭式投资基金RoboStrategy Inc.（NASDAQ: BOT）在其上市当日将Apptronik列为投资组合中的核心高增长企业。 | 标志Apptronik获得专业机器人主题资本市场的正式认可，提升其在AI具身智能领域的机构能见度与背书层级。 | [来源](https://blog.csdn.net/techforward/article/details/161819392) |
+| 2026-05-15 | ⚡ | Tesla Optimus | 特斯拉Optimus V3进入量产前夜，绿的谐波、拓普集团人形机器人相关订单显著放量，供应链已启动加班生产 | 标志Optimus从概念验证正式迈入工程化量产阶段，验证技术可行性与商业节奏 | [来源](https://www.163.com/dy/article/KUJDTUOM0534A4SC.html) |
+| 2026-06-01 | 🔧 | Tesla Optimus | 特斯拉就Optimus核心技术机密遭非法获取一事，对一名前工程师提起法律诉讼 | 凸显项目保密等级升级及商业化临界点敏感性，预示知识产权保护机制全面启动 | [来源](https://guba.sina.com.cn/?s=thread&bid=21046&tid=197586) |
+| 2026-06-02 | ⚡ | Tesla Optimus | 特斯拉在AWE 2026展会上公开展示Optimus Gen3，并宣布将于2026年夏季开始生产、2027年大规模量产并面向公众销售 | 首次明确Gen3量产时间表与商业化路径，确立行业量产基准线 | [来源](https://caifuhao.eastmoney.com/news/20250515142551617713680) |
+| 2026-06-04 | ⚡ | Tesla Optimus | 特斯拉确认Optimus V3量产临近，得州超级工厂建设专属制造设施，弗里蒙特工厂试点产线已启动，样机已在自有工厂执行电池分类等任务 | 证实内部产线部署与真实场景落地能力，强化‘从实验室到车间’的可信度 | [来源](https://caifuhao.eastmoney.com/news/20250515142551617713680) |
