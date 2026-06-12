@@ -36,3 +36,15 @@
 
 ---
 [← Back to Companies](./README.md)
+
+---
+
+## 🤖 Moltbot Updates
+
+> ⚙️ 本节由 industry-radar 自动追加 | 人工内容止于上方分隔线 | 协议见 AGENTS.md
+
+| 日期 | 标记 | 公司 | 事件 | 影响 | 来源 |
+|---|---|---|---|---|---|
+| 2026-06-12 | ⚡ | Physical Intelligence | Physical Intelligence获得由杰夫·贝佐斯和OpenAI联合领投的4亿美元融资 | 强化其在具身智能底层AI大脑技术上的研发能力与商业化加速能力 | [来源](https://www.163.com/dy/article/JGB2152N051193U6.html) |
+| 2026-06-12 | ⚡ | Physical Intelligence | Physical Intelligence披露新一轮融资计划，目标募资10亿美元，投后估值达110亿美元 | 反映资本市场对其AI驱动物理智能平台的高度认可，或重塑行业估值基准 | [来源](https://weibo.com/ttarticle/p/show?id=2310475282034443747355) |
+| 2026-06-12 | 🔧 | Physical Intelligence | Physical Intelligence完成7000万美元融资，由OpenAI相关方支持 | 支撑其早期工程化与人才招募，夯实AI-robotics闭环技术路径 | [来源](https://www.thepaper.cn/newsDetail_forward_26663733) |

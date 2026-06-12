@@ -33,3 +33,4 @@
 | 2026-06-04 | Galaxea | product | Galaxea于2026年6月4日发布VLA基础模型Galaxea G0.5，升级‘VLA自回归建模’范式，支持推理与动作共序列生成。 | ⚡ | news | https://blog.csdn.net/v_JULY_v/article/details/161690445 |
 | 2026-06-08 | Xiaomi Robotics | product | 2026年6月8日，小米机器人在小米17T系列新品发布会上登台，手持小米17T Pro手机，通过音量键变焦完成拍照演示。 | ⚡ | news | http://finance.sina.com.cn/wm/2026-06-09/doc-iniauefc5290210.shtml |
 | 2026-06-08 | Lumos Robot | product | Lumos Robot于2026年6月8日正式发布FastUMI Pro，定位为低成本、高效率、高精度的全域覆盖多模态无本体数据采集软硬件系统，口号为‘从实验室，到全世界’。 | ⚡ | news | https://weibo.com/u/8006652968 |
+| 2026-06-12 | Unitree | product | 宇树科技于2026年6月12日宣布全新人形机器人H2 Plus将于2026年下半年上市，搭载英伟达Jetson Thor平台，并已接入Isaac GR00T开发者平台。 | ⚡ | news | http://k.sina.com.cn/article_7857201856_1d45362c001906mrhi.html |
