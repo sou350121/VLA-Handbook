@@ -34,3 +34,8 @@
 | 2026-06-08 | Xiaomi Robotics | product | 2026年6月8日，小米机器人在小米17T系列新品发布会上登台，手持小米17T Pro手机，通过音量键变焦完成拍照演示。 | ⚡ | news | http://finance.sina.com.cn/wm/2026-06-09/doc-iniauefc5290210.shtml |
 | 2026-06-08 | Lumos Robot | product | Lumos Robot于2026年6月8日正式发布FastUMI Pro，定位为低成本、高效率、高精度的全域覆盖多模态无本体数据采集软硬件系统，口号为‘从实验室，到全世界’。 | ⚡ | news | https://weibo.com/u/8006652968 |
 | 2026-06-12 | Unitree | product | 宇树科技于2026年6月12日宣布全新人形机器人H2 Plus将于2026年下半年上市，搭载英伟达Jetson Thor平台，并已接入Isaac GR00T开发者平台。 | ⚡ | news | http://k.sina.com.cn/article_7857201856_1d45362c001906mrhi.html |
+| 2026-06-08 | Tesla Optimus | product | Tesla Optimus（T-Bot）于2026年6月8日前后确认进入量产启动（SOP）阶段，核心及新晋供应商均已收到Q2正式采购订单。 | ⚡ | news | https://finance.eastmoney.com/a/202606083763085170.html |
+| 2026-06-08 | Tesla Optimus | product | 截至2026年6月8日，Tesla Optimus当前月度交付量级已超100台且呈逐月上升趋势。 | 🔧 | news | https://finance.eastmoney.com/a/202606083763085170.html |
+| 2026-06-08 | Tesla Optimus | product | 特斯拉确认Optimus V3将于2026年7–8月在弗里蒙特工厂正式启动量产，首年目标产能为100万台。 | ⚡ | news | https://finance.eastmoney.com/a/202606083763085170.html |
+| null | Kepler | product | 2026年6月上旬（信息发布时间为6月11日–12日），开普勒披露其在手商业化订单总额超4700万元，全部来自客户复购，覆盖汽车制造、精密机加、智能物流等六大场景 | 🔧 | news | http://news.cnfol.com/shangyeyaowen/20260611/32276662.shtml |
+| null | Kepler | product | 2026年6月上旬（信息发布时间为6月11日–12日），开普勒宣布完成向‘硬件自研+实景数据沉淀+具身智能大脑’三位一体全栈智能方案企业的战略升级 | ⚡ | news | https://stock.10jqka.com.cn/20260612/c677429501.shtml |
