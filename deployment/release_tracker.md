@@ -39,3 +39,4 @@
 | 2026-06-08 | Tesla Optimus | product | 特斯拉确认Optimus V3将于2026年7–8月在弗里蒙特工厂正式启动量产，首年目标产能为100万台。 | ⚡ | news | https://finance.eastmoney.com/a/202606083763085170.html |
 | null | Kepler | product | 2026年6月上旬（信息发布时间为6月11日–12日），开普勒披露其在手商业化订单总额超4700万元，全部来自客户复购，覆盖汽车制造、精密机加、智能物流等六大场景 | 🔧 | news | http://news.cnfol.com/shangyeyaowen/20260611/32276662.shtml |
 | null | Kepler | product | 2026年6月上旬（信息发布时间为6月11日–12日），开普勒宣布完成向‘硬件自研+实景数据沉淀+具身智能大脑’三位一体全栈智能方案企业的战略升级 | ⚡ | news | https://stock.10jqka.com.cn/20260612/c677429501.shtml |
+| 2026-06-13 | MagicLab | product | 2026年6月13日，MagicLab（魔法原子）在第十二届中国（上海）国际技术进出口交易会（CSITF）首次公开发布自研大模型Magic-VLA K02与世界模型Magic-Mix，并完成叠衣服、叠盒子等长序任务真机实操演示。 | ⚡ | news | http://finance.sina.com.cn/stock/hkstock/hkzmt/2026-06-13/doc-inicfvnr2868374.shtml |

@@ -48,3 +48,4 @@
 | 2026-06-12 | ⚡ | Physical Intelligence | Physical Intelligence获得由杰夫·贝佐斯和OpenAI联合领投的4亿美元融资 | 强化其在具身智能底层AI大脑技术上的研发能力与商业化加速能力 | [来源](https://www.163.com/dy/article/JGB2152N051193U6.html) |
 | 2026-06-12 | ⚡ | Physical Intelligence | Physical Intelligence披露新一轮融资计划，目标募资10亿美元，投后估值达110亿美元 | 反映资本市场对其AI驱动物理智能平台的高度认可，或重塑行业估值基准 | [来源](https://weibo.com/ttarticle/p/show?id=2310475282034443747355) |
 | 2026-06-12 | 🔧 | Physical Intelligence | Physical Intelligence完成7000万美元融资，由OpenAI相关方支持 | 支撑其早期工程化与人才招募，夯实AI-robotics闭环技术路径 | [来源](https://www.thepaper.cn/newsDetail_forward_26663733) |
+| 2026-06-13 | ⚡ | MagicLab | 2026年6月13日，MagicLab（魔法原子）在第十二届中国（上海）国际技术进出口交易会（CSITF）首次公开发布自研大模型Magic-VLA K02与世界模型Magic-Mix，并完成叠衣服、叠盒子等长序任务真机实操演示。 | 标志其‘本体+模型+数据’全栈技术路线成熟落地，强化具身智能领域技术话语权。 | [来源](http://finance.sina.com.cn/stock/hkstock/hkzmt/2026-06-13/doc-inicfvnr2868374.shtml) |
