@@ -40,3 +40,6 @@
 | null | Kepler | product | 2026年6月上旬（信息发布时间为6月11日–12日），开普勒披露其在手商业化订单总额超4700万元，全部来自客户复购，覆盖汽车制造、精密机加、智能物流等六大场景 | 🔧 | news | http://news.cnfol.com/shangyeyaowen/20260611/32276662.shtml |
 | null | Kepler | product | 2026年6月上旬（信息发布时间为6月11日–12日），开普勒宣布完成向‘硬件自研+实景数据沉淀+具身智能大脑’三位一体全栈智能方案企业的战略升级 | ⚡ | news | https://stock.10jqka.com.cn/20260612/c677429501.shtml |
 | 2026-06-13 | MagicLab | product | 2026年6月13日，MagicLab（魔法原子）在第十二届中国（上海）国际技术进出口交易会（CSITF）首次公开发布自研大模型Magic-VLA K02与世界模型Magic-Mix，并完成叠衣服、叠盒子等长序任务真机实操演示。 | ⚡ | news | http://finance.sina.com.cn/stock/hkstock/hkzmt/2026-06-13/doc-inicfvnr2868374.shtml |
+| 2026-06-10 | LimX Dynamics | product | 逐际动力于2026年6月10日发布女性全尺寸人形机器人 LimX Luna，身高160cm、27自由度，支持视频学舞、零代码任务编排与200台群控。 | ⚡ | news | https://www.163.com/dy/article/KKPBLRM00519QIKK.html |
+| 2026-06-10 | Xpeng Robotics | product | Xpeng Robotics于2026年6月10日正式确认其人形机器人IRON将于2026年底实现量产。 | ⚡ | news | https://stock.10jqka.com.cn/hks/20260610/c677352319.shtml |
+| 2026-06-10 | Xpeng Robotics | product | Xpeng Robotics宣布IRON将于2027年一季度进入小鹏线下门店担任导购，初始功能涵盖导览、导购，并向收银等零售岗位拓展。 | 🔧 | news | https://stock.10jqka.com.cn/hks/20260610/c677352319.shtml |
