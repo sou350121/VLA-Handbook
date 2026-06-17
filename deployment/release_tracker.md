@@ -43,3 +43,7 @@
 | 2026-06-10 | LimX Dynamics | product | 逐际动力于2026年6月10日发布女性全尺寸人形机器人 LimX Luna，身高160cm、27自由度，支持视频学舞、零代码任务编排与200台群控。 | ⚡ | news | https://www.163.com/dy/article/KKPBLRM00519QIKK.html |
 | 2026-06-10 | Xpeng Robotics | product | Xpeng Robotics于2026年6月10日正式确认其人形机器人IRON将于2026年底实现量产。 | ⚡ | news | https://stock.10jqka.com.cn/hks/20260610/c677352319.shtml |
 | 2026-06-10 | Xpeng Robotics | product | Xpeng Robotics宣布IRON将于2027年一季度进入小鹏线下门店担任导购，初始功能涵盖导览、导购，并向收银等零售岗位拓展。 | 🔧 | news | https://stock.10jqka.com.cn/hks/20260610/c677352319.shtml |
+| 2026-06-11 | 1X Technologies | product | 1X Technologies于2026年6月11日宣布其NEO家用人形机器人在美国启动首批面向消费者的交付，系全球首款以‘家用电器’身份进入家庭的人形机器人。 | ⚡ | news | https://cloud.tencent.com/developer/news/3433946 |
+| 2026-06-13 | Tesla Optimus | product | 权威信源于2026年6月13日确认特斯拉Optimus Gen3（V3）将于2026年7–8月在弗里蒙特工厂启动量产，全身37关节、灵巧手22自由度，目标2027年底上市。 | ⚡ | news | https://news.qq.com/rain/a/20260423A01NQ100?adChannelId=tech |
+| 2026-06-15 | Tesla Optimus | product | 国盛证券于2026年6月15日报告指出特斯拉第三代人形机器人预计年中亮相，7–8月启动正式投产，加州工厂规划年产能100万台。 | 🔧 | news | http://finance.sina.com.cn/jjxw/2026-06-15/doc-inicnisv8287300.shtml |
+| 2026-06-17 | Sanctuary AI | product | Sanctuary AI在Tier 1汽车供应商现场完成物理AI（Physical AI）性能验证，强调其技术已具备生产就绪（production-ready）能力，而非依赖未来 humanoid 形态。 | ⚡ | news | https://www.therobotreport.com/sanctuary-ai-validates-physical-ai-performance-tier-1-automotive-supplier/ |
