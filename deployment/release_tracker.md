@@ -47,3 +47,6 @@
 | 2026-06-13 | Tesla Optimus | product | 权威信源于2026年6月13日确认特斯拉Optimus Gen3（V3）将于2026年7–8月在弗里蒙特工厂启动量产，全身37关节、灵巧手22自由度，目标2027年底上市。 | ⚡ | news | https://news.qq.com/rain/a/20260423A01NQ100?adChannelId=tech |
 | 2026-06-15 | Tesla Optimus | product | 国盛证券于2026年6月15日报告指出特斯拉第三代人形机器人预计年中亮相，7–8月启动正式投产，加州工厂规划年产能100万台。 | 🔧 | news | http://finance.sina.com.cn/jjxw/2026-06-15/doc-inicnisv8287300.shtml |
 | 2026-06-17 | Sanctuary AI | product | Sanctuary AI在Tier 1汽车供应商现场完成物理AI（Physical AI）性能验证，强调其技术已具备生产就绪（production-ready）能力，而非依赖未来 humanoid 形态。 | ⚡ | news | https://www.therobotreport.com/sanctuary-ai-validates-physical-ai-performance-tier-1-automotive-supplier/ |
+| 2026-06-16 | Galaxea | product | Galaxea在WDC 2026上正式发布并开源新一代视觉语言动作（VLA）基础模型G0.5，同步公布世界模型Fast-WAM与全身控制基础模型 | ⚡ | news | https://baike.baidu.com/item/星海图全球开发者大会/67985045 |
+| 2026-06-16 | Galaxea | product | Galaxea在WDC 2026上首次公开展示自研双足人形机器人Kengo（行客），标志其整机研发能力落地 | ⚡ | news | https://stock.10jqka.com.cn/20260617/c677541792.shtml |
+| 2026-06-17 | Tesla Optimus | product | 特斯拉已完成Optimus供应链核心协议签署，弗里蒙特工厂产线改造完毕，确认于2026年7月启动规模化量产，目标年产能达百万台。 | ⚡ | news | https://m.163.com/dy/article/KVJJBEPP055616YL.html |
