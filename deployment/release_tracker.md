@@ -50,3 +50,5 @@
 | 2026-06-16 | Galaxea | product | Galaxea在WDC 2026上正式发布并开源新一代视觉语言动作（VLA）基础模型G0.5，同步公布世界模型Fast-WAM与全身控制基础模型 | ⚡ | news | https://baike.baidu.com/item/星海图全球开发者大会/67985045 |
 | 2026-06-16 | Galaxea | product | Galaxea在WDC 2026上首次公开展示自研双足人形机器人Kengo（行客），标志其整机研发能力落地 | ⚡ | news | https://stock.10jqka.com.cn/20260617/c677541792.shtml |
 | 2026-06-17 | Tesla Optimus | product | 特斯拉已完成Optimus供应链核心协议签署，弗里蒙特工厂产线改造完毕，确认于2026年7月启动规模化量产，目标年产能达百万台。 | ⚡ | news | https://m.163.com/dy/article/KVJJBEPP055616YL.html |
+| 2026-06-17 | NVIDIA Robotics | product | NVIDIA于2026年6月17日发布Nemotron 3 Ultra大模型、Vera CPU、Factory Operations Blueprint（FOX）及Cosmos 3 OmniModel，构成面向长时间运行AI智能体的物理AI技术底座。 | ⚡ | news | https://blogs.nvidia.cn/blog/national-robotics-week-2026/ |
+| 2026-06-17 | NVIDIA Robotics | product | NVIDIA于2026年6月17日同步发布全新开源物理AI智能体技能库与开发工具集，作为Isaac Lab与GR00T模型配套资源。 | 🔧 | news | https://blogs.nvidia.cn/blog/national-robotics-week-2026/ |
