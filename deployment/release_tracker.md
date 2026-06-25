@@ -52,3 +52,4 @@
 | 2026-06-17 | Tesla Optimus | product | 特斯拉已完成Optimus供应链核心协议签署，弗里蒙特工厂产线改造完毕，确认于2026年7月启动规模化量产，目标年产能达百万台。 | ⚡ | news | https://m.163.com/dy/article/KVJJBEPP055616YL.html |
 | 2026-06-17 | NVIDIA Robotics | product | NVIDIA于2026年6月17日发布Nemotron 3 Ultra大模型、Vera CPU、Factory Operations Blueprint（FOX）及Cosmos 3 OmniModel，构成面向长时间运行AI智能体的物理AI技术底座。 | ⚡ | news | https://blogs.nvidia.cn/blog/national-robotics-week-2026/ |
 | 2026-06-17 | NVIDIA Robotics | product | NVIDIA于2026年6月17日同步发布全新开源物理AI智能体技能库与开发工具集，作为Isaac Lab与GR00T模型配套资源。 | 🔧 | news | https://blogs.nvidia.cn/blog/national-robotics-week-2026/ |
+| 2026-06-23 | ByteDance Seed | product | 2026年6月23日，火山引擎在FORCE原动力大会上正式发布Seedance 2.5视频生成模型、豆包Seed2.1系列大模型、Seeddream5.0图像模型及豆包音频生成模型1.0。 | ⚡ | news | https://user.guancha.cn/main/content?id=1675991 |
