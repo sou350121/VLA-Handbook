@@ -53,3 +53,9 @@
 | 2026-06-17 | NVIDIA Robotics | product | NVIDIA于2026年6月17日发布Nemotron 3 Ultra大模型、Vera CPU、Factory Operations Blueprint（FOX）及Cosmos 3 OmniModel，构成面向长时间运行AI智能体的物理AI技术底座。 | ⚡ | news | https://blogs.nvidia.cn/blog/national-robotics-week-2026/ |
 | 2026-06-17 | NVIDIA Robotics | product | NVIDIA于2026年6月17日同步发布全新开源物理AI智能体技能库与开发工具集，作为Isaac Lab与GR00T模型配套资源。 | 🔧 | news | https://blogs.nvidia.cn/blog/national-robotics-week-2026/ |
 | 2026-06-23 | ByteDance Seed | product | 2026年6月23日，火山引擎在FORCE原动力大会上正式发布Seedance 2.5视频生成模型、豆包Seed2.1系列大模型、Seeddream5.0图像模型及豆包音频生成模型1.0。 | ⚡ | news | https://user.guancha.cn/main/content?id=1675991 |
+| 2026-06-24 | Unitree | product | Unitree R1自2026年6月24日起开放现货销售，该机型重约25千克，配备26个高精度关节，支持语音与图像多模态大模型交互。 | 🔧 | news | https://m.163.com/dy/article/L08M43UE05567I2C.html |
+| 2026-06-24 | Tesla Optimus | product | 2026年6月24日媒体报道称特斯拉Optimus人形机器人已进入量产准备阶段，谐波减速器、关节模块等核心部件由上游供应商开始供货。 | ⚡ | news | https://www.163.com/dy/article/L0661LF20519QIKK.html |
+| 2026-06-24 | Tesla Optimus | product | 2026年6月24日多家媒体援引供应链报告指出，特斯拉Optimus大规模量产将于2026年下半年启动，加州与德州工厂同步推进。 | ⚡ | news | https://www.163.com/dy/article/L0661LF20519QIKK.html |
+| 2026-06-24 | Galaxea | product | Galaxea作为核心参展方参与2026上海世界移动通信大会（MWC上海2026），展示其在6G+AI+具身智能融合场景下的技术落地能力。 | ⚡ | news | https://www.163.com/dy/article/L09NRHUL0511A632.html |
+| 2026-06-25 | Galaxea | product | 中国蓝TV、新华网等权威媒体于6月25日广泛报道Galaxea于6月16日启动的‘100万小时超高质量真实数据计划’及其‘本能智能—作业智能—进化智能’三重跃迁理论。 | ⚡ | news | https://maimai.cn/article/detail?fid=1904974173&efid=IErjyI8Oiv4DElYSmAY1wA |
+| 2026-06-26 | Galaxea | product | 6月26日，多家平台汇总确认Galaxea全球开发者大会（WDC 2026）成果，包括开源VLA模型G0.5、首秀双足人形机器人Kengo（行客）、发布世界模型Fast-WAM及联合北京亦庄共建‘亦数智能’数据公司。 | ⚡ | news | https://maimai.cn/article/detail?fid=1904974173&efid=IErjyI8Oiv4DElYSmAY1wA |
