@@ -110,3 +110,13 @@ DYNA 的公开指标设计非常“部署导向”，值得当作你评估任何
 | 2026-06-24 | ⚡ | Tesla Optimus | 2026年6月24日媒体报道称特斯拉Optimus人形机器人已进入量产准备阶段，谐波减速器、关节模块等核心部件由上游供应商开始供货。 | 标志Optimus从原型验证正式转向规模化生产准备，供应链协同进入实质交付阶段。 | [来源](https://www.163.com/dy/article/L0661LF20519QIKK.html) |
 | 2026-06-24 | ⚡ | Tesla Optimus | 2026年6月24日多家媒体援引供应链报告指出，特斯拉Optimus大规模量产将于2026年下半年启动，加州与德州工厂同步推进。 | 首次明确双基地量产节奏，强化商业化落地时间表可信度。 | [来源](https://www.163.com/dy/article/L0661LF20519QIKK.html) |
 | 2026-06-24 | 🔧 | Tesla Optimus | 2026年6月24日报道称特斯拉正与美诺自动化、亚洲光电、盟立集团等供应商开展Optimus核心部件的深度合作。 | 揭示关键供应链布局进展，反映本土化与全球化并行的制造策略。 | [来源](https://www.163.com/dy/article/L0661LF20519QIKK.html) |
+| 2026-06-22 | ⚡ | Tesla Optimus | 2026年6月22日，特斯拉与台湾盟立自动化（供应谐波减速器和关节模组）及亚洲光学（负责光学‘眼睛’组件）达成供货合作，标志Optimus 3量产进入实质性备货阶段。 | 核心执行部件供应链落地，为7月下旬至8月量产提供确定性保障。 | [来源](https://www.163.com/dy/article/L0661LF20519QIKK.html) |
+| 2026-06-22 | ⚡ | Agility Robotics | 2026年6月22日，英伟达发布Halos for Robotics系统，Agility Robotics为其全球首家合作方。 | 接入英伟达端到端物理AI安全栈，提升机器人自主决策安全性与部署效率。 | [来源](https://blog.csdn.net/txg666/article/details/162332380) |
+| 2026-06-23 | ⚡ | Tesla Optimus | 2026年6月23日，特斯拉关停Model S/X整车产线，全面改造弗里蒙特工厂为Optimus 3专用产线，设计年产能100万台；得州超级工厂专属Optimus工厂同步动工，规划年产能1000万台。 | 确立规模化制造基础设施，释放量产物理能力边界。 | [来源](https://www.163.com/dy/article/L0661LF20519QIKK.html) |
+| 2026-06-24 | ⚡ | Tesla Optimus | 2026年6月24日，产业链厂商确认谐波减速器、关节模组等关键零部件已开始供货，多家机构援引该进展指出Optimus 3量产窗口仅余约1个月，明确指向2026年7月下旬至8月启动。 | 量产时间表从预期转向倒计时，触发二级市场与上游产能爬坡响应。 | [来源](https://www.163.com/dy/article/KV5TI46M0519QIKK.html) |
+| 2026-06-24 | ⚡ | Agility Robotics | 公司确认本次交易共募集超6.2亿美元，其中4.2亿美元来自Churchill XI信托现金，超2亿美元通过PIPE方式由富士康领投。 | 显著增强量产与商业化落地资金保障能力，并强化与富士康在制造端的战略协同。 | [来源](https://m.ebrun.com/684584.html) |
+| 2026-06-25 | ⚡ | Tesla Optimus | 2026年6月25日，美光科技在第三财季电话会议中确认，Optimus人形机器人将成为其内存芯片最大增量客户，采购需求预期超过特斯拉汽车业务。 | 验证Optimus硬件采购权重跃升至公司级战略优先级，重塑产业链估值逻辑。 | [来源](https://mbd.baidu.com/newspage/data/dtlandingsuper?nid=dt_4478792863668663492) |
+| 2026-06-25 | ⚡ | Agility Robotics | Agility Robotics于2026年6月25日完成与Churchill Capital Corp. XI（CCXI）的SPAC合并，正式登陆公开市场。 | 确立其全球首家专注人形机器人研发与销售的上市企业地位，估值约25亿美元。 | [来源](https://m.163.com/dy/article/L06MNSVS0519QIKK.html) |
+| 2026-06-25 | 🔧 | Agility Robotics | 截至2026年6月25日，Digit机器人已在丰田（含丰田加拿大制造公司）、舍弗勒、GXO、Mercado Libre及亚马逊等9个客户站点实现商用部署。 | 验证产品真实场景可靠性与工业适配性，支撑后续规模化复制。 | [来源](https://m.163.com/dy/article/L0A9AG6605118UGF.html) |
+| 2026-06-25 | ⚡ | Agility Robotics | 新一代Digit V5机型已获得超3亿美元多年期订单，并有30余家潜在客户正在评估大规模部署方案。 | 标志产品迭代成功及市场需求加速释放，奠定2026年下半年收入增长基础。 | [来源](https://m.163.com/dy/article/L0A9AG6605118UGF.html) |
+| 2026-06-26 | 🔧 | Tesla Optimus | 2026年6月26日，巨轮智能公告与特斯拉签订28–50亿元框架协议，为其Optimus提供RV减速器及膝踝关节减速模组，首批订单3500台，XT减速器已进入小批量供货阶段。 | 国产关键运动部件获特斯拉认证并启动交付，加速本土供应链替代进程。 | [来源](https://caifuhao.eastmoney.com/news/20260626181836920154950) |

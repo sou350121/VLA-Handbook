@@ -59,3 +59,8 @@
 | 2026-06-24 | Galaxea | product | Galaxea作为核心参展方参与2026上海世界移动通信大会（MWC上海2026），展示其在6G+AI+具身智能融合场景下的技术落地能力。 | ⚡ | news | https://www.163.com/dy/article/L09NRHUL0511A632.html |
 | 2026-06-25 | Galaxea | product | 中国蓝TV、新华网等权威媒体于6月25日广泛报道Galaxea于6月16日启动的‘100万小时超高质量真实数据计划’及其‘本能智能—作业智能—进化智能’三重跃迁理论。 | ⚡ | news | https://maimai.cn/article/detail?fid=1904974173&efid=IErjyI8Oiv4DElYSmAY1wA |
 | 2026-06-26 | Galaxea | product | 6月26日，多家平台汇总确认Galaxea全球开发者大会（WDC 2026）成果，包括开源VLA模型G0.5、首秀双足人形机器人Kengo（行客）、发布世界模型Fast-WAM及联合北京亦庄共建‘亦数智能’数据公司。 | ⚡ | news | https://maimai.cn/article/detail?fid=1904974173&efid=IErjyI8Oiv4DElYSmAY1wA |
+| 2026-06-23 | Tesla Optimus | product | 2026年6月23日，特斯拉关停Model S/X整车产线，全面改造弗里蒙特工厂为Optimus 3专用产线，设计年产能100万台；得州超级工厂专属Optimus工厂同步动工，规划年产能1000万台。 | ⚡ | news | https://www.163.com/dy/article/L0661LF20519QIKK.html |
+| 2026-06-24 | Unitree | product | 2026年6月24日，宇树科技在北京王府井全国首家直营店陈列R1不同配置版本，标价分别为约3.9万元与2.9万元，证实R1 Air（18自由度）与基础款（26自由度）为分层产品线。 | 🔧 | news | https://www.163.com/dy/article/L07HNV400512B07B.html |
+| 2026-06-24 | Tesla Optimus | product | 2026年6月24日，产业链厂商确认谐波减速器、关节模组等关键零部件已开始供货，多家机构援引该进展指出Optimus 3量产窗口仅余约1个月，明确指向2026年7月下旬至8月启动。 | ⚡ | news | https://www.163.com/dy/article/KV5TI46M0519QIKK.html |
+| 2026-06-25 | Agility Robotics | product | 截至2026年6月25日，Digit机器人已在丰田（含丰田加拿大制造公司）、舍弗勒、GXO、Mercado Libre及亚马逊等9个客户站点实现商用部署。 | 🔧 | news | https://m.163.com/dy/article/L0A9AG6605118UGF.html |
+| 2026-06-25 | Agility Robotics | product | 新一代Digit V5机型已获得超3亿美元多年期订单，并有30余家潜在客户正在评估大规模部署方案。 | ⚡ | news | https://m.163.com/dy/article/L0A9AG6605118UGF.html |
