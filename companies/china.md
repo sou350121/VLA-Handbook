@@ -188,3 +188,14 @@ FastUMI Pro 是从学术界 FastUMI 升级而来的工业级、无本体数据�
 | 2026-06-24 | ⚡ | Unitree | 宇树科技于2026年6月24日宣布Unitree R1人形机器人起售价由3.99万元下调25.06%至2.99万元，并同步开放现货销售。 | 显著降低开发者与教育机构准入门槛，加速人形机器人商业化落地与生态构建。 | [来源](https://www.guandian.cn/article/20260625/569125.html) |
 | 2026-06-24 | ⚡ | Unitree | 宇树科技将R1降价明确归因于规模化生产形成的成本优势（核心零部件国产化率超90%，累计下线约1.1万台）及加速生态构建的战略意图。 | 印证其已具备稳定量产能力，强化市场对其技术自主性与供应链成熟度的信心。 | [来源](https://finance.sina.cn/2026-06-26/detail-inietspn0461340.d.html) |
 | 2026-06-24 | 🔧 | Unitree | 2026年6月24日，宇树科技在北京王府井全国首家直营店陈列R1不同配置版本，标价分别为约3.9万元与2.9万元，证实R1 Air（18自由度）与基础款（26自由度）为分层产品线。 | 明确产品矩阵策略，为下游采购与开发选型提供实操参考依据。 | [来源](https://www.163.com/dy/article/L07HNV400512B07B.html) |
+| 2026-06-28 | ⚡ | Unitree | 宇树科技科创板IPO已成功过会，进入静默期。 | 标志公司迈入上市关键阶段，融资与品牌公信力提升，但静默期限制其对降价等商业动作的官方解释。 | [来源](https://t.cj.sina.com.cn/articles/view/1733583753/6754638900101bzf4) |
+| 2026-06-23 | ⚡ | ByteDance Seed | ByteDance Seed于2026年6月23日正式发布Seed 2.1版本，重点提升智能代理在复杂场景下的可靠交付能力及代码生成能力。 | 显著强化其AI代理在真实业务场景（如自动化开发、运维）中的落地可靠性。 | [来源](https://seed.bytedance.com/en/?view_from=homepage_tabn) |
+| 2026-06-23 | 🔧 | ByteDance Seed | ByteDance Seed于2026年6月23日开源VeOmni模型训练框架，支持任意模态联合建模，将工程开发周期从数周缩短至数天。 | 降低多模态AI研发门槛，加速第三方开发者和企业定制化模型迭代。 | [来源](https://seed.bytedance.com/en/?view_from=homepage_tabn) |
+| 2026-06-23 | ⚡ | ByteDance Seed | ByteDance Seed旗下GR-RL强化学习框架于2026年6月23日公布成果：全球首次在真实机器人平台上完成自主鞋带系结任务。 | 标志其具身智能与灵巧操作技术达到可实际部署水平，为服务机器人商业化提供关键能力验证。 | [来源](https://seed.bytedance.com/en/?view_from=homepage_tabn) |
+| 2026-06-23 | 🔧 | ByteDance Seed | ByteDance Seed于2026年6月23日上线Seedream 5.0 Lite版本，显著增强语言理解、逻辑推理与内容生成能力。 | 优化轻量级端侧AI体验，支撑Doubao等应用中更自然、深度的交互响应。 | [来源](https://seed.bytedance.com/en/?view_from=homepage_tabn) |
+| 2026-06-23 | 🔧 | ByteDance Seed | ByteDance Seed于2026年6月23日在Doubao App正式上线Full-Duplex Speech LLM，具备专注倾听与强抗干扰能力，对话流畅度提升12%。 | 实质性改善语音交互体验，推动AI助手向高保真实时对话场景规模化渗透。 | [来源](https://seed.bytedance.com/en/?view_from=homepage_tabn) |
+| 2026-06-24 | ⚡ | Unitree | 宇树科技于2026年6月24日宣布Unitree R1双足人形机器人官方售价由3.99万元下调至2.99万元起，并即日起开放现货销售。 | 显著降低开发者与教育机构采购门槛，加速人形机器人在教学、科研及早期应用落地。 | [来源](https://www.sohu.com/a/1041487075_121218495) |
+| 2026-06-24 | 🔧 | Agibot | AGIBOT于2026年6月24日公布基于GO-2大模型的G2机器人在龙旗科技南昌工厂完成6天真实量产产线直播，实现全链路自主作业，并披露LIBERO基准测试平均成功率98.5%。 | 提供具身智能在工业场景中高可靠性与泛化能力的关键实证，支撑客户采购与生态合作决策。 | [来源](https://hk.prnasia.com/story/538949-2.shtml) |
+| 2026-06-27 | ⚡ | Deep Robotics | 杭州云深处科技股份有限公司于2026年6月27日正式完成股份制改造，并启用新公司全称‘杭州云深处科技股份有限公司’。 | 确立规范化法人治理结构，为IPO合规性奠定法律主体基础。 | [来源](http://m.bjnews.com.cn/detail/1776155746129584.html) |
+| 2026-06-28 | ⚡ | Agibot | AGIBOT于2026年6月28日宣布第15000台工业级具身任务机器人G2量产下线，并当日交付龙旗科技投入ODM产线实际作业。 | 标志其具身智能机器人进入规模化量产与真实产线部署新阶段，验证商业化落地能力。 | [来源](http://finance.sina.com.cn/stock/usstock/summary/2026-06-28/doc-inieyets0514724.shtml) |
+| 2026-06-28 | ⚡ | Agibot | AGIBOT量产第15,000台轮式半人形机器人，标志具身智能从研发生产进入规模化部署阶段 | 反映中国具身智能企业已实现万台级量产能力，验证商业化落地节奏加快 | [来源](https://www.therobotreport.com/agibot-produces-15000th-robot-marking-milestone-embodied-ai-deployment/) |

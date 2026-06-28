@@ -64,3 +64,11 @@
 | 2026-06-24 | Tesla Optimus | product | 2026年6月24日，产业链厂商确认谐波减速器、关节模组等关键零部件已开始供货，多家机构援引该进展指出Optimus 3量产窗口仅余约1个月，明确指向2026年7月下旬至8月启动。 | ⚡ | news | https://www.163.com/dy/article/KV5TI46M0519QIKK.html |
 | 2026-06-25 | Agility Robotics | product | 截至2026年6月25日，Digit机器人已在丰田（含丰田加拿大制造公司）、舍弗勒、GXO、Mercado Libre及亚马逊等9个客户站点实现商用部署。 | 🔧 | news | https://m.163.com/dy/article/L0A9AG6605118UGF.html |
 | 2026-06-25 | Agility Robotics | product | 新一代Digit V5机型已获得超3亿美元多年期订单，并有30余家潜在客户正在评估大规模部署方案。 | ⚡ | news | https://m.163.com/dy/article/L0A9AG6605118UGF.html |
+| 2026-06-23 | ByteDance Seed | product | ByteDance Seed于2026年6月23日正式发布Seed 2.1版本，重点提升智能代理在复杂场景下的可靠交付能力及代码生成能力。 | ⚡ | news | https://seed.bytedance.com/en/?view_from=homepage_tabn |
+| 2026-06-23 | ByteDance Seed | product | ByteDance Seed于2026年6月23日开源VeOmni模型训练框架，支持任意模态联合建模，将工程开发周期从数周缩短至数天。 | 🔧 | news | https://seed.bytedance.com/en/?view_from=homepage_tabn |
+| 2026-06-23 | ByteDance Seed | product | ByteDance Seed旗下GR-RL强化学习框架于2026年6月23日公布成果：全球首次在真实机器人平台上完成自主鞋带系结任务。 | ⚡ | news | https://seed.bytedance.com/en/?view_from=homepage_tabn |
+| 2026-06-23 | ByteDance Seed | product | ByteDance Seed于2026年6月23日上线Seedream 5.0 Lite版本，显著增强语言理解、逻辑推理与内容生成能力。 | 🔧 | news | https://seed.bytedance.com/en/?view_from=homepage_tabn |
+| 2026-06-23 | ByteDance Seed | product | ByteDance Seed于2026年6月23日在Doubao App正式上线Full-Duplex Speech LLM，具备专注倾听与强抗干扰能力，对话流畅度提升12%。 | 🔧 | news | https://seed.bytedance.com/en/?view_from=homepage_tabn |
+| 2026-06-24 | Agibot | product | AGIBOT于2026年6月24日公布基于GO-2大模型的G2机器人在龙旗科技南昌工厂完成6天真实量产产线直播，实现全链路自主作业，并披露LIBERO基准测试平均成功率98.5%。 | 🔧 | news | https://hk.prnasia.com/story/538949-2.shtml |
+| 2026-06-28 | Agibot | product | AGIBOT于2026年6月28日宣布第15000台工业级具身任务机器人G2量产下线，并当日交付龙旗科技投入ODM产线实际作业。 | ⚡ | news | http://finance.sina.com.cn/stock/usstock/summary/2026-06-28/doc-inieyets0514724.shtml |
+| 2026-06-28 | Agibot | product | AGIBOT量产第15,000台轮式半人形机器人，标志具身智能从研发生产进入规模化部署阶段 | ⚡ | news | https://www.therobotreport.com/agibot-produces-15000th-robot-marking-milestone-embodied-ai-deployment/ |
