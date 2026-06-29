@@ -72,3 +72,5 @@
 | 2026-06-24 | Agibot | product | AGIBOT于2026年6月24日公布基于GO-2大模型的G2机器人在龙旗科技南昌工厂完成6天真实量产产线直播，实现全链路自主作业，并披露LIBERO基准测试平均成功率98.5%。 | 🔧 | news | https://hk.prnasia.com/story/538949-2.shtml |
 | 2026-06-28 | Agibot | product | AGIBOT于2026年6月28日宣布第15000台工业级具身任务机器人G2量产下线，并当日交付龙旗科技投入ODM产线实际作业。 | ⚡ | news | http://finance.sina.com.cn/stock/usstock/summary/2026-06-28/doc-inieyets0514724.shtml |
 | 2026-06-28 | Agibot | product | AGIBOT量产第15,000台轮式半人形机器人，标志具身智能从研发生产进入规模化部署阶段 | ⚡ | news | https://www.therobotreport.com/agibot-produces-15000th-robot-marking-milestone-embodied-ai-deployment/ |
+| 2026-06-25 | Agibot | product | 2026年6月25日，AGIBOT在法国巴黎VivaTech 2026科技大会上全面展示其具身智能机器人产品矩阵，涵盖交互、运动、操作及多机协同能力。 | ⚡ | news | https://www.cnstock.com/commonDetail/735266 |
+| 2026-06-25 | Lumos Robot | product | Lumos Robotics自研产业具身大脑Prime R0在AI2发起的MolmoSpaces零样本评测中，实现单臂/双臂精细操作全任务谱系综合成功率全球第一。 | ⚡ | news | https://tech.ifeng.com/c/8uFdQDTMj0A |

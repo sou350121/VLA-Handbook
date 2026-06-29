@@ -199,3 +199,6 @@ FastUMI Pro 是从学术界 FastUMI 升级而来的工业级、无本体数据�
 | 2026-06-27 | ⚡ | Deep Robotics | 杭州云深处科技股份有限公司于2026年6月27日正式完成股份制改造，并启用新公司全称‘杭州云深处科技股份有限公司’。 | 确立规范化法人治理结构，为IPO合规性奠定法律主体基础。 | [来源](http://m.bjnews.com.cn/detail/1776155746129584.html) |
 | 2026-06-28 | ⚡ | Agibot | AGIBOT于2026年6月28日宣布第15000台工业级具身任务机器人G2量产下线，并当日交付龙旗科技投入ODM产线实际作业。 | 标志其具身智能机器人进入规模化量产与真实产线部署新阶段，验证商业化落地能力。 | [来源](http://finance.sina.com.cn/stock/usstock/summary/2026-06-28/doc-inieyets0514724.shtml) |
 | 2026-06-28 | ⚡ | Agibot | AGIBOT量产第15,000台轮式半人形机器人，标志具身智能从研发生产进入规模化部署阶段 | 反映中国具身智能企业已实现万台级量产能力，验证商业化落地节奏加快 | [来源](https://www.therobotreport.com/agibot-produces-15000th-robot-marking-milestone-embodied-ai-deployment/) |
+| 2026-06-24 | ⚡ | Unitree | 宇树科技于2026年6月24日宣布Unitree R1起售价由3.99万元降至2.99万元，降幅25.06%，并即日起开放现货销售。 | 显著降低开发者与教育机构采购门槛，加速R1在科研、教学及早期商业化场景的部署。 | [来源](https://www.163.com/dy/article/L07HNV400512B07B.html) |
+| 2026-06-25 | ⚡ | Agibot | 2026年6月25日，AGIBOT在法国巴黎VivaTech 2026科技大会上全面展示其具身智能机器人产品矩阵，涵盖交互、运动、操作及多机协同能力。 | 标志着AGIBOT首次以全球领军企业身份集中对外呈现技术实力，强化其在具身智能领域的国际认知度与商业化叙事。 | [来源](https://www.cnstock.com/commonDetail/735266) |
+| 2026-06-25 | ⚡ | Lumos Robot | Lumos Robotics自研产业具身大脑Prime R0在AI2发起的MolmoSpaces零样本评测中，实现单臂/双臂精细操作全任务谱系综合成功率全球第一。 | 验证其在真实物理环境中零样本泛化能力与安全执行能力，确立全球具身智能技术标杆地位。 | [来源](https://tech.ifeng.com/c/8uFdQDTMj0A) |
