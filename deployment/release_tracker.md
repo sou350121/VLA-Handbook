@@ -74,3 +74,7 @@
 | 2026-06-28 | Agibot | product | AGIBOT量产第15,000台轮式半人形机器人，标志具身智能从研发生产进入规模化部署阶段 | ⚡ | news | https://www.therobotreport.com/agibot-produces-15000th-robot-marking-milestone-embodied-ai-deployment/ |
 | 2026-06-25 | Agibot | product | 2026年6月25日，AGIBOT在法国巴黎VivaTech 2026科技大会上全面展示其具身智能机器人产品矩阵，涵盖交互、运动、操作及多机协同能力。 | ⚡ | news | https://www.cnstock.com/commonDetail/735266 |
 | 2026-06-25 | Lumos Robot | product | Lumos Robotics自研产业具身大脑Prime R0在AI2发起的MolmoSpaces零样本评测中，实现单臂/双臂精细操作全任务谱系综合成功率全球第一。 | ⚡ | news | https://tech.ifeng.com/c/8uFdQDTMj0A |
+| 2026-06-24 | Agility Robotics | product | Agility Robotics于2026年6月24日确认已就Digit第五代（V5）获得客户订单，新版具备更高灵巧性（可移动更小物体）和更高安全标准。 | 🔧 | news | https://m.163.com/dy/article/L06MNSVS0519QIKK.html |
+| 2026-06-25 | Unitree | product | 2026年6月下旬，Unitree R1全球首家官方授权线下体验店在京东MALL北京双井店正式开业，作为降价后渠道落地的关键举措。 | 🔧 | news | https://www.elecfans.com/zt/158703/ |
+| 2026-06-26 | Apptronik | product | Apptronik于2026年6月26日正式推出Apollo 2人形机器人，采用模块化架构、可更换移动底盘、自研高能效驱动模组（能效＞90%）、LED交互嘴、碰撞检测与换电设计，并同步发布Artemis智能系统与Fleet Connect集群管理系统。 | ⚡ | news | https://tech.ifeng.com/c/8uHGwrDGDD7 |
+| 2026-06-30 | UBTech | product | 优必选于2026年6月30日全球发布会宣布其超仿生人形机器人‘优世界U1’系列全渠道订单已突破1万台，并力争当年完成交付。 | ⚡ | news | https://www.163.com/dy/article/L0J5HQU00538J1KQ.html |
