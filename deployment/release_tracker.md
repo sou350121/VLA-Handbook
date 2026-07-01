@@ -78,3 +78,8 @@
 | 2026-06-25 | Unitree | product | 2026年6月下旬，Unitree R1全球首家官方授权线下体验店在京东MALL北京双井店正式开业，作为降价后渠道落地的关键举措。 | 🔧 | news | https://www.elecfans.com/zt/158703/ |
 | 2026-06-26 | Apptronik | product | Apptronik于2026年6月26日正式推出Apollo 2人形机器人，采用模块化架构、可更换移动底盘、自研高能效驱动模组（能效＞90%）、LED交互嘴、碰撞检测与换电设计，并同步发布Artemis智能系统与Fleet Connect集群管理系统。 | ⚡ | news | https://tech.ifeng.com/c/8uHGwrDGDD7 |
 | 2026-06-30 | UBTech | product | 优必选于2026年6月30日全球发布会宣布其超仿生人形机器人‘优世界U1’系列全渠道订单已突破1万台，并力争当年完成交付。 | ⚡ | news | https://www.163.com/dy/article/L0J5HQU00538J1KQ.html |
+| 2026-06-25 | Agibot | product | Agibot于2026年6月25日在成都‘2026天府人工智能产业生态暨产品发布会’上正式发布具身智能数采2.0技术体系，支持多行业高质量数据集稳定输出及垂域智能模型孵化。 | ⚡ | news | https://www.sohu.com/a/1043897996_122066678 |
+| 2026-06-25 | UBTech | product | 2026年6月25日，优必选宣布启动两个1万台规模的量产计划，并将推出搭载自研‘万相系统’的新款仿生人形机器人。 | ⚡ | news | https://new.qq.com/rain/a/20260625A06ZN400 |
+| 2026-06-30 | Agibot | product | Agibot于2026年6月30日宣布第15000台工业级具身任务机器人Agibot G2正式下线，同步披露其已在平板电脑产线完成约100小时工厂直播运营。 | ⚡ | news | https://www.sohu.com/a/1043892825_114765 |
+| 2026-06-30 | Agibot | product | 截至2026年6月下旬，Agibot G2在平板电脑产线质检工序中完成累计约100小时工厂直播运营，实现与产线节拍同步及人机协同作业。 | 🔧 | news | https://www.163.com/dy/article/L0MV1FKD05118UGF.html |
+| 2026-07-01 | Apptronik | product | Apptronik发布新一代通用 humanoid 平台 Apollo 2，并同步启用旗舰级数据采集与训练设施。 | ⚡ | news | https://www.therobotreport.com/apptronik-unveils-apollo-2-flagship-data-collection-training-facility/ |
