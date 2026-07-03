@@ -83,3 +83,4 @@
 | 2026-06-30 | Agibot | product | Agibot于2026年6月30日宣布第15000台工业级具身任务机器人Agibot G2正式下线，同步披露其已在平板电脑产线完成约100小时工厂直播运营。 | ⚡ | news | https://www.sohu.com/a/1043892825_114765 |
 | 2026-06-30 | Agibot | product | 截至2026年6月下旬，Agibot G2在平板电脑产线质检工序中完成累计约100小时工厂直播运营，实现与产线节拍同步及人机协同作业。 | 🔧 | news | https://www.163.com/dy/article/L0MV1FKD05118UGF.html |
 | 2026-07-01 | Apptronik | product | Apptronik发布新一代通用 humanoid 平台 Apollo 2，并同步启用旗舰级数据采集与训练设施。 | ⚡ | news | https://www.therobotreport.com/apptronik-unveils-apollo-2-flagship-data-collection-training-facility/ |
+| 2026-06-29 | Unitree | product | 宇树科技于2026年6月29日发布WVLA2.0具身大模型，已完成无遥操实机验证，为首个具备商业部署潜力的版本。 | ⚡ | news | https://view.inews.qq.com/a/20260629A07HW200 |
