@@ -84,3 +84,6 @@
 | 2026-06-30 | Agibot | product | 截至2026年6月下旬，Agibot G2在平板电脑产线质检工序中完成累计约100小时工厂直播运营，实现与产线节拍同步及人机协同作业。 | 🔧 | news | https://www.163.com/dy/article/L0MV1FKD05118UGF.html |
 | 2026-07-01 | Apptronik | product | Apptronik发布新一代通用 humanoid 平台 Apollo 2，并同步启用旗舰级数据采集与训练设施。 | ⚡ | news | https://www.therobotreport.com/apptronik-unveils-apollo-2-flagship-data-collection-training-facility/ |
 | 2026-06-29 | Unitree | product | 宇树科技于2026年6月29日发布WVLA2.0具身大模型，已完成无遥操实机验证，为首个具备商业部署潜力的版本。 | ⚡ | news | https://view.inews.qq.com/a/20260629A07HW200 |
+| 2026-06-30 | Agibot | product | 2026年6月30日，Agibot宣布第15000台Agibot G2人形机器人正式下线，标志其规模化量产与工程交付能力达成重要里程碑。 | ⚡ | news | https://view.inews.qq.com/a/20260630A09SP700 |
+| 2026-06-30 | Agibot | product | 2026年6月30日，Agibot宣布第15000台Agibot G2人形机器人正式下线，进入更大规模实际应用新阶段。 | 🔧 | news | https://m.sohu.com/a/1043892825_114765 |
+| 2026-07-02 | Tesla Optimus | product | 2026年7月2日，埃隆·马斯克在社交平台发布与近30位员工在弗里蒙特工厂Optimus生产线的合影，并配文‘在弗里蒙特工厂参观Optimus机器人生产线’，特斯拉同步确认Model S/X产线已完成改造，将用于Optimus V3量产。 | ⚡ | news | https://www.163.com/dy/article/L0R8OVDT051191D6.html |
