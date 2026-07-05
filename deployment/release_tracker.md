@@ -87,3 +87,7 @@
 | 2026-06-30 | Agibot | product | 2026年6月30日，Agibot宣布第15000台Agibot G2人形机器人正式下线，标志其规模化量产与工程交付能力达成重要里程碑。 | ⚡ | news | https://view.inews.qq.com/a/20260630A09SP700 |
 | 2026-06-30 | Agibot | product | 2026年6月30日，Agibot宣布第15000台Agibot G2人形机器人正式下线，进入更大规模实际应用新阶段。 | 🔧 | news | https://m.sohu.com/a/1043892825_114765 |
 | 2026-07-02 | Tesla Optimus | product | 2026年7月2日，埃隆·马斯克在社交平台发布与近30位员工在弗里蒙特工厂Optimus生产线的合影，并配文‘在弗里蒙特工厂参观Optimus机器人生产线’，特斯拉同步确认Model S/X产线已完成改造，将用于Optimus V3量产。 | ⚡ | news | https://www.163.com/dy/article/L0R8OVDT051191D6.html |
+| 2026-07-01 | Tesla Optimus | product | 2026年7月1日，埃隆·马斯克在社交平台发布其本人在加州弗里蒙特工厂Optimus Gen3生产线上的合影，并称量产初期将极其缓慢。 | ⚡ | news | https://k.sina.cn/article_7857201856_1d45362c001907qgro.html |
+| 2026-07-01 | Booster Robotics | product | Booster Robotics于2026年6月底正式发布行业首款具身智能原生集成开发平台Booster Studio，并于2026年7月1日获权威媒体报道。 | ⚡ | news | https://www.tmtpost.com/agent/ai-article/18788 |
+| 2026-07-02 | Tesla Optimus | product | 2026年7月2日，特斯拉Optimus Gen3专属产线（由原Model S/X产线改造）全员合照公开，工程高管确认将于7月底至8月启动小批量量产，初期周产100台。 | ⚡ | news | https://k.sina.cn/article_7857201856_1d45362c001907qgro.html |
+| 2026-07-02 | Tesla Optimus | product | 2026年7月2日，野村证券基于产线进展同步上调特斯拉弗里蒙特工厂Optimus年化产能预测至7万台。 | 🔧 | news | https://k.sina.cn/article_7857201856_1d45362c001907qgro.html |
