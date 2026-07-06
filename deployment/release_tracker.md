@@ -91,3 +91,5 @@
 | 2026-07-01 | Booster Robotics | product | Booster Robotics于2026年6月底正式发布行业首款具身智能原生集成开发平台Booster Studio，并于2026年7月1日获权威媒体报道。 | ⚡ | news | https://www.tmtpost.com/agent/ai-article/18788 |
 | 2026-07-02 | Tesla Optimus | product | 2026年7月2日，特斯拉Optimus Gen3专属产线（由原Model S/X产线改造）全员合照公开，工程高管确认将于7月底至8月启动小批量量产，初期周产100台。 | ⚡ | news | https://k.sina.cn/article_7857201856_1d45362c001907qgro.html |
 | 2026-07-02 | Tesla Optimus | product | 2026年7月2日，野村证券基于产线进展同步上调特斯拉弗里蒙特工厂Optimus年化产能预测至7万台。 | 🔧 | news | https://k.sina.cn/article_7857201856_1d45362c001907qgro.html |
+| 2026-07-01 | Tesla Optimus | product | 埃隆·马斯克在X平台发布与Optimus工厂团队合影，并明确表示Optimus生产初期将极其缓慢，因所有环节均为全新构建。 | 🔧 | news | http://k.sina.com.cn/article_7857201856_1d45362c001907kx2y.html |
+| 2026-07-03 | Tesla Optimus | product | 特斯拉副总裁陶琳在2026全球数字经济大会上正式宣布Optimus人形机器人将于2026年底启动规模化量产，弗里蒙特工厂已启动产线切换。 | ⚡ | news | https://view.inews.qq.com/a/20260703A09AYD00 |
