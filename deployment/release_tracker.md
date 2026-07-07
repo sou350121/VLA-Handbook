@@ -93,3 +93,7 @@
 | 2026-07-02 | Tesla Optimus | product | 2026年7月2日，野村证券基于产线进展同步上调特斯拉弗里蒙特工厂Optimus年化产能预测至7万台。 | 🔧 | news | https://k.sina.cn/article_7857201856_1d45362c001907qgro.html |
 | 2026-07-01 | Tesla Optimus | product | 埃隆·马斯克在X平台发布与Optimus工厂团队合影，并明确表示Optimus生产初期将极其缓慢，因所有环节均为全新构建。 | 🔧 | news | http://k.sina.com.cn/article_7857201856_1d45362c001907kx2y.html |
 | 2026-07-03 | Tesla Optimus | product | 特斯拉副总裁陶琳在2026全球数字经济大会上正式宣布Optimus人形机器人将于2026年底启动规模化量产，弗里蒙特工厂已启动产线切换。 | ⚡ | news | https://view.inews.qq.com/a/20260703A09AYD00 |
+| 2026-07-01 | Tesla Optimus | product | 2026年7月1日，埃隆·马斯克在社交媒体发布于加州弗里蒙特工厂Optimus生产线的合影，并配文‘正在参观该产线’，标志Optimus V3正式进入量产准备阶段。 | ⚡ | news | http://k.sina.com.cn/article_7857201856_1d45362c001907qgro.html |
+| 2026-07-01 | ByteDance Seed | product | 2026年7月1日披露Seedance 2.5支持单次生成原生30秒4K视频、局部场景编辑、音画同步及最多50路多模态参考素材输入。 | 🔧 | news | https://zhuanlan.zhihu.com/p/2055776086953406694 |
+| 2026-07-03 | Tesla Optimus | product | 2026年7月3日，马斯克强调Optimus初期量产将‘极其缓慢’，因其属全栈自研、从零构建的新制造体系，与汽车生产存在本质差异。 | 🔧 | news | https://view.inews.qq.com/a/20260702A076G700 |
+| 2026-07-06 | Tesla Optimus | product | 2026年7月6日，权威资料确认Optimus V3将于2026年7–8月在弗里蒙特工厂启动量产，初期规划年产能5万–10万台。 | ⚡ | news | http://mbd.baidu.com/newspage/data/dtlandingsuper?nid=dt_4010323531850318124 |
