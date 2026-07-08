@@ -97,3 +97,11 @@
 | 2026-07-01 | ByteDance Seed | product | 2026年7月1日披露Seedance 2.5支持单次生成原生30秒4K视频、局部场景编辑、音画同步及最多50路多模态参考素材输入。 | 🔧 | news | https://zhuanlan.zhihu.com/p/2055776086953406694 |
 | 2026-07-03 | Tesla Optimus | product | 2026年7月3日，马斯克强调Optimus初期量产将‘极其缓慢’，因其属全栈自研、从零构建的新制造体系，与汽车生产存在本质差异。 | 🔧 | news | https://view.inews.qq.com/a/20260702A076G700 |
 | 2026-07-06 | Tesla Optimus | product | 2026年7月6日，权威资料确认Optimus V3将于2026年7–8月在弗里蒙特工厂启动量产，初期规划年产能5万–10万台。 | ⚡ | news | http://mbd.baidu.com/newspage/data/dtlandingsuper?nid=dt_4010323531850318124 |
+| 2026-07-05 | Booster Robotics | product | 2026年7月5日，清华火神队使用Booster Robotics旗下Booster T1机器人，在RoboCup 2026人形组决赛中以6∶2击败农大山海队，成功卫冕。 | ⚡ | news | https://caifuhao.eastmoney.com/news/20260702231700037691510 |
+| 2026-07-05 | Booster Robotics | product | 2026年7月5日，Booster Robotics提供的机器人平台支撑38支参赛队，实现RoboCup人形组全部金牌包揽。 | ⚡ | news | http://www.cb.com.cn/index/show/gd/cv/cv1362560951495 |
+| 2026-07-06 | UBTech | product | 优必选科技（UBTech）于2026年7月6日宣布其超仿生机器人订单量突破一万台。 | ⚡ | news | https://www.cls.cn/subject/1527 |
+| 2026-07-06 | Booster Robotics | product | 2026年7月6日，RoboCup赛事报道确认Booster T1、K1及K1 Air被B-Human队、武大Invic队等38支顶尖队伍采用，包揽双足人形全部组别金牌。 | ⚡ | news | https://caifuhao.eastmoney.com/news/20260702231700037691510 |
+| 2026-07-07 | Boston Dynamics | product | 2026年7月7日，Boston Dynamics在巴黎MACHINA Summit峰会上以‘新一代人形机器人’身份演示Atlas全电动平台在负重、跳跃及模拟工地作业等场景下的持续能力演进。 | 🔧 | news | https://hk.prnasia.com/story/540028-2.shtml |
+| 2026-07-07 | Astribot | product | 2026年7月7日，官方确认Astribot T1已启动量产并进入商业交付阶段，配套万台级产能建设。 | 🔧 | news | https://m.163.com/dy/article/L18BFTID05569K8R.html |
+| 2026-07-08 | Boston Dynamics | product | 2026年7月8日，Boston Dynamics研发的量产版Atlas人形机器人在纽约/新泽西球场举行的FIFA World Cup 2026™ 16强赛中场休息期间完成全球首次真实高动态体育场景下的公开展示，执行球星庆祝动作并递球给裁判。 | ⚡ | news | https://www.prnasia.com/story/540027-1.shtml |
+| 2026-07-08 | Boston Dynamics | product | 2026年7月8日，Boston Dynamics量产版Atlas在FIFA World Cup 2026™现场完成首次高动态、高干扰体育环境下的稳定运行与交互任务。 | ⚡ | news | https://beareyes.com.cn/2/lib/202607/08/20260708706.htm |
