@@ -105,3 +105,8 @@
 | 2026-07-07 | Astribot | product | 2026年7月7日，官方确认Astribot T1已启动量产并进入商业交付阶段，配套万台级产能建设。 | 🔧 | news | https://m.163.com/dy/article/L18BFTID05569K8R.html |
 | 2026-07-08 | Boston Dynamics | product | 2026年7月8日，Boston Dynamics研发的量产版Atlas人形机器人在纽约/新泽西球场举行的FIFA World Cup 2026™ 16强赛中场休息期间完成全球首次真实高动态体育场景下的公开展示，执行球星庆祝动作并递球给裁判。 | ⚡ | news | https://www.prnasia.com/story/540027-1.shtml |
 | 2026-07-08 | Boston Dynamics | product | 2026年7月8日，Boston Dynamics量产版Atlas在FIFA World Cup 2026™现场完成首次高动态、高干扰体育环境下的稳定运行与交互任务。 | ⚡ | news | https://beareyes.com.cn/2/lib/202607/08/20260708706.htm |
+| 2026-07-03 | Tesla Optimus | product | 特斯拉CEO马斯克于2026年7月3日发布弗里蒙特工厂Optimus生产线合影，并确认Gen-3产线改造基本完成，为7月底试产铺路。 | ⚡ | news | https://k.sina.cn/article_7857201856_1d45362c001907qgro.html |
+| 2026-07-03 | Tesla Optimus | product | 多家财经媒体交叉印证，Optimus Gen-3将于2026年7月底至8月启动小批量量产（试产爬坡），初期周产约100台，9月目标周产1000台。 | 🔧 | news | https://k.sina.com.cn/article_7857201856_1d45362c001907r4du.html |
+| 2026-07-06 | Tesla Optimus | product | 特斯拉副总裁陶琳在2026全球数字经济大会上宣布Optimus将于2026年Q4（10–12月）启动规模化量产，弗里蒙特工厂远期年产能目标为100万台。 | ⚡ | news | https://k.sina.cn/article_7857201856_1d45362c001907qgro.html |
+| 2026-07-06 | Agility Robotics | product | CEO Peggy Johnson向TechCrunch明确Agility采用按月租赁的RaaS模式，所有POC客户均已进入实际部署阶段。 | 🔧 | news | https://www.163.com/dy/article/L16AR6VJ05569K8R.html |
+| 2026-07-06 | Agility Robotics | product | Agility Robotics公布第五代Digit机器人载重50磅（≈22.7公斤）、续航约22小时、最大触及高度2.1米，并具备反向弯曲膝关节设计。 | 🔧 | news | https://caifuhao.eastmoney.com/news/20260703205341259716360 |
