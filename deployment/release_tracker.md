@@ -110,3 +110,7 @@
 | 2026-07-06 | Tesla Optimus | product | 特斯拉副总裁陶琳在2026全球数字经济大会上宣布Optimus将于2026年Q4（10–12月）启动规模化量产，弗里蒙特工厂远期年产能目标为100万台。 | ⚡ | news | https://k.sina.cn/article_7857201856_1d45362c001907qgro.html |
 | 2026-07-06 | Agility Robotics | product | CEO Peggy Johnson向TechCrunch明确Agility采用按月租赁的RaaS模式，所有POC客户均已进入实际部署阶段。 | 🔧 | news | https://www.163.com/dy/article/L16AR6VJ05569K8R.html |
 | 2026-07-06 | Agility Robotics | product | Agility Robotics公布第五代Digit机器人载重50磅（≈22.7公斤）、续航约22小时、最大触及高度2.1米，并具备反向弯曲膝关节设计。 | 🔧 | news | https://caifuhao.eastmoney.com/news/20260703205341259716360 |
+| 2026-07-05 | Boston Dynamics | product | Boston Dynamics于2026年7月5日通过达沃斯科技峰会成果披露，正式展示新一代Atlas人形机器人在负重、跳跃及真实工地场景下的实机作业能力。 | ⚡ | news | https://caifuhao.eastmoney.com/news/20260705070328317051380 |
+| 2026-07-06 | Booster Robotics | product | 2026年7月6日，清华火神队使用Booster Robotics的T1人形机器人成功卫冕RoboCup 2026 Large组世界冠军；Booster K1、K1 Air被全球38支队伍选用，包揽双足人形全部组别金牌。 | ⚡ | news | http://www.cb.com.cn/index/show/gd/cv/cv1362560951495 |
+| 2026-07-07 | Tesla Optimus | product | 2026年7月7日，Tesla Optimus Gen 3在法国巴黎Machina Summit峰会完成欧洲首秀，特斯拉官方参与并提供实机行走、抓取与交互演示视频。 | 🔧 | news | https://k.sina.com.cn/article_7857201856_1d45362c001907txai.html |
+| 2026-07-11 | Unitree | product | Unitree基于G1平台改造的人形机器人‘Surgie’在UCSD远程操控下成功完成猪胆囊切除手术，成果发表于《Nature》。 | ⚡ | news | http://finance.sina.com.cn/roll/2026-07-11/doc-inihkyif8369707.shtml |
