@@ -151,3 +151,4 @@ DYNA 的公开指标设计非常“部署导向”，值得当作你评估任何
 | 2026-07-06 | 🔧 | Agility Robotics | Agility Robotics表示所募资金将用于扩建俄勒冈州塞勒姆RoboFab工厂（现70,000平方英尺），以加速交付积压订单。 | 指向制造能力瓶颈突破，是支撑千台级交付承诺的必要基础设施投入。 | [来源](https://baike.baidu.com/item/Robo%20Fab/68047701) |
 | 2026-07-05 | ⚡ | Boston Dynamics | Boston Dynamics于2026年7月5日通过达沃斯科技峰会成果披露，正式展示新一代Atlas人形机器人在负重、跳跃及真实工地场景下的实机作业能力。 | 标志Atlas从实验室演示迈向结构化工业场景落地的关键进展，强化其在具身智能硬件领域的技术领导地位。 | [来源](https://caifuhao.eastmoney.com/news/20260705070328317051380) |
 | 2026-07-07 | 🔧 | Tesla Optimus | 2026年7月7日，Tesla Optimus Gen 3在法国巴黎Machina Summit峰会完成欧洲首秀，特斯拉官方参与并提供实机行走、抓取与交互演示视频。 | 实现关键海外市场技术亮相，验证Gen 3工程成熟度，支撑后续本地化合作与场景拓展预期。 | [来源](https://k.sina.com.cn/article_7857201856_1d45362c001907txai.html) |
+| 2026-07-12 | ⚡ | Tesla Optimus | 特斯拉于2026年7月12日在弗里蒙特工厂完成Model S/X产线拆除，耗时46天，正式启用Optimus人形机器人专用产线。 | 标志Optimus量产物理基础设施就绪，进入规模化制造阶段。 | [来源](https://www.sina.cn/news/detail/5317291130749597.html) |

@@ -114,3 +114,5 @@
 | 2026-07-06 | Booster Robotics | product | 2026年7月6日，清华火神队使用Booster Robotics的T1人形机器人成功卫冕RoboCup 2026 Large组世界冠军；Booster K1、K1 Air被全球38支队伍选用，包揽双足人形全部组别金牌。 | ⚡ | news | http://www.cb.com.cn/index/show/gd/cv/cv1362560951495 |
 | 2026-07-07 | Tesla Optimus | product | 2026年7月7日，Tesla Optimus Gen 3在法国巴黎Machina Summit峰会完成欧洲首秀，特斯拉官方参与并提供实机行走、抓取与交互演示视频。 | 🔧 | news | https://k.sina.com.cn/article_7857201856_1d45362c001907txai.html |
 | 2026-07-11 | Unitree | product | Unitree基于G1平台改造的人形机器人‘Surgie’在UCSD远程操控下成功完成猪胆囊切除手术，成果发表于《Nature》。 | ⚡ | news | http://finance.sina.com.cn/roll/2026-07-11/doc-inihkyif8369707.shtml |
+| 2026-07-06 | Galbot | product | Galbot于2026年7月6日获国家知识产权局授权一项实用新型专利，名称为‘一种手指机构及机器人’。 | 🔧 | news | https://baike.baidu.com/item/北京银河通用机器人有限公司/63639704 |
+| 2026-07-12 | Tesla Optimus | product | 特斯拉于2026年7月12日在弗里蒙特工厂完成Model S/X产线拆除，耗时46天，正式启用Optimus人形机器人专用产线。 | ⚡ | news | https://www.sina.cn/news/detail/5317291130749597.html |

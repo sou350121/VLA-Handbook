@@ -243,3 +243,4 @@ FastUMI Pro 是从学术界 FastUMI 升级而来的工业级、无本体数据�
 | 2026-07-06 | ⚡ | Booster Robotics | 2026年7月6日，清华火神队使用Booster Robotics的T1人形机器人成功卫冕RoboCup 2026 Large组世界冠军；Booster K1、K1 Air被全球38支队伍选用，包揽双足人形全部组别金牌。 | 标志Booster Robotics机器人平台被业界广泛采纳为具身智能‘通用底座’，确立其在人形机器人底层平台领域的全球领先地位。 | [来源](http://www.cb.com.cn/index/show/gd/cv/cv1362560951495) |
 | 2026-07-07 | 🔧 | Unitree | Unitree官方降价政策持续生效，R1系列起售价调至2.99万元并开放现货销售。 | 推动消费级人形机器人首次大规模进入3万元以内价格带，加速C端与教育/中小机构采购转化。 | [来源](https://finance.cnr.cn/ycbd/20260706/t20260706_527694090.shtml) |
 | 2026-07-11 | ⚡ | Unitree | Unitree基于G1平台改造的人形机器人‘Surgie’在UCSD远程操控下成功完成猪胆囊切除手术，成果发表于《Nature》。 | 标志人形机器人首次在真实外科场景中实现高精度远程医疗应用，确立Unitree在通用具身智能临床落地的全球领先地位。 | [来源](http://finance.sina.com.cn/roll/2026-07-11/doc-inihkyif8369707.shtml) |
+| 2026-07-06 | 🔧 | Galbot | Galbot于2026年7月6日获国家知识产权局授权一项实用新型专利，名称为‘一种手指机构及机器人’。 | 该专利强化其灵巧操作硬件技术储备，支撑Galbot G1在精细作业场景的落地能力。 | [来源](https://baike.baidu.com/item/北京银河通用机器人有限公司/63639704) |
