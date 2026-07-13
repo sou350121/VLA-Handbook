@@ -116,3 +116,5 @@
 | 2026-07-11 | Unitree | product | Unitree基于G1平台改造的人形机器人‘Surgie’在UCSD远程操控下成功完成猪胆囊切除手术，成果发表于《Nature》。 | ⚡ | news | http://finance.sina.com.cn/roll/2026-07-11/doc-inihkyif8369707.shtml |
 | 2026-07-06 | Galbot | product | Galbot于2026年7月6日获国家知识产权局授权一项实用新型专利，名称为‘一种手指机构及机器人’。 | 🔧 | news | https://baike.baidu.com/item/北京银河通用机器人有限公司/63639704 |
 | 2026-07-12 | Tesla Optimus | product | 特斯拉于2026年7月12日在弗里蒙特工厂完成Model S/X产线拆除，耗时46天，正式启用Optimus人形机器人专用产线。 | ⚡ | news | https://www.sina.cn/news/detail/5317291130749597.html |
+| 2026-07-09 | Unitree | product | 医生通过远程系统操控Unitree G1成功完成活体动物外科手术，成果发表于《Nature》期刊 | ⚡ | news | https://k.sina.com.cn/article_7857201856_1d45362c001907zako.html |
+| 2026-07-12 | Tesla Optimus | product | IT之家报道特斯拉仅用46天完成弗里蒙特工厂Model S/X整车产线拆除，全面切换为Optimus第三代（Gen3）人形机器人量产产线。 | ⚡ | news | https://view.inews.qq.com/a/20260706A0B1WZ00 |
