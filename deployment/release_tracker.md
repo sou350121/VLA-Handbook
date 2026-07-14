@@ -118,3 +118,5 @@
 | 2026-07-12 | Tesla Optimus | product | 特斯拉于2026年7月12日在弗里蒙特工厂完成Model S/X产线拆除，耗时46天，正式启用Optimus人形机器人专用产线。 | ⚡ | news | https://www.sina.cn/news/detail/5317291130749597.html |
 | 2026-07-09 | Unitree | product | 医生通过远程系统操控Unitree G1成功完成活体动物外科手术，成果发表于《Nature》期刊 | ⚡ | news | https://k.sina.com.cn/article_7857201856_1d45362c001907zako.html |
 | 2026-07-12 | Tesla Optimus | product | IT之家报道特斯拉仅用46天完成弗里蒙特工厂Model S/X整车产线拆除，全面切换为Optimus第三代（Gen3）人形机器人量产产线。 | ⚡ | news | https://view.inews.qq.com/a/20260706A0B1WZ00 |
+| 2026-07-10 | 1X Technologies | product | 1X Technologies于2026年7月10日正式发布NEO人形机器人搭载的新一代灵巧手，强调22自由度与闭环控制能力。 | 🔧 | news | https://baike.baidu.com/item/1X/65295746 |
+| 2026-07-14 | Tesla Optimus | product | 特斯拉在46天内完成弗里蒙特工厂Model S/X产线拆除，明确将该产能空间转用于Optimus规模化生产。 | 🔧 | news | http://finance.sina.com.cn/stock/stockzmt/2026-07-07/doc-inifxpii1650902.shtml |

@@ -153,3 +153,7 @@ DYNA 的公开指标设计非常“部署导向”，值得当作你评估任何
 | 2026-07-07 | 🔧 | Tesla Optimus | 2026年7月7日，Tesla Optimus Gen 3在法国巴黎Machina Summit峰会完成欧洲首秀，特斯拉官方参与并提供实机行走、抓取与交互演示视频。 | 实现关键海外市场技术亮相，验证Gen 3工程成熟度，支撑后续本地化合作与场景拓展预期。 | [来源](https://k.sina.com.cn/article_7857201856_1d45362c001907txai.html) |
 | 2026-07-12 | ⚡ | Tesla Optimus | 特斯拉于2026年7月12日在弗里蒙特工厂完成Model S/X产线拆除，耗时46天，正式启用Optimus人形机器人专用产线。 | 标志Optimus量产物理基础设施就绪，进入规模化制造阶段。 | [来源](https://www.sina.cn/news/detail/5317291130749597.html) |
 | 2026-07-12 | ⚡ | Tesla Optimus | IT之家报道特斯拉仅用46天完成弗里蒙特工厂Model S/X整车产线拆除，全面切换为Optimus第三代（Gen3）人形机器人量产产线。 | 标志特斯拉正式从电动车制造转向具身智能硬件规模化量产，产线资源完成战略性重构。 | [来源](https://view.inews.qq.com/a/20260706A0B1WZ00) |
+| 2026-07-08 | ⚡ | Boston Dynamics | Boston Dynamics研发的Atlas机器人作为现代汽车官方合作伙伴，在FIFA世界杯2026十六强赛（纽约/新泽西球场）执行中场表演并交付比赛用球。 | 标志其人形机器人首次在顶级国际体育赛事中规模化、实时化落地应用，强化与现代汽车的战略协同及公众技术形象。 | [来源](https://www.prnasia.com/lightnews/lightnews-1-102-97467.shtml) |
+| 2026-07-08 | 🔧 | Boston Dynamics | Atlas在2026 FIFA世界杯现场实时演绎哈里·凯恩、哈兰德、库尼亚、孙兴慜等球星的经典进球庆祝动作。 | 验证其高精度运动控制与具身智能在动态非结构化环境下的实时响应能力。 | [来源](https://www.prnasia.com/lightnews/lightnews-1-102-97467.shtml) |
+| 2026-07-10 | 🔧 | 1X Technologies | 1X Technologies于2026年7月10日正式发布NEO人形机器人搭载的新一代灵巧手，强调22自由度与闭环控制能力。 | 提升末端操作精度与鲁棒性，支撑家庭场景中复杂物操作任务落地。 | [来源](https://baike.baidu.com/item/1X/65295746) |
+| 2026-07-14 | 🔧 | Tesla Optimus | 特斯拉在46天内完成弗里蒙特工厂Model S/X产线拆除，明确将该产能空间转用于Optimus规模化生产。 | 实质性释放物理产能，支撑Optimus V3按期投产，体现资源倾斜力度。 | [来源](http://finance.sina.com.cn/stock/stockzmt/2026-07-07/doc-inifxpii1650902.shtml) |
