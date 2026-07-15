@@ -120,3 +120,6 @@
 | 2026-07-12 | Tesla Optimus | product | IT之家报道特斯拉仅用46天完成弗里蒙特工厂Model S/X整车产线拆除，全面切换为Optimus第三代（Gen3）人形机器人量产产线。 | ⚡ | news | https://view.inews.qq.com/a/20260706A0B1WZ00 |
 | 2026-07-10 | 1X Technologies | product | 1X Technologies于2026年7月10日正式发布NEO人形机器人搭载的新一代灵巧手，强调22自由度与闭环控制能力。 | 🔧 | news | https://baike.baidu.com/item/1X/65295746 |
 | 2026-07-14 | Tesla Optimus | product | 特斯拉在46天内完成弗里蒙特工厂Model S/X产线拆除，明确将该产能空间转用于Optimus规模化生产。 | 🔧 | news | http://finance.sina.com.cn/stock/stockzmt/2026-07-07/doc-inifxpii1650902.shtml |
+| 2026-07-09 | 1X Technologies | product | 1X Technologies于2026年7月9日发布为NEO定制的25自由度肌腱驱动灵巧手，具备IP68防水及食品级材料，当年产能规划1万只，已数百只下线。 | 🔧 | news | https://stock.10jqka.com.cn/20260106/c673765456.shtml |
+| 2026-07-10 | Agility Robotics | product | 2026年7月10日，Agility Robotics在花旗纽约总部举办的第四届机器人与实体人工智能峰会上展示Digit机器人在产线与工位间搬运重物的实际作业能力。 | 🔧 | news | http://finance.sina.com.cn/stock/usstock/c/2026-07-10/doc-inihinfz5172625.shtml |
+| 2026-07-12 | Tesla Optimus | product | 特斯拉于2026年7月12日官方发布视频，展示弗里蒙特工厂原Model S/X生产线拆除全过程（耗时46天），明确该动作系为Optimus Gen3人形机器人量产铺路。 | ⚡ | news | http://finance.sina.com.cn/jjxw/2026-07-09/doc-inihewsv1418107.shtml |
