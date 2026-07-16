@@ -123,3 +123,7 @@
 | 2026-07-09 | 1X Technologies | product | 1X Technologies于2026年7月9日发布为NEO定制的25自由度肌腱驱动灵巧手，具备IP68防水及食品级材料，当年产能规划1万只，已数百只下线。 | 🔧 | news | https://stock.10jqka.com.cn/20260106/c673765456.shtml |
 | 2026-07-10 | Agility Robotics | product | 2026年7月10日，Agility Robotics在花旗纽约总部举办的第四届机器人与实体人工智能峰会上展示Digit机器人在产线与工位间搬运重物的实际作业能力。 | 🔧 | news | http://finance.sina.com.cn/stock/usstock/c/2026-07-10/doc-inihinfz5172625.shtml |
 | 2026-07-12 | Tesla Optimus | product | 特斯拉于2026年7月12日官方发布视频，展示弗里蒙特工厂原Model S/X生产线拆除全过程（耗时46天），明确该动作系为Optimus Gen3人形机器人量产铺路。 | ⚡ | news | http://finance.sina.com.cn/jjxw/2026-07-09/doc-inihewsv1418107.shtml |
+| 2026-07-10 | ByteDance Seed | product | 2026年7月10日，微博渠道再次确认Seedream 5.0 Pro已发布，并提及后续版本Seedance 2.5处于可预期阶段。 | 🔧 | news | https://weibo.com/2152140700/QrOr2pK2r |
+| 2026-07-15 | Tesla Optimus | product | 2026年7月15日，产业链调研确认Optimus Gen3将于7月底至8月投产，2026年量产目标约1.5万台。 | ⚡ | news | http://finance.sina.com.cn/jjxw/2026-07-09/doc-inihewsv1418107.shtml |
+| 2026-07-15 | Tesla Optimus | product | 2026年7月15日，官方信息确认弗里蒙特工厂Optimus专属产线改造已于7月中旬完成。 | 🔧 | news | https://k.sina.com.cn/article_7880068204_1d5b04c6c06801ccd2.html |
+| 2026-07-15 | Tesla Optimus | product | 2026年7月15日，官方明确德克萨斯州超级工厂内专设的Optimus独立工厂已完成规划，计划2027年开始生产，目标年产1000万台。 | ⚡ | news | https://k.sina.com.cn/article_7880068204_1d5b04c6c06801ccd2.html |
