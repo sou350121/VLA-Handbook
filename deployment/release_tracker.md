@@ -127,3 +127,4 @@
 | 2026-07-15 | Tesla Optimus | product | 2026年7月15日，产业链调研确认Optimus Gen3将于7月底至8月投产，2026年量产目标约1.5万台。 | ⚡ | news | http://finance.sina.com.cn/jjxw/2026-07-09/doc-inihewsv1418107.shtml |
 | 2026-07-15 | Tesla Optimus | product | 2026年7月15日，官方信息确认弗里蒙特工厂Optimus专属产线改造已于7月中旬完成。 | 🔧 | news | https://k.sina.com.cn/article_7880068204_1d5b04c6c06801ccd2.html |
 | 2026-07-15 | Tesla Optimus | product | 2026年7月15日，官方明确德克萨斯州超级工厂内专设的Optimus独立工厂已完成规划，计划2027年开始生产，目标年产1000万台。 | ⚡ | news | https://k.sina.com.cn/article_7880068204_1d5b04c6c06801ccd2.html |
+| 2026-07-15 | Tesla Optimus | product | 特斯拉于2026年7月15日确认Optimus 3已于2026年7月至8月在弗里蒙特工厂正式投产，2026年量产目标为约1.5万台。 | ⚡ | news | https://k.sina.cn/article_7880068362_1d5b04d0a06801h368.html |
