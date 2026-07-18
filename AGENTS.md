@@ -30,7 +30,7 @@ Moltbot（自动化 AI agent）通过 GitHub Contents API 向本仓库写入内�
 | 文件/目录 | 允许的操作 | 禁止的操作 |
 |-----------|-----------|-----------|
 | `theory/paper_index.md` | 追加表格行 | 修改/删除已有行、改表头、改分类结构 |
-| `theory/benchmark_tracker.md` | 追加表格行 | 修改/删除已有行、改表头、改 section 结构 |
+| `theory/benchmark_tracker.md` | 创建/整体重写（⚙️ 自动生成文件，每日投影自 pulsar-web `vla-sota-tracker.json`，由 `maintenance/build-benchmark-tracker.py` 重生） | — 该文件全程自动维护，勿手工编辑（改动会被下次重生覆盖） |
 | `deployment/release_tracker.md` | 追加表格行 | 修改/删除已有行、改表头、改表格结构 |
 | `theory/code-notes/{project}_analysis.md` | 创建新文件 | 修改已存在的文件 |
 | `reports/biweekly/{YYYY-MM-DD}.md` | 创建新文件；如同日重跑允许覆盖（仅限自动生成内容） | 修改人工撰写报告、改报告结构 |
@@ -165,7 +165,7 @@ Moltbot（自动化 AI agent）通过 GitHub Contents API 向本仓库写入内�
 | 内容类型 | 存放路径 | 来源任务 | 操作类型 |
 |---------|---------|---------|---------|
 | 论文索引追加 | `theory/paper_index.md`（追加行） | Moltbot Task 2（每日热点） | 追加行 |
-| Benchmark SOTA 追踪 | `theory/benchmark_tracker.md`（追加行） | VLA Benchmark SOTA Tracker | 追加行 |
+| Benchmark SOTA 追踪 | `theory/benchmark_tracker.md`（⚙️ 整体重生，投影自 vla-sota-tracker.json） | maintenance/build-benchmark-tracker.py（本机每日） | 整体重生 |
 | Release 追踪（平台/硬件） | `deployment/release_tracker.md`（追加行） | VLA Release Tracker | 追加行 |
 | 双周前沿报告 | `reports/biweekly/{YYYY-MM-DD}.md` | Moltbot Task 4（双周推理） | 创建新文件 / 同日重跑允许覆盖 |
 | 双周索引更新 | `reports/biweekly/README.md`（追加/同日 upsert） | Moltbot Task 4（双周推理） | 追加行 / 同日 upsert |
