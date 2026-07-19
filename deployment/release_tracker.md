@@ -128,3 +128,6 @@
 | 2026-07-15 | Tesla Optimus | product | 2026年7月15日，官方信息确认弗里蒙特工厂Optimus专属产线改造已于7月中旬完成。 | 🔧 | news | https://k.sina.com.cn/article_7880068204_1d5b04c6c06801ccd2.html |
 | 2026-07-15 | Tesla Optimus | product | 2026年7月15日，官方明确德克萨斯州超级工厂内专设的Optimus独立工厂已完成规划，计划2027年开始生产，目标年产1000万台。 | ⚡ | news | https://k.sina.com.cn/article_7880068204_1d5b04c6c06801ccd2.html |
 | 2026-07-15 | Tesla Optimus | product | 特斯拉于2026年7月15日确认Optimus 3已于2026年7月至8月在弗里蒙特工厂正式投产，2026年量产目标为约1.5万台。 | ⚡ | news | https://k.sina.cn/article_7880068362_1d5b04d0a06801h368.html |
+| 2026-07-19 | Tesla Optimus | product | 据产业链调研及野村证券研报引用，特斯拉将弗里蒙特Optimus V3产线年化产能目标上调至约7万台，官方指引显示‘7月底至8月投产’，批量量产预计于8月底至9月启动。 | 🔧 | news | http://finance.sina.com.cn/money/fund/jjgsgd/2026-07-16/doc-inihyqhh1182471.shtml |
+| 2026-07-17 | Galbot | product | Galbot于2026年7月17日在WAIC 2026上海世博展览馆H3展厅公开展示Galbot G1（早餐制作、零售值守、迎宾交互）和Galbot S1（重载搬运、打螺丝、拆码垛），并披露S1已在宁德时代产线实现7×24小时常态化运行超3个月。 | ⚡ | news | https://finance.sina.cn/2026-07-19/detail-iniikara8257184.d.html |
+| 2026-07-18 | Fourier | product | 傅利叶智能于2026年7月18日世界人工智能大会（WAIC）期间首次公开展示面向居家陪伴服务的具身智能全链路技术Demo——‘具身之家’。 | ⚡ | news | http://finance.sina.com.cn/wm/2026-07-19/doc-iniiiwhz3406461.shtml |
