@@ -131,3 +131,13 @@
 | 2026-07-19 | Tesla Optimus | product | 据产业链调研及野村证券研报引用，特斯拉将弗里蒙特Optimus V3产线年化产能目标上调至约7万台，官方指引显示‘7月底至8月投产’，批量量产预计于8月底至9月启动。 | 🔧 | news | http://finance.sina.com.cn/money/fund/jjgsgd/2026-07-16/doc-inihyqhh1182471.shtml |
 | 2026-07-17 | Galbot | product | Galbot于2026年7月17日在WAIC 2026上海世博展览馆H3展厅公开展示Galbot G1（早餐制作、零售值守、迎宾交互）和Galbot S1（重载搬运、打螺丝、拆码垛），并披露S1已在宁德时代产线实现7×24小时常态化运行超3个月。 | ⚡ | news | https://finance.sina.cn/2026-07-19/detail-iniikara8257184.d.html |
 | 2026-07-18 | Fourier | product | 傅利叶智能于2026年7月18日世界人工智能大会（WAIC）期间首次公开展示面向居家陪伴服务的具身智能全链路技术Demo——‘具身之家’。 | ⚡ | news | http://finance.sina.com.cn/wm/2026-07-19/doc-iniiiwhz3406461.shtml |
+| 2026-07-15 | Astribot | product | 2026年7月15日，Astribot宣布其全球制造与供应链中心在无锡梁溪科技城机器人产业园全面投产。 | ⚡ | news | https://www.21jingji.com/article/20260715/herald/6925e5e7ee4fae1f5d3b84fc0f05c398.html |
+| 2026-07-17 | Agibot | product | 2026年7月17日，智元机器人（Agibot）在世界人工智能大会（WAIC）展出远征A3，完成全球首个无遥控、无脚本、无人工干预的实时人机乒乓球对抗。 | ⚡ | news | http://finance.sina.com.cn/jjxw/2026-07-19/doc-iniiiwie8210986.shtml |
+| 2026-07-17 | Booster Robotics | product | Booster Robotics于2026年7月17日在世界人工智能大会（WAIC 2026）正式发布旗舰人形机器人平台Booster T2及全球首款具身智能集成开发环境Booster Studio。 | ⚡ | news | http://finance.sina.com.cn/stock/t/2026-07-19/doc-iniiimti0275168.shtml |
+| 2026-07-17 | Booster Robotics | product | Booster Robotics于2026年7月17日宣布清华大学火神队基于其机器人平台实现RoboCup 2025首冠与2026卫冕。 | 🔧 | news | https://stock.10jqka.com.cn/20260719/c678273896.shtml |
+| 2026-07-17 | MagicLab | product | MagicLab在WAIC 2026全球首发MagicBot X1全尺寸人形机器人、MagicBot D1工业轮式人形机器人和MagicDog T1轻工业四足机器人。 | ⚡ | news | https://www.cinic.org.cn/zgzz/qy/1644918.html |
+| 2026-07-19 | Galbot | product | 2026年7月19日，银河通用在上海WAIC 2026展会上正式公开展示Galbot G1（家庭服务型）和Galbot S1（重载工业型）人形机器人，并实时演示早餐制作、零售值守、迎宾交互、物流搬运、装配打螺丝五大场景。 | ⚡ | news | https://stock.10jqka.com.cn/20260719/c678275545.shtml |
+| 2026-07-19 | Galbot | product | 2026年7月19日，银河通用宣布‘银河太空舱’解决方案在全国40余个城市落地超170个点位，‘人形机器人智慧药房’方案已在数十个城市部署百家即时零售仓。 | 🔧 | news | https://www.sina.cn/news/detail/5322012394521486.html |
+| 2026-07-19 | Galbot | product | 2026年7月19日，银河通用在WAIC 2026展示迎宾机器人‘小盖’，其搭载自研DexNDM灵巧手世界模型，可完成‘盘核桃’等高精度手内操作任务。 | 🔧 | news | https://www.sina.cn/news/detail/5322012394521486.html |
+| 2026-07-19 | Galbot | product | 2026年7月19日，新浪新闻报道Galbot G1在WAIC 2026现场完成烤面包+倒饮料的早餐制作任务，在挪动面包、移走水壶、变换杯盘位置等随机干扰下，依托自研具身大模型‘银河星脑（AstraBrain）’实现稳定感知–规划–执行闭环。 | ⚡ | news | http://finance.sina.com.cn/roll/2026-07-19/doc-iniikara8257184.shtml.md |
+| 2026-07-19 | Lumos Robot | product | 鹿明机器人确认搭载Lumos NexCore泛工业场景物理AI引擎的系统已在真实产线部署，完成‘数据采集→模型训练→场景部署→效果反馈’闭环并持续回流高质量具身数据。 | 🔧 | news | https://yuanchuang.10jqka.com.cn/20260719/c678272948.shtml |
