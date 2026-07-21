@@ -35,9 +35,9 @@
 | 模块 | 输入 | 输出 | 触发频率 | 训练/推理 |
 |------|------|------|----------|-----------|
 | Failure-Driven Reflective RL | 最近 5 轮失败轨迹视频 | 密集奖励函数 R_reflect | 每 5 轮数据收集触发 1 次 | 训练期（PPO 更新） |
-| Success-Driven Quality-Guided SFT | 成功轨迹 + R_reflect | 质量评分 Q(τ) | 每轮数据收集后 | 训练期（SFT 更新） |
+| Success-Driven Quality-Guided SFT | 成功轨迹 + R_reflect | 质量评分 $Q(\tau)$ | 每轮数据收集后 | 训练期（SFT 更新） |
 | Conditional Curriculum | 成功率 < 10% 信号 | 简化任务环境 | 动态激活 | 训练期（冷启动阶段） |
-| Policy Update | 经验缓冲 + R_reflect + D_SFT | 更新后策略 π_θ | 每轮迭代 | 训练期 |
+| Policy Update | 经验缓冲 + R_reflect + D_SFT | 更新后策略 $\pi_\theta$ | 每轮迭代 | 训练期 |
 
 ### 1.2 关键机制 (Key Mechanism)
 
@@ -50,7 +50,7 @@
 **成功驱动通路**的核心是 Quality-Guided Prioritized Replay：
 - 每条成功轨迹 τ_succ 计算质量分：Q(τ) = w_reward × ΣR_reflect(s_t) - w_steps × T
 - 缓冲池 D_SFT 容量 50 条，新轨迹替换最低分旧轨迹
-- SFT 采样概率与 Q^α 成正比（α=0.6），优先学习高质量成功
+- SFT 采样概率与 $Q^\alpha$ 成正比（$\alpha=0.6$），优先学习高质量成功
 
 ⚡ **Eureka Moment**：这篇论文最核心的想法是——**把奖励工程从"手工设计"变成"结构化推理任务"**。VLM 不直接输出奖励值，而是输出可验证的组件配置（JSON），系统再确定性解析执行。这样既利用了 VLM 的因果推理能力，又避免了直接生成代码的不可靠性。
 
@@ -120,13 +120,13 @@ L_SFT(θ) = -E_{(o_t,a_t)∼D}[log π_θ(a_t|o_t,l)]
 | R_i | 第 i 个奖励组件（如 approach、avoid） | - |
 | w_i | 组件权重 | VLM 动态设定 |
 | G(s) | 条件门控函数（平滑可微） | - |
-| Q(τ) | 轨迹质量分（奖励总和 - 步数惩罚） | - |
+| $Q(\tau)$ | 轨迹质量分（奖励总和 - 步数惩罚） | - |
 | w_reward | 奖励权重 | 1.0 |
 | w_steps | 步数惩罚权重 | 0.01 |
-| α | 优先采样指数 | 0.6 |
-| λ_SFT | SFT 损失权重 | 0.1 |
+| $\alpha$ | 优先采样指数 | 0.6 |
+| $\lambda_{\text{SFT}}$ | SFT 损失权重 | 0.1 |
 
-> 符号与本文/相关文档保持一致：π_θ 为 VLA 策略，o_t 为视觉观测，l 为语言指令。
+> 符号与本文/相关文档保持一致：$\pi_\theta$ 为 VLA 策略，$o_t$ 为视觉观测，$l$ 为语言指令。
 
 ## 3. 带数字走一遍：玩具例子 (Worked Example)
 
@@ -149,14 +149,14 @@ R_reflect(s) = 1.0 × avoid(bowl_on_top, margin=0.1) + 1.0 × approach(bowl_besi
 
 **第 2 轮反思**（k=10）：
 - 新增组件：`avoid(ketchup)`
-- 更新奖励：R_reflect(s) += 1.0 × avoid(ketchup, margin=0.15)
+- 更新奖励：$R_{\text{reflect}}(s) += 1.0 \times \text{avoid}(ketchup, \text{margin}=0.15)$
 
 **成功轨迹质量评估**：
-- 轨迹 A：成功，总奖励 45.2，步数 120 → Q = 1.0×45.2 - 0.01×120 = 44.0
-- 轨迹 B：成功，总奖励 38.5，步数 85 → Q = 1.0×38.5 - 0.01×85 = 37.65
-- 轨迹 C：成功，总奖励 52.1，步数 95 → Q = 1.0×52.1 - 0.01×95 = 51.15
+- 轨迹 A：成功，总奖励 45.2，步数 120 → $Q = 1.0 \times 45.2 - 0.01 \times 120 = 44.0$
+- 轨迹 B：成功，总奖励 38.5，步数 85 → $Q = 1.0 \times 38.5 - 0.01 \times 85 = 37.65$
+- 轨迹 C：成功，总奖励 52.1，步数 95 → $Q = 1.0 \times 52.1 - 0.01 \times 95 = 51.15$
 
-**SFT 采样**：轨迹 C 被选中的概率最高（Q^0.6 最大），策略优先模仿这条高效成功路径。
+**SFT 采样**：轨迹 C 被选中的概率最高（$Q^{0.6}$ 最大），策略优先模仿这条高效成功路径。
 
 ## 4. 工程视角 (Engineering View)
 
@@ -164,7 +164,7 @@ R_reflect(s) = 1.0 × avoid(bowl_on_top, margin=0.1) + 1.0 × approach(bowl_besi
 |----------|-----------|------|
 | VLM 调用频率 | 每 5 轮迭代 1 次 | 降低 API 成本，反思不需要每步进行 |
 | GPU 配置 | 8×A800 | 并行数据收集，单轮约 2-3 小时 |
-| SFT 缓冲池容量 | 50 条轨迹 | 内存占用约 50×2MB = 100MB（视频 + 元数据） |
+| SFT 缓冲池容量 | 50 条轨迹 | 内存占用约 $50 \times 2\,\text{MB} = 100\,\text{MB}$（视频 + 元数据） |
 | PPO 批大小 | 与 VLA-RL 一致 | 约 256 条 transition |
 | SFT 批大小 | 16 | 行为克隆标准配置 |
 | 收敛轮次 | LIBERO-Adapt 约 50-80 轮 | 比 VLA-RL 快约 2 倍 |
@@ -196,7 +196,7 @@ R_reflect(s) = 1.0 × avoid(bowl_on_top, margin=0.1) + 1.0 × approach(bowl_besi
 | GRAPE (偏好) | 82.0 | 77.5 | 65.0 | 52.5 | 69.3 |
 | VLA-RL | 85.5 | 81.0 | 70.5 | 58.0 | 73.8 |
 | **本文 (Reflective)** | **89.0** | **85.5** | **75.0** | **63.5** | **78.3** |
-| π0-FAST (参考上界) | 92.0 | 88.5 | 78.5 | 68.0 | 81.8 |
+| $\pi_0$-FAST (参考上界) | 92.0 | 88.5 | 78.5 | 68.0 | 81.8 |
 
 **学习曲线**（LIBERO-Adapt）：
 - 本文框架：约 50 轮收敛到 75%+ 成功率

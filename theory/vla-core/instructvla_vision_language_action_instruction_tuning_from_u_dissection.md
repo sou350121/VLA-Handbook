@@ -42,11 +42,11 @@
 
 | 组件 | 输入 | 输出 | 频率/时序 | 训练/推理差异 |
 |------|------|------|-----------|---------------|
-| VLM Backbone (Eagle2-2B) | 图像 (448×448) + 文本指令 | 文本响应 + 隐藏状态 | 自回归生成 | 推理时缓存文本响应减少前向传播 |
+| VLM Backbone (Eagle2-2B) | 图像 ($448 \times 448$) + 文本指令 | 文本响应 + 隐藏状态 | 自回归生成 | 推理时缓存文本响应减少前向传播 |
 | 潜在动作查询 Q | VLM 隐藏状态 | 潜在动作 C ∈ R^(N×D) | 并行解码 (N=64) | 训练时 650M 参数，推理时冻结 |
-| MoE 适配层 | 隐藏状态 + 门控系数 λ_i | 加权 LoRA 输出 | 每 token 切换 | 语言 LoRA + 动作 LoRA 动态混合 |
+| MoE 适配层 | 隐藏状态 + 门控系数 $\lambda_i$ | 加权 LoRA 输出 | 每 token 切换 | 语言 LoRA + 动作 LoRA 动态混合 |
 | Flow Action Expert | DINOv2 图像特征 + 潜在动作 + 本体感知 | 7 维动作 (位置 + 夹爪) | 每控制步 | 12 层 transformer，flow matching 监督 |
-| 门控标量头 | 隐藏状态分类 | 门控系数 λ_i | 每 token | 决定语言/动作专家权重 |
+| 门控标量头 | 隐藏状态分类 | 门控系数 $\lambda_i$ | 每 token | 决定语言/动作专家权重 |
 
 ### 1.2 关键机制 (Key Mechanism)
 
@@ -109,7 +109,7 @@ L = L_LM + L_FM = CrossEntropy(text) + FlowMatching(actions)
 | L_FM | Flow Matching 损失 | 动作 expert 的动作生成监督 |
 | Q ∈ R^(N×D) | N 个可学习动作查询向量 | 从 VLM 隐藏状态提取潜在动作 |
 | C ∈ R^(N×D) | 潜在动作表示 | Q attention 到 VLM 隐藏状态的结果 |
-| λ_i | 门控系数 | 标量头预测，决定专家 i 的权重 |
+| $\lambda_i$ | 门控系数 | 标量头预测，决定专家 i 的权重 |
 | h = W₀x + Σ(BᵢAᵢx · αᵢ · λᵢ) | MoE 输出隐藏状态 | K 个 LoRA 专家的加权和 |
 
 **直觉解释**：
@@ -118,7 +118,7 @@ L = L_LM + L_FM = CrossEntropy(text) + FlowMatching(actions)
 - 阶段 2 只训练 MoE 模块（220M 参数），让模型学会在推理和动作之间动态切换
 - Flow Matching 损失保证动作连续平滑，CrossEntropy 保证语言流畅
 
-> 符号与本文/相关文档保持一致：潜在动作 C 对应论文中的"latent action embeddings"，MoE 门控λ对应论文 Appendix F.2
+> 符号与本文/相关文档保持一致：潜在动作 $C$ 对应论文中的"latent action embeddings"，MoE 门控 $\lambda$ 对应论文 Appendix F.2
 
 ## 3. 带数字走一遍：玩具例子 (Worked Example)
 
@@ -161,8 +161,8 @@ Token "移动" → λ_language=0.3, λ_action=0.7  # 转向动作规划
 
 | 指标 | 数值/设计 | 工程含义 |
 |------|-----------|----------|
-| VLM 分辨率 | 448×448 | 标准 VLM 输入，兼容预训练权重 |
-| Action Expert 分辨率 | 224×224 | 降低计算量，动作不需要高频细节 |
+| VLM 分辨率 | $448 \times 448$ | 标准 VLM 输入，兼容预训练权重 |
+| Action Expert 分辨率 | $224 \times 224$ | 降低计算量，动作不需要高频细节 |
 | 潜在动作维度 | N=64, D=768 | 64 个 query 平衡表达能力和效率（论文 Figure 9 消融） |
 | MoE 参数量 | 220M (阶段 2) | 仅占 VLM 总参数~15%，高效微调 |
 | 推理延迟优化 | 文本缓存 + 潜在动作缓存 | 减少 VLM 前向传播次数，实测比 ECoT 快 2-3× |
@@ -172,7 +172,7 @@ Token "移动" → λ_language=0.3, λ_action=0.7  # 转向动作规划
 **部署约束**：
 
 - 需要 2GB+ GPU 内存（Eagle2-2B + action expert）
-- Flow matching 推理需要多次采样（论文用 β分布增强噪声步精度）
+- Flow matching 推理需要多次采样（论文用 $\beta$分布增强噪声步精度）
 - 潜在动作缓存适用于静态场景，动态环境需每步重新生成
 
 ## 5. 数据与评测 (Data & Eval)
@@ -259,7 +259,7 @@ Token "移动" → λ_language=0.3, λ_action=0.7  # 转向动作规划
 
 ### 值得精讀原文的人
 
-1. **VLA 后训练研究者**：正在微调 OpenVLA/π0 但遇到灾难性遗忘问题，需要参考 MoE 适配方案
+1. **VLA 后训练研究者**：正在微调 OpenVLA/$\pi_0$ 但遇到灾难性遗忘问题，需要参考 MoE 适配方案
 2. **指令微调工程师**：想给机器人模型加入复杂指令理解能力，VLA-IT 数据标注流程可直接复用
 3. **多模态 Agent 开发者**：关注"推理→行动"闭环设计，本文的潜在动作 + flow expert 架构有启发
 

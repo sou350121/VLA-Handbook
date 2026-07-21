@@ -35,10 +35,10 @@
 
 | 組件 | 輸入 | 輸出 | 訓練方式 | 推理角色 |
 |------|------|------|----------|----------|
-| VQ-VAE Encoder | 動作 chunk a[1:H] ∈ R^{H×d_a} | 連續潛變量 z ∈ R^{L×d_e} | 重建 + commitment loss | 凍結，產生監督目標 |
+| VQ-VAE Encoder | 動作 chunk $a[1:H] \in \mathbb{R}^{H \times d_a}$ | 連續潛變量 $z \in \mathbb{R}^{L \times d_e}$ | 重建 + commitment loss | 凍結，產生監督目標 |
 | VQ-VAE Decoder | quantized embeddings z_q | 重建動作 chunk | 與 encoder 聯合訓練 | 凍結，將 code 序列解碼為動作 |
-| VFM Policy (DiT) | 噪聲 x_t, t, 視覺 o, 語言 c | codebook logits h ∈ R^{L×K} | 交叉熵 (Eq.6) | 核心生成器，每步輸出分類偏好 |
-| CFG Module | 條件 logits h_c + 無條件 h_∅ | 引導 logits h̃ | 訓練時 p_drop 置空語言 | 推理時放大語言信號 |
+| VFM Policy (DiT) | 噪聲 x_t, t, 視覺 o, 語言 c | codebook logits $h \in \mathbb{R}^{L \times K}$ | 交叉熵 (Eq.6) | 核心生成器，每步輸出分類偏好 |
+| CFG Module | 條件 logits $h_c$ + 無條件 $h_\emptyset$ | 引導 logits h̃ | 訓練時 p_drop 置空語言 | 推理時放大語言信號 |
 | Codebook Critic | o, c, p, t | 可行性分數 | InfoNCE 對比學習 | 推理時梯度引導 p 向可行模式 |
 
 **關鍵超參數**:
@@ -46,11 +46,11 @@
 | 超參數 | 數值 | 說明 |
 |--------|------|------|
 | Codebook 大小 K | 512 | 消融實驗顯示 K=512 最優（LIBERO-90） |
-| 時間下採樣 S | 2 | L = H/2^S，壓縮序列長度 |
+| 時間下採樣 S | 2 | $L = H / 2^S$，壓縮序列長度 |
 | DiT 層數 | 12 | hidden=1024, 8 heads |
 | Critic 層數 | 3 | hidden=256, 4 heads |
 | CFG weight w | 最佳 w=2~4 | LIBERO-90: w=2; LIBERO-Goal: w=4 |
-| Critic λ_max | 1.0 | 與 CFG 組合時 λ=1.0 |
+| Critic $\lambda_{\max}$ | 1.0 | 與 CFG 組合時 $\lambda=1.0$ |
 
 ### 1.2 關鍵機制 (Key Mechanism)
 
@@ -61,7 +61,7 @@
 VQActFlow 的解決方案：
 1. **VQ-VAE tokenization**：把連續動作 chunk 編碼成 L 個離散 code index（K=512 的 codebook）
 2. **VFM 分類訓練**：不訓練速度場回歸（如標準 CFM），而是訓練分類頭預測每個位置的 code index（交叉熵損失）
-3. **後驗加權速度**：推理時從分類輸出 p_k^{(l)} 計算後驗均值 μ₁，再用 OT 速度公式推導速度場
+3. **後驗加權速度**：推理時從分類輸出 $p_k^{(l)}$ 計算後驗均值 $\mu_1$，再用 OT 速度公式推導速度場
 4. **統一 guidance 接口**：CFG 和 Codebook Critic 都作用於分類分佈 p，而非連續速度或動作
 
 ⚡ **Eureka Moment**：「讓生成過程中的每一步都輸出對 K 個動作模式的分類偏好——這樣 guidance 就有了一個明確的、可操作的錨點，而不是在連續潛空間中盲目地重塑分佈。」
@@ -145,7 +145,7 @@ v_θ(x_t, t) = [Σ_k p_k^{(l)} · e_k - x_t] / (1-t)
 ```
 L_VFM = -Σ_{l=1}^{L} [h_{k*_l}^{(l)} - log(Σ_j exp(h_j^{(l)}))]
 ```
-其中 h^{(l)} = f_θ(x_t, t, o, c)^{(l)} ∈ R^K 是位置 l 的 logits，k*_l 是 ground-truth code index。
+其中 $h^{(l)} = f_\theta(x_t, t, o, c)^{(l)} \in \mathbb{R}^K$ 是位置 $l$ 的 logits，$k^*_l$ 是 ground-truth code index。
 
 推理速度（從後驗均值導出）：
 ```
@@ -166,11 +166,11 @@ p̃ = Proj_Δ [p + λ(t) · Π_T[∇_p C_ψ(o, c, p, t)]]
 ```
 
 > 符號與本文保持一致：
-> - x_t: OT 插值點 ∈ R^{L×d_e}，t 為 flow 時間步
-> - p ∈ R^{L×K}: 每個位置對 K 個 code 的分類概率
-> - e_k: codebook 第 k 個 embedding ∈ R^{d_e}
-> - o: 視覺觀察編碼; c: 語言指令編碼; ∅: 空語言 embedding
-> - H(p): 分類分佈的熵; Π_T: 切空間投影（減均值）; Proj_Δ: 單純形投影
+> - $x_t$: OT 插值點 $\in \mathbb{R}^{L \times d_e}$，$t$ 為 flow 時間步
+> - $p \in \mathbb{R}^{L \times K}$: 每個位置對 $K$ 個 code 的分類概率
+> - $e_k$: codebook 第 $k$ 個 embedding $\in \mathbb{R}^{d_e}$
+> - $o$: 視覺觀察編碼; $c$: 語言指令編碼; $\emptyset$: 空語言 embedding
+> - $H(p)$: 分類分佈的熵; $\Pi_T$: 切空間投影（減均值）; $\mathrm{Proj}_\Delta$: 單純形投影
 
 **直覺**：速度場不是直接回歸的，而是從「政策當前偏好哪些動作 mode」的分類分佈中導出。當分佈集中在某個 code 上時，速度指向該 code 的 embedding；當分佈分散時，速度指向多個 code 的加權平均——這自然地表徵了「模式選擇的不確定性」。
 
@@ -230,7 +230,7 @@ v_θ = (μ₁ - x_t) / (1 - 0.5)
 ```
 x_{t+Δt} = x_t + 0.1 · v_θ
 ```
-經過多個 Euler 步，x_t 逐漸靠近 e_0 和 e_{k*_2} 的區域，最終 quantize 得到 code 序列。
+經過多個 Euler 步，$x_t$ 逐漸靠近 $e_0$ 和 $e_{k^*_2}$ 的區域，最終 quantize 得到 code 序列。
 
 ## 4. 工程视角 (Engineering View)
 
@@ -239,8 +239,8 @@ x_{t+Δt} = x_t + 0.1 · v_θ
 | Policy 參數量 | DiT-12L, d_model=1024, 8 heads | ~100M 量級（標準 DiT-S/X 規模） |
 | Critic 參數量 | Transformer-3L, d_model=256, 4 heads | ~10M 量級，遠小於 policy |
 | 推理步數 | Euler steps（論文未明確給出，典型 20-50 步） | Flow matching 通常比 diffusion 少步數 |
-| 每步開銷 | 1× Policy forward + 1× CFG unconditional + 1× Critic forward | CFG 需額外一次 unconditional 前向 |
-| Codebook lookup | O(1) per position（nearest neighbor in R^{d_e}） | K=512, d_e 通常 64-256 |
+| 每步開銷 | $1\times$ Policy forward + $1\times$ CFG unconditional + $1\times$ Critic forward | CFG 需額外一次 unconditional 前向 |
+| Codebook lookup | $O(1)$ per position（nearest neighbor in $\mathbb{R}^{d_e}$） | K=512, d_e 通常 64-256 |
 | 訓練階段 | 兩階段：VQ-VAE 預訓練 → VFM+Critic 聯合訓練 | VQ-VAE 凍結後不參與梯度 |
 | 部署約束 | 需要 CLIP-B/32 + ResNet-18 + DiT + Critic | 視覺+語言 encoder 可共享/凍結 |
 
@@ -261,26 +261,26 @@ x_{t+Δt} = x_t + 0.1 · v_θ
 **訓練協議**（仿真基準）：
 - 所有基線使用相同的視覺/語言 encoder、訓練數據集、訓練步數、初始化種子
 - Discrete Policy 基線使用與 VQActFlow 共享的 VQ-VAE 權重和相同的 DiT backbone
-- VLA 模型（OpenVLA, π₀）因預訓練數據集不同而未納入直接比較
+- VLA 模型（OpenVLA, $\pi_0$）因預訓練數據集不同而未納入直接比較
 
 **核心結果**：
-- LIBERO-Goal: VQActFlow 73.0%（無引導）→ 81.0%（w=4），Discrete Policy 峰值 61.5%（w=6）
-- LIBERO-90: VQActFlow + CFG(w=2) + Critic(λ=1.0) = 80.5%，超越 CFM DiT、MT-ACT、VQ-BeT (24.1%)、Discrete Policy+CFG (63.2%)
+- LIBERO-Goal: VQActFlow $73.0\%$（無引導）→ $81.0\%$（$w=4$），Discrete Policy 峰值 $61.5\%$（$w=6$）
+- LIBERO-90: VQActFlow + CFG($w=2$) + Critic($\lambda=1.0$) = $80.5\%$，超越 CFM DiT、MT-ACT、VQ-BeT ($24.1\%$)、Discrete Policy+CFG ($63.2\%$)
 - 人形硬件: 4 個拾放任務，w=6 時改善正確任務選擇（具體數字待補充，論文截斷）
 
 ## 6. 能力與失敗模式 (Capabilities & Failure Modes)
 
 ### 能做什么
 - **多任務模式選擇**：在相同視覺觀察 + 不同語言指令下，能正確選擇動作模式（LIBERO-Goal 上 CFG 提升 8%）
-- **推理時 steering**：無需重訓，通過調整 w 和 λ 即可改變行為
+- **推理時 steering**：無需重訓，通過調整 $w$ 和 $\lambda$ 即可改變行為  
 - **場景可行性判斷**：Codebook Critic 提供獨立於語言的可行性信號（+2.0% 單獨增益）
 - **跨平台泛化**：從仿真（LIBERO）到雙臂（ALOHA）到人形（G1）均有驗證
 
 ### 不能做什么 / 失敗模式
 | 失敗類型 | 場景 | 原因 |
 |----------|------|------|
-| 錯誤任務執行 | w=1（低引導） | 無條件邊緣 h_∅ 抑制不足，政策對錯誤對象執行連貫動作 |
-| 抓取失敗 | w=8（過引導） | 激進放大 (h_c - h_∅) 損害執行精度——到達正確對象但抓不準 |
+| 錯誤任務執行 | w=1（低引導） | 無條件邊緣 $h_\emptyset$ 抑制不足，政策對錯誤對象執行連貫動作   |
+| 抓取失敗 | w=8（過引導） | 激進放大 $(h_c - h_\emptyset)$ 損害執行精度——到達正確對象但抓不準   |
 | 天花板任務回退 | 接近天花板任務 | w=4 時「打開中間抽屜」從 90% 降至 75%——引導對已學好的任務反而有害 |
 | Codebook 粒度不足 | K=128 | 詞彙太粗，無法區分細粒度動作差異 |
 | 分類困難 | K=2048 | 分類空間過大，政策難以學習精確的 K 路分類 |
@@ -315,9 +315,9 @@ x_{t+Δt} = x_t + 0.1 · v_θ
   2. 探索 VQ-VAE + Flow Matching 結合的生成模型研究者
   3. 需要設計推理時 guidance 機制（特別是 scene-conditioned feasibility）的工程師
 
-- **建議章節路徑**：先讀 §IV-B（VFM Policy，核心方法）→ 再看 §IV-D（Codebook Critic，創新點）→ §V-B（LIBERO-90 結果，核心實驗）→ 可跳 §III（ preliminaries，如已熟悉 VQ-VAE 和 Flow Matching）
+- **建議章節路徑**：先讀 §IV-B（VFM Policy，核心方法）→ 再看 §IV-D（Codebook Critic，創新點）→ §V-B（LIBERO-90 結果，核心實驗）→ 可跳 §III（ preliminaries，如已熟悉 VQ-VAE 和 Flow Matching）  
 
-- **不值得精讀的理由**：如果只做單任務操控、已熟悉 VQ-VAE + diffusion 架構、或不關心推理時 guidance——讀摘要和 §IV-A 的 tokenization 部分即可。本文的價值在於「全程顯式模式偏好 + 統一 guidance 接口」的設計，不做多任務的讀者可能從 Diffusion Policy 或 π₀ 獲得更多實用價值。
+- **不值得精讀的理由**：如果只做單任務操控、已熟悉 VQ-VAE + diffusion 架構、或不關心推理時 guidance——讀摘要和 §IV-A 的 tokenization 部分即可。本文的價值在於「全程顯式模式偏好 + 統一 guidance 接口」的設計，不做多任務的讀者可能從 Diffusion Policy 或 $\pi_0$ 獲得更多實用價值。  
 
 ---
-[← Back to Theory](./README.md)
+[← Back to Theory](./README.md)  

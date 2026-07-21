@@ -35,7 +35,7 @@
 |------|------|------|------|---------------|
 | VLM 场景过滤 | 场景图像 + 任务文本 | 任务相关物体列表 | 仅初始化 (9s 一次性) | 训练/推理相同 |
 | 2D 定位 (Molmo + SAM2) | 图像 + 物体类别 | 2D 分割掩码 | 初始化 + 跟踪 (20Hz) | SAM2 跟踪在推理时复用 |
-| 3D 投影 (Foundation Stereo) | 立体图像对 | 深度图 → 3D 点云 | 每步 0.115s (5Hz) | 推理时需实时计算 |
+| 3D 投影 (Foundation Stereo) | 立体图像对 | 深度图 $\to$ 3D 点云 | 每步 0.115s (5Hz) | 推理时需实时计算 |
 | 策略 (BAKU + PointNet) | 历史点云 + 语言 | 末端执行器位姿 | 5Hz | 训练用 MSE，推理用 chunk 平均 |
 | 机器人表征 | 机器人位姿 | 夹爪关键点 | 每步 | 刚性变换计算 |
 
@@ -47,7 +47,7 @@
 -  prior 工作（Point Policy）用手动标注关键点，本文用 VLM 自动化
 
 **VLM 引导的场景过滤流程**：
-1. Gemini-2.5-flash 从任务描述识别相关物体（如"把碗放在盘子上"→{碗，盘子}）
+1. Gemini-2.5-flash 从任务描述识别相关物体（如"把碗放在盘子上"$\to${碗，盘子}）
 2. Molmo-7B 定位物体在图像中的像素位置
 3. SAM2 从像素位置生成 2D 分割掩码
 4. 从掩码均匀采样 2D 点，用 Foundation Stereo 深度图提升到 3D
@@ -102,14 +102,14 @@
 π*(a|𝒪) = argmax_θ Σ_{τ∈𝒟_sim ∪ 𝒟_real} Σ_t log π_θ(a_t | 𝒫_{t-H:t}, ℒ)
 ```
 
-**目标**：学习策略 π_θ，输入为历史点云 𝒫 和语言指令 ℒ，输出动作 a（末端位姿 + 夹爪状态）。
+**目标**：学习策略 $\pi_\theta$，输入为历史点云 $\mathcal{P}$ 和语言指令 $\mathcal{L}$，输出动作 $a$（末端位姿 + 夹爪状态）。
 
 **变量说明**：
 | 符号 | 含义 | 维度/说明 |
 |------|------|-----------|
-| 𝒪^t-H:t | 观察历史 | {𝒫_r^t-H:t, 𝒫_o^t-H:t, ℒ} |
+| $\mathcal{O}^{t-H:t}$ | 观察历史 | $\{\mathcal{P}_r^{t-H:t}, \mathcal{P}_o^{t-H:t}, \mathcal{L}\}$ |
 | 𝒫_r | 机器人关键点 | N 个夹爪关键点位姿 |
-| 𝒫_o | 物体点云 | M 点/物体 × K 物体 |
+| 𝒫_o | 物体点云 | $M$ 点/物体 $\times K$ 物体 |
 | ℒ | 语言指令 | MiniLM 6 层编码 |
 | H | 历史长度 | 实验用 10 步 |
 | 𝒟_sim | 仿真数据 | 1200 演示/任务 (MimicGen 扩展) |
@@ -131,8 +131,8 @@ X_base = R · X_cam + t              # 从相机坐标系到机器人基座标�
 假设任务："把碗放在盘子上"，场景中有 1 个碗 + 1 个盘子。
 
 **Step 1: VLM 场景过滤**
-- Gemini 输入：图像 + "put the bowl on the plate" → 输出：{bowl, plate}
-- Molmo 定位：bowl → (u=320, v=240), plate → (u=400, v=300)
+- Gemini 输入：图像 + "put the bowl on the plate" $\to$ 输出：{bowl, plate}
+- Molmo 定位：bowl $\to$ $(u=320, v=240)$, plate $\to$ $(u=400, v=300)$
 - SAM2 分割：从种子点生成掩码，各约 5000 像素
 
 **Step 2: 3D 点提取**
@@ -144,8 +144,8 @@ X_base = R · X_cam + t              # 从相机坐标系到机器人基座标�
 
 **Step 3: 策略推理**
 - 输入：𝒫 = {𝒫_r (8 个夹爪点), 𝒫_o (256 个物体点), ℒ}
-- PointNet 编码：256 点 → 512 维向量
-- BAKU Transformer：处理 10 步历史 → 输出 8 步动作 chunk
+- PointNet 编码：256 点 $\to$ 512 维向量
+- BAKU Transformer：处理 10 步历史 $\to$ 输出 8 步动作 chunk
 - 指数时间平均：平滑轨迹
 - 输出：末端位姿 (x,y,z, qx,qy,qz,qw) + 夹爪开合
 
@@ -203,15 +203,15 @@ X_base = R · X_cam + t              # 从相机坐标系到机器人基座标�
 | 真实遥操作 | 3 (fold towel, close drawer, put bowl in oven) | 20/任务 | 纯真实任务评测 |
 
 **仿真数据生成**：
-- 每个任务 4 物体实例对 × 5 人工演示 = 20 种子演示
-- MimicGen 扩展到 300 演示/物体对 → 1200 演示/任务
+- 每个任务 4 物体实例对 $\times$ 5 人工演示 = 20 种子演示
+- MimicGen 扩展到 300 演示/物体对 $\to$ 1200 演示/任务
 - MimicGen 核心：对演示段施加 SE(3) 变换 T_W^o' · (T_W^o)^(-1) 适配新场景
 
 ### 5.2 评测任务设置
 
 **Zero-shot sim-to-real**：
 - 仅在仿真数据上训练
-- 真实世界评测：3 物体实例对 × 10 rollouts = 30 次评估/任务
+- 真实世界评测：3 物体实例对 $\times$ 10 rollouts = 30 次评估/任务
 - 指标：任务成功率
 
 **Co-training**：
@@ -225,7 +225,7 @@ X_base = R · X_cam + t              # 从相机坐标系到机器人基座标�
 ### 5.3 关键结果
 
 **Table 1 核心数字**（单任务 zero-shot）：
-| 方法 | Bowl→Plate | Mug→Plate | Stack Bowls | 平均 |
+| 方法 | Bowl$\to$Plate | Mug$\to$Plate | Stack Bowls | 平均 |
 |------|------------|-----------|-------------|------|
 | 图像策略 | 0% | 0% | 0% | 0% |
 | Point Bridge | 78% | 75% | 75% | **76%** |
@@ -262,7 +262,7 @@ X_base = R · X_cam + t              # 从相机坐标系到机器人基座标�
 |----------|------|--------------|
 | VLM 定位失败 | 物体被遮挡/太小 | Appendix Fig 4: 金属碗被夹爪遮挡时失败 |
 | 深度估计噪声 | 反光/透明物体 | Section 5.4: RGB-D 在反光物体上表现差 |
-| 视角不匹配 | Sim/real 相机位姿差异大 | Appendix Table 7: 视角随机化后 76%→47% |
+| 视角不匹配 | Sim/real 相机位姿差异大 | Appendix Table 7: 视角随机化后 $76\% \to 47\%$ |
 | 动态场景 | 控制频率 5Hz 不够快 | Section 6 Limitations |
 |  cluttered 场景 | 点表征丢弃上下文 | Section 6 Limitations |
 

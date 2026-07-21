@@ -13,7 +13,7 @@
 | 核心結論 | 动静解耦 + 可学习 recache gate 让 VLA 在保持/提升成功率的同时实现 2.0-2.2x 推理加速，并首次让 LLM backbone 直接对多帧推理 |
 | 適合精讀 | 如果你在优化 VLA 推理效率、需要多帧记忆能力、或设计实时机器人控制系统，重点看 §1.1、§2、§4.1 |
 | 可以跳過 | 如果你只关心单帧 VLA 或纯量化/剪枝加速，这篇距离中等 |
-| 落地可行性 | 中（需修改 VLM backbone 的 token 路由逻辑，但 recache gate 本身很轻量 ≈1.27% 开销） |
+| 落地可行性 | 中（需修改 VLM backbone 的 token 路由逻辑，但 recache gate 本身很轻量 $\approx 1.27\%$ 开销） |
 | 主要風險 | 实验仅在桌面操作场景验证（SimplerEnv / LIBERO / Cobot Magic），对动态场景（移动机器人、双臂协作）的有效性未知 |
 
 💡 **X-Ray 开场**
@@ -40,7 +40,7 @@ VLA 模型有两个死穴：上下文窗口装不下多帧历史（每张图 256
 | 视觉 token | 全部每帧重算 | 全部重算 | 启发式复用 patch | 单帧进 LLM | 静态 token 缓存 + 动态 token 每帧算 |
 | KV 缓存策略 | 无 | 无 (复用 action) | 像素相似度启发式 | 无 | **可学习 recache gate** (Gumbel-softmax) |
 | LLM 多帧推理 | ❌ | ❌ | ❌ | ❌ (仅解码器) | ✅ 直接推理 |
-| 上下文长度 (256 token/帧, T=10) | 2560 | 2560 | 2560 | 256 | **256 (静态) + 16×10 (动态) = 416** |
+| 上下文长度 (256 token/帧, T=10) | 2560 | 2560 | 2560 | 256 | **$256$ (静态) $+ 16 \times 10$ (动态) $= 416$** |
 | SimplerEnv 加速 | 1.00x | 1.33x | 1.29-1.38x | TODO | **2.26x** |
 | LIBERO 加速 | 1.00x | 1.13x | 1.14-1.29x | TODO | **1.70x** |
 | 实时世界加速 | 1.00x | 1.30x | 1.01-1.27x | TODO | **2.21x** |
@@ -54,7 +54,7 @@ VLA 模型有两个死穴：上下文窗口装不下多帧历史（每张图 256
 - **L2 静态缓存 (107 tokens, 42%)**: 中等持久——物体级外观，可能因遮挡或交互偶尔变化
 - **动态 token (16 tokens, 6%)**: 每帧必变——机器人末端位置、被抓取物体的位移
 
-**Recache Gate**：不是简单地"永远缓存"或"永远重算"，而是用一个轻量级可学习门控网络预测"当前帧是否需要刷新缓存"。训练时用 Gumbel-softmax 实现端到端可微的二值决策；推理时概率超过阈值 δ 就刷新，否则复用 KV cache。
+**Recache Gate**：不是简单地"永远缓存"或"永远重算"，而是用一个轻量级可学习门控网络预测"当前帧是否需要刷新缓存"。训练时用 Gumbel-softmax 实现端到端可微的二值决策；推理时概率超过阈值 $\delta$ 就刷新，否则复用 KV cache。
 
 ⚡ **Eureka Moment**：Transformer 架构中，即使两个帧的像素完全相同，经过 attention 后它们的 hidden representation 也会不同——所以基于像素相似度的启发式缓存（TTF-VLA, VLA-Cache）本质上是错误的。DySta 通过在 token 级别做动静解耦 + 可学习 gate，从根本上解决了这个问题。
 
@@ -160,11 +160,11 @@ L = L_Task + Σ_l α_l · L_InfoNCE^l + β · L_gate
 | N_d | 动态 token 数 | 16 |
 | r | 静态 token 占比 | 94% (240/256) |
 | T | 历史帧数 | 论文未明确给出具体值 |
-| δ_l | recache 阈值 | 论文 Appendix D |
-| λ | gate 时间先验衰减 | 固定值，论文未给出 |
-| α_l, β | 损失权重 | 论文 Appendix I.1 有敏感性分析 |
+| $\delta_l$ | recache 阈值 | 论文 Appendix D |
+| $\lambda$ | gate 时间先验衰减 | 固定值，论文未给出 |
+| $\alpha_l$, $\beta$ | 损失权重 | 论文 Appendix I.1 有敏感性分析 |
 
-> 符号与原文保持一致。论文中 α_l 和 β 的具体数值需查阅 Appendix I.1。
+> 符号与原文保持一致。论文中 $\alpha_l$ 和 $\beta$ 的具体数值需查阅 Appendix I.1。
 
 ## 3. 带数字走一遍：玩具例子 (Worked Example)
 
@@ -178,18 +178,18 @@ L = L_Task + Σ_l α_l · L_InfoNCE^l + β · L_gate
 
 **第 2 帧 (t=1)**：
 - 新帧编码: 256 tokens
-- Recache gate 判断: g_L1 = 0.12 < δ_L1 (假设 δ=0.5) → 复用 L1 cache ✓
-- g_L2 = 0.08 < δ_L2 → 复用 L2 cache ✓
+- Recache gate 判断: $g_{L1} = 0.12 < \delta_{L1}$ (假设 $\delta=0.5$) → 复用 L1 cache ✓
+- $g_{L2} = 0.08 < \delta_{L2}$ → 复用 L2 cache ✓
 - 只需计算 16 个动态 token
 - LLM 输入: [L1_cached(133), L2_cached(107), d_0(16), d_1(16), I] = 288 tokens
-- 对比传统: 256×2 + I = 512+ tokens → **节省 44% 上下文**
+- 对比传统: $256\times2 + I = 512+$ tokens → **节省 44% 上下文**
 
 **第 5 帧 (t=4)**：机器人已经抓起玉米，开始移动
-- Recache gate 判断: g_L1 = 0.72 > δ_L1 → **刷新 L1** (背景变了)
+- Recache gate 判断: $g_{L1} = 0.72 > \delta_{L1}$ → **刷新 L1** (背景变了)
 - L1 刷新 → L2 强制刷新
 - 256 tokens 全部重算
-- 但之前的 4 帧中，假设 3 帧复用了 cache → 5 帧总计算量 ≈ 2×256 + 3×16 = 560 tokens
-- 传统方法: 5×256 = 1280 tokens → **节省 56% FLOPs**
+- 但之前的 4 帧中，假设 3 帧复用了 cache → 5 帧总计算量 ≈ $2\times256 + 3\times16 = 560$ tokens
+- 传统方法: $5\times256 = 1280$ tokens → **节省 56% FLOPs**
 
 **理论加速验证**：
 ```
@@ -206,13 +206,13 @@ r = 240/256 = 0.9375
 | 单帧延迟 (SimplerEnv) | 601ms (DySta) vs 1360ms (CogACT) | 每步少等 759ms |
 | 单帧延迟 (LIBERO) | 437ms vs 741ms | 少等 304ms |
 | 单帧延迟 (真实世界) | 493ms vs 1089ms | 少等 596ms |
-| Recache gate 开销 | ≈1.27% | 可忽略 |
+| Recache gate 开销 | $\approx1.27\%$ | 可忽略 |
 | 静态 token 比例 | 94% (240/256) | 极高，动态 token 仅 16 个 |
 | 动态 token 数 | 16 | 非常小——信息密度极高 |
 
 **关键 trade-off**：
 - **动态 token 越少 → 加速越大，但信息损失风险越高**。论文中 16 个动态 token 是否足够表达所有关键变化？Appendix I.2 有敏感性分析，但具体数值未在主文明确。
-- **Recache 阈值 δ 是唯一的操作旋钮**：δ 高 → 少刷新 → 更快但可能 stale；δ 低 → 多刷新 → 更准但更慢。
+- **Recache 阈值 $\delta$ 是唯一的操作旋钮**：$\delta$ 高 → 少刷新 → 更快但可能 stale；$\delta$ 低 → 多刷新 → 更准但更慢。
 - **部署约束**：需要修改 VLM backbone 的 token 路由逻辑和 KV cache 管理——不是即插即用的插件，需要框架级改造。
 - **控制频率含义**：601ms 的推理延迟意味着 ~1.6Hz 的控制频率，对于桌面操作足够，但对于需要高频响应的任务（如接住掉落物体）仍不够。
 

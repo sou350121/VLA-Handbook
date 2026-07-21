@@ -4,7 +4,7 @@
 >
 > **论文**: RhinoVLA Technical Report
 > **链接**: https://arxiv.org/abs/2606.07383
-> **核心定位**: 将 VLA 推理延迟的根因追溯到视觉 token 数量，通过 Qwen3-VL 的 4× token 压缩 + 辉羲 R1 芯片联合优化，在边缘 SoC 上实现 11.69 Hz 实时闭环控制，同时保持与 π0.5 相当的任务成功率。
+> **核心定位**: 将 VLA 推理延迟的根因追溯到视觉 token 数量，通过 Qwen3-VL 的 $4\times$ token 压缩 + 辉羲 R1 芯片联合优化，在边缘 SoC 上实现 $11.69$ Hz 实时闭环控制，同时保持与 $\pi_{0.5}$ 相当的任务成功率。
 
 ## ⚡ 快速判斷（30 秒讀完這段就夠了）
 
@@ -41,14 +41,14 @@ VLA 模型在机器人上跑不快，根本原因是什么？这篇论文给出�
 
 ### 1.1 系统对比概览 (System Component Comparison)
 
-| 维度 | π₀.₅ (PI) | RhinoVLA | 差异含义 |
+| 维度 | $\pi_{0.5}$ (PI) | RhinoVLA | 差异含义 |
 |------|-----------|----------|----------|
 | VLM Backbone | PaliGemma-224 (~3B) | Qwen3-VL (2.13B) | 参数量减少 ~30% |
-| 每图视觉 token | 256 | 64 (空间合并后) | **4× 压缩**，核心创新 |
+| 每图视觉 token | 256 | 64 (空间合并后) | **4$\times$ 压缩**，核心创新   |
 | Action Expert | 0.43B (Gemma-based) | 0.40B (Qwen-compatible) | 规模相当，但适配 Qwen 接口 |
 | 总参数量 | ~3.3B | ~2.53B | 更轻量 |
 | 部署芯片 | NVIDIA Jetson AGX Orin | 辉羲 R1 (7nm, 500 TOPS INT8) | 不同芯片生态 |
-| 端到端频率 | ~1.17 Hz (Orin 估算) | **11.69 Hz** (R1 实测) | **10× 提升** |
+| 端到端频率 | ~1.17 Hz (Orin 估算) | **11.69 Hz** (R1 实测) | **10$\times$ 提升**   |
 | 跨机器人接口 | 无统一机制 | View Registry + 72D slot + Instance LoRA | RhinoVLA 独有 |
 | 训练数据 | 未公开 | AgiBotWorld (2976h G1 + G2) + Open X-Embodiment | 数据源不同 |
 | 量化策略 | FP16 | W8A16 (INT8 权重 + FP16 激活) | 内存带宽优化 |
@@ -57,18 +57,18 @@ VLA 模型在机器人上跑不快，根本原因是什么？这篇论文给出�
 
 RhinoVLA 的核心设计围绕三个异质性挑战展开：
 
-**挑战 A: 摄像头视角异构** → **View Registry**
+**挑战 A: 摄像头视角异构** $\to$ **View Registry**  
 - 不同机器人数据集的摄像头布局、命名、顺序完全不同
 - 解决方案：在预处理阶段将每个数据集的摄像头字段映射到固定角色-模态词汇表（如 `[head|rgb]`、`[left_wrist|rgb]`）
 - 关键效果：Qwen3-VL 在 tokenization 之前就知道每张图的相机身份，而非从图像顺序中猜测
 
-**挑战 B: 动作空间异构** → **72D 统一物理槽位 + 二元掩码**
+**挑战 B: 动作空间异构** $\to$ **72D 统一物理槽位 + 二元掩码**  
 - 不同机器人的动作向量长度和索引含义不同
 - 解决方案：定义 72 维固定物理含义的槽位空间（臂/腕/头/腰用弧度，夹爪用 [0,1] 闭合比，移动底座用速度单位）
 - 二元掩码标记哪些槽位对当前机器人有效，无效槽位从 flow-matching 损失中排除
 - 灵巧手预留 16 槽：拇指 4 DoF + 其余四指各 3 DoF（4-3-3-3-3 分配）
 
-**挑战 C: 机器人实例残差** → **Robot-instance LoRA**
+**挑战 C: 机器人实例残差** $\to$ **Robot-instance LoRA**  
 - 即使共享相同的槽位定义，不同机器人在标定误差、关节限位、夹爪力学等方面仍有差异
 - 解决方案：在 Action Expert 的 FFN 中插入机器人实例级 LoRA 模块
 - 部署时可将 LoRA 合并到基权重中，保持统一计算图
@@ -141,7 +141,7 @@ FLOPs = 2 · B · S · d_in · d_out
 - `S` = 输入 token 数量（视觉 token + 上下文 token）
 - `d_in` / `d_out` = 线性层的输入/输出维度（固定）
 
-**关键洞察**: 当 `d_in`、`d_out`、`B` 固定时，FLOPs 与 `S` 成线性关系。π₀.₅ 的 PaliGemma 用 256 token/图，Qwen3-VL 用 64 token/图 → 单图 MLP 计算量减少 **4×**。
+**关键洞察**: 当 `d_in`、`d_out`、`B` 固定时，FLOPs 与 `S` 成线性关系。$\pi_{0.5}$ 的 PaliGemma 用 256 token/图，Qwen3-VL 用 64 token/图 $\to$ 单图 MLP 计算量减少 **4$\times$**。  
 
 **Flow-matching 损失**（训练目标）:
 
@@ -165,11 +165,11 @@ L_FM = Σ_{h,d} m_a(d) · w(h,d) · ||v̂_θ(h,d) - (z(h,d) - a(h,d))||²₂
 
 ## 3. 带数字走一遍：玩具例子 (Worked Example)
 
-**场景**: 单目视觉（1 张 224×224 图像），单步推理，比较 π₀.₅ 与 RhinoVLA 的 MLP 计算量差异。
+**场景**: 单目视觉（1 张 $224\times224$ 图像），单步推理，比较 $\pi_{0.5}$ 与 RhinoVLA 的 MLP 计算量差异。  
 
 **假设参数**（基于论文公开数据 + 合理估算）：
 
-| 参数 | π₀.₅ (PaliGemma) | RhinoVLA (Qwen3-VL) |
+| 参数 | $\pi_{0.5}$ (PaliGemma)   | RhinoVLA (Qwen3-VL) |
 |------|-------------------|----------------------|
 | 视觉 token/图 | 256 | 64 |
 | 上下文 token (语言指令) | 64 | 64 |
@@ -194,7 +194,7 @@ Rhino:  26 ×  4.29B = 111.6B FLOPs
 
 **理论加速比**: 279.3 / 111.6 = **2.5×**
 
-这意味着仅通过 token 压缩，VLM backbone 的 MLP 计算量就减少了 **60%**。加上 R1 芯片的 W8A16 量化（up_proj 实测 1.69× 加速）、并行视觉编码（34.52ms → 24.31ms）、以及算子融合，最终端到端达到 11.69 Hz。
+这意味着仅通过 token 压缩，VLM backbone 的 MLP 计算量就减少了 **60%**。加上 R1 芯片的 W8A16 量化（up_proj 实测 $1.69\times$ 加速）、并行视觉编码（$34.52\,\text{ms} \to 24.31\,\text{ms}$）、以及算子融合，最终端到端达到 $11.69\ \text{Hz}$。  
 
 **推理采样过程**（以 4 步 flow-matching 为例）：
 
@@ -219,13 +219,13 @@ Step 4: t=1.00 → x_t = z              → AE 预测 v̂₄ → 输出最终动
 | 视觉编码 (3 views) | ~24.3 | 28.4% | 并行 batch encoding |
 | VLM Backbone (Qwen3-VL) | ~38.5 | 45.0% | token 压缩 + W8A16 + 算子融合 |
 | Action Expert (4 steps) | ~22.7 | 26.6% | 共享 KV cache + Instance LoRA |
-| **总计** | **~85.5** | **100%** | **→ 11.69 Hz** |
+| **总计** | **~85.5** | **100%** | **$\to\ 11.69\ \text{Hz}$**   |
 
 ### 4.2 关键工程 trade-off
 
 | 设计选择 | 收益 | 代价 |
 |----------|------|------|
-| W8A16 量化（非 W8A8） | 保持精度（W8A8 明显降低成功率） | 需要自定义 GEMM kernel（up_proj 191μs → 113μs） |
+| W8A16 量化（非 W8A8） | 保持精度（W8A8 明显降低成功率） | 需要自定义 GEMM kernel（up_proj $191\,\mu\text{s} \to 113\,\mu\text{s}$）   |
 | Qwen3-VL 64 token/图 | MLP 计算量减少 60% | 空间分辨率降低，可能丢失细粒度视觉信息 |
 | Instance LoRA（非独立输出头） | 统一部署图，可合并权重 | LoRA 容量有限，大残差机器人可能适配不足 |
 | 冻结 VLM backbone，仅训 LoRA | 减少训练计算量 | 预训练视觉表征无法针对机器人视角深度调整 |
@@ -246,7 +246,7 @@ Step 4: t=1.00 → x_t = z              → AE 预测 v̂₄ → 输出最终动
 | AgiBotWorld 2026 | 更新版真实机器人轨迹 | 未公开具体时长 |
 | Open X-Embodiment | 跨平台机器人关节空间子集 | 多机器人平台 |
 
-**数据配比**: 使用 power-law 平衡（指数 0.43，与 π₀ 系列一致）：
+**数据配比**: 使用 power-law 平衡（指数 $0.43$，与 $\pi_0$ 系列一致）：  
 
 ```
 p_i = N_i^0.43 / Σ_j N_j^0.43
@@ -257,21 +257,21 @@ p_i = N_i^0.43 / Σ_j N_j^0.43
 | 模型 | Spatial | Object | Goal | Long | 平均 |
 |------|---------|--------|------|------|------|
 | OpenVLA | — | — | — | — | — |
-| π₀ | — | — | — | — | — |
-| π₀-Fast | — | — | — | — | — |
+| $\pi_0$   | — | — | — | — | — |
+| $\pi_0$-Fast | — | — | — | — | — |
 | CoT-VLA | — | — | — | — | — |
 | **RhinoVLA** | — | — | — | 90.4% | **94.1%** |
 
-> TODO: 论文 Table 4 的具体数值在 HTML 提取中不完整，上述表格中 "-" 表示待从 PDF 原文补充。已知 RhinoVLA 平均 94.1%，Long 套件 90.4%，超过 π₀ 和 π₀-Fast。
+> TODO: 论文 Table 4 的具体数值在 HTML 提取中不完整，上述表格中 "-" 表示待从 PDF 原文补充。已知 RhinoVLA 平均 $94.1\%$，Long 套件 $90.4\%$，超过 $\pi_0$ 和 $\pi_0$-Fast。
 
 **消融实验**（论文原文）：
-- 无机器人预训练 → 平均 90.0%
-- + 机器人预训练 → 平均 91.8%（+1.8pp）
-- + View Registry → 平均 **94.1%**（+2.3pp）
+- 无机器人预训练 → 平均 $90.0\%$
+- + 机器人预训练 → 平均 $91.8\%$（$+1.8$pp）
+- + View Registry → 平均 **$94.1\%$**（$+2.3$pp）
 
 ### 5.3 真机评测
 
-| 机器人 | 任务 | 设置 | RhinoVLA SR | π₀.₅ SR |
+| 机器人 | 任务 | 设置 | RhinoVLA SR | $\pi_{0.5}$ SR |
 |--------|------|------|-------------|---------|
 | Galbot G1 | 红袋→远 bin | seen | — | — |
 | Galbot G1 | 红袋→远 bin | unseen | 100% | 100% |
@@ -280,7 +280,7 @@ p_i = N_i^0.43 / Σ_j N_j^0.43
 | AgiBot G1 | 双臂叠毛巾 | seen | 67% | — |
 | AgiBot G1 | 双臂叠毛巾 | unseen | 43% | — |
 
-> TODO: 部分 π₀.₅ 对比数据在 HTML 提取中不完整，待从 PDF 补充。
+> TODO: 部分 $\pi_{0.5}$ 对比数据在 HTML 提取中不完整，待从 PDF 补充。
 
 ## 6. 能力与失败模式 (Capabilities & Failure Modes)
 
@@ -313,7 +313,7 @@ p_i = N_i^0.43 / Σ_j N_j^0.43
 
 ## 7. 与相关工作对比 (Comparison)
 
-| 维度 | π₀.₅ | OpenVLA | GR00T N1 | RhinoVLA |
+| 维度 | $\pi_{0.5}$ | OpenVLA | GR00T N1 | RhinoVLA |
 |------|------|---------|----------|----------|
 | 架构 | VLM + Flow Expert | 7B Prismatic VLM | VLM + DiT Action | Qwen3-VL + Flow Expert |
 | 参数量 | ~3.3B | ~7B | 未公开 | ~2.53B |
@@ -324,7 +324,7 @@ p_i = N_i^0.43 / Σ_j N_j^0.43
 | 量化 | FP16 | 未量化 | 未公开 | **W8A16** |
 | 开源 | 部分 | 是 | 部分 | 是 (Apache 2.0) |
 
-**面试 Tip**: 如果被问到"RhinoVLA 相比 π₀.₅ 的核心改进是什么"，回答："不是减少参数量，而是减少视觉 token 数量 — 从 256 到 64，4 倍压缩。因为 MLP GEMM 计算量与 token 数线性相关，这是比减少参数量更直接的延迟优化路径。"
+**面试 Tip**: 如果被问到"RhinoVLA 相比 $\pi_{0.5}$ 的核心改进是什么"，回答："不是减少参数量，而是减少视觉 token 数量 — 从 $256$ 到 $64$，$4$ 倍压缩。因为 MLP GEMM 计算量与 token 数线性相关，这是比减少参数量更直接的延迟优化路径。"
 
 ## 8. 精讀建議 (Reading Guide)
 
@@ -345,4 +345,4 @@ p_i = N_i^0.43 / Σ_j N_j^0.43
 - 代码: https://github.com/HUIXI-AI/RhinoVLA
 - 权重: https://huggingface.co/HuixiAI/RhinoVLA
 - Qwen3-VL: https://github.com/QwenLM/Qwen3-VL
-- π₀.₅: https://www.physicalintelligence.company/blog/pi05
+- $\pi_{0.5}$: https://www.physicalintelligence.company/blog/pi05

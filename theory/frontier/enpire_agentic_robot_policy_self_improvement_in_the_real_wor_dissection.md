@@ -4,13 +4,13 @@
 >
 > **论文**: ENPIRE: Agentic Robot Policy Self-Improvement in the Real World
 > **链接**: https://arxiv.org/abs/2606.19980
-> **核心定位**: 首次将 coding agent 的自改进闭环从数字环境延伸到真实物理机器人，通过"环境构建→策略迭代→多机器人并行→知识进化"四模块框架，让 coding agent 自主将灵巧操作策略提升到 99% 成功率，填补了 Agentic VLA 在真实世界闭环反馈中的空白。
+> **核心定位**: 首次将 coding agent 的自改进闭环从数字环境延伸到真实物理机器人，通过"环境构建→策略迭代→多机器人并行→知识进化"四模块框架，让 coding agent 自主将灵巧操作策略提升到 $99\%$ 成功率，填补了 Agentic VLA 在真实世界闭环反馈中的空白。
 
 ## ⚡ 快速判斷（30 秒讀完這段就夠了）
 
 | 維度 | 判斷 |
 |------|------|
-| 核心結論 | Coding agent 可以在真实机器人上自主完成"环境搭建→策略训练→多机并行→知识迁移"的完整研究闭环，无需人工干预即可将灵巧操作策略优化到 99% 成功率 |
+| 核心結論 | Coding agent 可以在真实机器人上自主完成"环境搭建→策略训练→多机并行→知识迁移"的完整研究闭环，无需人工干预即可将灵巧操作策略优化到 $99\%$ 成功率 |
 | 適合精讀 | 如果你在做 Agentic 机器人、物理 autoresearch、多机器人并行训练、或 coding agent 在物理世界的部署，重点看 §2（方法架构）和 §3.3（多机扩展） |
 | 可以跳過 | 如果你只关心纯仿真中的策略学习或纯 VLA 模型架构本身，这篇距离中等——它的核心贡献在系统框架而非模型创新 |
 | 落地可行性 | 高（框架设计模块化，Gym API 接口标准，但需要 8 台双臂机器人 fleet 和 NVIDIA/CMU 级别的硬件基础设施） |
@@ -148,9 +148,9 @@ max_π  E[success(π, env)]  s.t.  cost(token) < B,  time < T
 
 | 符号 | 含义 | 说明 |
 |------|------|------|
-| π | 策略 | 可以是 BC 策略、RL 策略、启发式代码策略或 VLA+工具调用混合 |
+| $\pi$ | 策略 | 可以是 BC 策略、RL 策略、启发式代码策略或 VLA+工具调用混合 |
 | env | 环境 | 由 EN 模块构建的 Gym 接口，包含自动 reset 和 verify |
-| success(π, env) | 二值奖励 | 1=任务完成, 0=失败（8 次重试内） |
+| $\mathrm{success}(\pi, \mathrm{env})$ | 二值奖励 | 1=任务完成, 0=失败（8 次重试内） |
 | cost(token) | 平均 token 消耗率 (MTU) | tokens/min，随 fleet 规模超线性增长 |
 | B | token 预算 | 获取成功策略的总 token 消耗 |
 | T | 墙钟时间 | 达到目标成功率的实际耗时 |
@@ -221,13 +221,13 @@ Iteration 31-40: 最终调优 → 连续 50 次成功 ✅
 | 多机协调 | Git（push/pull/merge/cherry-pick） | 去中心化协调，无中央服务器，故障隔离 |
 | Agent 沙箱 | 无权限提示 +  unrestricted internet | 高自主性但需要物理安全约束兜底 |
 | 数据隔离 | 每次 rollout 独立目录 | 通过 /restart 端点分配新缓冲区，结果可追溯 |
-| 知识迁移 | Markdown 摘要（非原始数据） | 从 pin insertion → GPU insertion 通过文本知识传递 |
+| 知识迁移 | Markdown 摘要（非原始数据） | 从 pin insertion $\to$ GPU insertion 通过文本知识传递 |
 
 **关键 trade-off**：
 
-- **Token 效率 vs 墙钟时间**：8 agent fleet 将时间从 1.5h 降到 40min（2.25× 加速），但 token 成本增长到 ~5×。这是典型的资源-时间交换。
-- **MRU 随 fleet 规模下降**：1 agent 时 ~50% → 8 agents 时 ~25%。原因：多 agent 需要更多时间总结 peer 分支，更少时间实际操作机器人。
-- **GPU 利用率随 fleet 规模上升**：1 agent 时 ~30% → 8 agents 时 ~75%。原因：更多 agent 同时训练，GPU 负载更高。
+- **Token 效率 vs 墙钟时间**：8 agent fleet 将时间从 $1.5\,\text{h}$ 降到 $40\,\text{min}$（$2.25\times$ 加速），但 token 成本增长到 $\sim 5\times$。这是典型的资源-时间交换。
+- **MRU 随 fleet 规模下降**：1 agent 时 $\sim 50\%$ $\to$ 8 agents 时 $\sim 25\%$。原因：多 agent 需要更多时间总结 peer 分支，更少时间实际操作机器人。
+- **GPU 利用率随 fleet 规模上升**：1 agent 时 $\sim 30\%$ $\to$ 8 agents 时 $\sim 75\%$。原因：更多 agent 同时训练，GPU 负载更高。
 
 ## 5. 数据与评测 (Data & Eval)
 
@@ -248,7 +248,7 @@ Iteration 31-40: 最终调优 → 连续 50 次成功 ✅
 |-------|---------|--------------------------|
 | Codex | GPT-5.5 xhigh | ✅ 95% in ~2h |
 | Claude Code | Opus 4.7 High | ✅ 95% in ~2h |
-| Kimi Code | Kimi K2.6 thinking | ⚠️ 95% in ~4h（2× 时间） |
+| Kimi Code | Kimi K2.6 thinking | ⚠️ $95\%$ in $\sim 4\,\text{h}$（$2\times$ 时间） |
 
 **关键发现**：仿真中三个 agent 都成功，但真实世界中 2/3 的 agent 失败——凸显了真实世界 autoresearch 的独特挑战。
 
@@ -259,9 +259,9 @@ Iteration 31-40: 最终调优 → 连续 50 次成功 ✅
 | 能力 | 证据 | 条件 |
 |------|------|------|
 | 自主环境构建 | 从几分钟演示合成验证函数 + reset 函数 | 需要人类提供演示和验收 |
-| 多方法策略搜索 | 自主尝试 BC → iterative BC → RL → 组合 | 需要训练代码库写权限 |
-| 多机并行加速 | 8 agent fleet 比单 agent 快 2.25× | 需要 8 台同构机器人 |
-| 知识迁移 | pin insertion → GPU insertion 通过摘要传递 | 任务必须相似 |
+| 多方法策略搜索 | 自主尝试 BC $\to$ iterative BC $\to$ RL $\to$ 组合 | 需要训练代码库写权限 |
+| 多机并行加速 | 8 agent fleet 比单 agent 快 $2.25\times$ | 需要 8 台同构机器人 |
+| 知识迁移 | pin insertion $\to$ GPU insertion 通过摘要传递 | 任务必须相似 |
 | VLA+工具集成 | 自动发现 GR00T VLA + 运动规划的协同 | 仅在 RoboCasa365 仿真中验证 |
 
 ### 6.2 失败模式
@@ -292,9 +292,9 @@ Iteration 31-40: 最终调优 → 连续 50 次成功 ✅
 | Dreamcoder (Ellis 2021) | 数字（程序合成） | 技能库积累 | 无 | ❌ 无 | 计算时间 |
 | Voyager (Wang 2023) | Minecraft 仿真 | 技能库+课程学习 | 无 | ❌ 无 | 游戏时间 |
 | Eureka (Ma 2024b) | Isaac Gym 仿真 | LLM 奖励生成 | 无 | ❌ 无 | rollout 数 |
-| Dreureka (Ma 2024a) | 仿真→sim-to-real | 域随机化合成 | 无 | ⚠️ 仅部署 | 仿真 rollout |
+| Dreureka (Ma 2024a) | 仿真$\to$sim-to-real | 域随机化合成 | 无 | ⚠️ 仅部署 | 仿真 rollout |
 | CaP-X (Fu 2026) | 真实机器人 | 多轮反馈+技能合成 | 有（基准测试） | ✅ 是 | 成功率 |
-| AI Scientist (Lu 2024) | 数字（ML 研究） | 假设→实验→论文 | 无 | ❌ 无 | 论文质量 |
+| AI Scientist (Lu 2024) | 数字（ML 研究） | 假设$\to$实验$\to$论文 | 无 | ❌ 无 | 论文质量 |
 | **ENPIRE (本文)** | **真实机器人 fleet** | **策略代码自主修改** | **仅阶段一** | **✅ 闭环迭代** | **MRU + MTU** |
 
 **关键区分**：ENPIRE 是唯一一个将完整 autoresearch 闭环运行在真实硬件上的系统。之前的系统要么在仿真中迭代（Eureka、Voyager、Dreureka），要么在真实机器人上但不做闭环自改进（CaP-X）。
@@ -310,7 +310,7 @@ Iteration 31-40: 最终调优 → 连续 50 次成功 ✅
 - 关注 VLA 策略自动优化的研究者——§3.5 展示了 VLA + 工具调用的自动集成
 
 **建議章節路徑**：
-1. 先读 §2（Method）——理解 EN → PIRE 两阶段架构和四个模块
+1. 先读 §2（Method）——理解 EN $\to$ PIRE 两阶段架构和四个模块
 2. 再看 §3.2-3.3（梯度策略改进 + 多机扩展）——核心实验结果
 3. 然后读 §3.6（资源利用率）——MRU/MTU 度量是本文的独特贡献
 4. 可跳 §5（Related Work）——除非你要写文献综述

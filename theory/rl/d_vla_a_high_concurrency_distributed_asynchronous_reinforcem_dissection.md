@@ -10,7 +10,7 @@
 
 | 維度 | 判斷 |
 |------|------|
-| 核心結論 | 将物理仿真（高频数据面）与模型训练（低频控制面）物理隔离，配合四线程异步流水线，可在 π₀.₅ 和 OpenVLA-OFT 上实现 22%–86% 吞吐量提升 |
+| 核心結論 | 将物理仿真（高频数据面）与模型训练（低频控制面）物理隔离，配合四线程异步流水线，可在 $\pi_{0.5}$ 和 OpenVLA-OFT 上实现 $22\%$–$86\%$ 吞吐量提升 |
 | 適合精讀 | 如果你在搭建或优化 VLA 的 RL 训练基础设施，或遇到仿真-训练资源竞争瓶颈，重点看 §3（系统设计）和 §4.1（实验） |
 | 可以跳過 | 如果你只关心 VLA 算法本身（如新的 loss 设计、reward 建模），这篇距离较远——它是系统工程论文 |
 | 落地可行性 | 中（架构设计清晰，但论文未开源代码，需自行实现 Plane Decoupling 和 Swimlane 流水线） |
@@ -30,23 +30,23 @@ VLA 模型从 SFT 转向 RL 训练时，最大的系统瓶颈不是算法——�
 
 ### 1.1 系统对比概览 (System Component Comparison)
 
-| 维度 | RLinf-VLA (同步) | RL-VLA³ (三阶段异步) | D-VLA (四阶段异步 + 平面解耦) |
+| 维度 | RLinf-VLA (同步) | RL-VLA$^3$ (三阶段异步) | D-VLA (四阶段异步 + 平面解耦) |
 |------|-------------------|----------------------|-------------------------------|
-| 执行模型 | 锁步同步，Rollout 与 Actor 交替执行 | 三阶段异步：Env → Rollout → Actor | 四线程异步：采样 + 收权重 + 梯度训练 + 分发参数 |
+| 执行模型 | 锁步同步，Rollout 与 Actor 交替执行 | 三阶段异步：Env $\to$ Rollout $\to$ Actor | 四线程异步：采样 + 收权重 + 梯度训练 + 分发参数 |
 | 资源隔离 | 无隔离，仿真与训练共享 GPU | 部分隔离（2 GPU Rollout / 4 GPU Actor） | Plane Decoupling：数据面与控制面物理隔离 |
 | 通信后端 | NCCL（GPU 侧） | NCCL | 数据面 NCCL + 控制面 Gloo（CPU 侧） |
 | 内存管理 | 标准 PyTorch allocator | 标准 | 双池模型（模型计算池 + 环境辅助池） |
 | 零拷贝 | 无 | 无 | 同部署模式下支持零拷贝数据交换 |
 | 扩展策略 | 固定资源分配 | 动态 batch 调度 | 拓扑感知复制 + FSDP 全局梯度归约 |
-| π₀.₅ 吞吐量 (steps/s) | 127.24 | ~110 | 147.0（1:1）/ 237.0（3:1） |
+| $\pi_{0.5}$ 吞吐量 (steps/s) | 127.24 | ~110 | 147.0（1:1）/ 237.0（3:1） |
 | OpenVLA-OFT 吞吐量 | 108.24 | 110.88 | 156.0 |
 
 ### 1.2 关键机制 (Key Mechanism)
 
-**Plane Decoupling（平面解耦）** 是 D-VLA 最核心的设计决策。传统框架中，物理仿真引擎（如 PhysX）和深度学习模型（如 π₀.₅）运行在同一执行流上，导致：
-- 仿真引擎频繁分配/释放内存 → PyTorch 缓存分配器碎片化 → OOM 或 crash
-- 仿真产生的高分辨率图像需要序列化后传给推理模块 → 带宽浪费
-- 仿真等待 GPU 时，训练模块也在等待 → GPU bubble
+**Plane Decoupling（平面解耦）** 是 D-VLA 最核心的设计决策。传统框架中，物理仿真引擎（如 PhysX）和深度学习模型（如 $\pi_{0.5}$）运行在同一执行流上，导致：
+- 仿真引擎频繁分配/释放内存 $\to$ PyTorch 缓存分配器碎片化 $\to$ OOM 或 crash
+- 仿真产生的高分辨率图像需要序列化后传给推理模块 $\to$ 带宽浪费
+- 仿真等待 GPU 时，训练模块也在等待 $\to$ GPU bubble
 
 D-VLA 的解法：
 - **数据面（Data Plane）**：高频，负责环境采样、观测数据收集，使用 NCCL 在 GPU 间高速传输
@@ -106,7 +106,7 @@ Throughput = total_steps / T_total
 其中 T_total = max(T_rollout, T_actor) + T_comm_overlap
 ```
 
-在理想异步重叠下，T_comm_overlap → 0（通信被计算完全掩盖），因此：
+在理想异步重叠下，$T_{\text{comm\_overlap}} \to 0$（通信被计算完全掩盖），因此：
 
 ```
 Throughput_optimal ≈ total_steps / max(T_rollout, T_actor)
@@ -122,7 +122,7 @@ Throughput_optimal ≈ total_steps / max(T_rollout, T_actor)
 
 ## 3. 带数字走一遍：玩具例子 (Worked Example)
 
-假设训练 π₀.₅ 模型，单次 step 的耗时分解如下：
+假设训练 $\pi_{0.5}$ 模型，单次 step 的耗时分解如下：
 
 | 阶段 | 耗时 | 说明 |
 |------|------|------|
@@ -137,7 +137,7 @@ T_total_sync = T_rollout + T_comm + T_actor
 GPU 利用率 = (200 + 200) / 420 ≈ 95% 的理论值，但实际因锁步等待更低
 ```
 
-**D-VLA 异步框架**（T_rollout ≈ T_actor）：
+**D-VLA 异步框架**（$T_{\text{rollout}} \approx T_{\text{actor}}$）：
 ```
 T_total_async = max(T_rollout, T_actor) + 残余通信
               = max(200, 200) + ~5s (部分无法重叠)
@@ -163,8 +163,8 @@ GPU bubble = 547 - 100 = 447s 的 Rollout 空闲
 | 通信后端 | 数据面 NCCL + 控制面 Gloo | Gloo 在 CPU 侧运行，不占用 CUDA stream，避免与 PhysX 死锁 |
 | 扩展策略 | 拓扑感知复制 | 每个节点内建完整的采样-推理闭环；高频张量流限制在节点内 NVLink/InfiniBand |
 | 全局同步 | FSDP + 控制面卸载 | 全局梯度归约不影响本地采样效率 |
-| 单步延迟 | π₀.₅: 566ms (vs RLinf-dis 1007ms) | 异步重叠将延迟降低 50%+ |
-| 最优环境规模 | π₀.₅ 在 768 环境时达峰值 379 steps/s | 超过 768 后 GPU 内存带宽饱和，吞吐量开始下降 |
+| 单步延迟 | $\pi_{0.5}$: $566\,\text{ms}$ (vs RLinf-dis $1007\,\text{ms}$) | 异步重叠将延迟降低 50%+ |
+| 最优环境规模 | $\pi_{0.5}$ 在 $768$ 环境时达峰值 $379$ steps/s | 超过 768 后 GPU 内存带宽饱和，吞吐量开始下降 |
 
 **部署约束**：
 - 16 GPU 集群：4 GPU Rollout + 4 GPU Actor（混合模式）为推荐配置
@@ -176,19 +176,19 @@ GPU bubble = 547 - 100 = 447s 的 Rollout 空闲
 | 维度 | 设置 |
 |------|------|
 | 仿真环境 | ManiSkill（GPU 加速物理 + 并行渲染） |
-| 模型 | π₀.₅（扩散模型，迭代去噪）；OpenVLA-OFT（自回归 Transformer + PEFT） |
+| 模型 | $\pi_{0.5}$（扩散模型，迭代去噪）；OpenVLA-OFT（自回归 Transformer + PEFT） |
 | 动作预测 | Action chunking（预测动作序列而非单步） |
 | RL 算法 | GRPO（Group Relative Policy Optimization） |
-| 基线 | RLinf-co / RLinf-dis / RLinf-hyper / RL-VLA³ |
+| 基线 | RLinf-co / RLinf-dis / RLinf-hyper / RL-VLA$^3$ |
 | 集群规模 | 单节点 8 GPU + 多节点 16 GPU |
 | 核心指标 | Throughput (steps/s)、Step Time (s)、Rollout/Actor 时间分解 |
 | 学习性能 | ManiSkill 上训练成功率曲线（图 6） |
 
 **关键实验数据**（来自论文 §4.1）：
-- π₀.₅, 1:1 配置：D-VLA 147.0 steps/s vs RLinf-co 127.24 (+22.25%)
-- π₀.₅, 3:1 配置：D-VLA 237.0 steps/s vs RLinf-co 127.24 (+86.26%)
+- $\pi_{0.5}$, $1:1$ 配置：D-VLA $147.0$ steps/s vs RLinf-co $127.24$ ($+22.25\%$)
+- $\pi_{0.5}$, 3:1 配置：D-VLA 237.0 steps/s vs RLinf-co 127.24 (+86.26%)
 - OpenVLA-OFT, 1:1 配置：D-VLA 156.0 steps/s vs RLinf-co 108.24 (+44.44%)
-- π₀.₅ step time：D-VLA 566.41s vs RLinf-dis 1006.8s (-50.43%)
+- $\pi_{0.5}$ step time：D-VLA 566.41s vs RLinf-dis 1006.8s (-50.43%)
 
 ## 6. 能力与失败模式 (Capabilities & Failure Modes)
 
@@ -202,7 +202,7 @@ GPU bubble = 547 - 100 = 447s 的 Rollout 空闲
 - **不改进 RL 算法**：使用标准 GRPO，不改变收敛性质或样本效率
 - **未验证真机部署**：所有实验在 ManiSkill 仿真环境进行，仿真-真机迁移的通信模式可能不同
 - **不解决 reward 设计问题**：系统加速训练，但 reward 信号的设计仍是算法层面的责任
-- **超大规模下存在饱和点**：π₀.₅ 在 768 环境后吞吐量开始下降（GPU 内存带宽饱和）
+- **超大规模下存在饱和点**：$\pi_{0.5}$ 在 768 环境后吞吐量开始下降（GPU 内存带宽饱和）
 
 ### 6.1 隐含假设 (Hidden Assumptions)
 
@@ -218,11 +218,11 @@ GPU bubble = 547 - 100 = 447s 的 Rollout 空闲
 | 框架 | 核心关注点 | 异步程度 | 资源隔离 | 通信优化 | 适用场景 |
 |------|-----------|---------|---------|---------|---------|
 | RLinf-VLA | 通用分布式接口 | 同步锁步 | 无 | 标准 NCCL | 快速原型验证 |
-| RL-VLA³ | 三阶段异步流水线 | 三阶段异步 | 部分（GPU 分割） | 动态 batch 调度 | 中等规模 VLA 训练 |
+| RL-VLA$^3$ | 三阶段异步流水线 | 三阶段异步 | 部分（GPU 分割） | 动态 batch 调度 | 中等规模 VLA 训练 |
 | veRL / OpenRLHF | LLM RLHF | 高度异步 | 有（推理/训练分离） | Zero-copy, offload | LLM 训练，不直接适用 VLA |
 | **D-VLA** | **VLA 专用系统优化** | **四线程全异步** | **Plane Decoupling** | **双后端 + 零拷贝 + 拓扑感知** | **大规模 VLA RL 训练** |
 
-> **面试 Tip**: 当被问到"D-VLA 和 RL-VLA³ 的区别"时，回答："RL-VLA³ 解决了异步调度的问题（三阶段解耦），但仿真和训练仍在同一执行平面内，资源竞争只是被缓解了；D-VLA 从架构层面把仿真（数据面）和训练（控制面）物理隔离，用不同的通信后端，这是从'缓解竞争'到'消除竞争'的质变。"
+> **面试 Tip**: 当被问到"D-VLA 和 RL-VLA$^3$ 的区别"时，回答："RL-VLA$^3$ 解决了异步调度的问题（三阶段解耦），但仿真和训练仍在同一执行平面内，资源竞争只是被缓解了；D-VLA 从架构层面把仿真（数据面）和训练（控制面）物理隔离，用不同的通信后端，这是从'缓解竞争'到'消除竞争'的质变。"
 
 ## 8. 精讀建議 (Reading Guide)
 
@@ -241,4 +241,4 @@ GPU bubble = 547 - 100 = 447s 的 Rollout 空闲
 **关键引用**：
 - 论文: https://arxiv.org/abs/2605.13276
 - HTML 版本: https://arxiv.org/html/2605.13276v2
-- 相关框架: RL-VLA³ (arXiv:2602.05765), RLinf-VLA (arXiv:2510.06710)
+- 相关框架: RL-VLA$^3$ (arXiv:2602.05765), RLinf-VLA (arXiv:2510.06710)

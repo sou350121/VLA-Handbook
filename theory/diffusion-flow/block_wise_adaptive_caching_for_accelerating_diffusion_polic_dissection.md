@@ -4,13 +4,13 @@
 >
 > **论文**: Block-wise Adaptive Caching for Accelerating Diffusion Policy
 > **链接**: https://arxiv.org/abs/2506.13456
-> **核心定位**: 以训练-free 的分块级特征缓存机制，将 Transformer 基 Diffusion Policy 推理加速 3× 且无性能损失，同时首次系统分析了扩散策略中 FFN 块的块间缓存误差传播问题
+> **核心定位**: 以训练-free 的分块级特征缓存机制，将 Transformer 基 Diffusion Policy 推理加速 $3\times$ 且无性能损失，同时首次系统分析了扩散策略中 FFN 块的块间缓存误差传播问题
 
 ## ⚡ 快速判斷（30 秒讀完這段就夠了）
 
 | 維度 | 判斷 |
 |------|------|
-| 核心結論 | 在 block 级别自适应缓存中间特征，配合动态规划排程 + 误差截断算法，实现 Diffusion Policy 3× 无损推理加速 |
+| 核心結論 | 在 block 级别自适应缓存中间特征，配合动态规划排程 + 误差截断算法，实现 Diffusion Policy $3\times$ 无损推理加速 |
 | 適合精讀 | 如果你在做实时机器人控制（需要 30-50 Hz 动作频率）、部署 Diffusion Policy/VLA 到边缘设备、或研究扩散模型推理优化 |
 | 可以跳過 | 如果你只关心 VLA 架构创新（如新的多模态融合方式）、或不做扩散策略推理部署 |
 | 落地可行性 | 高 — 训练-free 即插即用插件，无需重新训练，直接集成到现有 Transformer-based DP |
@@ -40,7 +40,7 @@
 | 排程策略 | 每步全计算 | 固定间隔更新 | 基于 timestep embedding 阈值 | **动态规划 + BUA 误差截断** |
 | 训练需求 | 无 | 无 | 无 | 无（training-free） |
 | 架构支持 | 任意 | 任意 | 任意 | **Transformer (DiT) only** |
-| 加速比 (Robomimic PH) | 1× | 2.69-3.20× | 2.23-3.14× | **3.40-3.54×** |
+| 加速比 (Robomimic PH) | $1\times$ | 2.69-3.20× | 2.23-3.14× | **3.40-3.54×** |
 | 成功率 (Robomimic PH AVG) | 0.76 | 0.76-0.79 | 0.71-0.72 | **0.74-0.79** |
 | 实时频率 (Franka 真实) | 7.8 Hz | N/A | N/A | **39.2-45.1 Hz** |
 
@@ -52,7 +52,7 @@ BAC 由两个核心组件构成：
 - 观察：相邻去噪步的特征余弦相似度 s_k 随时间非均匀变化
 - 目标：在给定计算预算 M（缓存更新步数）下，选择 M 个更新时刻，最大化全局特征相似度
 - 方法：将组合优化问题转化为动态规划，DP[m][j] 表示第 m 次缓存在步 j 更新时的最大累积相似度
-- 复杂度：O(M·K²)，在单任务 episode 内计算一次，推理前完成，零额外开销
+- 复杂度：$O(M\cdot K^2)$，在单任务 episode 内计算一次，推理前完成，零额外开销
 
 **组件 2：Bubbling Union Algorithm (BUA) — 误差截断算法**
 - 问题：直接对每个 block 独立运行 ACS 会导致 FFN 块出现误差激增（error surge）
@@ -142,7 +142,7 @@ max_{C ⊆ {1,...,K}, |C|=M}  Σ_{m=0}^{M} φ(c_m, c_{m+1}-1)
 | M (论文用 𝒮) | 缓存更新步数 | 5-10 |
 | b_k | 某 block 在步 k 的输出特征 | d 维向量 |
 | s_k | 相邻步余弦相似度 | [-1, 1] |
-| φ(i,j) | 区间 [i,j] 累积相似度 | 实数 |
+| $\varphi(i,j)$ | 区间 [i,j] 累积相似度 | 实数 |
 | C | 缓存更新时刻集合 | {c_1, ..., c_M} |
 
 **直觉**：如果相邻两步的特征很相似（s_k 接近 1），那么步 k 可以复用步 k-1 的缓存而不引入大误差。ACS 就是在 K 步中选出 M 个"关键步"来更新缓存，其余步复用，使得总的相似度损失最小。
@@ -161,7 +161,7 @@ PTR[m][j] = argmax_{0≤i<j} { DP[m-1][i] + φ(i, j) }
 
 ### 2.3 FFN 误差传播理论 (Proposition 3.1)
 
-**命题**：给定上游误差 δ，FFN 块的更新引入的额外误差为：
+**命题**：给定上游误差 $\delta$，FFN 块的更新引入的额外误差为：
 
 ```
 Δ = W_out · diag(φ'(U)) · W_in · (A - B) · δ + O(||δ||²)
@@ -254,10 +254,10 @@ C(FFN.3) = C(FFN.3) ∪ C(FFN.4) ∪ C(FFN.5)
 | 工程维度 | 数值/观察 | 含义 |
 |----------|-----------|------|
 | 推理加速比 | 3.4-3.54× (仿真) / 3-5× (真实) | 50 步去噪 → 等效 14-17 步计算 |
-| 真实频率 | 7.8 Hz → 45.1 Hz (Franka, 𝒮=5) | 从不可用 → 满足 30-50 Hz 实时要求 |
-| 端到端延迟 | 54s → 显著降低 | 观察-动作同步性大幅改善 |
-| 显存占用 | 每 block 额外缓存 1 个特征向量 | DiT 通常 12-24 层 × 3 block = 36-72 个缓存，可忽略 |
-| DP 排程开销 | O(M·K²) 在推理前计算一次 | K=50, M=10 → ~25000 次操作，<1ms |
+| 真实频率 | 7.8 Hz $\to$ 45.1 Hz (Franka, $\mathcal{S}=5$) | 从不可用 $\to$ 满足 30-50 Hz 实时要求 |
+| 端到端延迟 | 54 s $\to$ 显著降低 | 观察-动作同步性大幅改善 |
+| 显存占用 | 每 block 额外缓存 1 个特征向量 | DiT 通常 12-24 层 $\times$ 3 block = 36-72 个缓存，可忽略 |
+| DP 排程开销 | $O(M \cdot K^2)$ 在推理前计算一次 | $K=50$, $M=10$ $\to$ $\sim 25000$ 次操作，$<1$ ms |
 | 超参敏感性 | n (BUA 选块数): 仿真 n=5, 真实 n=3 | 真实场景更保守（误差容忍度低） |
 | 𝒮 (更新步数) | 𝒮=10 无损, 𝒮=5 轻微降 | 可根据延迟预算灵活调整 |
 | 架构限制 | 仅支持 Transformer (DiT) | U-Net 基 DP 需不同方案 |
@@ -288,23 +288,23 @@ C(FFN.3) = C(FFN.3) ∪ C(FFN.4) ∪ C(FFN.5)
 - **FLOPs**: 计算量
 - **Speedup**: 推理加速比
 - **Inference Frequency (Hz)**: 真实部署的动作更新频率
-- **End-to-End Latency**: 端到端延迟（观察→动作执行）
+- **End-to-End Latency**: 端到端延迟（观察$\to$动作执行）
 
 ### 5.3 关键结果摘要
 
 | 场景 | 方法 | 成功率 | 加速比 | 频率 |
 |------|------|--------|--------|------|
-| Robomimic PH AVG | Full Precision | 0.76 | 1× | — |
-| Robomimic PH AVG | BAC (𝒮=10) | **0.79** | **3.40×** | — |
-| Robomimic MH AVG | Full Precision | 0.76 | 1× | — |
-| Robomimic MH AVG | BAC (𝒮=10) | **0.77** | **3.41×** | — |
-| Kitchen p4 | Uniform (fastest) | 0.08 | 3.34× | — |
-| Kitchen p4 | BAC (𝒮=10) | **0.94** | **3.60×** | — |
-| Franka 真实 | DDPM K=100 | 3% | 1× | 7.8 Hz |
+| Robomimic PH AVG | Full Precision | 0.76 | $1\times$ | — |
+| Robomimic PH AVG | BAC (𝒮=10) | **0.79** | **$3.40\times$** | — |
+| Robomimic MH AVG | Full Precision | 0.76 | $1\times$ | — |
+| Robomimic MH AVG | BAC (𝒮=10) | **0.77** | **$3.41\times$** | — |
+| Kitchen p4 | Uniform (fastest) | 0.08 | $3.34\times$ | — |
+| Kitchen p4 | BAC (𝒮=10) | **0.94** | **$3.60\times$** | — |
+| Franka 真实 | DDPM K=100 | 3% | $1\times$ | 7.8 Hz |
 | Franka 真实 | BAC (𝒮=7) | **71%** | — | **39.2 Hz** |
 | Franka 真实 | BAC (𝒮=5) | **63%** | — | **45.1 Hz** |
-| RDT-1B VLA | Full Precision | 基线 | 1× | — |
-| RDT-1B VLA | BAC (𝒮=2) | 轻微下降 | **3.55×** | — |
+| RDT-1B VLA | Full Precision | 基线 | $1\times$ | — |
+| RDT-1B VLA | BAC (𝒮=2) | 轻微下降 | **$3.55\times$** | — |
 
 > 数据来源：论文 Table 1, Figure 5, Figure 7
 
@@ -314,10 +314,10 @@ C(FFN.3) = C(FFN.3) ∪ C(FFN.4) ∪ C(FFN.5)
 
 | 能力 | 具体表现 | 条件 |
 |------|----------|------|
-| 无损加速 | 𝒮=10 时成功率 ≥ Full Precision | 仿真任务 |
-| 高难任务恢复 | Kitchen p4: 0.08→0.94 (Uniform 失败时) | 多阶段复杂任务 |
+| 无损加速 | $\mathcal{S}=10$ 时成功率 $\geq$ Full Precision | 仿真任务 |
+| 高难任务恢复 | Kitchen p4: $0.08\to0.94$ (Uniform 失败时) | 多阶段复杂任务 |
 | 真实部署 | 45.1 Hz, 63% 成功率 | Franka + 软袋操作 |
-| VLA 泛化 | RDT-1B 上 3.55× 加速 | 𝒮=2 时轻微降, 𝒮=1 无损 |
+| VLA 泛化 | RDT-1B 上 $3.55\times$ 加速 | 𝒮=2 时轻微降, 𝒮=1 无损 |
 | 即插即用 | training-free, 无需 retraining | Transformer 基 DP |
 
 ### 6.2 失败模式
@@ -334,17 +334,17 @@ C(FFN.3) = C(FFN.3) ∪ C(FFN.4) ∪ C(FFN.5)
 
 1. **任务内特征变化模式稳定**：ACS 在 episode 开始前计算一次排程，假设同一任务的不同 episode 有相似的特征演化轨迹。如果任务分布漂移（如物体位置/形状变化大），排程可能次优。
 2. **FFN 是误差传播的主要通道**：论文聚焦 FFN 块的误差放大，但 CA 和 SA 块是否也有类似问题？论文未深入分析。
-3. **余弦相似度是缓存误差的充分代理指标**：用 cos(b_k, b_{k-1}) 衡量缓存质量，但方向一致性高不一定意味着动作输出质量高（可能在高维空间中有细微差异影响下游）。
+3. **余弦相似度是缓存误差的充分代理指标**：用 $\cos(b_k, b_{k-1})$ 衡量缓存质量，但方向一致性高不一定意味着动作输出质量高（可能在高维空间中有细微差异影响下游）。
 4. **单机器人单臂设定**：所有实验在 Franka 单臂或仿真单臂上进行，未验证双臂/移动操作/人形机器人。
 
 ## 7. 与相关工作对比 (Comparison)
 
 | 方法 | 架构 | 缓存粒度 | 训练需求 | 加速比 | 核心思路 |
 |------|------|----------|----------|--------|----------|
-| DeepCache (2024) | U-Net | 高层特征 | 无 | ~2× | 缓存 U-Net 跳跃连接的高层特征 |
-| TeaCache (2025) | DiT | 全局统一 | 需训练引导信号 | ~3× | 基于 timestep embedding 阈值判断 |
-| Uniform Cache | DiT | 全局统一 | 无 | 2.7-3.3× | 固定间隔更新所有 block |
-| **BAC (本文)** | **DiT** | **逐 block** | **无** | **3.4-3.6×** | **DP 排程 + BUA 误差截断** |
+| DeepCache (2024) | U-Net | 高层特征 | 无 | $\sim2\times$ | 缓存 U-Net 跳跃连接的高层特征 |
+| TeaCache (2025) | DiT | 全局统一 | 需训练引导信号 | $\sim3\times$ | 基于 timestep embedding 阈值判断 |
+| Uniform Cache | DiT | 全局统一 | 无 | $2.7\text{-}3.3\times$ | 固定间隔更新所有 block |
+| **BAC (本文)** | **DiT** | **逐 block** | **无** | **$3.4\text{-}3.6\times$** | **DP 排程 + BUA 误差截断** |
 
 **面试 Tip**：当被问到"为什么现有的扩散模型加速方法不能直接用于 Diffusion Policy"时，回答：「现有方法（如 DeepCache）针对 U-Net 架构设计，利用跳跃连接的高层特征冗余；而 Diffusion Policy 越来越多采用 DiT 架构，其 block 级特征相似度呈现非均匀时间动态和 block 特异性模式，且 FFN 块存在独特的误差传播问题，需要 block 级别的自适应排程和误差截断。」
 

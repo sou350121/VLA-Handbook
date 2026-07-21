@@ -43,10 +43,10 @@
 
 | 组件 | 输入 | 输出 | 运行频率 | 训练方式 |
 |------|------|------|----------|----------|
-| 轨迹生成器 (Trace Generator) | 初始观测 o₀ + 指令 ℐ | IVLR-Trace z = [(c⁽¹⁾,k⁽¹⁾)...(c⁽ᴺ⁾,k⁽ᴺ⁾)] | 每 episode 1 次（t=0） | 文本：自回归 CE；视觉：Flow Matching |
-| 文本子目标解码器 | 多模态上下文 | 文本 token 序列 c⁽ⁱ⁾ | 每个 stage 1 次 | 标准 next-token CE |
-| 视觉关键帧生成器 | 多模态上下文 + 噪声 | RGB 关键帧 k⁽ⁱ⁾ | 每个 stage 1 次 | Flow Matching (ODE 求解) |
-| 动作解码器 (Action Decoder) | 当前观测 oₜ + 指令 ℐ + 缓存轨迹 z | 连续动作 aₜ | 10 Hz（执行阶段） | L1 action loss |
+| 轨迹生成器 (Trace Generator) | 初始观测 $o_0$ + 指令 $\mathcal{I}$ | IVLR-Trace $z = [(c^{(1)},k^{(1)})\dots(c^{(N)},k^{(N)})]$ | 每 episode 1 次（t=0） | 文本：自回归 CE；视觉：Flow Matching |
+| 文本子目标解码器 | 多模态上下文 | 文本 token 序列 $c^{(i)}$ | 每个 stage 1 次 | 标准 next-token CE |
+| 视觉关键帧生成器 | 多模态上下文 + 噪声 | RGB 关键帧 $k^{(i)}$ | 每个 stage 1 次 | Flow Matching (ODE 求解) |
+| 动作解码器 (Action Decoder) | 当前观测 $o_t$ + 指令 $\mathcal{I}$ + 缓存轨迹 $z$ | 连续动作 $a_t$ | 10 Hz（执行阶段） | L1 action loss |
 
 ### 1.2 关键机制 (Key Mechanism)
 
@@ -95,7 +95,7 @@ P(z, a₁:T | o₀, ℐ) = P(z | o₀, ℐ) · ∏ₜ P(aₜ | oₜ, ℐ, z)
 
 先分解为"轨迹生成"和"轨迹条件动作预测"两个因子——推理和执行的解耦。
 
-### 目标 → 公式 → 变量 → 直觉
+### 目标 $\to$ 公式 $\to$ 变量 $\to$ 直觉
 
 **总损失函数**：
 
@@ -107,18 +107,18 @@ L_total = L_text + λ·L_flow + γ·L_action
 |------|------|------|
 | L_text | CE(next-token on captions) | 文本子目标的自回归交叉熵 |
 | L_flow | E[‖v_θ(τ, x_τ, C) − (x₁−x₀)‖²] | Flow Matching 损失：学习向量场将噪声变换为目标视觉潜变量 |
-| L_action | ‖âₜ − aₜ‖₁ | L1 动作损失，âₜ = MLP(h_[ACT]) + μ_act |
+| L_action | ‖âₜ − aₜ‖₁ | L1 动作损失，$\hat{a}_t = \text{MLP}(h_{\text{[ACT]}}) + \mu_{\text{act}}$ |
 
 **变量说明**：
-- z = [(c⁽¹⁾,k⁽¹⁾), ..., (c⁽ᴺ⁾,k⁽ᴺ⁾)]：IVLR-Trace，N 个 stage 的交错序列
-- c⁽ⁱ⁾：第 i 个 stage 的文本子目标（caption）
-- k⁽ⁱ⁾：第 i 个 stage 的视觉关键帧（RGB image）
-- o₀：初始观测；oₜ：t 时刻观测；ℐ：任务指令
-- v_θ：flow-matching 向量场网络；x₀~N(0,I)，x₁ = E(k⁽ⁱ⁾) 为编码后的视觉潜变量
+- $z = [(c^{(1)},k^{(1)}), \dots, (c^{(N)},k^{(N)})]$：IVLR-Trace，$N$ 个 stage 的交错序列
+- $c^{(i)}$：第 $i$ 个 stage 的文本子目标（caption）
+- $k^{(i)}$：第 $i$ 个 stage 的视觉关键帧（RGB image）
+- $o_0$：初始观测；$o_t$：$t$ 时刻观测；$\mathcal{I}$：任务指令
+- $v_\theta$：flow-matching 向量场网络；$x_0 \sim \mathcal{N}(0,I)$，$x_1 = E(k^{(i)})$ 为编码后的视觉潜变量
 - h_[ACT]：可学习 [ACT] token 的隐状态
-- μ_act：数据集动作统计量（归一化用）
+- $\mu_{\text{act}}$：数据集动作统计量（归一化用）
 
-> 符号与论文保持一致。λ 和 γ 为超参数（论文未给出具体值，TODO: 待补充）。
+> 符号与论文保持一致。$\lambda$ 和 $\gamma$ 为超参数（论文未给出具体值，TODO: 待补充）。
 
 **直觉**：L_text 确保文本子目标因果正确，L_flow 确保视觉关键帧几何准确，L_action 确保动作可执行。三者联合训练让同一个 1.5B Transformer 同时学会"想"（生成轨迹）和"做"（预测动作）。
 
@@ -128,7 +128,7 @@ L_total = L_text + λ·L_flow + γ·L_action
 
 **Step 1: 轨迹生成 (t=0)**
 
-模型接收初始观测 o₀（桌上有咖啡杯和笔）和指令 ℐ，生成 2-stage 轨迹：
+模型接收初始观测 $o_0$（桌上有咖啡杯和笔）和指令 $\mathcal{I}$，生成 2-stage 轨迹：
 
 ```
 z = [
@@ -140,21 +140,21 @@ z = [
 ```
 
 生成过程：
-- 先自回归解码 c⁽¹⁾（文本 token by token）
-- 再用 Flow Matching 从噪声采样生成 k⁽¹⁾（ODE 求解器，TODO: 步数待补充）
-- 交替进行 c⁽²⁾ 和 k⁽²⁾
+- 先自回归解码 $c^{(1)}$（文本 token by token）
+- 再用 Flow Matching 从噪声采样生成 $k^{(1)}$（ODE 求解器，TODO: 步数待补充）
+- 交替进行 $c^{(2)}$ 和 $k^{(2)}$
 
 耗时：~10 秒（单 H20 GPU）
 
 **Step 2: 闭环执行 (t=1,2,...,T)**
 
 假设执行到 t=5 时：
-- o₅：观测到咖啡杯已在桌上左侧 ✓（与 k⁽¹⁾ 匹配）
-- 动作解码器通过 attention 自动聚焦到轨迹的第二部分 (c⁽²⁾,k⁽²⁾)
-- 输出 a₅ = 向笔移动（连续动作）
+- $o_5$：观测到咖啡杯已在桌上左侧 ✓（与 $k^{(1)}$ 匹配）
+- 动作解码器通过 attention 自动聚焦到轨迹的第二部分 $(c^{(2)},k^{(2)})$
+- 输出 $a_5 = $ 向笔移动（连续动作）
 
 假设有一个 2cm 执行扰动（咖啡杯实际偏右 2cm）：
-- o₅' 与 k⁽¹⁾ 有偏差，但闭环观测 conditioning 让策略能恢复
+- $o_5'$ 与 $k^{(1)}$ 有偏差，但闭环观测 conditioning 让策略能恢复
 - 实验数据：有扰动时 LIBERO-Long 成功率 88.2% vs 无扰动 92.4%（仅降 4.2%）
 
 **可计算的闭环验证**：
@@ -170,7 +170,7 @@ z = [
 | 模型参数量 | 1.5B | Show-o2 初始化，相对轻量 |
 | 轨迹生成延迟 | ~10s/episode | 前置 thinking cost，不适合动态场景 |
 | 执行频率 | 10 Hz | 缓存轨迹后动作解码很快 |
-| 训练算力 | 16×H200, 4h (LIBERO) / 6h (SimplerEnv) | 40K/60K steps |
+| 训练算力 | $16 \times H200$, $4\text{h}$ (LIBERO) / $6\text{h}$ (SimplerEnv) | 40K/60K steps |
 | 动作空间 | 连续 (7-DoF) | L1 loss + 动作归一化 |
 | 推理阶段 | 10s (一次性) + 10Hz 闭环 | 适合静态长程，不适合实时交互 |
 
@@ -185,8 +185,8 @@ z = [
 - 基础数据集：标准机器人演示轨迹（未包含交错轨迹标注）
 - 伪轨迹构造管线：
   1. UVD（Universal Visual Decomposer）自动分段演示轨迹
-  2. 每段末帧作为视觉关键帧 k⁽ⁱ⁾
-  3. Qwen3-VL 为每段生成结构化 caption c⁽ⁱ⁾
+  2. 每段末帧作为视觉关键帧 $k^{(i)}$
+  3. Qwen3-VL 为每段生成结构化 caption $c^{(i)}$
   4. 随机人工检查作为 sanity check
 
 **评测基准**：
@@ -194,7 +194,7 @@ z = [
 | 基准 | 测试维度 | IVLR 结果 | 最佳基线 | 差距 |
 |------|----------|-----------|----------|------|
 | LIBERO-Spatial | 空间泛化 | 99.6% | 99.4% (VLA-0) | +0.2% |
-| LIBERO-Object | 物体变化 | 98.0% | 98.6% (π₀-FAST) | -0.6% |
+| LIBERO-Object | 物体变化 | 98.0% | $98.6\%$ ($\pi_0$-FAST) | -0.6% |
 | LIBERO-Goal | 目标变化 | 97.0% | 96.4% (VLA-0) | +0.6% |
 | LIBERO-Long | 长程序列 | 92.4% | 87.6% (VLA-0) | +4.8% |
 | LIBERO-Average | 综合 | **95.5%** | 93.0% (VLA-0) | +2.5% |
@@ -228,7 +228,7 @@ z = [
 | 方法 | 关注点 | 推理表示 | 训练方式 | 适用场景 |
 |------|--------|----------|----------|----------|
 | RT-1/RT-2 | 端到端动作预测 | 无（隐式） | 大规模行为克隆 | 短程操作 |
-| OpenVLA/π₀ | 通用 VLA | 隐式潜状态 | 大规模混合数据 | 通用操作 |
+| OpenVLA/$\pi_0$ | 通用 VLA | 隐式潜状态 | 大规模混合数据 | 通用操作 |
 | Text CoT 规划器 | 因果分解 | 纯文本链 | 两阶段（规划+执行） | 需因果推理 |
 | 视觉世界模型 | 几何预测 | 纯视觉帧 | 自监督预测 | 需空间 grounding |
 | CoT-VLA | 视觉链式推理 | 视觉 CoT token | 联合训练 | 中间推理 |

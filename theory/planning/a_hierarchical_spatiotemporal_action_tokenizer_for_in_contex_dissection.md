@@ -47,13 +47,13 @@
 | 量化层级 | 单层 flat clustering | 两层 hierarchical (subcluster → cluster) | 本文能捕获动作层次结构 |
 | 重建目标 | 仅动作 X | 动作 X + 时间戳 T | 本文显式建模时序 |
 | 平滑约束 | Lipschitz 正则化 | Lipschitz + 层次 Commitment Loss | 本文双重平滑保障 |
-| Codebook 大小 | K=64 (单层) | αK=64 (subcluster), K=16 (cluster) | 本文参数效率更高 |
+| Codebook 大小 | K=64 (单层) | $\alpha K = 64$ (subcluster), $K = 16$ (cluster) | 本文参数效率更高 |
 | RoboCasa 成功率 | 53% | 59% | +6% 绝对提升 |
 
 ### 1.2 关键机制 (Key Mechanism)
 
 **分层矢量量化**：
-- Level 1：将 Lipschitz 正则化后的 latent vector v' 映射到最近的 subcluster prototype z_j* (共 αK 个)
+- Level 1：将 Lipschitz 正则化后的 latent vector $v'$ 映射到最近的 subcluster prototype $z_j^*$ (共 $\alpha K$ 个)
 - Level 2：将 Level 1 输出经 Lipschitz 网络后，映射到 cluster prototype a_i* (共 K 个)
 - 直觉：先分"细粒度子动作"，再聚成"完整动作"
 
@@ -99,7 +99,7 @@ L = λ_vq(L_vq^Z + L_vq^A) + λ_spat·MSE(X, X̂) + λ_temp·MSE(T, T̂) + λ_re
 ```
 
 **目标分解**：
-- L_vq^Z, L_vq^A：两层矢量量化的 commitment + codebook loss
+- $L_{\text{vq}}^Z$, $L_{\text{vq}}^A$：两层矢量量化的 commitment + codebook loss
 - L_spat：动作重建的 MSE
 - L_temp：时间戳预测的 MSE
 - L_reg：Lipschitz 正则化损失
@@ -108,13 +108,13 @@ L = λ_vq(L_vq^Z + L_vq^A) + λ_spat·MSE(X, X̂) + λ_temp·MSE(T, T̂) + λ_re
 
 | 符号 | 含义 | 维度 |
 |------|------|------|
-| X | 输入动作序列 (位置 + 夹爪角度) | (B·S) × D_feature |
-| V' | Lipschitz 正则化后的 latent | (B·S) × D_latent |
-| Z | Subcluster codebook | αK × D_latent |
-| A | Cluster codebook | K × D_latent |
-| Q^Z, Q^A | Level 1/2 量化输出 | (B·S) × D_latent |
-| X̂ | 重建动作 | (B·S) × D_feature |
-| T̂ | 预测时间戳 | B·S |
+| X | 输入动作序列 (位置 + 夹爪角度) | $(B \cdot S) \times D_{\text{feature}}$ |
+| V' | Lipschitz 正则化后的 latent | $(B \cdot S) \times D_{\text{latent}}$ |
+| Z | Subcluster codebook | $\alpha K \times D_{\text{latent}}$ |
+| A | Cluster codebook | $K \times D_{\text{latent}}$ |
+| $Q^Z$, $Q^A$ | Level 1/2 量化输出 | $(B \cdot S) \times D_{\text{latent}}$ |
+| X̂ | 重建动作 | $(B \cdot S) \times D_{\text{feature}}$ |
+| T̂ | 预测时间戳 | $B \cdot S$ |
 
 **直觉解释**：
 - Commitment Loss：让 encoder 的输出"靠近"选中的 prototype
@@ -136,7 +136,7 @@ softplus(c_ℓ) = ln(1 + exp(c_ℓ))  # 保证 Lipschitz bound 为正
 
 假设我们有一个简单的"推滑块"任务：
 
-**输入**：5 步动作序列，每步包含 [Δx, Δy, gripper_open]
+**输入**：5 步动作序列，每步包含 $[\Delta x, \Delta y, \text{gripper\_open}]$
 ```
 X = [
   [0.0, 0.0, 0.0],   # t=0: 初始
@@ -156,7 +156,7 @@ V' = [
 ]
 ```
 
-**Level 1 VQ (αK=64 个 subcluster)**：
+**Level 1 VQ ($\alpha K = 64$ 个 subcluster)**：
 ```
 v'_0 → 最近 z_7  → q^Z_0 = z_7
 v'_1 → 最近 z_7  → q^Z_1 = z_7   # 连续动作映射到同一 subcluster
@@ -195,12 +195,12 @@ T̂ = TemporalDecoder(Q^Z') ≈ [0, 1, 2, 3, 4]  # MSE < 0.5
 **部署约束**：
 - 需要预训练 tokenizer (与 policy 联合训练或独立预训练)
 - Codebook 大小需根据任务复杂度调整：
-  - 简单任务 (单臂桌面操作)：αK=32, K=8 足够
-  - 复杂任务 (长序列、多阶段)：αK=64, K=16 推荐
+  - 简单任务 (单臂桌面操作)：$\alpha K = 32$, $K = 8$ 足够
+  - 复杂任务 (长序列、多阶段)：$\alpha K = 64$, $K = 16$ 推荐
   - 本文发现 (64, 32) 有冗余，性能不增
 
 **超参敏感度**：
-- λ_temp (时间戳 loss 权重)：0.02 最佳
+- $\lambda_{\text{temp}}$ (时间戳 loss 权重)：$0.02$ 最佳
   - < 0.002：时序约束太弱，退化到仅空间重建
   - > 2.0：过度关注时间戳，动作表示质量下降
 - Lipschitz bound c_ℓ：可学习，无需手动调
@@ -212,8 +212,8 @@ T̂ = TemporalDecoder(Q^Z') ≈ [0, 1, 2, 3, 4]  # MSE < 0.5
   - 或使用 exponential moving average 更新 codebook
 
 **内存占用**：
-- Codebook 存储：(αK + K) × D_latent × 4 bytes
-- 默认配置 (64+16)×64×4 ≈ 25 KB，可忽略不计
+- Codebook 存储：$(\alpha K + K) \times D_{\text{latent}} \times 4$ bytes
+- 默认配置 $(64 + 16) \times 64 \times 4 \approx 25$ KB，可忽略不计
 
 ---
 
@@ -240,9 +240,9 @@ T̂ = TemporalDecoder(Q^Z') ≈ [0, 1, 2, 3, 4]  # MSE < 0.5
 | **HiST-AT (本文)** | **59%** | **54.3%** | **57%** | **51.2%** |
 
 **消融实验关键发现**：
-- 仅加分层：+3.5% (53% → 56.5%)
-- 仅加时空重建：+1.5% (53% → 54.5%)
-- 两者都加：+6% (53% → 59%)
+- 仅加分层：$+3.5\%$ ($53\% \to 56.5\%$)
+- 仅加时空重建：$+1.5\%$ ($53\% \to 54.5\%$)
+- 两者都加：$+6\%$ ($53\% \to 59\%$)
 - 结论：分层和时空重建是互补的
 
 ---

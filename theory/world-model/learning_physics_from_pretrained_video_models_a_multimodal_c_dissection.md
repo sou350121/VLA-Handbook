@@ -107,8 +107,8 @@ p(E_l, P_0, ..., P_N) = ∏_{n=0}^{N} p(P_n | E_l, P_0, ..., P_{n-1})
 **变量说明**:
 | 符号 | 含义 | 维度 |
 |------|------|------|
-| E_l | 语言 token 序列 | K_l × d |
-| P_n | 第 n 步物理 token (帧 + 动作) | (K_O + K_A) × d |
+| E_l | 语言 token 序列 | $K_l \times d$ |
+| P_n | 第 n 步物理 token (帧 + 动作) | $(K_O + K_A) \times d$ |
 | K_O | 每帧的视觉 token 数 | 360 |
 | K_A | 每步的动作 token 数 | 8 (= action chunk size L) |
 | d | 嵌入维度 | NOVA 隐藏层维度 |
@@ -171,7 +171,7 @@ P_0 = [E_O,0 (360 tokens); BOA; E_A,1 (8 tokens)]  → 共 369 个连续 token
 
 **延迟/吞吐 Trade-off**:
 - 自回归步数 N=5（物理包数量）→ 每步需一次 Transformer 前向 + 扩散采样
-- 扩散步数：训练时采样 t 4 次/样本，推理时 T≈50 步（可蒸馏加速）
+- 扩散步数：训练时采样 $t$ $4$ 次/样本，推理时 $T \approx 50$ 步（可蒸馏加速）
 - L-MTP 预测 3 token 并行 → 理论上 3x 吞吐提升（但只执行第一个）
 
 **部署约束**:
@@ -189,7 +189,7 @@ P_0 = [E_O,0 (360 tokens); BOA; E_A,1 (8 tokens)]  → 共 369 个连续 token
 |------|---------------|---------------|-------------|-------------|----------|
 | OpenVLA | - | - | - | - | 基线 |
 | WorldVLA | - | - | - | - | +8.8% |
-| π0-Fast | - | - | - | - | +4.8% |
+| $\pi_0$-Fast | - | - | - | - | +4.8% |
 | **PhysGen** | **略逊** | **最优** | **最优** | **+18.8%** | **SOTA** |
 
 关键结果：PhysGen 平均超越 WorldVLA 8.8 个百分点，LIBERO-Long 上提升 18.8 点。唯一弱点是 LIBERO-Spatial（底层视频模型空间感知有限）。
@@ -200,14 +200,14 @@ P_0 = [E_O,0 (360 tokens); BOA; E_A,1 (8 tokens)]  → 共 369 个连续 token
 |------|----------|----------|-----------|----------|
 | RDT | - | - | - | 略高于 PhysGen |
 | ICRT | - | - | - | -12% |
-| π0 | - | - | - | -5% |
+| $\pi_0$ | - | - | - | -5% |
 | **PhysGen** | **100%** | - | - | **SOTA 级别** |
 
 PushCube 任务达到 100% 成功率，显示对简单物理交互的鲁棒性。
 
 ### 5.2 真实世界实验
 
-**平台**: Franka Panda + 2×RealSense D415（固定 + 腕装）
+**平台**: Franka Panda + $2\times$RealSense D415（固定 + 腕装）
 
 **任务**（每任务 80-100 演示，20 次评估）:
 
@@ -215,10 +215,10 @@ PushCube 任务达到 100% 成功率，显示对简单物理交互的鲁棒性�
 |------|-----------|--------------|------------|-------------------|----------|
 | ACT (从头训练) | - | - | - | - | 基线 |
 | OpenVLA (finetune) | - | - | - | - | 低于 PhysGen |
-| π0 (finetune) | - | - | - | - | **持平** |
+| $\pi_0$ (finetune) | - | - | - | - | **持平** |
 | **PhysGen (无动作预训练)** | - | - | - | **+5%** | **持平** |
 
-**关键亮点**: Pick Transparency 任务（抓取透明方块）PhysGen 超越 π0 5 个百分点。透明物体的折射/反射造成视觉模糊，需要更强的物理先验——这正是视频预训练的优势。
+**关键亮点**: Pick Transparency 任务（抓取透明方块）PhysGen 超越 $\pi_0$ $5$ 个百分点。透明物体的折射/反射造成视觉模糊，需要更强的物理先验——这正是视频预训练的优势。
 
 ### 5.3 消融实验（LIBERO-Object）
 
@@ -246,7 +246,7 @@ PushCube 任务达到 100% 成功率，显示对简单物理交互的鲁棒性�
 
 | 局限 | 表现 | 根因 |
 |------|------|------|
-| 空间感知有限 | LIBERO-Spatial 略逊 π0-Fast | 底层 NOVA 视频模型的空间理解不足 |
+| 空间感知有限 | LIBERO-Spatial 略逊 $\pi_0$-Fast | 底层 NOVA 视频模型的空间理解不足 |
 | 依赖视频 backbone | 需 NOVA 或类似模型 | 方法论绑定特定架构 |
 | 推理延迟 | 自回归 + 扩散采样 | 相比单步回归慢，需 KV-cache + 蒸馏优化 |
 | 未见物体泛化 | 未测试开放词汇 | 视频预训练未覆盖所有物体类别 |
@@ -269,11 +269,11 @@ PushCube 任务达到 100% 成功率，显示对简单物理交互的鲁棒性�
 |------|----------|-----------|-----------|----------|----------|
 | OpenVLA | LLM (Phi-2) | 离散 | 是 (机器人数据) | 开源 VLA 基线 | 语言条件操作 |
 | WorldVLA | 视频生成 | 离散 | 是 | 视频 + 动作联合预测 | 世界模型辅助 |
-| π0 | VLM + Flow | 连续 (flow matching) | 是 | 流匹配动作生成 | 高动态操作 |
+| $\pi_0$ | VLM + Flow | 连续 (flow matching) | 是 | 流匹配动作生成 | 高动态操作 |
 | RDT | Diffusion | 连续 | 是 | 扩散基础模型 | 双臂操作 |
 | **PhysGen** | **视频生成 (NOVA)** | **连续 (扩散)** | **否** | **视频物理先验迁移** | **数据高效操作** |
 
-**面试 Tip**: 被问到"视频生成模型如何用于机器人控制"时，回答："PhysGen 的关键是用连续物理 token 统一视频和动作表征，用扩散去噪估计条件分布——这样视频预训练的物理先验（物体持久性、动力学）可以直接迁移，无需动作预训练。实验显示 LIBERO 上超越 WorldVLA 8.8%，真实世界匹配 π0。"
+**面试 Tip**: 被问到"视频生成模型如何用于机器人控制"时，回答："PhysGen 的关键是用连续物理 token 统一视频和动作表征，用扩散去噪估计条件分布——这样视频预训练的物理先验（物体持久性、动力学）可以直接迁移，无需动作预训练。实验显示 LIBERO 上超越 WorldVLA $8.8\%$，真实世界匹配 $\pi_0$。"
 
 ## 8. 精讀建議 (Reading Guide)
 
@@ -304,7 +304,7 @@ PushCube 任务达到 100% 成功率，显示对简单物理交互的鲁棒性�
 - **NOVA (视频生成 backbone)**: Deng et al., "Autoregressive video generation without vector quantization", arXiv:2412.14169, 2024
 - **MAR (连续自回归框架)**: Li et al., "Autoregressive image generation without vector quantization", NeurIPS 2024
 - **WorldVLA (最接近基线)**: Cen et al., "WorldVLA: Towards Autoregressive Action World Model", arXiv:2506.21539, 2025
-- **π0 (真实世界对比基线)**: Black et al., "π0: A Vision-Language-Action Flow Model for General Robot Control", arXiv:2410.24164, 2024
+- **$\pi_0$ (真实世界对比基线)**: Black et al., "$\pi_0$: A Vision-Language-Action Flow Model for General Robot Control$", arXiv:2410.24164, 2024
 
 ---
 

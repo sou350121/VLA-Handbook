@@ -246,7 +246,7 @@ u_t* = argmin_u  𝔼_{(s,c) ~ 𝒟_t} [ cost(TSIP(s, u, c)) ]
 | **JEPA latent WM** | I-JEPA / V-JEPA | 點估計（一個 latent） | latent 推理 | 一個點 | 本文要求分布；JEPA 在論文裡**沒被測試** |
 | **Sampling-based MPC** | MPPI / CEM | 對動作採樣，但 dynamics 確定 | 任意 dynamics | m 個動作軌跡 | 本文讓 dynamics 也帶 m 個樣本（雙重 m） |
 | **RL policy** | PPO / SAC | 通常無 | 環境給 | 一個動作 | 本文「包」RL policy，過濾不安全動作 |
-| **ManiDreams（本文）** | — | **DRIS 顯式分布 + Cage 過濾** | 任意可批次評估的 backend | m × n 個未來 | — |
+| **ManiDreams（本文）** | — | **DRIS 顯式分布 + Cage 過濾** | 任意可批次評估的 backend | $m \times n$ 個未來 | — |
 
 ### 🎤 面試 Tip
 
@@ -289,7 +289,7 @@ u_t* = argmin_u  𝔼_{(s,c) ~ 𝒟_t} [ cost(TSIP(s, u, c)) ]
 - 對比類別：MPPI / CEM (Williams et al., 2017) · UniSim (Yang et al., 2023) · JEPA (LeCun, 2022) · ManiSkill3 (Tao et al., 2024) · Newton / Warp / Isaac Lab
 
 🧠 **本文判讀（作者觀點）**：
-這篇論文的**真正貢獻**不是新 World Model，而是把「**不確定性傳播是規劃器的責任**」這條原則寫進工程框架。核心 ablation（m=1 → 16 漲 +28pp）是乾淨的因果證據，**論點站得住**。但要**老實看到**：
+這篇論文的**真正貢獻**不是新 World Model，而是把「**不確定性傳播是規劃器的責任**」這條原則寫進工程框架。核心 ablation（$m=1 \to 16$ 漲 $+28$pp）是乾淨的因果證據，**論點站得住**。但要**老實看到**：
 - 論文目前**只實測 2 個 backend**（ManiSkill3 + Diffusion），「三派都能掛」是設計目標；
 - 真機沒定量；
 - 「OMPL of manipulation」是作者**自我定位**而非社群共識。

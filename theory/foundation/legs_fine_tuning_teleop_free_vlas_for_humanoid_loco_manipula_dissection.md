@@ -108,11 +108,11 @@ c_d ≈ M · [R(c_m) ⊕ c_b]
 | c_m | mesh 顶点颜色（SAM3D 回归的反照率） |
 | c_b | 3DGS 背景像素（扫描设备的 ISP 色彩空间） |
 | c_d | 部署相机像素（目标色彩空间） |
-| R(·) | 逐网格对角缩放矩阵（线性 RGB），使每个网格的渲染均值匹配手持扫描 |
-| ⊕ | 深度测试合成操作 |
+| $R(\cdot)$ | 逐网格对角缩放矩阵（线性 RGB），使每个网格的渲染均值匹配手持扫描 |
+| $\oplus$ | 深度测试合成操作 |
 | M ∈ R^(3×3) | 全局色彩校正矩阵，由 24 色 ColorChecker 双相机照片最小二乘拟合 |
 
-**直觉**：R 修正 SAM3D 的错误反照率（SAM3D 把黑色盒子渲染成灰白色 → R 恢复为黑色），M 将 3DGS 背景（桌子和地板）偏移至部署相机色彩。两步合起来把合成图像拉到真实图像附近。
+**直觉**：$R$ 修正 SAM3D 的错误反照率（SAM3D 把黑色盒子渲染成灰白色 → $R$ 恢复为黑色），$M$ 将 3DGS 背景（桌子和地板）偏移至部署相机色彩。两步合起来把合成图像拉到真实图像附近。
 
 > 符号与本文保持一致。详细推导见论文 Appendix C。
 
@@ -127,22 +127,22 @@ c_d ≈ M · [R(c_m) ⊕ c_b]
 2. **Place 原语**：目标腕部 SE(3) → 盘子上方 5cm → 张开夹爪 → 退回
 
 **MuJoCo 物理求解**（500 Hz）：
-- 每个控制步：18-D 指令 → SONIC 控制器 → 关节力矩
-- 29-DoF 身体 + 7-DoF 手 × 2 = 43-DoF 系统
-- 假设一个 Pick 阶段耗时 2 秒 → 1000 个物理步
+- 每个控制步：18-D 指令 → SONIC 控制器 → 关节力矩  
+- 29-DoF 身体 + 7-DoF 手 × 2 = 43-DoF 系统  
+- 假设一个 Pick 阶段耗时 2 秒 → 1000 个物理步  
 
 **渲染**：
 - 每帧：3DGS 背景渲染（固定）+ 网格前景光栅化 + 深度测试合成
-- 色彩校准：c_d = M · [R(c_m) ⊕ c_b]
-- 30 Hz RGB → 60 帧图像
+- 色彩校准：$c_d = M \cdot [R(c_m) \oplus c_b]$  
+- 30 Hz RGB → 60 帧图像  
 
 **最终数据集条目**（以 50 episodes 为例）：
-- 50 episodes × ~60 frames/episode = ~3,000 帧
+- 50 episodes × ~60 frames/episode = ~3{,}000 帧  
 - 每帧：(图像, 18-D 指令, 语言标签 "place the orange on the plate")
 
 **对比遥操作**：
-- 遥操作 50 episodes ≈ 1.5 人工小时（操作员通过 VR 控制）
-- LEGS 50 episodes ≈ 0.5 GPU 小时（无人值守）
+- 遥操作 50 episodes ≈ 1.5 人工小时（操作员通过 VR 控制）  
+- LEGS 50 episodes ≈ 0.5 GPU 小时（无人值守）  
 - 新场景适配：遥操作需重新采集 >1.5h，LEGS 重新渲染仅需 ~0.1h
 
 ## 4. 工程视角 (Engineering View)
@@ -150,7 +150,7 @@ c_d ≈ M · [R(c_m) ⊕ c_b]
 | 维度 | LEGS | 遥操作 | 工程含义 |
 |------|------|--------|----------|
 | 初始数据采集成本 | 0.5 GPU-hr (RTX 4090) | 1.5 operator-hr | LEGS 将人力绑定转为计算绑定，可并行化 |
-| 新场景适配成本 | 0.1 GPU-hr | >1.5 operator-hr | 15× 成本降低，核心优势 |
+| 新场景适配成本 | 0.1 GPU-hr | >1.5 operator-hr | 15× 成本降低，核心优势   |
 | 场景准备 | 1-2 min 手持视频 + 物体照片 | 无需准备 | 3DGS 重建是前置开销，但远低于遥操作 |
 | 物理求解频率 | 500 Hz (MuJoCo) | N/A | 高频率确保动力学精度 |
 | 渲染频率 | 30 Hz (RGB) | 30 Hz (RealSense D435) | 匹配真实相机帧率 |
@@ -176,13 +176,13 @@ c_d ≈ M · [R(c_m) ⊕ c_b]
 
 ### 评测设置
 
-- **机器人**：Unitree G1（29-DoF 身体 + 7-DoF Dex3 手 × 2）
+- **机器人**：Unitree G1（29-DoF 身体 + 7-DoF Dex3 手 × 2）  
 - **相机**：头部 Intel RealSense D435，30 Hz RGB
 - **任务**：3 个 pick-and-place 任务，难度递增
   - Task 1：纯操作（无移动），"把橘子放到盘子上"
   - Task 2：全身操作（走到桌子前，抓取放置）
   - Task 3：全身操作（难）（走、抓、转身、走到矮桌、蹲下、放置）
-- **扰动**：橘子/盘子位置 ±5 cm，机器人朝向 ±10°，基座位置 ±10 cm（Task 2/3）
+- **扰动**：橘子/盘子位置 ±5 cm，机器人朝向 ±10°，基座位置 ±10 cm（Task 2/3）  
 - **每条件试验数**：R = 10
 - **总试验数**：1,110 trials
 
@@ -190,8 +190,8 @@ c_d ≈ M · [R(c_m) ⊕ c_b]
 
 | Backbone | 微调方式 | 来源 |
 |----------|---------|------|
-| ψ0 | Action head only | arXiv 2026 |
-| π0.5 | Full fine-tuning | arXiv 2410.24164 |
+| $\psi_0$   | Action head only | arXiv 2026 |
+| $\pi_{0.5}$   | Full fine-tuning | arXiv 2410.24164 |
 | GR00T N1.6 | Action head only | arXiv 2503.14734 |
 
 同一 backbone 内微调配方固定，确保 within-backbone 比较隔离数据源的影响。
@@ -202,11 +202,11 @@ c_d ≈ M · [R(c_m) ⊕ c_b]
 
 | 能力 | 场景 | 证据 |
 |------|------|------|
-| 替代遥操作 | 三种难度的 pick-and-place | Table 2: LEGS(200) ≥ Teleop(50) 在所有 9 个 (backbone, task) 组合 |
+| 替代遥操作 | 三种难度的 pick-and-place | Table 2: $LEGS(200) \geq Teleop(50)$ 在所有 9 个 (backbone, task) 组合   |
 | 长程任务 | Task 3（多步骤全身操作） | Teleop 在 Task 3 全部为 0/10，LEGS 达 2-6/10 |
 | 外观迁移 | 新场景/新物体 | LEGS-AUG 在 objects+scene shift 下达 100/80/40% |
-| 低成本适配 | 新外观条件 | ~0.1 GPU-hr vs >1.5 operator-hr（15×） |
-| 跨 backbone 泛化 | ψ0, π0.5, GR00T N1.6 | 三种 backbone 趋势一致 |
+| 低成本适配 | 新外观条件 | ~0.1 GPU-hr vs >1.5 operator-hr（15×）   |
+| 跨 backbone 泛化 | $\psi_0$, $\pi_{0.5}$, GR00T N1.6 | 三种 backbone 趋势一致 |
 
 ### 不能做什么
 

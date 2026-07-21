@@ -114,14 +114,14 @@ L = λ_v · MSE(v_θ(z_v^t, t_v | z_0, ℓ), v_target)
 
 | 符号 | 含义 |
 |------|------|
-| z_v^t, z_a^t | 第 t 步的视频/动作噪声 latent |
+| $z_v^t$, $z_a^t$ | 第 t 步的视频/动作噪声 latent |
 | z_0 | 条件帧 latent（teacher-forced） |
 | ℓ | 语言指令 tokens |
-| v_θ, a_θ | 视频/动作速度场预测网络 |
+| $v_\theta$, $a_\theta$ | 视频/动作速度场预测网络 |
 | v_target, a_target | 对应的目标速度场（ground truth） |
 | t_v, t_a | 独立采样的视频/动作扩散时间步 |
 | timeshift=6/1 | 视频倾向于更噪声区域采样，动作更均匀采样 |
-| λ_v, λ_a | 视频/动作损失权重 |
+| $\lambda_v$, $\lambda_a$ | 视频/动作损失权重 |
 
 **直觉**：视频和动作共享同一个 Transformer  backbone，但各自有独立的去噪时间和速度场预测。视频用更大的 timeshift（更噪声）让模型学会在模糊视觉条件下依然预测准确动作——这本质上是在做"鲁棒的条件化动作生成"。
 
@@ -148,17 +148,17 @@ L = λ_v · MSE(v_θ(z_v^t, t_v | z_0, ℓ), v_target)
 **Step 3 — 前向传播**：
 - Text tokens 进入 text stream → 16 个 hidden states
 - z_0 作为 condition 在 video stream 中 teacher-forced
-- z_v^t 和 z_a^t 分别进入 video/action stream
-- H-Bridge: 底层 25% 独立处理 → 中层 50% V↔A cross-attn → 顶层 25% 独立精炼
+- $z_v^t$ 和 $z_a^t$ 分别进入 video/action stream
+- H-Bridge: 底层 25% 独立处理 → 中层 50% $V \leftrightarrow A$ cross-attn → 顶层 25% 独立精炼
 
 **Step 4 — 速度场预测**：
-- v_out = VideoStream(z_v^t, t_v, z_0, ℓ) → 预测速度场
-- a_out = ActionStream(z_a^t, t_a, z_0, ℓ) → 预测速度场
+- $v_{\text{out}} = \text{VideoStream}(z_v^t, t_v, z_0, \ell)$ → 预测速度场
+- $a_{\text{out}} = \text{ActionStream}(z_a^t, t_a, z_0, \ell)$ → 预测速度场
 
 **Step 5 — 损失计算**（假设值）：
 - L_v = MSE(v_out, v_target) = 0.023
 - L_a = MSE(a_out, a_target) = 0.015
-- L = 1.0 × 0.023 + 1.0 × 0.015 = 0.038
+- $L = 1.0 \times 0.023 + 1.0 \times 0.015 = 0.038$
 
 **Step 6 — 推理（V2A 加速后）**：
 - 前 N=5 步：联合去噪 (z_v, z_a)
@@ -171,17 +171,17 @@ L = λ_v · MSE(v_θ(z_v^t, t_v | z_0, ℓ), v_target)
 
 | 优化手段 | 步骤数 | 每步延迟 | 总延迟 | 频率 | 累计加速 |
 |----------|--------|----------|--------|------|----------|
-| Baseline | 50 | 95.0 ms | 4.90 s | 0.20 Hz | 1× |
-| + Noise sampling | 30 | 95.0 ms | 2.90 s | 0.34 Hz | 1.69× |
-| + torch.compile | 30 | 32.7 ms | 0.98 s | 1.02 Hz | 5.00× |
-| + FP8 quantization | 30 | 29.3 ms | 0.88 s | 1.14 Hz | 5.57× |
-| + DiT cache | 30 | — | 0.20 s | 5.00 Hz | 24.5× |
-| + V2A-style | 30 (action-only) | — | 0.09 s | **11.11 Hz** | **54.4×** |
+| Baseline | 50 | 95.0 ms | 4.90 s | 0.20 Hz | $1\times$ |
+| + Noise sampling | 30 | 95.0 ms | 2.90 s | 0.34 Hz | $1.69\times$ |
+| + torch.compile | 30 | 32.7 ms | 0.98 s | 1.02 Hz | $5.00\times$ |
+| + FP8 quantization | 30 | 29.3 ms | 0.88 s | 1.14 Hz | $5.57\times$ |
+| + DiT cache | 30 | — | 0.20 s | 5.00 Hz | $24.5\times$ |
+| + V2A-style | 30 (action-only) | — | 0.09 s | **11.11 Hz** | **$54.4\times$** |
 
 **关键工程含义**：
 
-1. **torch.compile 贡献最大单步加速**（95→32.7 ms，2.9×），说明重复 DiT 前向的传播开销是主要瓶颈
-2. **DiT cache 贡献最大累计加速**（0.20s vs 0.88s，4.4×），利用去噪步骤间的时序冗余跳过部分计算
+1. **torch.compile 贡献最大单步加速**（95→32.7 ms，$2.9\times$），说明重复 DiT 前向的传播开销是主要瓶颈
+2. **DiT cache 贡献最大累计加速**（0.20s vs 0.88s，$4.4\times$），利用去噪步骤间的时序冗余跳过部分计算
 3. **V2A-style 是质变点**：将视频流从后半程完全移除，达到 11 Hz 超过人类反应速度
 4. **FP8 量化损失可控**：论文声称在 RoboTwin 2.0 上成功率波动在亚百分级，说明量化后模型保真度基本不变
 
@@ -223,7 +223,7 @@ L = λ_v · MSE(v_θ(z_v^t, t_v | z_0, ℓ), v_target)
 | 多视角灵活输入 | 任意数量相机，不同布局 | 3D RoPE 视角偏移 |
 | 跨具身迁移 | 新机器人仅需 50-100 轨迹 | 相对 EEF 动作表征 |
 | 长程任务 | 多步骤操作无需外部规划器 | AR chunk-level factorization |
-| 实时控制 | 11 Hz 推理频率 | 54× 加速栈 |
+| 实时控制 | 11 Hz 推理频率 | 54$\times$ 加速栈 |
 
 ### 失败模式
 
@@ -240,7 +240,7 @@ L = λ_v · MSE(v_θ(z_v^t, t_v | z_0, ℓ), v_target)
 1. **Vidu VAE 的表征足够通用**：假设 Vidu 在通用视频上训练的 VAE 编码能充分保留机器人操作所需的空间细节——但未在文中看到对 VAE 重建误差的量化分析
 2. **相对 EEF 坐标的跨具身通用性**：假设所有机器人都能映射到 10D 相对末端坐标——但忽略了自由度差异（如 7-DOF vs 6-DOF 手臂）
 3. **V2A 非对称注意力无损**：假设视频不依赖动作信息不影响策略质量——在需要"根据动作效果调整视觉关注"的任务中可能不成立
-4. **DiT cache 的平滑性假设**：假设相邻去噪步骤的速度场变化缓慢（s_t > γ）——在扩散早期可能不成立
+4. **DiT cache 的平滑性假设**：假设相邻去噪步骤的速度场变化缓慢（$s_t > \gamma$）——在扩散早期可能不成立
 5. **FP8 量化对生成质量影响可忽略**：论文声称"亚百分级波动"，但未报告对视频生成质量的独立评估
 
 ## 7. 与相关工作对比 (Comparison)
@@ -261,7 +261,7 @@ L = λ_v · MSE(v_θ(z_v^t, t_v | z_0, ℓ), v_target)
 
 - **值得精讀原文的人**：
   1. 研究世界模型驱动策略的具身智能研究者——本文展示了 WAM 架构的最新演进
-  2. 需要部署扩散策略到真实机器人的工程师——推理加速栈（54×）有直接参考价值
+  2. 需要部署扩散策略到真实机器人的工程师——推理加速栈（$54\times$）有直接参考价值
   3. 探索跨具身迁移的研究者——统一相对 EEF 动作表征方案可借鉴
 
 - **建議章節路徑**：先读 §2.1（架构总览）→ 再看 §2.4（推理加速，工程价值最高）→ §2.2-2.3（训练细节，按需）→ 可跳 §3（实验细节，HTML 版本不完整）

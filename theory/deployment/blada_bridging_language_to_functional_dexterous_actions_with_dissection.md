@@ -10,7 +10,7 @@
 
 | 維度 | 判斷 |
 |------|------|
-| 核心結論 | 提出三模块级联架构 (KLP→TriLocation→KGT3D+)，在非结构化场景中实现零样本功能性灵巧抓取，LSR 达 68.75% |
+| 核心結論 | 提出三模块级联架构 (KLP→TriLocation→KGT3D+)，在非结构化场景中实现零样本功能性灵巧抓取，LSR 达 $68.75\%$   |
 | 適合精讀 | 如果你在做 VLA+ 触觉/灵巧手/3D 表示学习，重点看 §III-B (TriLocation) 和 §III-C (KGT3D+) |
 | 可以跳過 | 如果你只关心端到端 VLA 训练，这篇是模块化方法，距离较远 |
 | 落地可行性 | 中（需 3DGS 重建 + Franka+Inspire Hand 硬件，代码已开源） |
@@ -35,9 +35,9 @@
 
 | 模块 | 输入 | 输出 | 频率/时序 | 训练/推理 |
 |------|------|------|-----------|-----------|
-| KLP (语言解析) | 自然语言指令 L | 结构化六元组 S=(g^a, g^r, g^t, g^f, τ, κ) | 单次推理 | 零样本 (LLM+prompt) |
-| TriLocation (3D 定位) | 多视角 RGB-D + S 中的 (g^a, g^r, τ, κ) | 三个功能关键点 P={p1, p2, p3} | 每场景重建一次 | 需训练 (MLP+3DGS 蒸馏) |
-| KGT3D+ (执行) | P + (g^t, g^f) | 手腕位姿 (R,T) + 关节角 J + 力 F | 每次抓取 | 确定性计算 (F2F 查找表) |
+| KLP (语言解析) | 自然语言指令 L | 结构化六元组 $S=(g^a, g^r, g^t, g^f, \tau, \kappa)$   | 单次推理 | 零样本 (LLM+prompt) |
+| TriLocation (3D 定位) | 多视角 RGB-D + $S$ 中的 $(g^a, g^r, \tau, \kappa)$   | 三个功能关键点 P={p1, p2, p3} | 每场景重建一次 | 需训练 (MLP+3DGS 蒸馏) |
+| KGT3D+ (执行) | $P + (g^t, g^f)$   | 手腕位姿 (R,T) + 关节角 J + 力 F | 每次抓取 | 确定性计算 (F2F 查找表) |
 
 **端到端流程**：
 ```
@@ -49,12 +49,12 @@
 ### 1.2 关键机制 (Key Mechanism)
 
 **KLP 模块**：将开放词汇指令解析为六元组：
-- g^a (grasp affordance): 可用区域的空间可达性
-- g^r (role assignment): 各手指接触时的功能角色
-- g^t (grasp type): 抓握手势/类型，对应关节角预定义值
-- g^f (force level): 交互力度等级
-- τ (tool topology): 工具拓扑先验 (rod/handle/knob/surface 四类)
-- κ (task intent): 任务意图先验 (press/click/open/hold 四类)
+- $g^a$ (grasp affordance): 可用区域的空间可达性  
+- $g^r$ (role assignment): 各手指接触时的功能角色  
+- $g^t$ (grasp type): 抓握手势/类型，对应关节角预定义值  
+- $g^f$ (force level): 交互力度等级  
+- $\tau$ (tool topology): 工具拓扑先验 (rod/handle/knob/surface 四类)  
+- $\kappa$ (task intent): 任务意图先验 (press/click/open/hold 四类)  
 
 **TriLocation 模块**：
 - 用 3DGS 构建连续场景表示
@@ -113,20 +113,20 @@ G, P = M(L, Ω)  其中 S=KLP(L,Prompt), P=TriLocation(Ω,S), (R,T,J,F)=KGT3D+(P
 S = {g^a, g^r, g^t, g^f, τ, κ} = KLP(L, P)
 ```
 变量说明：
-- g^a: grasp affordance (可用区域)
-- g^r: role assignment (手指角色)
-- g^t: grasp type (手势类型)
-- g^f: force level (力度)
-- τ: tool topology ∈ {rod, handle, knob, surface}
-- κ: task intent ∈ {press, click, open, hold}
+- $g^a$: grasp affordance (可用区域)
+- $g^r$: role assignment (手指角色)
+- $g^t$: grasp type (手势类型)
+- $g^f$: force level (力度)
+- $\tau$: tool topology $\in \{\text{rod}, \text{handle}, \text{knob}, \text{surface}\}$
+- $\kappa$: task intent $\in \{\text{press}, \text{click}, \text{open}, \text{hold}\}$
 
 **3DGS 特征渲染**：
 ```
 F^ = Σ_{i=1}^{N} f_i · α_i · Π_{j=1}^{i-1} (1 - α_j)
 ```
 变量说明：
-- f_i ∈ R^d: 第 i 个高斯原语的潜在特征
-- α_i: 不透明度
+- $f_i \in \mathbb{R}^d$: 第 i 个高斯原语的潜在特征
+- $\alpha_i$: 不透明度
 - F^: 渲染的潜在特征
 
 **上下文感知裁剪**（解决语义漂移）：
@@ -135,7 +135,7 @@ B'_p = [x1 - γ·w, y1 - γ·h, x2 + γ·w, y2 + γ·h]
 ```
 变量说明：
 - B_p = [x1, y1, x2, y2]: 部件边界框
-- γ: 填充比例 (超参数)
+- $\gamma$: 填充比例 (超参数)
 - w, h: B_p 的宽度和高度
 
 **三点坐标计算**（局部坐标系中）：
@@ -147,7 +147,7 @@ p3 = p1 + R · [0, 0, -L13]^T
 - p1: 语义锚点 (功能指尖接触点)
 - L12, L13: 模板提供的边长
 - A1: p2 与 p3 的夹角
-- R ∈ R^{3×3}: 由任务 - 工具规则确定的旋转矩阵
+- $R \in \mathbb{R}^{3 \times 3}$: 由任务 - 工具规则确定的旋转矩阵
 
 **手腕位姿构建**：
 ```
@@ -162,7 +162,7 @@ R = [x→  y→  z→],  T = p3
 J, F = F2F(g^t, g^f)
 ```
 
-> 符号与本文/相关文档保持一致：上标 a/r/t/f 分别对应 affordance/role/type/force；τ/κ 为希腊字母表示拓扑和意图先验。
+> 符号与本文/相关文档保持一致：上标 $a/r/t/f$ 分别对应 affordance/role/type/force；$\tau/\kappa$ 为希腊字母表示拓扑和意图先验。
 
 ## 3. 带数字走一遍：玩具例子 (Worked Example)
 
@@ -182,12 +182,12 @@ J, F = F2F(g^t, g^f)
 ```
 
 **Step 2: TriLocation 定位**
-假设 3DGS 场重建后，CLIP 相似度阈值 δ=0.7，找到高斯簇质心：
+假设 3DGS 场重建后，CLIP 相似度阈值 $\delta = 0.7$，找到高斯簇质心：
 ```
 p1 = (0.15, 0.32, 0.48)  # 手柄功能接触点 (食指)
 ```
 从手模板查得边长 L12=0.08m, L13=0.12m, 夹角 A1=30°。
-局部坐标系由 τ_handle + κ=hold 确定：
+局部坐标系由 $\tau_{\text{handle}} + \kappa = \text{hold}$ 确定：
 ```
 z^ = 径向方向 (从手柄中心向外)
 y^ = 手柄轴线方向
@@ -229,7 +229,7 @@ T = p3 = (0.15, 0.32, 0.36)
 | KGT3D+ 计算 | <10ms | 确定性几何计算 + 查表，实时 |
 | 关键点定位精度 | LSR 68.75% (阈值内) | 3D 坐标偏差在预定义阈值内算成功 |
 | 功能抓取成功率 | FSR 未明确给出 (需看 Table V) | 物理试验 100 次的成功比例 |
-| 内存占用 | 3DGS 场 + 特征 ≈ 数百 MB | 取决于场景复杂度 |
+| 内存占用 | 3DGS 场 + 特征 $\approx$ 数百 MB | 取决于场景复杂度 |
 | 量化误差 | 未讨论 | 潜在风险：低精度推理可能影响定位 |
 
 **部署约束**：
@@ -263,7 +263,7 @@ T = p3 = (0.15, 0.32, 0.36)
 
 **关键结果** (论文 Table II, III, IV)：
 - **KLP 提升**: ChatGPT4.0 + KLP 的 LRA 从 0.508 → 0.753 (+21.5%)
-- **2D 定位**: Hammer Handle 的 P_En 从 0.28 → 0.60 (+113%)
+- **2D 定位**: Hammer Handle 的 $P_{\text{En}}$ 从 0.28 → 0.60 (+113%)
 - **3D 定位 LSR**: TriLocation 平均 68.75%，MKA 基线仅 22.5%
   - Hold: 75% | Press: 50% | Open: 100% | Click: 50%
 

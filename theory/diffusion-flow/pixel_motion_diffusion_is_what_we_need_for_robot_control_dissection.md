@@ -137,10 +137,10 @@ action_{t-1} = √α_t · action_t + (1 - α_t) · ε_φ(action_t, t, flow, img,
 **变量说明**：
 | 符号 | 含义 | 维度示例 |
 |------|------|----------|
-| flow | 像素运动场 | (T, H, W, 2) — T 步未来，H×W 像素，2 通道 (dx, dy) |
+| flow | 像素运动场 | $(T, H, W, 2)$ — $T$ 步未来，$H \times W$ 像素，2 通道 $(dx, dy)$ |
 | action | 机器人动作 | (H, D) — H 步未来，D 维关节空间 |
-| ε_θ, ε_φ | 两个扩散模型的噪声预测网络 | U-Net / Transformer |
-| α_t | 扩散调度系数 | 标量，随 timestep t 递减 |
+| $\varepsilon_\theta$, $\varepsilon_\phi$ | 两个扩散模型的噪声预测网络 | U-Net / Transformer |
+| $\alpha_t$ | 扩散调度系数 | 标量，随 timestep t 递减 |
 
 > 符号与本文/相关文档保持一致：flow 指像素运动（类似光流但预测未来），action 指机器人关节动作或末端执行器位姿。
 
@@ -151,8 +151,8 @@ action_{t-1} = √α_t · action_t + (1 - α_t) · ε_φ(action_t, t, flow, img,
 **场景**：机械臂需要"拿起桌上的蓝色积木"
 
 **步骤 1：Motion Director 预测**
-- 输入：当前 RGB 图像（640×480）+ 文本指令 "pick the blue block"
-- 输出：未来 8 帧的像素运动场（8×640×480×2）
+- 输入：当前 RGB 图像（$640 \times 480$）+ 文本指令 "pick the blue block"
+- 输出：未来 8 帧的像素运动场（$8 \times 640 \times 480 \times 2$）
 - 可视化：图像中蓝色积木区域的像素被预测为"向上移动"，机械臂夹爪区域被预测为"向下然后闭合"
 
 **假设数值**（简化 2D 示例）：
@@ -165,7 +165,7 @@ Motion Director 预测：
 
 **步骤 2：Action Expert 消费运动预测**
 - 输入：上述 flow + 原图 + 文本 + 当前关节角度 [q1, q2, q3, q4, q5, q6]
-- 输出：未来 16 步的关节动作（16×6）
+- 输出：未来 16 步的关节动作（$16 \times 6$）
 - 推理：Action Expert 学到"当积木区域像素向上移动时，夹爪应该先下降再闭合再上升"
 
 **步骤 3：执行与闭环**
@@ -182,7 +182,7 @@ Motion Director 预测：
 - 总延迟：~80ms / 12.5Hz —— 对桌面操作足够，对高速动态任务可能不足
 
 **优化策略**：
-- 论文使用潜在扩散（latent diffusion）而非像素空间扩散，减少 4× 计算量
+- 论文使用潜在扩散（latent diffusion）而非像素空间扩散，减少 $4 \times$ 计算量
 - 可蒸馏为单步策略（如 consistency model）进一步提升速度
 
 **内存占用**：

@@ -35,12 +35,12 @@
 
 | 组件 | 输入 | 输出 | 训练/推理差异 | 关键设计 |
 |------|------|------|---------------|----------|
-| **视频编码器 f(·)** | 4×244×244 RGB 帧 (LaViLa backbone) | 可见 patch embeddings V | 训练时：掩码输入；推理时：完整视频 | LoRA fine-tuning (rank=8, α=4) |
-| **掩码重建解码器 g(·)** | 可见 tokens + 可学习 mask tokens | 重建 masked token embeddings | 训练时：重建被掩码 patch；推理时：不使用 | 1 层 Transformer, 4 attention heads |
-| **HDA 解码器** | 编码视觉 patches V + 可学习 queries | video-level e^v, hand-centric e^h, object-centric e^o | 训练时：三路监督；推理时：仅用 e^v | DETR-like, q^v(1×512), q^h(2×512), q^o(K×512) |
-| **边界框头 H_bbox** | e^h, e^o + 帧嵌入 e_t | 手/物边界框 b^h, b^o | 训练时：ℓ1 + GIoU 损失；推理时：不使用 | 每帧 Hungarian matching |
-| **语义头 H_sem** | e^h, e^o | 手/物语义表征 s^h, s^o (216-dim) | 训练时：NCE loss 对齐 verb/noun；推理时：不使用 | 手/物分别预测动词 |
-| **视频-文本对齐** | e^v | 与叙述文本对齐 | 训练时：EgoNCE loss；推理时：cosine similarity 检索 | hard negative 采样 |
+| **视频编码器 $f(\cdot)$** | $4\times244\times244$ RGB 帧 (LaViLa backbone) | 可见 patch embeddings V | 训练时：掩码输入；推理时：完整视频 | LoRA fine-tuning (rank=8, $\alpha=4$) |
+| **掩码重建解码器 $g(\cdot)$** | 可见 tokens + 可学习 mask tokens | 重建 masked token embeddings | 训练时：重建被掩码 patch；推理时：不使用 | 1 层 Transformer, 4 attention heads |
+| **HDA 解码器** | 编码视觉 patches V + 可学习 queries | video-level $e^v$, hand-centric $e^h$, object-centric $e^o$ | 训练时：三路监督；推理时：仅用 $e^v$ | DETR-like, $q^v(1\times512)$, $q^h(2\times512)$, $q^o(K\times512)$ |
+| **边界框头 H_bbox** | $e^h$, $e^o$ + 帧嵌入 $e_t$ | 手/物边界框 $b^h$, $b^o$ | 训练时：ℓ1 + GIoU 损失；推理时：不使用 | 每帧 Hungarian matching |
+| **语义头 H_sem** | $e^h$, $e^o$ | 手/物语义表征 $s^h$, $s^o$ (216-dim) | 训练时：NCE loss 对齐 verb/noun；推理时：不使用 | 手/物分别预测动词 |
+| **视频-文本对齐** | $e^v$ | 与叙述文本对齐 | 训练时：EgoNCE loss；推理时：cosine similarity 检索 | hard negative 采样 |
 
 ### 1.2 关键机制 (Key Mechanism)
 
@@ -52,13 +52,13 @@
 
 | 掩码类型 | 掩码集合 M | 保留可见区域 | 目的 |
 |----------|-----------|-------------|------|
-| **Hand-centric** | M = H ∪ B^h | 物体 + 部分背景 | 迫使模型仅从物体变换推断动作 |
+| **Hand-centric** | $M = H \cup B^h$ | 物体 + 部分背景 | 迫使模型仅从物体变换推断动作 |
 | **Object-centric** | M = (O \ H) ∪ B^o | 手部 + 部分背景 | 迫使模型仅从手部操作推断动作 |
-| **Background** | M = B^b | 手部 + 物体 | 基线：仅关注 HOI 区域 |
+| **Background** | $M = B^b$ | 手部 + 物体 | 基线：仅关注 HOI 区域 |
 
 关键细节：
 - Tubelet 分配：时空 patch 按空间位置聚合为 tubelet，与手/物框重叠 >50% 即标记为手/物相关
-- 掩码率 τ = 0.5；80% 概率选手/物掩码，20% 选背景掩码
+- 掩码率 $\tau = 0.5$；80% 概率选手/物掩码，20% 选背景掩码
 - 手/物区域掩码比例 1:9（物体区域掩码更多，因为手部通常较小）
 
 **核心洞察**：通过强制模型在缺失手或物的情况下仍能推断动作，模型必须学会从剩余线索中提取真正的 HOI 动态信息，而非依赖单一模态的捷径。
@@ -145,9 +145,9 @@ L_BBox = λ_ℓ1 · ||b_hat - b||_1 + λ_giou · L_giou(b_hat, b)
 ```
 L_Noun = (1/K) · Σ_{j=1}^{K} NCE(s^o_j, t_noun^{σ(j)})
 ```
-- s^o_j: 第 j 个 object query 的语义 embedding
+- $s^o_j$: 第 $j$ 个 object query 的语义 embedding
 - t_noun: 名词文本 embedding（通过 text encoder）
-- σ: Hungarian matching 将 object embedding 映射到对应 noun
+- $\sigma$: Hungarian matching 将 object embedding 映射到对应 noun
 
 ```
 L_Verb = (1/N_h) · Σ_{i=1}^{N_h} NCE(s^h_i, t_verb) + (1/K) · Σ_{j=1}^{K} NCE(s^o_j, t_verb)
@@ -159,27 +159,27 @@ L_Verb = (1/N_h) · Σ_{i=1}^{N_h} NCE(s^h_i, t_verb) + (1/K) · Σ_{j=1}^{K} NC
 L_EgoNCE^v→t = -(1/|B|) · Σ_{i∈B} log[ Σ_{j∈P_i} exp(cos(v_i, t_nar_j)/τ) / Σ_{k∈B^e} exp(cos(v_i, t_nar_k)/τ) ]
 ```
 - P_i: 正样本集（配对叙述 + 共享 noun+verb 的其他样本）
-- B^e: 扩展 batch（原始 batch + hard negative）
+- $B^e$: 扩展 batch（原始 batch + hard negative）
 - hard negative: 同视频不同叙述
 
 **超参数**：
 | 参数 | 值 | 说明 |
 |------|-----|------|
-| λ_vt | 0.2 | 视频-文本对齐权重 |
-| λ_Noun | 0.5 | 名词语义权重 |
-| λ_Verb | 0.3 | 动词语义权重 |
-| τ (掩码率) | 0.5 | 掩码 tubelet 比例 |
+| $\lambda_{vt}$ | 0.2 | 视频-文本对齐权重 |
+| $\lambda_{\text{Noun}}$ | 0.5 | 名词语义权重 |
+| $\lambda_{\text{Verb}}$ | 0.3 | 动词语义权重 |
+| $\tau$ (掩码率) | 0.5 | 掩码 tubelet 比例 |
 | LoRA rank | 8 | 低秩适配秩 |
-| LoRA α | 4 | 缩放因子 |
+| LoRA $\alpha$ | 4 | 缩放因子 |
 | batch size | 256 | 训练批次大小 |
 | learning rate | 1e-5 | AdamW 学习率 |
 | epochs | 2 | 训练轮数 |
 
-> 符号与本文保持一致：V ∈ R^{|V|×D_e} 为编码器输出；e^v, e^h, e^o 分别为 video/hand/object 级 embedding；s^h, s^o ∈ R^{216} 为语义 head 输出。
+> 符号与本文保持一致：$V \in \mathbb{R}^{|V| \times D_e}$ 为编码器输出；$e^v$, $e^h$, $e^o$ 分别为 video/hand/object 级 embedding；$s^h$, $s^o \in \mathbb{R}^{216}$ 为语义 head 输出。
 
 ## 3. 带数字走一遍：玩具例子 (Worked Example)
 
-假设一个简化场景：视频帧 4×4 的空间 grid，共 16 个 tubelet。
+假设一个简化场景：视频帧 $4 \times 4$ 的空间 grid，共 $16$ 个 tubelet。
 
 **场景**：视频内容是"揉面团"——手部在左上方揉捏，面团在中间变形。
 
@@ -256,20 +256,20 @@ L_total = 0.2 × (2.0 + 2.0) + 0.5 × 0.8 + 0.3 × 1.35 + 0.25 + 0.15
         = 2.005
 ```
 
-**关键观察**：在 object-centric masking 下，物体区域大部分被掩码，但模型仍需通过手部线索（e^h）预测动词"knead"。这迫使手中心表征学习到足够的动作动态信息，而不依赖物体外观。
+**关键观察**：在 object-centric masking 下，物体区域大部分被掩码，但模型仍需通过手部线索（$e^h$）预测动词"knead"。这迫使手中心表征学习到足够的动作动态信息，而不依赖物体外观。
 
 ## 4. 工程视角 (Engineering View)
 
 | 维度 | 数值/设计 | 工程含义 |
 |------|-----------|----------|
-| **输入帧数** | 4 帧 (244×244) | 低时间分辨率，适合实时推理但可能丢失细粒度动态 |
+| **输入帧数** | $4$ 帧 $(244 \times 244)$ | 低时间分辨率，适合实时推理但可能丢失细粒度动态 |
 | **训练批次** | 256 | 需要较大 GPU 内存；可能需梯度累积 |
 | **训练轮数** | 2 epochs | 快速收敛，LoRA fine-tuning 效率高 |
 | **学习率** | 1e-5 | 较小，避免破坏预训练表征 |
 | **LoRA rank** | 8 | 参数量增加极少（~0.1% backbone），适合资源受限场景 |
 | **掩码重建解码器** | 1 层 Transformer, 4 heads | 极轻量，推理时完全丢弃 |
-| **HDA 解码器** | DETR-like, K object queries | 推理时仅用 e^v，query 数量不影响推理延迟 |
-| **推理延迟** | 仅 backbone + HDA 前向 | 与基线 VLM 基本一致（额外开销 ≈ 0） |
+| **HDA 解码器** | DETR-like, K object queries | 推理时仅用 $e^v$，query 数量不影响推理延迟 |
+| **推理延迟** | 仅 backbone + HDA 前向 | 与基线 VLM 基本一致（额外开销 $\approx 0$） |
 | **外部依赖** | HOI 检测器 (Shan et al.) | 训练时需要手/物框；检测器质量直接影响掩码质量 |
 | **评估数据构建** | ProPainter inpainting + SAM2 mask propagation | 离线构建，不影響推理；但构建成本高 |
 
@@ -295,7 +295,7 @@ L_total = 0.2 × (2.0 + 2.0) + 0.5 × 0.8 + 0.3 × 1.35 + 0.25 + 0.15
 |------|------|----------|----------|-------------|
 | **DEHOI** (本文构建) | Cue-Isolated HOI 动词预测 | 2,652 视频 (手/物分别 inpainted) | 16 帧 | 分离评估手/物线索独立推理能力 |
 | **STATUS Bench** | 对象状态识别 + 变化识别 | 404 图像对 | 1-2 帧 | 物体中心表征质量 |
-| **DROID** | 机器人操作动作识别 | 视频数据 | 16 帧 | 跨 embodiment 泛化 (人手→机械手) |
+| **DROID** | 机器人操作动作识别 | 视频数据 | 16 帧 | 跨 embodiment 泛化 (人手$\to$机械手) |
 
 **DEHOI 构建流程**：
 ```
@@ -335,10 +335,10 @@ EPIC-KITCHENS-100 视频
 
 | 失败场景 | 原因 | 论文证据 |
 |----------|------|----------|
-| 手/物严重重叠的交互 | tubelet 分配模糊 (H ∩ O)，掩码策略无法清晰分离 | 论文承认重叠 tubelet 的处理是近似 |
+| 手/物严重重叠的交互 | tubelet 分配模糊 $(H \cap O)$，掩码策略无法清晰分离 | 论文承认重叠 tubelet 的处理是近似 |
 | 依赖环境上下文的动作 | 掩码策略仅针对手/物，不处理背景捷径 | 20% 背景掩码比例较低 |
 | 慢速/微妙物体变换 | 4 帧输入时间窗口短，可能错过关键状态变化 | 工程约束，非方法缺陷 |
-| 推理时利用手/物解耦 | 推理时丢弃 e^h 和 e^o，仅用 e^v | §3.4 明确说明 |
+| 推理时利用手/物解耦 | 推理时丢弃 $e^h$ 和 $e^o$，仅用 $e^v$ | §3.4 明确说明 |
 | 无 HOI 检测器的场景 | 训练阶段依赖外部检测器获取手/物框 | 外部依赖，限制部署灵活性 |
 
 ### 6.1 隐含假设 (Hidden Assumptions)
@@ -348,7 +348,7 @@ EPIC-KITCHENS-100 视频
 | **HOI 检测器足够准确** | Shan et al. 检测器能可靠定位手和物体 | 未做消融实验验证检测器误差影响 | 检测器偏差会传播到掩码策略 |
 | **手/物 tubelet 二分法充分** | 所有 HOI 信息可归入手或物类别 | 未考虑工具中介交互（如用钳子夹物体） | 工具使用场景可能丢失关键信息 |
 | **物体动态跨 embodiment 可迁移** | 人手操作的物体变换模式适用于机械手 | DROID 上有实验支持，但仅单一机器人平台 | 对双臂/人形/非标操作器的泛化未验证 |
-| **推理时丢弃 e^h/e^o 无损** | video-level embedding 已聚合足够信息 | 无 ablation 对比"使用 vs 不使用"手/物嵌入 | 可能浪费了训练阶段学到的解耦表征 |
+| **推理时丢弃 $e^h/e^o$ 无损** | video-level embedding 已聚合足够信息 | 无 ablation 对比"使用 vs 不使用"手/物嵌入 | 可能浪费了训练阶段学到的解耦表征 |
 | **inpainted 视频保持语义完整** | ProPainter 移除手/物后不引入伪影 | 定性展示，无定量评估 inpainting 质量 | 低质量 inpainting 可能引入新的捷径 |
 
 ## 7. 与相关工作对比 (Comparison)

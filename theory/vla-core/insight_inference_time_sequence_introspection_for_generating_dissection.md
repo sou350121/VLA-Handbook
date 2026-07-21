@@ -36,8 +36,8 @@ VLA 模型（如 π0-FAST、OpenVLA）能生成动作，但不知道自己什么
 
 | 组件 | 输入 | 输出 | 训练方式 | 参数量 |
 |------|------|------|----------|--------|
-| **π0-FAST (基础 VLA)** | 语言指令 + RGB 图像 + 机器人状态 | 变长动作 token 序列 | 全参数微调 (80K 步骤演示数据) | ~9B (OpenVLA 规模) |
-| **INSIGHT 强监督分类器** | 每步的 4×N 不确定性特征矩阵 | 单步 help/no-help 二分类 | 步骤级 BCE (expert 标注) | ~300K |
+| **$\pi_0$-FAST (基础 VLA)** | 语言指令 + RGB 图像 + 机器人状态 | 变长动作 token 序列 | 全参数微调 (80K 步骤演示数据) | ~9B (OpenVLA 规模) |
+| **INSIGHT 强监督分类器** | 每步的 $4 \times N$ 不确定性特征矩阵 | 单步 help/no-help 二分类 | 步骤级 BCE (expert 标注) | ~300K |
 | **INSIGHT 弱监督分类器** | 整个 episode 的每步不确定性特征 | Episode 级 success/failure | Episode 级 BCE + LSE pooling | ~500K |
 | **CP-Entropy (基线)** | 序列级熵聚合分数 | 单阈值判断 | Conformal calibration | 0 (无训练) |
 | **CP-Perplexity (基线)** | 序列级困惑度聚合分数 | 单阈值判断 | Conformal calibration | 0 (无训练) |
@@ -46,10 +46,10 @@ VLA 模型（如 π0-FAST、OpenVLA）能生成动作，但不知道自己什么
 
 INSIGHT 的核心流程：
 
-1. **π0-FAST 推理**：每步 t 生成变长 token 序列 T_t^1:n，同时输出每个 token 的概率分布 P_t^i
-2. **不确定性特征提取**：对每个 token 提取 4 维特征向量 u_t^i = [熵, -log P, 认知不确定性 AU, 模型不确定性 EU]
-3. **Transformer 编码**：4×N 特征矩阵输入 compact transformer（正弦位置编码 + 自注意力）
-4. **Help 预测**：输出 r_t ∈ [0,1]，超过阈值则触发人工辅助
+1. **$\pi_0$-FAST 推理**：每步 $t$ 生成变长 token 序列 $T_t^{1:n}$，同时输出每个 token 的概率分布 $P_t^i$
+2. **不确定性特征提取**：对每个 token 提取 4 维特征向量 $u_t^i = [\text{熵}, -\log P, \text{认知不确定性 } AU, \text{模型不确定性 } EU]$
+3. **Transformer 编码**：$4 \times N$ 特征矩阵输入 compact transformer（正弦位置编码 + 自注意力）
+4. **Help 预测**：输出 $r_t \in [0,1]$，超过阈值则触发人工辅助
 
 ⚡ **Eureka Moment**：VLA 的 token 级不确定性信号本身就包含了「何时会失败」的信息——不需要额外的训练或检测网络，只需要一个轻量级分类器来「翻译」这些信号。
 
@@ -120,7 +120,7 @@ AU(a_t) = -Σ (α_k/α_0)[ψ(α_k+1) - ψ(α_0+1)]
 EU(a_t) = K / Σ (α_k + 1)
 ```
 
-其中 ψ(·) 是 digamma 函数。AU 捕捉数据固有模糊性，EU 捕捉模型知识缺口。
+其中 $\psi(\cdot)$ 是 digamma 函数。AU 捕捉数据固有模糊性，EU 捕捉模型知识缺口。
 
 **强监督损失**（步骤级 BCE）：
 ```
@@ -133,11 +133,11 @@ L_strong = -Σ_t [y_t · log(r_t) + (1-y_t) · log(1-r_t)]
 L_weak = -Σ_e [Y^(e) · log(Ŷ^(e)) + (1-Y^(e)) · log(1-Ŷ^(e))]
 ```
 
-> 符号与本文保持一致：y_t 为步骤级标签，Y^(e) 为 episode 级标签，r_t 为分类器输出概率，ℓ_t 为步骤 logit。
+> 符号与本文保持一致：$y_t$ 为步骤级标签，$Y^{(e)}$ 为 episode 级标签，$r_t$ 为分类器输出概率，$\ell_t$ 为步骤 logit。
 
 ## 3. 带数字走一遍：玩具例子 (Worked Example)
 
-假设一个厨房任务「把胡萝卜放进锅里」，第 3 步的 π0-FAST 推理：
+假设一个厨房任务「把胡萝卜放进锅里」，第 $3$ 步的 $\pi_0$-FAST 推理：
 
 **正常情况**（VLA 有信心）：
 ```
@@ -185,14 +185,14 @@ Token 3: P=[闭合:0.40, 打开:0.35, 保持:0.15, 其他:0.10]
 
 | 指标 | 数值 | 含义 |
 |------|------|------|
-| 分类器参数量 | 300K-500K | 相比 π0-FAST 的 ~9B 可忽略不计 |
-| 推理延迟 | 实时（见表 I） | 强监督 TTFH=2.1±1.3 步，弱监督 TTFH=3.8±2.1 步 |
+| 分类器参数量 | 300K-500K | 相比 $\pi_0$-FAST 的 $\sim 9\,\text{B}$ 可忽略不计 |
+| 推理延迟 | 实时（见表 I） | 强监督 $\text{TTFH}=2.1\pm1.3$ 步，弱监督 $\text{TTFH}=3.8\pm2.1$ 步 |
 | 触发频率 | 强: 0.31/步, 弱: 0.12/步, CP: 0.22/步 | 强监督更频繁干预，弱监督保守 |
-| 部署方式 | 与 π0-FAST 并行 | 不阻塞主 VLA 推理流水线 |
+| 部署方式 | 与 $\pi_0$-FAST 并行 | 不阻塞主 VLA 推理流水线 |
 | 特征提取开销 | 每步从 logits 计算 4 维 | 无需额外前向传播，几乎零额外计算 |
 
 **工程含义**：
-- INSIGHT 的最大优势是**零额外推理成本**——不确定性特征直接从 π0-FAST 已有的 logits 中提取，不需要额外模型前向传播
+- INSIGHT 的最大优势是**零额外推理成本**——不确定性特征直接从 $\pi_0$-FAST 已有的 logits 中提取，不需要额外模型前向传播
 - 300K 参数的 transformer 可以在 CPU 上实时运行，无需 GPU
 - 强监督模型触发更频繁（0.31/步），适合安全关键场景；弱监督模型保守（0.12/步），适合对中断敏感的场景
 - 变长 token 序列需要 padding 到固定长度 N，对超长序列有信息截断风险
@@ -203,20 +203,20 @@ Token 3: P=[闭合:0.40, 打开:0.35, 保持:0.15, 其他:0.10]
 
 | 数据集 | 规模 | 来源 | 用途 |
 |--------|------|------|------|
-| 自采集厨房数据 | 80,419 步 / 5 类任务 / 17 个任务 | xArm7 + GELLO 遥操作 | 微调 π0-FAST |
-| In-Distribution rollout | 160 episodes / 4 任务 / 4 起始配置 | 微调后 π0-FAST | ID 测试 |
+| 自采集厨房数据 | 80,419 步 / 5 类任务 / 17 个任务 | xArm7 + GELLO 遥操作 | 微调 $\pi_0$-FAST |
+| In-Distribution rollout | 160 episodes / 4 任务 / 4 起始配置 | 微调后 $\pi_0$-FAST | ID 测试 |
 | Distribution-Shift rollout | 469 episodes / 同任务新配置 | 物体位置/朝向/新物体 | 分布偏移测试 |
-| Sim-OOD (LIBERO) | 500 rollouts | LIBERO-10 微调的 π0-FAST | 大规模 OOD 测试 |
+| Sim-OOD (LIBERO) | 500 rollouts | LIBERO-10 微调的 $\pi_0$-FAST | 大规模 OOD 测试 |
 
 **评测任务**：lift carrot, lift eggplant, put corn in pot, put pot in sink
 
 **标注方式**：
-- 强标签：专家判断每步动作是否「对任务有贡献」→ help/no-help
+- 强标签：专家判断每步动作是否「对任务有贡献」→ $\text{help}/\text{no-help}$
 - 弱标签：episode 级 success/failure（在最大步数内完成即 success）
 
 **评测指标**：Accuracy, F1（10-fold cross-validation），Time-to-First-Help, Trigger Count, Trigger Rate
 
-**基线**：Conformal Prediction with Entropy (CP-E), Conformal Prediction with Perplexity (CP-P)，β=0.2
+**基线**：Conformal Prediction with Entropy (CP-E), Conformal Prediction with Perplexity (CP-P)，$\beta=0.2$
 
 ## 6. 能力与失败模式 (Capabilities & Failure Modes)
 
@@ -240,7 +240,7 @@ Token 3: P=[闭合:0.40, 打开:0.35, 保持:0.15, 其他:0.10]
 
 ### 6.1 隐含假设 (Hidden Assumptions)
 
-1. **Token 级不确定性信号在跨 VLA 架构间稳定**：论文仅在 π0-FAST（自回归）上验证，未测试 π0（流模型）或 Octo 等其他架构
+1. **Token 级不确定性信号在跨 VLA 架构间稳定**：论文仅在 $\pi_0$-FAST（自回归）上验证，未测试 $\pi_0$（流模型）或 Octo 等其他架构
 2. **强标签的「任务贡献」判断具有内部一致性**：作者承认标注主观，但假设一致性足够
 3. **Episode 级 success/failure 是客观的**：弱标签假设成功 episode 中所有步骤都不需要 help——这可能过于简化（部分步骤可能本应求助但侥幸完成）
 4. **人类辅助总是可用且低成本的**：实际部署中，人类响应延迟可能使「及时求助」变得困难

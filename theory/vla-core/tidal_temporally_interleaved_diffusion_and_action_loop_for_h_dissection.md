@@ -125,7 +125,7 @@ a_hat = x₀ + v_θ(x₀, t=0, s̃_t, ℰ_cached)
 ```
 
 - ℰ_k: 稠密意图 embedding，在一个宏周期（H=16 步）内冻结
-- Φ_VLM: 预训练 VLM backbone（GR00T-N1.5-3B）
+- $\Phi_{\text{VLM}}$: 预训练 VLM backbone（GR00T-N1.5-3B）
 - I_tk: 宏步骤 k 的 RGB 观测
 - l_instr: 自然语言指令
 
@@ -135,8 +135,8 @@ a_hat = x₀ + v_θ(x₀, t=0, s̃_t, ℰ_cached)
 â = x₀ + v_θ(x₀, t=0, s̃_t, ℰ)
 ```
 
-- x₀ ~ N(0, I): 源噪声
-- v_θ: 条件流匹配（CFM）向量场
+- $x_0 \sim \mathcal{N}(0, I)$: 源噪声
+- $v_\theta$: 条件流匹配（CFM）向量场
 - s̃_t: 融合后的实时状态（本体感受 + 运动特征）
 - ℰ: 缓存的语义意图
 - 关键：t=0，即只从纯噪声出发做一步 Euler 积分
@@ -147,9 +147,9 @@ a_hat = x₀ + v_θ(x₀, t=0, s̃_t, ℰ_cached)
 L(θ) = E_{k,t,x₀,x₁} [ Σ_{i=0}^{H-1} w_i · ‖v_θ(ψ_t(x₀,x₁), t, s_{k·N}, ℰ₀)⁽ⁱ⁾ - (x₁⁽ⁱ⁾ - x₀⁽ⁱ⁾)‖² ]
 ```
 
-- k ∈ {0,1,2,3}: 采样的延迟阶段
-- s_{k·N}: 时间错位的本体感受（比 ℰ 晚 k·N 步）
-- ℰ₀: 冻结在 t=0 的语义意图
+- $k \in \{0,1,2,3\}$: 采样的延迟阶段
+- $s_{k\cdot N}$: 时间错位的本体感受（比 $\mathcal{E}$ 晚 $k\cdot N$ 步）
+- $\mathcal{E}_0$: 冻结在 $t=0$ 的语义意图
 - w_i: 水平加权权重（i < N=4 时 w_i=2.0，否则 w_i=1.0）
 
 **(4) 时间偏置采样**
@@ -158,7 +158,7 @@ L(θ) = E_{k,t,x₀,x₁} [ Σ_{i=0}^{H-1} w_i · ‖v_θ(ψ_t(x₀,x₁), t, s_
 s ~ Beta(α=5.0, β=1.0),  t = 1 - s
 ```
 
-- 将采样质量集中在 t≈0（噪声源），匹配单步推理的实际查询点
+- 将采样质量集中在 $t\approx 0$（噪声源），匹配单步推理的实际查询点
 
 **(5) 运动预测辅助损失**
 
@@ -174,10 +174,10 @@ L_aux = λ₁·‖p̂_t - p_t‖² + λ₂·‖v̂_t - v_t‖² + λ₃·‖p̂_
 s̃_t = Concat(s_prop, (1 - c_t) · m_t)
 ```
 
-- c_t ∈ {0,1}: 夹爪接触状态
+- $c_t \in \{0,1\}$: 夹爪接触状态
 - 接近阶段（c_t=0）：全运动向量；接触后（c_t=1）：零掩码，回退到本体感受控制
 
-> 符号与本文保持一致：ℰ=语义意图 embedding, s̃_t=融合状态, v_θ=向量场, H=预测视界(16), N=执行块大小(4), K=延迟阶段数(4)
+> 符号与本文保持一致：$\mathcal{E}=$语义意图 embedding, $\tilde{s}_t=$融合状态, $v_\theta=$向量场, $H=$预测视界(16), $N=$执行块大小(4), $K=$延迟阶段数(4)
 
 ## 3. 带数字走一遍：玩具例子 (Worked Example)
 
@@ -353,5 +353,5 @@ k=3 (t=240ms):
 **关键引用**：
 - 论文: https://arxiv.org/abs/2601.14945
 - GR00T Backbone: https://arxiv.org/abs/2503.14734
-- π0 Flow Model: https://arxiv.org/abs/2410.24164
+- $\pi_0$ Flow Model: https://arxiv.org/abs/2410.24164
 - RoboCasa Benchmark: https://arxiv.org/abs/2503.14734 (Ref [42] in paper)

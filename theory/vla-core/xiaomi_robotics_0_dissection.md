@@ -1,4 +1,4 @@
-# Xiaomi-Robotics-0：用 RoPE 偏移 + Λ-mask + 動態 loss 三件套破解 Action Prefix 的「shortcut」 (An Open-Sourced VLA Model with Real-Time Execution)
+# Xiaomi-Robotics-0：用 RoPE 偏移 + $\Lambda$-mask + 動態 loss 三件套破解 Action Prefix 的「shortcut」 (An Open-Sourced VLA Model with Real-Time Execution)
 
 > **發布時間**：2026-02-13（v1）/ 2026-03-25（v2）（arXiv 2602.12684）；後訓練流程 2026-04-27 開源
 > **論文題目**：Xiaomi-Robotics-0: An Open-Sourced Vision-Language-Action Model with Real-Time Execution
@@ -8,7 +8,7 @@
 VLA 部署到真機時最大的兩難：要**異步推理**（一邊執行當前動作一邊算下一段）才能避免延遲卡頓；異步推理要**Action Prefixing**（用上一段動作的尾巴作為下段的條件）才能拼接平滑——但 Action Prefixing 會讓模型「**走捷徑**」，直接複製動作慣性而忽視當前視覺。Xiaomi-Robotics-0 的工程貢獻是把這條 shortcut 用三個技術同時封死。
 
 **X-Ray 開場（非專家可複述）**：
-這篇論文要解決的是「機器人連續動作怎麼又快又穩」。傳統做法：每次推理一段動作再執行——但推理 80ms 太慢、動作會卡頓；改成異步推理（執行同時算下一段）+ 把上一段動作的尾巴餵給下一段做開頭——動作變絲滑了，但模型開始**偷懶**：直接根據「之前的動作」推測「下一個動作」，眼睛幾乎不看當前畫面。小米的解法是三個訓練時的小技巧——把動作的位置編號偏移開、加一個 Λ 形遮罩限制注意力流向、根據誤差大小動態加重 loss——讓模型即使有 prefix 仍必須看視覺。對 VLA 研究者意味著：**異步推理是落地必經之路，但伴隨的 shortcut 是訓練時就要正面處理的工程議題，不是「換個 backbone」能繞過的**。
+這篇論文要解決的是「機器人連續動作怎麼又快又穩」。傳統做法：每次推理一段動作再執行——但推理 80ms 太慢、動作會卡頓；改成異步推理（執行同時算下一段）+ 把上一段動作的尾巴餵給下一段做開頭——動作變絲滑了，但模型開始**偷懶**：直接根據「之前的動作」推測「下一個動作」，眼睛幾乎不看當前畫面。小米的解法是三個訓練時的小技巧——把動作的位置編號偏移開、加一個 $\Lambda$ 形遮罩限制注意力流向、根據誤差大小動態加重 loss——讓模型即使有 prefix 仍必須看視覺。對 VLA 研究者意味著：**異步推理是落地必經之路，但伴隨的 shortcut 是訓練時就要正面處理的工程議題，不是「換個 backbone」能繞過的**。
 
 ---
 
@@ -56,7 +56,7 @@ VLA 部署到真機時最大的兩難：要**異步推理**（一邊執行當前
 ### 1.2 關鍵機制 (Key Mechanism)
 
 ⚡ **Eureka Moment**：
-> **「Action Prefixing 解決了動作平滑問題，但同時打開了一條 shortcut——模型可以光看『前一段動作』就猜出下一段，視覺被忽視。三個小技巧（RoPE 偏移 + Λ-mask + 動態 loss）的目的都是『**讓 prefix 變得無法被偷懶利用**』。」**
+> **「Action Prefixing 解決了動作平滑問題，但同時打開了一條 shortcut——模型可以光看『前一段動作』就猜出下一段，視覺被忽視。三個小技巧（RoPE 偏移 + $\Lambda$-mask + 動態 loss）的目的都是『**讓 prefix 變得無法被偷懶利用**』。」**
 
 四個設計選擇的因果鏈：
 
@@ -65,7 +65,7 @@ VLA 部署到真機時最大的兩難：要**異步推理**（一邊執行當前
 3. **為什麼會有 shortcut？** —— Prefix 與目標動作高度相關（時間連續），模型發現「**直接複製 prefix 比看視覺更省事**」，loss 也會降下來。論文原話：「policy learning may take a shortcut by simply copying the action prefix instead of attending to the visual and language inputs」。
 4. **為什麼三個技巧而不是一個？** —— 三條 attack vector 互不重疊：
    - **RoPE 偏移**讓模型在位置編碼層面就分清「這是 noisy 待預測動作 vs clean prefix」
-   - **Λ-mask** 在 attention 層面限制 noisy action token 只能看 VLM/state/前 w 步，不能看後段的 prefix
+   - **$\Lambda$-mask** 在 attention 層面限制 noisy action token 只能看 VLM/state/前 $w$ 步，不能看後段的 prefix
    - **動態 loss re-weighting** 在訓練目標層面對誤差大的樣本加權，避免模型只學「容易的部分」
 
 ### 1.3 信息流 (Flow Diagram)
@@ -122,7 +122,7 @@ clean_prefix_tok 的 RoPE index = base_index
 
 > **直覺**：noisy 與 prefix 在 RoPE 空間被「拉開」——模型不再能透過位置編碼的相鄰性把它們當「自然延續」處理。
 
-**(2) Λ-Shape Attention Mask**
+**(2) $\Lambda$-Shape Attention Mask**
 
 論文原話：「A noisy action token can only attend to the vision and language tokens via the VLM KV cache, the sink token, the state token, and the action tokens of the previous w timesteps.」
 
@@ -131,11 +131,11 @@ mask[i, j] = 1  iff  j ∈ {VLM_KV, sink, state, prefix_{t-w:t}}
 mask[i, j] = 0  otherwise
 ```
 
-> **直覺**：noisy action 不能往「後面」看（後面是 prefix 後續或別的 noisy）——它的注意力被強制送回 VLM/state/前 w 步的「**真信息**」，不能在 noisy 群裡互相抄。「Λ」形指注意力連通圖頂端窄、底部寬。
+> **直覺**：noisy action 不能往「後面」看（後面是 prefix 後續或別的 noisy）——它的注意力被強制送回 VLM/state/前 $w$ 步的「**真信息**」，不能在 noisy 群裡互相抄。「$\Lambda$」形指注意力連通圖頂端窄、底部寬。
 
 **(3) Adaptive Loss Re-weighting**
 
-論文原話：「we dynamically re-weight the flow-matching loss based on the L₁ error between the online-predicted actions and the ground-truth actions. This strategy prioritizes samples with larger deviations.」
+論文原話：「we dynamically re-weight the flow-matching loss based on the $L_1$ error between the online-predicted actions and the ground-truth actions. This strategy prioritizes samples with larger deviations.」
 
 ```
 w(δ_i) = f(||a_pred_i − a_gt_i||₁)    (誤差越大，權重越大)
@@ -159,7 +159,7 @@ w(δ_i) = f(||a_pred_i − a_gt_i||₁)    (誤差越大，權重越大)
 
 ---
 
-## 3. 帶數字走一遍：Λ-mask 為什麼是 Λ (Worked Example)
+## 3. 帶數字走一遍：$\Lambda$-mask 為什麼是 $\Lambda$ (Worked Example)
 
 考慮一段 chunk，noisy action token 排成 t = 1, 2, ..., 10：
 
@@ -194,7 +194,7 @@ noisy_t=10 只能看到：
 
 | 維度 | 數值 / 觀察 | 工程含義 |
 |------|------------|---------|
-| **參數規模** | 4.7B（Qwen3-VL-4B + 16 層 DiT） | π0 同量級 |
+| **參數規模** | 4.7B（Qwen3-VL-4B + 16 層 DiT） | $\pi_0$ 同量級 |
 | **推理延遲** | **80ms / RTX 4090**（單次 chunk 推理） | 異步推理掩蓋之後實際無感 |
 | **預訓練數據** | ~**200M timesteps** robot + **80M** vision-language | 真機 trajectory 量級在 OpenVLA 之上 |
 | **數據來源** | DROID + MolmoAct + 內部遙操作（**Lego 338 hr / Towel 400 hr**） | ⚠️ 營銷稿沒提 DROID/MolmoAct |
@@ -202,7 +202,7 @@ noisy_t=10 只能看到：
 | **後訓練示範** | **20 hours**（耳機收納 demo） | ⚠️ 耳機 demo **不在論文 v2**，是 04-27 開源時新增 |
 | **License** | **Apache 2.0** | 商用友善 |
 | **倉庫成熟度** | 483 stars / 50 forks / 6 commits 主分支 | 早期但活躍 |
-| **依賴** | PyTorch 2.8 / Transformers ≥4.57.1 / FlashAttn 2.8.3 / Python 3.12 / CUDA 12.8 | 新依賴；舊環境需升級 |
+| **依賴** | PyTorch 2.8 / Transformers $\geq$4.57.1 / FlashAttn 2.8.3 / Python 3.12 / CUDA 12.8 | 新依賴；舊環境需升級 |
 
 **部署約束**：
 - 異步推理依賴執行延遲與推理延遲的時序匹配——任務動作頻率 ≠ 80ms 整數倍時抖動仍可能出現
@@ -222,8 +222,8 @@ noisy_t=10 只能看到：
 | | Goal | 98.8% |
 | | Long | 97.2% |
 | | **Average** | **98.7%** |
-| **CALVIN** | ABCD→D 平均完成長度 | **4.80**（vs FLOWER 4.67） |
-| | ABC→D 平均完成長度 | **4.75** |
+| **CALVIN** | ABCD$\to$D 平均完成長度 | **4.80**（vs FLOWER 4.67） |
+| | ABC$\to$D 平均完成長度 | **4.75** |
 | **SimplerEnv** | Visual Matching | 85.5% |
 | | Visual Aggregation | 74.7% |
 | | WidowX | 79.2% |
@@ -248,8 +248,8 @@ noisy_t=10 只能看到：
 ## 6. 能力與失敗模式 (Capabilities & Failure Modes)
 
 ### 6.1 能做什麼
-- LIBERO 全四子任務 ≥97%
-- CALVIN ABCD→D 4.80（超過 FLOWER）
+- LIBERO 全四子任務 $\geq 97\%$
+- CALVIN ABCD$\to$D 4.80（超過 FLOWER）
 - 異步推理 80ms / RTX 4090
 - 後訓練 20 小時即可學新真機任務（耳機 demo 聲稱）
 - Apache 2.0 + HF 權重，學界可直接 fine-tune
@@ -278,15 +278,15 @@ noisy_t=10 只能看到：
 | 方法 | VLM | 動作頭 | 異步推理 | Action Prefixing | Shortcut 處理 | LIBERO Avg |
 |------|-----|--------|:--------:|:----------------:|:------------:|:----------:|
 | OpenVLA | LLaMA-2-7B | autoregressive | ✗ | ✗ | — | 76.5% |
-| π0 | PaliGemma | flow-matching DiT | 部分 | ✗ | — | 94.2% |
-| π0.5 (RTC) | PaliGemma | DiT | ✓ | ✓ | 部分（不公開細節） | 95.4% |
+| $\pi_0$ | PaliGemma | flow-matching DiT | 部分 | ✗ | — | 94.2% |
+| $\pi_{0.5}$ (RTC) | PaliGemma | DiT | ✓ | ✓ | 部分（不公開細節） | 95.4% |
 | Gr00T-N1.5 | Eagle-VL | DiT | ✓ | ✓ | 部分 | ~96% |
 | **Xiaomi-Robotics-0** | **Qwen3-VL-4B** | **16 層 DiT, FM** | **✓ (80ms)** | **✓** | **3 招正面處理** | **98.7%** |
 
 ### 🎤 面試 Tip
 
 > **被問「VLA 異步推理為什麼會 shortcut？怎麼處理？」** ——
-> 三句話答：(1) 異步推理需要 Action Prefixing 拼接平滑，但 prefix 與目標動作高度相關，模型可以「複製 prefix 而忽視視覺」走捷徑；(2) Xiaomi-Robotics-0 的解法是三條獨立路徑：RoPE 位置偏移（位置編碼層拉開）+ Λ-mask（注意力層限制）+ 動態 loss 加權（loss 層加重困難樣本）；(3) 但要老實補一句：**論文沒給三技巧的逐項 ablation 數字**——只能說「協同有效」，不能說「每條獨立必要」。
+> 三句話答：(1) 異步推理需要 Action Prefixing 拼接平滑，但 prefix 與目標動作高度相關，模型可以「複製 prefix 而忽視視覺」走捷徑；(2) Xiaomi-Robotics-0 的解法是三條獨立路徑：RoPE 位置偏移（位置編碼層拉開）+ $\Lambda$-mask（注意力層限制）+ 動態 loss 加權（loss 層加重困難樣本）；(3) 但要老實補一句：**論文沒給三技巧的逐項 ablation 數字**——只能說「協同有效」，不能說「每條獨立必要」。
 
 ---
 
@@ -295,10 +295,10 @@ noisy_t=10 只能看到：
 > 來源混合（arXiv 論文 v2 + GitHub + 項目主頁 + 公司營銷稿）：
 
 1. **「HuggingFace 全球 VLA 下載榜第六名」**？論文與項目頁均無此排名數據——是 2026-02 短期排名還是穩定排名？
-2. **「Random Masking 隨機遮蔽」是否真存在**？營銷稿原話「自適應加權 + Λ-mask + **隨機遮蔽**」三招——但論文 v2 的三招實際是「自適應加權 + Λ-mask + **RoPE 偏移**」。隨機遮蔽**論文中未發現**——是營銷稿翻譯誤植，還是後訓練流程中新增了第四個技巧未在論文體現？
+2. **「Random Masking 隨機遮蔽」是否真存在**？營銷稿原話「自適應加權 + $\Lambda$-mask + **隨機遮蔽**」三招——但論文 v2 的三招實際是「自適應加權 + $\Lambda$-mask + **RoPE 偏移**」。隨機遮蔽**論文中未發現**——是營銷稿翻譯誤植，還是後訓練流程中新增了第四個技巧未在論文體現？
 3. **「20 小時耳機收納」demo 真機成功率**？營銷稿稱「連續完成多組」——多組是幾組？成功率如何？論文 v2 不含此任務。
-4. **三技巧的逐項 ablation**？論文只給「同步 vs 異步」對比，缺「有 RoPE 偏移 vs 無」「有 Λ-mask vs 無」「有動態 loss vs 無」的單獨數字——讀者無法判斷各技巧貢獻。
-5. **Λ-mask 的 w 與 T 比例**？w 太大易 shortcut，太小拼接抖動——論文沒給最優搭配。
+4. **三技巧的逐項 ablation**？論文只給「同步 vs 異步」對比，缺「有 RoPE 偏移 vs 無」「有 $\Lambda$-mask vs 無」「有動態 loss vs 無」的單獨數字——讀者無法判斷各技巧貢獻。
+5. **$\Lambda$-mask 的 $w$ 與 $T$ 比例**？$w$ 太大易 shortcut，太小拼接抖動——論文沒給最優搭配。
 6. **DROID + MolmoAct 之外是否有未公開來源**？338h Lego + 400h Towel 合計 ~30 天遙操作數據；總體 200M timesteps 是否還有其他內部數據未列？
 7. **異步推理在 RTX 4090 之外的硬體表現**？80ms 是 4090 數字；消費級 / 邊緣 GPU（如 5070 Ti laptop、Jetson Orin）的延遲是否仍可滿足異步條件？
 8. **Apache 2.0 license vs Qwen3-VL 上游 license**？Qwen3-VL 自有條款（特別是「商用」上的限制需確認）——使用 Xiaomi-Robotics-0 商用時要追溯 VLM 上游。
@@ -320,10 +320,10 @@ noisy_t=10 只能看到：
 - 項目主頁: https://robotics.xiaomi.com/xiaomi-robotics-0.html
 - 代碼: https://github.com/XiaomiRobotics/Xiaomi-Robotics-0（Apache 2.0, 483★, 50 forks）
 - 權重: https://huggingface.co/collections/XiaomiRobotics/xiaomi-robotics-0
-- 對比基線: π0 (Black et al., 2024) · π0.5/RTC (Black et al., 2025) · Gr00T-N1.5 (NVIDIA, 2025) · OpenVLA (Kim et al., 2024) · DROID · MolmoAct
+- 對比基線: $\pi_0$ (Black et al., 2024) · $\pi_{0.5}/\text{RTC}$ (Black et al., 2025) · Gr00T-N1.5 (NVIDIA, 2025) · OpenVLA (Kim et al., 2024) · DROID · MolmoAct
 
 🧠 **本文判讀（作者觀點）**：
-這篇論文的真正貢獻**不是「另一個更強的 VLA」**，而是把 RTC（Real-Time Chunking）落地時的隱形痛點（shortcut）正式寫進**訓練處方**。三招（RoPE 偏移 + Λ-mask + 動態 loss）在概念上互不重疊，**有工程美感**——但缺逐項 ablation 是論文最大的數據漏洞，**讀者無法判斷三招誰是必要、誰是邊際**。
+這篇論文的真正貢獻**不是「另一個更強的 VLA」**，而是把 RTC（Real-Time Chunking）落地時的隱形痛點（shortcut）正式寫進**訓練處方**。三招（RoPE 偏移 + $\Lambda$-mask + 動態 loss）在概念上互不重疊，**有工程美感**——但缺逐項 ablation 是論文最大的數據漏洞，**讀者無法判斷三招誰是必要、誰是邊際**。
 
 仿真數字飽和（LIBERO 98.7%）不是真正的賣點——真正的賣點是 **「異步 80ms + 真機 20 小時學會新任務 + Apache 2.0 開源」**。但 20 小時 demo 在論文 v2 不存在（只在 04-27 後訓練流程開源時亮相），**真機定量成功率仍缺**——這是 ⚡ 戰略級評估被卡在 🔧 的關鍵原因。
 

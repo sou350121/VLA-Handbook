@@ -134,13 +134,13 @@ P_task = P_bg ∪ P_obj ∪ P_robot
 
 **任务**："Pick up the bottle and place it into the basket"
 
-**输入**：单张厨房桌面图像 (1920×1080 RGB)
+**输入**：单张厨房桌面图像 $(1920 \times 1080\ \text{RGB})$
 
 **Step 1: 场景重建**
-- Metric3Dv2 输出深度图 D (1920×1080)，假设焦距 f=1000
+- Metric3Dv2 输出深度图 $D\ (1920 \times 1080)$，假设焦距 $f = 1000$
 - 反投影得到稠密点云 P_dense (约 2M 点)
 - SAM 分割出瓶子 mask M_bottle
-- TRELLIS 补全瓶子 3D 形状 → P_obj (约 5000 点)
+- TRELLIS 补全瓶子 3D 形状 → $P_{\text{obj}}$ (约 5000 点)
 - K-means 聚类提取 K=64 个空间关键点 K
 
 **Step 2: 动作规划**
@@ -204,7 +204,7 @@ P_task = P_bg ∪ P_obj ∪ P_robot
 **单次生成内存占用** (估算)：
 - 点云存储：2M 点 × 6 字节 (XYZRGB) ≈ 12MB
 - SE(3) 轨迹：180 帧 × 7 参数 (四元数 + 平移) ≈ 10KB
-- 渲染缓存：取决于分辨率，假设 224×224 × 3 通道 × 180 帧 ≈ 27MB
+- 渲染缓存：取决于分辨率，假设 $224 \times 224 \times 3$ 通道 × 180 帧 ≈ 27MB
 
 **吞吐优化建议**：
 - 批量处理多张图像 (并行 Stage 1)
@@ -226,7 +226,7 @@ P_task = P_bg ∪ P_obj ∪ P_robot
 - Object-Object Interaction: "Hit Box"
 
 **对比基线**：
-- π0-base (zero-shot，无微调)
+- $\pi_0$-base (zero-shot，无微调)
 - 人真机采集 (10/100 样本)
 - IGen 生成 (100/1000 样本)
 
@@ -243,14 +243,14 @@ P_task = P_bg ∪ P_obj ∪ P_robot
 | **平均** | 17.26 | **27.00** | 0.3235 | **0.0630** |
 
 **行为质量** (Figure 4)：
-- Instruction Following: IGen ≈ 2× TesserAct/Cosmos (VLM 评估)
+- Instruction Following: IGen ≈ $2\times$ TesserAct/Cosmos (VLM 评估)
 - Physics Alignment: IGen 显著优于基线 (视频生成模型难以保证物理一致性)
 
 **Policy 迁移性能** (Figure 7)：
 
 | 训练数据 | 平均成功率 |
 |----------|------------|
-| Zero-shot (π0-base) | ~0% |
+| Zero-shot ($\pi_0$-base) | ~0% |
 | 人真机 10 样本 | 19.4% |
 | 人真机 100 样本 | 58.3% |
 | IGen 100 样本 | **44.5%** |

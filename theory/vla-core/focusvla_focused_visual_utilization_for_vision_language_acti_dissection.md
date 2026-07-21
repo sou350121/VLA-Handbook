@@ -119,7 +119,7 @@ W_V = Softmax(TopK((σ_q(A_t)) · (σ_k(C_t^V))^T))
 H_V = W_V · (σ_v(C_0^V))^T
 ```
 
-其中 C_t^V 作为 keys（深层 VLM 特征，语义对齐好），C_0^V 作为 values（浅层特征，空间细节好）。
+其中 $C_t^V$ 作为 keys（深层 VLM 特征，语义对齐好），$C_0^V$ 作为 values（浅层特征，空间细节好）。
 
 **Channel-level Focus 公式**：
 
@@ -127,19 +127,19 @@ H_V = W_V · (σ_v(C_0^V))^T
 H_V' = H_V ⊙ σ_g(A_t)
 ```
 
-其中 σ_g 是 gate MLP，⊙ 是逐元素乘法。
+其中 $\sigma_g$ 是 gate MLP，$\odot$ 是逐元素乘法。
 
 **变量说明**：
 
 | 符号 | 含义 |
 |------|------|
 | A_t | 第 t 层的 action latent |
-| C_t^V | 第 t 层的视觉特征（来自 VLM） |
-| C_t^AQ | 第 t 层的 action query |
-| C_0^V | 视觉 backbone 的原始特征（浅层） |
-| σ_q, σ_k, σ_v | MLP 投影（query/key/value） |
-| σ_fusion | 融合 MLP |
-| σ_g | Gate MLP（element-wise） |
+| $C_t^V$ | 第 t 层的视觉特征（来自 VLM） |
+| $C_t^{AQ}$ | 第 t 层的 action query |
+| $C_0^V$ | 视觉 backbone 的原始特征（浅层） |
+| $\sigma_q$, $\sigma_k$, $\sigma_v$ | MLP 投影（query/key/value） |
+| $\sigma_{\text{fusion}}$ | 融合 MLP |
+| $\sigma_g$ | Gate MLP（element-wise） |
 | TopK | 只保留 attention score 最高的 K 个 token |
 
 > 符号与本文/相关文档保持一致：上标 V=Vision, AQ=Action Query, A=Action latent；下标 t=层索引，0=原始特征。
@@ -149,8 +149,8 @@ H_V' = H_V ⊙ σ_g(A_t)
 假设一个 LIBERO-Spatial 任务："将红色积木放到蓝色盒子里"。
 
 **输入**：
-- 视觉特征 C_t^V：256 个 patch token（16×16 网格），每个 512 维
-- Action query C_t^AQ：8 个 learnable tokens
+- 视觉特征 $C_t^V$：256 个 patch token（16×16 网格），每个 512 维
+- Action query $C_t^{AQ}$：8 个 learnable tokens
 - Action latent A_t：8 个 tokens，512 维
 
 **VLA-Adapter 的问题**：
@@ -172,10 +172,10 @@ H_V' = H_V ⊙ σ_g(A_t)
    - 其余 192 个 background patches 被 mask
 
 3. **Channel-level Focus**：
-   - σ_g(A_t) 输出 512 维 gate 向量，值域 (0, 1)
+   - $\sigma_g(A_t)$ 输出 512 维 gate 向量，值域 $(0, 1)$
    - 与任务相关的通道（如空间位置编码、颜色特征）gate 值 ~0.8-1.0
    - 背景噪声通道（如纹理、光照变化）gate 值 ~0.1-0.3
-   - 逐元素相乘后，H_V' 的信噪比提升约 3×
+   - 逐元素相乘后，$H_V'$ 的信噪比提升约 $3\times$
 
 4. **融合与输出**：
    - [H_A, H_AQ, H_V'] 拼接后通过 fusion MLP
@@ -189,8 +189,8 @@ H_V' = H_V ⊙ σ_g(A_t)
 
 | 工程指标 | VLA-Adapter | FocusVLA | 含义 |
 |----------|-------------|----------|------|
-| 训练步数 (LIBERO-Spatial) | 25k | 5k | 5× 收敛加速 |
-| 训练步数 (LIBERO 平均) | 100k | ~67k | 1.5× 收敛加速 |
+| 训练步数 (LIBERO-Spatial) | 25k | 5k | $5\times$ 收敛加速 |
+| 训练步数 (LIBERO 平均) | 100k | ~67k | $1.5\times$ 收敛加速 |
 | 推理延迟 | 基准 | +5-8% | TopK 选择和 gate 计算引入少量开销 |
 | 显存占用 | 基准 | +3-5% | 额外存储 attention score 和 gate 向量 |
 | 超参敏感度 | 中 | 中高 | TopK 的 K 值需根据任务调整（论文默认 64） |
@@ -200,7 +200,7 @@ H_V' = H_V ⊙ σ_g(A_t)
 - **收敛加速**：1.5×-5× 的训练速度提升意味着更短的迭代周期，对于需要频繁 fine-tune 的真实机器人场景尤其重要
 - **推理开销可控**：5-8% 的延迟增加对于非实时场景（如 10-20Hz 控制频率）可接受
 - **TopK 选择**：K 值是任务相关的超参——精细操作（如插孔）需要更小的 K（更聚焦），长程任务可能需要更大的 K（更多上下文）
-- **Gate 初始化**：论文未明确说明 σ_g 的初始化策略，实践中建议用 Xavier 初始化避免训练初期梯度消失
+- **Gate 初始化**：论文未明确说明 $\sigma_g$ 的初始化策略，实践中建议用 Xavier 初始化避免训练初期梯度消失
 
 ## 5. 数据与评测 (Data & Eval)
 
@@ -221,7 +221,7 @@ H_V' = H_V ⊙ σ_g(A_t)
 - VGGT（隐式 3D 信息，无任务语义）
 
 **训练配置**：
-- GPU：LIBERO 用 4×A100，RoboTwin 用 8×A100
+- GPU：LIBERO 用 $4\times$A100，RoboTwin 用 $8\times$A100
 - Batch size：64
 - 学习率等超参：跟随 VLA-Adapter 设置
 
@@ -243,7 +243,7 @@ H_V' = H_V ⊙ σ_g(A_t)
 - ✅ 精细操作任务（需要视觉定位的任务，如插孔、对齐）
 - ✅ 长程任务（LIBERO-Long 达到 99.6% SR）
 - ✅ 多物体场景（通过 Patch-level Focus 抑制无关物体）
-- ✅ 快速收敛（训练效率 1.5×-5× 提升）
+- ✅ 快速收敛（训练效率 $1.5\times$-$5\times$ 提升）
 
 **不能做什么/局限**：
 - ❌ 未验证 3D 操作（如避障、深度估计任务）
@@ -254,7 +254,7 @@ H_V' = H_V ⊙ σ_g(A_t)
 
 ### 6.1 隐含假设 (Hidden Assumptions)
 
-- **假设 1**：视觉 backbone 已经能提供足够的空间细节（C_0^V 作为 values）——如果 backbone 本身分辨率不足，Patch-level Focus 可能丢失关键信息
+- **假设 1**：视觉 backbone 已经能提供足够的空间细节（$C_0^V$ 作为 values）——如果 backbone 本身分辨率不足，Patch-level Focus 可能丢失关键信息
 - **假设 2**：任务相关信息在 attention score 中可分——如果任务本身需要全局上下文（如"找到房间里唯一的红色物体"），TopK 可能过早剪枝
 - **假设 3**：训练数据足够覆盖任务分布——论文所有实验都在有 500 演示/任务的标准基准上进行，few-shot 场景未验证
 - **假设 4**：单参数 gate 收敛到近零是"问题"——但在某些场景下，视觉信息确实可能不如 action query 可靠（如视觉遮挡严重时）

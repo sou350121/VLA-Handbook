@@ -35,9 +35,9 @@ VLA 的 RL 后训练面临一个冷酷现实：早期策略几乎每次 rollout 
 
 | 组件 | 输入 | 输出 | 训练/推理 | 频率 |
 |------|------|------|-----------|------|
-| VLA 策略 π_θ | 观测 o_t + 指令 g | 动作 a_t | 训练 (GRPO) | 每步推理 |
-| VLM relabeler M_ψ (指令) | 锚点轨迹 τ_i* (RGB序列) | hindsight 指令 g' | 推理 | 每组失败 rollout 调用 1 次 |
-| VLM relabeler M_ψ (奖励) | 轨迹 τ_i + g' | 奖励 R̃_i ∈ {0, 0.5, 1} | 推理 | 每组 K 次调用 |
+| VLA 策略 $\pi_\theta$ | 观测 o_t + 指令 g | 动作 a_t | 训练 (GRPO) | 每步推理 |
+| VLM relabeler $M_\psi$ (指令) | 锚点轨迹 $\tau_i^*$ (RGB序列) | hindsight 指令 g' | 推理 | 每组失败 rollout 调用 1 次 |
+| VLM relabeler $M_\psi$ (奖励) | 轨迹 $\tau_i + g'$ | 奖励 $\tilde{R}_i \in \{0, 0.5, 1\}$ | 推理 | 每组 K 次调用 |
 | GRPO 优化器 | 原始组 G + hindsight 组 G̃ | 策略参数更新 | 训练 | 每 batch |
 
 ### 1.2 关键机制 (Key Mechanism)
@@ -48,7 +48,7 @@ VLA 的 RL 后训练面临一个冷酷现实：早期策略几乎每次 rollout 
 
 2. **单 VLM 双职责**：用同一个 VLM（Qwen3-VL-235B）既生成 hindsight 指令又评分奖励，简化了 pipeline，避免了多模型间的误差累积。
 
-3. **仅对低奖励组激活**：高奖励组（平均奖励 ≥ η）已经有可靠的训练信号，重标签反而会引入噪声。LfH 只在"否则会被丢弃"的组上工作，不干扰正常学习。
+3. **仅对低奖励组激活**：高奖励组（平均奖励 $\geq \eta$）已经有可靠的训练信号，重标签反而会引入噪声。LfH 只在"否则会被丢弃"的组上工作，不干扰正常学习。
 
 4. **重要性修正**：轨迹是在原始指令 g 下采样的，但优化目标是 hindsight 指令 g'。通过重要性采样比 π_θ(a|o,g') / π_θ_old(a|o,g) 修正分布偏移。
 
@@ -134,15 +134,15 @@ r̃_i,t(θ) = π_θ(a_i,t | o_i,t, g') / π_θ_old(a_i,t | o_i,t, g)
 |------|------|
 | g | 原始命令指令 |
 | g' | VLM 生成的 hindsight 指令 |
-| τ_i | 第 i 条轨迹 (o_0, a_0, ..., a_{T-1}, o_T) |
+| $\tau_i$ | 第 $i$ 条轨迹 $(o_0, a_0, \dots, a_{T-1}, o_T)$ |
 | R_i | 原始稀疏奖励 (0 或 1) |
 | R̃_i | hindsight 奖励 (0/0.5/1) |
-| η | 激活阈值 (平均奖励 < η 时触发重标签) |
-| λ | hindsight 损失权重 |
+| $\eta$ | 激活阈值 (平均奖励 $< \eta$ 时触发重标签) |
+| $\lambda$ | hindsight 损失权重 |
 | i* | 锚点轨迹索引 (从失败轨迹中随机选) |
 | K | 组大小 (每组轨迹数) |
 
-> 符号与论文保持一致。VLM relabeler M_ψ 包含两个子模块：M_inst 生成指令，M_rew 评分奖励。
+> 符号与论文保持一致。VLM relabeler $M_\psi$ 包含两个子模块：$M_{\text{inst}}$ 生成指令，$M_{\text{rew}}$ 评分奖励。
 
 **直觉**：LfH 不改变 GRPO 的核心优化机制——它只是在"否则无信号可学"的时候，用 VLM 创造一个新的学习任务，让同一条轨迹同时为原始任务和 hindsight 任务服务。
 
@@ -158,12 +158,12 @@ r̃_i,t(θ) = π_θ(a_i,t | o_i,t, g') / π_θ_old(a_i,t | o_i,t, g)
 τ_4: 碰到微波炉但没关 → R_4 = 0
 ```
 
-**标准 GRPO**：μ_R = 0, σ_R = 0 → 所有 Â_i = 0 → 该组被丢弃，无梯度。
+**标准 GRPO**：$\mu_R = 0$, $\sigma_R = 0$ → 所有 $\hat{A}_i = 0$ → 该组被丢弃，无梯度。
 
 **LfH 介入**：
 
-1. 检测到 mean(R) = 0 < η → 激活重标签
-2. 选锚点 i* = 2 (τ_2: 拿起杯子)
+1. 检测到 $\text{mean}(R) = 0 < \eta$ → 激活重标签
+2. 选锚点 $i^* = 2$ ($\tau_2$: 拿起杯子)
 3. VLM 生成 g' = "拿起杯子"
 4. VLM 评分：
    ```
@@ -181,10 +181,10 @@ r̃_i,t(θ) = π_θ(a_i,t | o_i,t, g') / π_θ_old(a_i,t | o_i,t, g)
    Ã_3 = (0 - 0.375) / (0.443 + δ) ≈ -0.80
    Ã_4 = (0.5 - 0.375) / (0.443 + δ) ≈ +0.27
    ```
-6. 现在 Ã_2 > 0，τ_2 在 g' = "拿起杯子" 下获得正优势 → 策略学会"拿起杯子"
-7. 同时 ℒ_GRPO 仍在优化原始指令 g → 策略同时学习两个任务
+6. 现在 $\tilde{A}_2 > 0$，$\tau_2$ 在 $g' = $ "拿起杯子" 下获得正优势 → 策略学会"拿起杯子"
+7. 同时 $\mathcal{L}_{\text{GRPO}}$ 仍在优化原始指令 $g \to$ 策略同时学习两个任务  
 
-**关键**：同一条轨迹 τ_2，在原始指令下是失败 (R=0)，在 hindsight 指令下是成功 (R̃=1)。一条数据，两份信号。
+**关键**：同一条轨迹 $\tau_2$，在原始指令下是失败 $(R=0)$，在 hindsight 指令下是成功 $(\tilde{R}=1)$。一条数据，两份信号。  
 
 ## 4. 工程视角 (Engineering View)
 
@@ -193,9 +193,9 @@ r̃_i,t(θ) = π_θ(a_i,t | o_i,t, g') / π_θ_old(a_i,t | o_i,t, g)
 | VLM Relabeler 成本 | 每次 GRPO step 需要调用 VLM：指令生成 1 次/组 + 奖励评分 K 次/组。使用 Qwen3-VL-235B，单次推理约数秒。如果每组 4 条轨迹，每 step 约 5 次 VLM 调用 |
 | 吞吐影响 | VLM 推理是瓶颈。论文中 GRPO 本身也需要 rollout 收集（物理机器人更慢），VLM 推理可与 rollout 并行 |
 | 内存 | 需要同时维护原始组和 hindsight 组的 buffer，内存翻倍。但 buffer 大小通常不大（几百条轨迹） |
-| 部署约束 | VLM relabeler 仅在训练时需要，推理时不需要。部署的 VLA 策略 π_θ 大小不变 |
-| 稳定性 | 重要性修正 r̃_i,t 可能引入方差——当 g 和 g' 差异大时，π_θ(a|o,g') 和 π_θ_old(a|o,g) 分布偏移大，重要性比可能很大。论文通过 KL penalty 和 clip 控制 |
-| λ 超参 | hindsight 损失权重。论文未详细讨论调参，但直觉上 λ 过大可能让策略偏离原始任务 |
+| 部署约束 | VLM relabeler 仅在训练时需要，推理时不需要。部署的 VLA 策略 $\pi_\theta$ 大小不变   |
+| 稳定性 | 重要性修正 $\tilde{r}_{i,t}$ 可能引入方差——当 $g$ 和 $g'$ 差异大时，$\pi_\theta(a$  |o,g') 和 π_θ_old(a|o,g) 分布偏移大，重要性比可能很大。论文通过 KL penalty 和 clip 控制 |
+| $\lambda$ 超参   | hindsight 损失权重。论文未详细讨论调参，但直觉上 $\lambda$ 过大可能让策略偏离原始任务   |
 
 **工程含义**：LfH 不改变部署时的 VLA 架构——它只是一个训练技巧。训练时需要一个大 VLM 做 relabeler，但推理时只需要策略网络。对于资源受限的场景，可以用较小的 VLM（如 Qwen2.5-VL-7B）替代 235B 版本，可能牺牲一些重标签质量。
 
@@ -207,7 +207,7 @@ r̃_i,t(θ) = π_θ(a_i,t | o_i,t, g') / π_θ_old(a_i,t | o_i,t, g)
 |------|------|
 | 初始化策略 | RLinf-Pi0.5-LIBERO-SFT (在 4 个 LIBERO 套件上用少量示范训练) |
 | 评测基准 | LIBERO-PRO (OOD 任务，保持场景但改变任务规格) |
-| 训练步数 | 40 steps (π_0.5) / 200 steps (GR00T) / 60 steps (OpenVLA-OFT) |
+| 训练步数 | 40 steps ($\pi_{0.5}$) / 200 steps (GR00T) / 60 steps (OpenVLA-OFT)   |
 | 组大小 K | 论文未明确给出，但 GRPO 通常 K=4 |
 | 物理机器人 | Franka FR3, 10 个 SFT 任务 (每任务 20 个 SpaceMouse 示范) + 1 个 held-out 任务 |
 
@@ -221,12 +221,12 @@ Gain(t) = SR_t / SR_0 - 1
 
 | 方法 | LIBERO-PRO 样本效率 | 保持组比例 |
 |------|---------------------|-----------|
-| GRPO (baseline) | 1× (30 steps 达到最终性能) | 20-40% |
-| GRPO + RoboMETER | ~2× | 20-40% |
-| **GRPO + LfH** | **~5×** (8 steps 达到 GRPO 最终性能) | **70-80%** |
+| GRPO (baseline) | 1× (30 steps 达到最终性能)   | 20-40% |
+| GRPO + RoboMETER | $\sim 2\times$   | 20-40% |
+| **GRPO + LfH** | **$\sim 5\times$** (8 steps 达到 GRPO 最终性能)   | **70-80%** |
 
 **物理机器人结果**（论文 §5.4）：
-- 128 rollouts: LfH ≈ 2× GRPO 成功率
+- 128 rollouts: LfH $\approx 2\times$ GRPO 成功率  
 - 160 rollouts: LfH 56% vs GRPO 22%
 
 ## 6. 能力与失败模式 (Capabilities & Failure Modes)
@@ -236,8 +236,8 @@ Gain(t) = SR_t / SR_0 - 1
 | 能力 | 证据 | 条件 |
 |------|------|------|
 | 从失败中提取信号 | Figure 2(a): 保留 70-80% 组 vs GRPO 的 20-40% | 失败轨迹必须有"可描述的行为" |
-| 跨 VLA 骨干泛化 | Figure 3(c): π_0.5, GR00T, OpenVLA-OFT 均有提升 | VLA 需有语言泛化能力 |
-| 物理机器人迁移 | Figure 4(b): Franka FR3 上 2.5× 提升 | 需要 SFT 初始化策略 |
+| 跨 VLA 骨干泛化 | Figure 3(c): $\pi_{0.5}$, GR00T, OpenVLA-OFT 均有提升   | VLA 需有语言泛化能力 |
+| 物理机器人迁移 | Figure 4(b): Franka FR3 上 $2.5\times$ 提升   | 需要 SFT 初始化策略 |
 | 超越密集奖励 | 优于 GRPO+RoboMETER | 在低成功率 regime 下优势明显 |
 
 ### 不能做什么（失败模式）
@@ -257,7 +257,7 @@ Gain(t) = SR_t / SR_0 - 1
 
 3. **VLM relabeler 的评分是可靠的**：M_rew 输出 {0, 0.5, 1} 三值奖励。如果 VLM 对"是否完成了 g'"判断不准，会引入噪声奖励信号。论文未对 relabeler 准确率做独立评估。
 
-4. **hindsight 任务与原始任务有某种关联**：虽然论文 Figure 2(b) 显示 hindsight 指令可能与目标任务语义不相关（"关闭微波炉" → "拿起杯子"），但 relabeling 仍然有帮助。这暗示即使不相关的任务也能提供"对比 grounding 信号"。但这个机制尚未被严格验证。
+4. **hindsight 任务与原始任务有某种关联**：虽然论文 Figure 2(b) 显示 hindsight 指令可能与目标任务语义不相关（"关闭微波炉" $\to$ "拿起杯子"），但 relabeling 仍然有帮助。这暗示即使不相关的任务也能提供"对比 grounding 信号"。但这个机制尚未被严格验证。
 
 ## 7. 与相关工作对比 (Comparison)
 

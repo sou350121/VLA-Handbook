@@ -61,7 +61,7 @@ OxyGen 的核心设计围绕一个抽象：**将 KV Cache 提升为一等公民�
 
 **优化 2 — 跨帧连续批处理（Cross-Frame Continuous Batching）**
 - 语言解码不需要在单帧内完成，可以跨帧继续
-- 管理器维护每个活跃请求的可恢复状态 σ_t = (K_t, y_t, δ_t)
+- 管理器维护每个活跃请求的可恢复状态 $\sigma_t = (K_t, y_t, \delta_t)$
 - 每帧将 m 个活跃请求批处理为一个联合批次，统一推进 k 步解码
 - Action 生成有硬帧截止（如 50 Hz 控制频率），语言解码有软截止（跨帧完成）
 - 大 batch size 下硬件并行度充分利用，长解码场景下维持恒定 action 频率
@@ -107,21 +107,21 @@ T_frame = T_prefill + T_denoise + T_decode(B, k)
         ≈ T_shared + T_action + T_token(B) · k
 ```
 
-核心洞察：跨帧批处理将单 token 解码成本除以 batch size B，使得 language 解码时间从 O(N·T_token) 降为 O((N/k)·T_token/B) 每帧——当 B 增大时，language 时间被摊薄到几乎不影响 action 硬截止。
+核心洞察：跨帧批处理将单 token 解码成本除以 batch size $B$，使得 language 解码时间从 $O(N \cdot T_{\text{token}})$ 降为 $O((N/k) \cdot T_{\text{token}} / B)$ 每帧——当 $B$ 增大时，language 时间被摊薄到几乎不影响 action 硬截止。
 
 **变量说明**：
 
 | 符号 | 含义 | 典型值 |
 |------|------|--------|
-| τ | Language 吞吐（tokens/s） | 200+（OxyGen） |
+| $\tau$ | Language 吞吐（tokens/s） | 200+（OxyGen） |
 | B | 平均活跃批大小 | N/k（总步数/每帧步数） |
 | k | 每帧语言解码步数 | 1~10（可调） |
 | T | 帧端到端推理延迟 | 由 prefill + denoise + decode 组成 |
-| f | Action 频率（Hz） | ≥ 50（灵巧操作） |
+| f | Action 频率（Hz） | $\geq 50$（灵巧操作） |
 | H | Action horizon（控制步数） | 10 |
 | f_min | 最低控制频率 | 50 Hz |
 
-**直觉**：降低 T（减少冗余计算）和提高 B·k（跨帧批处理放大并行度）是两条正交优化路径。OxyGen 同时走两条路——跨任务 KV 共享降低 T，跨帧批处理提高 B。
+**直觉**：降低 $T$（减少冗余计算）和提高 $B \cdot k$（跨帧批处理放大并行度）是两条正交优化路径。$\text{OxyGen}$ 同时走两条路——跨任务 $KV$ 共享降低 $T$，跨帧批处理提高 $B$。
 
 **核心方程**：
 
@@ -145,7 +145,7 @@ p_{Θ_Lang}(y_t | K_t)    — language expert, 自回归解码
 σ_t = (K_t, y_t, δ_t)
 ```
 
-其中 δ_t ∈ {0,1} 是终止标志（EOS 或达到最大长度 N）。
+其中 $\delta_t \in \{0,1\}$ 是终止标志（EOS 或达到最大长度 $N$）。
 
 > 符号与本文保持一致：o_t = 观察，K_t = KV Cache，A_t = action chunk，y_t = language tokens，S = 去噪步数，N = 最大解码步数，k = 每帧解码步数，H = action horizon。
 
@@ -163,16 +163,16 @@ p_{Θ_Lang}(y_t | K_t)    — language expert, 自回归解码
 
 **Baseline（孤立执行）**：
 
-每帧需要：prefill × 2（action + language 各一次）+ denoise + language decode(5 tokens)
+每帧需要：$\text{prefill} \times 2$（action + language 各一次）+ $\text{denoise}$ + $\text{language decode}(5\ \text{tokens})$
 ```
 T_baseline = 2×30 + 150 + 5×15 = 60 + 150 + 75 = 285 ms
 f = H / T = 10 / 0.285 ≈ 35.1 Hz
 ```
-当 N 增大（每帧需要 decode 更多 token），language 时间线性增长，f 持续下降。N=30 时实际测得 f ≈ 19.1 Hz。
+当 $N$ 增大（每帧需要 decode 更多 token），language 时间线性增长，$f$ 持续下降。$N=30$ 时实际测得 $f \approx 19.1\ \text{Hz}$。
 
 **OxyGen（统一 KV + 跨帧批处理）**：
 
-每帧需要：prefill × 1（共享）+ denoise + batched language decode(k=5, batch size B)
+每帧需要：$\text{prefill} \times 1$（共享）+ $\text{denoise}$ + $\text{batched language decode}(k=5,\ \text{batch size } B)$
 ```
 T_oxygen = 30 + 150 + (5×15)/B
 ```
@@ -207,10 +207,10 @@ f ≈ 52 Hz（几乎恒定）
 ### 4.2 关键 Trade-off
 
 **每帧解码步数 k 的选择**：
-- k 小 → 平均 batch size B = N/k 大 → 批处理效率高 → language 吞吐高
-- k 小 → 每帧留给 action 的时间预算多 → action 频率高
-- 但 k 太小 → 请求跨更多帧完成 → 管理器状态维护 overhead 增加
-- 论文建议：k ∈ {1, 5, 10}，根据目标帧率和硬件校准
+- $k$ 小 → 平均 batch size $B = N/k$ 大 → 批处理效率高 → language 吞吐高
+- $k$ 小 → 每帧留给 action 的时间预算多 → action 频率高
+- 但 $k$ 太小 → 请求跨更多帧完成 → 管理器状态维护 overhead 增加
+- 论文建议：$k \in \{1, 5, 10\}$，根据目标帧率和硬件校准  
 
 **跨帧调度 overhead**：
 - OxyGen 与"单帧解码上界"之间存在 gap（图 6 虚线），代表跨帧调度的额外开销
@@ -257,14 +257,14 @@ f ≈ 52 Hz（几乎恒定）
 | LIBERO-Goal | 98.0% | 97.4% | -0.6% |
 | LIBERO-10 | 92.4% | 93.2% | +0.8% |
 
-差异在统计噪声范围内（±0.8%），确认加速不牺牲质量。
+差异在统计噪声范围内（$\pm 0.8\%$），确认加速不牺牲质量。  
 
 ### 5.3 工作负载泛化
 
 论文还测试了三种到达模式：
 - **Uniform**：每帧固定数量请求 → 总 action/s 提升 4.4x
-- **Poisson**：随机到达（强度 λ 变化）→ 维持更高 action 频率
-- **Random-length**：请求长度随机变化 → 恒定 per-request action 频率
+- **Poisson**：随机到达（强度 $\lambda$ 变化）→ 维持更高 action 频率  
+- **Random-length**：请求长度随机变化 → 恒定 per-request action 频率  
 
 ## 6. 能力与失败模式 (Capabilities & Failure Modes)
 
@@ -275,8 +275,8 @@ f ≈ 52 Hz（几乎恒定）
 | 1 | Action 和 language 任务共享同一观察 o_t | 如果两个任务使用不同相机视角或不同时间的观察，跨任务 KV 共享不适用 | 论文假设成立但未显式讨论 |
 | 2 | pi0.5 的 MoT 架构（VLM backbone + action expert + language expert） | 对其他 MoT backbone（如 WALL-OSS、Xiaomi-Robotics-0）的泛化性未验证 | §3.2 讨论但留作未来工作 |
 | 3 | 单 GPU 边缘设备场景 | 多 GPU 部署下资源争用模式不同，优化效果待验证 | 实验仅覆盖单 GPU |
-| 4 | 逐 token 自回归解码 | 状态 σ_t 理论上支持 speculative decoding，但未实际验证 | 作者声称兼容，未实验 |
-| 5 | 每帧解码步数 k 离线校准 | 动态负载下固定 k 可能不是最优值 | 实验用 k∈{1,5,10} 覆盖但未自适应 |
+| 4 | 逐 token 自回归解码 | 状态 $\sigma_t$ 理论上支持 speculative decoding，但未实际验证   | 作者声称兼容，未实验 |
+| 5 | 每帧解码步数 k 离线校准 | 动态负载下固定 k 可能不是最优值 | 实验用 $k\in\{1,5,10\}$ 覆盖但未自适应   |
 
 ### 6.2 能力
 
@@ -321,7 +321,7 @@ f ≈ 52 Hz（几乎恒定）
 - 评估多任务具身 Agent 系统架构的研究者——§1 和 §2 的 motivation 和 related work 提供了清晰的分类框架
 
 **建議章節路徑**：
-先读 §1 Introduction（理解 isolated execution 的两个问题）→ 再看 §3 Method（统一 KV 管理器 + 两个优化）→ §4.2 端到端结果 + §4.3 ablation（量化收益）→ §4.6 真机部署（落地参考）→ 可跳 §A（形式化细节，除非你要复现）
+先读 §1 Introduction（理解 isolated execution 的两个问题）→ 再看 §3 Method（统一 KV 管理器 + 两个优化）→ §4.2 端到端结果 + §4.3 ablation（量化收益）→ §4.6 真机部署（落地参考）→ 可跳 §A（形式化细节，除非你要复现）  
 
 **不值得精讀的理由**：
 - 如果你不做 MoT VLA 推理优化（只关心单任务 action-only），这篇的优化方向不匹配
@@ -330,7 +330,7 @@ f ≈ 52 Hz（几乎恒定）
 
 
 ---
-[← Back to Theory](./README.md)
+[← Back to Theory](./README.md)  
 
 **关键引用**：
 - 论文: https://arxiv.org/abs/2603.14371

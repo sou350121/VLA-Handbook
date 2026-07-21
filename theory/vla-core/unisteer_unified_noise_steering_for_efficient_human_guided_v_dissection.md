@@ -14,7 +14,7 @@
 | 適合精讀 | 如果你在做人机协作机器人学习、噪声空间策略优化、或 flow-matching 策略适配，重点看 §4（方法）和 §5.2（实验） |
 | 可以跳過 | 如果你只关心离线模仿学习或纯视觉预训练，这篇距离中等 |
 | 落地可行性 | 中（需要 flow-matching VLA 的 decoder 可调用 + 单张 A100 + 遥操作设备） |
-| 主要風險 | 实验仅在单臂 Piper 机器人 + π₀ 架构上验证；固定点反演的收敛性依赖 Lipschitz 假设，实际 VLA 是否满足未经验证 |
+| 主要風險 | 实验仅在单臂 Piper 机器人 + $\pi_0$ 架构上验证；固定点反演的收敛性依赖 Lipschitz 假设，实际 VLA 是否满足未经验证 |
 
 💡 **X-Ray 开场**
 
@@ -42,10 +42,10 @@ Diffusion/flow-matching VLA 模型预训练后部署到真实世界时，会因�
 
 | 维度 | UniSteer | DSRL (噪声空间 RL) | DAgger (动作空间模仿) |
 |------|----------|-------------------|----------------------|
-| **策略表示** | 噪声变量 z ∈ ℝᵈ | 噪声变量 z ∈ ℝᵈ | 动作 chunk a ∈ ℝᵈ |
+| **策略表示** | 噪声变量 $z \in \mathbb{R}^d$ | 噪声变量 $z \in \mathbb{R}^d$ | 动作 chunk $a \in \mathbb{R}^d$ |
 | **VLA Decoder** | 冻结 (flow-matching) | 冻结 (flow-matching) | 冻结 |
 | **可训练模块** | 轻量噪声 actor ψ_φ(z\|s) | 轻量噪声 actor ψ_φ(z\|s) | 策略网络（动作空间） |
-| **人类信号形式** | 纠正动作 aʰ → 反演为噪声目标 ẑʰ | 无人类信号 | 纠正动作 aʰ 直接监督 |
+| **人类信号形式** | 纠正动作 $a^h$ → 反演为噪声目标 $\hat{z}^h$ | 无人类信号 | 纠正动作 aʰ 直接监督 |
 | **优化目标** | L_demo + L_RL（双信号） | 仅 L_RL（纯 RL） | 仅 L_BC（行为克隆） |
 | **探索方式** | 人类引导 + RL 自主探索 | 纯自主探索 | 纯人类演示 |
 | **训练开销** | 低（仅更新小 actor） | 低（仅更新小 actor） | 中（需更新更大网络） |
@@ -55,15 +55,15 @@ Diffusion/flow-matching VLA 模型预训练后部署到真实世界时，会因�
 
 UniSteer 的核心创新在于两个组件的协同：
 
-1. **动作→噪声反演 (Action-to-Noise Inversion)**：给定人类纠正动作 aʰ，利用 frozen flow-matching decoder 的逐步 Euler 结构，从终端 aʰ 逆向逐步反演回初始噪声 ẑ。每一步反演通过固定点迭代求解：
+1. **动作→噪声反演 (Action-to-Noise Inversion)**：给定人类纠正动作 $a^h$，利用 frozen flow-matching decoder 的逐步 Euler 结构，从终端 $a^h$ 逆向逐步反演回初始噪声 $\hat{z}$。每一步反演通过固定点迭代求解：
 
 ```
 z_k^(m+1) = ẑ_{k-1} - Δt · v_θ(z_k^(m), t_k, s)
 ```
 
-其中 v_θ 是冻结的速度场网络，K 步反演后得到 ẑ = ẑ_K。
+其中 $v_\theta$ 是冻结的速度场网络，$K$ 步反演后得到 $\hat{z} = \hat{z}_K$。
 
-2. **统一噪声引导框架 (Unified Noise Steering)**：反演得到的噪声目标 ẑʰ 与 RL 采集的轨迹共享同一个噪声 actor 接口。人类纠正数据存入 demo buffer B_demo 用于监督损失 L_demo = ‖ψ_φ(s) - ẑʰ‖²；自主探索数据存入 RL buffer B_RL 用于 Q-learning 损失 L_RL = -Q_ω(s, z)。两个 buffer 交替采样更新同一 actor。
+2. **统一噪声引导框架 (Unified Noise Steering)**：反演得到的噪声目标 $\hat{z}^h$ 与 RL 采集的轨迹共享同一个噪声 actor 接口。人类纠正数据存入 demo buffer $B_{\text{demo}}$ 用于监督损失 $L_{\text{demo}} = \Vert\psi_\varphi(s) - \hat{z}^h\Vert^2$；自主探索数据存入 RL buffer $B_{\text{RL}}$ 用于 Q-learning 损失 $L_{\text{RL}} = -Q_\omega(s, z)$。两个 buffer 交替采样更新同一 actor。
 
 ⚡ **Eureka Moment**：人类纠正动作虽然天然在动作空间给出，但可以通过 frozen decoder 的逆向 Euler 结构近似反演为噪声空间目标——这使得人类指导可以直接监督噪声 actor，而不需要微分整个 decoder 或修改大模型权重。
 
@@ -133,13 +133,13 @@ L_Q     = ‖Q_ω(s,z) - (r + γ·Q̄_ω(s',z'))‖²  （TD 损失）
 
 | 符号 | 含义 |
 |------|------|
-| s ∈ 𝒮 | 机器人状态（双 RGB 图 + 6D 末端位姿 + 夹爪状态） |
-| z₀ ∈ ℝᵈ | 初始噪声变量，z₀ ~ N(0, I) |
-| a ∈ ℝᵈ | 动作 chunk（末端目标位姿 + 夹爪开合） |
-| G_θ(s, z) | 冻结的 flow-matching decoder |
-| v_θ(z, t, s) | 冻结的速度场网络 |
+| $s \in \mathcal{S}$ | 机器人状态（双 RGB 图 + 6D 末端位姿 + 夹爪状态） |
+| $z_0 \in \mathbb{R}^d$ | 初始噪声变量，$z_0 \sim \mathcal{N}(0, I)$ |
+| $a \in \mathbb{R}^d$ | 动作 chunk（末端目标位姿 + 夹爪开合） |
+| $G_\theta(s, z)$ | 冻结的 flow-matching decoder |
+| $v_\theta(z, t, s)$ | 冻结的速度场网络 |
 | ψ_φ(z\|s) | 可训练的轻量噪声 actor |
-| Q_ω(s, z) | 噪声空间 critic |
+| $Q_\omega(s, z)$ | 噪声空间 critic |
 | ẑʰ | 人类纠正动作 aʰ 反演得到的噪声目标 |
 | K | Euler 离散化步数 |
 | M | 固定点迭代步数 |
@@ -150,9 +150,9 @@ L_Q     = ‖Q_ω(s,z) - (r + γ·Q̄_ω(s',z'))‖²  （TD 损失）
 
 ### 反演方法的理论保证
 
-**Proposition 1（可控性）**：若速度场 v_θ(z,t,s) 在 z 上全局 Lipschitz 连续，则映射 G_θ(s, ·): ℝᵈ → ℝᵈ 是双射。即对任意动作 a，存在唯一的初始噪声 z₀ 使得 a = G_θ(s, z₀)。
+**Proposition 1（可控性）**：若速度场 $v_\theta(z,t,s)$ 在 $z$ 上全局 Lipschitz 连续，则映射 $G_\theta(s, \cdot): \mathbb{R}^d \to \mathbb{R}^d$ 是双射。即对任意动作 $a$，存在唯一的初始噪声 $z_0$ 使得 $a = G_\theta(s, z_0)$。
 
-**Proposition 2（反演收敛性）**：若 v_θ(·, t_k, s) 是 L-Lipschitz 且 Δt·L < 1，则逆向 Euler 映射 g_y(x) = y - Δt·v_θ(x, t_k, s) 是压缩映射，固定点迭代唯一收敛。
+**Proposition 2（反演收敛性）**：若 $v_\theta(\cdot, t_k, s)$ 是 $L$-Lipschitz 且 $\Delta t \cdot L < 1$，则逆向 Euler 映射 $g_y(x) = y - \Delta t \cdot v_\theta(x, t_k, s)$ 是压缩映射，固定点迭代唯一收敛。
 
 这两个命题保证了：(1) 反演目标存在且唯一；(2) 固定点迭代能稳定收敛。
 
@@ -162,10 +162,10 @@ L_Q     = ‖Q_ω(s,z) - (r + γ·Q̄_ω(s',z'))‖²  （TD 损失）
 
 **给定**：
 - 状态 s，人类纠正动作 aʰ = [0.5, -0.3]ᵀ
-- 冻结速度场 v_θ（假设线性近似：v_θ(z, t, s) ≈ W·z，其中 ‖W‖ = 0.4）
-- Δt = 1/K = 0.5，满足 Δt·L = 0.5·0.4 = 0.2 < 1（收敛条件满足）
+- 冻结速度场 $v_\theta$（假设线性近似：$v_\theta(z, t, s) \approx W \cdot z$，其中 $\Vert W \Vert = 0.4$）
+- $\Delta t = 1/K = 0.5$，满足 $\Delta t \cdot L = 0.5 \cdot 0.4 = 0.2 < 1$（收敛条件满足）
 
-**反演过程**（从 aʰ 逆向到 z₀）：
+**反演过程**（从 $a^h$ 逆向到 $z_0$）：
 
 ```
 Step K=2 (t=1.0 → t=0.5):
@@ -215,7 +215,7 @@ Actor 被推向更接近反演噪声目标的方向。
 | **动作维度** | 6D pose + gripper openness | 7 维连续动作空间 |
 
 **工程含义**：
-- 反演过程需要前向调用冻结的 v_θ 网络 M×K 次（每次反演），这是额外计算开销但可接受（~1.4s/轨迹 vs 训练 3s/轨迹）
+- 反演过程需要前向调用冻结的 $v_\theta$ 网络 $M \times K$ 次（每次反演），这是额外计算开销但可接受（~1.4s/轨迹 vs 训练 3s/轨迹）
 - 噪声 actor 远小于完整 VLA 模型，更新速度快且稳定
 - 固定点反演相比优化法（optimization-based inversion）在速度和质量上均占优（Table 2：Act. Loss 低 50 倍，总时间快 2.8 倍）
 - 30 Hz 控制频率下，反演仅在人类 takeover 时触发，不影响自主推理延迟
@@ -236,7 +236,7 @@ Actor 被推向更接近反演噪声目标的方向。
 - **成功率**：20 次真实世界试验的成功百分比
 - **ID/OOD 拆分**：位置基任务中 16 条 ID + 4 条 OOD 轨迹
 - **基线**：DSRL（噪声空间 RL，无人类）、DAgger（动作空间模仿学习，纯人类纠正）
-- **初始化**：所有方法从同一 π₀ 预训练 checkpoint 出发 + 30  demonstrations warmup
+- **初始化**：所有方法从同一 $\pi_0$ 预训练 checkpoint 出发 + 30  demonstrations warmup
 
 ### 核心数据（来自论文 Table 1）
 
@@ -264,14 +264,14 @@ Actor 被推向更接近反演噪声目标的方向。
 | 局限 | 原因 | 影响 |
 |------|------|------|
 | 仅验证单臂 Piper 机器人 | 实验平台单一 | 对双臂/移动/人形机器人有效性未知 |
-| 仅基于 π₀ 架构 | 未测试 RT-2/OpenVLA 等其他 VLA | 不同 decoder 结构的反演收敛性未验证 |
+| 仅基于 $\pi_0$ 架构 | 未测试 RT-2/OpenVLA 等其他 VLA | 不同 decoder 结构的反演收敛性未验证 |
 | 依赖人类遥操作 | 需要 master-slave 设备 | 无遥操作设备时无法收集纠正数据 |
-| 反演计算开销 | 每次反演需 M×K 次 v_θ 前向调用 | 虽然比优化法快，但仍增加延迟 |
+| 反演计算开销 | 每次反演需 $M \times K$ 次 $v_\theta$ 前向调用 | 虽然比优化法快，但仍增加延迟 |
 | 稀疏奖励下仍依赖人类 | Fold Towel 成功率仅 75% | 复杂任务仍需更多人类信号 |
 
 ### 6.1 隐含假设 (Hidden Assumptions)
 
-1. **Lipschitz 连续性假设**：Proposition 1-2 依赖速度场全局 Lipschitz 连续。实际 π₀ 的速度场网络（MLP/Transformer）是否满足全局 Lipschitz 未经验证——局部 Lipschitz 可能足够，但理论保证不完整。
+1. **Lipschitz 连续性假设**：Proposition 1-2 依赖速度场全局 Lipschitz 连续。实际 $\pi_0$ 的速度场网络（MLP/Transformer）是否满足全局 Lipschitz 未经验证——局部 Lipschitz 可能足够，但理论保证不完整。
 
 2. **反演精度足够**：固定点迭代是近似解（M 步截断），反演误差会累积到噪声目标质量。论文 Table 2 显示 Act. Loss 很低（0.00122），但这仅在 16 条轨迹上评估，未系统分析误差传播。
 

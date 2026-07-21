@@ -119,7 +119,7 @@
 p(a|s_t) ∝ ∏_i [p_i(a|m_i,t)]^{w_i}
 ```
 
-**目标**：学习一个多模态策略 π(a|s_t)，其中状态 s_t 包含 N 个异构感官模态 {m_1,t, ..., m_N,t}，每个模态在不同任务阶段的重要性动态变化。
+**目标**：学习一个多模态策略 $\pi(a|s_t)$，其中状态 $s_t$ 包含 $N$ 个异构感官模态 $\{m_{1,t}, \dots, m_{N,t}\}$，每个模态在不同任务阶段的重要性动态变化。
 
 **核心公式**（能量基组合）：
 
@@ -139,13 +139,13 @@ p(a|s_t) ∝ exp(-Σ_i wi · Σ_j E_θ_i,j(a, m_i,t))
 | 符号 | 含义 |
 |------|------|
 | a | 动作候选 |
-| a^k | diffusion timestep k 的噪声动作 |
+| $a^k$ | diffusion timestep k 的噪声动作 |
 | s_t | t 时刻状态，包含 N 个模态 |
 | m_i,t | 模态 i 在 t 时刻的原始观测 |
 | e_i,t | 模态 i 的 latent embedding（含机器人状态） |
 | p_i,j | 模态 i 的第 j 个子策略 |
-| E_θ_i,j | 子策略定义的能量函数 |
-| ε_θ_i,j | diffusion 分数（score function） |
+| $E_{\theta_{i,j}}$ | 子策略定义的能量函数 |
+| $\varepsilon_{\theta_{i,j}}$ | diffusion 分数（score function） |
 | wi | 路由器输出的共识权重，Σwi = 1 |
 | Ki | 模态 i 的子专家数量（实验中 Ki=2） |
 
@@ -213,7 +213,7 @@ p(a|s_t) ∝ exp(-Σ_i wi · Σ_j E_θ_i,j(a, m_i,t))
 | 环境 | 任务 | 演示数量 | 模态配置 |
 |------|------|---------|---------|
 | RLBench (仿真) | open box, open drawer, take umbrella, toilet seat up | 200 episodes (训练) | RGB 双相机 + PCD + DINO 语义特征 |
-| 真实世界 | occluded marker picking | 80 demos | RGB 双相机 (96×128) + FlexiTac 触觉 (12×32 阵列) |
+| 真实世界 | occluded marker picking | 80 demos | RGB 双相机 ($96 \times 128$) + FlexiTac 触觉 ($12 \times 32$ 阵列) |
 | 真实世界 | in-hand spoon reorientation | 60 demos | 同上 |
 | 真实世界 | puzzle insertion | 50 demos | 同上 |
 
@@ -234,7 +234,7 @@ p(a|s_t) ∝ exp(-Σ_i wi · Σ_j E_θ_i,j(a, m_i,t))
 | Concatenation (基线) | 0.56 | 262.9 |
 | **Ours** | **0.66** | 263.6 |
 
-→ 相对提升 18%，参数仅增加 0.3%
+→ 相对提升 $18\%$，参数仅增加 $0.3\%$
 
 **真实世界任务**：
 
@@ -244,7 +244,7 @@ p(a|s_t) ∝ exp(-Σ_i wi · Σ_j E_θ_i,j(a, m_i,t))
 | Spoon Reorientation | 67% | 21% | 75% |
 | Puzzle Insertion | - | - | 52% |
 
-→ 关键发现：特征拼接基线在部分任务上甚至不如单模态（如遮挡抓取 5% vs 35%），证明**错误融合比不融合更糟**。
+→ 关键发现：特征拼接基线在部分任务上甚至不如单模态（如遮挡抓取 $5\%$ vs $35\%$），证明**错误融合比不融合更糟**。
 
 ## 6. 能力与失败模式 (Capabilities & Failure Modes)
 

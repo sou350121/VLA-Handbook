@@ -140,13 +140,13 @@ L_DynaFLIP = L_align + λ_tcn · L_tcn + λ_act · L_act
 
 | 符号 | 含义 |
 |------|------|
-| z_I | 图像跃迁嵌入 = Π(f(I_{t+H}) - f(I_t)) |
-| z_L | 语言嵌入 = Π(h(L))，来自 T5 EOS token |
-| z_F | 3D 流嵌入 = Π(g(F_{t:t+K}; sg(f(I_t)))) |
-| Π(v) | L2 归一化 = v / ‖v‖₂ |
-| α | 余弦正则化权重（≥ 0） |
-| τ | InfoNCE 温度参数 |
-| λ_tcn, λ_act | 辅助损失权重 |
+| z_I | 图像跃迁嵌入 = $\Pi(f(I_{t+H}) - f(I_t))$ |
+| z_L | 语言嵌入 = $\Pi(h(L))$，来自 T5 EOS token |
+| z_F | 3D 流嵌入 = $\Pi(g(F_{t:t+K}; \text{sg}(f(I_t))))$ |
+| $\Pi(v)$ | L2 归一化 = $v / \Vert v \Vert_2$ |
+| $\alpha$ | 余弦正则化权重（$\geq 0$） |
+| $\tau$ | InfoNCE 温度参数 |
+| $\lambda_{\text{tcn}}, \lambda_{\text{act}}$ | 辅助损失权重 |
 
 > 符号与论文保持一致。sg 表示 stop-gradient。
 
@@ -155,12 +155,12 @@ L_DynaFLIP = L_align + λ_tcn · L_tcn + λ_act · L_act
 假设一个批量中有 2 个样本（简化演示）：
 
 **样本 1**: 机器人抓取杯子放到水槽
-- I_t: 杯子在桌上, I_{t+H}: 杯子被拿起
+- $I_t$: 杯子在桌上, $I_{t+H}$: 杯子被拿起
 - 语言: "pick up cup and place in sink"
 - 3D 流: 杯子从 (x=0.3, y=0.5) 移动到 (x=0.5, y=0.2)
 
 **样本 2**: 机器人推开盒子
-- I_t: 盒子在原位, I_{t+H}: 盒子向右移动
+- $I_t$: 盒子在原位, $I_{t+H}$: 盒子向右移动
 - 语言: "push box to the right"
 - 3D 流: 盒子从 (x=0.6, y=0.3) 移动到 (x=0.8, y=0.3)
 
@@ -213,7 +213,7 @@ L_align = -log [ exp(0.0655/τ) / (exp(0.0655/τ) + exp(-0.105/τ)) ]
 |------|------|
 | **训练成本** | 需要 3D 流估计管线（点跟踪+深度估计+相机运动补偿），这是最大的工程负担。论文未给出具体训练时间/显存，但 260K 轨迹的规模意味着需要多 GPU 训练数天 |
 | **推理成本** | 推理时只需单帧图像 + 冻结的 DINOv2 backbone，与 CLIP/DINOv2 推理成本完全一致——这是关键优势 |
-| **模块化程度** | 高。图像编码器完全冻结后可即插即用到 MLP/Diffusion/VLA 三种策略。VLA 场景下通过 PVI（plug-in visual injection）将特征投影到 π₀.₅ 的 DiT 隐藏空间，只需训练轻量注入模块 |
+| **模块化程度** | 高。图像编码器完全冻结后可即插即用到 MLP/Diffusion/VLA 三种策略。VLA 场景下通过 PVI（plug-in visual injection）将特征投影到 $\pi_{0.5}$ 的 DiT 隐藏空间，只需训练轻量注入模块 |
 | **部署约束** | 3D 流仅在训练时需要，部署时无需深度传感器或点跟踪模块——纯 RGB 相机即可 |
 | **量化/压缩** | 论文未涉及，但 DINOv2 backbone 本身已有成熟的量化方案，DynaFLIP 微调后的权重理论上可沿用 |
 | **数据依赖** | 260K 轨迹来自 7+ 个异构数据源（人类+机器人视频）。3D 流估计质量直接影响表征质量——这是主要瓶颈 |
@@ -237,7 +237,7 @@ L_align = -log [ exp(0.0655/τ) / (exp(0.0655/τ) + exp(-0.105/τ)) ]
 | MetaWorld | 15 任务, 25 demo/任务 | MLP (冻结) | 成功率, 控制相关分数 S_m |
 | RLBench | 6 任务, 100 demo/任务 | MLP (冻结) | 同上 |
 | LIBERO-90/Goal/Object/Spatial/Long | 5 个子集 | Diffusion Policy | 成功率 (Frozen + LoRA FT) |
-| 真实 UR3 机械臂 | 3 ID 任务 + 2 OOD 设置 | VLA (π₀.₅ + PVI) | 成功率 |
+| 真实 UR3 机械臂 | 3 ID 任务 + 2 OOD 设置 | VLA ($\pi_{0.5} +$ PVI) | 成功率 |
 
 ### 关键数字
 
@@ -268,7 +268,7 @@ L_align = -log [ exp(0.0655/τ) / (exp(0.0655/τ) + exp(-0.105/τ)) ]
 
 ### 6.1 隐含假设 (Hidden Assumptions)
 
-1. **3D 流估计足够准确**: 论文使用 20×20 均匀关键点网格估计 3D 流，包含场景中所有运动（含任务无关运动）。作者自己在 Limitations 中承认这引入了噪声，但未量化噪声对表征质量的影响程度。
+1. **3D 流估计足够准确**: 论文使用 $20 \times 20$ 均匀关键点网格估计 3D 流，包含场景中所有运动（含任务无关运动）。作者自己在 Limitations 中承认这引入了噪声，但未量化噪声对表征质量的影响程度。
 
 2. **VLM 生成的语言指令足够可靠**: 语言指令由 VLM 从视频自动生成，可能存在描述偏差或错误。论文未分析语言噪声的敏感性。
 
@@ -308,5 +308,5 @@ L_align = -log [ exp(0.0655/τ) / (exp(0.0655/τ) + exp(-0.105/τ)) ]
 **关键引用**:
 - 论文: https://arxiv.org/abs/2605.30350
 - 项目页: https://dynaflip-robotics.github.io
-- π₀.₅ (VLA backbone): https://arxiv.org/abs/2410.24164
+- $\pi_{0.5}$ (VLA backbone): https://arxiv.org/abs/2410.24164
 - LIBERO 基准: https://arxiv.org/abs/2306.03310

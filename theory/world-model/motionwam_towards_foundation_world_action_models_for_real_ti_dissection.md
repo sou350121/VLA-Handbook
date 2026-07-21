@@ -46,12 +46,12 @@
 MotionWAM 的核心设计围绕两个关键决策：
 
 **决策 1：用中间去噪特征替代完整去噪**
-传统 WAM 需要多步迭代去噪未来视频帧，然后从去噪后的帧中提取特征。MotionWAM 在扩散过程的纯噪声端（τf ≈ 1）设置一个 forward hook，直接从 Video DiT 的 velocity network 读取中间激活。此时未来帧仍然是高斯噪声，但给定干净的当前条件帧 z_t^0 和语言目标 l，Transformer 的激活已经编码了"场景将往哪里去"的信息。这一单步操作是实时性的关键。
+传统 WAM 需要多步迭代去噪未来视频帧，然后从去噪后的帧中提取特征。MotionWAM 在扩散过程的纯噪声端（$\tau_f \approx 1$）设置一个 forward hook，直接从 Video DiT 的 velocity network 读取中间激活。此时未来帧仍然是高斯噪声，但给定干净的当前条件帧 $z_t^0$ 和语言目标 $l$，Transformer 的激活已经编码了"场景将往哪里去"的信息。这一单步操作是实时性的关键。
 
 **决策 2：统一运动潜变量替代上下肢分离**
-基于 SONIC 全身控制器，MotionWAM 用一个统一的运动潜变量 m_t = (m_t^cont, k_t) 覆盖所有身体部位：
-- k_t ∈ {-1, -15/16, ..., 1}^64：SONIC 的有限标量量化（FSQ）token，64 维离散向量，汇总运动、躯干、高度和足部交互意图
-- m_t^cont：连续通道，覆盖 SONIC 未覆盖的灵巧手/夹爪控制
+基于 SONIC 全身控制器，MotionWAM 用一个统一的运动潜变量 $m_t = (m_t^{\text{cont}}, k_t)$ 覆盖所有身体部位：
+- $k_t \in \{-1, -15/16, \dots, 1\}^{64}$：SONIC 的有限标量量化（FSQ）token，64 维离散向量，汇总运动、躯干、高度和足部交互意图  
+- $m_t^{\text{cont}}$：连续通道，覆盖 SONIC 未覆盖的灵巧手/夹爪控制  
 
 ⚡ **Eureka Moment**：不需要等视频帧完全去噪——在纯噪声端读取 Transformer 中间激活，就足以获得"场景将往哪里去"的语义编码，这一观察把推理速度从 0.7 Hz 提升到 4.9 Hz。
 
@@ -107,7 +107,7 @@ m_t = Motion DiT(h_t^{τf}, p_t, ε_m)  →  round(k_t) → SONIC → a_t
 h_t^{τf} = H[v_θ^{video}](z_{t+1}^{τf}, τf | z_t^0, l)
 其中 z_{t+1}^{τf}|_{τf→1} ~ N(0, I)
 ```
-在纯噪声端（τf ≈ 1）读取 velocity network 的隐藏状态——未来帧尚未去噪，但激活已编码场景演化方向。
+在纯噪声端（$\tau_f \approx 1$）读取 velocity network 的隐藏状态——未来帧尚未去噪，但激活已编码场景演化方向。  
 
 2. **Video 流匹配损失**（Eq. 3）：
 ```
@@ -134,7 +134,7 @@ m_t = (m_t^cont, k_t~) → 流匹配 → m_hat_t = (m_hat_t^cont, k_hat_t~)
 ```
 SONIC token 索引作为连续标量在流匹配中回归，推理时最近邻取整后解码为关节命令。
 
-> 符号与论文保持一致：o_t = egocentric 观测, p_t = 本体感受状态, l = 语言目标, e = 实体索引, τ = 流匹配时间步, H[·] = 隐藏状态提取算子。
+> 符号与论文保持一致：$o_t = \text{egocentric 观测}$, $p_t = \text{本体感受状态}$, $l = \text{语言目标}$, $e = \text{实体索引}$, $\tau = \text{流匹配时间步}$, $H[\cdot] = \text{隐藏状态提取算子}$。  
 
 ## 3. 带数字走一遍：玩具例子 (Worked Example)
 
@@ -146,21 +146,21 @@ SONIC token 索引作为连续标量在流匹配中回归，推理时最近邻�
 - 本体感受 p_t：当前站立姿态，双足着地
 
 **Video DiT 单步前向**：
-- z_t^0 = VAE(o_t)：当前帧潜变量
-- z_{t+1}^{τf} = N(0, I)：纯噪声（τf = 0.99）
-- 经过 Video DiT 一层前向：h_t^{τf} ∈ R^{N×D}（N=序列长度, D=隐藏维度）
+- $z_t^0 = \text{VAE}(o_t)$：当前帧潜变量  
+- $z_{t+1}^{\tau_f} = \mathcal{N}(0, I)$：纯噪声（$\tau_f = 0.99$）  
+- 经过 Video DiT 一层前向：$h_t^{\tau_f} \in \mathbb{R}^{N \times D}$（$N=$序列长度, $D=$隐藏维度）  
 - 这个激活向量编码了"球将被踢飞、身体前倾、右腿前摆"的语义方向
 
 **Motion DiT 前向**：
-- 输入：h_t^{τf}（交叉注意力）+ p_t（拼接）+ ε_m ~ N(0,I)（噪声运动潜变量）
+- 输入：$h_t^{\tau_f}$（交叉注意力）+ $p_t$（拼接）+ $\varepsilon_m \sim \mathcal{N}(0,I)$（噪声运动潜变量）  
 - 流匹配去噪：经过若干步（或单步 flow-matching），输出 m_hat_t
 - m_hat_t = (m_hat_t^cont, k_hat_t~) = ([0.3, -0.1, 0.8, ...], 3.7)
-- round(3.7) = 4 → SONIC token 4 对应"右腿前摆踢球"的全身运动模式
+- $\text{round}(3.7) = 4$ → SONIC token 4 对应"右腿前摆踢球"的全身运动模式  
 
 **SONIC 解码**：
-- Token 4 的 64 维 FSQ 向量 → 全身关节目标
+- Token 4 的 64 维 FSQ 向量 → 全身关节目标  
 - 包含：右髋屈曲 30°、右膝伸展、左腿支撑、躯干前倾 15°
-- 输出 a_t → 关节控制器执行
+- 输出 $a_t$ → 关节控制器执行  
 
 **关键**：整个过程只需 Video DiT 一次前向 + Motion DiT 一次前向，在 A100 上约 200ms，实现 4.9 Hz 控制频率。
 
@@ -173,7 +173,7 @@ SONIC token 索引作为连续标量在流匹配中回归，推理时最近邻�
 | **对比 VLA 基线** | 略低但可比（VLA 通常 10-20 Hz） | 用 2-4x 速度换取视频动态先验，trade-off 值得 |
 | **硬件** | 单 RTX 4090 工作站 + 机载控制器 | WebSocket 策略服务器模式，非机载推理 |
 | **模型规模** | Video DiT: Cosmos-Predict2.5-2B (2B) + Motion DiT (~数百M) | 总参数量与 GR00T-N1.7 可比 |
-| **训练数据** | Stage 1: ~2,136h 视频；Stage 3: 200 episodes/task × 9 tasks | Stage 1 数据可廉价获取（无动作标注）；Stage 3 是瓶颈 |
+| **训练数据** | Stage 1: ~2,136h 视频；Stage 3: 200 episodes/task × 9 tasks   | Stage 1 数据可廉价获取（无动作标注）；Stage 3 是瓶颈 |
 | **流匹配步数** | 论文未明确给出推理步数 | 疑似单步或极少步数 flow-matching（需确认） |
 | **部署约束** | 需要 Cosmos 生态（VAE + text encoder 冻结） | 迁移到其他平台需适配 Cosmos 预训练权重 |
 
@@ -184,7 +184,7 @@ SONIC token 索引作为连续标量在流匹配中回归，推理时最近邻�
 **数据组成**：
 - **Stage 1**（~2,136h）：egocentric 人类视频 + 人形机器人视频，无动作标注，仅用于视频帧预测
 - **Stage 2**：Unitree G1 异构数据，覆盖不同末端执行器和动作标注格式
-- **Stage 3**：200 episodes/任务 × 9 任务 = 1,800 episodes 全身 teleoperation 数据，通过 PICO VR 三点追踪采集，经 SMPL 重定向到 Unitree G1
+- **Stage 3**：200 episodes/任务 × 9 任务 = 1,800 episodes 全身 teleoperation 数据，通过 PICO VR 三点追踪采集，经 SMPL 重定向到 Unitree G1  
 
 **评测设置**：
 - 9 个真实 Unitree G1 全身 loco-manipulation 任务
@@ -220,7 +220,7 @@ SONIC token 索引作为连续标量在流匹配中回归，推理时最近邻�
 
 ### 6.1 隐含假设 (Hidden Assumptions)
 
-1. **中间激活足够编码未来动态**：论文假设 τf ≈ 1 时的 Transformer 激活足以指导动作预测，但未系统探索不同 τf 值的性能曲线。如果最优 τf 因任务而异（精细操作 vs 大步移动），固定 τf 可能次优。
+1. **中间激活足够编码未来动态**：论文假设 $\tau_f \approx 1$ 时的 Transformer 激活足以指导动作预测，但未系统探索不同 $\tau_f$ 值的性能曲线。如果最优 $\tau_f$ 因任务而异（精细操作 vs 大步移动），固定 $\tau_f$ 可能次优。  
 
 2. **Egocentric 视频预训练足以捕获机器人动态**：Stage 1 使用人类 egocentric 视频 + 少量机器人视频，假设这些视觉动态可以迁移到 Unitree G1 的视角。但未量化"多少机器人视频是必要的"。
 
@@ -241,7 +241,7 @@ SONIC token 索引作为连续标量在流匹配中回归，推理时最近邻�
 | **Qwen3DiT** (ablation) | VLM vs 视频先验 | Qwen3-VL 2B + Motion DiT | 同 Stage 3 | Unitree G1 | ~10 Hz |
 
 **关键区分**：
-- 与 VLA 基线（GR00T-N1.7, π₀.₅）的唯一差异是：MotionWAM 用 Video DiT 中间特征替代 VLM 图像-文本特征，其余（相同数据、相同动作空间、相同 SONIC 接口）全部一致
+- 与 VLA 基线（GR00T-N1.7, $\pi_{0.5}$）的唯一差异是：MotionWAM 用 Video DiT 中间特征替代 VLM 图像-文本特征，其余（相同数据、相同动作空间、相同 SONIC 接口）全部一致
 - 与 Cosmos Policy 的核心差异：单步中间特征 vs 迭代去噪 → 7x 速度差异
 - Qwen3DiT ablation 证明：VLM 静态先验在运动密集型任务上接近零成功率，视频动态先验是性能差异的来源
 

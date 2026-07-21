@@ -117,7 +117,7 @@ Semantic Safety Gap = Action Success Rate - Safety Awareness Score
 ```
 
 **变量说明**：
-- π_θ：VLA 策略，参数θ
+- $\pi_\theta$：VLA 策略，参数$\theta$
 - S_safe / S_unsafe：安全/unsafe 孪生场景
 - O：物体集合（相同）
 - A：动作要求（相同）

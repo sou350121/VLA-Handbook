@@ -41,7 +41,7 @@
 | 组件 | SOLE-R1 | GPT-5 / Gemini-3-Pro（作为奖励） | RoboReward / Robometer |
 |------|---------|----------------------------------|------------------------|
 | 输入 | 自然语言目标 + 多帧视频窗口（K帧）+ 上一步进度 | 单帧/多帧 + 目标 | 单帧/多帧 + 目标 |
-| 输出 | CoT 推理 + progress ∈ [-100, 100] | 仅 success/probability 标量 | 仅 progress/success 标量 |
+| 输出 | CoT 推理 + progress $\in [-100, 100]$ | 仅 success/probability 标量 | 仅 progress/success 标量 |
 | 中间推理 | ✅ 每步显式 CoT（变化描述 + 前进/后退判断 + 子目标） | ❌ 无 | ❌ 无 |
 | 训练方式 | SFT（时空推理）+ RLVR（GRPO 优化进度精度） | 通用预训练 | 专用 reward 数据集 SFT |
 | 零样本在线 RL | ✅ 24/40 任务成功 | ❌ 7/40（GPT-5）/ 5/40（Gemini） | ❌ 4/40（Meta-World 部分任务） |
@@ -151,7 +151,7 @@ x_t = [g, o_0; o_{t-K+1:t}, p_{t-1}]
 ```
 
 其中：
-- `g` ∈ G：自然语言目标
+- `g` $\in G$：自然语言目标
 - `o_0`：首帧（参考基准）
 - `o_{t-K+1:t}`：最近 K 帧（或全部可用帧）
 - `p_{t-1}`：上一步进度预测
@@ -163,7 +163,7 @@ y_t = [<thinking> m_t </thinking>, <answer> p_t </answer>]
 ```
 
 - `m_t`：自由文本推理（描述变化、前进/后退判断、子目标）
-- `p_t` ∈ [-100, 100]：任务进度估计
+- `p_t` $\in [-100, 100]$：任务进度估计
 
 ### 2.3 奖励转换
 
@@ -200,9 +200,9 @@ r(o) = r_format(o) + r_acc(o)
 r_acc(o) = α · exp(-|p̂_t - p_t| / τ)
 ```
 
-- `r_format` ∈ [0, 0.5]：格式正确性
-- `r_acc` ∈ [0, 1.5]：进度精度（指数衰减误差惩罚）
-- `r(o)` ∈ [0, 2]：2 = 格式正确 + 进度精确
+- `r_format` $\in [0, 0.5]$：格式正确性
+- `r_acc` $\in [0, 1.5]$：进度精度（指数衰减误差惩罚）  
+- `r(o)` $\in [0, 2]$：2 = 格式正确 + 进度精确  
 
 ### 2.7 📌 Napkin Formula
 
@@ -210,9 +210,9 @@ r_acc(o) = α · exp(-|p̂_t - p_t| / τ)
 r_t = ψ · clip( CoT_reasoning(video_{t-K:t}, goal, p_{t-1})→progress, -c, c )
 ```
 
-一行直觉：**SOLE-R1 把"视频→推理→进度"这个映射函数变成了一个可微（通过 RLVR）的稠密奖励函数，替代了传统 RL 中需要人工设计的 reward engineering。**
+一行直觉：**SOLE-R1 把"视频→推理→进度"这个映射函数变成了一个可微（通过 RLVR）的稠密奖励函数，替代了传统 RL 中需要人工设计的 reward engineering。**  
 
-> 符号说明：φ 为模型参数；p_φ 为模型输出概率；o_i 为第 i 个采样输出；q 为查询（输入）；ρ 为重要性采样比；β 为 KL 惩罚系数；τ 为温度参数；α 为精度奖励缩放。
+> 符号说明：$\phi$ 为模型参数；$p_\phi$ 为模型输出概率；$o_i$ 为第 $i$ 个采样输出；$q$ 为查询（输入）；$\rho$ 为重要性采样比；$\beta$ 为 KL 惩罚系数；$\tau$ 为温度参数；$\alpha$ 为精度奖励缩放。  
 
 ## 3. 带数字走一遍：玩具例子 (Worked Example)
 
@@ -220,7 +220,7 @@ r_t = ψ · clip( CoT_reasoning(video_{t-K:t}, goal, p_{t-1})→progress, -c, c 
 
 **Timestep t=5**：
 - 目标 g = "place red block in right zone"
-- 输入窗口：o_0（初始状态，方块在左侧）+ o_{3:5}（最近3帧）+ p_4 = 15
+- 输入窗口：$o_0$（初始状态，方块在左侧）+ $o_{3:5}$（最近3帧）+ $p_4 = 15$  
 
 **SOLE-R1 推理输出**：
 ```
@@ -233,8 +233,8 @@ contact with the block.
 <answer>22</answer>
 ```
 
-- 进度从 15 → 22（+7），说明有进展但还没抓到
-- 奖励 r_5 = ψ · clip(22, -c, c)。假设 ψ=0.1, c=50 → r_5 = 2.2
+- 进度从 $15 \to 22$（$+7$），说明有进展但还没抓到  
+- 奖励 $r_5 = \psi \cdot \operatorname{clip}(22, -c, c)$。假设 $\psi=0.1$, $c=50 \to r_5 = 2.2$  
 
 **Timestep t=6**（机器人执行了"向下移动"动作）：
 ```
@@ -247,7 +247,7 @@ and lift.
 <answer>35</answer>
 ```
 
-- 进度从 22 → 35（+13），接触建立是重要进展
+- 进度从 $22 \to 35$（$+13$），接触建立是重要进展  
 - 奖励 r_6 = 3.5
 
 **Timestep t=7**（机器人执行了"错误动作"：向左移动）：
@@ -261,12 +261,12 @@ reverse direction and move rightward.
 <answer>28</answer>
 ```
 
-- 进度从 35 → 28（-7），明确识别到后退
+- 进度从 $35 \to 28$（$-7$），明确识别到后退  
 - 奖励 r_7 = -0.7（负奖励，惩罚错误方向）
 
 **DrQv2 策略学习**：
-- 策略看到：向下移动 → +3.5 奖励；向左移动 → -0.7 奖励
-- 经过多次交互，策略学会：先接近 → 接触 → 抓取 → 向右移动 → 放置
+- 策略看到：向下移动 $\to +3.5$ 奖励；向左移动 $\to -0.7$ 奖励  
+- 经过多次交互，策略学会：先接近 $\to$ 接触 $\to$ 抓取 $\to$ 向右移动 $\to$ 放置  
 - 全程无需真实奖励信号，SOLE-R1 的推理进度就是唯一指导
 
 ## 4. 工程视角 (Engineering View)
@@ -332,7 +332,7 @@ reverse direction and move rightward.
 
 ### 5.4 核心结果
 
-- **SOLE-R1**：24/40 任务达到 ≥50% 成功率
+- **SOLE-R1**：$24/40$ 任务达到 $\geq 50\%$ 成功率  
 - **GPT-5**：7/40 任务
 - **Gemini-3-Pro**：5/40 任务
 - **非推理模型**（Robometer/RoboReward/ReWiND）：仅 Meta-World 上 4 任务 >40%
@@ -403,7 +403,7 @@ reverse direction and move rightward.
 ### 不值得精讀的理由
 
 - 如果你不做**在线交互学习**（只做离线模仿学习或离线 RL），这篇论文的核心贡献（用推理驱动在线 RL）与你距离较远
-- 如果你已熟悉 ROVER（同一团队的 NeurIPS 2025 工作）和 GRPO 训练范式，方法论部分的新意主要在"推理→奖励"的映射设计，可以快速浏览
+- 如果你已熟悉 ROVER（同一团队的 NeurIPS 2025 工作）和 GRPO 训练范式，方法论部分的新意主要在"推理→奖励"的映射设计，可以快速浏览  
 
 ---
 
@@ -417,4 +417,4 @@ reverse direction and move rightward.
 - GRPO: .group relative policy optimization — SOLE-R1 Stage 2 使用的 RL 算法
 
 ---
-[← Back to Theory](./README.md)
+[← Back to Theory](./README.md)  

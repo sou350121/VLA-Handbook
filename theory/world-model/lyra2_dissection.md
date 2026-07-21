@@ -50,7 +50,7 @@ VLA 真機調試最大的瓶頸之一是「**沒有夠多樣的高擬真 3D 場�
 | 模組 | 設定 | 作用 |
 |------|------|------|
 | **Video DiT** | Wan 2.1-14B（凍結 base + LoRA finetune） | 生成下一段 80 幀 |
-| **VAE** | Wan 2.1 VAE（8×8 空間 / 4×4 時間下採樣） | latent 空間操作 |
+| **VAE** | Wan 2.1 VAE（$8\times8$ 空間 / $4\times4$ 時間下採樣） | latent 空間操作 |
 | **3D Cache 𝒞** | 全分辨率深度圖 + 相機外參 + 下採樣點雲 P_i ∈ ℝ^((H/d)×(W/d)×3) | 增量積累每幀幾何 |
 | **History Retriever** | 從 𝒞 中找出與當前視角重疊的舊幀 | 解決 spatial forgetting |
 | **Coordinate Map** | 3 通道 canonical coord ∈ [-1,1]^(3×H×W) + warped depth | 注入幾何約束 |
@@ -132,7 +132,7 @@ VLA 真機調試最大的瓶頸之一是「**沒有夠多樣的高擬真 3D 場�
 這是一個值得單獨拆的設計決定——**NVIDIA SIL 的工作竟然不用 NVIDIA Cosmos**。
 
 📜 **論文原話（§3 Preliminaries + Appendix A.1）**：
-> *「We adopt the Wan 2.1 VAE [wan2025wan], which downsamples 8×8 spatially and 4×4 temporally...」*
+> *「We adopt the Wan 2.1 VAE [wan2025wan], which downsamples $8 \times 8$ spatially and $4 \times 4$ temporally...」*
 >
 > *「We build upon the Wan 2.1-14B DiT [wan2025wan] as our backbone video diffusion model.」*
 >
@@ -145,7 +145,7 @@ Cosmos（`agarwal2025cosmos`）在論文中**只在 intro 引用一次**作為�
 | 理由 | 證據強度 | 說明 |
 |------|:------:|------|
 | **相機控制成熟度** | ✅ 論文明說 | Wan 2.1 內建的 camera conditioning 在長軌跡下「**alone already delivers accurate camera control**」——意味著作者**實測過**這條 baseline 已夠用，3D cache 是錦上添花 |
-| **VAE 規格匹配** | ✅ 論文需要 | 論文方法強依賴 8×8 空間 / 4×4 時間下採樣的 VAE；Wan 2.1 VAE 自帶此規格 |
+| **VAE 規格匹配** | ✅ 論文需要 | 論文方法強依賴 $8 \times 8$ 空間 / $4 \times 4$ 時間下採樣的 VAE；Wan 2.1 VAE 自帶此規格 |
 | **方法 backbone-agnostic 主張** | 🟡 推論 | 用非 NVIDIA backbone 證明「3D cache 路由 + self-aug 訓練」**對 backbone 中立**——這是更強的科學論點：換 Cosmos / Sora-style 都應該適用 |
 | **開源生態與 License** | 🟡 推論 | Wan 2.1 是 Apache 2.0 全開源權重，社群有大量 finetune 食譜（CameraCtrl-on-Wan 等）；Cosmos 是 NVIDIA 為 physical AI 推出的閉/半閉模型，外部 fine-tune 友善度待檢驗 |
 | **時序問題** | 🟡 推論 | Lyra 2 工作 likely 始於 2025 中後段；當時 Cosmos-1 → Cosmos-2 仍在迭代，Wan 2.1 已穩定 |
@@ -187,7 +187,7 @@ with probability p_aug:
     train history  ←  z_pred                    # 用「污染後的近似重建」當歷史
 ```
 
-> **直覺**：訓練分布 ≈ 推理分布。訓練時看到的歷史不只是 ground-truth，還有「自己生的次優結果」——模型學會在這種分布下保持品質。
+> **直覺**：訓練分布 $\approx$ 推理分布。訓練時看到的歷史不只是 ground-truth，還有「自己生的次優結果」——模型學會在這種分布下保持品質。
 
 ### 2.3 Coordinate Map 注入（spatial forgetting 解法核心）
 
@@ -230,11 +230,11 @@ Step 3:  生 frame 240..319（走回起點）
 
 **為什麼回到起點不會「房間變了」**：
 - 沒有 cache → 模型重新生 → 生出的「客廳」和原來不一樣（spatial forgetting）
-- 有 cache → frame 0..79 被 warp 回當前視角 → 模型看到「應該長這樣」的視覺先驗 → 一致
+- 有 cache → frame $0..79$ 被 warp 回當前視角 → 模型看到「應該長這樣」的視覺先驗 → 一致
 
 **為什麼漂移被抑制**：
 - 沒有 self-aug → 訓練只見過 clean 歷史 → 部署遇到自己生的髒歷史就崩
-- 有 self-aug → 訓練時 50% 機率餵髒歷史 → 模型學會「我生的有偏差，下次要拉回來」
+- 有 self-aug → 訓練時 $50\%$ 機率餵髒歷史 → 模型學會「我生的有偏差，下次要拉回來」
 
 ---
 
@@ -242,19 +242,19 @@ Step 3:  生 frame 240..319（走回起點）
 
 | 維度 | 數值 / 觀察 | 工程含義 |
 |------|------------|---------|
-| **訓練 GPU** | **64 × NVIDIA GB200**（Blackwell 級） | NVIDIA 專屬硬體；外部團隊需 H200/H100 spike |
+| **訓練 GPU** | **$64 \times$ NVIDIA GB200**（Blackwell 級） | NVIDIA 專屬硬體；外部團隊需 H200/H100 spike |
 | **訓練步數** | 7,000 iterations | 不算特別多，因為 base 是預訓 Wan 2.1-14B |
 | **訓練 batch** | 64 across 64 GPUs | 大 batch 但短訓 |
 | **參數規模** | Wan 2.1-14B 為主 + 小頭 | 14B 級 |
-| **單步推理** | **194 s / 80 frames（full 35-step CFG）** on 1× GB200 | 慢；不是即時 |
-| **DMD 加速** | **15 s / 80 frames（4-step, no CFG）** | 13× 加速；質量輕微下降 |
+| **單步推理** | **$194\ \text{s} / 80\ \text{frames}$（full $35$-step CFG）** on $1\times$ GB200 | 慢；不是即時 |
+| **DMD 加速** | **15 s / 80 frames（4-step, no CFG）** | $13\times$ 加速；質量輕微下降 |
 | **訓練數據** | DL3DV 10K real-world clips | 開源資料集 |
 | **Pose 估計** | ViPE（off-the-shelf SLAM/SfM） | 訓練前處理 |
 | **Depth 估計** | Depth Anything v3 | 預訓 |
 | **Caption** | Qwen3-VL-8B-Instruct | 多模態 |
 | **License（代碼）** | Apache 2.0 | 商用友善 |
 | **License（模型）** | 各版本不同 | ⚠️ 用前需逐個確認 |
-| **倉庫** | nv-tlabs/lyra · 1.8k★ · 174 fork | 高關注 |
+| **倉庫** | nv-tlabs/lyra · $1.8$k★ · $174$ fork | 高關注 |
 | **HF 權重** | nvidia/Lyra · nvidia/Lyra-2.0 | 開放下載 |
 
 **部署約束**（從 VLA / robotics 視角）：
@@ -370,7 +370,7 @@ Step 3:  生 frame 240..319（走回起點）
 ### 8.1 場景生成（offline）
 - 給 Isaac Sim 造訓練場景的廉價方案
 - ⚠️ 目前只室內、靜態——工業/室外/動態任務不行
-- 推理 194s/step 太慢 → 用 DMD 變體 15s/step 可接受
+- 推理 $194\,\text{s}/\text{step}$ 太慢 → 用 DMD 變體 $15\,\text{s}/\text{step}$ 可接受
 
 ### 8.2 真機 sim2real 數據增強（推測，論文未驗證）
 - 從真機相機重建 → Lyra 重生視訊 → 訓 VLA
@@ -394,7 +394,7 @@ Step 3:  生 frame 240..319（走回起點）
 2. **VLA 訓練數據應用實證**？論文示範「機器人在 Lyra 場景裡走」，但沒測「用 Lyra 訓的 VLA 在真機表現如何」——sim2real gap 是否被改善？
 3. **長軌跡上限**？論文 demo 是 4 step（320 frames）。10 step（800 frames）/ 50 step 是否仍 consistent？3D cache 內存增長曲線？
 4. **與 CAT3D / WonderWorld / ReconX 對比**？這些是 video-to-3D 的標準同行，論文 baseline 池缺它們。
-5. **DMD 變體的 quality drop 範圍**？15s/step 比 194s 快 13×，質量下降在哪個指標上？
+5. **DMD 變體的 quality drop 範圍**？$15\,\text{s}/\text{step}$ 比 $194\,\text{s}$ 快 $13\times$，質量下降在哪個指標上？
 6. **動態擴展可行性**？作者列為 future work，但沒給技術 roadmap。
 7. **Camera trajectory 是否能由 VLA policy 自主驅動**？論文 demo 是人手設計軌跡——機器人探索式軌跡（不規則、突變）下表現？
 8. **`research.nvidia.com` 與 GitHub 的差異**？1.8k stars repo 含 Lyra 1.0 + 2.0 兩版本——VLA 工程師應拿哪個？文檔對「替換」vs「並用」沒明說。

@@ -33,9 +33,9 @@ VLA 模型在训练分布内表现优秀，但一旦遇到指令重定向、物�
 
 | 组件 | 职责 | 输入 | 输出 | 训练/部署阶段 |
 |------|------|------|------|---------------|
-| **Agentic Planner (Π)** | 认知编排器，选择原语调用 | 任务描述 ℓ、RGB-D 观测 o_t、机器人状态 q_t、记忆检索结果 | JSON 原语调用 c_t | 部署时在线推理（Codex/CC） |
+| **Agentic Planner ($\Pi$)** | 认知编排器，选择原语调用 | 任务描述 ℓ、RGB-D 观测 o_t、机器人状态 q_t、记忆检索结果 | JSON 原语调用 c_t | 部署时在线推理（Codex/CC） |
 | **Primitive Library (𝒫)** | 统一操作接口，6 个解析原语 + 1 个 VLA 原语 | JSON 调用参数 | 执行到内部后置条件满足，返回新观测 | 固定不变（部署前确定） |
-| **vla_act** | 冻结 VLA 封装的接触原语 | prompt + early-return 谓词 τ | 动作块序列直到 τ 满足或预算耗尽 | VLA 权重冻结，仅调用 |
+| **vla_act** | 冻结 VLA 封装的接触原语 | prompt + early-return 谓词 $\tau$ | 动作块序列直到 $\tau$ 满足或预算耗尽 | VLA 权重冻结，仅调用 |
 | **Task-Specific Memory** | 存储参考种子探索的成功原语轨迹 | 探索阶段的 JSONL 轨迹 | 参数化后的成功轨迹（空间坐标→感知查询） | 引导阶段写入，部署阶段读取 |
 | **Global Memory** | 存储跨任务可复用的成功规则和失败模型 | 探索过程中的启发式经验 | 成功规则 + 失败模型（如空抓取、误检测） | 引导阶段写入，部署阶段读取 |
 | **Agentic Harness** | 运行时环境，序列化/执行/日志/检查 | Planner 决策 + 环境反馈 | 观测刷新、进度检查、预算控制 | 始终运行 |
@@ -115,19 +115,19 @@ VLA 模型在训练分布内表现优秀，但一旦遇到指令重定向、物�
 max_Π E[ 𝒢(τ) | ℓ, ε_perturbed ]
 ```
 
-其中 τ 是由 Π 在原语库 𝒫 上编排产生的轨迹，𝒢 是稀疏成功判定器。
+其中 $\tau$ 是由 $\Pi$ 在原语库 $\mathcal{P}$ 上编排产生的轨迹，$\mathcal{G}$ 是稀疏成功判定器。
 
 **关键变量说明**：
 
 | 符号 | 含义 |
 |------|------|
-| Π | Agentic Planner（Codex 或 Claude Code） |
+| $\Pi$ | Agentic Planner（Codex 或 Claude Code） |
 | 𝒫 | 固定原语库（6 解析 + 1 VLA） |
-| f_θ | 冻结 VLA 策略（如 π_0.5-SFT） |
+| $f_\theta$ | 冻结 VLA 策略（如 $\pi_{0.5\text{-SFT}}$） |
 | o_t = (I_rgb, I_d, q_t) | t 时刻多模态观测 |
 | ℓ | 自然语言任务描述 |
 | 𝒢 | 二元完成判定器（仅 episode 结束时返回） |
-| τ | early-return 谓词（控制 vla_act 调用时长） |
+| $\tau$ | early-return 谓词（控制 vla_act 调用时长） |
 | Memory_task | 任务特定记忆（参数化 JSONL 轨迹） |
 | Memory_global | 全局记忆（成功规则 + 失败模型） |
 
@@ -209,7 +209,7 @@ Step 6: 放置
 
 | 基准 | VLA 后端 | 来源 |
 |------|----------|------|
-| LIBERO / LIBERO-Pro | π_0.5-SFT (π_RLinf) | RLinf 发布 |
+| LIBERO / LIBERO-Pro | $\pi_{0.5\text{-SFT}}$ ($\pi_{\text{RLinf}}$) | RLinf 发布 |
 | RoboCasa365 | RLDX-1 RoboCasa checkpoint | 论文 [30] |
 | RoboTwin C2R | LingBot-VLA | 作者后训练 |
 
@@ -255,7 +255,7 @@ Step 6: 放置
 
 | 方法 | 核心思路 | VLA 角色 | 是否需要微调 | 扰动鲁棒性 | 适用场景 |
 |------|----------|----------|-------------|-----------|----------|
-| **直接 VLA** (π_0.5, RT-2) | 端到端语言-动作映射 | 单体策略 | 预训练 | 低（分布外退化严重） | 分布内操作 |
+| **直接 VLA** ($\pi_{0.5}$, RT-2) | 端到端语言-动作映射 | 单体策略 | 预训练 | 低（分布外退化严重） | 分布内操作 |
 | **Code as Policies** | LLM 合成执行程序 | 无 VLA | 否 | 中（依赖程序正确性） | 结构化任务 |
 | **ProgPrompt** | 程序化提示编排 API | 无 VLA | 否 | 中 | 已有 API 的任务 |
 | **RATS** | VLA + 推理时间搜索 | VLA 作为策略 | 否 | 中（43.8% LIBERO-Pro） | 需要搜索的任务 |

@@ -39,7 +39,7 @@ VLA 模型在预训练后需要大量后训练才能适应下游任务，但每�
 | 人类角色 | 单一操作员（遥操作 + 重置 + 监控） | 双角色分工：Teleoperator（遥操作）+ Floor Operator（监控 + 重置） |
 | 机器人规模 | 通常 1-4 台 | 12 台并发 |
 | 轨迹处理 | 整条轨迹用于训练（含失败片段） | VLAC-CUT 自动分割：保留 progress-making + recovery，丢弃 idle + failure-inducing |
-| 数据配比 | HITL 恢复数据 + 基础演示 | HITL +  curated rollout + 基础演示 ≈ 1:1:1 |
+| 数据配比 | HITL 恢复数据 + 基础演示 | HITL +  curated rollout + 基础演示 $\approx$ 1:1:1 |
 | 训练方式 | SFT on HITL data | SFT on curated autonomous + HITL data |
 | 核心瓶颈 | 人类任务切换成本高、认知过载 | 需要 VR 基础设施和专用网络（ZeroMQ/UDP） |
 
@@ -102,7 +102,7 @@ a_t^i = π_θ(s_t^i)     -- VLA 策略输出动作块
 d_t^i = ψ(s_t^i)       -- 任务终止预测 (0/1)
 ```
 
-其中 i ∈ {1, ..., 12} 表示机器人索引，s_t^i 为多模态观测（图像 + 本体感知）。
+其中 $i \in \{1, \dots, 12\}$ 表示机器人索引，$s_t^i$ 为多模态观测（图像 + 本体感知）。
 
 ### 2.2 客户端状态机（Eq. 2）
 
@@ -129,15 +129,15 @@ A_M = [M(π_HELP) - M(π_start)] / [M(π_HITL) - M(π_start)]
 >
 > 人类效率 = 策略提升 / 人类劳动
 >
-> HELP 通过两条路径最大化这个比值：系统级（角色分工 × 并发规模）+ 学习级（VLAC-CUT 轨迹分割放大每单位 HITL 数据的利用率）
+> HELP 通过两条路径最大化这个比值：系统级（角色分工 $\times$ 并发规模）+ 学习级（VLAC-CUT 轨迹分割放大每单位 HITL 数据的利用率）
 
-> 符号与本文保持一致：π_θ 为 VLA 策略，φ 为 takeover 预测器，ψ 为终止预测器，γ 为 takeover 信号，d 为终止信号。
+> 符号与本文保持一致：$\pi_\theta$ 为 VLA 策略，$\varphi$ 为 takeover 预测器，$\psi$ 为终止预测器，$\gamma$ 为 takeover 信号，$d$ 为终止信号。
 
 ## 3. 带数字走一遍：玩具例子
 
 考虑一个简化的 Refrigerator 任务后训练场景：
 
-**基线状态**：π_0.5 基础模型
+**基线状态**：$\pi_{0.5}$ 基础模型
 - 吞吐量：10 tasks/hour
 - 成功率：20%
 - 平均执行时间：72.3s
@@ -177,7 +177,7 @@ A_SR = (45% - 20%) / (35% - 20%) = 25 / 15 = 1.67x
 | 通信协议 | ZeroMQ + UDP | 低延迟命令路由；VR 遥操作需要动态 UDP gateway |
 | 客户端架构 | 双进程 + 异步多线程 | 硬件控制环与网络 I/O 解耦 |
 | 训练框架 | Ray 分布式 | 并行推理 + 异步训练，消除训练诱导延迟 |
-| 数据配比 | 基础:HITL:curated ≈ 1:1:1 | 每轮迭代重新平衡 |
+| 数据配比 | 基础:HITL:curated $\approx$ 1:1:1 | 每轮迭代重新平衡 |
 | 控制频率 | TODO: 论文未明确给出 Hz | 待补充 |
 | VR 延迟 |  transient latency/loss 存在 | 有 VLA-based teleoperation assistance 模块缓解 |
 

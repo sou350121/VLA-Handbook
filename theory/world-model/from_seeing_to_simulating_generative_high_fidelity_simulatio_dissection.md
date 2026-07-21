@@ -184,7 +184,7 @@ E_ICP = Σ_i ||(T_fine · p_a^i - p_b^j)ᵀ n_b^j||²
 **部署约束**：
 - 依赖 NVIDIA Isaac Sim（Omniverse 生态）
 - 需要预训练 Marble 世界模型（World Labs 闭源/开源待确认）
-- 3DGS → USD 转换需要 3DGRUT 工具链
+- 3DGS $\to$ USD 转换需要 3DGRUT 工具链
 
 **内存/计算**：
 - 3DGS 表示：单房间约数百 MB（取决于高斯点数量）
@@ -218,11 +218,11 @@ E_ICP = Σ_i ||(T_fine · p_a^i - p_b^j)ᵀ n_b^j||²
 - ACT：时序集成 Transformer 策略
 - Diffusion Policy：扩散过程建模多模态动作分布
 - SmolVLA：轻量级开源 VLA
-- π0：大规模预训练 VLA 基础模型
+- $\pi_0$：大规模预训练 VLA 基础模型
 
 **关键结果**（来自论文 Table I/II/III）：
 - Diffusion Policy + Cousin 数据：未见场景&物体成功率显著提升（Pour Water / Cut Sausage 等复杂物理任务）
-- VLA 模型（π0）：Cousin 数据在 Set Tableware 任务上带来正向增益
+- VLA 模型（$\pi_0$）：Cousin 数据在 Set Tableware 任务上带来正向增益
 - 真实部署：50 Real + 100 Sim 配置比 50 Real 基线在未见场景上 0.57 vs 0.33（近 2 倍）
 
 ## 6. 能力与失败模式 (Capabilities & Failure Modes)
@@ -251,10 +251,10 @@ E_ICP = Σ_i ||(T_fine · p_a^i - p_b^j)ᵀ n_b^j||²
 
 | 工作 | 关注点 | 架构 | 训练方式 | 适用场景 |
 |------|--------|------|----------|----------|
-| **WorldComposer (本文)** | 生成式 1→N 数据扩增 | Marble + 3DGS + Isaac Sim | 仿真数据 + 真实数据 co-training | 通用机器人学习 + 评估 |
+| **WorldComposer (本文)** | 生成式 $1\to N$ 数据扩增 | Marble + 3DGS + Isaac Sim | 仿真数据 + 真实数据 co-training | 通用机器人学习 + 评估 |
 | Digital Twins (RobotWin 等) | 1:1 高保真复现 | 3DGS + 物理引擎 | 仿真内训练 | 特定场景策略优化 |
 | Procedural Gen (RLBench 等) | 程序化生成多样性 | 手工规则 + 参数随机化 | 大规模仿真训练 | 基准测试 |
-| Real-is-Sim (2025) | Sim-to-Real 桥接 | 动态 Digital Twin | Sim→Real 迁移 | 真实部署 |
+| Real-is-Sim (2025) | Sim-to-Real 桥接 | 动态 Digital Twin | Sim$\to$Real 迁移 | 真实部署 |
 
 **面试 Tip**：被问到"如何解决机器人数据稀缺"时，可以回答："WorldComposer 的思路是从 1 个真实场景生成 N 个 Digital Cousins 变体，比单纯收集更多真实数据成本低，且 Sim-Real 相关性达 0.91，能可靠预测真实表现。"
 

@@ -145,8 +145,8 @@ UMI（Universal Manipulation Interface）类手持数据采集系统让机器人
 | W_ext_t | 外部交互 wrench（3D 力 + 3D 力矩） |
 | Gripper_t | 夹爪开合状态 |
 | a_t | 策略输出的 6-DOF 动作 + 夹爪指令 |
-| β_k | Diffusion 去噪第 k 步的采样动作 |
-| τ | 阻抗控制器输出的电机力矩 |
+| $\beta_k$ | Diffusion 去噪第 k 步的采样动作 |
+| $\tau$ | 阻抗控制器输出的电机力矩 |
 | K_p, K_d, K_f | 阻抗控制的刚度/阻尼/力增益 |
 
 > 符号与本文保持一致：策略部分沿用 Diffusion Policy 标准符号；部署部分采用经典阻抗控制公式。
@@ -160,9 +160,9 @@ UMI（Universal Manipulation Interface）类手持数据采集系统让机器人
 **采集阶段**：
 - 操作者手持 OmniUMI 接口在白板上画圈擦拭
 - 传感器实时记录：
-  - RGB: 640×480，白色板面 + 红色标记
+  - RGB: $640 \times 480$，白色板面 + 红色标记
   - Depth: 端到板面距离 ~5cm
-  - Tactile: 指尖压力分布（接触区域 ~2cm²，压力 ~15kPa）
+  - Tactile: 指尖压力分布（接触区域 $\sim 2\,\text{cm}^2$，压力 $\sim 15\,\text{kPa}$）
   - F_grasp: 内部夹持力 ~8N（保持稳定握持）
   - W_ext: 外部交互力 — 法向力 ~3N（保持接触），切向力 ~1.5N（滑动摩擦）
   - 轨迹: 角速度 ~0.5 rad/s
@@ -179,7 +179,7 @@ UMI（Universal Manipulation Interface）类手持数据采集系统让机器人
 
 **部署阶段**：
 - 策略输出虚拟目标位置 p_des 和期望力 f_des
-- 阻抗控制器：τ = K_p·(p_des - p) + K_d·(v_des - v) + K_f·(f_des - f)
+- 阻抗控制器：$\tau = K_p \cdot (p_{\text{des}} - p) + K_d \cdot (v_{\text{des}} - v) + K_f \cdot (f_{\text{des}} - f)$
 - 实际执行：法向力维持在 2.5-3.5N 范围内，擦除成功率显著提升
 
 **可计算的闭环**：力波动降低 → 数据质量提升 → 策略学习的力调节更精确 → 部署时力控制更稳定。这是一个从采集到部署的完整正反馈。

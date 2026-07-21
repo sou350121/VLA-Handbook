@@ -4,7 +4,7 @@
 >
 > **论文**: RL Token: Bootstrapping Online RL with Vision-Language-Action Models
 > **链接**: https://arxiv.org/abs/2604.23073
-> **核心定位**: 在冻结的 π0.6 VLA 之上插入一个可训练的「RL Token」压缩表示层，让轻量级 actor-critic 仅基于该表示做在线 RL 微调，实现数小时内成功率与执行速度的双提升
+> **核心定位**: 在冻结的 $\pi_{0.6}$ VLA 之上插入一个可训练的「RL Token」压缩表示层，让轻量级 actor-critic 仅基于该表示做在线 RL 微调，实现数小时内成功率与执行速度的双提升
 
 ## ⚡ 快速判斷（30 秒讀完這段就夠了）
 
@@ -13,11 +13,11 @@
 | 核心結論 | 在冻结 VLA 上暴露一个 RL Token 压缩表示，配合轻量 actor-critic 做在线 RL，可在 2-4 小时内将精密操作任务成功率从 ~20% 提升到 65%，关键阶段速度提升 3 倍 |
 | 适合精读 | 如果你在做人形机器人/精密装配的 RL 微调，重点看 §1.2（RL Token 机制）和 §4（工程视角） |
 | 可以跳过 | 如果你只关心离线 RL 或全模型微调（如 RECAP），这篇距离中等 |
-| 落地可行性 | 中——需要 π0.6 VLA + 真实机器人环境 + 数小时在线数据采集 |
+| 落地可行性 | 中——需要 $\pi_{0.6}$ VLA + 真实机器人环境 + 数小时在线数据采集 |
 | 主要风险 | 实验仅在 4 个桌面精密操作任务上验证，泛化到移动/双臂/人形平台待验证 |
 
 💡 **X-Ray 开场**
-VLA 模型（如 π0.6）能"开箱即用"地完成多种操作，但在精密任务的"最后一毫米"常常卡壳——速度慢、需要反复重试。这篇论文的核心发现是：不需要重新训练整个 VLA，只需要在 VLA 内部插入一个可训练的 RL Token 压缩表示层，然后用轻量 actor-critic 基于这个表示做在线 RL，就能在数小时内显著提升成功率和速度。对 VLA 研究者的意义是：它提供了一条比全模型 RL 微调高效得多的实用路径。
+VLA 模型（如 $\pi_{0.6}$）能"开箱即用"地完成多种操作，但在精密任务的"最后一毫米"常常卡壳——速度慢、需要反复重试。这篇论文的核心发现是：不需要重新训练整个 VLA，只需要在 VLA 内部插入一个可训练的 RL Token 压缩表示层，然后用轻量 actor-critic 基于这个表示做在线 RL，就能在数小时内显著提升成功率和速度。对 VLA 研究者的意义是：它提供了一条比全模型 RL 微调高效得多的实用路径。
 
 📍 **研究全景时间线**
 ```
@@ -34,11 +34,11 @@ VLA 模型（如 π0.6）能"开箱即用"地完成多种操作，但在精密�
 
 | 组件 | 输入 | 输出 | 训练阶段 | 是否冻结 |
 |------|------|------|----------|----------|
-| **VLA Backbone (π0.6)** | 4 路相机图像 + 语言指令 ℓ + 本体感知 sᵖ | 最终层 token 嵌入 z₁:ₘ + VLA 动作块 ã₁:ₕ | 预训练 + SFT 微调 | RL 阶段冻结 |
-| **RL Token Encoder** | VLA 嵌入 z₁:ₘ + 特殊 token e_rl | RL Token z_rl（压缩表示向量） | 自回归重建损失 L_ro | RL 阶段冻结 |
-| **RL Token Decoder** | RL Token z_rl | 重建 VLA 嵌入 z̄₁:ₘ | 与 encoder 联合训练 | RL 阶段冻结 |
-| **Critic Q_ψ** | 组合状态 x = (z_rl, sᵖ) + 动作块 a₁:₍ | Q 值标量 | TD 离线策略学习 | 在线更新 |
-| **Actor π_θ** | 组合状态 x + VLA 参考动作 ã₁:₍ | 高斯分布 N(μ_θ, σ²I) | 最大化 Q - β·‖a - ã‖² | 在线更新 |
+| **VLA Backbone ($\pi_{0.6}$)** | 4 路相机图像 + 语言指令 ℓ + 本体感知 sᵖ | 最终层 token 嵌入 $z_{1:m} +$ VLA 动作块 $\tilde{a}_{1:h}$ | 预训练 + SFT 微调 | RL 阶段冻结 |
+| **RL Token Encoder** | VLA 嵌入 $z_{1:m} +$ 特殊 token $e_{\text{rl}}$ | RL Token z_rl（压缩表示向量） | 自回归重建损失 L_ro | RL 阶段冻结 |
+| **RL Token Decoder** | RL Token z_rl | 重建 VLA 嵌入 $\bar{z}_{1:m}$ | 与 encoder 联合训练 | RL 阶段冻结 |
+| **Critic $Q_\psi$** | 组合状态 x = (z_rl, sᵖ) + 动作块 a₁:₍ | Q 值标量 | TD 离线策略学习 | 在线更新 |
+| **Actor $\pi_\theta$**   | 组合状态 x + VLA 参考动作 ã₁:₍ | 高斯分布 $\mathcal{N}(\mu_\theta, \sigma^2 I)$   | 最大化 $Q - \beta \cdot \Vert a - \tilde{a} \Vert^2$   | 在线更新 |
 
 ### 1.2 关键机制 (Key Mechanism)
 
@@ -48,7 +48,7 @@ VLA 模型（如 π0.6）能"开箱即用"地完成多种操作，但在精密�
 
 2. **冻结 VLA + 轻量头**：RL Token 训练完成后，VLA 和 RL Token 模块全部冻结。在线 RL 只更新小型 actor-critic 网络（通常 < 1M 参数），大幅降低计算和样本成本。
 
-3. **参考动作正则化**：Actor 以 VLA 采样的参考动作块 ã 为条件，并通过 L2 正则化 β·‖a - ã‖² 约束输出靠近参考动作。这使在线 RL 变成"局部动作编辑"而非无约束搜索。
+3. **参考动作正则化**：Actor 以 VLA 采样的参考动作块 $\tilde{a}$ 为条件，并通过 L2 正则化 $\beta \cdot \Vert a - \tilde{a} \Vert^2$ 约束输出靠近参考动作。这使在线 RL 变成"局部动作编辑"而非无约束搜索。  
 
 4. **参考动作 Dropout**：为防止 actor 简单地复制 VLA 动作，训练时对随机子集的 batch 将参考动作替换为零向量，迫使 actor 维持独立的动作生成能力。
 
@@ -109,12 +109,12 @@ L_π(θ) = E[-Q_ψ(x, a₁:₍) + β·‖a₁:₍ - ã₁:₍‖²]  [阶段2: R
 L_ro(φ) = E_D [ Σᵢ₌₁ᴹ ‖h_φ(d_φ([z_rl, z̄₁:ᵢ₋₁]))ᵢ - z̄ᵢ‖² ]
 ```
 
-- z = f(s, ℓ; θ_vla)：VLA 最终层 token 嵌入
+- $z = f(s, \ell; \theta_{\text{vla}})$：VLA 最终层 token 嵌入  
 - e_rl = e_φ(<rl>)：可学习的特殊 token 嵌入
-- z_rl = g_φ([z₁:ₘ, e_rl])_{M+1}：encoder 在特殊 token 位置的输出
+- $z_{\text{rl}} = g_\varphi([z_{1:m}, e_{\text{rl}}])_{M+1}$：encoder 在特殊 token 位置的输出  
 - z̄ᵢ = sg(zᵢ)：stop-gradient 操作，防止梯度回传到 VLA
-- d_φ：decoder transformer，自回归重建原始嵌入
-- h_φ：线性输出投影
+- $d_\varphi$：decoder transformer，自回归重建原始嵌入  
+- $h_\varphi$：线性输出投影  
 
 **阶段 2：Actor-Critic 优化**
 
@@ -128,11 +128,11 @@ L_π(θ) = E_B [-Q_ψ(x, a₁:₍) + β·‖a₁:₍ - ã₁:₍‖²]
 - x = (z_rl, sᵖ)：RL 状态 = 压缩表示 + 本体感知
 - a₁:₍：RL 动作块（长度 C < H，VLA 的块长度）
 - ã₁:₍ ~ π_vla(·|s, ℓ)：VLA 采样的参考动作块
-- β：正则化系数，控制 actor 偏离 VLA 参考动作的程度
-- γ：折扣因子
-- Q_ψ'：目标 critic 网络（TD3 风格）
+- $\beta$：正则化系数，控制 actor 偏离 VLA 参考动作的程度  
+- $\gamma$：折扣因子  
+- $Q_{\psi'}$：目标 critic 网络（TD3 风格）
 
-> 符号与本文保持一致：θ_vla = VLA 参数，φ = RL Token 参数，θ = actor 参数，ψ = critic 参数，H = VLA 动作块长度（50），C = RL 动作块长度（<50），M = VLA token 数量。
+> 符号与本文保持一致：$\theta_{\text{vla}} = \text{VLA 参数}$，$\varphi = \text{RL Token 参数}$，$\theta = \text{actor 参数}$，$\psi = \text{critic 参数}$，$H = \text{VLA 动作块长度（50）}$，$C = \text{RL 动作块长度（<50）}$，$M = \text{VLA token 数量}$。
 
 ## 3. 带数字走一遍：玩具例子 (Worked Example)
 
@@ -147,9 +147,9 @@ L_π(θ) = E_B [-Q_ψ(x, a₁:₍) + β·‖a₁:₍ - ã₁:₍‖²]
 
 **阶段 2 在线 RL**：
 - 初始化 replay buffer B：填入 200 条 VLA 自主 rollout 数据
-- 参数设置：C=20（RL 块长度），γ=0.99，β=1.0，G=8（update-to-data ratio）
+- 参数设置：$C=20$（RL 块长度），$\gamma=0.99$，$\beta=1.0$，$G=8$（update-to-data ratio）
 - Warmup 阶段（前 500 步）：执行 VLA 动作 ã 收集数据
-- 之后：a ~ π_θ(x, ã)
+- 之后：$a \sim \pi_\theta(x, \tilde{a})$
 
 **一个典型训练 step**：
 ```
@@ -171,7 +171,7 @@ Actor gradient: 最大化 Q - β·‖a - ã‖²
 
 | 维度 | 数值/约束 | 工程含义 |
 |------|-----------|----------|
-| VLA 推理延迟 | ~50-100ms/步（π0.6） | 冻结后无需更新，仅前向推理 |
+| VLA 推理延迟 | ~50-100ms/步（$\pi_{0.6}$） | 冻结后无需更新，仅前向推理 |
 | RL Token 推理 | ~5ms | 小型 transformer，可忽略 |
 | Actor-Critic 推理 | ~1ms | 小型 MLP，实时性无压力 |
 | 总控制周期 | ~50-100ms | 由 VLA 主导，RL 头不增加显著延迟 |
@@ -183,7 +183,7 @@ Actor gradient: 最大化 Q - β·‖a - ã‖²
 | 参考动作 Dropout 率 | 未明确（论文未披露） | TODO: 待补充 |
 
 **部署约束**：
-- 需要持续运行的 π0.6 VLA 推理（GPU）
+- 需要持续运行的 $\pi_{0.6}$ VLA 推理（GPU）
 - RL actor-critic 可部署在 CPU 上
 - 每个新任务需要：① 少量演示数据训练 RL Token（~50 条） ② 数小时在线 RL
 
@@ -245,7 +245,7 @@ Actor gradient: 最大化 Q - β·‖a - ã‖²
 | GR-RL | 扩散噪声预测器 | 扩散潜空间 | 中 | 真实机器人 1 长任务 | 操作扩散过程，非直接动作 |
 | SERL/RL100 | 小型策略（ResNet） | 块动作 | 高（数小时） | 真实机器人 | 无 VLA 先验，从零训练 |
 
-**面试 Tip**：当被问到"RLT 和 RECAP 有什么区别"时，可以回答："RLT 通过 RL Token 压缩表示将更新参数限制在 < 1M 的 actor-critic，而 RECAP 更新整个 π0.6* 模型（数十亿参数）。RLT 用表示压缩换效率，RECAP 用全模型更新换上限——前者适合数小时快速适配，后者适合追求极致性能的长任务。"
+**面试 Tip**：当被问到"RLT 和 RECAP 有什么区别"时，可以回答："RLT 通过 RL Token 压缩表示将更新参数限制在 $< 1\text{M}$ 的 actor-critic，而 RECAP 更新整个 $\pi_{0.6}^*$ 模型（数十亿参数）。RLT 用表示压缩换效率，RECAP 用全模型更新换上限——前者适合数小时快速适配，后者适合追求极致性能的长任务。"
 
 ## 8. 精讀建議 (Reading Guide)
 

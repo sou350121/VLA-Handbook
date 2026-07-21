@@ -54,7 +54,7 @@ RoboTTT 的核心设计围绕三个问题展开：
 2. **利用问题**：在部署时用梯度更新 fast weights 可以保留显著特征、丢弃冗余信息——机器人观测流是密集且重复的，需要选择性压缩。
 3. **效率问题**：传播 fast weights 的时间复杂度恒定，而 Transformer 即使有 KV cache 也会随历史增长。
 
-**架构集成**：在 GR00T N1.7 的 16 层 DiT action head 的每一层之后插入 TTT 层。注意力层处理单步内信息（R_t, q_t, A_t 之间的交互），TTT 层处理跨时间步信息。VLM 的 VL tokens Φ 不直接通过 TTT 层（计算效率），而是通过 N=16 个 learnable register tokens R 携带跨时间信息。
+**架构集成**：在 GR00T N1.7 的 16 层 DiT action head 的每一层之后插入 TTT 层。注意力层处理单步内信息（$R_t$, $q_t$, $A_t$ 之间的交互），TTT 层处理跨时间步信息。VLM 的 VL tokens $\Phi$ 不直接通过 TTT 层（计算效率），而是通过 $N=16$ 个 learnable register tokens $R$ 携带跨时间信息。
 
 ⚡ **Eureka Moment**：把 fast weights（测试时通过梯度下降更新的 MLP 参数）作为 VLA 策略的循环状态——历史不是被"缓存"（KV cache）或"压缩为向量"（RNN），而是被"写入参数空间"，推理时通过前向传播"读取"。
 
@@ -119,7 +119,7 @@ W_t = W_{t-1} - η · ∇_W L_FW(f_{W_{t-1}}(K_t), V_t)
 | 符号 | 含义 |
 |------|------|
 | W_t | t 时刻的 fast weights（MLP 参数矩阵） |
-| η | 可学习的学习率 |
+| $\eta$ | 可学习的学习率 |
 | K_t, V_t | 当前时间步的 Key 和 Value 投影 |
 | L_FW | fast weight loss，通常为 MSE: \|\|f(K_t) - V_t\|\|² |
 | f_W | 由 fast weights 参数化的小网络（本文用 2 层 MLP） |
@@ -143,9 +143,9 @@ O = tanh(α) ⊙ O_TTT + O_attn
 
 | 符号 | 含义 |
 |------|------|
-| α | 可学习门控参数，初始化为 0.001（接近 0） |
-| tanh(α) | 门控幅度，训练初期 ≈ 0，TTT 分支几乎沉默 |
-| ⊙ | 逐元素乘法 |
+| $\alpha$ | 可学习门控参数，初始化为 0.001（接近 0） |
+| tanh(α) | 门控幅度，训练初期 $\approx 0$，TTT 分支几乎沉默 |
+| $\odot$ | 逐元素乘法 |
 
 **序列 Flow-Matching 损失（外循环）**：
 
@@ -155,22 +155,22 @@ L_fm(ξ; W_0) = (1/T) · Σ_{t=1}^{T} E_{τ_t, ε} [||v_θ(Φ_t, A_t^{τ_t}, q_t
 
 | 符号 | 含义 |
 |------|------|
-| ξ | 完整轨迹序列 |
+| $\xi$ | 完整轨迹序列 |
 | W_0 | fast weight 初始化（通过 meta-learning 学习） |
-| τ_t | 每步独立采样的 flow-matching 噪声水平 |
-| v_θ | DiT action head |
-| A_t^{τ_t} | 加噪动作: τ_t · A_t + (1-τ_t) · ε |
+| $\tau_t$ | 每步独立采样的 flow-matching 噪声水平 |
+| $v_\theta$ | DiT action head |
+| $A_t^{\tau_t}$ | 加噪动作: $\tau_t \cdot A_t + (1-\tau_t) \cdot \varepsilon$ |
 
-> 符号与本文保持一致。θ_Q, θ_K, θ_V 和 W_0 作为模型参数通过外循环任务损失学习。
+> 符号与本文保持一致。$\theta_Q$, $\theta_K$, $\theta_V$ 和 $W_0$ 作为模型参数通过外循环任务损失学习。
 
 ## 3. 带数字走一遍：玩具例子 (Worked Example)
 
 假设一个简化的 3 步机器人轨迹，演示 fast weights 如何逐步积累历史信息：
 
 **设定**：
-- fast model f_W 是一个 2 层 MLP: d=64 → 128 → 64
-- W 的参数总量 ≈ 64×128 + 128×64 = 16,384 个参数（固定大小）
-- 学习率 η = 0.01（可学习）
+- fast model $f_W$ 是一个 2 层 MLP: $d=64 \to 128 \to 64$
+- $W$ 的参数总量 $\approx 64\times128 + 128\times64 = 16{,}384$ 个参数（固定大小）
+- 学习率 $\eta = 0.01$（可学习）
 
 **Step 1**：机器人看到初始观测（机械臂在起始位置）
 ```
@@ -209,18 +209,18 @@ O_3 = f_{W_3}(Q_3)  →  输出融合了前两步的上下文
 
 | 工程维度 | 数值/特性 | 含义 |
 |----------|-----------|------|
-| 预训练上下文 | 128 → 8K 时间步 | 逐步增加上下文长度预训练 30K steps |
+| 预训练上下文 | $128 \to 8\text{K}$ 时间步 | 逐步增加上下文长度预训练 30K steps |
 | 后训练上下文 | 1K 时间步 | 下游任务 post-train 20K steps |
-| 训练硬件 | 16× NVIDIA GB200 | 高成本，但 TBPTT 使内存不随序列增长 |
+| 训练硬件 | $16\times$ NVIDIA GB200 | 高成本，但 TBPTT 使内存不随序列增长 |
 | 推理延迟 | 恒定（与上下文无关） | fast weights 传播是固定计算量 |
-| Fast model | 每 DiT 层一个 2 层 MLP | 16 层 × MLP ≈ 额外参数可忽略 |
-| 门控初始化 | α = 0.001 | 训练初期 TTT 贡献 ≈ 0，保护预训练知识 |
+| Fast model | 每 DiT 层一个 2 层 MLP | $16$ 层 $\times$ MLP $\approx$ 额外参数可忽略 |
+| 门控初始化 | $\alpha = 0.001$ | 训练初期 TTT 贡献 $\approx 0$，保护预训练知识 |
 | TBPTT 段长度 | 未明确指定 | 决定 GPU 内存占用，段越短内存越小但梯度近似越粗糙 |
 | Action chunk | H 步（具体值论文未明确） | 每步输出 H 步动作序列，降低控制频率需求 |
 | 去噪步数 | k 步（具体值论文未明确） | flow matching 推理时的采样步数 |
 
 **工程含义**：
-- **控制频率**：8K 时间步 ≈ 4 分钟，意味着 ~33Hz 的控制频率（8000/240秒）。对于精密装配任务，这是合理的。
+- **控制频率**：$8\text{K}$ 时间步 $\approx 4$ 分钟，意味着 $\sim 33\text{Hz}$ 的控制频率（$8000/240$秒）。对于精密装配任务，这是合理的。
 - **模块边界**：VLM backbone 冻结，TTT 仅插入 DiT action head。这意味着可以复用任何预训练 VLM，只需在 action head 层做修改。
 - **部署约束**：推理时 fast weights 从 W_0 开始逐更新，不能并行化（时序依赖）。但每步计算量固定，适合边缘部署。
 
@@ -282,7 +282,7 @@ O_3 = f_{W_3}(Q_3)  →  输出融合了前两步的上下文
 |----------|------|--------|
 | 短上下文预训练泛化差 | 1K 以下预训练时，推理 horizon 超出训练窗口，fast weights 更新超出见过的位置编码范围 | 中 |
 | 仅桌面双臂验证 | 实验限于 YAM 桌面装配，未测试移动底盘/人形/单臂场景 | 高 |
-| 训练成本高 | 16×GB200 预训练 30K steps + 20K steps post-train | 高（可及性） |
+| 训练成本高 | $16\times\text{GB200}$ 预训练 $30\text{K}$ steps $+ 20\text{K}$ steps post-train | 高（可及性） |
 | Fast weights 可能"遗忘" | 8K 步的连续梯度更新可能导致早期信息被覆盖（类似 catastrophic forgetting） | 中（论文未讨论） |
 | 对 VLM 表征依赖 | VLM 冻结，如果视觉表征不足，TTT 无法补偿 | 低 |
 

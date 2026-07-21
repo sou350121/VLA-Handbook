@@ -32,7 +32,7 @@
 
 | 模块 | 输入 | 输出 | 频率/时序 | 训练/推理差异 |
 |------|------|------|-----------|---------------|
-| 传感器编码器 (Sensor Encoders) | 原始传感器数据 (Vision 64×64×3, FT 4×6, Proprio 14 维) | 128 维 embedding | 每步 | 训练/推理相同 |
+| 传感器编码器 (Sensor Encoders) | 原始传感器数据 (Vision $64 \times 64 \times 3$, FT $4 \times 6$, Proprio $14$ 维) | 128 维 embedding | 每步 | 训练/推理相同 |
 | MSDP 编码器 (2-layer Transformer) | 部分 masked 的 sensor embeddings (70% mask) | 融合 multisensory embeddings | 每步 | 预训练阶段 trainable，下游冻结 |
 | 解码器 (Decoder) | Masked embeddings + 动作条件 | 重建的传感器观测 (当前或下一步) | 预训练阶段 | 仅预训练使用 |
 | Critic 交叉注意力层 | Learnable query + MSDP embeddings | 动态 task-specific 特征 | 每步 | 下游训练 |
@@ -114,12 +114,12 @@ MSDP-R (Reconstruction):
 
 | 符号 | 含义 | 维度 |
 |------|------|------|
-| O^V | 视觉观测 | 64×64×3 |
-| O^{FT} | 力矩传感器读数 | 4×6 |
-| O^P | 本体感知 (关节位置 + 速度) | 14 |
+| $O^V$ | 视觉观测 | $64 \times 64 \times 3$ |
+| $O^{FT}$ | 力矩传感器读数 | $4 \times 6$ |
+| $O^P$ | 本体感知 (关节位置 + 速度) | 14 |
 | A_t | 动作 (笛卡尔控制) | 3 |
-| Φ | 解码器预测函数 | - |
-| ||·||² | 均方误差 (MSE) | - |
+| $\Phi$ | 解码器预测函数 | - |
+| ||$\cdot$||$^2$ | 均方误差 (MSE) | - |
 
 **直觉解释**：预训练阶段，网络被迫在缺失部分传感器的情况下重建完整观测——这迫使它学习传感器之间的物理关联（如"关节角度 + 视觉深度 → 接触力"）。下游 RL 时，冻结的编码器已经编码了这些跨模态关系，只需学习如何用这些表征做决策。
 
@@ -130,16 +130,16 @@ MSDP-R (Reconstruction):
 假设 **Peg Insertion** 任务中的单步推理：
 
 **输入观测**（t 时刻）：
-- Vision: 64×64×3 RGB 图像（peg 和 hole 的部分 occlusion）
-- FT: 4×6 力矩读数（当前接触力 ~2N）
+- Vision: $64 \times 64 \times 3$ RGB 图像（peg 和 hole 的部分 occlusion）
+- FT: $4 \times 6$ 力矩读数（当前接触力 $\sim 2\,\text{N}$）
 - Proprio: 14 维（关节角度 + 速度，endeffector 位置已知）
 
 **预训练编码器处理**：
-1. Vision 经 CNN-stem → 16 个 128 维 embeddings
-2. FT 经 Linear → 1 个 128 维 embedding
-3. Proprio 经 Linear → 1 个 128 维 embedding
+1. Vision 经 CNN-stem → 16 个 $128$ 维 embeddings
+2. FT 经 Linear → 1 个 $128$ 维 embedding
+3. Proprio 经 Linear → 1 个 $128$ 维 embedding
 4. 总计 18 个 embeddings，随机 mask 70% → 保留约 5-6 个
-5. Transformer encoder 处理 → 输出 18 个融合 embeddings
+5. Transformer encoder 处理 → 输出 $18$ 个融合 embeddings
 
 **Critic 特征提取**：
 ```
@@ -201,7 +201,7 @@ a = μ(all_pooled) + σ·noise  (SAC 策略)
 
 **真实世界设置**：
 - 机器人：Franka Emika Panda
-- 传感器：腕部 FT 传感器 + RealSense 相机 (64×64 下采样)
+- 传感器：腕部 FT 传感器 + RealSense 相机 ($64 \times 64$ 下采样)
 - 任务：Peg Insertion（三角 peg）、Push Cube（7.5cm 立方体推 15cm）
 - 奖励：稀疏 +1（成功检测 via endeffector 位置或 Aruco marker）
 

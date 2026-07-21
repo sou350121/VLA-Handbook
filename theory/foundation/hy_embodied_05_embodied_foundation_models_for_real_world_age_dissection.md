@@ -42,7 +42,7 @@
 | 架構類型 | Mixture-of-Transformers | Mixture-of-Experts | 模態自適應計算 |
 | 視覺路徑 | 獨立 QKV + FFN + 雙向 Attention | 同左 | 避免視覺訓練污染語言能力 |
 | Latent Tokens | 有（每圖 1 個） | 同左 | 連接視覺與語言語義 |
-| 推理速度 | ≈ Dense-2B | - | MoT 引入開銷可忽略 |
+| 推理速度 | $\approx$ Dense-2B | - | MoT 引入開銷可忽略 |
 
 ### 1.2 關鍵機制 (Key Mechanism)
 
@@ -129,7 +129,7 @@ L_total = L_llm + L_vision + L_global
 | 符號 | 含義 | 來源 |
 |------|------|------|
 | N_v | 視覺 token 數量 | 由輸入圖像分辨率和 ViT patch size 決定 |
-| z_i | 目標离散 visual code | 由更大 ViT 教師模型生成，codebook size=2k，每 8×8 patch 壓縮為 1 個 code |
+| z_i | 目標离散 visual code | 由更大 ViT 教師模型生成，codebook size=$2k$，每 $8\times8$ patch 壓縮為 1 個 code |
 | f_latent | latent token 特徵 | 模型內部可學習 |
 | f_teacher | 教師 ViT 全局特徵 | 預計算，固定監督信號 |
 
@@ -139,7 +139,7 @@ L_total = L_llm + L_vision + L_global
 
 ## 3. 帶數字走一遍：玩具例子 (Worked Example)
 
-假設輸入一張 512×512 的廚房場景圖像，任務是「找出橙子並給出抓取點」。
+假設輸入一張 $512\times512$ 的廚房場景圖像，任務是「找出橙子並給出抓取點」。
 
 **步驟 1：視覺編碼**
 ```
@@ -198,8 +198,8 @@ Reward = 1 - 0.014 = 0.986 (接近完美)
 | 視覺編碼器 | 400M | HY-ViT 2.0 參數量 |
 | 輸入分辨率 | 任意 | 原生支持，無需預處理縮放 |
 | 上下文長度 | 32k | 預訓練/中訓練階段 sequence packing |
-| 推理速度 | ≈ Dense-2B | MoT 引入開銷可忽略（解碼階段主導總時間） |
-| 顯存需求 | ≥16GB VRAM | 官方推薦，實際 BF16 推理約 10-12GB |
+| 推理速度 | $\approx$ Dense-2B | MoT 引入開銷可忽略（解碼階段主導總時間） |
+| 顯存需求 | $\geq16$GB VRAM | 官方推薦，實際 BF16 推理約 10-12GB |
 | 推理框架 | Transformers | 需安裝特定 commit (9293856)，vLLM 尚未支持 |
 
 **部署約束**：
@@ -271,7 +271,7 @@ Reward = 1 - 0.014 = 0.986 (接近完美)
 | Kimi K2.5 | 61.1% | -5.9 |
 
 **機器人控制實測（20 次試驗成功率）**：
-| 任務 | HY-Embodied VLA | π0 | π0.5 |
+| 任務 | HY-Embodied VLA | $\pi_0$ | $\pi_{0.5}$ |
 |------|-----------------|----|----|
 | Precision Plug-in Packing | **85%** | 80% | 85% |
 | Tableware Stacking | **80%** | 60% | 85% |
@@ -322,7 +322,7 @@ Reward = 1 - 0.014 = 0.986 (接近完美)
 | **HY-Embodied-0.5** | MoT + Latent Tokens | 2B/32B | ✅ | ✅ | 模態分離計算，視覺 latent tokens |
 | Qwen3-VL | Dense/MoE | 2B-72B | ❌ | ✅ | 通用 VLM，非具身優化 |
 | RoboBrain 2.5 | - | 4B | ✅ | ❓ | 專用具身，但性能落後 |
-| π0 / π0.5 | Action Expert | - | ✅ | ✅ | VLA 框架，非基礎模型 |
+| $\pi_0 / \pi_{0.5}$ | Action Expert | - | ✅ | ✅ | VLA 框架，非基礎模型 |
 | MiMo-Embodied | - | 7B | ✅ | ❓ | 小米具身模型，性能居中 |
 
 **面試 Tip**：  

@@ -1,7 +1,7 @@
 # Spirit-v1.5 模型解剖（Dissecting Spirit-v1.5）
 
 > **写作风格说明**：本文刻意参考 `pi0_flow_matching.md` / `pi0_5_dissection.md` 的叙事逻辑：
-> **Main Mathematical Idea → 架构信息流（ASCII）→ 数学/推理细节 → 代码入口走读 → 复现 checklist → 与 π0/π0.5 对比**。
+> **Main Mathematical Idea → 架构信息流（ASCII）→ 数学/推理细节 → 代码入口走读 → 复现 checklist → 与 $\pi_0$/$\pi_{0.5}$ 对比**。
 
 - 官方仓库：[`Spirit-AI-Team/spirit-v1.5`](https://github.com/Spirit-AI-Team/spirit-v1.5)
 
@@ -93,17 +93,17 @@ Spirit-v1.5 的仓库目录结构中，明确写了主文件：
 Spirit-v1.5 的核心不是“直接从图像回归动作”，而是：
 
 - 先用 Qwen3-VL 把多视角观测 + 任务文本编码成 **hidden states**
-- 再让 DiT action head cross-attend 到这些 hidden states，把它们当成条件 \(\\mathrm{cond}\\)
+- 再让 DiT action head cross-attend 到这些 hidden states，把它们当成条件 $\mathrm{cond}$
 
 从抽象上看，就是：
 
 $$
-v_\\theta = f_\\theta(x_t, t, \\underbrace{h_{\\text{VLM}}}_{\\mathrm{cond}})
+v_\theta = f_\theta(x_t, t, \underbrace{h_{\text{VLM}}}_{\mathrm{cond}})
 $$
 
-这里的 \(h_{\\text{VLM}}\) 是“这个时刻看到什么、要做什么、机器人是什么类型”的综合表征。
+这里的 $h_{\text{VLM}}$ 是“这个时刻看到什么、要做什么、机器人是什么类型”的综合表征。
 
-### 2.1 状态与动作的归一化：MIN_MAX → [-1, 1]
+### 2.1 状态与动作的归一化：MIN_MAX → $[-1, 1]$
 
 在 `SpiritVLAPolicy.select_action(...)` 内，先执行：
 - `Normalize` inputs（state）
@@ -116,18 +116,18 @@ $$
 Normalize 的具体公式（源码逐行对应）是：
 
 $$
-x' = \\frac{x - x_{\\min}}{x_{\\max} - x_{\\min} + 10^{-8}}
+x' = \frac{x - x_{\min}}{x_{\max} - x_{\min} + 10^{-8}}
 $$
 
-再把 \([0,1]\) 拉到 \([-1,1]\)：
+再把 $[0,1]$ 拉到 $[-1,1]$：
 
 $$
-\\hat{x} = 2x' - 1
+\hat{x} = 2x' - 1
 $$
 
 #### 2.1.1 这一步为什么重要（工程直觉）
 
-- **动作 head 的 ODE 迭代**默认在一个“相对规整”的数值空间里工作。把 state/action 统一缩放到 \([-1, 1]\)，可以显著降低不同机器人/任务尺度差异带来的数值不稳定。
+- **动作 head 的 ODE 迭代**默认在一个“相对规整”的数值空间里工作。把 state/action 统一缩放到 $[-1, 1]$，可以显著降低不同机器人/任务尺度差异带来的数值不稳定。
 - **坑点**：如果你迁移到自家机器人，最容易踩的是：`stats` 不完整或维度对不上 → Normalize buffer 里出现 `inf` → 推理直接 assert 失败。
 
 ### 2.2 条件 ODE 的离散化：Euler 积分
@@ -212,7 +212,7 @@ The current robot type is {robot_type}. What is the current task?
 3. 把最后 1 层沿 **序列维度**拼起来：
 
 $$
-h_{\\text{VLM}} = \\mathrm{cat}\\big(\\text{hidden\\_states}[-1:],\\ \\text{dim}=1\\big)
+h_{\text{VLM}} = \mathrm{cat}\big(\text{hidden\_states}[-1:],\ \text{dim}=1\big)
 $$
 
 随后进入 DiT 前会做一次投影：
@@ -447,7 +447,7 @@ Spirit-v1.5 登顶的 Table30 榜单是具身智能领域的高难度实机测�
 
 ---
 
-## 7. 与 π0 / π0.5 的“写作逻辑一致”的对比（只写可验证点）
+## 7. 与 $\pi_0$ / $\pi_{0.5}$ 的“写作逻辑一致”的对比（只写可验证点）
 
 这里刻意遵循 `pi0_flow_matching.md` / `pi0_5_dissection.md` 的对比方式：只写“代码/公开材料能确认”的点。
 
@@ -464,13 +464,13 @@ Spirit-v1.5 登顶的 Table30 榜单是具身智能领域的高难度实机测�
   - 参考：[`scripts/run_robochallenge.sh`](https://raw.githubusercontent.com/Spirit-AI-Team/spirit-v1.5/main/scripts/run_robochallenge.sh)
   - 参考：[`robochallenge/run_robochallenge.py`](https://raw.githubusercontent.com/Spirit-AI-Team/spirit-v1.5/main/robochallenge/run_robochallenge.py)
 
-### 7.4 “今天打败 π0.5 登顶”如何表述更严谨
+### 7.4 “今天打败 $\pi_{0.5}$ 登顶”如何表述更严谨
 - **性能数据**：截至 2026-01-11，Spirit-v1.5 在 Table30 总分 66.09，成功率 50.33%，具有统计学显著的领先优势。
 - **最强引用**：仓库 README 的 Table30 #1 声明（截至 2026-01-11）
   - 参考：[`Spirit-AI-Team/spirit-v1.5`](https://github.com/Spirit-AI-Team/spirit-v1.5)
 - **官方 Blog 深度解析**：
   - 参考：[Spirit-v1.5: Clean Data Is the Enemy of Great Robot Foundation Models](https://www.spirit-ai.com/en/blog/spirit-v1-5)
-- **交叉引用**：中文媒体 2026-01-12 的榜单叙述（用于“今天打败 π0.5”这一口径）
+- **交叉引用**：中文媒体 2026-01-12 的榜单叙述（用于“今天打败 $\pi_{0.5}$”这一口径）
   - 参考：[`m.sohu.com` 报道](https://m.sohu.com/a/975015519_610300)
   - 参考：[`stcn.com` 报道](https://www.stcn.com/article/detail/3586134.html)
 

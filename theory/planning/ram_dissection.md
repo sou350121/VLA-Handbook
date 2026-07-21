@@ -53,8 +53,8 @@
 | 模組 | 名稱（中/英） | 輸入 | 輸出 | 是否需訓練 |
 |------|--------------|------|------|:--------:|
 | **M1** | 物體類別級知識引擎 / Object Category-level Knowledge Engine | 預先建構的類別模板（11 類） | 類別模板（標準姿態、尺寸、對稱性、抓取點、功能平面） | ❌（人工標註模板，類別級而非實例級） |
-| **M2** | 三維視覺接地模型 / 3D Visual Grounding | RGB image + 點雲 + 模板 | 模板↔當前物體實例的姿態對應、grasp point 投影 | ✅ 主要用**合成數據**訓 |
-| **M3** | 檢索增強任務規劃器 / Retrieval-Augmented Task Planner | M2 grounding 結果 + 原始指令 + 圖像 | VLM 增強 context → 細粒度動作約束 → 軌跡優化 | ❌（用既有 VLM，不微調） |
+| **M2** | 三維視覺接地模型 / 3D Visual Grounding | RGB image + 點雲 + 模板 | 模板$\leftrightarrow$當前物體實例的姿態對應、grasp point 投影 | ✅ 主要用**合成數據**訓 |
+| **M3** | 檢索增強任務規劃器 / Retrieval-Augmented Task Planner | M2 grounding 結果 + 原始指令 + 圖像 | VLM 增強 context $\to$ 細粒度動作約束 $\to$ 軌跡優化 | ❌（用既有 VLM，不微調） |
 
 ### 1.2 關鍵機制 (Key Mechanism)
 
@@ -246,8 +246,8 @@ Step 3: TrajOpt
 ```
 
 **為什麼 92% 平面成功**（本文 image-guided 結果）：
-- 平面場景（桌面同高度）→ grounding 只需對齊 X-Y + 旋轉，誤差容忍大
-- 高低平面（**72%**）→ 額外要對齊 Z + 角度，grounding 誤差傳播 → 失敗率上升
+- 平面場景（桌面同高度）$\to$ grounding 只需對齊 X-Y + 旋轉，誤差容忍大
+- 高低平面（**72%**）$\to$ 額外要對齊 Z + 角度，grounding 誤差傳播 $\to$ 失敗率上升
 
 ⚠️ 這條 92% / 72% 數字來自 DeepTech 訪談，**未在原文表格逐項驗證**。
 
@@ -258,7 +258,7 @@ Step 3: TrajOpt
 | 維度 | 數值 / 觀察 | 工程含義 |
 |------|------------|---------|
 | **實驗任務** | **14 項真機任務** | 中大規模真機驗證（vs 多數論文 3-5 項） |
-| **物體類別** | **11 類**（杯、盤、餐具、抽屜、衣物 …） | 起步覆蓋日常 |
+| **物體類別** | **11 類**（杯、盤、餐具、抽屜、衣物 $\dots$） | 起步覆蓋日常 |
 | **物體實例** | **31 個** | 平均 ~3 實例/類 |
 | **語言驅動成功率** | **89.17%（120 次）** | 含單物體單步、多物體單步、多物體多步 |
 | **多物體多步成功率** | **80%** | 長程任務最具挑戰 |
@@ -302,14 +302,14 @@ Step 3: TrajOpt
 
 | 任務 | 成功率 | 描述 |
 |------|:----:|------|
-| 桌面清掃 | **65%** | 直接清掃不可行 → 規劃借助簸箕等中介工具 |
+| 桌面清掃 | **65%** | 直接清掃不可行 $\to$ 規劃借助簸箕等中介工具 |
 
 ### 5.4 物體類型擴展
 
 | 類型 | 方法 | 任務 |
 |------|------|------|
 | 鉸接物體（laptop、抽屜） | 多模板匹配（不同開合狀態預設） | 估計旋轉軸 / 推動方向 |
-| 柔性物體（衣物） | 折疊步驟拆解 + 分階段模板 | 展開→疊袖（左/右）→疊邊 |
+| 柔性物體（衣物） | 折疊步驟拆解 + 分階段模板 | 展開$\to$疊袖（左/右）$\to$疊邊 |
 | 觸覺擴展 | 抓取重心偏移時，觸覺反饋觸發 re-grasp | 重新規劃姿勢 |
 
 ⚠️ 鉸接 / 柔性的成功率未在訪談中給出，**待原文補**。
@@ -329,9 +329,9 @@ Step 3: TrajOpt
 
 | 場景 | 為何失敗 | 來源 |
 |------|---------|------|
-| 高低平面 image-guided | grounding 誤差在 Z 軸放大 | 數字隱含（92% → 72%） |
+| 高低平面 image-guided | grounding 誤差在 Z 軸放大 | 數字隱含（92% $\to$ 72%） |
 | 桌面清掃 35% 失敗案例 | 工具選擇 / 抓取軌跡 / 推送方向誤差 | 65% 反推 |
-| 開放類別物體 | 不在 11 類模板庫內 → 無法 ground | 訪談明確列為 future work |
+| 開放類別物體 | 不在 11 類模板庫內 $\to$ 無法 ground | 訪談明確列為 future work |
 | 接觸豐富 / 高速衝擊 | TrajOpt 範式假設不成立 | 隱含 |
 | VLM 幻覺 / 邊界推理 | RAG 注入不能完全消除 | 推論 |
 
@@ -352,7 +352,7 @@ Step 3: TrajOpt
 | Code-as-Policies | 隱式（代碼控制） | ❌ | 動態 | 中 | ❌ |
 | ReKep | 顯式（關鍵點約束） | ❌ | per-task 設計 | 中 | ❌ |
 | VoxPoser | 顯式（voxel 場） | ❌ | per-task | 中 | ❌ |
-| π0.5 / Hi-Robot | 隱式（VLA 雙層） | ✅（VLA 訓） | 看 VLA 預訓 | 中 | ❌ |
+| $\pi_{0.5}$ / Hi-Robot | 隱式（VLA 雙層） | ✅（VLA 訓） | 看 VLA 預訓 | 中 | ❌ |
 | CodeGraphVLP | 顯式（持久語義圖） | ❌ | 程式碼 ad-hoc | 中 | ❌ |
 | **RAM（本文）** | **顯式（類別模板庫）** | **❌（不訓 VLM）** | **新類別 = 新模板** | **大（14 任務 / 31 實例）** | **✅** |
 
@@ -368,15 +368,15 @@ Step 3: TrajOpt
 > 取得 GitHub repo 後，部分問題已答；剩餘待**原 PDF + 補充材料**確認：
 
 **已答（從 GitHub README 確認）**：
-- ~~代碼是否開源~~ → ✅ **已開源**（[RetrievalManip 組織](https://github.com/RetrievalManip/Retrieval-augmented-Manipulation)，但 license 未明列）
-- ~~VLM API 形式~~ → ✅ **`languages/` 目錄做 API client + prompt**——任意 OpenAI-compat 模型可換
-- ~~硬體~~ → ✅ **Fairino arm + ZED + RealSense D435/D455**
+- ~~代碼是否開源~~ $\to$ ✅ **已開源**（[RetrievalManip 組織](https://github.com/RetrievalManip/Retrieval-augmented-Manipulation)，但 license 未明列）
+- ~~VLM API 形式~~ $\to$ ✅ **`languages/` 目錄做 API client + prompt**——任意 OpenAI-compat 模型可換
+- ~~硬體~~ $\to$ ✅ **Fairino arm + ZED + RealSense D435/D455**
 
 **仍未答**（待 PDF / 補材確認）：
 1. **VLM 對比定量**：repo 是 API 介面，但**論文是否報告 GPT-4o vs Gemini 的成功率差異**？
-2. **Baseline 定量對比**：RAM vs VoxPoser / ReKep / π0.5 / CodeGraphVLP 在 same task suite 的成功率差？訪談沒提
+2. **Baseline 定量對比**：RAM vs VoxPoser / ReKep / $\pi_{0.5}$ / CodeGraphVLP 在 same task suite 的成功率差？訪談沒提
 3. **成功率細粒度**：89.17% 中**單步 vs 多步**分布；多步 80% **是 2 步、3 步還是 5 步**？
-4. **Sim2real gap 量化**：BOP-style 合成數據訓 RAM → 真實場景**性能下降百分比**？
+4. **Sim2real gap 量化**：BOP-style 合成數據訓 RAM $\to$ 真實場景**性能下降百分比**？
 5. **觸覺整合成功率**：訪談提及，無數字
 6. **VLM context 長度**：場景 10+ 物體時 retrieved JSON 多大？會吃到 context window 上限嗎？
 7. **TrajOpt 求解器**：repo `planner/` 目錄但具體用 OMPL / CHOMP / 可微分優化哪一個？收斂率？
@@ -400,8 +400,8 @@ Step 3: TrajOpt
 - Cite: Chen K, Li C, Tu C, et al. *Science Robotics*. 2026; 11(113):eaea2092
 - **代碼**: https://github.com/RetrievalManip/Retrieval-augmented-Manipulation （Stars=4, Forks=0；license 未指定）
 - 媒體訪談: DeepTech 第一作者陳凱訪談（2026 年）
-- 上游依賴: GroundingDINO · SAM2.1 · DINOv2 · VGGT (NVIDIA) · BlenderProc · Fairino SDK · ZED/RealSense bindings
-- 對比基線: Code-as-Policies (Liang 2023) · ReKep (Huang 2024) · VoxPoser (Huang 2023) · π0.5 (Black 2025) · CodeGraphVLP (2026) · Hi-Robot
+- 上游依賴: GroundingDINO $\cdot$ SAM2.1 $\cdot$ DINOv2 $\cdot$ VGGT (NVIDIA) $\cdot$ BlenderProc $\cdot$ Fairino SDK $\cdot$ ZED/RealSense bindings
+- 對比基線: Code-as-Policies (Liang 2023) · ReKep (Huang 2024) · VoxPoser (Huang 2023) · $\pi_{0.5}$ (Black 2025) · CodeGraphVLP (2026) · Hi-Robot
 
 🧠 **本文判讀（作者觀點）**：
 這篇是**少見的「不靠 scale 而靠範式遷移」的 manipulation 論文**——把 NLP 已驗證的 RAG 範式搬到具身 AI，**第一個系統性地把「外部空間知識」做成 first-class citizen**。Science Robotics 收錄是強信號（該期刊年錄用 100+ 篇）。

@@ -63,8 +63,8 @@
 
 四個設計選擇的因果鏈：
 
-1. **為什麼 DINO 不 VAE？** —— Ablation 直接打臉：相近設置下（MM-DiT + Qwen3vl + EI-30K），VAE 路線的 `UWM(MM-DiT)` 拿 20.0%、`LDA-1B`（DINO）拿 55.4%（**Δ ≈ +35 pp，注意 UWM(MM-DiT) 確切參數量論文未明列**）。VAE 的重構目標把算力消耗在像素細節，DINO 的判別性訓練讓特徵對背景不變、對物件結構敏感——**作者主張**後者才是動力學該住的空間（論文未給「DINO 重構訓練 / VAE 判別訓練」的中間態 ablation 來孤立證明這條因果）。
-2. **為什麼要 4 個 head 而不是只訓 policy？** —— 只訓 policy 時，加更多髒數據反而下降（π0.5 在 mixed-quality 下成功率掉 –10~–20 pp）。把 4 個任務統一後，髒數據可以走「dynamics 分支」做後門訓練，不污染 policy。
+1. **為什麼 DINO 不 VAE？** —— Ablation 直接打臉：相近設置下（MM-DiT + Qwen3vl + EI-30K），VAE 路線的 `UWM(MM-DiT)` 拿 20.0%、`LDA-1B`（DINO）拿 55.4%（**$\Delta \approx +35$ pp，注意 UWM(MM-DiT) 確切參數量論文未明列**）。VAE 的重構目標把算力消耗在像素細節，DINO 的判別性訓練讓特徵對背景不變、對物件結構敏感——**作者主張**後者才是動力學該住的空間（論文未給「DINO 重構訓練 / VAE 判別訓練」的中間態 ablation 來孤立證明這條因果）。
+2. **為什麼要 4 個 head 而不是只訓 policy？** —— 只訓 policy 時，加更多髒數據反而下降（$\pi_{0.5}$ 在 mixed-quality 下成功率掉 –10~–20 pp）。把 4 個任務統一後，髒數據可以走「dynamics 分支」做後門訓練，不污染 policy。
 3. **為什麼用 Task Embedding + Register Token？** —— 一張網路要同時會 4 件事，需要明確的「**模式開關**」。Register token 的設計很巧：訓 policy 時用 visual register 占未來畫面的位（不預測未來），訓 visual forecasting 時用 action register 占動作的位——把 4 種任務轉成同一個「填空題」的不同 mask 模式。
 4. **為什麼用統一末端執行器空間？** —— 不同機器人關節空間沒法共用；但「**手腕 6-DoF + 手指狀態**」是物理通用的——人類也用 MANO 描述手部，跨本體共享。
 
@@ -181,7 +181,7 @@ camera_extrinsics: 保留以解耦頭部 ego-motion 與手部運動
 低質量示範：30%（含暫停、重試、低效）→ 只走 dynamics + visual forecast head
 ```
 
-**π0.5（純 BC baseline）**：
+**$\pi_{0.5}$（純 BC baseline）**：
 - 高質量 only：60%
 - 加 30% 髒：**40%（−20 pp）** ← 髒動作直接污染 policy
 
@@ -209,9 +209,9 @@ camera_extrinsics: 保留以解耦頭部 ego-motion 與手部運動
 
 | 維度 | 數值 | 工程含義 |
 |------|------|---------|
-| **訓練計算** | 48 × H800 / 400k iter / 4,608 GPU-hr | 約 4 天牆鐘；中等規模實驗室可重現（不是百萬 GPU-hr 級） |
+| **訓練計算** | 48 $\times$ H800 / 400k iter / 4,608 GPU-hr | 約 4 天牆鐘；中等規模實驗室可重現（不是百萬 GPU-hr 級） |
 | **凍結模塊** | DINO + Qwen3-VL | 主要學主幹 + action encoder/decoder；節省顯存 |
-| **參數規模** | 1B（MM-DiT 主幹） | 對比 GR00T-N1.6 / π0.5 同量級 |
+| **參數規模** | 1B（MM-DiT 主幹） | 對比 GR00T-N1.6 / $\pi_{0.5}$ 同量級 |
 | **數據規模** | EI-30K = 33.83k 小時 | 8.03k 真機 + 8.6k sim + 7.2k 人類帶動作 + 10k 人類無動作 |
 | **真機 fine-tune** | 每 task 100 條 teleop（**50–80% 是專家**，其他是次優） | 直接體現「不要苛求專家數據」的論點 |
 | **跨本體 fine-tune** | Galbot G1 約 1 小時數據（營銷稿說法，未在論文嚴格量化） | ⚠️ 此數字未在論文 quantification 直接對應 |
@@ -238,7 +238,7 @@ camera_extrinsics: 保留以解耦頭部 ego-motion 與手部運動
 | 人類無動作視訊 | 10.0k 小時 | **只**走 visual forecasting |
 | **合計** | **33.83k 小時** | — |
 
-🧠 **作者觀點**：論文公開把「按質分工」的比例和角色寫死在表裡——這是少見的「**異構數據策略透明化**」。對比 π0.5 之類 monolithic BC 路線，LDA 等於把「數據工程」從黑盒改成可審計的訓練模式。
+🧠 **作者觀點**：論文公開把「按質分工」的比例和角色寫死在表裡——這是少見的「**異構數據策略透明化**」。對比 $\pi_{0.5}$ 之類 monolithic BC 路線，LDA 等於把「數據工程」從黑盒改成可審計的訓練模式。
 
 ### 5.2 RoboCasa-GR1 主結果（TABLE II）
 
@@ -255,14 +255,14 @@ camera_extrinsics: 保留以解耦頭部 ego-motion 與手部運動
 | **LDA-1B** | DINO | ✓ | **55.4** | **本文** |
 
 **ablation 拆解**（注意：UWM(MM-DiT) 論文未明列參數量，可能與 UWM-1B 相當）：
-- 表徵空間：UWM(MM-DiT) VAE 20.0 → LDA-1B DINO 55.4（**Δ ≈ +35 pp**，但混雜了表徵 + 數據策略 + 訓練細節差異）
+- 表徵空間：UWM(MM-DiT) VAE 20.0 → LDA-1B DINO 55.4（**$\Delta \approx +35$ pp**，但混雜了表徵 + 數據策略 + 訓練細節差異）
 - DiT → MM-DiT（控制 DINO 與 0.5B）：48.9 → 50.7（+1.8 pp）
 - 0.5B → 1B（控制其他）：50.7 → 55.4（+4.7 pp，**模型 scaling 真的給力**）
 - 對比 GR00T-EI30k（同數據、不同架構）：51.3 → 55.4（+4.1 pp，架構也有貢獻）
 
 ### 5.3 Mixed-Quality Fine-tune（TABLE IV）
 
-| 任務 | π0.5 高質 | π0.5 +髒 | LDA 高質 | LDA +髒 |
+| 任務 | $\pi_{0.5}$ 高質 | $\pi_{0.5}$ +髒 | LDA 高質 | LDA +髒 |
 |------|:---------:|:--------:|:---------:|:--------:|
 | Place pen | 60 | 40（**−20**） | 70 | **80（+10）** |
 | Remove lid | 50 | 40（−10） | 50 | **60（+10）** |
@@ -271,7 +271,7 @@ camera_extrinsics: 保留以解耦頭部 ego-motion 與手部運動
 
 ### 5.4 真機長尾任務
 
-| 任務 | 機器人 | LDA-1B | π0.5 | GR00T |
+| 任務 | 機器人 | LDA-1B | $\pi_{0.5}$ | GR00T |
 |------|--------|:------:|:----:|:-----:|
 | Pull Nail（低 DoF, BrainCo 手） | Unitree G1 | **80%** | ~0% | — |
 | Flip Bread（高 DoF, Sharpa 手） | Galbot G1 | **90%** | 10% | — |
@@ -301,7 +301,7 @@ camera_extrinsics: 保留以解耦頭部 ego-motion 與手部運動
 
 ### 6.3 隱含假設 (Hidden Assumptions)
 
-1. **DINO 已足夠表達物理**：DINO 是判別式預訓，沒看過動力學——論文賭的是「**好的判別特徵 ≈ 好的物理表徵**」。這條未被獨立證明，只是經驗性 ablation 支持。
+1. **DINO 已足夠表達物理**：DINO 是判別式預訓，沒看過動力學——論文賭的是「**好的判別特徵 $\approx$ 好的物理表徵**」。這條未被獨立證明，只是經驗性 ablation 支持。
 2. **跨本體統一空間需手動對齊**：論文原話 `manually aligned`——換平台不是即插即用。
 3. **4 個 task head 的權重平衡**：訓練時 task 是按比例採樣，比例本身是超參——論文未公開最優配比。
 4. **無動作視訊只貢獻 visual forecast**：論文沒做「移除無動作視訊」的單獨 ablation，所以「+10k 小時」對 policy 的實際貢獻是間接的。
@@ -313,7 +313,7 @@ camera_extrinsics: 保留以解耦頭部 ego-motion 與手部運動
 
 | 方法 | 學什麼 | 表徵空間 | 異構數據策略 | 跨本體 | 真機表現 |
 |------|--------|---------|------------|--------|----------|
-| π₀ / π₀.₅ | policy | 像素 + token | 只用高質 | 弱 | 短程強、長程/接觸弱 |
+| $\pi_0$ / $\pi_{0.5}$ | policy | 像素 + token | 只用高質 | 弱 | 短程強、長程/接觸弱 |
 | Gr00T-N1.x | policy + 視訊預測 | pixel-VAE | 部分異構 | 中 | 主流 baseline |
 | UWM | policy + dynamics | **VAE** | 試圖統一 | 中 | RoboCasa 19~20% |
 | WAM 概念類論文（PKU+Galbot 2025） | World+Action 範式（⚠️ 「首次定義」為營銷稿說法） | latent | 概念框架 | — | 概念論文 |
@@ -331,7 +331,7 @@ camera_extrinsics: 保留以解耦頭部 ego-motion 與手部運動
 > 來源混合（peer-review 論文 + 社群營銷稿）。本節用問題形式提出，不帶傾向：
 
 1. **RSS 2026 接收**？營銷稿稱「210 篇之一」，但項目頁與論文 metadata 均未顯示——是已接收但未官宣，還是僅 submit 中？
-2. **「π0.7」對比**？論文 baseline 是 π0.5（Black et al., 2025），未看到 π0.7 的引用——營銷稿可能筆誤或指未發表的 internal 版本。
+2. **「$\pi_{0.7}$」對比**？論文 baseline 是 $\pi_{0.5}$（Black et al., 2025），未看到 $\pi_{0.7}$ 的引用——營銷稿可能筆誤或指未發表的 internal 版本。
 3. **GEN-1 / Generalist AI 對比**？論文中無此 baseline，純社群敘事。
 4. **「1 小時 fine-tune 跨本體」**？營銷稿原話，論文中對應的是「100 條 teleop」這個量化——時長換算與「1 小時」是否對應同一個事實？
 5. **無動作視訊（10k 小時）的單獨貢獻**？論文沒做「移除這 10k」的 ablation——它對 policy 成功率的真實貢獻是 +X%？
@@ -345,7 +345,7 @@ camera_extrinsics: 保留以解耦頭部 ego-motion 與手部運動
 |------|--------|---------|
 | arXiv 論文（peer-review pending） | 🟡 中高 | 主表格、loss 公式、訓練成本 |
 | 項目主頁（pku-epic.github.io/LDA） | 🟡 中 | 演示視訊、硬體列表 |
-| 公司營銷稿（機器之心等） | 🔴 低 | RSS 接收、π0.7 對比、「1 小時跨本體」 |
+| 公司營銷稿（機器之心等） | 🔴 低 | RSS 接收、$\pi_{0.7}$ 對比、「1 小時跨本體」 |
 
 ---
 
@@ -354,7 +354,7 @@ camera_extrinsics: 保留以解耦頭部 ego-motion 與手部運動
 - HTML: https://arxiv.org/html/2602.12215v1
 - 項目: https://pku-epic.github.io/LDA/
 - 代碼: https://github.com/jiangranlv/latent-dynamics-action（**注意**：營銷稿給的 `LDA-1B` 路徑 ≠ 實際 repo 名）
-- 對比基線: π₀.₅ (Black et al., 2025) · GR00T-N1.6 (NVIDIA, 2025) · UWM (2025) · StarVLA · 早期 WAM 概念類工作（PKU+Galbot, 2025；具體論文名以原文 Related Work 為準）
+- 對比基線: $\pi_{0.5}$ (Black et al., 2025) · GR00T-N1.6 (NVIDIA, 2025) · UWM (2025) · StarVLA · 早期 WAM 概念類工作（PKU+Galbot, 2025；具體論文名以原文 Related Work 為準）
 
 🧠 **本文判讀（作者觀點）**：
 這是 2026 春季少見的**「用 ablation 把整條主流路線（pixel-VAE 世界模型）打死」**的論文——20.0% vs 55.4% 不是優化問題，是路線問題。`「VLA vs 世界模型」是假二分` 這一論斷如果經得起獨立復現，會直接影響未來 12 個月的具身 foundation model 設計。**但要老實看到限制**：DINO/VLM 全凍結意味著視覺學的天花板被外部工具決定，「按質分工」需要人工標註數據質量——scaling 之路還沒到「壓進去就能煉」的 GPT-2 時刻。**🔧 級評估**（未到 ⚡，因 RSS 接收未驗證 + checkpoint 未開源），但若 3 個月內模型權重發布且能被獨立復現，可升級。

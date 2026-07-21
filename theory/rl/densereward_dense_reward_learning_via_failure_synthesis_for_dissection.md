@@ -127,14 +127,14 @@ r_t = -1 + r_t^model                  (DSRL 真实世界集成)
 | 符号 | 含义 | 范围 |
 |------|------|------|
 | r_t | 融合后的每步奖励 | 实数 |
-| r_t^sim | 模拟器原始奖励 (binary) | {0, 1} |
-| r_t^model | DenseReward 预测的密集奖励 | [0, 1] |
-| α | 模拟器奖励权重 | 1.0 |
-| β | 模型奖励权重 | C/T_max (缩放以匹配累积尺度) |
+| $r_t^{\text{sim}}$ | 模拟器原始奖励 (binary) | {0, 1} |
+| $r_t^{\text{model}}$ | DenseReward 预测的密集奖励 | [0, 1] |
+| $\alpha$ | 模拟器奖励权重 | 1.0 |
+| $\beta$ | 模型奖励权重 | C/T_max (缩放以匹配累积尺度) |
 | C | action chunk 长度 | 5 |
 | T_max | 最大 episode 长度 | 任务相关 |
 
-**直觉**：β = C/T_max 的设计确保密集奖励的累积量与 episode 级成功信号在同一量级——不会让密集信号淹没稀疏信号，也不会弱到没有引导作用。
+**直觉**：$\beta = C/T_{\max}$ 的设计确保密集奖励的累积量与 episode 级成功信号在同一量级——不会让密集信号淹没稀疏信号，也不会弱到没有引导作用。
 
 > 符号与论文 §4.3/4.4 保持一致。DenseReward 模型本身的训练损失为 MAE（平均绝对误差），论文未公开具体网络结构细节。
 
@@ -144,7 +144,7 @@ r_t = -1 + r_t^model                  (DSRL 真实世界集成)
 
 **场景**：机器人在第 15 步时发生了碰撞，但重规划后继续执行，最终在第 45 步成功完成。
 
-**DenseReward 预测的 r_t^model 轨迹**（假设值，反映论文描述的模式）：
+**DenseReward 预测的 $r_t^{\text{model}}$ 轨迹**（假设值，反映论文描述的模式）：
 
 ```
 步数  阶段      r_model  说明
@@ -161,7 +161,7 @@ r_t = -1 + r_t^model                  (DSRL 真实世界集成)
 28-30  Done     1.00       成功完成
 ```
 
-**PPO 融合奖励**（α=1.0, β=5/50=0.1, 假设 r_sim=0 直到完成）：
+**PPO 融合奖励**（$\alpha=1.0$, $\beta=5/50=0.1$, 假设 $r_{\text{sim}}=0$ 直到完成）：
 
 ```
 步数  r_model  r_sim  r_t = 1.0·r_sim + 0.1·r_model
@@ -173,7 +173,7 @@ r_t = -1 + r_t^model                  (DSRL 真实世界集成)
 28-30   1.00     1        1.10        ← 成功 + 最大密集奖励
 ```
 
-**对比纯稀疏奖励**：如果没有 DenseReward，前 29 步的奖励全部为 0，只有第 30 步得到 r=1。PPO 的 credit assignment 几乎无法工作——它不知道哪步做对了、哪步做错了。有了 DenseReward，每一步都有梯度信号，尤其是碰撞→恢复的奖励变化直接告诉策略"碰撞是坏的，但恢复是好的"。
+**对比纯稀疏奖励**：如果没有 DenseReward，前 29 步的奖励全部为 0，只有第 30 步得到 $r=1$。PPO 的 credit assignment 几乎无法工作——它不知道哪步做对了、哪步做错了。有了 DenseReward，每一步都有梯度信号，尤其是碰撞→恢复的奖励变化直接告诉策略"碰撞是坏的，但恢复是好的"。
 
 ## 4. 工程视角
 
@@ -181,7 +181,7 @@ r_t = -1 + r_t^model                  (DSRL 真实世界集成)
 |----------|-----------|------|
 | 模型大小 | Qwen3-VL-4B | 4B 参数，单卡可部署（~8GB VRAM FP16） |
 | 输入帧数 | 当前帧 + 2 历史帧 | 3 帧输入；ablation 显示 2 帧是精度/成本最优平衡点 |
-| 历史帧 ablation | 0帧→MAE 0.096, 1帧→0.088, 2帧→0.081, 3帧→0.086 | 超过 2 帧反而引入噪声，说明短期时序建模足够 |
+| 历史帧 ablation | 0帧→MAE $0.096$, 1帧→$0.088$, 2帧→$0.081$, 3帧→$0.086$ | 超过 2 帧反而引入噪声，说明短期时序建模足够 |
 | 推理延迟 | 未报告（需实测） | 参考 Qwen3-VL-4B 推理速度，预计单帧 <50ms (A100) |
 | 训练数据 | 27k episodes | 仿真生成，零人工标注成本；覆盖 60+ 物体 |
 | 数据集来源 | DROID + Isaac Sim + RoboSuite + LIBERO | 跨源混合提升泛化性 |
@@ -213,7 +213,7 @@ r_t = -1 + r_t^model                  (DSRL 真实世界集成)
 |----------|------|----------|
 | 密集奖励预测 | 四数据集 (DROID/Isaac/RoboSuite/LIBERO) 测试集 | MAE (越低越好) |
 | MPC 引导 | 3 物体 (can/cup/lemon), 28 候选动作/步 | 最小末端执行器-物体距离 |
-| PPO 在线微调 | LIBERO (4 suites), π0 策略, 500 trials/检查点 | 成功率曲线 |
+| PPO 在线微调 | LIBERO (4 suites), $\pi_0$ 策略, 500 trials/检查点 | 成功率曲线 |
 | DSRL 真实世界 | Franka Research 3 + Robotiq 2F-85, 2 任务, 10 trials | 成功率 |
 
 ### 关键数字
@@ -221,8 +221,8 @@ r_t = -1 + r_t^model                  (DSRL 真实世界集成)
 - **奖励预测 MAE**: DenseReward 0.081 vs RoboReward-8B 0.230 vs Qwen3-VL-4B 0.289（**论文 Table 1**）
 - **MPC 平均距离**: DenseReward 0.229 vs RoboReward-8B 0.300（**论文 Table 2**）
 - **LIBERO-Spatial 最终成功率**: DenseReward 引导的 PPO 高于稀疏奖励基线（**论文 Figure 5**）
-- **真实世界 stack the cups**: 40% → 80%（+40pp）（**论文 Figure 6**）
-- **真实世界 put ball in basket**: 30% → 70%（+40pp）（**论文 Figure 6**）
+- **真实世界 stack the cups**: $40\% \to 80\%$（$+40$pp）（**论文 Figure 6**）
+- **真实世界 put ball in basket**: $30\% \to 70\%$（$+40$pp）（**论文 Figure 6**）
 
 ## 6. 能力与失败模式
 
@@ -253,7 +253,7 @@ r_t = -1 + r_t^model                  (DSRL 真实世界集成)
 
 3. **视觉输入稳定性**：DenseReward 依赖当前帧 + 历史帧作为输入，假设摄像头视角在操作过程中相对稳定。如果相机抖动或视角大幅变化，奖励预测可能退化。
 
-4. **奖励尺度可迁移**：PPO 集成中使用 β = C/T_max 缩放密集奖励，假设这个缩放因子在不同任务长度下都能保持奖励信号的合理量级。但对于 T_max 差异很大的任务，可能需要任务特定的调参。
+4. **奖励尺度可迁移**：PPO 集成中使用 $\beta = C/T_{\max}$ 缩放密集奖励，假设这个缩放因子在不同任务长度下都能保持奖励信号的合理量级。但对于 $T_{\max}$ 差异很大的任务，可能需要任务特定的调参。
 
 ## 7. 与相关工作对比
 
@@ -276,7 +276,7 @@ r_t = -1 + r_t^model                  (DSRL 真实世界集成)
 - 需要评估迁移到新的机器人平台可行性的团队——§4.4 的真实世界实验提供了样本效率数据
 
 **建议章节路径**：
-先读 §3.2 (Failure Synthesis) → 再看 §4.4 (Real-World Policy Learning) → 可跳 §2 (Related Work)
+先读 §3.2 (Failure Synthesis) $\to$ 再看 §4.4 (Real-World Policy Learning) $\to$ 可跳 §2 (Related Work)
 
 **不值得精读的理由**：
 如果你不做 RL 微调（只用纯 IL 方法如 ACT/Diffusion Policy），或者你的任务不在桌面操作范畴（如移动导航、双臂协作），读摘要即可。
@@ -287,7 +287,7 @@ r_t = -1 + r_t^model                  (DSRL 真实世界集成)
 **关键引用**:
 - 论文: https://arxiv.org/abs/2607.13033
 - 项目页: https://dense-reward.github.io/
-- π0 (被微调的策略): https://arxiv.org/abs/2410.24164
+- $\pi_0$ (被微调的策略): https://arxiv.org/abs/2410.24164
 - DSRL (真实世界 RL): https://arxiv.org/abs/2410.xxxxx (论文引用 [54])
 - DROID 数据集: https://arxiv.org/abs/2403.xxxxx (论文引用 [23])
 - LIBERO 基准: https://arxiv.org/abs/2306.xxxxx (论文引用 [31])

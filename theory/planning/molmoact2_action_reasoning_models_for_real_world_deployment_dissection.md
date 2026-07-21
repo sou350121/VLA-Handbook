@@ -4,20 +4,20 @@
 >
 > **论文**: MolmoAct2: Action Reasoning Models for Real-world Deployment
 > **链接**: https://arxiv.org/abs/2605.02881
-> **核心定位**: 首个"完全开源 + 可部署 + 高性能 + 快速推理"的四合一 VLA，用 Flow-Matching 专家 + Per-Layer KV 桥接 + 自适应深度推理，在 7 个仿真/真实基准上超越 π0.5，同时释放权重、数据、训练代码。
+> **核心定位**: 首个"完全开源 + 可部署 + 高性能 + 快速推理"的四合一 VLA，用 Flow-Matching 专家 + Per-Layer KV 桥接 + 自适应深度推理，在 7 个仿真/真实基准上超越 $\pi_{0.5}$，同时释放权重、数据、训练代码。
 
 ## ⚡ 快速判斷（30 秒讀完這段就夠了）
 
 | 維度 | 判斷 |
 |------|------|
-| 核心結論 | MolmoAct2 是首个在性能上超越闭源 π0.5 的完全开源 VLA，推理延迟低至 180ms（基础）/ 790ms（Think），支持三平台开箱部署 |
+| 核心結論 | MolmoAct2 是首个在性能上超越闭源 $\pi_{0.5}$ 的完全开源 VLA，推理延迟低至 $180\,\text{ms}$（基础）/ $790\,\text{ms}$（Think），支持三平台开箱部署 |
 | 适合精读 | 如果你在做 VLA 架构设计、Flow Matching 在机器人中的应用、或需要开源可部署基线，重点看 §4（架构）和 §6（评测） |
 | 可以跳过 | 如果你只关心纯触觉感知或纯扩散策略加速，这篇距离中等——它关注的是端到端 VLA 而非单一模块 |
 | 落地可行性 | 高（权重/数据/代码全开源，支持 YAM/SO-100/DROID 三平台开箱部署） |
 | 主要风险 | 自适应深度推理仅在场景变化区域预测 depth token，对静态场景增益有限；视觉遮挡仍是共性问题 |
 
 💡 **X-Ray 开场**
-VLA 模型长期面临一个"不可能三角"：开源 vs 高性能 vs 低延迟——三者不可兼得。闭源模型（如 π0.5）性能好但不可复现；开源模型要么性能差、要么延迟高到无法闭环控制。MolmoAct2 的核心突破是用 **Per-Layer KV 桥接 + Flow Matching 专家** 的架构设计，在保持 VLM 预训练知识的同时，将推理延迟从 MolmoAct 的 6700ms 压到 180ms（37x 加速），同时性能超越 π0.5。对 VLA 研究者来说，这意味着开源 VLA 首次在"可部署"维度上追平了闭源方案。
+VLA 模型长期面临一个"不可能三角"：开源 vs 高性能 vs 低延迟——三者不可兼得。闭源模型（如 $\pi_{0.5}$）性能好但不可复现；开源模型要么性能差、要么延迟高到无法闭环控制。MolmoAct2 的核心突破是用 **Per-Layer KV 桥接 + Flow Matching 专家** 的架构设计，在保持 VLM 预训练知识的同时，将推理延迟从 MolmoAct 的 $6700\,\text{ms}$ 压到 $180\,\text{ms}$（37x 加速），同时性能超越 $\pi_{0.5}$。对 VLA 研究者来说，这意味着开源 VLA 首次在"可部署"维度上追平了闭源方案。
 
 📍 **研究全景时间线**
 ```
@@ -40,7 +40,7 @@ VLA 模型长期面临一个"不可能三角"：开源 vs 高性能 vs 低延迟
 
 ### 1.1 系统对比概览 (System Component Comparison)
 
-| 维度 | MolmoAct (v1) | π0.5 (闭源) | MolmoAct2 |
+| 维度 | MolmoAct (v1) | $\pi_{0.5}$ (闭源) | MolmoAct2 |
 |------|---------------|-------------|-----------|
 | VLM Backbone | Molmo2-ER 前身 | 闭源 | Molmo2-ER (Qwen3-4B 特化) |
 | 动作表示 | 离散 token | 连续 Flow | 离散 token + 连续 Flow 双输出 |
@@ -142,16 +142,16 @@ L_flow = E[||m ⊙ (f_θ(x_t, t, c) - u)||²₂]
 |------|------|
 | x_t | t 时刻的噪声动作（插值 between noise and data） |
 | t | flow time，均匀采样自 [0,1] |
-| ε | 标准高斯噪声 |
+| $\varepsilon$ | 标准高斯噪声 |
 | a | 归一化目标动作 chunk（30 steps × 32 dims max） |
-| f_θ | DiT-style action expert |
+| $f_\theta$ | DiT-style action expert |
 | c | VLM context（任务/视觉/状态/setup-control descriptors） |
 | m | mask（padding steps 和 padding dims） |
 | K | flow sample 数量（post-training: 4, fine-tuning: 8） |
 
 **直觉**：Flow matching 学习一个从噪声到真实动作的"速度场"。推理时从纯高斯噪声出发，沿学习到的速度场积分，逐步"去噪"得到连续动作轨迹。Per-layer KV 桥接确保每个去噪步骤都能访问 VLM 的视觉-语言注意力状态。
 
-> 符号与本文保持一致：f_θ 为 action expert，K_ℓ^vlm/V_ℓ^vlm 为 VLM 第 ℓ 层的 KV cache，P_K/P_V 为 adapter 投影。
+> 符号与本文保持一致：$f_\theta$ 为 action expert，$K_\ell^{\text{vlm}}/V_\ell^{\text{vlm}}$ 为 VLM 第 $\ell$ 层的 KV cache，$P_K/P_V$ 为 adapter 投影。
 
 ## 3. 带数字走一遍：玩具例子 (Worked Example)
 
@@ -199,18 +199,18 @@ Step 5: Per-Layer KV 桥接的作用
 |------|---------------|-------------------|-------------------|
 | 单次推理延迟 | 6700ms | 180ms | 790ms |
 | 加速比 | 1x | 37x | 8.5x |
-| 硬件需求 | 1×H100 | 1×H100 | 1×H100 |
+| 硬件需求 | $1 \times H100$ | $1 \times H100$ | $1 \times H100$ |
 | 动作输出频率 | ~0.15 Hz | ~5.5 Hz | ~1.3 Hz |
 | 模型深度 | 36 layers | 36+36 (VLM+Expert) | 36+36+depth |
 | 训练总 GPU 时 | ~8000h (估算) | ~11,560h | 含在 Think 微调中 |
 
 **训练计算量拆解**：
-- Pre-training: 200K steps, batch=128, 64×H100 → ~5,760 GPU hours
-- Post-training: 100K steps, batch=128, 64×H100 → ~2,300 GPU hours
-- Fine-tuning (YAM): 100K steps, batch=128, 64×H100 → ~2,300 GPU hours
-- Fine-tuning (DROID): 100K steps, batch=64, 32×H100 → ~1,150 GPU hours
-- Fine-tuning (SO-100/101): 100K steps, batch=64, 32×H100 → ~1,150 GPU hours
-- Fine-tuning (LIBERO): 50K steps, batch=64, 32×H100 → ~1,150 GPU hours
+- Pre-training: 200K steps, batch=128, $64 \times H100$ → ~5,760 GPU hours
+- Post-training: 100K steps, batch=128, $64 \times H100$ → ~2,300 GPU hours
+- Fine-tuning (YAM): 100K steps, batch=128, $64 \times H100$ → ~2,300 GPU hours
+- Fine-tuning (DROID): 100K steps, batch=64, $32 \times H100$ → ~1,150 GPU hours
+- Fine-tuning (SO-100/101): 100K steps, batch=64, $32 \times H100$ → ~1,150 GPU hours
+- Fine-tuning (LIBERO): 50K steps, batch=64, $32 \times H100$ → ~1,150 GPU hours
 - **总计**: ~13,810 GPU hours（约 575 H100 天）
 
 **工程含义**：
@@ -236,7 +236,7 @@ Step 5: Per-Layer KV 桥接的作用
 
 **仿真基准**：
 
-| 基准 | MolmoAct2 | π0.5 | MolmoAct (v1) | 提升 |
+| 基准 | MolmoAct2 | $\pi_{0.5}$ | MolmoAct (v1) | 提升 |
 |------|-----------|------|---------------|------|
 | MolmoBot (all tasks) | 20.6% | 10.3% | — | 2x |
 | RoboEval (bimanual) | 0.443 | 0.405 | — | +9% |
@@ -245,7 +245,7 @@ Step 5: Per-Layer KV 桥接的作用
 
 **真实世界零样本（Franka 臂，15 trials/task）**：
 
-| 任务 | MolmoAct2 | MolmoBot | π0.5 |
+| 任务 | MolmoAct2 | MolmoBot | $\pi_{0.5}$ |
 |------|-----------|----------|------|
 | Apple on plate | 100% | — | — |
 | Pipette in tray | 86.7% | — | — |
@@ -260,7 +260,7 @@ Step 5: Per-Layer KV 桥接的作用
 |------|----------|---------------|
 | MolmoAct2 | 0.51 | #1 (7/8 tasks) |
 | OpenVLA-OFT | 0.36 | — |
-| π0.5 | 0.32 | — |
+| $\pi_{0.5}$ | 0.32 | — |
 | Cosmos Policy | 0.16 | — |
 | X-VLA | 0.05 | — |
 
@@ -316,17 +316,17 @@ Step 5: Per-Layer KV 桥接的作用
 |------|----------|----------|----------|------|------|----------|
 | RT-1 (Google) | 权重 | 离散 token | Direct mapping | 未知 | 基线 | Google Robot |
 | OpenVLA | 权重+代码 | 连续 (LoRA) | VLM + LoRA head | 未知 | 中 | Franka |
-| π0.5 (PI) | 权重 | 连续 Flow | 闭源架构 | 未知 | 高 | 闭源 |
+| $\pi_{0.5}$ (PI) | 权重 | 连续 Flow | 闭源架构 | 未知 | 高 | 闭源 |
 | MolmoAct (v1) | 权重+数据 | 离散 + depth token | VLM + CoT reasoning | 6700ms | 中高 | 单臂 |
 | **MolmoAct2** | **权重+数据+代码** | **离散 + 连续 Flow** | **VLM + Per-Layer KV + Flow Expert** | **180ms** | **高** | **YAM/SO-100/DROID** |
 
-**面试 Tip**：当被问到"MolmoAct2 与 π0.5 的核心区别"时，回答："π0.5 是闭源 Flow-based VLA，性能强但不可复现；MolmoAct2 是首个在性能上超越 π0.5 的完全开源方案，核心创新是 Per-Layer KV 桥接——用 VLM 每层的 KV cache 而非 hidden states 连接 Flow Matching 专家，实现了离散预训练与连续控制的无缝嫁接，同时通过 Knowledge Insulation 保护 VLM 预训练知识。"
+**面试 Tip**：当被问到"MolmoAct2 与 $\pi_{0.5}$ 的核心区别"时，回答："$\pi_{0.5}$ 是闭源 Flow-based VLA，性能强但不可复现；MolmoAct2 是首个在性能上超越 $\pi_{0.5}$ 的完全开源方案，核心创新是 Per-Layer KV 桥接——用 VLM 每层的 KV cache 而非 hidden states 连接 Flow Matching 专家，实现了离散预训练与连续控制的无缝嫁接，同时通过 Knowledge Insulation 保护 VLM 预训练知识。"
 
 ## 8. 精讀建議 (Reading Guide)
 
 **值得精讀原文的人**：
 - 做 VLA 架构设计的研究者——Per-Layer KV 桥接是一个可复用的设计模式，可能影响下一代 VLA 架构
-- 需要开源可部署 VLA 基线的工程师——MolmoAct2 是目前唯一"权重+数据+代码"全开源且性能超越 π0.5 的方案
+- 需要开源可部署 VLA 基线的工程师——MolmoAct2 是目前唯一"权重+数据+代码"全开源且性能超越 $\pi_{0.5}$ 的方案
 - 研究 Flow Matching 在机器人中应用的人——论文详细描述了 DiT-style expert 与 VLM 的耦合方式
 
 **建议章节路径**：

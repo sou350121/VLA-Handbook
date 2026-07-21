@@ -17,7 +17,7 @@
 | 主要風險 | 尚无法证明可以 one-shot 执行全新的动作基元；低任务多样性场景下弱于语言条件化 |
 
 💡 **X-Ray 开场**
-这篇论文回答了一个简单但深刻的问题：能不能像 LLM 用 few-shot 示例学会新任务一样，让机器人用一条演示视频学会新操作？答案是肯定的——作者提出了 Behavior Prompting Policy (BPP)，把一条完整的传感器空间演示（观察+本体感受+动作序列）作为"行为 prompt"塞进策略的 context，让机器人在推理时实时参考这个演示来生成动作。对 VLA 研究者的意义在于：它提供了一条不依赖语言指令、不依赖微调的零样本适应路径，且性能可媲美经过基础预训练的 π0.5 模型。
+这篇论文回答了一个简单但深刻的问题：能不能像 LLM 用 few-shot 示例学会新任务一样，让机器人用一条演示视频学会新操作？答案是肯定的——作者提出了 Behavior Prompting Policy (BPP)，把一条完整的传感器空间演示（观察+本体感受+动作序列）作为"行为 prompt"塞进策略的 context，让机器人在推理时实时参考这个演示来生成动作。对 VLA 研究者的意义在于：它提供了一条不依赖语言指令、不依赖微调的零样本适应路径，且性能可媲美经过基础预训练的 $\pi_{0.5}$ 模型。
 
 📍 **研究全景时间线**
 ```
@@ -34,7 +34,7 @@
 |------|------|------|-----------|-----------------|
 | **Prompt Encoder** | 行为 prompt（obs + proprio + action chunks）+ 当前观察 | 提取的 prompt 相关特征向量 | 每推理步调用一次 | 训练时 prompt 来自同任务的不同演示；推理时来自单条用户演示 |
 | **Action Decoder** | 当前观察 + prompt 特征 + diffusion timestep k | K 步去噪后的动作序列 | 每推理步执行 K 步去噪 | 训练时为标准 BC 损失；推理时缓存 prompt 特征 |
-| **Prompt Chunking** | 原始演示序列（Δt 步） | 单个 chunk embedding p_i | 观测/本体感受降采样至 1Hz；动作保留全分辨率 | 仅预处理，训练/推理一致 |
+| **Prompt Chunking** | 原始演示序列（$\Delta t$ 步） | 单个 chunk embedding p_i | 观测/本体感受降采样至 1Hz；动作保留全分辨率 | 仅预处理，训练/推理一致 |
 | **Cross-Attention** | Query: 当前观察 token；Key/Value: prompt chunk embeddings | 与当前状态最相关的 prompt 信息 | 每推理步 | 训练/推理一致 |
 
 ### 1.2 关键机制 (Key Mechanism)
@@ -47,13 +47,13 @@ BPP 的设计围绕三个核心问题展开：
 - 观测和本体感受降采样至 ~1Hz（计算效率），动作保留全分辨率（保留完整行为序列）
 
 **Q2: 如何在策略中使用 prompt？**
-- Prompt 被切分为 chunks（每 Δt 步一个 chunk），每个 chunk 通过 attention pooling 合并为单个 embedding
+- Prompt 被切分为 chunks（每 $\Delta t$ 步一个 chunk），每个 chunk 通过 attention pooling 合并为单个 embedding
 - Prompt encoder 是一个 transformer decoder：以当前观察为 query，对 prompt chunk embeddings 做 cross-attention
 - 提取出的 prompt 特征与当前观察拼接后，输入 diffusion action decoder
 
 **Q3: 什么数据能启用行为提示？**
 - **关键发现：任务多样性 > 单任务数据量**。在固定演示预算下，更多任务 × 更少每任务演示 >> 更少任务 × 更多每任务演示
-- 仅用 5 条演示/任务 × 2000 个程序化生成任务即可训练出强大的 BPP
+- 仅用 5 条演示/任务 $\times$ 2000 个程序化生成任务即可训练出强大的 BPP
 
 ⚡ **Eureka Moment**：把一条传感器空间的演示直接作为策略的 in-context prompt——不需要语言标注、不需要目标图像、不需要微调，一条演示 = 一个任务描述。
 
@@ -115,7 +115,7 @@ a_t = DiffusionDecoder([o_t; h_t], k)     # diffusion 去噪生成动作
 |------|------|
 | P | 行为 prompt 的 chunk embedding 序列 |
 | p_i | 第 i 个 chunk 的聚合 embedding（含 obs + proprio + actions） |
-| Δt | chunk 时间跨度（通常使观测降采样至 ~1Hz） |
+| $\Delta t$ | chunk 时间跨度（通常使观测降采样至 ~1Hz） |
 | h_t | 当前时刻从 prompt 中提取的相关特征 |
 | k | diffusion 去噪 timestep（K 步去噪） |
 | a_t | 输出的机器人动作（6DoF） |
@@ -166,10 +166,10 @@ a_t = DiffusionDecoder([o_t; h_t], k)     # diffusion 去噪生成动作
 | **Prompt 编码延迟** | 每 rollout 一次（可缓存） | rollout 内推理时 prompt 特征已缓存，每步只需 cross-attention |
 | **Cross-Attention 延迟** | 每推理步 ~30 个 dot-product | 与 prompt 长度线性相关；降采样至 1Hz 是关键优化 |
 | **Diffusion 去噪延迟** | 每步 K=1000 步（可压缩至 50-100） | 主要计算瓶颈；与 prompt 解耦后无需每步重新编码 |
-| **内存占用** | prompt embeddings 30 × 256 dim | 极小；主要内存消耗在 diffusion decoder |
+| **内存占用** | prompt embeddings $30 \times 256$ dim | 极小；主要内存消耗在 diffusion decoder |
 | **控制频率** | 论文未明确给出，推断 ~10-20Hz | diffusion 去噪步数与控制频率 trade-off |
-| **数据需求** | 2000 任务 × 5 演示/任务 = 10K 轨迹 | 任务多样性优先；iPhUMI 使数据采集效率大幅提升 |
-| **部署约束** | 需要 GPU 运行 diffusion decoder | 无基础预训练 → 模型规模较小；可在边缘 GPU 部署 |
+| **数据需求** | $2000$ 任务 $\times 5$ 演示/任务 $= 10\text{K}$ 轨迹 | 任务多样性优先；iPhUMI 使数据采集效率大幅提升 |
+| **部署约束** | 需要 GPU 运行 diffusion decoder | 无基础预训练 $\to$ 模型规模较小；可在边缘 GPU 部署 |
 
 **工程含义总结**：BPP 的架构设计充分考虑了推理效率——prompt 编码与 action decoding 解耦，使得 diffusion 去噪步骤可以独立于 prompt 执行。这是与 ICRT（保留完整 rollout history）的关键工程差异，也是 BPP 能扩展到 2000 任务规模的原因之一。
 
@@ -191,17 +191,17 @@ a_t = DiffusionDecoder([o_t; h_t], k)     # diffusion 去噪生成动作
 | DrawAnything-Sim | 50 | 未见过的人类手绘 | 连续精细动作适应 + 空间变换（画板朝向不同） |
 | DrawAnything-Real | 10 (4 训练 + 6 未见) | 人类 iPhUMI 演示 | 6DoF 全空间操作 + 视觉遮挡（笔尖遮挡） |
 | LIBERO-Gen Combination | 10 | 未见过的 pick-place 组合 | 两步组合指令跟随（选哪个碗 + 放哪里） |
-| LIBERO-Gen Chain | 10 | 未见过的两步链 | 长程操作链（先开抽屉 → 再放碗） |
+| LIBERO-Gen Chain | 10 | 未见过的两步链 | 长程操作链（先开抽屉 $\to$ 再放碗） |
 
 ### 5.3 关键评测结果
 
-| 基准 | BPP | Goal-Image | Language | ICRT | π0.5 (100K LoRA) |
+| 基准 | BPP | Goal-Image | Language | ICRT | $\pi_{0.5}$ (100K LoRA) |
 |------|-----|-----------|----------|------|------------------|
 | DrawAnything-Sim (误差) | 基准 | +80.7% 误差 | — | +33.3% 误差 | — |
 | LIBERO-Gen Chain | 基准 | — | +10.7% 误差 | — | 可比 |
 | LIBERO-Gen Chain (ablation) | 基准 | — | +20.8% 误差 | — | 可比 |
 
-> 来源：论文 Figure 4。π0.5 结果来自论文正文描述（100K LoRA 微调步后）。
+> 来源：论文 Figure 4。$\pi_{0.5}$ 结果来自论文正文描述（100K LoRA 微调步后）。
 
 ## 6. 能力与失败模式 (Capabilities & Failure Modes)
 
@@ -240,7 +240,7 @@ a_t = DiffusionDecoder([o_t; h_t], k)     # diffusion 去噪生成动作
 |------|--------|------|---------|---------|
 | **BPP (本文)** | 行为 prompt 作为 in-context 条件 | Transformer decoder (prompt encoder) + Diffusion decoder | BC 从 scratch | 高任务多样性的多任务操作 |
 | **ICRT (2025)** | 自回归 in-context 视觉运动 | 自回归 transformer，保留完整 rollout history | BC | 有限任务多样性（29 任务） |
-| **π0.5 (2025)** | 基础预训练 VLA | 大规模 transformer + LoRA 微调 | 预训练 + 微调 | 开放世界泛化 |
+| **$\pi_{0.5}$ (2025)** | 基础预训练 VLA | 大规模 transformer + LoRA 微调 | 预训练 + 微调 | 开放世界泛化 |
 | **BC-Z (2022)** | 语言零样本适应 | 图像编码器 + 策略网络 | BC + 语言对齐 | 新环境/新物体（非新动作） |
 | **Octo (2024)** | 通用机器人策略 | Transformer + 多任务 BC | 大规模 BC | 跨平台泛化 |
 | **DOME (2022)** | 单演示视觉伺服 | 显式空间变换 | 元学习 | 单一任务快速适应 |
@@ -255,10 +255,10 @@ a_t = DiffusionDecoder([o_t; h_t], k)     # diffusion 去噪生成动作
   3. 研究 LLM in-context learning 与机器人学习交叉的研究者——这是 ICL 范式在具身智能中最系统的落地尝试之一
 
 - **建議章節路徑**：
-  先讀 §3.3（BPP 架构）→ 再看 §4.1（关键发现与消融）→ 可跳 §2（相关工作，除非你需要写文献综述）→ 附录有与 ICRT 的模型对比细节
+  先讀 §3.3（BPP 架构）$\to$ 再看 §4.1（关键发现与消融）$\to$ 可跳 §2（相关工作，除非你需要写文献综述）$\to$ 附录有与 ICRT 的模型对比细节
 
 - **不值得精讀的理由**：
-  如果你不做多任务策略学习、或你的场景只需要语言指令跟随（如 π0.5 已足够），读摘要和 Figure 4 的结果即可。本文的核心贡献在于"行为 prompt"这一范式本身，而非某个具体的性能突破。
+  如果你不做多任务策略学习、或你的场景只需要语言指令跟随（如 $\pi_{0.5}$ 已足够），读摘要和 Figure 4 的结果即可。本文的核心贡献在于"行为 prompt"这一范式本身，而非某个具体的性能突破。
 
 ---
 [← Back to Theory](./README.md)
@@ -268,4 +268,4 @@ a_t = DiffusionDecoder([o_t; h_t], k)     # diffusion 去噪生成动作
 - [arXiv 论文](https://arxiv.org/abs/2606.30457)
 - ICRT ( prior behavior prompting): [Fu et al., 2025](https://arxiv.org/abs/2408.15980)
 - Diffusion Policy: [Chi et al., RSS 2023](https://arxiv.org/abs/2303.04137)
-- π0.5 VLA: [Physical Intelligence, 2025](https://www.physicalintelligence.company/)
+- $\pi_{0.5}$ VLA: [Physical Intelligence, 2025](https://www.physicalintelligence.company/)

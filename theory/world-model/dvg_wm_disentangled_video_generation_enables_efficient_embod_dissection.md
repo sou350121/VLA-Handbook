@@ -4,13 +4,13 @@
 >
 > **论文**: DVG-WM: Disentangled Video Generation Enables Efficient Embodied World Model for Robotic Manipulation
 > **链接**: https://arxiv.org/abs/2606.32028
-> **核心定位**: 将世界模型的"动力学建模"和"视觉合成"解耦为两阶段流水线，用 Flow Matching 串联，实现 3.97× 推理加速的同时提升视频质量与物体级准确率
+> **核心定位**: 将世界模型的"动力学建模"和"视觉合成"解耦为两阶段流水线，用 Flow Matching 串联，实现 $3.97\times$ 推理加速的同时提升视频质量与物体级准确率
 
 ## ⚡ 快速判斷（30 秒讀完這段就夠了）
 
 | 維度 | 判斷 |
 |------|------|
-| 核心結論 | 解耦动力学学习与视觉合成，两阶段世界模型在 LIBERO 达到 89% 物体级准确率，推理加速 3.97× |
+| 核心結論 | 解耦动力学学习与视觉合成，两阶段世界模型在 LIBERO 达到 $89\%$ 物体级准确率，推理加速 $3.97\times$ |
 | 適合精讀 | 如果你在研究具身世界模型、视频预测用于规划、Flow Matching 在机器人中的应用，重点看 §1.2 和 §2 |
 | 可以跳過 | 如果你只关心 action-conditioned 世界模型（本文是 goal/language-conditioned），距离中等 |
 | 落地可行性 | 中 — 需要 CogVideoX 基座 + A100 集群训练，但推理阶段计算需求显著降低 |
@@ -37,16 +37,16 @@
 
 | 模块 | 输入 | 输出 | 分辨率 | 模型 | 训练方式 | NFE |
 |------|------|------|--------|------|----------|-----|
-| **Preview 阶段** | 降采样初始帧 x₀ᵈ + 语言指令 c | 低分辨率视频潜变量 z_lr | 256×384 | CogVideoX-5B + LoRA (rank=128) | LoRA 微调 10K iter, 单 A100 | 50 |
-| **Refinement 阶段** | z_lr + 原始帧 x₀ + 语言指令 c | 高分辨率视频潜变量 z_hr | 480×720 | CogVideoX-2B | Flow Matching, 10 epochs, 8×A100 | 4 |
+| **Preview 阶段** | 降采样初始帧 $x_0^d$ + 语言指令 $c$ | 低分辨率视频潜变量 z_lr | $256\times384$ | CogVideoX-5B + LoRA (rank=128) | LoRA 微调 10K iter, 单 A100 | 50 |
+| **Refinement 阶段** | $z_{\text{lr}}$ + 原始帧 $x_0$ + 语言指令 $c$ | 高分辨率视频潜变量 z_hr | $480\times720$ | CogVideoX-2B | Flow Matching, 10 epochs, $8\times$A100 | 4 |
 | **Action Expert** | 预测高清帧 x_hr | 动作序列 a | — | Diffusion Policy (vision-only) | 联合微调 L_DP | 50 (DP) |
-| **3D VAE** | 视频像素 x_T | 潜特征 z (h×w×t) | h=H/8, w=W/8 | CogVideoX VAE | 冻结 | 0 |
+| **3D VAE** | 视频像素 x_T | 潜特征 $z$ $(h \times w \times t)$ | h=H/8, w=W/8 | CogVideoX VAE | 冻结 | 0 |
 
 ### 1.2 关键机制 (Key Mechanism)
 
 **两阶段解耦设计哲学**：动力学建模需要低时间分辨率下的物理交互推理（接触、滑动、遮挡），不需要高分辨率纹理；而高清帧合成需要高层语义和丰富纹理，但不需要反复迭代动力学。传统方法用一个单体视频生成器同时做两件事，导致计算浪费。
 
-**Flow Matching 级联**：传统级联扩散把低分辨率动力学当作 conditioning 输入，从高斯噪声重新开始 denoising——冗余。DVG-WM 用 Flow Matching 直接建立 LR 潜变量 → HR 潜变量的映射，学习一个向量场 v_θ，沿直线路径从 z_lr 推进到 z_hr。
+**Flow Matching 级联**：传统级联扩散把低分辨率动力学当作 conditioning 输入，从高斯噪声重新开始 denoising——冗余。DVG-WM 用 Flow Matching 直接建立 LR 潜变量 $\to$ HR 潜变量的映射，学习一个向量场 $v_\theta$，沿直线路径从 $z_{\text{lr}}$ 推进到 $z_{\text{hr}}$。
 
 **潜空间退化（Latent Degradation）**：训练 refinement 阶段时，不用像素级降采样（会造成 LR-HR 强相关，模型走捷径做超分），而是在潜空间对 z_lr 加扰动，迫使模型重建接触细节而非简单上采样像素。
 
@@ -115,28 +115,28 @@ z_hr = z^K    (K=4)
 ```
 
 > 符号说明：
-> - x₀: 初始观测帧 (720p)
-> - x₀ᵈ: 降采样初始帧 (256×384)
+> - $x_0$: 初始观测帧 (720p)
+> - $x_0^d$: 降采样初始帧 $(256 \times 384)$
 > - c: 语言指令 conditioning
-> - z_lr: Preview 输出的低分辨率潜变量 (h×w×t, h=H/8, w=W/8)
+> - $z_{\text{lr}}$: Preview 输出的低分辨率潜变量 $(h \times w \times t,\ h = H/8,\ w = W/8)$
 > - z~lr: z_lr 线性上采样到 HR 尺寸
 > - z_hr: 目标高分辨率潜变量
-> - v_θ: 神经向量场 (CogVideoX-2B backbone)
-> - τ: 插值步, τ ∈ [0,1]
+> - $v_\theta$: 神经向量场 (CogVideoX-2B backbone)
+> - $\tau$: 插值步, $\tau \in [0,1]$
 > - NFE: Number of Function Evaluations (去噪/推进步数)
 
 **直觉**：Flow Matching 学的是一个"从粗到细的箭头"——给定 LR 潜变量，它知道该往哪个方向走、走多远才能到达 HR 潜变量。因为起点（z_lr 上采样）已经包含了正确的动力学结构，所以只需要 4 步就能到达终点，而不是像传统扩散那样从随机噪声开始走 50 步。
 
 ## 3. 带数字走一遍：玩具例子 (Worked Example)
 
-假设我们有一个 49 帧的机械臂开抽屉任务，初始帧 x₀ 分辨率 480×720。
+假设我们有一个 49 帧的机械臂开抽屉任务，初始帧 $x_0$ 分辨率 $480 \times 720$。
 
 **Step 1: VAE 压缩**
 - 原始视频 x₄₉ ∈ ℝ^(480×720×49)
 - 3D VAE 编码 → z ∈ ℝ^(60×90×13) （h=480/8=60, w=720/8=90, t=(49-1)/4+1=13）
 
 **Step 2: Preview 阶段（LR）**
-- 降采样 x₀ᵈ: 256×384 → 对应潜空间约 32×48
+- 降采样 $x_0^d$: $256 \times 384$ $\to$ 对应潜空间约 $32 \times 48$
 - CogVideoX-5B + LoRA 运行 50 步 denoising
 - 输出 z_lr ∈ ℝ^(32×48×13)
 - 耗时：约 2.1 秒（单 A100）
@@ -146,7 +146,7 @@ z_hr = z^K    (K=4)
 - 此时 z~lr 已有正确的动力学结构（机械臂接触抽屉、拉开），但纹理模糊
 
 **Step 4: Refinement 阶段（FM, 仅 4 步）**
-- τ₀=0.0: z⁰ = z~lr （起点）
+- $\tau_0 = 0.0$: $z^0 = \tilde{z}_{\text{lr}}$ （起点）
 - τ₁=0.25: z¹ = z⁰ + 0.25 · v_θ(z⁰, 0.0 | ...) → 机械臂纹理开始清晰
 - τ₂=0.50: z² = z¹ + 0.25 · v_θ(z¹, 0.25 | ...) → 抽屉表面纹理恢复
 - τ₃=0.75: z³ = z² + 0.25 · v_θ(z², 0.50 | ...) → 接触区域细节（夹爪-抽屉接触面）重建
@@ -154,21 +154,21 @@ z_hr = z^K    (K=4)
 - 耗时：约 0.3 秒
 
 **Step 5: 解码**
-- x_hr = VAE_Decoder(z_hr) → 480×720×49 高清视频
+- $x_{\text{hr}} = \text{VAE\_Decoder}(z_{\text{hr}})$ → $480\times720\times49$ 高清视频  
 
 **总耗时对比**：
 - DVG-WM: 2.1 + 0.3 = 2.4 秒
 - LVP (单体 50 NFE @ HR): ~9.5 秒
-- 加速比: 3.97×
+- 加速比: $3.97\times$  
 
 ## 4. 工程视角 (Engineering View)
 
 | 工程维度 | 数值/约束 | 含义 |
 |----------|-----------|------|
-| Preview 推理 | 50 NFE @ 256×384 | 低分辨率下 50 步仍可行，每步计算量约为 HR 的 1/4 |
-| Refinement 推理 | 4 NFE @ 480×720 | Flow Matching 是关键——仅 4 步完成 HR 合成 |
+| Preview 推理 | $50$ NFE @ $256\times384$   | 低分辨率下 50 步仍可行，每步计算量约为 HR 的 1/4 |
+| Refinement 推理 | $4$ NFE @ $480\times720$   | Flow Matching 是关键——仅 4 步完成 HR 合成 |
 | 总推理延迟 | ~2.4 秒/49帧 | 相比 LVP 的 9.5 秒，适合迭代规划（可多次查询） |
-| 训练成本 | Preview: 1×A100, 10K iter; Refinement: 8×A100, 24h | 两阶段独立训练，可并行优化 |
+| 训练成本 | Preview: $1\times\text{A100}$, $10\text{K}$ iter; Refinement: $8\times\text{A100}$, $24\text{h}$   | 两阶段独立训练，可并行优化 |
 | 模型大小 | Preview: 5B (LoRA 128); Refinement: 2B | 总参数量 ~7B，LoRA 仅增加 ~0.6B |
 | 显存占用 | 推理时 ~20-30GB（单卡可跑） | 两阶段串行，无需同时加载全部参数 |
 | 量化友好度 | 中高 — Flow Matching 是确定性 ODE，无扩散随机性 | 适合 INT8 量化部署 |
@@ -184,14 +184,14 @@ z_hr = z^K    (K=4)
 
 **评测任务设置**：
 - LIBERO: 视频质量指标（PSNR, SSIM, LPIPS, FVD）+ 物体级准确率（人工抽查 10% 轨迹）
-- 真实世界: 9 个操作任务 × 2 个平台（Galaxea A1 Arm），评估 Mask-IoU（机械臂区域）+ 成功率
+- 真实世界: $9$ 个操作任务 $\times 2$ 个平台（Galaxea A1 Arm），评估 Mask-IoU（机械臂区域）+ 成功率  
 
 **关键数字**（来自论文 Table 1）：
 - PSNR: DVG-WM 领先基线 ~3.7%（平均）
 - SSIM: 略低于 LongScape，但竞争力相当
 - LPIPS/FVD: 全面优于 CogVideoX-5B 和 Wan2.1-14B
 - 物体级准确率: 89%（显著高于基线，说明动力学建模更准确）
-- 推理加速: 相比 LVP 达 3.97×（Table 2）
+- 推理加速: 相比 LVP 达 $3.97\times$（Table 2）  
 
 ## 6. 能力与失败模式 (Capabilities & Failure Modes)
 
@@ -237,12 +237,12 @@ z_hr = z^K    (K=4)
   2. 关注 Flow Matching 在机器人领域应用的工程师——§3.3 的级联 FM 实现是可直接复用的模式
   3. 评估触觉丰富操作任务中视频预测可行性的团队——潜空间退化机制对接触细节保留有直接价值
 
-- **建議章節路徑**：先讀 §3.1-3.3（方法核心） → 再看 §4.2-4.3（实验验证与消融） → 可跳 §2（相关工作）
+- **建議章節路徑**：先讀 §3.1-3.3（方法核心） → 再看 §4.2-4.3（实验验证与消融） → 可跳 §2（相关工作）  
 
 - **不值得精讀的理由**：如果你不做语言条件视频预测、已经熟悉 CogVideoX 微调流程、或只关心 action-conditioned 世界模型，读摘要和 §1 即可。
 
 ---
-[← Back to Theory](./README.md)
+[← Back to Theory](./README.md)  
 
 **关键引用**：
 - 论文: https://arxiv.org/abs/2606.32028

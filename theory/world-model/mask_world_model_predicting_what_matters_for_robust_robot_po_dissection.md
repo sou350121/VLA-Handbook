@@ -97,12 +97,12 @@ L_act  = E[λ(σ) · ||φ_ξ(ũ, σ, H_t) + ε/σ||²₂]
 |------|------|
 | z_0 | 干净的未来掩码 latent（目标） |
 | z_1 | 高斯噪声 N(0, I) |
-| z_s | 插值路径 z_s = (1-s)z_0 + sz_1, s∈[0,1] |
-| v_θ | Transformer 预测的速度场 |
+| z_s | 插值路径 $z_s = (1-s)z_0 + sz_1$, $s \in [0,1]$ |
+| $v_\theta$ | Transformer 预测的速度场 |
 | c_t | RGB 记忆窗口 + 语言指令（cross-attention 注入） |
-| H_t | Backbone 多层隐藏状态 {h_t^(1), ..., h_t^(L)} |
+| H_t | Backbone 多层隐藏状态 $\{h_t^{(1)}, \dots, h_t^{(L)}\}$ |
 | u_t | Action-state token [a_t, s_t]（15 维：7-DoF pose + gripper + proprioception） |
-| φ_ξ | Action denoiser（diffusion policy） |
+| $\varphi_\xi$ | Action denoiser（diffusion policy） |
 
 **直觉**：Flow matching 学习从噪声到干净掩码 latent 的连续变换轨迹；action diffusion 从 Backbone 的预测特征中读取"未来会发生什么"，据此生成动作。第二阶段中 ℒ_act 的梯度会回传更新 Backbone，使预测特征越来越对齐控制需求。
 
@@ -114,7 +114,7 @@ L_act  = E[λ(σ) · ||φ_ξ(ũ, σ, H_t) + ε/σ||²₂]
 
 **Stage 1 — 掩码预测**：
 - 输入：过去 n=4 帧 RGB（机械臂靠近方块）
-- 目标：未来 τ=5 帧的语义掩码（机械臂 + 方块 + 目标区域三个语义区域）
+- 目标：未来 $\tau=5$ 帧的语义掩码（机械臂 + 方块 + 目标区域三个语义区域）
 - Flow matching 过程：
   ```
   s=0.0: z_s = z_0 (干净的掩码 latent，方块在目标位置)
@@ -170,9 +170,9 @@ L_act  = E[λ(σ) · ||φ_ξ(ũ, σ, H_t) + ε/σ||²₂]
 **评测指标**：Success Rate (SR) — 成功执行的 episode 比例
 
 **关键数字来源**：
-- LIBERO Table 1: MWM 98.3% avg vs GE-ACT ~86% vs π0 ~81%
+- LIBERO Table 1: MWM 98.3% avg vs GE-ACT ~86% vs $\pi_0$ ~81%
 - RLBench Table 2: MWM 68.3% avg vs GE-ACT 30.8% vs FiS-VLA 50.0%
-- Real-world Table 4: MWM 67.5% avg vs GE-ACT 23.8% vs π0 38.8%
+- Real-world Table 4: MWM 67.5% avg vs GE-ACT 23.8% vs $\pi_0$ 38.8%
 
 ## 6. 能力与失败模式 (Capabilities & Failure Modes)
 

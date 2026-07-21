@@ -10,7 +10,7 @@
 
 | 维度 | 判断 |
 |------|------|
-| 核心结论 | 在 π0 基线上增加预测性轨迹模块 +3D 高斯几何模块（仅训练时监督），RoboCasa Human-50 从 42.3%→52.4%，LIBERO 从 93.9%→96.5% |
+| 核心结论 | 在 $\pi_0$ 基线上增加预测性轨迹模块 +3D 高斯几何模块（仅训练时监督），RoboCasa Human-50 从 $42.3\% \to 52.4\%$，LIBERO 从 $93.9\% \to 96.5\%$ |
 | 适合精读 | 如果你在做 VLA 空间推理、3D 感知 + 动作、预测性世界模型，重点看 §3.2 和 §3.3 |
 | 可以跳过 | 如果你只关心纯 2D VLA 部署或离散动作空间，这篇距离中等 |
 | 落地可行性 | 中（需要多视角 RGB-D 数据和相机外参，但推理无额外开销） |
@@ -18,11 +18,11 @@
 
 💡 **X-Ray 开场**
 
-这篇论文解决什么问题？当前 VLA 模型（如 OpenVLA、π0）主要在 2D 图像空间操作，缺乏显式 3D 空间建模能力，导致在需要精确 3D 推理的任务上表现不稳定。
+这篇论文解决什么问题？当前 VLA 模型（如 OpenVLA、$\pi_0$）主要在 2D 图像空间操作，缺乏显式 3D 空间建模能力，导致在需要精确 3D 推理的任务上表现不稳定。
 
 发现了什么？通过在训练时引入两个预测模块——多步 3D 关键点轨迹预测 + 预测性 3D 高斯场景表示——可以让 VLA 学到更好的空间先验，而推理时只需轻量级查询 token，不增加计算负担。
 
-对 VLA 研究者意味着什么？如果你在用 π0 或类似连续动作 VLA，这套方法可以在不改变推理架构的前提下，用训练时监督换取 10%+ 的性能提升，尤其适合桌面操作、精密抓取等几何敏感任务。
+对 VLA 研究者意味着什么？如果你在用 $\pi_0$ 或类似连续动作 VLA，这套方法可以在不改变推理架构的前提下，用训练时监督换取 $10\%+$ 的性能提升，尤其适合桌面操作、精密抓取等几何敏感任务。
 
 📍 **研究全景时间线**
 
@@ -40,8 +40,8 @@
 |------|------|------|-----------|---------------|
 | Track Encoder | K 个关键点历史轨迹 (t-1 步) | K 个历史 track token | 每步 | 训练/推理一致 |
 | Future Track Query | 历史 token + 指令 + 图像 | H+1 步 3D 关键点预测 | 每步预测未来 50 步 | 训练有 MSE 监督，推理无解码 |
-| 3D Spatial Query | 工作空间体素网格 (1.6×1.6×1.0m) | Nx×Ny×Nz 空间 query token | 每步 | 训练/推理一致 |
-| Voxel Decoder | 空间 embedding | 3D 高斯基元 (μ, α, Σ) | 每步预测未来 H 帧 | 仅训练时执行，推理跳过 |
+| 3D Spatial Query | 工作空间体素网格 (1.6×1.6×1.0m) | $N_x \times N_y \times N_z$ 空间 query token | 每步 | 训练/推理一致 |
+| Voxel Decoder | 空间 embedding | 3D 高斯基元 $(\mu, \alpha, \Sigma)$ | 每步预测未来 H 帧 | 仅训练时执行，推理跳过 |
 | Track-guided Refinement | 预测关键点位置 | 高密度高斯 (NG'=64/voxel) | 沿轨迹体素 | 仅训练时执行 |
 | Depth Renderer | 3DGS 表示 | 深度图 | H+1 帧 | 仅训练时执行 |
 | Action Expert | 所有 token + 动作噪声 | 50 步动作块 | 每步 | 训练/推理一致 |
@@ -56,7 +56,7 @@
 
 3. **Track-guided Refinement 的效率权衡**：全局高分辨率 3DGS 计算代价过高（NG=8 时训练时间 19.1h/epoch vs NG=4 时 12.0h）。通过在预测关键点轨迹附近的体素增加高斯密度（NG'=64），用 15.7h/epoch 换取 52.4% SR，比全局加密更高效。
 
-4. **训练时监督、推理时静默**：两个预测模块（Voxel Decoder + Depth Renderer）只在训练时执行，推理时 transformer 已学到几何先验，action expert 行为与基线 π0 完全一致。这是关键设计——增益不来自推理时计算，而来自表示学习。
+4. **训练时监督、推理时静默**：两个预测模块（Voxel Decoder + Depth Renderer）只在训练时执行，推理时 transformer 已学到几何先验，action expert 行为与基线 $\pi_0$ 完全一致。这是关键设计——增益不来自推理时计算，而来自表示学习。
 
 ⚡ **Eureka Moment**：预测模块不需要在推理时运行——它们的作用是作为训练时的"几何教师"，通过深度渲染监督塑造 transformer 的内部表示，推理时这些模块完全静默，保持基线效率。
 
@@ -119,7 +119,7 @@
 L_total = L_action(π0) + L_track(MSE 轨迹) + L_depth(渲染深度 - GT 深度)
 ```
 
-**目标**：在保持 π0 动作生成能力的基础上，通过两个辅助任务（轨迹预测 + 深度渲染）让 transformer 学到预测性运动学和几何表示。
+**目标**：在保持 $\pi_0$ 动作生成能力的基础上，通过两个辅助任务（轨迹预测 + 深度渲染）让 transformer 学到预测性运动学和几何表示。
 
 **公式分解**：
 
@@ -169,10 +169,10 @@ L_total = L_action(π0) + L_track(MSE 轨迹) + L_depth(渲染深度 - GT 深度
 |------|------|--------|
 | K | 跟踪的关键点数量 | 8 (LIBERO/RoboCasa), 7 (实机) |
 | H | 预测时域长度 | 50 步 |
-| Nx, Ny, Nz | 粗粒度体素网格分辨率 | 取决于工作空间 1.6×1.6×1.0m, v=0.04m |
+| Nx, Ny, Nz | 粗粒度体素网格分辨率 | 取决于工作空间 $1.6 \times 1.6 \times 1.0\,\text{m}$, $v = 0.04\,\text{m}$ |
 | NG | 初始高斯基元数/体素 | 4 |
 | NG' | Refinement 高斯基元数/体素 | 64 |
-| λ1, λ2, λ3 | 损失权重 | 均为 1.0 |
+| $\lambda_1$, $\lambda_2$, $\lambda_3$ | 损失权重 | 均为 1.0 |
 
 **直觉**：L_track 强迫 transformer 预测机器人未来运动，L_depth 强迫它预测场景未来几何。两个任务共享 transformer backbone，因此动作生成路径间接获得了"未来感知"能力。
 
@@ -188,47 +188,47 @@ L_total = L_action(π0) + L_track(MSE 轨迹) + L_depth(渲染深度 - GT 深度
 
 **前向传播**：
 
-1. Track Encoder 处理 8 个关键点历史轨迹 → 8 个 Z_k^hist token (每 token 2048 维)
+1. Track Encoder 处理 8 个关键点历史轨迹 → 8 个 $Z_k^{\text{hist}}$ token (每 token 2048 维)
 
-2. Future Track Query (8 个 learnable query) 经 transformer 处理 → 预测未来 51 步 (t 到 t+50) 的 8 个关键点轨迹
-   - 输出形状：8 × 51 × 3 = 1224 个坐标值
+2. Future Track Query (8 个 learnable query) 经 transformer 处理 → 预测未来 51 步 ($t$ 到 $t+50$) 的 8 个关键点轨迹
+   - 输出形状：$8 \times 51 \times 3 = 1224$ 个坐标值
    - 训练时与 GT 轨迹计算 MSE，假设 L_track = 0.023
 
-3. 3D Spatial Query：工作空间 1.6×1.6×1.0m，体素大小 v=0.04m
-   - 原始分辨率：40×40×25 = 40,000 体素
-   - 下采样 4 倍：10×10×6 = 600 个 coarse query token
-   - 经 transformer 处理 → E_spatial ∈ R^600×2048
+3. 3D Spatial Query：工作空间 $1.6 \times 1.6 \times 1.0\,\text{m}$，体素大小 $v = 0.04\,\text{m}$
+   - 原始分辨率：$40 \times 40 \times 25 = 40{,}000$ 体素
+   - 下采样 4 倍：$10 \times 10 \times 6 = 600$ 个 coarse query token
+   - 经 transformer 处理 → $E_{\text{spatial}} \in \mathbb{R}^{600 \times 2048}$
 
-4. Voxel Decoder：对每个未来 timestep τ=0...50
-   - E_spatial + PE_time[τ] → 3D 转置卷积上采样 → F_voxel
-   - 每个体素映射到 4 个初始高斯 → G_init
+4. Voxel Decoder：对每个未来 timestep $\tau = 0 \dots 50$
+   - $E_{\text{spatial}} + \text{PE}_{\text{time}}[\tau]$ → 3D 转置卷积上采样 → $F_{\text{voxel}}$
+   - 每个体素映射到 4 个初始高斯 → $G_{\text{init}}$
    - 根据预测关键点位置，标记 refinement 体素（约 5% 体素）
-   - Refinement 体素内生成 64 个高斯 → G_refine
-   - G_total = G_init ∪ G_refine
+   - Refinement 体素内生成 64 个高斯 → $G_{\text{refine}}$
+   - $G_{\text{total}} = G_{\text{init}} \cup G_{\text{refine}}$
 
 5. Depth Renderer：从 G_total 渲染 2 个环境相机的深度图
-   - 每帧 224×224 像素，但 M_spatial 掩码只保留工作空间内像素（约 30%）
+   - 每帧 $224 \times 224$ 像素，但 $M_{\text{spatial}}$ 掩码只保留工作空间内像素（约 30%）
    - 计算 L1 深度损失，假设 L_depth = 0.041
 
 6. Action Expert：条件流匹配生成 50 步动作块
    - 输入：所有 token + 动作噪声
-   - 迭代去噪 a=10 步（π0 默认）
-   - 输出：A_t ∈ R^(50×7)，每步动作包含 Δx, Δy, Δz, Δroll, Δpitch, Δyaw, gripper
+   - 迭代去噪 $a = 10$ 步（$\pi_0$ 默认）
+   - 输出：$A_t \in \mathbb{R}^{(50 \times 7)}$，每步动作包含 $\Delta x$, $\Delta y$, $\Delta z$, $\Delta\text{roll}$, $\Delta\text{pitch}$, $\Delta\text{yaw}$, gripper
 
 **训练时总损失**：
 ```
 L_total = 1.0 × L_action + 1.0 × 0.023 + 1.0 × 0.041
 ```
 
-**推理时**：步骤 4-5 完全跳过，transformer 直接输出 action expert 所需的 KV cache，动作生成与 π0 基线完全一致。
+**推理时**：步骤 4-5 完全跳过，transformer 直接输出 action expert 所需的 KV cache，动作生成与 $\pi_0$ 基线完全一致。
 
 ## 4. 工程视角 (Engineering View)
 
-| 指标 | GeoPredict 训练 | GeoPredict 推理 | π0 基线 |
+| 指标 | GeoPredict 训练 | GeoPredict 推理 | $\pi_0$ 基线 |
 |------|-----------------|-----------------|---------|
-| GPU | 8×H20 | - | 8×H20 |
+| GPU | $8 \times \text{H20}$ | - | $8 \times \text{H20}$ |
 | 训练时间/epoch | 15.7h (NG=4, NG'=64) | - | 12.0h |
-| 推理延迟 | - | 与 π0 相同 (~50ms) | ~50ms |
+| 推理延迟 | - | 与 $\pi_0$ 相同 ($\sim 50\,\text{ms}$) | ~50ms |
 | 动作频率 | - | 50Hz (H=50, chunk size 50) | 50Hz |
 | 显存占用 (训练) | 约 80GB (8 卡) | - | 约 64GB |
 | 额外参数量 | - | 0 (推理时无模块) | 0 |
@@ -280,21 +280,21 @@ L_total = 1.0 × L_action + 1.0 × 0.023 + 1.0 × 0.041
 
 **RoboCasa Human-50** (Table 1)：
 - GeoPredict: 52.4%
-- π0 基线：42.3%
+- $\pi_0$ 基线：42.3%
 - GWM: 39.2%
 - BC-Transformer: 28.8%
-- **提升**：+10.1% vs π0
+- **提升**：+10.1% vs $\pi_0$
 
 **LIBERO** (Table 2)：
 - GeoPredict: 96.5% (Spatial 98.0%, Object 98.2%, Goal 95.7%, Long 94.0%)
-- π0 基线：93.9%
+- $\pi_0$ 基线：93.9%
 - UniVLA: 95.2%
-- **提升**：+2.6% vs π0，超越当前 SOTA UniVLA
+- **提升**：+2.6% vs $\pi_0$，超越当前 SOTA UniVLA
 
 **实机** (Table 5)：
-- Spatial: 85.0% vs π0 60.0%
-- Geometry: 95.0% vs π0 50.0%
-- Robustness: 90.0% vs π0 35.0%
+- Spatial: 85.0% vs $\pi_0$ 60.0%
+- Geometry: 95.0% vs $\pi_0$ 50.0%
+- Robustness: 90.0% vs $\pi_0$ 35.0%
 
 ## 6. 能力与失败模式 (Capabilities & Failure Modes)
 
@@ -339,7 +339,7 @@ L_total = 1.0 × L_action + 1.0 × 0.023 + 1.0 × 0.041
 | WorldVLA | 隐式 | 是 (自回归) | 高 | - | 81.8% |
 | 4D-VLA | 体素 | 是 | 中 | - | 88.6% |
 | DreamVLA | 隐式 | 是 | 中 | - | 92.6% |
-| π0 | 2D 图像 | 否 | 低 | 42.3% | 93.9% |
+| $\pi_0$ | 2D 图像 | 否 | 低 | 42.3% | 93.9% |
 | UniVLA | 隐式 | 否 | 低 | - | 95.2% |
 | **GeoPredict** | **3DGS** | **是 (训练时)** | **低** | **52.4%** | **96.5%** |
 
@@ -354,7 +354,7 @@ L_total = 1.0 × L_action + 1.0 × 0.023 + 1.0 × 0.041
 
 ### 值得精读原文的人
 
-1. **VLA 研究者**：正在用 π0 或类似连续动作 VLA，想提升空间推理性能但不愿改变推理架构
+1. **VLA 研究者**：正在用 $\pi_0$ 或类似连续动作 VLA，想提升空间推理性能但不愿改变推理架构
 2. **具身 AI 工程师**：需要部署到实机，对推理延迟敏感，但有深度相机和标定条件
 3. **世界模型方向**：对预测性表示感兴趣，想了解如何将 3DGS 与 VLA 结合
 
@@ -381,7 +381,7 @@ L_total = 1.0 × L_action + 1.0 × 0.023 + 1.0 × 0.041
 
 ## 关键引用
 
-- π0 基线：https://arxiv.org/abs/2410.24164
+- $\pi_0$ 基线：https://arxiv.org/abs/2410.24164
 - 3D Gaussian Splatting：https://arxiv.org/abs/2308.04079
 - RoboCasa：https://arxiv.org/abs/2309.16631
 - LIBERO：https://arxiv.org/abs/2306.03316

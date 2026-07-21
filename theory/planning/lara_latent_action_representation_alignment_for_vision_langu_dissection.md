@@ -14,7 +14,7 @@
 | 適合精讀 | 如果你在做 LAM-based VLA 预训练、后训练增强、或用 latent action 做 pseudo-label——这篇的方法即插即用 |
 | 可以跳過 | 如果你只关心纯行为克隆 VLA（如 OpenVLA 微调）且不用 LAM，这篇距离中等 |
 | 落地可行性 | 高——仅需一个 projection head + cosine loss，不修改 DiT 或 LAM 架构 |
-| 主要風險 | 真实世界 G1 人形机器人仅 2 个复合任务 × 50 次演示，泛化性待更多 real-world 验证 |
+| 主要風險 | 真实世界 G1 人形机器人仅 $2$ 个复合任务 $\times 50$ 次演示，泛化性待更多 real-world 验证 |
 
 💡 **X-Ray 开场**
 VLA 模型受限于机器人动作数据稀缺，研究者常用 LAM 从未标注人类视频中提取潜在动作来补充监督信号。但传统做法是两阶段训练——LAM 先预训练，然后冻结作为 pseudo-label 提供者——这导致 LAM 学到的视觉动态与真实机器人动作脱节，VLA 又被冻结的 LAM 表示束缚。LARA 的核心发现是：让 LAM 和 VLA 在训练过程中通过表示对齐互相正则化，两者都能做得更好。
@@ -35,13 +35,13 @@ VLA 模型受限于机器人动作数据稀缺，研究者常用 LAM 从未标�
 | 组件 | 传统 LAM-based VLA | LARA |
 |------|---------------------|------|
 | **LAM 训练** | 单独在 unlabeled 视频上预训练，然后冻结 | 与 VLA 联合训练，持续更新 |
-| **LAM 输入** | I_t, I_{t+C}（连续帧） | 相同 |
-| **LAM 输出** | 离散 latent action z_t^q（VQ codebook token） | 连续 latent action z_t（量化前）用于对齐 |
+| **LAM 输入** | $I_t$, $I_{t+C}$（连续帧） | 相同 |
+| **LAM 输出** | 离散 latent action $z_t^q$（VQ codebook token） | 连续 latent action z_t（量化前）用于对齐 |
 | **VLA 架构** | DiT + cross-attention，条件为 VLM 特征 + proprio | 相同 |
-| **VLA 监督** | 真实动作 A_t +（可选）预测 z_t^q | 真实动作 A_t + LARA 对齐损失 |
-| **训练阶段** | 两阶段：LAM 预训练 → VLA 训练 | 三阶段：LAM 预训练 → LARA 联合预训练 → LARA 联合后训练 |
-| **信息流** | 单向：LAM → VLA（冻结） | 双向：LAM ↔ VLA（联合优化） |
-| **额外参数** | 无 | 1 个 projection head f_ψ（轻量 MLP） |
+| **VLA 监督** | 真实动作 $A_t$ +（可选）预测 $z_t^q$ | 真实动作 A_t + LARA 对齐损失 |
+| **训练阶段** | 两阶段：LAM 预训练 $\to$ VLA 训练 | 三阶段：LAM 预训练 $\to$ LARA 联合预训练 $\to$ LARA 联合后训练 |
+| **信息流** | 单向：LAM $\to$ VLA（冻结） | 双向：LAM $\leftrightarrow$ VLA（联合优化） |
+| **额外参数** | 无 | $1$ 个 projection head $f_\psi$（轻量 MLP） |
 
 ### 1.2 关键机制 (Key Mechanism)
 
@@ -52,9 +52,9 @@ L_LARA(θ, φ, ψ) = -E[A_t, ε, τ][CosSim(z_t^φ, f_ψ(h_t^θ))]
 ```
 
 其中：
-- z_t^φ = LAM 的连续潜在动作（量化前）
-- h_t^θ = 扩散 VLA（DiT）在 L-2 层的中间特征
-- f_ψ = 可学习的 projection head
+- $z_t^\varphi = \text{LAM}$ 的连续潜在动作（量化前）
+- $h_t^\theta = $ 扩散 VLA（DiT）在 $L\text{-}2$ 层的中间特征
+- $f_\psi = $ 可学习的 projection head
 
 **为什么这样设计：**
 
@@ -112,20 +112,20 @@ L(θ, φ, ψ) = L_ACT(θ) + w₁·(-CosSim[z_t^φ, f_ψ(h_t^θ)]) + w₂·L_LAM(
 
 | 项 | 含义 | 更新谁 |
 |----|------|--------|
-| L_ACT(θ) | Flow matching 动作生成损失：E[‖v_θ(A_t^τ, c_t) - (A_t - ε)‖²] | θ (DiT) |
-| L_LARA | 余弦相似度对齐：-CosSim[z_t^φ, f_ψ(h_t^θ)] | θ, φ, ψ（三者都更新） |
-| L_LAM(φ) | VQ-VAE 重建损失：‖I_{t+C} - Î_{t+C}‖² + commitment loss | φ (LAM) |
+| $L_{\text{ACT}}(\theta)$ | Flow matching 动作生成损失：$\mathbb{E}\left[\Vert v_\theta(A_t^\tau, c_t) - (A_t - \varepsilon)\Vert^2\right]$ | $\theta$ (DiT) |
+| L_LARA | 余弦相似度对齐：$-\text{CosSim}[z_t^\varphi, f_\psi(h_t^\theta)]$ | $\theta, \varphi, \psi$（三者都更新） |
+| $L_{\text{LAM}}(\varphi)$ | VQ-VAE 重建损失：$\Vert I_{t+C} - \hat{I}_{t+C}\Vert^2 + $ commitment loss | $\varphi$ (LAM) |
 
 **变量说明**：
-- θ: DiT（扩散动作生成器）参数
-- φ: LAM（IDM + FDM + VQ）参数
-- ψ: projection head 参数
-- z_t^φ: LAM 的连续 latent action（量化前），维度未明确给出，参考 Moto-GPT 设计
-- h_t^θ: DiT 在 L-2 层的中间特征
-- f_ψ: 可学习 projection head，将 h_t^θ 投影到 z_t 的空间
-- w₁, w₂: 损失平衡超参数（论文 Appendix 中有具体值，待补充）
+- $\theta$: DiT（扩散动作生成器）参数
+- $\varphi$: LAM（IDM + FDM + VQ）参数
+- $\psi$: projection head 参数
+- $z_t^\varphi$: LAM 的连续 latent action（量化前），维度未明确给出，参考 Moto-GPT 设计
+- $h_t^\theta$: DiT 在 $L\text{-}2$ 层的中间特征
+- $f_\psi$: 可学习 projection head，将 $h_t^\theta$ 投影到 $z_t$ 的空间
+- $w_1$, $w_2$: 损失平衡超参数（论文 Appendix 中有具体值，待补充）
 
-> 符号与本文保持一致：θ=DiT, φ=LAM, ψ=projection head
+> 符号与本文保持一致：$\theta=\text{DiT}$, $\varphi=\text{LAM}$, $\psi=\text{projection head}$
 
 ## 3. 带数字走一遍：玩具例子 (Worked Example)
 
@@ -134,15 +134,15 @@ L(θ, φ, ψ) = L_ACT(θ) + w₁·(-CosSim[z_t^φ, f_ψ(h_t^θ)]) + w₂·L_LAM(
 **场景**：机械臂需要将红色方块从左移到右。
 
 **Step 1 — LAM 前向**：
-- 输入：I_t（方块在左）, I_{t+C}（方块在右）
+- 输入：$I_t$（方块在左）, $I_{t+C}$（方块在右）
 - IDM 输出：z_t = [0.8, -0.3]（表示"向右移动"的潜在动作）
-- VQ 量化：z_t^q = codebook[7]（最接近的码本条目）
-- FDM 重建：Î_{t+C} ≈ I_{t+C}（重建成功，L_LAM 小）
+- VQ 量化：$z_t^q = \text{codebook}[7]$（最接近的码本条目）
+- FDM 重建：$\hat{I}_{t+C} \approx I_{t+C}$（重建成功，$L_\text{LAM}$ 小）
 
 **Step 2 — VLA 前向**：
 - 输入：观察 I_t + 指令 L = "move red block right" + proprio s_t
-- DiT 在 L-2 层输出中间特征：h_t^θ = [1.2, -0.5]（未对齐前可能与 z_t 方向不一致）
-- Projection head：f_ψ(h_t^θ) = [0.7, -0.2]
+- DiT 在 L-2 层输出中间特征：$h_t^\theta = [1.2, -0.5]$（未对齐前可能与 $z_t$ 方向不一致）
+- Projection head：$f_\psi(h_t^\theta) = [0.7, -0.2]$
 
 **Step 3 — 对齐损失**：
 ```
@@ -153,15 +153,15 @@ L_LARA = -0.91
 如果 CosSim 低（比如 0.3），说明 VLA 的中间表示与 LAM 的潜在动作不一致——VLA 可能在生成"看起来合理但实际无效"的动作。对齐损失会推动两者靠近。
 
 **Step 4 — 联合更新**：
-- ∂L/∂θ: DiT 调整使 h_t^θ 更接近 z_t 方向
-- ∂L/∂φ: LAM 调整 IDM 使 z_t 更聚焦于控制相关变化
-- 结果：z_t 不再编码光照变化等伪影，h_t^θ 不再产生无效轨迹
+- $\partial L/\partial \theta$: DiT 调整使 $h_t^\theta$ 更接近 $z_t$ 方向
+- $\partial L/\partial \varphi$: LAM 调整 IDM 使 $z_t$ 更聚焦于控制相关变化
+- 结果：$z_t$ 不再编码光照变化等伪影，$h_t^\theta$ 不再产生无效轨迹
 
 ## 4. 工程视角 (Engineering View)
 
 | 维度 | 分析 |
 |------|------|
-| **额外参数量** | 仅 1 个 projection head f_ψ，预计 < 1M 参数（相对 DiT + LAM 可忽略） |
+| **额外参数量** | 仅 1 个 projection head $f_\psi$，预计 $< 1\text{M}$ 参数（相对 DiT + LAM 可忽略） |
 | **训练开销** | 联合训练 vs 两阶段：多一次前向（LAM 不冻结），但无需额外数据 |
 | **推理延迟** | 推理时 LARA 损失不参与，仅需 LAM（可选）+ DiT，延迟不变 |
 | **内存占用** | 联合训练时需同时保留 LAM 和 DiT 的梯度，显存约增加 30-50% |
@@ -181,7 +181,7 @@ L_LARA = -0.91
 | LIBERO | 评测 | 4 个子任务：Spatial, Object, Goal, Long |
 | SIMPLER-ENV | 评测 | 3 个子任务：Pick Coke Can, Object Movement, Drawer |
 | GR1-Sim-24(30) | 评测 | 24 个双臂仿真任务，每任务 30 个演示微调 |
-| G1-Real(50) | 真实世界评测 | Unitree G1 人形机器人，2 个复合任务 × 50 次演示 |
+| G1-Real(50) | 真实世界评测 | Unitree G1 人形机器人，2 个复合任务 $\times 50$ 次演示 |
 
 ### 关键实验结果
 
@@ -219,18 +219,18 @@ L_LARA = -0.91
 
 | 局限 | 原因 |
 |------|------|
-| 真实世界验证有限 | G1-Real 仅 2 个任务 × 50 次演示，远不足以证明泛化 |
+| 真实世界验证有限 | G1-Real 仅 2 个任务 $\times 50$ 次演示，远不足以证明泛化 |
 | Drawer 任务在 SIMPLER-ENV 上仍弱 | LARA (full) 仅 29.5%，远低于 Pick/Move |
 | 对已很强的大模型提升有限 | GR00T-N1.6 在 Unconstrained 下仅 +1.3% |
 | 依赖 LAM 预训练质量 | 如果 LAM 预训练不好，对齐起点就低 |
 
 ### 6.1 隐含假设 (Hidden Assumptions)
 
-1. **DiT 中间特征与 LAM latent action 空间可对齐**：假设两者在高维空间中存在线性或近线性映射关系（通过 projection head f_ψ 实现）。如果两者表征空间差异过大（例如 DiT 编码了 LAM 完全没学到的语义信息），对齐可能不充分。
+1. **DiT 中间特征与 LAM latent action 空间可对齐**：假设两者在高维空间中存在线性或近线性映射关系（通过 projection head $f_\psi$ 实现）。如果两者表征空间差异过大（例如 DiT 编码了 LAM 完全没学到的语义信息），对齐可能不充分。
 
-2. **CosSim 足以捕捉对齐质量**：余弦相似度只关注方向，忽略幅度。如果 z_t 和 h_t^θ 的幅度分布差异很大，CosSim 可能给出误导性的"对齐"信号。
+2. **CosSim 足以捕捉对齐质量**：余弦相似度只关注方向，忽略幅度。如果 $z_t$ 和 $h_t^\theta$ 的幅度分布差异很大，CosSim 可能给出误导性的"对齐"信号。
 
-3. **联合训练不会导致优化冲突**：L_ACT 和 L_LAM 的梯度方向可能不一致，w₁ 和 w₂ 的选取对结果敏感。论文未提供消融实验分析超参数的影响。
+3. **联合训练不会导致优化冲突**：$L_{\text{ACT}}$ 和 $L_{\text{LAM}}$ 的梯度方向可能不一致，$w_1$ 和 $w_2$ 的选取对结果敏感。论文未提供消融实验分析超参数的影响。
 
 4. **LAM codebook size = 128 足够**：参考 Moto-GPT 设计，但未分析不同 codebook size 对 LARA 效果的影响。
 

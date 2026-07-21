@@ -37,10 +37,10 @@ OBEYED-VLA（OBject-centric and gEometrY groundED VLA）是一个三层分层架
 
 | 组件 | 输入 | 输出 | 训练状态 | 作用 |
 |------|------|------|----------|------|
-| **YOLO11-Seg** (对象分割) | base/wrist RGB 图像 | 对象级 mask 集合 M^base, M^wrist | 微调过 (100 demo + LVIS 子集) | 生成候选对象区域 |
+| **YOLO11-Seg** (对象分割) | base/wrist RGB 图像 | 对象级 mask 集合 $M^{\text{base}}, M^{\text{wrist}}$ | 微调过 (100 demo + LVIS 子集) | 生成候选对象区域 |
 | **Qwen3-VL** (对象中心接地) | task instruction + mask marks | 选中 mask 子集 | 冻结（off-the-shelf） | 根据指令选择任务相关对象 |
 | **深度估计** (几何接地) | 选中 mask 区域的 RGB | 深度图 (masked depth) | 冻结（off-the-shelf） | 强调 3D 结构，丢弃外观 |
-| **VLA 策略** (动作推理) | 接地后的观测 + instruction + proprioception | 动作轨迹 τ | 微调过 (干净单对象 demo) | 生成控制动作 |
+| **VLA 策略** (动作推理) | 接地后的观测 + instruction + proprioception | 动作轨迹 $\tau$ | 微调过 (干净单对象 demo) | 生成控制动作 |
 
 **与主流 VLA 架构的关键差异**：
 
@@ -51,7 +51,7 @@ OBEYED-VLA（OBject-centric and gEometrY groundED VLA）是一个三层分层架
 | 训练目标 | 纯动作预测损失 | 动作预测损失（感知模块冻结） |
 | 推理开销 | 单次 VLA forward | 分割 + VLM 推理 + 深度估计 + VLA |
 | 跨平台迁移 | 重新微调整个 VLA | 仅微调 YOLO11-Seg + VLA，VLM 冻结 |
-| 缺席目标处理 | 误抓率 >75% | 误抓率 ≈ 0% |
+| 缺席目标处理 | 误抓率 >75% | 误抓率 $\approx 0\%$ |
 
 ### 1.2 关键机制 (Key Mechanism)
 
@@ -134,18 +134,18 @@ max_θ  E_{(o,q,τ,l)~D} [ log π_θ(τ | o_grounded, q, l) ]
 
 | 符号 | 含义 |
 |------|------|
-| θ | VLA 策略参数（唯一需要微调的） |
-| τ | 短视程动作轨迹 (a_t, ..., a_{t+H})，H 为轨迹长度 |
+| $\theta$ | VLA 策略参数（唯一需要微调的） |
+| $\tau$ | 短视程动作轨迹 $(a_t, \dots, a_{t+H})$，$H$ 为轨迹长度 |
 | o | 视觉观测，base + wrist 两个 RGB 图像 |
 | q | 机器人本体感知状态（关节角度等） |
 | l | 自然语言指令 |
-| M^base, M^wrist | YOLO11-Seg 生成的对象 mask 集合 |
+| $M^{\text{base}}, M^{\text{wrist}}$ | YOLO11-Seg 生成的对象 mask 集合 |
 | VLM_Ground | Qwen3-VL 的对象中心接地函数（冻结） |
 | GeoGround | 深度估计 + mask 应用（冻结） |
 
 **直觉**：整个感知接地模块是一个确定性（或冻结模型）的函数 G(l, o_raw)，它把原始观测映射到"干净"的观测空间。VLA 只需要学会在这个干净空间里做动作推理——这比在原始杂乱空间里同时做感知和推理容易得多。
 
-> 符号与本文保持一致：π_θ 为策略，τ 为动作轨迹，o 为观测，q 为 proprioception，l 为语言指令。
+> 符号与本文保持一致：$\pi_\theta$ 为策略，$\tau$ 为动作轨迹，$o$ 为观测，$q$ 为 proprioception，$l$ 为语言指令。
 
 ## 3. 带数字走一遍：玩具例子 (Worked Example)
 
@@ -156,7 +156,7 @@ max_θ  E_{(o,q,τ,l)~D} [ log π_θ(τ | o_grounded, q, l) ]
 - 在 wrist 视图中检测到 4 个 mask：ketchup（部分可见）、mustard（部分可见）、bin、gripper
 
 **步骤 2 — 对象中心接地（Qwen3-VL）**：
-- VLM 解析指令："place ketchup in the bin" → 需要对象 = {ketchup, bin}
+- VLM 解析指令："place ketchup in the bin" → 需要对象 = $\{ketchup, bin\}$
 - 在 base 视图 mask 中选中：ketchup mask、bin mask → 丢弃 mustard、salt、robot arm
 - Cross-view matching：在 wrist 视图中找到 ketchup 和 bin 的对应 mask
 
@@ -167,16 +167,16 @@ max_θ  E_{(o,q,τ,l)~D} [ log π_θ(τ | o_grounded, q, l) ]
 
 **步骤 4 — VLA 动作推理**：
 - VLA 输入：(grounded_base_depth, grounded_wrist_depth, "place ketchup in the bin", proprioception)
-- VLA 输出：动作轨迹 τ = [move_to(ketchup), grasp, move_to(bin), release]
+- VLA 输出：动作轨迹 $\tau = [\text{move\_to}(ketchup),\ \text{grasp},\ \text{move\_to}(bin),\ \text{release}]$
 
 **对比基线**：
 - Pi-0 原始输入：(raw_base_RGB, raw_wrist_RGB, "place ketchup in the bin", proprioception)
-- Pi-0 输出（75% 概率）：τ = [move_to(mustard), grasp, ...] ← 被干扰物吸引
+- Pi-0 输出（75% 概率）：$\tau = [\text{move\_to}(mustard),\ \text{grasp},\ \dots]$ ← 被干扰物吸引
 
 **关键数字**：
 - 基线缺席目标误抓率：>75%（即使目标不在桌上也抓）
-- OBEYED-VLA 缺席目标误抓率：≈ 0%（几乎从不误抓）
-- 7 个干扰物场景成功率：基线 ~30-40% → OBEYED-VLA 80-90%
+- OBEYED-VLA 缺席目标误抓率：$\approx 0\%$（几乎从不误抓）
+- 7 个干扰物场景成功率：基线 $\sim 30\text{-}40\%$ → OBEYED-VLA $80\text{-}90\%$
 
 ## 4. 工程视角 (Engineering View)
 
@@ -211,7 +211,7 @@ max_θ  E_{(o,q,τ,l)~D} [ log π_θ(τ | o_grounded, q, l) ]
 | 场景 | 测试内容 | OBEYED-VLA 表现 | 基线表现 |
 |------|----------|-----------------|----------|
 | **干扰物场景** (1-7 个) | 目标 + 不同数量干扰物 | 80-90% 成功率（稳定） | 随干扰物增加急剧下降 |
-| **缺席目标** | 指令对象不在桌上 | ≈ 0% 误抓率 | >75% 误抓率 |
+| **缺席目标** | 指令对象不在桌上 | $\approx 0\%$ 误抓率 | >75% 误抓率 |
 | **背景偏移** | 更换桌布/背景 | 几乎无性能下降 | 下降 10-30 个百分点 |
 | **未见物体** | 所有物品均为训练未见 | 成功率保持较高 | 成功率大幅下降 |
 

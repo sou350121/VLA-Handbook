@@ -60,11 +60,11 @@ RoboECC 由两个核心模块组成：
 
 **模块 2: 网络感知部署调整（Network-Aware Deployment Adjustment）**
 
-- **问题**: 网络带宽波动（如 10 MB/s → 1 MB/s）会导致网络延迟从 9.9ms 飙到 99.6ms，最优分割点随之漂移
+- **问题**: 网络带宽波动（如 $10\,\text{MB/s} \to 1\,\text{MB/s}$）会导致网络延迟从 $9.9\,\text{ms}$ 飙到 $99.6\,\text{ms}$，最优分割点随之漂移
 - **方案**: 三步机制
   - **LSTM 预测器**: 轻量级 LSTM（20.1 MB）预测下一时刻网络带宽，输入时间粒度 < min(t_cloud, t_edge)
   - **参数共享池**: 在边缘和云端各保存最优分割点所在 block 的全部层权重（如 LLAMA Block 单层约 386 MB），避免传输延迟
-  - **细粒度调整**: 根据预测带宽变化量 ΔNB 与阈值 T_high/T_low 比较，在共享池内微调分割点——带宽增加时选数据传输量最大的层，带宽降低时选最小的层
+  - **细粒度调整**: 根据预测带宽变化量 $\Delta NB$ 与阈值 $T_{\text{high}}/T_{\text{low}}$ 比较，在共享池内微调分割点——带宽增加时选数据传输量最大的层，带宽降低时选最小的层
 
 ⚡ **Eureka Moment**: 网络波动时不需要重新搜索全局最优分割点——只需在最优分割点附近的"参数共享池"（单个 block 的层）内微调，因为相邻层的计算负载变化可忽略，只需优化数据传输量即可。
 
@@ -130,7 +130,7 @@ T_total(S) = Σ_{i=0}^{S} T_GPU^Edge(L_i) + Σ_{i=S}^{n} T_GPU^Cloud(L_i)
 
 **直觉**: 这个公式的本质是"在云侧显存预算内，把计算量最大的部分卸载到云上，同时让边缘侧承担尽可能少的工作"。关键创新在于 T_GPU 的计算不是黑盒测量，而是通过结构建模 + 硬件建模预测的——这让它能适配任意 VLA 结构。
 
-> 符号与本文保持一致：S_enc ∈ {M_ViT}, S_back ∈ {M_LLM}, S_dec ∈ {M_De-tokenizer, M_MLP, M_LSTM, M_Diff, M_DiT}
+> 符号与本文保持一致：$S_{\text{enc}} \in \{M_{\text{ViT}}\}$, $S_{\text{back}} \in \{M_{\text{LLM}}\}$, $S_{\text{dec}} \in \{M_{\text{De-tokenizer}}, M_{\text{MLP}}, M_{\text{LSTM}}, M_{\text{Diff}}, M_{\text{DiT}}\}$
 
 ## 3. 带数字走一遍：玩具例子 (Worked Example)
 
@@ -149,8 +149,8 @@ Layer 3: DiT Action Model→ FLOPs=800G,  DataMove=4GB,  |Edge|=56ms, |Cloud=12m
 
 | 分割点 S | Edge 层 | Cloud 层 | Edge Lat | Cloud Lat | Net Lat | Total | Cloud 显存 |
 |----------|---------|----------|----------|-----------|---------|-------|------------|
-| S=0 (全云) | - | 0,1,2,3 | 0 | 26ms | 40ms (4×100KB) | **66ms** | 14.1GB |
-| S=1 | 0 | 1,2,3 | 35ms | 18ms | 30ms (3×100KB) | **83ms** | 10.5GB |
+| S=0 (全云) | - | 0,1,2,3 | 0 | 26ms | $40\,\text{ms}$ ($4\times100\,\text{KB}$) | **66ms** | 14.1GB |
+| S=1 | 0 | 1,2,3 | 35ms | 18ms | $30\,\text{ms}$ ($3\times100\,\text{KB}$) | **83ms** | 10.5GB |
 | S=2 | 0,1 | 2,3 | 49ms | 15ms | 20ms (2×100KB) | **84ms** | 7.2GB |
 | S=3 | 0,1,2 | 3 | 63ms | 12ms | 10ms (1×100KB) | **85ms** | 4.0GB |
 | S=4 (全边缘) | 0,1,2,3 | - | 119ms | 0 | 0 | **119ms** | 14.1GB |
@@ -164,7 +164,7 @@ Layer 3: DiT Action Model→ FLOPs=800G,  DataMove=4GB,  |Edge|=56ms, |Cloud=12m
 | S=2 | 49ms | 15ms | 200ms | **264ms** ← 原来最优 |
 | S=3 | 63ms | 12ms | 100ms | **175ms** ← 新的最优 |
 
-此时 RoboECC 的网络感知模块会检测到 ΔNB 超过 T_low 阈值，在参数共享池内将分割点从 S=2 调整到 S=3（减少传输数据量），总延迟从 264ms 降到 175ms。
+此时 RoboECC 的网络感知模块会检测到 $\Delta NB$ 超过 $T_{\text{low}}$ 阈值，在参数共享池内将分割点从 $S=2$ 调整到 $S=3$（减少传输数据量），总延迟从 $264\,\text{ms}$ 降到 $175\,\text{ms}$。
 
 ## 4. 工程视角 (Engineering View)
 
@@ -175,7 +175,7 @@ Layer 3: DiT Action Model→ FLOPs=800G,  DataMove=4GB,  |Edge|=56ms, |Cloud=12m
 | **LSTM 预测器大小** | 20.1 MB | 相对 VLA 模型（14+ GB）几乎为零 |
 | **分割点调整耗时** | 平均 10.7 ms | 平均延迟降低 32.6 ms，ROI ≈ 3x |
 | **参数共享池** | ~386 MB (单层 LLAMA) | Orin 32/64GB 内存中占比 1-2%，Thor 64/128GB 中占比 <1% |
-| **实时控制门槛** | ~30 Hz (33ms/action) | RoboECC 达到 354ms/action ≈ 2.8 Hz，仍远低于 30 Hz |
+| **实时控制门槛** | ~30 Hz (33ms/action) | RoboECC 达到 $354\,\text{ms/action} \approx 2.8\,\text{Hz}$，仍远低于 $30\,\text{Hz}$ |
 
 **关键 trade-off**：
 - **延迟 vs 任务成功率**: RoboECC 不修改模型权重，理论上不影响成功率。但论文未在网络波动场景下验证任务成功率——加速是以不牺牲成功率为前提的，这个假设需要更多实验支撑。
@@ -211,7 +211,7 @@ Layer 3: DiT Action Model→ FLOPs=800G,  DataMove=4GB,  |Edge|=56ms, |Cloud=12m
 |------|------|
 | 适配多种 VLA 结构 | OpenVLA (LLM-only) 和 CogACT (LLM+DiT) 均有效 |
 | 自适应网络波动 | LSTM 预测 + 参数共享池微调，平均降低 32.6ms 延迟 |
-| 真实机器人部署 | AgileX PIPER 机械臂实验，Orin 从 1274ms→362ms |
+| 真实机器人部署 | AgileX PIPER 机械臂实验，Orin 从 $1274\,\text{ms}\to 362\,\text{ms}$ |
 | 低额外开销 | 参数共享池仅 2.55%-2.62% |
 
 ### 不能做什么 / 失败模式
@@ -223,7 +223,7 @@ Layer 3: DiT Action Model→ FLOPs=800G,  DataMove=4GB,  |Edge|=56ms, |Cloud=12m
 | 仅测试 2 个 VLA 模型 | OpenVLA + CogACT | 对 RT-2、DROID 等模型的泛化性未验证 |
 | 网络预测需要预热 | LSTM 需要历史带宽数据训练 | 新部署场景需要冷启动期 |
 | 单机械臂实验 | 仅 AgileX PIPER | 双臂/移动机器人/人形场景未验证 |
-| 仍远低于 30 Hz | 最优 192ms ≈ 5.2 Hz | 未达到实时控制门槛，需配合其他加速方法 |
+| 仍远低于 30 Hz | 最优 $192\,\text{ms} \approx 5.2\,\text{Hz}$ | 未达到实时控制门槛，需配合其他加速方法 |
 
 ### 6.1 隐含假设 (Hidden Assumptions)
 
@@ -231,7 +231,7 @@ Layer 3: DiT Action Model→ FLOPs=800G,  DataMove=4GB,  |Edge|=56ms, |Cloud=12m
 
 2. **网络波动是平稳过程**: LSTM 预测器假设历史带宽模式可预测未来。但在突发网络拥塞（如 WiFi 干扰、基站切换）场景下，预测可能失效。
 
-3. **参数共享池大小固定**: 假设单个 block 的权重（~386 MB）可以完全覆盖分割点调整范围。但如果最优分割点跨越多个 block 类型（如 LLM→DiT），共享池可能不够。
+3. **参数共享池大小固定**: 假设单个 block 的权重（$\sim 386\,\text{MB}$）可以完全覆盖分割点调整范围。但如果最优分割点跨越多个 block 类型（如 LLM→DiT），共享池可能不够。
 
 4. **云侧算力无限**: 优化只约束了云侧显存预算，未约束云侧算力竞争。实际多机器人共享云资源时，云侧延迟可能波动。
 

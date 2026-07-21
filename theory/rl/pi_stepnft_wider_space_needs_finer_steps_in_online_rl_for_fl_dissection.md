@@ -1,8 +1,8 @@
-# π-StepNFT：更宽探索空间需要更细粒度步级监督 (Wider Space Needs Finer Steps in Online RL for Flow-based VLAs)
+# $\pi$-StepNFT：更宽探索空间需要更细粒度步级监督 (Wider Space Needs Finer Steps in Online RL for Flow-based VLAs)
 
 > ⚙️ 本文由 Moltbot 自动生成 | 2026-03-09
 >
-> **论文**: π-StepNFT: Wider Space Needs Finer Steps in Online RL for Flow-based VLAs
+> **论文**: $\pi$-StepNFT: Wider Space Needs Finer Steps in Online RL for Flow-based VLAs
 > **链接**: https://arxiv.org/abs/2603.02083
 > **核心定位**: 解决 Flow-based VLA 在线 RL 中似然不可计算问题，用 SDE 扩展探索空间 + 步级对比排序实现无 critic 微调
 
@@ -16,7 +16,7 @@
 | 落地可行性 | 中（需要 RLinf 框架 + Flow-SDE 采样器，但代码已开源） |
 | 主要風險 | 短 horizon 任务效果最好，长 horizon 任务 credit assignment 仍弱于 PPO |
 
-💡 **X-Ray 开场**：Flow-based VLA 在监督微调后容易 collapse 到单一模式，缺乏误差恢复能力。在线 RL 能扩展行为流形，但 ODE 采样的似然不可计算阻碍了标准策略梯度。这篇论文提出 π-StepNFT：用 SDE 注入噪声扩展探索空间，用步级监督（预测下一步 xt- 而非终端 x0）提供细粒度引导，用对比排序损失实现无 critic 的双向推拉更新。在 LIBERO 上比 SFT 提升 32.9%，在 ManiSkill OOD 场景上比 PPO 高 11.1%。
+💡 **X-Ray 开场**：Flow-based VLA 在监督微调后容易 collapse 到单一模式，缺乏误差恢复能力。在线 RL 能扩展行为流形，但 ODE 采样的似然不可计算阻碍了标准策略梯度。这篇论文提出 $\pi$-StepNFT：用 SDE 注入噪声扩展探索空间，用步级监督（预测下一步 $x_{t-}$ 而非终端 $x_0$）提供细粒度引导，用对比排序损失实现无 critic 的双向推拉更新。在 LIBERO 上比 SFT 提升 $32.9\%$，在 ManiSkill OOD 场景上比 PPO 高 $11.1\%$。
 
 📍 **研究全景时间线**
 
@@ -47,7 +47,7 @@
 | SFT | 否 | 否 | 1 | 基线 (57.6-77.1%) | 基线 |
 | PPO | 是 | 否 | 多 | +20-30% | +0-5% |
 | GRPO | 否 | 否 | 多 | +15-20% | +5-8% |
-| π-StepNFT | **否** | **否** | **1** | **+32.9%** | **+11.1%** |
+| $\pi$-StepNFT | **否** | **否** | **1** | **+32.9%** | **+11.1%** |
 
 ### 1.2 关键机制 (Key Mechanism)
 
@@ -113,11 +113,11 @@ L_total = softplus(½·y·(E⁺ - E⁻)) + λ_TR·||Δv||²
 
 | 符号 | 含义 | 来源 |
 |------|------|------|
-| y = 2r-1 | 奖励标签转换 (r∈{0,1} → y∈{-1,1}) | §4.2 |
+| y = 2r-1 | 奖励标签转换 $(r \in \{0,1\} \to y \in \{-1,1\})$   | §4.2 |
 | E⁺, E⁻ | 正负镜像分支的方差归一化步级误差 | Eq.6 |
 | ΔE = E⁺ - E⁻ | 误差差，正比于 log 似然比 | Lemma 4.2 |
-| softplus(z) = log(1+e^z) | 平滑 hinge 损失 | §4.2 |
-| λ_TR·||Δv||² | Trust region 正则，防止过大更新 | Algorithm 1 |
+| $\text{softplus}(z) = \log(1+e^z)$   | 平滑 hinge 损失 | §4.2 |
+| $\lambda_{\text{TR}} \cdot$  ||$\Delta v$  ||$^2$   | Trust region 正则，防止过大更新 | Algorithm 1 |
 
 **误差计算** (代码块形式):
 ```
@@ -136,17 +136,17 @@ v⁻_θ = (1+β)·vold - β·vθ   (负分支，对称偏移)
 - y=-1（失败）时，要求 E⁺ > E⁻，即负分支更好地拟合
 - 这等价于调整构造的转移似然比 log(q⁺/q⁻) 以匹配 episode 标签
 
-> 符号与本文/相关文档保持一致：v 表示 velocity field（流匹配的速度场预测），xt 表示去噪时间 t 的状态，xt- 表示下一步状态（t- = t - δt）
+> 符号与本文/相关文档保持一致：$v$ 表示 velocity field（流匹配的速度场预测），$x_t$ 表示去噪时间 $t$ 的状态，$x_{t-}$ 表示下一步状态（$t- = t - \delta t$）  
 
 ## 3. 带数字走一遍：玩具例子 (Worked Example)
 
 假设一个简化的 2D 动作空间场景：
 
 **设定**：
-- 机器人需要抓取物体，动作 a = (x, y) ∈ R²
+- 机器人需要抓取物体，动作 $a = (x, y) \in \mathbb{R}^2$  
 - 当前去噪步 t=0.5，状态 xt = (0.5, 0.5)
-- 去噪步长 δt = 0.1，下一步 t- = 0.4
-- 噪声调度 σt = 0.3，协方差 Σt = σt²·I = 0.09·I
+- 去噪步长 $\delta t = 0.1$，下一步 $t- = 0.4$  
+- 噪声调度 $\sigma_t = 0.3$，协方差 $\Sigma_t = \sigma_t^2 \cdot I = 0.09 \cdot I$
 
 **Rollout 阶段**：
 ```
@@ -161,7 +161,7 @@ xt- = xt + [vold + σt²/(2t)·(xt + (1-t)·vold)]·(-δt) + σt·√δt·ε
     ≈ (0.49, 0.51) + 噪声项  (假设 ε=(0.1, -0.2)，则 xt- ≈ (0.499, 0.491))
 ```
 
-执行动作后获得终端奖励 r=1（成功抓取），则 y = 2·1 - 1 = +1
+执行动作后获得终端奖励 $r=1$（成功抓取），则 $y = 2 \cdot 1 - 1 = +1$
 
 **优化阶段**：
 ```
@@ -207,8 +207,8 @@ L = softplus(½ · y · ΔE) = softplus(½ · 1 · (-0.0062))
 
 **关键观察**：
 - E⁺ < E⁻ 说明正分支更好地拟合了观测转移
-- y=+1 时损失鼓励这种差异（ΔE 为负时 softplus 值小）
-- 梯度方向会推动 vθ 更接近 v⁺_θ，即沿 Δv 方向更新
+$- y=+1$ 时损失鼓励这种差异（$\Delta E$ 为负时 softplus 值小）
+- 梯度方向会推动 $v_\theta$ 更接近 $v^{+}_\theta$，即沿 $\Delta v$ 方向更新
 
 ## 4. 工程视角 (Engineering View)
 
@@ -219,16 +219,16 @@ L = softplus(½ · y · ΔE) = softplus(½ · 1 · (-0.0062))
 | 采样吞吐 | 高（RLinf 共置） | 中 | 中 | 环境 + rollout + actor 同 GPU |
 | 去噪步数 K | 10-20（短路径） | N/A | N/A | 具身控制延迟约束 |
 | 更新频率 | 每 episode 后 | 每 batch | 每 batch | 在线学习 |
-| 超参敏感度 | 中（β, σ, α） | 高（clip, λ） | 中 | 需动态 decay 调度 |
+| 超参敏感度 | 中（$\beta$, $\sigma$, $\alpha$） | 高（clip, $\lambda$） | 中 | 需动态 decay 调度 |
 
 **部署约束**：
 - **短去噪路径**：K=10-20 步是实践 sweet spot，更长路径收益递减（论文引用 Chen et al., 2025）
-- **单 GPU 共置**：RLinf 框架要求环境、rollout 策略、actor 在同一 GPU，适合 8×H100 或 8×4090 配置
+- **单 GPU 共置**：RLinf 框架要求环境、rollout 策略、actor 在同一 GPU，适合 $8 \times$H100 或 $8 \times 4090$ 配置
 - **VLM 骨干冻结**：只微调 action expert（~300M 参数），骨干（PaliGemma-3B）冻结以节省显存
 
 **Trade-off**：
-- **探索宽度 vs 监督粒度**：σ 太大导致收敛困难，太小限制探索；β 在 [1.0, 2.0] 最优
-- **更新激进 vs 稳定**：动态 decay α（0.9 → 0.995）平衡初期加速和后期稳定
+- **探索宽度 vs 监督粒度**：$\sigma$ 太大导致收敛困难，太小限制探索；$\beta$ 在 $[1.0, 2.0]$ 最优
+- **更新激进 vs 稳定**：动态 decay $\alpha$（$0.9 \to 0.995$）平衡初期加速和后期稳定
 - **稀疏奖励 vs 稠密价值**：稀疏二元信号训练更稳定，但长 horizon 任务 credit assignment 弱于 PPO
 
 ## 5. 数据与评测 (Data & Eval)
@@ -237,12 +237,12 @@ L = softplus(½ · y · ΔE) = softplus(½ · 1 · (-0.0062))
 
 | 基准 | 任务数 | 评估方式 | 关键挑战 |
 |------|--------|----------|----------|
-| LIBERO | 4 suites × 10 子任务 | 500 episodes/suite | 长 horizon 任务（LIBERO-Long 需多步操作） |
+| LIBERO | $4$ suites $\times 10$ 子任务 | 500 episodes/suite | 长 horizon 任务（LIBERO-Long 需多步操作） |
 | ManiSkill | 4,352 组合任务 | IND/OOD 分割 | 视觉多样性（未见过的纹理、物体、场景） |
 
 ### 5.2 训练数据
 
-| 数据集 | π0 训练轨迹 | π0.5 训练轨迹 | 说明 |
+| 数据集 | $\pi_0$ 训练轨迹 | $\pi_{0.5}$ 训练轨迹 | 说明 |
 |--------|------------|--------------|------|
 | LIBERO | 58（Spatial/Object/Goal）+ 208（Long） | 40（few-shot，每子任务 1 条） | 剪枝子集防止性能饱和掩盖 RL 增益 |
 | ManiSkill | 16,384（全量） | 16,384（全量） | 任务复杂度高需全量数据 |
@@ -251,7 +251,7 @@ L = softplus(½ · y · ΔE) = softplus(½ · 1 · (-0.0062))
 
 **LIBERO 成功率 (%)** (Table 1):
 
-| 方法 | π0 Spatial | π0 Object | π0 Goal | π0 Long | π0 Avg | π0.5 Avg |
+| 方法 | $\pi_0$ Spatial | $\pi_0$ Object | $\pi_0$ Goal   | $\pi_0$ Long   | π0 Avg | π0.5 Avg |
 |------|-----------|-----------|---------|---------|--------|----------|
 | SFT | 52.4 | 58.2 | 54.8 | 65.0 | 57.6 | 77.1 |
 | PPO | 85.2 | 92.4 | 83.6 | 88.4 | 87.4 | 91.2 |
@@ -269,7 +269,7 @@ L = softplus(½ · y · ΔE) = softplus(½ · 1 · (-0.0062))
 
 **关键发现**：
 - LIBERO 上 π-StepNFT 比 SFT 提升 32.9%（π0: 57.6% → 90.5%）
-- ManiSkill OOD 上比 PPO 高 11.1%（π0: 39.3% → 50.4%）
+- ManiSkill OOD 上比 PPO 高 11.1%（$\pi_0$: 39.3% → 50.4%）  
 - Critic-free 方法在视觉分布偏移下更鲁棒（避免 critic 过拟合 nuisance 特征）
 
 ## 6. 能力与失败模式 (Capabilities & Failure Modes)
@@ -309,17 +309,17 @@ L = softplus(½ · y · ΔE) = softplus(½ · 1 · (-0.0062))
 | SFT | 监督学习 | 否 | 否 | 1 | 无 | 终端 x0 | 基线 |
 | PPO | 策略梯度 | 是 | 否 | 多 | 截断重要性采样 | 步级优势 | 稳定 RL 基线 |
 | GR-RL | 价值蒸馏 | 是（隐式） | 否 | 多 | 噪声注入 | 终端 | 免显式 critic |
-| πRL | SDE 近似 | 否 | 近似 | 多 | SDE | 终端 | 高斯参数化似然 |
+| $\pi_{\text{RL}}$   | SDE 近似 | 否 | 近似 | 多 | SDE | 终端 | 高斯参数化似然 |
 | Diffusion-NFT | 对比学习 | 否 | 否 | 1 | ODE | 终端 x0 | 图像生成域首创 |
-| **π-StepNFT** | **对比学习** | **否** | **否** | **1** | **SDE** | **步级 xt-** | **具身控制域迁移 + 步级监督** |
+| **$\pi$-StepNFT**   | **对比学习** | **否** | **否** | **1** | **SDE** | **步级 xt-** | **具身控制域迁移 + 步级监督** |
 
-**面试 Tip**：被问到"Flow-based VLA 如何做在线 RL"时，回答："核心挑战是似然不可计算。π-StepNFT 用 SDE 扩展探索空间，用步级监督替代终端监督解决噪声累积问题，用对比排序损失实现无 critic 的双向更新——单前向、无价值网络、LIBERO 提升 33%、OOD 泛化优于 PPO。"
+**面试 Tip**：被问到"Flow-based VLA 如何做在线 RL"时，回答："核心挑战是似然不可计算。$\pi$-StepNFT 用 SDE 扩展探索空间，用步级监督替代终端监督解决噪声累积问题，用对比排序损失实现无 critic 的双向更新——单前向、无价值网络、LIBERO 提升 33%、OOD 泛化优于 PPO。"
 
 ## 8. 精讀建議 (Reading Guide)
 
 ### 值得精讀原文的人
 
-1. **做多模态具身 Agent 的研究者**：特别是用 Flow-based VLA（π0, Octo, GR00t）的，§4 方法提供完整数学推导，§5.3 消融验证各组件必要性
+1. **做多模态具身 Agent 的研究者**：特别是用 Flow-based VLA（$\pi_0$, Octo, GR00t）的，§4 方法提供完整数学推导，§5.3 消融验证各组件必要性
 2. **要评估迁移到新机器人平台可行性的工程师**：§5.1 实验设置详述硬件配置（8×H100/4090）、RLinf 框架、超参；§6 失败模式帮助判断适用性
 3. **对 critic-free RL 感兴趣的方法研究者**：§4.4 对比 Diffusion-NFT 的 weighted-MSE，Theorem 4.5 证明隐式惩罚项存在，理论扎实
 
@@ -347,7 +347,7 @@ L = softplus(½ · y · ΔE) = softplus(½ · 1 · (-0.0062))
 
 - **论文**: https://arxiv.org/abs/2603.02083
 - **代码**: https://wangst0181.github.io/pi-StepNFT/
-- **基础 Flow VLA**: π0 (Black et al., 2026) https://arxiv.org/abs/2410.24164
+- **基础 Flow VLA**: $\pi_0$ (Black et al., 2026) https://arxiv.org/abs/2410.24164
 - **Diffusion-NFT**: Zheng et al., 2025（图像生成域先驱工作）
 - **RLinf 框架**: Yu et al., 2025（高吞吐在线 RL 框架）
 

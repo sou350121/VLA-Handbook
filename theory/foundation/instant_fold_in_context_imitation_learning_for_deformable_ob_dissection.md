@@ -98,12 +98,12 @@ L_policy   = E[‖v_θ(z_t, t | o_t, C) - (ε - x)‖² + BCE(g̃, g)] + λ_kp·
 
 | 符号 | 含义 |
 |------|------|
-| z_t = (1-t)x + tε | Flow matching 插值：t∈[0,1] 从目标轨迹 x 到噪声 ε~N(0,I) |
-| v_θ(·) | 网络预测的向量场（速度），目标是逼近 (ε - x) |
+| $z_t = (1-t)x + t\varepsilon$ | Flow matching 插值：t∈[0,1] 从目标轨迹 x 到噪声 ε~N(0,I) |
+| $v_\theta(\cdot)$ | 网络预测的向量场（速度），目标是逼近 (ε - x) |
 | L_same | 同衣物 temporal contrastive loss（粒子级对应） |
 | L_cross | 跨衣物 contrastive loss（语义关键点级对应） |
 | L_kp | 辅助 keypose 预测 loss（短程子目标监督） |
-| λ_kp | keypose 辅助 loss 权重 |
+| $\lambda_{kp}$ | keypose 辅助 loss 权重 |
 
 **直觉**：
 - 预训练阶段：让 encoder 学会"跟踪"布料上同一物理点——即使布料折叠、拉伸，同一物理位置的视觉特征在 embedding 空间中保持接近。
@@ -153,7 +153,7 @@ Flow matching 推理过程（5 步 ODE 求解）：
 | 预训练 VRAM | 73.3 GB (RTX PRO 6000 Blackwell) | 需要高端 GPU；batch = 96 轨迹/步 |
 | Cloth Tokens | N=64 点/帧 | FPS 采样平衡了精度和计算量 |
 | 上下文关键帧 | K 个（由末端执行器事件自动提取） | 夹爪开/关事件触发，避免手动标注 |
-| 动作维度 | 8D（双臂 × (Δx, Δy, Δz, gripper)） | 相对增量控制，非绝对位置 |
+| 动作维度 | $8\text{D}$（双臂 $\times (\Delta x, \Delta y, \Delta z, \text{gripper})$） | 相对增量控制，非绝对位置 |
 | 推理延迟 | 未明确报告 | Flow matching 通常需 4-8 步 ODE 求解 |
 | 训练数据量 | ~80K 策略轨迹 + 40K 预训练轨迹 | 全仿真生成，无需真实数据 |
 | Sim-to-Real | 零样本，无微调 | 但实机失败率仍较高（见 §6） |
@@ -169,9 +169,9 @@ Flow matching 推理过程（5 步 ODE 求解）：
 
 | 数据集 | 规模 | 来源 | 用途 |
 |--------|------|------|------|
-| 策略训练 | 80K 轨迹（8 模式 × 300 衣物 × 12 轨迹/模式） | FleX 仿真 | Policy Learning |
+| 策略训练 | $80\text{K}$ 轨迹（$8$ 模式 $\times 300$ 衣物 $\times 12$ 轨迹/模式） | FleX 仿真 | Policy Learning |
 | 预训练 | 40K 额外轨迹（语义随机形变模式） | FleX 仿真 | Temporal Contrastive |
-| 保持测试 | 60 衣物 × 32 上下文 = 1920 rollout | 同仿真器 | 评估泛化 |
+| 保持测试 | $60$ 衣物 $\times 32$ 上下文 $= 1920$ rollout | 同仿真器 | 评估泛化 |
 | 真实测试 | 8 件 unseen 衣物（衬衫、短裤、夹克等） | 真实世界 | Sim-to-Real |
 
 ### 评测指标

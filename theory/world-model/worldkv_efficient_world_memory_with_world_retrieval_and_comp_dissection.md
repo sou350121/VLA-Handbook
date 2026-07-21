@@ -39,7 +39,7 @@
 |------|---------------|---------------|----------------|
 | 记忆策略 | 仅保留最近 N 帧 | 保留全部历史 KV | 存储全部 chunk（压缩后），按需检索 top-k |
 | 吞吐 (FPS) | 高（18.87 / 5.05） | 低（7.82 / 2.36） | 接近滑窗（16.25 / 4.78） |
-| 内存增长 | 恒定 | 线性增长 → OOM | 压缩后缓慢增长，可 CPU offload |
+| 内存增长 | 恒定 | 线性增长 $\to$ OOM | 压缩后缓慢增长，可 CPU offload |
 | 长程一致性 | 差（幻觉/漂移） | 好（但受 OOD 累积误差影响） | 好（检索过滤 OOD chunk） |
 | 训练需求 | 无 | 无 | 无（训练无关） |
 | 适用模型 | Matrix-Game-2.0 (1.3B) | LingBot-World-Fast (14B) | 两者通用 |
@@ -60,7 +60,7 @@ WorldKV 由两个互补组件构成：
 - 相邻帧产生近重复的 KV Cache（视角、场景布局、物体外观变化微小）
 - 以 chunk 内第一帧为 anchor，计算非 anchor 帧每个 key 与所有 anchor keys 的余弦相似度
 - 剪枝高相似度 token（冗余信息），保留低相似度 token（新揭示区域/动态内容）
-- 每个 3 帧 chunk 从 3T 压缩到约 1.5T token，存储效率 2×
+- 每个 $3$ 帧 chunk 从 $3\text{T}$ 压缩到约 $1.5\text{T}$ token，存储效率 $2\times$
 
 ⚡ **Eureka Moment**：模型的 KV Cache 已经是有效的世界记忆——问题不在于记忆不存在，而在于访问方式（全量 vs 滑窗）太极端；按视角相关性检索 + 压缩冗余，就能以极低成本解锁这个已有记忆。
 
@@ -130,9 +130,9 @@ s_j(f) = (1/T) · Σ_i [ k_j(f)^T · k_i(a) / (||k_j(f)|| · ||k_i(a)||) ]
 - k_j(f): 非 anchor 帧 f 中第 j 个 key 向量
 - k_i(a): anchor 帧中第 i 个 key 向量
 - T: anchor 帧的 token 数
-- s_j 高 → 该 token 与 anchor 高度冗余 → 剪枝
-- s_j 低 → 该 token 携带 anchor 未覆盖的新信息 → 保留
-- 最终：anchor 全保留 + 非 anchor 保留 25% → 3T → 1.5T
+- $s_j$ 高 $\to$ 该 token 与 anchor 高度冗余 $\to$ 剪枝
+- $s_j$ 低 $\to$ 该 token 携带 anchor 未覆盖的新信息 $\to$ 保留
+- 最终：anchor 全保留 + 非 anchor 保留 25% → $3\text{T} \to 1.5\text{T}$
 
 > 符号与本文保持一致：s_t 为视觉状态，a_t 为动作，K/V 为注意力 key/value，T 为 token 数，F 为 chunk 内帧数。
 
@@ -156,7 +156,7 @@ s_j(f) = (1/T) · Σ_i [ k_j(f)^T · k_i(a) / (||k_j(f)|| · ||k_i(a)||) ]
   Chunk 3:  (x=5.0, y=-3.0, yaw=120°) → dist=8.7 ← 不检索
   ...
 ```
-→ 3 个相关 chunk 被检索回注意力窗口，覆盖 9 帧
+→ $3$ 个相关 chunk 被检索回注意力窗口，覆盖 $9$ 帧
 
 **World Compression 执行**（以 Chunk 0 为例）：
 ```
@@ -187,17 +187,17 @@ Frame 2: 同理 → 25 个 token 保留
 
 | 工程维度 | 数值/观察 | 含义 |
 |----------|-----------|------|
-| 单 chunk 存储 (LingBot-World-Fast) | ~3.4GB / chunk (3 帧) | 1 分钟 rollout → 200GB+，超 B200 VRAM |
-| 压缩后存储 | ~1.7GB / chunk | 同样预算下 2× 历史覆盖 |
+| 单 chunk 存储 (LingBot-World-Fast) | ~3.4GB / chunk (3 帧) | $1$ 分钟 rollout → $200\text{GB}+$，超 B200 VRAM |
+| 压缩后存储 | ~1.7GB / chunk | 同样预算下 $2\times$ 历史覆盖 |
 | CPU Offload | 可行 | 非活跃 chunk 可 offload 到 CPU 内存，GPU 内存几乎恒定 |
-| 吞吐 (Matrix-Game-2.0, 4×H200) | 16.25 FPS (vs SW 18.87, Full KV 7.82) | 仅比纯滑窗低 14%，但记忆质量大幅提升 |
-| 吞吐 (LingBot-World-Fast, 4×H200) | 4.78 FPS (vs SW 5.05, Full KV 2.36) | 约 2× Full KV 吞吐，记忆质量相当 |
+| 吞吐 (Matrix-Game-2.0, $4\times\text{H200}$) | 16.25 FPS (vs SW 18.87, Full KV 7.82) | 仅比纯滑窗低 14%，但记忆质量大幅提升 |
+| 吞吐 (LingBot-World-Fast, $4\times\text{H200}$) | 4.78 FPS (vs SW 5.05, Full KV 2.36) | 约 $2\times$ Full KV 吞吐，记忆质量相当 |
 | 检索开销 | 可忽略 | 相机/动作距离计算是轻量向量运算 |
 | 压缩开销 | 每 chunk 一次 | 在存储时执行，不影响推理延迟 |
 
 **关键 trade-off**：
 - 检索精度 vs 存储成本：更多存储 = 更广覆盖 = 更好的检索候选
-- 压缩率 vs 信息损失：3→1.5 是 sweet spot；3→1.0（仅 anchor）丢失非 anchor 独特信息
+- 压缩率 vs 信息损失：$3\to 1.5$ 是 sweet spot；$3\to 1.0$（仅 anchor）丢失非 anchor 独特信息
 - 模块边界：WorldKV 完全在推理时操作，不修改 backbone 权重，不改变训练流程
 
 ## 5. 数据与评测 (Data & Eval)
@@ -229,7 +229,7 @@ Frame 2: 同理 → 25 个 token 保留
 | **Matrix-Game-2.0** | **WorldKV** | **16.25** | **0.462** | **14.101** | **0.405** | **93.561** |
 
 **关键发现**：
-- LingBot-World-Fast：WorldKV 接近 Full KV 的所有指标，吞吐约 2×
+- LingBot-World-Fast：WorldKV 接近 Full KV 的所有指标，吞吐约 $2\times$
 - Matrix-Game-2.0：WorldKV **超越** Full KV（因为 Full KV 积累了 OOD 退化 KV，引入累积误差）
 - 与记忆训练基线比：WorldKV 在 LingBot 上全面超越 WorldPlay/Yume-1.5，在 Matrix-Game 上竞争力相当
 
@@ -249,7 +249,7 @@ Frame 2: 同理 → 25 个 token 保留
 
 ### 6.1 隐含假设 (Hidden Assumptions)
 
-1. **相机/动作坐标与视觉场景存在稳定映射**：检索依赖位姿相似度，假设相同位姿 ≈ 相同视角 ≈ 相同场景内容。在物理仿真中成立，但在非物理场景（如抽象游戏、2D 界面操作）中可能不成立。
+$1$. **相机/动作坐标与视觉场景存在稳定映射**：检索依赖位姿相似度，假设相同位姿 $\approx$ 相同视角 $\approx$ 相同场景内容。在物理仿真中成立，但在非物理场景（如抽象游戏、2D 界面操作）中可能不成立。
 
 2. **相邻帧冗余性普遍存在**：压缩假设连续 3 帧之间有高度重叠。在高频抖动、快速切换场景时，冗余性下降，压缩效果减弱。
 

@@ -113,7 +113,7 @@
 决策 = Execute if |C|=1; Ask if |C|>1 (ambiguous); Learn if C=∅ (incapable)
 ```
 
-**目标**：在部署时，以至少 1-α 的概率保证正确策略被包含在预测集中。
+**目标**：在部署时，以至少 $1-\alpha$ 的概率保证正确策略被包含在预测集中。
 
 **Conformal Prediction 校准过程**：
 
@@ -130,7 +130,7 @@
 | --- | --- | --- |
 | p(y|x) | VLM 对行为叙事 y 的条件概率 | VLM verifier 输出 |
 | q̂ | 校准阈值 | 从校准集计算的分位数 |
-| α | 目标错误率 (如 0.1 表示 90% 覆盖) | 预设超参 |
+| $\alpha$ | 目标错误率 (如 0.1 表示 90% 覆盖) | 预设超参 |
 | C(x) | 预测集 | conformal prediction 输出 |
 | |C| | 预测集大小 | 决策依据 |
 
@@ -169,7 +169,7 @@ C = {y: p(y|x) ≥ 0.75}
   = ∅ (空集，因为所有概率都 < 0.75)
 ```
 
-**决策**：C = ∅ → **Incapable** 或 **Ambiguous**
+**决策**：$C = \emptyset$ → **Incapable** 或 **Ambiguous**
 
 进一步分析：如果是因为多个意图概率接近但都不够高，则是 Ambiguous → 触发 Ask 策略。
 
@@ -284,7 +284,7 @@ Vanilla VLM 直接选最高分 H1 (0.72)，执行后失败（用户实际指右�
 | Human-Gated DAgger | 人工决定 | 无 | 人工干预 | 人在环 |
 | **UPS (本文)** | **显式分类 (3 类)** | **Conformal Prediction** | **Execute/Ask/Learn** | **部署时自适应** |
 
-**面试 Tip**：如果被问到"如何让 VLA 系统知道自己什么时候不确定"，回答："用 conformal prediction 校准 VLM 输出，将概率转化为有覆盖保证的预测集。预测集大小决定策略：|C|=1 执行，|C|>1 询问，C=∅ 学习。这是 UPS 框架的核心。"
+**面试 Tip**：如果被问到"如何让 VLA 系统知道自己什么时候不确定"，回答："用 conformal prediction 校准 VLM 输出，将概率转化为有覆盖保证的预测集。预测集大小决定策略：$|C|=1$ 执行，$|C|>1$ 询问，$C=\emptyset$ 学习。这是 UPS 框架的核心。"
 
 ---
 

@@ -48,7 +48,7 @@ RouterVLA 不是一个神经网络架构，而是一个 **commissioning-and-sele
 | **是否需要 probe** | 否 | 是（每专家 B=3 次） | 是（但事后才看） |
 | **选择粒度** | 全局单一专家 | 每 variant 独立选专家 | 每 variant 选最优专家 |
 | **LIBERO-Plus SR** | 0.4686 | 0.6149 | 0.7393 |
-| **Δ vs Global** | — | +14.64pp | +27.07pp |
+| **$\Delta$ vs Global** | — | +14.64pp | +27.07pp |
 | **可部署性** | ✅ 是 | ✅ 是 | ❌ 否（需未来信息） |
 | **部署成本** | 0 次额外执行 | ~65.5 次 probe/condition | N/A |
 
@@ -57,7 +57,7 @@ RouterVLA 不是一个神经网络架构，而是一个 **commissioning-and-sele
 RouterVLA 的核心流程：
 
 1. **Commissioning（部署前测试）**：对每个候选专家执行 B 次 probe（默认 B=3），记录 success/failure、rollout length、duration、termination 等标量指标
-2. **Profile 构建**：将 probe 记录压缩为 14 维向量 ϕ_e = [S_e, R_e, P_e, M_e]
+2. **Profile 构建**：将 probe 记录压缩为 14 维向量 $\phi_e = [S_e, R_e, P_e, M_e]$
    - S_e: probe 成功率汇总（经验值、Beta 后验均值/方差）
    - R_e: rollout 轨迹汇总（步数、时长、超时/早停比例）
    - P_e: 训练集先验（训练成功率、延迟先验）
@@ -152,13 +152,13 @@ L_BCE(θ) = (1/|D_train|) · Σ BCE(Y_e,x^(t), σ(g_θ(ϕ_e^(t)(x))))
 | 符号 | 含义 |
 |------|------|
 | ℰ | 冻结专家池（28 个异构 VLA） |
-| ℰₓ | variant x 下可用的子集（均值 21.8） |
+| $\mathcal{E}_x$ | variant x 下可用的子集（均值 21.8） |
 | B | 每专家 probe 次数（默认 3） |
 | c_e | 专家 e 的成功 probe 数 |
-| ϕ_e | 14 维 commissioning profile |
-| Y_e,x^(t) | 专家 e 在 trial t 上的 binary 成功结果 |
-| SR(θ) | 所有评估行的平均成功率 |
-| U_x^(t) | hindsight upper bound = max_e Y_e,x^(t) |
+| $\phi_e$ | 14 维 commissioning profile |
+| $Y_{e,x}^{(t)}$ | 专家 e 在 trial t 上的 binary 成功结果 |
+| $SR(\theta)$ | 所有评估行的平均成功率 |
+| $U_x^{(t)}$ | hindsight upper bound = $\max_e Y_{e,x}^{(t)}$ |
 
 > 符号与本文保持一致。关键约束：profile 构建时不能使用 scored trial t 的结果（outcome-disjoint）。
 
@@ -176,7 +176,7 @@ Expert C: 3 次 probe → [失败, 失败, 成功] → c_C = 1, q_emp = 1/3 = 0.
 
 **Scored Execution**：用 Expert B 执行 held-out trial t（t 的结果未参与 profile 构建）
 
-假设实际结果：成功 → R = 1
+假设实际结果：成功 → $R = 1$
 
 **全局统计**（论文实际数据，Table 2）：
 
@@ -207,7 +207,7 @@ Permuted（对照）:    SR = 0.1011  → 随机，证明信号真实
 
 | 指标 | 值 | 含义 |
 |------|-----|------|
-| 平均 probe 数/condition | 65.5 | 21.8 专家 × 3 probe，中位数 81 |
+| 平均 probe 数/condition | 65.5 | $21.8$ 专家 $\times 3$ probe，中位数 $81$ |
 | 短列方案 (M=12, B=3) | 36 次 | 先按先验选 Top-12，再 probe |
 | 激进短列 (M=3, B=1) | 3 次 | 仅 Top-3 各 1 次 probe，SR=0.5597 |
 | Selector 推理成本 | 可忽略 | LR/GBDT/MLP 对 14 维向量推理 < 1ms |
@@ -235,10 +235,10 @@ Permuted（对照）:    SR = 0.1011  → 随机，证明信号真实
 |------|-----|------|
 | 总记录数 | 34,960 | 多平台 ledger |
 | LIBERO-Plus 有效记录 | 34,752 | 本文分析子集 |
-| Task-perturbation variants | 398 | 4 suites × 3 扰动轴 |
+| Task-perturbation variants | 398 | $4$ suites $\times 3$ 扰动轴 |
 | 冻结专家数 | 28 | 异构 VLA（不同架构/训练） |
 | 每 variant-expert 对的 trial 数 | 4 | ID 0-3 |
-| Variant-trial 评估行 | 1,592 | 398 variants × 4 folds |
+| Variant-trial 评估行 | 1,592 | 398 variants $\times$ 4 folds |
 
 ### 评测协议
 
@@ -270,15 +270,15 @@ Permuted（对照）:    SR = 0.1011  → 随机，证明信号真实
 
 | 场景 | 表现 | 原因 |
 |------|------|------|
-| Layout 扰动 | 路由增益为负（MLP Δ 负值） | Scalar profile 无法捕捉视觉布局变化 |
-| B=1 低预算 | SR ≈ 0.5837（下降 3pp） | 单次 probe 信息不足，tie 率更高 |
+| Layout 扰动 | 路由增益为负（MLP $\Delta$ 负值） | Scalar profile 无法捕捉视觉布局变化 |
+| B=1 低预算 | SR $\approx$ 0.5837（下降 3pp） | 单次 probe 信息不足，tie 率更高 |
 | 零 probe 新场景 | 不适用 | RouterVLA 假设重复使用场景，非零 probe 路由 |
 | 59.2% tie 场景 | 靠先验/ID 打破 | 成功率信号不够细粒度 |
 
 ### 6.1 隐含假设 (Hidden Assumptions)
 
 1. **Probe 成本可接受**：假设部署前做 65.5 次 probe（平均）是可行的。对于真实机器人，这可能意味着数十分钟的测试时间。
-2. **Trial ID 轮换 ≈ 时间泛化**：3-to-1 cross-fitting 用 ledger ID 轮换而非真实时间顺序。ID 不是时间戳，所以这不等同于部署后的 chronological generalization。
+2. **Trial ID 轮换 $\approx$ 时间泛化**：3-to-1 cross-fitting 用 ledger ID 轮换而非真实时间顺序。ID 不是时间戳，所以这不等同于部署后的 chronological generalization。
 3. **专家池固定**：所有 28 个专家对每个 variant 都可用（仅 0.8% 的 variant 只有 1 个专家）。真实部署中专家可用性可能更稀疏。
 4. **Scalar profile 足够**：论文聚焦于 scalar-only profile。这排除了图像/语言特征的潜在价值——作者自己也承认 layout 扰动下需要视觉上下文。
 5. **LIBERO-Plus 代表真实部署**：虽然 LIBERO-Plus 包含多种扰动，但它仍是仿真环境。真实机器人的 probe 噪声、机械误差等未建模。
@@ -323,4 +323,4 @@ Permuted（对照）:    SR = 0.1011  → 随机，证明信号真实
 - [论文 arXiv](https://arxiv.org/abs/2606.27355)
 - [LIBERO-Plus](https://github.com/LIBERO-Benchmark/LIBERO) (Fei et al., 2025)
 - [OpenVLA](https://arxiv.org/abs/2406.09246) (Kim et al., 2024)
-- [π₀.₄](https://www.physicalintelligence.company/) (Physical Intelligence et al., 2025)
+- [$\pi_{0.4}$](https://www.physicalintelligence.company/) (Physical Intelligence et al., 2025)

@@ -14,7 +14,7 @@
 |------|------|
 | 核心結論 | 分层 VLA 系统的规划质量可以通过改进其两个输入接口（物体几何证据 + 经验记忆）来提升，无需重新训练底层策略 |
 | 適合精讀 | 如果你在做多视角 3D 重建、机器人长期记忆管理、或分层 VLA 系统架构设计 |
-| 可以跳過 | 如果你只关心端到端训练 VLA（如 OpenVLA、π₀）而非分层规划架构 |
+| 可以跳過 | 如果你只关心端到端训练 VLA（如 OpenVLA、$\pi_0$）而非分层规划架构 |
 | 落地可行性 | 中——需要校准 RGB-D 多视角输入和 verifier LLM，但代码已开源 |
 | 主要風險 | 改进幅度一致但保守（CD -2.20%, PSNR +2.36%），且真实实验仅限 4 个桌面任务 |
 
@@ -150,8 +150,8 @@ p'' = c + (p' - c) ⊙ a + δ
 ```
 
 - a ∈ ℝ³：三个轴方向的缩放因子
-- δ ∈ ℝ³：小偏移量
-- ⊙：逐元素乘法
+- $\delta \in \mathbb{R}^3$：小偏移量
+- $\odot$：逐元素乘法
 - 选择 a 和 δ 使得修正后的几何与输入掩码更一致，同时保持接近原始 MV-SAM3D 几何
 
 ### 2.4 保守几何融合 (Conservative Geometry Fusion)
@@ -164,8 +164,8 @@ G_out = { ((1-α)·x_A^j + α·x_B^j, θ_A^j) }_{j=1}^N
 
 - x_A^j, x_B^j：Source A 和 B 的第 j 个高斯中心
 - θ_A^j：Source A 的非几何属性（颜色、透明度、SH 系数等）
-- α：融合权重，平衡两个几何源
-- 关键：外观 θ 完全来自 A，几何是 A 和 B 的加权平均
+- $\alpha$：融合权重，平衡两个几何源
+- 关键：外观 $\theta$ 完全来自 A，几何是 A 和 B 的加权平均
 
 ### 2.5 受控记忆检索分数 (Governed Retrieval Score)
 
@@ -176,7 +176,7 @@ S(q_t, X_t, m) = r_text(q_t, m) + κ_m + b_success(m) + b_recency(m) + b_usage(m
 | 符号 | 含义 | 类型 |
 |------|------|------|
 | r_text | 文本语义相似度 | 基础分 |
-| κ_m | 记忆 m 的置信度 | +奖励 |
+| $\kappa_m$ | 记忆 m 的置信度 | +奖励 |
 | b_success | 该记忆是否来自成功轨迹 | +奖励 |
 | b_recency | 时间近期性 | +奖励 |
 | b_usage | 历史使用频率 | +奖励 |
@@ -195,24 +195,24 @@ S(q_t, X_t, m) = r_text(q_t, m) + κ_m + b_success(m) + b_recency(m) + b_usage(m
 
 **Step 2 — Source A（带 VGGT 先验）**
 - VGGT 提供外部几何估计，与 MV-SAM3D 输出融合
-- 对某个高斯中心 p_A = (0.15, -0.02, 0.10)，掩码一致性 s(p_A) = 0.85（高支持）→ 几乎不收缩
-- 对另一个 p_A' = (0.18, 0.05, 0.12)，s(p_A') = 0.30（低支持）→ λ=0.1 → p_A' 向中心收缩 10%
+- 对某个高斯中心 $p_A = (0.15, -0.02, 0.10)$，掩码一致性 $s(p_A) = 0.85$（高支持）→ 几乎不收缩
+- 对另一个 $p_A' = (0.18, 0.05, 0.12)$，$s(p_A') = 0.30$（低支持）→ $\lambda=0.1$ → $p_A'$ 向中心收缩 10%
 
 **Step 3 — Source B（轴补偿）**
 - 不使用 VGGT，仅用输入掩码优化
-- 轴参数 a = (1.02, 0.98, 1.01)，δ = (0.001, -0.002, 0.001)
-- 对 p_A'' = c + (p_A' - c) ⊙ a + δ → 微调后的几何
+- 轴参数 $a = (1.02, 0.98, 1.01)$，$\delta = (0.001, -0.002, 0.001)$
+- 对 $p_A'' = c + (p_A' - c) \odot a + \delta$ → 微调后的几何
 
 **Step 4 — 融合**
-- α = 0.5（平衡两源）
-- p_out = 0.5 · p_A + 0.5 · p_B
-- 外观 θ 完全来自 Source A
+- $\alpha = 0.5$（平衡两源）
+- $p_{\text{out}} = 0.5 \cdot p_A + 0.5 \cdot p_B$
+- 外观 $\theta$ 完全来自 Source A
 
 **Step 5 — 记忆检索**
 - 假设 KnowledgeBank 中有 3 条候选记忆：
-  - m1: r_text=0.8, κ=0.9, b_success=1, b_recency=0.5, b_usage=0.3, p_conflict=0, p_stale=0 → S=3.5
-  - m2: r_text=0.85, κ=0.4, b_success=0, b_recency=0.2, b_usage=0.1, p_conflict=0.5, p_stale=0.3 → S=0.75
-  - m3: r_text=0.7, κ=0.8, b_success=1, b_recency=0.3, b_usage=0.5, p_conflict=0, p_stale=0 → S=3.3
+  - m1: $r_{\text{text}}=0.8$, $\kappa=0.9$, $b_{\text{success}}=1$, $b_{\text{recency}}=0.5$, $b_{\text{usage}}=0.3$, $p_{\text{conflict}}=0$, $p_{\text{stale}}=0$ → $S=3.5$
+  - m2: $r_{\text{text}}=0.85$, $\kappa=0.4$, $b_{\text{success}}=0$, $b_{\text{recency}}=0.2$, $b_{\text{usage}}=0.1$, $p_{\text{conflict}}=0.5$, $p_{\text{stale}}=0.3$ → $S=0.75$
+  - m3: $r_{\text{text}}=0.7$, $\kappa=0.8$, $b_{\text{success}}=1$, $b_{\text{recency}}=0.3$, $b_{\text{usage}}=0.5$, $p_{\text{conflict}}=0$, $p_{\text{stale}}=0$ → $S=3.3$
 - 检索返回 m1（最高分）和 m3 作为规划上下文
 - m2 被过滤：虽然文本相似度高，但置信度低、来自失败轨迹、有冲突标记
 
@@ -314,11 +314,11 @@ S(q_t, X_t, m) = r_text(q_t, m) + κ_m + b_success(m) + b_recency(m) + b_usage(m
 | 方法 | 关注点 | 架构 | 训练方式 | 3D 几何 | 记忆治理 |
 |------|--------|------|----------|---------|----------|
 | RT-2 (2023) | 端到端 VLA 迁移 | 单一 Transformer | 大规模微调 | 无 | 无 |
-| π₀ (2024) | 流模型控制 | Flow-based VLA | 预训练 | 无 | 无 |
+| $\pi_0$ (2024) | 流模型控制 | Flow-based VLA | 预训练 | 无 | 无 |
 | OpenVLA (2024) | 开源 VLA | LLaVA + action head | 微调 | 无 | 无 |
 | VoxPoser (2023) | 3D 语义地图规划 | LLM + 体素 | 无训练 | 体素语义地图 | 无 |
-| Code as Policies (2023) | 代码生成策略 | LLM → 代码 | 无训练 | 无 | 无 |
-| GeneralVLA (2025) | 分层 VLA 规划 | ASM → 3DAgent → 执行 | 无训练 | 单目 SAM3D | 语义检索 |
+| Code as Policies (2023) | 代码生成策略 | LLM $\to$ 代码 | 无训练 | 无 | 无 |
+| GeneralVLA (2025) | 分层 VLA 规划 | ASM $\to$ 3DAgent $\to$ 执行 | 无训练 | 单目 SAM3D | 语义检索 |
 | **GeneralVLA-2 (2026)** | **分层 VLA 升级** | **同 GeneralVLA** | **无训练** | **多视角几何融合** | **受控记忆** |
 
 **面试 Tip**：当被问到"GeneralVLA-2 和 GeneralVLA 的区别"时，回答："GeneralVLA-2 不改变分层架构本身，而是强化 3DAgent 规划器的两个输入接口——用多视角几何融合替代单目重建减少幻觉，用带质量/置信度/生命周期的受控记忆替代纯语义检索减少噪声。两者都不需要重新训练策略。"
@@ -331,7 +331,7 @@ S(q_t, X_t, m) = r_text(q_t, m) + κ_m + b_success(m) + b_recency(m) + b_usage(m
 - 评估分层 VLA 系统规划质量的团队（§5.3 RLBench 实验设计提供了 training-free 评测范式）
 
 **建議章節路徑**：
-1. 先读 §3 Preliminaries — 理解 GeneralVLA 的基础架构（3D 场景点 → 3DAgent → 轨迹）
+1. 先读 §3 Preliminaries — 理解 GeneralVLA 的基础架构（3D 场景点 $\to$ 3DAgent $\to$ 轨迹）
 2. 再看 §4.1 GeoFuse-MV3D — 重点看 Equation (4)-(8) 的几何融合流程
 3. 然后读 §4.3 Governed Memory Operations — 检索公式 (10) 是核心
 4. 可跳 §5.2 的 SWE-Bench 细节 — 那是软件 Agent 评测，与机器人操作关系较远

@@ -249,23 +249,23 @@ Agent 发送工具调用：
 
 | 方法 | LIBERO-Spatial | LIBERO-Object | LIBERO-Goal | LIBERO-Long | 速度提升 |
 |------|----------------|---------------|-------------|-------------|----------|
-| OpenVLA-OFT | 98.6% | 97.6% | 97.2% | 95.8% | 1.00× |
-| RoboNeuron + P25 | 98.8% (+0.2) | 98.0% (+0.4) | 97.6% (+0.4) | 94.4% (-1.4) | 1.03× |
-| RoboNeuron + P50 | 99.2% (+0.6) | 98.4% (+0.8) | 96.8% (-0.4) | 94.4% (-1.4) | 1.17× |
-| RoboNeuron + P75 | 98.4% (-0.2) | 89.8% (-7.8) | 96.6% (-0.6) | 89.2% (-6.6) | 1.58× |
+| OpenVLA-OFT | 98.6% | 97.6% | 97.2% | 95.8% | $1.00\times$ |
+| RoboNeuron + P25 | 98.8% (+0.2) | 98.0% (+0.4) | 97.6% (+0.4) | 94.4% (-1.4) | $1.03\times$ |
+| RoboNeuron + P50 | 99.2% (+0.6) | 98.4% (+0.8) | 96.8% (-0.4) | 94.4% (-1.4) | $1.17\times$ |
+| RoboNeuron + P75 | 98.4% (-0.2) | 89.8% (-7.8) | 96.6% (-0.6) | 89.2% (-6.6) | $1.58\times$ |
 
 **Case IV-B**（OpenVLA runtime + 剪枝变体）：测量单步推理延迟（RTX 4090）。
 
 | 配置 | 延迟 (ms) | 相对速度 |
 |------|-----------|----------|
-| OpenVLA baseline | ~120ms | 1.00× |
-| RoboNeuron overhead | ~125ms | 0.96× |
-| SGLang runtime | ~80ms | 1.50× |
-| SGLang + P50 | ~50ms | 2.40× |
+| OpenVLA baseline | ~120ms | $1.00\times$ |
+| RoboNeuron overhead | ~125ms | $0.96\times$ |
+| SGLang runtime | ~80ms | $1.50\times$ |
+| SGLang + P50 | ~50ms | $2.40\times$ |
 
 **关键结论**（来自论文 Table I + Figure 6）：
 - RoboNeuron 自身开销 <5%
-- SGLang + 剪枝可实现 2.4× 加速，成功率下降可控（P50 下平均 -1%）
+- SGLang + 剪枝可实现 $2.4\times$ 加速，成功率下降可控（P50 下平均 $-1\%$）
 
 ## 6. 能力与失败模式 (Capabilities & Failure Modes)
 
@@ -308,12 +308,12 @@ Agent 发送工具调用：
 | **SayCan**[[1](#bib.bib1)] | 技能选择 | LLM + 技能库 | 无训练 | 任务级规划 |
 | **Code as Policies**[[2](#bib.bib2)] | 程序结构化控制 | LLM 生成代码 | 无训练 | 可解释执行 |
 | **OpenVLA**[[10](#bib.bib10)] | VLA 模型 | Transformer | 端到端训练 | 模仿学习 |
-| **ROS2-MCP-Server**[[23](#bib.bib23)] | 协议桥接 | MCP ↔ ROS2 | 无 | 基础连通性 |
+| **ROS2-MCP-Server**[[23](#bib.bib23)] | 协议桥接 | MCP $\leftrightarrow$ ROS2 | 无 | 基础连通性 |
 | **RoboNeuron (本文)** | **运行时基础设施** | **双平面 + 稳定边界** | **无** | **部署/集成/后端切换** |
 
 **关键差异**：
 - SayCan/Code as Policies 关注**规划逻辑**，RoboNeuron 关注**运行时基础设施**
-- OpenVLA 是**模型**，RoboNeuron 是**部署框架**（可承载 OpenVLA/π0 等）
+- OpenVLA 是**模型**，RoboNeuron 是**部署框架**（可承载 OpenVLA/$\pi_0$ 等）
 - ROS2-MCP-Server 仅做**协议桥接**，RoboNeuron 额外提供**schema 推导 + 生命周期管理 + 后端切换**
 
 **面试 Tip**：被问到"RoboNeuron 的核心贡献是什么"时，回答：**"它不是新的 VLA 模型或规划算法，而是一个中间件层，通过 schema-based 工具推导和稳定推理边界，解决 Agent 工具调用与 ROS2 执行之间的接口 mismatch 问题，支持后端切换无需系统重布线。"**

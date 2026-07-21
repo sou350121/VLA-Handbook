@@ -10,7 +10,7 @@
 
 | 維度 | 判斷 |
 |------|------|
-| 核心結論 | WEAVER 通过 Flow Matching + Diffusion Forcing + 预训练 SD3 编码器 + 稀疏记忆/短期历史双路架构，首次在同一世界模型中同时实现高保真（ρ=0.870 策略评估相关性）、长程一致性（40+ 步预测）和高效推理（比 Ctrl-World 快 5-10×） |
+| 核心結論 | WEAVER 通过 Flow Matching + Diffusion Forcing + 预训练 SD3 编码器 + 稀疏记忆/短期历史双路架构，首次在同一世界模型中同时实现高保真（$\rho = 0.870$ 策略评估相关性）、长程一致性（40+ 步预测）和高效推理（比 Ctrl-World 快 $5\text{--}10\times$） |
 | 適合精讀 | 如果你在做 VLA 策略训练、需要离线策略评估、或想用世界模型做 test-time planning，重点看 §3.2（推理加速）和 §3.4（下游应用） |
 | 可以跳过 | 如果你只关心纯视觉生成或自动驾驶世界模型，这篇距离中等——它聚焦的是机械臂操作场景 |
 | 落地可行性 | 中（需要 SD3 VAE + 真实机器人数据微调；但代码已开源） |
@@ -41,22 +41,22 @@
 | 训练目标 | Flow Matching + Diffusion Forcing | Diffusion | MSE (pixel) | Future prediction |
 | 推理加速 | Rectified Flow 蒸馏 | 无 | 无 | 无 |
 | 奖励/价值头 | ✅ (latent空间) | ❌ (需VLM judge) | ✅ | ❌ |
-| 推理速度 | 5-10× 快于 Ctrl-World | 基线 | 较快 | 快 |
+| 推理速度 | $5\text{--}10\times$ 快于 Ctrl-World | 基线 | 较快 | 快 |
 | OOD鲁棒性 | 高 (预训练encoder) | 中 | 低 (从0学) | 高 |
 
 ### 1.2 关键机制
 
-**输入表示**: 多view图像 (I¹, ..., Iⁿ) + 本体状态 q ∈ R⁸ → 通过预训练 SD3 VAE 编码器 → patch tokens + proprioceptive token → 拼接为 z_t
+**输入表示**: 多view图像 $(I^1, \dots, I^n)$ + 本体状态 $q \in \mathbb{R}^8$ → 通过预训练 SD3 VAE 编码器 → patch tokens + proprioceptive token → 拼接为 $z_t$
 
 **记忆架构**:
-- **稀疏长期记忆**: z^{mem}_t = (..., z_{t-2k}, z_{t-k})，每 k 步保存一次，捕获长期场景上下文
-- **短期历史**: z^{hist}_t = (z_{t-1}, z_t)，捕获最近动作的即时后果
+- **稀疏长期记忆**: $z^{mem}_t = (\dots, z_{t-2k}, z_{t-k})$，每 $k$ 步保存一次，捕获长期场景上下文
+- **短期历史**: $z^{hist}_t = (z_{t-1}, z_t)$，捕获最近动作的即时后果
 
 **动态模型**: z_hat_t ~ f_φ(z^{mem}_t, z^{hist}_t, a_t)，用 2D Transformer（空间注意力 + 因果时间注意力），配合 RMSNorm / RoPE / QKNorm / SwiGLU
 
 **价值估计**:
 - **奖励头 R**: AdaPool + MLP，直接在 latent 上预测任务对齐分数（替代 VLM judge）
-- **Critic V**: 与奖励头共享设计，预测 λ-return 以估计 horizon 外的价值
+- **Critic $V$**: 与奖励头共享设计，预测 $\lambda$-return 以估计 horizon 外的价值
 
 ⚡ **Eureka Moment**: 用预训练的视频生成模型编码器（SD3 VAE）替代从0学习的encoder，同时用 Flow Matching + Rectified Flow 蒸馏替代传统 diffusion denoising——这一组合同时解决了 OOD 鲁棒性和推理速度两个痛点。
 
@@ -131,7 +131,7 @@ z^τ_t = τ·z¹_t + (1-τ)·z⁰_t   (插值轨迹, τ ∈ [0,1))
 L_WM = E[ ||(z¹_t - z⁰_t) - f_φ(z^{hist}, z^{mem}, a_t, z^τ_t, τ)||²₂ ]
 ```
 
-模型学习预测从噪声到真实 latents 的"速度"方向 (z¹ - z⁰)。
+模型学习预测从噪声到真实 latents 的"速度"方向 $(z^1 - z^0)$。
 
 **奖励头训练**:
 
@@ -141,7 +141,7 @@ L_R = E[ ||R(z_hat_t, ℓ) - r_distilled||²₂ ]
 
 奖励头 R 通过 AdaPool 聚合 latent tokens 后接 MLP，蒸馏外部奖励模型（RoboMeter）的分数。
 
-**Critic 训练 (λ-return)**:
+**Critic 训练 ($\lambda$-return)**:
 
 ```
 v_t^λ = R(z_t, ℓ) + γ·((1-λ)·V(z_{t+1}, ℓ) + λ·v_{t+1}^λ)
@@ -158,7 +158,7 @@ A_hat_t^b = Σ_{ℓ=1}^{H} γ^{ℓ-1}·R(z_hat_{t+ℓ}^b, ℓ) + γ^H·V(z_hat_{
 
 对 B 个采样 rollout 计算 advantage，仅当 max_b A_hat_t^b > ε_adv 时才蒸馏到基策略。
 
-> 符号说明: z = latent state; a = action chunk (h-step); ℓ = language instruction; R = reward head; V = critic; γ = discount factor; λ = GAE trace parameter; ε_adv = advantage threshold; f_φ = latent dynamics model; E_ψ = pretrained encoder; D_η = pretrained decoder
+> 符号说明: $z = $ latent state; $a = $ action chunk $(h\text{-step})$; $\ell = $ language instruction; $R = $ reward head; $V = $ critic; $\gamma = $ discount factor; $\lambda = $ GAE trace parameter; $\varepsilon_{\text{adv}} = $ advantage threshold; $f_\varphi = $ latent dynamics model; $E_\psi = $ pretrained encoder; $D_\eta = $ pretrained decoder
 
 ### 2.4 直觉
 
@@ -174,12 +174,12 @@ Flow Matching 把"预测未来"转化为"学习从噪声到数据的矢量场"�
 - 指令 ℓ: "把碗A叠到碗B上"
 
 **策略采样** (t=0):
-- π_θ 采样一个 h=15 步的 action chunk: a_0 = [v₁, v₂, ..., v₁₅]（关节速度序列）
+- $\pi_\theta$ 采样一个 $h=15$ 步的 action chunk: $a_0 = [v_1, v_2, \dots, v_{15}]$（关节速度序列）
 
 **世界模型想象** (t=0):
-- 编码器: z_0 = E_ψ(o_0) → 假设 latent 维度 1024
-- 记忆: z^{mem}_0 = (z_{-2k}, z_{-k}) = (z_{-20}, z_{-10})（假设 k=10）
-- 历史: z^{hist}_0 = (z_{-1}, z_0)
+- 编码器: $z_0 = E_\psi(o_0)$ → 假设 latent 维度 $1024$
+- 记忆: $z^{mem}_0 = (z_{-2k}, z_{-k}) = (z_{-20}, z_{-10})$（假设 $k=10$）
+- 历史: $z^{hist}_0 = (z_{-1}, z_0)$
 - 动态模型: z_hat_{1:16} = f_φ(z^{mem}_0, z^{hist}_0, a_0)
   - 假设 Flow Matching 用 NFE=4 步完成 denoising
 
@@ -189,7 +189,7 @@ Flow Matching 把"预测未来"转化为"学习从噪声到数据的矢量场"�
 - R(z_hat_16, ℓ) = 0.9（碗A成功叠放）
 - V(z_hat_16, ℓ) = 0.95（预测后续步骤也很可能成功）
 
-**Advantage 计算** (假设 γ=0.99, H=16):
+**Advantage 计算** (假设 $\gamma=0.99$, $H=16$):
 
 ```
 A_hat = 0.99⁰·0.3 + 0.99¹·0.6 + ... + 0.99¹⁵·0.9 + 0.99¹⁶·0.95 - V(z_0, ℓ)
@@ -198,24 +198,24 @@ A_hat = 0.99⁰·0.3 + 0.99¹·0.6 + ... + 0.99¹⁵·0.9 + 0.99¹⁶·0.95 - V(
      ≈ 4.11
 ```
 
-如果 ε_adv = 0.5，则 4.11 > 0.5 → 该 rollout 被蒸馏到策略。
+如果 $\varepsilon_{\text{adv}} = 0.5$，则 $4.11 > 0.5$ → 该 rollout 被蒸馏到策略。
 
 **Test-time Planning** (B=4 candidates):
-- 采样 4 个 action chunks: a^{(1)}, a^{(2)}, a^{(3)}, a^{(4)}
+- 采样 $4$ 个 action chunks: $a^{(1)}, a^{(2)}, a^{(3)}, a^{(4)}$
 - 各自想象得到 A_hat^(1)=4.11, A_hat^(2)=2.3, A_hat^(3)=5.7, A_hat^(4)=1.8
-- 选择 a^{(3)} 执行（最高 advantage）
+- 选择 $a^{(3)}$ 执行（最高 advantage）
 
 ## 4. 工程视角
 
 | 工程维度 | 数值/设计 | 含义 |
 |----------|-----------|------|
-| 推理速度 | 5-10× 快于 Ctrl-World | Rectified Flow 蒸馏后 NFE 大幅减少，使 test-time planning 可行 |
+| 推理速度 | $5$-$10\times$ 快于 Ctrl-World | Rectified Flow 蒸馏后 NFE 大幅减少，使 test-time planning 可行 |
 | NFE (函数评估数) | 低 NFE 下仍保持质量 | Ctrl-World 在低 NFE 时质量急剧下降，WEAVER 更鲁棒 |
 | 编码器 | SD3 VAE (冻结) | 无需从0训练，节省大量计算；预训练带来的 OOD 泛化是关键优势 |
 | 解码器 | SD3 VAE (冻结) | 仅在需要视觉反馈时调用；大多数规划在 latent 空间完成，避免解码开销 |
 | 内存占用 | 多view + memory tokens + KV cache | 稀疏记忆 (每 k 步) 而非全历史，控制 token 数量 |
-| 训练数据 | DROID 预训练 + 5任务×50 rollout 微调 | 预训练在大规模数据集上，微调仅需 250 rollout（每任务50） |
-| 硬件 | 1× Franka Panda + 2× Zed 2i + 1× Zed Mini | 标准单臂操作配置；WM 运行在离线工作站上 |
+| 训练数据 | DROID 预训练 + $5$任务$\times 50$ rollout 微调 | 预训练在大规模数据集上，微调仅需 250 rollout（每任务50） |
+| 硬件 | $1\times$ Franka Panda + $2\times$ Zed 2i + $1\times$ Zed Mini | 标准单臂操作配置；WM 运行在离线工作站上 |
 | 策略改进 | 合成数据 + 真实数据混合微调 | 仅用合成数据也能提升 38%，混合使用效果最佳 |
 
 **关键 trade-off**:
@@ -230,28 +230,28 @@ A_hat = 0.99⁰·0.3 + 0.99¹·0.6 + ... + 0.99¹⁵·0.9 + 0.99¹⁶·0.95 - V(
 | 数据集 | 规模 | 用途 | 来源 |
 |--------|------|------|------|
 | DROID | 全量 | WEAVER 预训练 | 大规模机器人数据集 |
-| D_real^FT | 5任务 × 50 rollout = 250 | WM 微调 | π_0.5 在真实硬件上采集 |
-| D_real^val | 5任务 × 20 rollout = 100 | 评估 | 独立采集 |
+| $D_{\text{real}}^{\text{FT}}$ | $5$任务 $\times 50$ rollout $= 250$ | WM 微调 | $\pi_{0.5}$ 在真实硬件上采集 |
+| $D_{\text{real}}^{\text{val}}$ | $5$任务 $\times$ $20$ rollout $= 100$ | 评估 | 独立采集 |
 
 ### 5.2 任务设置
 
-| 任务 | 类型 | 难度 | π_0.5 基线成功率 |
+| 任务 | 类型 | 难度 | $\pi_{0.5}$ 基线成功率 |
 |------|------|------|-------------------|
-| Stack Bowls | 刚体堆叠 | 中 | ≥20% |
-| PnP Bag | 可变形物体 | 高 | ≥20% |
-| PnP Marker | 精确操作 | 中 | ≥20% |
-| PnP Towel | 可变形物体 | 高 | ≥20% |
-| Pour Beans | 颗粒动力学 | 极高 | ≥20% |
+| Stack Bowls | 刚体堆叠 | 中 | $\geq 20\%$ |
+| PnP Bag | 可变形物体 | 高 | $\geq 20\%$ |
+| PnP Marker | 精确操作 | 中 | $\geq 20\%$ |
+| PnP Towel | 可变形物体 | 高 | $\geq 20\%$ |
+| Pour Beans | 颗粒动力学 | 极高 | $\geq 20\%$ |
 
-筛选标准：基线策略成功率 ≥20%，覆盖刚体/可变形/动态操作。
+筛选标准：基线策略成功率 $\geq 20\%$，覆盖刚体/可变形/动态操作。
 
 ### 5.3 核心评测结果
 
 | 下游任务 | 指标 | WEAVER | Ctrl-World | 提升 |
 |----------|------|--------|------------|------|
-| 策略评估 | Spearman ρ (vs 真实成功率) | 0.870 | 更低 | 论文 Table |
-| 策略改进 | 真实成功率提升 (vs π_0.5) | +38% | 未报告 | — |
-| Test-time Planning | 真实成功率提升 | +14% | 基线 | 5-10× 更快 |
+| 策略评估 | Spearman $\rho$ (vs 真实成功率) | 0.870 | 更低 | 论文 Table |
+| 策略改进 | 真实成功率提升 (vs $\pi_{0.5}$) | +38% | 未报告 | — |
+| Test-time Planning | 真实成功率提升 | +14% | 基线 | $5$-$10\times$ 更快 |
 | OOD 泛化 | 多view预测误差 | 更低 | 更高 | 预训练encoder优势 |
 
 > 来源: 论文正文 + 项目页面。Pour Beans 任务因颗粒动力学尤其具挑战性。
@@ -327,5 +327,5 @@ A_hat = 0.99⁰·0.3 + 0.99¹·0.6 + ... + 0.99¹⁵·0.9 + 0.99¹⁶·0.95 - V(
 - 基线 Dreamer-v4: arXiv (引用 [16])
 - Flow Matching: Lipman et al. (引用 [27])
 - Diffusion Forcing: (引用 [7])
-- π_0.5 VLA 基策略: (引用 [21])
+- $\pi_{0.5}$ VLA 基策略: (引用 [21])
 - DROID 数据集: (引用 [41])

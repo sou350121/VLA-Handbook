@@ -35,9 +35,9 @@
 |------|------|------|-----------|---------------|
 | 充分性判别器 ℰ | 语言指令 It, 视觉观测 Ot, 基础技能库 Lbase | 布尔反馈：是否需要新技能 | 每任务 1 次 | 推理时 VLM 调用 |
 | 技能生成器 𝒢 | It, Ot, Lbase | 新技能描述 (自然语言 + API 签名) | 仅当 ℰ 判定不足时 | 推理时 VLM 调用 |
-| 规划器 𝒫 | It, Ot, {Lbase, Lext} | 可执行策略代码 {πi, pi} | 每任务 1 次 | 推理时 VLM 调用 |
+| 规划器 𝒫 | It, Ot, {Lbase, Lext} | 可执行策略代码 $\{\pi_i, p_i\}$ | 每任务 1 次 | 推理时 VLM 调用 |
 | 技能标注 Pipeline | 原始机器人视频 (350h DROID) | 10,000+ 技能片段 + 描述 | 离线一次性 | Gemini-2.0-Flash 三阶段处理 |
-| SkillFolder 检索 | 新技能描述 πi | 最相似技能示例 {τe, 𝒪e, ϕc, ϕw} | 每新技能 1 次 | CLIP 特征相似度 + VerbNet 层次遍历 |
+| SkillFolder 检索 | 新技能描述 $\pi_i$ | 最相似技能示例 $\{\tau_e, \mathcal{O}_e, \phi_c, \phi_w\}$ | 每新技能 1 次 | CLIP 特征相似度 + VerbNet 层次遍历 |
 | 轨迹生成器 𝒱 | 示例轨迹 + 语义约束 + 目标场景 | 6-DoF 位姿序列 {c, {wj}} | 每技能 1 次 | GPT-4o 网格离散化 + 深度提升 |
 
 ### 1.2 关键机制 (Key Mechanism)
@@ -45,7 +45,7 @@
 **技能感知规划 (Skill-Aware Planning)**:
 - 传统方法：给定固定技能库 Lbase，LLM 直接生成代码
 - Uni-Skill：先问"现有技能够吗？"→ 不够则生成新技能描述 → 再规划
-- 形式化：(Ot, It, {Lbase, Lext}) ⇒ 𝒫 ⇒ {πi, pi} (公式 1)
+- 形式化：$(O_t, I_t, \{L_{\text{base}}, L_{\text{ext}}\}) \Rightarrow \mathcal{P} \Rightarrow \{\pi_i, p_i\}$ (公式 1)
 - 关键：Lext 是动态合成的，不是预定义的
 
 **自动技能演化 (Automatic Skill Evolution)**:
@@ -122,10 +122,10 @@ SkillFolder 四层结构 (离线构建):
 |------|------|------|
 | Ot, It | 视觉观测、语言指令 | 任务输入 |
 | Lbase, Lext | 基础技能库、扩展技能库 | Lbase 预定义，Lext 动态生成 |
-| πi, pi | 第 i 个 API 调用及其参数 | 规划器输出 |
-| τe, 𝒪e | 示例轨迹、示例视角观测 | SkillFolder 检索 |
-| ϕc, ϕw | 接触约束、航点约束 | 从示例用 VLM 提取 |
-| 𝒪i, πi, pi | 目标场景观测、技能描述、参数 | 部署时输入 |
+| $\pi_i$, $p_i$ | 第 i 个 API 调用及其参数 | 规划器输出 |
+| $\tau_e$, $\mathcal{O}_e$ | 示例轨迹、示例视角观测 | SkillFolder 检索 |
+| $\phi_c$, $\phi_w$ | 接触约束、航点约束 | 从示例用 VLM 提取 |
+| $\mathcal{O}_i$, $\pi_i$, $p_i$ | 目标场景观测、技能描述、参数 | 部署时输入 |
 | c, {wj} | 接触点、航点序列 | 轨迹生成器输出 |
 | Rlocal_src, Rlocal_tgt | 源/目标局部坐标系 | 由航点方向构建 |
 | Rskill | 技能特定姿态模式 | 从示例提取并迁移 |
@@ -161,7 +161,7 @@ SkillFolder 四层结构 (离线构建):
 - "wipe_surface" 经 VerbNet 解析 → 匹配 wipe-manner-10.4.1 类别
 - SkillFolder 层次遍历：N1 → N2(wipe) → N3(wipe surface) → N4(具体示例)
 - CLIP 相似度筛选：保留视角/布局最接近的 3 个示例
-- 输出：{τe, 𝒪e, ϕc, ϕw} = {示例轨迹，示例图像，接触约束="布与桌面接触"，航点约束="往复运动"}
+- 输出：$\{\tau_e, \mathcal{O}_e, \phi_c, \phi_w\} = \{$示例轨迹，示例图像，接触约束="布与桌面接触"，航点约束="往复运动"$\}$
 
 **步骤 5 - 轨迹生成**:
 - 目标场景离散化为网格
@@ -173,8 +173,8 @@ SkillFolder 四层结构 (离线构建):
 **假设数值** (基于 Table II 平均成功率 41%):
 - 若 SkillFolder 有 50 个 "wipe surface" 示例 → 检索 top-3 用 CLIP 筛选
 - 轨迹生成成功率约 80% (基于 Table III Fold Cloth 任务 70% 成功率推断)
-- 整体任务成功率 ≈ 判别准确率 × 规划准确率 × 检索准确率 × 轨迹成功率
-  ≈ 0.9 × 0.85 × 0.8 × 0.7 ≈ 0.43 (与 Table II 41% 接近)
+- 整体任务成功率 $\approx$ 判别准确率 $\times$ 规划准确率 $\times$ 检索准确率 $\times$ 轨迹成功率
+  $\approx 0.9 \times 0.85 \times 0.8 \times 0.7 \approx 0.43$ (与 Table II 41% 接近)
 
 ## 4. 工程视角 (Engineering View)
 
@@ -209,7 +209,7 @@ SkillFolder 四层结构 (离线构建):
 **仿真 (RLBench)**:
 - 基础任务 8 个：Push Buttons, Stack Blocks, Close Jar, Stack Cups, Sweep Dirt, Slide Block, Screw Bulb, Put in Board
 - 分布外任务 10 个：Close Micro, Close Fridge, Seat Down, Close Laptop, Close Drawer, Press Switch, Water Plants, Open Door, Unplug Charger, Lift Number
-- 指标：25 轮次 × 3 次重复，报告均值±标准差
+- 指标：25 轮次 $\times$ 3 次重复，报告均值$\pm$标准差
 
 **真实世界**:
 - 8 任务：Pick Place, Stack Blocks, Clean Table, Fold Cloth, Shake Bell, Close Door, Close Drawer, Stir Blocks
@@ -233,7 +233,7 @@ SkillFolder 四层结构 (离线构建):
 | 零样本泛化到新任务 | Table II: 分布外任务 41% vs MOKA 10% | 指令包含未预定义技能 (如"close fridge") |
 | 长程任务分解 | Table III: Stir Blocks 60% (MOKA 0%, CaP 0%) | 需多步骤 + 工具使用 + 轨迹推理 |
 | 从无标注视频学习 | 10,000+ 片段从 350h DROID 自动提取 | 无需人工标注新技能演示 |
-| 跨场景迁移 | 仿真→真实世界 73% 平均成功率 | 检索示例与目标场景布局不同 |
+| 跨场景迁移 | 仿真$\to$真实世界 73% 平均成功率 | 检索示例与目标场景布局不同 |
 
 ### 6.2 不能做什么 / 失败模式
 

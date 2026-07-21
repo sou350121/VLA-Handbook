@@ -41,9 +41,9 @@
 
 | 组件 | 输入 | 输出 | 频率 | 作用 |
 |------|------|------|------|------|
-| 9× IMU 追踪器 (BNO085) | 9 轴 IMU 原始数据 | 骨骼朝向 R^Wi_Si(t) | 100 Hz | 抗遮挡、高速运动鲁棒性 |
-| Project Aria 眼镜 | 广角 RGB + IMU | SLAM 位姿 T^C_Wc(t) | 30 Hz | 全局轨迹锚点、RGB 视频 |
-| iPhone 校准 APP | AprilTag 视频 | 标签位姿 R^Cs_Ti(t) | 30 Hz | 免校准盒的视觉辅助校准 |
+| 9× IMU 追踪器 (BNO085) | 9 轴 IMU 原始数据 | 骨骼朝向 $R^{W_i}_{S_i}(t)$ | 100 Hz | 抗遮挡、高速运动鲁棒性 |
+| Project Aria 眼镜 | 广角 RGB + IMU | SLAM 位姿 $T^{C}_{W_c}(t)$ | 30 Hz | 全局轨迹锚点、RGB 视频 |
+| iPhone 校准 APP | AprilTag 视频 | 标签位姿 $R^{C_s}_{T_i}(t)$ | 30 Hz | 免校准盒的视觉辅助校准 |
 | EgoAllo 扩散模型 | SLAM 位姿 + 骨骼朝向 | SMPL 全身姿态 | 30 Hz | 从稀疏 IMU 生成完整关节 |
 | 时间同步模块 | UTC 时间戳 | 对齐的多模态流 | - | 最近邻时间匹配 |
 
@@ -126,11 +126,11 @@ R^Wp_Bi(t) = R^Wp_Wi · R^Wi_Si(t) · (R^Bi_Si)^T
 
 | 符号 | 含义 | 来源 |
 |------|------|------|
-| R^Wi_Si(t) | IMU 传感器在其局部世界中的朝向 | BNO085 直接输出 |
-| R^Bi_Si | 传感器到 SMPL 骨骼的固定偏移 | 校准确定 |
-| R^Wp_Wi | IMU 局部世界到骨盆世界的对齐 | 校准确定 |
-| R^Wp_Bi(t) | 最终骨骼在骨盆世界中的朝向 | 公式 (1) 计算 |
-| T^C_Wc(t) | Aria 相机在全局世界中的位姿 | Aria SLAM 输出 |
+| $R^{W_i}_{S_i}(t)$ | IMU 传感器在其局部世界中的朝向 | BNO085 直接输出 |
+| $R^{B_i}_{S_i}$ | 传感器到 SMPL 骨骼的固定偏移 | 校准确定 |
+| $R^{W_p}_{W_i}$ | IMU 局部世界到骨盆世界的对齐 | 校准确定 |
+| $R^{W_p}_{B_i}(t)$ | 最终骨骼在骨盆世界中的朝向 | 公式 (1) 计算 |
+| $T^{C}_{W_c}(t)$ | Aria 相机在全局世界中的位姿 | Aria SLAM 输出 |
 
 ### 2.2 校准优化（公式 3-4）
 
@@ -158,12 +158,12 @@ EgoAllo 原生用 HaMeR 手部姿态引导，RoSHI 改为用 IMU 骨骼朝向引
 **步骤 1：校准（20-40 秒）**
 - 用户穿上 RoSHI 套装，手持 iPhone 自然摆动
 - iPhone 检测到 9 个 AprilTag，每标签平均 150 帧有效观测
-- 计算 R̄^Bi_Si：对 150 个 R^Bi_Si(t_j) 在 SO(3) 上取 Barycenter
-- 计算 R^Wp_Wi：用骨盆 IMU 作为参考世界，对齐其他 8 个 IMU
+- 计算 $\overline{R}^{B_i}_{S_i}$：对 150 个 $R^{B_i}_{S_i}(t_j)$ 在 $\mathrm{SO}(3)$ 上取 Barycenter
+- 计算 $R^{W_p}_{W_i}$：用骨盆 IMU 作为参考世界，对齐其他 8 个 IMU
 
 **步骤 2：数据采集（60 秒序列）**
-- IMU 输出：R^Wi_Si(t) 在 100 Hz，共 6000 帧
-- Aria 输出：T^C_Wc(t) 在 30 Hz，共 1800 帧
+- IMU 输出：$R^{W_i}_{S_i}(t)$ 在 100 Hz，共 6000 帧
+- Aria 输出：$T^{C}_{W_c}(t)$ 在 30 Hz，共 1800 帧
 - 时间对齐：IMU 帧 t=0.010s 匹配 Aria 帧 t=0.033s（最近邻）
 
 **步骤 3：姿态生成**

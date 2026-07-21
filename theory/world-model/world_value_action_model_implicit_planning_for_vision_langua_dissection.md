@@ -17,7 +17,7 @@
 | 主要風險 | 实验主要在 LIBERO 和单臂桌面操作场景，泛化到人形/双臂/移动操作尚未验证 |
 
 💡 **X-Ray 开场**
-VLA 模型（如 OpenVLA、π₀）擅长把视觉和语言映射到动作，但它们是"反应式"的——每一步独立预测，不思考未来。WAV 的核心发现是：如果你让模型先想象未来视频、再评估这些未来的价值、最后在潜空间里做迭代优化，而不是直接在动作空间搜索，那么长视界任务的成功率会显著提升。这对 VLA 研究者的意义是：规划可以不作为一个外挂模块存在，而是内生于生成模型的推理过程中。
+VLA 模型（如 OpenVLA、$\pi_0$）擅长把视觉和语言映射到动作，但它们是"反应式"的——每一步独立预测，不思考未来。WAV 的核心发现是：如果你让模型先想象未来视频、再评估这些未来的价值、最后在潜空间里做迭代优化，而不是直接在动作空间搜索，那么长视界任务的成功率会显著提升。这对 VLA 研究者的意义是：规划可以不作为一个外挂模块存在，而是内生于生成模型的推理过程中。
 
 📍 **研究全景时间线**
 
@@ -50,15 +50,15 @@ WAV 将 VLA 的规划与控制解耦为三个紧密耦合的模块，统一在�
 | **训练范式** | 最大似然 (BC) | BC + 世界模型loss | 三阶段 flow matching |
 | **推理时优化** | 无 | 无 | MPPI-style 潜空间 elite reweighting |
 | **理论保证** | 无 | 无 | Lemma 4.1 + Prop 4.2 + Cor 4.3 |
-| **输入** | 视觉+语言→动作 | 视觉+语言→动作+未来帧 | 视觉+语言→未来视频→价值→动作 |
+| **输入** | 视觉+语言→动作 | 视觉+语言$\to$动作+未来帧 | 视觉+语言$\to$未来视频$\to$价值$\to$动作 |
 | **架构骨干** | Transformer / ResNet | 统一 Transformer | 多视角 DiT（视频/价值/动作专家） |
 
 ### 1.2 关键机制 (Key Mechanism)
 
 **模块 1: 语言条件视频生成 (World Model)**
-- 输入：多视角初始观察 v₀⁽ⁱ⁾（头/左/右相机）、稀疏视觉记忆 v̂⁽ⁱ⁾、语言指令 g（T5-XXL 编码）、随机噪声 z⁽ⁱ⁾
+- 输入：多视角初始观察 $v_0^{(i)}$（头/左/右相机）、稀疏视觉记忆 $\hat{v}^{(i)}$、语言指令 $g$（T5-XXL 编码）、随机噪声 $z^{(i)}$
 - 架构：DiT backbone + cross-attention 注入语言嵌入
-- 输出：预测未来视觉片段 x̂ₜ:ₜ₊ₙ，自回归生成时间连贯的视觉 rollout
+- 输出：预测未来视觉片段 $\hat{x}_{t:t+n}$，自回归生成时间连贯的视觉 rollout
 - 直觉：相当于让模型"想象"执行任务后的未来画面
 
 **模块 2: 轨迹价值评估 (Value Function)**
@@ -167,12 +167,12 @@ aₜ = decode( refine( imagine(oₜ, g),  value(imagine(oₜ, g)) ) )
 
 | 符号 | 含义 |
 |------|------|
-| oₜ | t 时刻多视角视觉观察 |
+| $o_t$ | t 时刻多视角视觉观察 |
 | g | 语言指令 |
-| imagine(·) | 视频生成模块 W，从潜噪声采样并去噪得到未来视觉特征 |
-| value(·) | 价值模块 V，评估轨迹的累积折扣回报 |
-| refine(·) | MPPI-style 迭代：sample → evaluate → elite select → update distribution |
-| decode(·) | 动作模块，从优化后的视频+价值特征生成可执行动作 |
+| $\text{imagine}(\cdot)$ | 视频生成模块 W，从潜噪声采样并去噪得到未来视觉特征 |
+| $\text{value}(\cdot)$ | 价值模块 V，评估轨迹的累积折扣回报 |
+| $\text{refine}(\cdot)$ | MPPI-style 迭代：sample $\to$ evaluate $\to$ elite select $\to$ update distribution |
+| $\text{decode}(\cdot)$ | 动作模块，从优化后的视频+价值特征生成可执行动作 |
 
 > 符号与本文保持一致：W 为视频生成（世界模型），V 为价值评估，动作解码通过 DiT 的 action expert 实现。训练使用 flow matching 而非传统 diffusion。
 
@@ -186,8 +186,8 @@ aₜ = decode( refine( imagine(oₜ, g),  value(imagine(oₜ, g)) ) )
 阶段3 (动作):  L_act = E[||v_θ(t, l, o, z_vid, z_val, a^t) - (a¹ - a⁰)||²₂]
 ```
 
-- x⁰, v⁰, a⁰: 来自基础噪声分布的采样
-- x¹, v¹, a¹: 来自目标数据分布的采样（目标视频轨迹、累积折扣回报、目标动作）
+- $x^0$, $v^0$, $a^0$: 来自基础噪声分布的采样
+- $x^1$, $v^1$, $a^1$: 来自目标数据分布的采样（目标视频轨迹、累积折扣回报、目标动作）
 - 阶段 2 冻结视频模块，阶段 3 联合训练所有模块
 
 ### 2.6 推理时迭代优化（Algorithm 1）
@@ -216,13 +216,13 @@ for k = 1 to K:
 
 ## 3. 带数字走一遍：玩具例子 (Worked Example)
 
-假设一个简化的 3 步操作任务：「抓取杯子 → 移动到目标位置 → 放置」
+假设一个简化的 3 步操作任务：「抓取杯子 $\to$ 移动到目标位置 $\to$ 放置」
 
 **设置**：
 - 视界 H = 3 步
 - 潜空间维度 d_z = 64（视频）+ 32（价值）
 - 推理时参数：M = 8（视频采样数），N = 4（每个视频的价值采样数），K = 5（迭代次数）
-- K₁ = 2（视频 elite 数），K₂ = 4（价值 elite 数）
+- $K_1 = 2$（视频 elite 数），$K_2 = 4$（价值 elite 数）
 
 **迭代过程**（以第 1 次和第 5 次迭代对比）：
 
@@ -271,16 +271,16 @@ Iteration k=5 (收敛后: μ≈[0.7, 0.1, ...], σ≈[0.1, 0.2, ...])
 
 | 工程维度 | WAV | 传统 VLA (如 OpenVLA) | 工程含义 |
 |----------|-----|----------------------|---------|
-| **推理延迟** | K 次迭代 × (M 视频 + M×N 价值评估) | 1 次前向 | WAV 推理延迟约 5-10× 高于直接预测 |
-| **每步计算量** | ~K·M·FLOPs_vid + K·M·N·FLOPs_val + FLOPs_act | 1·FLOPs_act | 主要瓶颈在视频生成（DiT 去噪） |
-| **内存占用** | 3 个 DiT expert 共享 backbone | 1 个模型 | 约 1.5-2× 显存（共享 backbone 缓解） |
+| **推理延迟** | $K$ 次迭代 $\times (M$ 视频 $+ M \times N$ 价值评估) | 1 次前向 | WAV 推理延迟约 $5\text{--}10\times$ 高于直接预测 |
+| **每步计算量** | $\sim K \cdot M \cdot \text{FLOPs}_{\text{vid}} + K \cdot M \cdot N \cdot \text{FLOPs}_{\text{val}} + \text{FLOPs}_{\text{act}}$ | $1 \cdot \text{FLOPs}_{\text{act}}$ | 主要瓶颈在视频生成（DiT 去噪） |
+| **内存占用** | 3 个 DiT expert 共享 backbone | 1 个模型 | 约 $1.5\text{--}2\times$ 显存（共享 backbone 缓解） |
 | **控制频率** | 受迭代次数 K 限制（通常 5-10 次） | 可高频（10-20Hz） | WAV 适合 1-5Hz 的控制频率 |
 | **量化友好度** | Flow matching 比 diffusion 更稳定 | 标准 BC 训练 | flow matching 对低精度更鲁棒 |
 | **部署约束** | 需要 WebSocket/HTTP server（见 GitHub） | 可端侧部署 | WAV 更适合 server-side 部署 |
 | **训练复杂度** | 三阶段，需顺序训练 | 单阶段 BC | 阶段间依赖强，调参空间大 |
 
 **Trade-off 分析**：
-- **精度 vs 延迟**：WAV 用 5-10× 推理延迟换取长视界任务 15-30% 的成功率提升（论文声称），对短视界任务可能不划算
+- **精度 vs 延迟**：WAV 用 $5\text{--}10\times$ 推理延迟换取长视界任务 $15\text{--}30\%$ 的成功率提升（论文声称），对短视界任务可能不划算
 - **模块化 vs 端到端**：三模块设计便于独立替换（如换更好的视频生成器），但增加了接口复杂度
 - **通用性 vs 专用性**：需要为每个新机器人/任务做三阶段适配训练，迁移成本高于 zero-shot VLA
 
@@ -298,7 +298,7 @@ Iteration k=5 (收敛后: μ≈[0.7, 0.1, ...], σ≈[0.1, 0.2, ...])
 
 **LIBERO 基准**（论文声称）：
 - 在 LIBERO-SQL / LIBERO-100 等子集上评估闭环任务成功率
-- 与基线对比：OpenVLA、π₀、RT-1、Diffusion Policy、WorldVLA、DreamVLA、ReinboT 等
+- 与基线对比：OpenVLA、$\pi_0$、RT-1、Diffusion Policy、WorldVLA、DreamVLA、ReinboT 等
 - 论文声称在长视界和组合场景中显著提升
 
 **真实世界实验**（论文声称）：
@@ -339,7 +339,7 @@ Iteration k=5 (收敛后: μ≈[0.7, 0.1, ...], σ≈[0.1, 0.2, ...])
 1. **奖励函数可设计**：论文使用"类似 ReinboT 的基于规则的稠密奖励函数"——这意味着需要人工为每个任务设计奖励。在开放世界场景中，这几乎不可能自动化。
    - *X-Ray 批判*：如果奖励需要手工设计，那"价值函数评估"的泛化性就受限于奖励函数的覆盖范围。
 
-2. **世界模型预测足够准确**：Proposition 4.2 假设潜生成器能参数化可行轨迹（Platent ≥ 1-δ）。但如果世界模型在 OOD 场景下预测失真，价值评估就会基于错误的"想象"做决策。
+2. **世界模型预测足够准确**：Proposition 4.2 假设潜生成器能参数化可行轨迹（$\mathcal{P}_{\text{latent}} \geq 1-\delta$）。但如果世界模型在 OOD 场景下预测失真，价值评估就会基于错误的"想象"做决策。
    - *X-Ray 批判*：这本质上是"garbage in, garbage out"——想象的未来不准确，规划就没有意义。
 
 3. **流形假设成立**：Lemma 4.1 假设可行轨迹形成低维流形。但在高度动态/多智能体场景中，可行轨迹可能不是低维流形而是高维区域，此时潜空间重加权的理论优势可能不成立。
@@ -351,7 +351,7 @@ Iteration k=5 (收敛后: μ≈[0.7, 0.1, ...], σ≈[0.1, 0.2, ...])
 | 方法 | 关注点 | 架构 | 训练方式 | 规划 | 适用场景 |
 |------|--------|------|---------|------|---------|
 | **OpenVLA (2024)** | 通用 VLA | ViT + LLM + action head | BC | 无 | 短视界通用操作 |
-| **π₀ (2024)** | 流匹配 VLA | DiT flow matching | BC | 无 | 通用操作 |
+| **$\pi_0$ (2024)** | 流匹配 VLA | DiT flow matching | BC | 无 | 通用操作 |
 | **WorldVLA (2025)** | 世界模型+VLA | 统一 Transformer | BC + world model loss | 隐式（通过world model） | 需要预测的场景 |
 | **DreamVLA (2025)** | 长视界预测 | 统一 Transformer | BC + 视频预测 | 隐式 | 长视界操作 |
 | **ReinboT (2025)** | Flow matching VLA | DiT | Flow matching BC | 无 | 通用操作 |
@@ -379,7 +379,7 @@ Iteration k=5 (收敛后: μ≈[0.7, 0.1, ...], σ≈[0.1, 0.2, ...])
 ### 不值得精讀的理由
 
 - 如果你不做长视界机器人操作（只做单步 grasping 或 short-horizon manipulation），WAV 的规划机制对你没有直接价值，读摘要即可。
-- 如果你已经熟悉 TD-MPC2 的潜空间规划 + π₀ 的 flow matching，WAV 的核心贡献（隐式规划）在直觉上不难理解，不需要精读。
+- 如果你已经熟悉 TD-MPC2 的潜空间规划 $+$ $\pi_0$ 的 flow matching，WAV 的核心贡献（隐式规划）在直觉上不难理解，不需要精读。
 
 ---
 [← Back to Theory](./README.md)
@@ -388,4 +388,4 @@ Iteration k=5 (收敛后: μ≈[0.7, 0.1, ...], σ≈[0.1, 0.2, ...])
 - 论文: https://arxiv.org/abs/2604.14732
 - 项目页: https://win-commit.github.io/wavpage/
 - 代码: https://github.com/Win-commit/WAV (代码/权重尚未开源)
-- 相关: TD-MPC2 (Hansen et al. 2023), π₀ (Black et al. 2024), ReinboT (Zhang et al. 2025)
+- 相关: TD-MPC2 (Hansen et al. 2023), $\pi_0$ (Black et al. 2024), ReinboT (Zhang et al. 2025)

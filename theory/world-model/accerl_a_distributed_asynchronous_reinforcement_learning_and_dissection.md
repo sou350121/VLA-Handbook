@@ -11,7 +11,7 @@
 
 | 維度 | 判斷 |
 |------|------|
-| 核心結論 | 完全异步解耦 Rollout/Inference/Training 三层流水线，配合 GIPO 算法消除策略滞后偏差；世界模型提供像素级想象 Rollout，样本效率提升 200× |
+| 核心結論 | 完全异步解耦 Rollout/Inference/Training 三层流水线，配合 GIPO 算法消除策略滞后偏差；世界模型提供像素级想象 Rollout，样本效率提升 $200\times$ |
 | 適合精讀 | 在做 VLA RL 后训练、分布式训练框架搭建、或世界模型集成的人 |
 | 可以跳過 | 只做模仿学习（IL）不做 RL 微调的研究者；不关心系统工程的纯算法研究者 |
 | 落地可行性 | 中高（代码开源 + 提供最小可复现脚本；但全量训练需要多 GPU 集群） |
@@ -37,10 +37,10 @@ AcceRL 的核心设计哲学是**物理隔离 + 异步通信**：Training、Infe
 
 | 维度 | 同步框架 (SimpleVLA/RLinf) | RL-VLA3 (部分异步) | AcceRL (完全异步) |
 |------|--------------------------|-------------------|-------------------|
-| Rollout ↔ Training | 锁步同步，等最慢 Worker | 三阶段解耦但仍有同步点 | 完全异步，非阻塞 FIFO Buffer |
-| Inference ↔ Rollout | 耦合在同一进程 | 部分解耦 | Inference-as-a-Service 独立服务 |
+| Rollout $\leftrightarrow$ Training | 锁步同步，等最慢 Worker | 三阶段解耦但仍有同步点 | 完全异步，非阻塞 FIFO Buffer |
+| Inference $\leftrightarrow$ Rollout | 耦合在同一进程 | 部分解耦 | Inference-as-a-Service 独立服务 |
 | GPU 利用率 | 30-60%（受仿真步制约） | ~80% | 94-95% |
-| 吞吐量 | 基线 | ~1.8× | 2.4× |
+| 吞吐量 | 基线 | $\sim 1.8\times$ | $2.4\times$ |
 | 长尾延迟容忍 | 无（最慢 Worker 决定整体速度） | 有限 | 通过动态批处理 + 异步缓冲消除 |
 | 世界模型集成 | 不支持 | 不支持 | 可插拔像素级 WM（DIAMOND/Cosmos） |
 | 策略滞后处理 | 不适用（同步无滞后） | 有限 | GIPO + Value Recomputation |
@@ -119,7 +119,7 @@ Trigger = (|Q| ≥ B) ∨ (t_now - t_first ≥ T_max)
 L_GIPO(θ) = -E_[τ~B] [ ω(ρ̄_t; σ) · ρ_t(θ) · A_t ]
 ```
 
-其中 ω 是高斯信任权重，ρ 是重要性比率，A_t 是经 Value Recomputation 修正的优势估计。
+其中 $\omega$ 是高斯信任权重，$\rho$ 是重要性比率，$A_t$ 是经 Value Recomputation 修正的优势估计。
 
 ### 2.3 关键公式详解
 
@@ -130,8 +130,8 @@ L_GIPO(θ) = -E_[τ~B] [ ω(ρ̄_t; σ) · ρ_t(θ) · A_t ]
 ```
 
 - ρ̄_t = π_θ(a_t | o_t) / μ(a_t | o_t)：当前策略与行为策略的重要性比率（stop-gradient 版本）
-- σ：高斯宽度超参数，控制对策略偏移的容忍度
-- 直觉：当 ρ̄_t 接近 1 时 ω ≈ 1（信任该样本）；当 ρ̄_t 偏离 1 时 ω 平滑衰减（软惩罚），而非 PPO 的硬截断（直接丢弃）
+- $\sigma$：高斯宽度超参数，控制对策略偏移的容忍度
+- 直觉：当 $\bar{\rho}_t$ 接近 $1$ 时 $\omega \approx 1$（信任该样本）；当 $\bar{\rho}_t$ 偏离 $1$ 时 $\omega$ 平滑衰减（软惩罚），而非 PPO 的硬截断（直接丢弃）
 
 **GIPO 策略损失**（公式 6）：
 
@@ -140,7 +140,7 @@ L_GIPO(θ) = -E_[τ~B] [ ω(ρ̄_t; σ) · ρ_t(θ) · A_t ]
 ```
 
 - A_t：经过 Value Recomputation 修正的优势估计（GAE）
-- 与 PPO 对比：PPO 用 clip(ρ_t, 1-ε, 1+ε) 硬截断，高度滞后的数据梯度被清零；GIPO 用高斯权重软衰减，保留学习信号
+- 与 PPO 对比：PPO 用 $\operatorname{clip}(\rho_t,\, 1-\varepsilon,\, 1+\varepsilon)$ 硬截断，高度滞后的数据梯度被清零；GIPO 用高斯权重软衰减，保留学习信号
 
 **价值重计算（Value Recomputation）**：
 
@@ -158,39 +158,39 @@ r̂_τ = M_reward(ô_{t+1}) - M_reward(ô_t)
 
 基于潜在理论的奖励塑形（potential-based reward shaping），在加速训练的同时不改变策略最优解。
 
-> 符号说明：o_t = 观测，a_t = 动作，r_t = 奖励，μ = 行为策略，π_θ = 学习策略，v_t = 状态价值估计，B = replay buffer，τ = 轨迹
+> 符号说明：$o_t = $ 观测，$a_t = $ 动作，$r_t = $ 奖励，$\mu = $ 行为策略，$\pi_\theta = $ 学习策略，$v_t = $ 状态价值估计，$B = $ replay buffer，$\tau = $ 轨迹
 
 ## 3. 带数字走一遍：玩具例子 (Worked Example)
 
 假设一个简化的 VLA 操作任务：机械臂抓取方块。
 
 **场景设定**：
-- 策略滞后：Rollout 使用的策略 μ 是 Trainer 1000 步前的版本
+- 策略滞后：Rollout 使用的策略 $\mu$ 是 Trainer $1000$ 步前的版本
 - 当前重要性比率 ρ_t = π_θ(a_t|o_t) / μ(a_t|o_t) = 3.0（策略已显著偏移）
 - 优势估计 A_t = 0.5（该动作优于平均）
-- GIPO σ = 1.0
+- GIPO $\sigma = 1.0$
 
 **PPO vs GIPO 对比**：
 
-PPO（ε = 0.2）：
+PPO（$\varepsilon = 0.2$）：
 ```
 clip(3.0, 0.8, 1.2) = 1.2 → L_PPO = -1.2 × 0.5 = -0.6
 ```
-但 ρ_t = 3.0 远超 clip 范围，实际训练中会被视为极端 off-policy，可能被丢弃或产生不稳定梯度。
+但 $\rho_t = 3.0$ 远超 clip 范围，实际训练中会被视为极端 off-policy，可能被丢弃或产生不稳定梯度。
 
-GIPO（σ = 1.0）：
+GIPO（$\sigma = 1.0$）：
 ```
 log(3.0) = 1.099
 ω = exp(-1/2 × (1.099/1.0)^2) = exp(-0.604) ≈ 0.547
 L_GIPO = -0.547 × 3.0 × 0.5 = -0.820
 ```
 
-GIPO 给这个滞后样本分配了 54.7% 的信任权重，既保留了学习信号，又通过 ω 因子限制了更新幅度。相比之下，PPO 要么硬截断（浪费数据），要么不截断（不稳定）。
+GIPO 给这个滞后样本分配了 $54.7\%$ 的信任权重，既保留了学习信号，又通过 $\omega$ 因子限制了更新幅度。相比之下，PPO 要么硬截断（浪费数据），要么不截断（不稳定）。
 
 **吞吐量视角**：
-- 同步框架：4×H200，最慢仿真步 200ms → 整体吞吐量受限于 200ms → ~18 SPS
-- AcceRL：Rollout 不等最慢步，Inference 动态批处理 → 42.4 SPS（2.4× 加速）
-- Trainer 扩展到 7×H200：ZeRO-2 允许更大 micro-batch → 104.22 SPS（超线性扩展）
+- 同步框架：$4\times\text{H200}$，最慢仿真步 $200\,\text{ms}$ → 整体吞吐量受限于 $200\,\text{ms}$ → $\sim 18$ SPS
+- AcceRL：Rollout 不等最慢步，Inference 动态批处理 → $42.4$ SPS（$2.4\times$ 加速）
+- Trainer 扩展到 $7 \times \text{H200}$：ZeRO-2 允许更大 micro-batch → $104.22$ SPS（超线性扩展）
 
 ## 4. 工程视角 (Engineering View)
 
@@ -207,7 +207,7 @@ GIPO 给这个滞后样本分配了 54.7% 的信任权重，既保留了学习�
 
 **部署约束**：
 - 最低要求：2 GPU（一个跑 Trainer，一个跑 Rollout+Inference）
-- 推荐配置：4×H200（论文实验配置）
+- 推荐配置：$4 \times \text{H200}$（论文实验配置）
 - 世界模型模式额外需要 GPU 给 WM Trainer/Inference Actor
 - Python 3.10 + Ray + DeepSpeed ZeRO-2
 
@@ -217,7 +217,7 @@ GIPO 给这个滞后样本分配了 54.7% 的信任权重，既保留了学习�
 
 | 数据集 | 用途 | 说明 |
 |--------|------|------|
-| LIBERO-Spatial | 空间泛化测试 | 4 个任务套件之一，AcceRL-WM 在此达到 200× 样本效率 |
+| LIBERO-Spatial | 空间泛化测试 | 4 个任务套件之一，AcceRL-WM 在此达到 $200 \times$ 样本效率 |
 | LIBERO-Object | 物体泛化测试 | 测试对不同物体的泛化能力 |
 | LIBERO-Long | 长程任务 | OpenVLA-OFT 仅 90.7%，AcceRL 达 99.1% |
 | LIBERO-Goal | 目标泛化测试 | 测试对不同目标的泛化能力 |
@@ -228,7 +228,7 @@ GIPO 给这个滞后样本分配了 54.7% 的信任权重，既保留了学习�
 - **基线**：OpenVLA-OFT（监督微调）、SimpleVLA-RL、RLinf-VLA
 - **初始化**：OpenVLA-OFT checkpoint（有限演示预训练）
 - **世界模型预训练**：DIAMOND 在 2000 条离线轨迹上预训练（OOD，比在线采样更经济）
-- **吞吐量测试**：4×H200，2000 training steps 的 wall-clock time
+- **吞吐量测试**：$4 \times \text{H200}$，$2000$ training steps 的 wall-clock time
 - **样本效率**：对数 x 轴比较达到相同平均回报所需的环境交互步数
 
 ### 5.3 关键结果
@@ -246,11 +246,11 @@ GIPO 给这个滞后样本分配了 54.7% 的信任权重，既保留了学习�
 
 | 能力 | 证据 | 条件 |
 |------|------|------|
-| 高吞吐量 RL 训练 | 42.4 SPS，2.4× 加速 | 需要多 GPU 集群 |
+| 高吞吐量 RL 训练 | $42.4$ SPS，$2.4 \times$ 加速 | 需要多 GPU 集群 |
 | 长程任务稳定性 | LIBERO-Long 99.1% | RL 优化长期回报 vs IL 的单步模仿 |
 | 接触丰富操作 | ManiSkill PickCube ~90% | 需要物理仿真环境 |
 | 世界模型可插拔 | DIAMOND + Cosmos 均成功 | 世界模型需适配像素级接口 |
-| 样本效率 | LIBERO-Spatial 200× 提升 | 需要 WM 预训练（1000-2000 离线轨迹） |
+| 样本效率 | LIBERO-Spatial $200 \times$ 提升 | 需要 WM 预训练（1000-2000 离线轨迹） |
 | 超线性扩展 | 7 GPU 达 104.22 SPS | ZeRO-2 允许更大 batch |
 
 ### 6.2 不能做什么 / 局限
@@ -267,8 +267,8 @@ GIPO 给这个滞后样本分配了 54.7% 的信任权重，既保留了学习�
 
 1. **仿真环境可并行化**：虽然 AcceRL 不依赖向量仿真器，但其吞吐量优势在可并行仿真的场景下最明显。对于完全串行的真实物理机器人，Rollout 的并行度受限。
 2. **世界模型的像素级预测足够保真**：DIAMOND/Cosmos 在 LIBERO 的简单物体操作场景下表现良好，但在复杂接触动力学（如精细操作、多物体交互）下，像素级预测的误差可能累积。
-3. **GIPO 的 σ 超参数可通用**：论文未深入分析 σ 对不同任务/滞后程度的敏感性。实际部署可能需要任务级调参。
-4. **NCCL 广播的通信开销可忽略**：在多节点集群中，NCCL broadcast 的延迟可能成为新的瓶颈。论文在单台 4×H200 上测试，未涉及跨节点通信。
+3. **GIPO 的 $\sigma$ 超参数可通用**：论文未深入分析 $\sigma$ 对不同任务/滞后程度的敏感性。实际部署可能需要任务级调参。
+4. **NCCL 广播的通信开销可忽略**：在多节点集群中，NCCL broadcast 的延迟可能成为新的瓶颈。论文在单台 $4 \times \text{H200}$ 上测试，未涉及跨节点通信。
 5. **价值重计算的 GAE 近似足够准确**：将 GAE 推到 training 后向传播阶段是一种近似，论文声称"数学等价性证明见附录"，但近似误差对收敛的影响未量化。
 
 ## 7. 与相关工作对比 (Comparison)

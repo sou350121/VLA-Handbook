@@ -115,8 +115,8 @@ L_commit = ||E(m) - sg[z]||²  (codebook commitment loss)
 | E_h, E_r | 人/机器人编码器 |
 | D_h, D_r | 人/机器人解码器 |
 | z | 量化后的 latent token |
-| α, β | 平衡系数（commitment / cross 损失权重） |
-| sg[·] | stop-gradient 操作 |
+| $\alpha$, $\beta$ | 平衡系数（commitment / cross 损失权重） |
+| $\text{sg}[\cdot]$ | stop-gradient 操作 |
 
 **直觉**：
 - L_intra 保证各自模态内的重建质量

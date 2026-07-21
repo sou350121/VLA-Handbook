@@ -77,11 +77,11 @@ a_t = MLP_θ(h_VLM([I_{t-k:t}, L]))  其中 h_VLM 是 VLM 的 hidden state，a_t
 **变量说明**：
 | 符号 | 含义 | 维度 |
 |------|------|------|
-| I_{t-k:t} | 当前帧（StarVLA-α 不用历史帧） | H×W×3 |
+| $I_{t-k:t}$ | 当前帧（StarVLA-α 不用历史帧） | $H \times W \times 3$ |
 | L | 语言指令 | token sequence |
 | h_VLM | VLM 输出的 action token hidden state | d_model (e.g., 4096) |
-| a_t | 预测的动作块 | T×D (T=chunk size, D≤32) |
-| θ | MLP 参数 | 2-3 层，隐藏层 dim≈512 |
+| a_t | 预测的动作块 | $T \times D$ ($T=$chunk size, $D \leq 32$) |
+| $\theta$ | MLP 参数 | 2-3 层，隐藏层 dim$\approx 512$ |
 
 **直觉**：VLM 已经学会了丰富的视觉 - 语言表征，action head 只需要做一个简单的回归任务——把表征映射到机器人动作空间。复杂的 diffusion/flow 模型在 VLM 足够强时是多余的。
 
@@ -92,20 +92,20 @@ a_t = MLP_θ(h_VLM([I_{t-k:t}, L]))  其中 h_VLM 是 VLM 的 hidden state，a_t
 **场景**：LIBERO-Spatial 任务（机械臂抓取并放置物体）
 
 **输入**：
-- RGB 图像：768×768×3
+- RGB 图像：$768 \times 768 \times 3$
 - 语言指令："pick up the red block and place it in the green tray"
 - 动作空间：7 维（x, y, z, roll, pitch, yaw, gripper）
 
 **StarVLA-α 推理流程**：
-1. Qwen3-VL 处理图像 + 文本 → 输出 hidden state (dim=4096)
+1. Qwen3-VL 处理图像 + 文本 → 输出 hidden state (dim$=4096$)
 2. MLP action head 读取 designated action token → 回归 10 个动作步（chunk）
-3. 输出：10×7=70 个连续值（归一化到 [-1, 1]）
+3. 输出：$10 \times 7 = 70$ 个连续值（归一化到 $[-1, 1]$）
 4. 反归一化：用训练集统计量还原到机器人动作空间
 5. 执行前 1-2 步，重复感知 - 行动循环
 
 **对比 FAST（离散 token）**：
 - FAST 需要将连续动作离散化为 token（如 256 bins/维度）
-- 7 维 × 10 步 × 8 bits ≈ 560 bits 信息 → 需要预测 ~70 个 token
+- 7 维 $\times$ 10 步 $\times$ 8 bits $\approx 560$ bits 信息 → 需要预测 $\sim 70$ 个 token
 - 自回归解码慢，且量化误差累积
 
 **StarVLA-α 优势**：
@@ -117,8 +117,8 @@ a_t = MLP_θ(h_VLM([I_{t-k:t}, L]))  其中 h_VLM 是 VLM 的 hidden state，a_t
 
 | 工程维度 | StarVLA-α 选择 | 含义 |
 |---------|---------------|------|
-| 模型大小 | Qwen3-VL 4B | 2B→4B 提升显著（+18% WidowX），4B→8B 收益<1% |
-| 推理延迟 | 单次前向 + MLP | ~50-100ms (A100)，比 diffusion/flow 快 3-5× |
+| 模型大小 | Qwen3-VL 4B | $2\text{B}\to4\text{B}$ 提升显著（$+18\%$ WidowX），$4\text{B}\to8\text{B}$ 收益$<1\%$ |
+| 推理延迟 | 单次前向 + MLP | $\sim50\text{-}100\,\text{ms}$ (A100)，比 diffusion/flow 快 $3\text{-}5\times$ |
 | 训练吞吐 | batch size 256-512 | batch size 是关键：512 比 64 在 RoboCasa-GR1 上 +10% |
 | 内存占用 | 4B 模型 + 轻量 head | 单卡 A100 可训练（用 Florence-2 更小） |
 | 部署约束 | 需 VLM 推理能力 | 边缘设备需量化/蒸馏 |
@@ -133,10 +133,10 @@ a_t = MLP_θ(h_VLM([I_{t-k:t}, L]))  其中 h_VLM 是 VLM 的 hidden state，a_t
 **训练数据**：
 | Benchmark | 任务数 | 机器人 | 数据量 |
 |-----------|--------|--------|--------|
-| LIBERO | 4 suites × 10 tasks | WidowX | ~2k demos/task |
+| LIBERO | $4$ suites $\times$ $10$ tasks | WidowX | ~2k demos/task |
 | SimplerEnv | 3 robot types | WidowX/Google Robot | ~1k demos/task |
 | RoboTwin 2.0 | 24 tasks | Dual-arm | 50-500 demos/task (ablation) |
-| RoboCasa-GR1 | 24 tasks | Humanoid GR1 | 24×10-1000 demos (ablation) |
+| RoboCasa-GR1 | 24 tasks | Humanoid GR1 | $24\times10\text{-}1000$ demos (ablation) |
 
 **评测协议**：
 - 严格遵循各 benchmark 官方评测
@@ -147,16 +147,16 @@ a_t = MLP_θ(h_VLM([I_{t-k:t}, L]))  其中 h_VLM 是 VLM 的 hidden state，a_t
 | Method | LIBERO avg | SimplerEnv Google VM | RoboTwin clean* | RoboCasa-GR1 |
 |--------|-----------|---------------------|-----------------|--------------|
 | OpenVLA-OFT | 97.1 | 63.0 | – | – |
-| π₀ | 94.1 | 58.8 | 65.9 | 58.4 |
-| π₀.₅ | 96.9 | 72.7 | 82.7 | 37.0 |
+| $\pi_0$ | 94.1 | 58.8 | 65.9 | 58.4 |
+| $\pi_{0.5}$ | 96.9 | 72.7 | 82.7 | 37.0 |
 | GR00T-N1.6 | 97.0 | 67.7 | – | 47.6 |
 | **StarVLA-α** | **98.8** | **76.0** | **88.3** | **53.8** |
 
-> 来源：论文 Table 1。StarVLA-α 在 4 个 benchmark 上全部 SOTA 或持平最优。
+> 来源：论文 Table 1。StarVLA-α 在 $4$ 个 benchmark 上全部 SOTA 或持平最优。
 
 **真实机器人（RoboChallenge，Table 7）**：
-- StarVLA-α：33.6% SR, 54.5 progress score
-- π₀.₅：12.7% SR, 27.6 progress score
+- StarVLA-α：$33.6\%$ SR, $54.5$ progress score
+- $\pi_{0.5}$：$12.7\%$ SR, $27.6$ progress score
 - **提升 20%+**，证明简化设计在真实世界同样有效
 
 ## 6. 能力与失败模式 (Capabilities & Failure Modes)
@@ -166,13 +166,13 @@ a_t = MLP_θ(h_VLM([I_{t-k:t}, L]))  其中 h_VLM 是 VLM 的 hidden state，a_t
 |------|------|
 | 跨任务泛化 | 单模型训练 4 benchmarks，性能持平 specialist (Table 5) |
 | 跨 embodiment | 从 WidowX 到 Humanoid GR1，无需 per-robot 工程 |
-| 低延迟推理 | MLP head 比 diffusion/flow 快 3-5× |
+| 低延迟推理 | MLP head 比 diffusion/flow 快 $3\text{-}5\times$ |
 | 真实世界部署 | RoboChallenge SOTA (Table 7) |
 
 ### 6.2 不能做什么/局限
 | 局限 | 原因 |
 |------|------|
-| 小模型 (<2B) 下性能下降 | Fig 5: 2B→4B +18%，但 backbone 弱时简化设计不够 |
+| 小模型 (<2B) 下性能下降 | Fig 5: $2\text{B}\to4\text{B}$ $+18\%$，但 backbone 弱时简化设计不够 |
 | 低数据场景需数据工程 | Table 4: <100 demos 时 proprioception/history 有帮助 |
 | 未测试移动/长视野任务 | 评测集中在桌面操作（manipulation） |
 | 依赖 Qwen3-VL 可用性 | 需要访问 Qwen3-VL 权重（开源但需申请） |
@@ -188,7 +188,7 @@ a_t = MLP_θ(h_VLM([I_{t-k:t}, L]))  其中 h_VLM 是 VLM 的 hidden state，a_t
 | 方法 | Backbone | Action Head | 预训练 | 数据工程 | 核心差异 |
 |------|----------|-------------|--------|---------|---------|
 | OpenVLA-OFT | LLaVA | MLP | OXE | 标准 | 首提开源 VLA+MLP |
-| π₀/π₀.₅ | LLaVA/PaliGemma | Diffusion/Flow | 多模态 | 复杂 | 生成式 action |
+| $\pi_0/\pi_{0.5}$ | LLaVA/PaliGemma | Diffusion/Flow | 多模态 | 复杂 | 生成式 action |
 | GR00T | VLM + separate | Flow (System 1) | 仿真 | 双系统 | System 1+2 分离 |
 | FAST | VLM | Discrete tokens | 任务特定 | 中等 | 离散自回归 |
 | **StarVLA-α** | **Qwen3-VL** | **MLP** | **无** | **最小** | **简化基线** |

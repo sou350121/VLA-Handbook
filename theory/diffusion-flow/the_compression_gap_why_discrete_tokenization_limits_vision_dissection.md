@@ -35,15 +35,15 @@
 
 | 组件 | Diffusion Policy (连续) | OAT (离散) | 关键差异 |
 |------|------------------------|------------|----------|
-| 动作表示 | 连续向量 a ∈ R^d | 离散 token 序列 T ∈ V^H_l | 有无量化阶段 |
-| 信息流 | O → Z → A (全连续) | O → Z → T → A (含量化 Q) | OAT 多一个瓶颈 |
-| 码本容量 | 无限制 | |V|^H_l ≈ 1000^8 ≈ 80 bits | 硬上限 |
-| 编码器敏感度 | 高（Δ_enc = +21~26%） | 低（Δ_enc = +3~10%） | 本文核心发现 |
-| 模型 scaling | 有效（M→L +12~14%） | 无效/不稳定 | 瓶颈位置不同 |
+| 动作表示 | 连续向量 $a \in \mathbb{R}^d$ | 离散 token 序列 $T \in \mathcal{V}^{H_l}$ | 有无量化阶段 |
+| 信息流 | $O \to Z \to A$ (全连续) | $O \to Z \to T \to A$ (含量化 $Q$) | OAT 多一个瓶颈 |
+| 码本容量 | 无限制 | |V|$H_l \approx 1000^8 \approx 80$ bits | 硬上限 |
+| 编码器敏感度 | 高（$\Delta_{\text{enc}} = +21\sim26\%$） | 低（$\Delta_{\text{enc}} = +3\sim10\%$） | 本文核心发现 |
+| 模型 scaling | 有效（$M\to L\ +12\sim14\%$） | 无效/不稳定 | 瓶颈位置不同 |
 
 ### 1.2 关键机制 (Key Mechanism)
 
-**数据处理不等式（Data Processing Inequality）**：对于马尔可夫链 O → Z → A：
+**数据处理不等式（Data Processing Inequality）**：对于马尔可夫链 $O \to Z \to A$：
 
 ```
 I(O;A) ≤ min(I(O;Z), I(Z;A))
@@ -114,8 +114,8 @@ I(O;A) ≤ I(Z;T) ≤ H_l × log₂|V| ≈ 8 × log₂(1000) ≈ 80 bits
 ## 3. 带数字走一遍：玩具例子 (Worked Example)
 
 假设我们有两个视觉编码器：
-- **ResNet-18**: 输出 64-d 特征，估计 I(O;Z) ≈ 50 bits
-- **SigLIP**: 输出 1152-d 特征，估计 I(O;Z) ≈ 150 bits
+- **ResNet-18**: 输出 $64$-d 特征，估计 $I(O;Z) \approx 50$ bits
+- **SigLIP**: 输出 $1152$-d 特征，估计 $I(O;Z) \approx 150$ bits
 
 **连续路径（DP）**：
 ```
@@ -154,7 +154,7 @@ SigLIP: I(O;A) ≤ min(150, 80) = 80 bits → 成功率 57.4%
 **基准**: LIBERO-10（10 个任务，每任务 50 个演示），Franka Emika Panda 机械臂，7-d 动作空间
 
 **实验设计**:
-- **因子实验**: 2×2×2 = 8 条件（动作表示 × 编码器 × 模型大小）
+- **因子实验**: $2\times2\times2 = 8$ 条件（动作表示 $\times$ 编码器 $\times$ 模型大小）
 - **编码器质量梯度**: 4 个编码器（ResNet-18, SigLIP, DINOv2, SigLIP 2）
 - **码本大小实验**: 3 个 |V|（1000, 1920, 4375）
 
@@ -165,7 +165,7 @@ SigLIP: I(O;A) ≤ min(150, 80) = 80 bits → 成功率 57.4%
 
 **关键结果**（Table 1, LIBERO-10）:
 
-| 动作表示 | 模型大小 | ResNet-18 | SigLIP | Δ_enc |
+| 动作表示 | 模型大小 | ResNet-18 | SigLIP | $\Delta_{\text{enc}}$ |
 |----------|----------|-----------|--------|-------|
 | DP | M | 36.4% | 57.6% | +21.2% |
 | DP | L | 44.0% | 70.0% | +26.0% |

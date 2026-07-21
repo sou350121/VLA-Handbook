@@ -35,7 +35,7 @@
 
 ### 1.1 系统对比概览 (System Component Comparison)
 
-| 维度 | 端到端 VLA (π₀.₅等) | LLM 编程 Agent | Harness VLA |
+| 维度 | 端到端 VLA ($\pi_0.5$等) | LLM 编程 Agent | Harness VLA |
 |------|----------------------|----------------|-------------|
 | 语言理解 | 内嵌在策略中（弱） | 核心能力（强） | Planner 承担（强） |
 | 长期规划 | 无（单轨迹执行） | 核心能力 | Planner 承担 |
@@ -103,7 +103,7 @@ Harness VLA 的核心设计哲学是**职责分离**：
 π* = argmax_π E[ G | π 编排 P, f_θ 冻结, M_task + M_global ]
 ```
 
-**目标**：在 VLA 参数 θ 冻结、原语库 P 固定的约束下，学习一个编排策略 π 使得任务完成概率最大化。
+**目标**：在 VLA 参数 $\theta$ 冻结、原语库 $P$ 固定的约束下，学习一个编排策略 $\pi$ 使得任务完成概率最大化。
 
 **变量说明**：
 - `π`：Agentic Planner（LLM），负责从原语库 P 中选择原语并绑定参数
@@ -115,7 +115,7 @@ Harness VLA 的核心设计哲学是**职责分离**：
 
 **直觉**：传统 VLA 试图用一个策略网络同时学习"做什么"和"怎么做"。Harness VLA 将这两个问题解耦——Planner 学"做什么"（原语编排），VLA 只负责"怎么做"（接触操作）。记忆系统 M_task 提供结构先验，M_global 提供启发式约束，两者共同缩小 Planner 的搜索空间。
 
-> 符号与本文保持一致：ℓ = 任务描述，o_t = 多模态观察 (I_rgb, I_depth, q)，q_t = 机器人本体状态（末端执行器位姿 + 夹爪状态），τ = early-return 谓词。
+> 符号与本文保持一致：$\ell = $ 任务描述，$o_t = $ 多模态观察 $(I_{\text{rgb}}, I_{\text{depth}}, q)$，$q_t = $ 机器人本体状态（末端执行器位姿 + 夹爪状态），$\tau = $ early-return 谓词。
 
 ## 3. 带数字走一遍：玩具例子 (Worked Example)
 
@@ -143,7 +143,7 @@ t=3: Planner 调用 release()  ← 分析原语，释放
 
 **关键数字**：
 - VLA 调用次数：1 次（仅在 t=1 的接触阶段）
-- 分析原语调用：3 次（move_to × 2, release × 1）
+- 分析原语调用：3 次（move_to $\times 2$, release $\times 1$）
 - 总编排步数：4 步（远少于 VLA 从头到尾执行所需的数十步）
 - 空间偏移容忍度：由分析原语的感知定位能力决定（不依赖 VLA 的分布内假设）
 
@@ -167,16 +167,16 @@ t=3: Planner 调用 release()  ← 分析原语，释放
 
 | 基准 | 类型 | 扰动类型 | 评估设置 |
 |------|------|----------|----------|
-| LIBERO | 桌面操作（标准） | 无（分布内） | 10 任务 × 10 种子 = 100 次/套件 |
-| LIBERO-Pro | 桌面操作（扰动） | 指令重定向(T) / 位置交换(S) | 10 任务 × 10 种子 = 100 次/单元格 |
+| LIBERO | 桌面操作（标准） | 无（分布内） | $10$ 任务 $\times 10$ 种子 $= 100$ 次/套件 |
+| LIBERO-Pro | 桌面操作（扰动） | 指令重定向(T) / 位置交换(S) | $10$ 任务 $\times 10$ 种子 $= 100$ 次/单元格 |
 | RoboCasa365 | 厨房操作 | 移动 staging + 铰链器具 | 10 种子(Atomic-Seen) / 5 种子(Composite) |
-| RoboTwin C2R | 双臂操作 | Clean→Randomized 零样本迁移 | 50 任务 × 5 随机种子 |
+| RoboTwin C2R | 双臂操作 | Clean→Randomized 零样本迁移 | $50$ 任务 $\times 5$ 随机种子 |
 
 ### VLA 后端配置
 
 | 基准 | VLA 后端 | 来源 |
 |------|----------|------|
-| LIBERO / LIBERO-Pro | π₀.₅-SFT (RLinf 发布) | π_RLinf |
+| LIBERO / LIBERO-Pro | $\pi_{0.5}\text{-SFT}$ (RLinf 发布) | $\pi_{\text{RLinf}}$ |
 | RoboCasa365 | RLDX-1 RoboCasa | 冻结 checkpoint |
 | RoboTwin C2R | LingBot-VLA | 作者后训练 checkpoint |
 
@@ -218,7 +218,7 @@ t=3: Planner 调用 release()  ← 分析原语，释放
 
 | 方法 | 核心思路 | VLA 角色 | 记忆 | 微调 | LIBERO-Pro 整体 |
 |------|----------|----------|------|------|-----------------|
-| π_RLinf (直接 VLA) | 端到端策略 | 全部 | 无 | 训练时 | 50.0% |
+| $\pi_{\text{RLinf}}$ (直接 VLA) | 端到端策略 | 全部 | 无 | 训练时 | 50.0% |
 | RATS | VLA + 推理 | 全部 + 推理增强 | 无 | 训练时 | 43.8% |
 | Cap-X | Agent + VLA 回调 | Agent 调用 VLA | 无 | 无 | ~33.6% |
 | **Harness VLA (CC)** | **Agent 编排固定原语** | **仅接触原语** | **双层记忆** | **无** | **82.4%** |
@@ -254,7 +254,7 @@ t=3: Planner 调用 release()  ← 分析原语，释放
 **关键引用**：
 - 论文: https://arxiv.org/abs/2607.08448
 - 项目页: https://harnessvla.github.io/
-- VLA 基线 π_RLinf: https://github.com/RLinf-Foundation/RLinf
+- VLA 基线 $\pi_{\text{RLinf}}$: https://github.com/RLinf-Foundation/RLinf
 - LIBERO: https://libero-project.github.io/
 - RoboCasa365: https://robocasa365.github.io/
 - RoboTwin: https://github.com/robottwin

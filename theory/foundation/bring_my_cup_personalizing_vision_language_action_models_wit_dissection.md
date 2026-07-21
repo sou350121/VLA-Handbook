@@ -35,14 +35,14 @@ VLA 模型擅长理解"拿起杯子"这类通用指令，但面对"拿**我的**
 
 | 模块 | 输入 | 输出 | 训练/推理 | 频率 |
 |------|------|------|-----------|------|
-| 参考编码 (Offline) | K≈5 张参考图 | DINOv2 特征向量 Z_o | 一次性编码，推理期冻结 | 注册时 |
+| 参考编码 (Offline) | $K \approx 5$ 张参考图 | DINOv2 特征向量 Z_o | 一次性编码，推理期冻结 | 注册时 |
 | 开放词汇检测 (t=0) | 场景图 I_t + 类别名 c | 候选框 B_t = {b_i} | Grounding DINO 推理 | 首帧 |
 | 实例匹配 (t=0) | 候选框特征 + 参考特征 | 目标框 b* (投票聚合) | 余弦相似度 + 多数投票 | 首帧 |
 | 掩码细化 (t=0) | 目标框 b* | 像素级掩码 M_0 | SAM2 segment anything | 首帧 |
-| 时序追踪 (t>0) | 当前图 I_t + 历史 H_{t-1} | 更新掩码 M_t | SAM2 tracker 推理 | 每控制帧 |
+| 时序追踪 (t>0) | 当前图 $I_t$ + 历史 $H_{t-1}$ | 更新掩码 M_t | SAM2 tracker 推理 | 每控制帧 |
 | 视觉提示 | 掩码 M_t + 场景图 | 高亮图 I_t~ | 半透明色叠 | 每控制帧 |
 | 指令重写 | 原始指令 ℓ + 高亮颜色 | 改写指令 ℓ~ | 模板字符串替换 | 每 episode |
-| 冻结 VLA | (I_t~, s_t, ℓ~) | 动作 a_t | π_0 / π_0.5 推理 | 每控制帧 |
+| 冻结 VLA | (I_t~, s_t, ℓ~) | 动作 a_t | $\pi_0 / \pi_{0.5}$ 推理 | 每控制帧 |
 
 ### 1.2 关键机制 (Key Mechanism)
 
@@ -120,9 +120,9 @@ b* = argmax_{b_i ∈ B_t} Σ_{k=1}^K 1[i = argmax_j cos(e_j, z_k)]
 | b_i | 第 i 个候选框（由 Grounding DINO 提出） |
 | e_i | 候选框内图像的 DINOv2 特征（ℓ2 归一化） |
 | z_k | 第 k 张参考图的 DINOv2 特征 |
-| K | 参考图数量（≈5） |
-| cos(·,·) | 余弦相似度 |
-| 1[·] | 指示函数 |
+| K | 参考图数量（$\approx 5$） |
+| $\cos(\cdot,\cdot)$ | 余弦相似度 |
+| $\mathbf{1}[\cdot]$ | 指示函数 |
 
 **直觉**：每张参考图 k 独立"投票"给它认为最相似的候选框（余弦相似度最高者）。最终选得票最多的候选框。这相当于让 5 张不同角度的参考图"民主表决"，而不是依赖单一匹配。
 
@@ -132,7 +132,7 @@ M_t = g(I_t, R_o, H_{t-1})     — tracker 基于历史传播掩码
 (x_t~, ℓ~) = p(x_t, ℓ, M_t)    — 掩码 → 高亮图 + 改写指令
 ```
 
-> 符号与本文保持一致：g 为 grounding 函数，p 为 prompting 函数，H_{t-1} 为 tracker 记忆状态。
+$>$ 符号与本文保持一致：$g$ 为 grounding 函数，$p$ 为 prompting 函数，$H_{t-1}$ 为 tracker 记忆状态。
 
 ## 3. 带数字走一遍：玩具例子 (Worked Example)
 
@@ -200,14 +200,14 @@ t=2: tracker 更新 M_2 ... 直到抓取完成
 | 维度 | 数值/评估 | 工程含义 |
 |------|-----------|----------|
 | 训练成本 | 零（training-free） | 新物品注册只需拍 5 张照片，无需 GPU 微调 |
-| 首帧延迟 | Grounding DINO + SAM2 分割 ≈ 200-500ms（取决于硬件） | 首帧有检测开销，后续帧仅 tracker ≈ 30-50ms |
-| 控制频率 | 依赖底层 VLA（π_0 约 10-20 Hz） | VAP 不改变控制频率，仅修改输入 |
-| 内存占用 | 5 张参考图 × 1024-d = 5 KB/物品 | 可注册大量个人物品，内存几乎无压力 |
+| 首帧延迟 | Grounding DINO + SAM2 分割 $\approx 200\text{--}500\,\text{ms}$（取决于硬件） | 首帧有检测开销，后续帧仅 tracker $\approx 30\text{--}50\,\text{ms}$ |
+| 控制频率 | 依赖底层 VLA（$\pi_0$ 约 $10\text{--}20\ \text{Hz}$） | VAP 不改变控制频率，仅修改输入 |
+| 内存占用 | $5$ 张参考图 $\times 1024\text{-}d = 5\ \text{KB}/$物品 | 可注册大量个人物品，内存几乎无压力 |
 | 遮挡恢复 | SAM2 tracker 处理短期遮挡 | 长时间遮挡或物品移出视野后需重新检测 |
-| 多视角 | 每相机视图独立运行 grounding | 3 视图 × 检测开销 ≈ 3 倍首帧延迟 |
+| 多视角 | 每相机视图独立运行 grounding | $3$ 视图 $\times$ 检测开销 $\approx 3$ 倍首帧延迟 |
 | 部署约束 | 需 Grounding DINO + SAM2 + DINOv2 三个模型 | 边缘设备部署需模型压缩或蒸馏 |
 
-**关键 trade-off**：VAP 用推理时的多个 foundation model 串联（Grounding DINO → DINOv2 → SAM2）换取了零训练成本。在云边协同架构中，grounding 可放在边缘 GPU，VLA 推理放在云端；在纯边缘部署中，需考虑模型量化（INT8）和流水线并行。
+**关键 trade-off**：VAP 用推理时的多个 foundation model 串联（Grounding DINO $\to$ DINOv2 $\to$ SAM2）换取了零训练成本。在云边协同架构中，grounding 可放在边缘 GPU，VLA 推理放在云端；在纯边缘部署中，需考虑模型量化（INT8）和流水线并行。
 
 ## 5. 数据与评测 (Data & Eval)
 
@@ -254,7 +254,7 @@ t=2: tracker 更新 M_2 ... 直到抓取完成
 | 检测器漏检目标 | ❌ | Grounding DINO 若未提出候选框，回退到无提示模式 |
 | 长时间遮挡/物品移出视野 | ❌ | tracker 丢失后需重新检测，但论文未详述恢复机制 |
 | 高度相似物品（如同款不同划痕） | ⚠️ | DINOv2 可能无法区分极细微差异 |
-| 非"my X"格式的个性化指令 | ⚠️ | 指令重写依赖模板匹配 "my X" → "the color X" |
+| 非"my X"格式的个性化指令 | ⚠️ | 指令重写依赖模板匹配 "my X" $\to$ "the color X" |
 | 跨类别泛化 | ❌ | 每个物品需独立注册参考图 |
 
 ### 6.3 隐含假设 (Hidden Assumptions)
@@ -275,7 +275,7 @@ t=2: tracker 更新 M_2 ... 直到抓取完成
 |------|--------|------|----------|----------|
 | **VAP (本文)** | 实例级个性化 | 参考图 grounding + 视觉高亮 + 指令重写 | 零训练 | 同类干扰物中的特定实例操作 |
 | Generic VLA | 通用操作 | 直接输入原始指令 | 预训练完成 | 通用指令（"拿起杯子"） |
-| Hard Prompt | 语言消歧 | LLM 描述参考图 → 扩展指令 | 零训练 | 可语言描述的物品差异 |
+| Hard Prompt | 语言消歧 | LLM 描述参考图 $\to$ 扩展指令 | 零训练 | 可语言描述的物品差异 |
 | Soft Prompt (Token Learning) | Token 级个性化 | 优化特定 token embedding | 需优化每个物品 | 静态图像识别（闭环中注意力漂移） |
 | MEMENTO (Kwon 2026) |  episodic 记忆 | 检索物品语义 | 需记忆库构建 | 高层语义检索，非控制级 |
 | PIN (Barsellotti 2024) | 导航个性化 | 参考图条件化 | 需训练 | 导航任务，非操作 |
@@ -293,9 +293,9 @@ t=2: tracker 更新 M_2 ... 直到抓取完成
   3. 构建多用户家庭机器人系统的团队——论文展示了多用户场景的可行性
 
 - **建議章節路徑**:
-  - 先读 §3（VAP 方法）→ 理解 grounding + prompting 的双组件设计
-  - 再看 §5.2（基线对比）→ 理解为什么 Generic/Soft/Hard Prompt 都不够
-  - 可跳 §2（相关工作）→ 如果对 referring expression 领域已熟悉
+  - 先读 §3（VAP 方法）$\to$ 理解 grounding $+$ prompting 的双组件设计
+  - 再看 §5.2（基线对比）$\to$ 理解为什么 Generic/Soft/Hard Prompt 都不够
+  - 可跳 §2（相关工作）$\to$ 如果对 referring expression 领域已熟悉
 
 - **不值得精讀的理由**:
   - 如果你不做机器人操作（只做图像/视频理解），这篇的闭环控制细节可能超出需求
@@ -309,4 +309,4 @@ t=2: tracker 更新 M_2 ... 直到抓取完成
 - 论文: https://arxiv.org/abs/2512.20014
 - 项目页面: https://vap-project.github.io/
 - ICML 2026
-- 基线: π_0 / π_0.5 (Physical Intelligence), DINOv2, Grounding DINO, SAM2
+- 基线: $\pi_0 / \pi_{0.5}$ (Physical Intelligence), DINOv2, Grounding DINO, SAM2

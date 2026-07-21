@@ -47,7 +47,7 @@
 | Scene Describer | 实验台图像 | 结构化场景 Dashboard（物体、状态、空间关系） | 任务开始前一次性 | 调用 VLM API（Qwen3-VL） |
 | Subtask Reasoner | Dashboard + 历史子任务 | 单个原子子任务 | 迭代生成（每轮 1 个） | LLM 推理 |
 | Reflector | 候选子任务 + 约束 | 有效/无效判定 + 反馈 | 每轮验证 | LLM 推理 |
-| Skill-VLA | 视觉观测 + 语言指令 + 机器人状态 | 动作块 (50 步) + 进度标量 pt∈[0,1] | 实时闭环（异步推断） | 微调 GR00T + Progress Head |
+| Skill-VLA | 视觉观测 + 语言指令 + 机器人状态 | 动作块 (50 步) + 进度标量 $p_t \in [0,1]$ | 实时闭环（异步推断） | 微调 GR00T + Progress Head |
 | MCP Server | 子任务指令 | 工具调用 + 状态返回 | 按需 | 服务封装 |
 | 双層记忆 | 对话历史 + 执行轨迹 | 检索结果 + 偏好画像 | 持续更新 | 向量检索 + 定期归档 |
 
@@ -60,9 +60,9 @@
 **进度感知 VLA（Skill-VLA）**：
 - 在 GR00T 基础上附加轻量 Progress Head
 - 输入：机器人状态 St（query）+ VLM 隐藏状态（key/value）
-- 输出：连续进度标量 pt∈[0,1]
+- 输出：连续进度标量 $p_t \in [0,1]$
 - 训练：MSE Loss，真值为子任务时间步归一化位置
-- 推理：pt 超过阈值 → 自动触发下一子任务
+- 推理：$p_t$ 超过阈值 → 自动触发下一子任务
 
 **异步连续推断**：
 - 解耦模型推断与控制循环，防止推断延迟导致危险停顿
@@ -146,14 +146,14 @@ vθ(xτ, τ, c) 在 τ=1.0 时固定（掩蔽前缀 d 步）
 
 | 符号 | 含义 | 维度/范围 |
 |------|------|-----------|
-| St | 机器人状态（关节角 + 末端位姿） | R^6+6 |
-| VLM_hidden | Eagle VLM 最终隐藏表示 | R^seq×d_model |
+| St | 机器人状态（关节角 + 末端位姿） | $\mathbb{R}^6+6$ |
+| VLM_hidden | Eagle VLM 最终隐藏表示 | $\mathbb{R}^{\text{seq} \times d_{\text{model}}}$ |
 | pt | 预测进度标量 | [0,1] |
 | p_gt | 真值进度（帧归一化位置） | [0,1] |
 | H | 动作块大小（action horizon） | 50（本文设置） |
-| d | 推断延迟步数 | d ≤ s < H |
-| τ | Flow matching timestep | [0,1] |
-| vθ | DiT 速度估计器 | - |
+| d | 推断延迟步数 | $d \leq s < H$ |
+| $\tau$ | Flow matching timestep | [0,1] |
+| $v_\theta$ | DiT 速度估计器 | - |
 
 > 符号与 GR00T 原文保持一致：GR00T 使用 Flow Matching 训练 Diffusion Transformer，本文在其基础上附加 Progress Head。
 
@@ -270,7 +270,7 @@ t=60    → p=0.97（瓶盖松开）→ 触发切换
 
 | 统计项 | 数值 |
 |--------|------|
-| 原始 χDL 协议 | 108 个 |
+| 原始 $\chi_{\text{DL}}$ 协议 | 108 个 |
 | Back-Instruct 扩展 | 92 个多模态样本 |
 | 数据来源 | 基础化学教学视频 + 人工标注 |
 

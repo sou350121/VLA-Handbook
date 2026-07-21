@@ -51,14 +51,14 @@
 | 模块 | 输入 | 输出 | 频率/时序 | 训练/推理 |
 |------|------|------|-----------|-----------|
 | **Goal State Reasoning** | RGB 图像 I + 任务描述 L | 目标图像 I' + 深度 D' + 物体掩码 M, M' | 任务级（一次/任务） | 推理（Gemini 2.5 + Grounded SAM） |
-| **Spatial Grounding** | I, I', D, D', M, M' | 旋转 R ∈ SO(3) + 平移 t ∈ R³ + 尺度 s₂ | 任务级（一次/任务） | 推理（Geo-Aware + Umeyama） |
+| **Spatial Grounding** | I, I', D, D', M, M' | 旋转 $R \in SO(3)$ + 平移 $t \in \mathbb{R}^3$ + 尺度 $s_2$ | 任务级（一次/任务） | 推理（Geo-Aware + Umeyama） |
 | **Low-level Policy** | 当前观测 O + 掩码 M + 目标姿态 | 动作序列 {a}ᵢ | 控制频率（~10-100Hz） | 推理（运动规划器） |
 
 **与基线对比**：
 
 | 方法 | 中间表示类型 | 零样本 | 精确 3D 空间定位 | 低层策略需训练 |
 |------|-------------|--------|-----------------|---------------|
-| OpenVLA / π₀ | 无（端到端） | ✗ | N/A | ✓（大规模动作数据） |
+| OpenVLA / $\pi_0$ | 无（端到端） | ✗ | N/A | ✓（大规模动作数据） |
 | MOKA | 关键点 | ✓ | ✗ | ✗ |
 | VoxPoser | 3D 价值图 | ✓ | ✗（VLM 空间推理弱） | ✗ |
 | SUSIE | 子目标图像 | ✓ | ✗ | ✓（需训练解释图像） |
@@ -135,7 +135,7 @@ Stage 3: Low-level Policy (底层策略)
 s₂·P' = R·P + t  (物体从初始姿态到目标姿态的相似变换)
 ```
 
-**目标**：计算物体从初始状态到目标状态的 3D 变换（旋转 R、平移 t、尺度 s₂），用于指导底层策略。
+**目标**：计算物体从初始状态到目标状态的 3D 变换（旋转 $R$、平移 $t$、尺度 $s_2$），用于指导底层策略。
 
 **公式拆解**：
 
@@ -147,7 +147,7 @@ s₂·P' = R·P + t  (物体从初始姿态到目标姿态的相似变换)
 
 - `f(x,y)`：初始图像像素 (x,y) 的语义特征向量（来自 Geo-Aware 模型）
 - `f'(p,q)`：目标图像像素 (p,q) 的语义特征向量
-- 输出：像素对应关系 F:(x,y)→(x',y')
+- 输出：像素对应关系 $F:(x,y)\to(x',y')$
 
 > 直觉：生成图像可能改变物体外观，传统光流不可靠，用语义特征匹配更鲁棒。
 
@@ -176,9 +176,9 @@ s₂·P' = R·P + t
 - `t ∈ R³`：平移向量
 - `s₂`：相似变换尺度因子（处理生成图像的尺度漂移）
 
-> 直觉：找到最优 R, t, s₂ 使变换后的目标点云与初始点云对齐。
+> 直觉：找到最优 $R$, $t$, $s_2$ 使变换后的目标点云与初始点云对齐。
 
-> 符号与本文/相关文档保持一致：R 为旋转，t 为平移，s 为尺度因子（s₁ 深度对齐，s₂ 点云配准）。
+> 符号与本文/相关文档保持一致：$R$ 为旋转，$t$ 为平移，$s$ 为尺度因子（$s_1$ 深度对齐，$s_2$ 点云配准）。
 
 ---
 
@@ -197,7 +197,7 @@ s₂·P' = R·P + t
 2. **Reflection-through-Synthesis Loop**（第 1 次迭代）：
    - 生成候选图 I'cand：番茄在盘子里，但盘子位置移动了 5cm（错误）
    - 合成叠加图 I_synth：用 Grounded SAM 分割番茄，叠加到原图
-   - Reflector 评估："盘子不应移动，只应移动番茄" → 输出修正提示 L_revised
+   - Reflector 评估："盘子不应移动，只应移动番茄" → 输出修正提示 $L_{\text{revised}}$
 3. **第 2 次迭代**：
    - 重新生成：番茄在盘子里，盘子位置不变 ✓
    - Reflector 验证通过
@@ -216,8 +216,8 @@ s₂·P' = R·P + t
 
 **深度对齐**：
 - 背景像素数：约 50,000 像素（640×480 - 物体区域）
-- 最小二乘拟合：s₁ = 1.08, b = -0.02m
-- 应用：D'_rescaled = 1.08·D' - 0.02
+- 最小二乘拟合：$s_1 = 1.08$, $b = -0.02\,\text{m}$
+- 应用：$D'_{\text{rescaled}} = 1.08 \cdot D' - 0.02$
 
 **点云配准**：
 - P：初始番茄点云（约 500 点，由 D 和 M 提取）
@@ -236,7 +236,7 @@ s₂·P' = R·P + t
 **接触点确定**：
 - 在 P 上采样 1000 个候选接触姿态（沿表面法向）
 - 碰撞过滤：保留 120 个无碰撞姿态
-- 启发式评分：选择最稳定的抓取点 → P_contact
+- 启发式评分：选择最稳定的抓取点 → $P_{\text{contact}}$
 
 **目标姿态计算**：
 ```
@@ -280,10 +280,10 @@ P_goal = ApplyTransform((R,t), P_contact)
 
 | 误差源 | 典型量级 | 影响任务 | 缓解策略 |
 |--------|---------|---------|---------|
-| 深度估计（Depth-Anything） | ±2-5mm | Weighing Duck（高度敏感） | 用多视角融合或结构光相机 |
+| 深度估计（Depth-Anything） | $\pm 2$-$5\,\text{mm}$ | Weighing Duck（高度敏感） | 用多视角融合或结构光相机 |
 | 语义匹配错误 | 1-3 像素 | 纹理重复物体 | 增加几何约束（RANSAC） |
-| 生成图像尺度漂移 | s₂ = 0.95-1.05 | 所有任务 | Umeyama 相似变换已处理 |
-| 反射迭代不足 | 15-20% 失败率 | 复杂任务（Table Sweeping） | 增加 max_iterations（1→3 提升 5%） |
+| 生成图像尺度漂移 | $s_2 = 0.95$-$1.05$ | 所有任务 | Umeyama 相似变换已处理 |
+| 反射迭代不足 | 15-20% 失败率 | 复杂任务（Table Sweeping） | 增加 max_iterations（$1\to 3$ 提升 $5\%$） |
 
 ### 4.4 部署约束
 
@@ -301,7 +301,7 @@ P_goal = ApplyTransform((R,t), P_contact)
 
 ### 5.1 评测任务设置
 
-**仿真环境（RLBench）**：8 个任务，每任务 100 次试验（10 种子 × 10 次/种子）
+**仿真环境（RLBench）**：8 个任务，每任务 100 次试验（10 种子 $\times 10$ 次/种子）
 
 | 任务 | 技能类型 | 难度 |
 |------|---------|------|
@@ -336,7 +336,7 @@ P_goal = ApplyTransform((R,t), P_contact)
 | 方法 | 平均 | 最佳任务 | 最差任务 |
 |------|------|---------|---------|
 | OpenVLA | 0.2 | Pick Up Cup (0) | 全部 ~0 |
-| π₀ | 0.0 | 全部 0 | 全部 0 |
+| $\pi_0$ | 0.0 | 全部 0 | 全部 0 |
 | SUSIE | 0.0 | 全部 0 | 全部 0 |
 | VoxPoser | 5.8 | Open Wine Bottle (24) | 多数 0 |
 | MolmoAct | 11.3 | Put Shoe On Box (40) | 5 个任务 0 |
@@ -363,7 +363,7 @@ P_goal = ApplyTransform((R,t), P_contact)
 | 能力 | 场景 | 证据 |
 |------|------|------|
 | **零样本泛化** | 新物体/新环境/新任务 | 仿真 59.9% / 真机 60%，无任务特定训练 |
-| **跨本体迁移** | Franka（仿真）→ X-ARM（真机） | 相同 pipeline 直接部署 |
+| **跨本体迁移** | Franka（仿真）$\to$ X-ARM（真机） | 相同 pipeline 直接部署 |
 | **非抓取操作** | Table Sweeping（用工具推） | 真机 40% 成功率 |
 | **物体重定向** | Stand a Bottle Upright | 真机 40% 成功率 |
 | **精细放置** | Weigh the Duck（小目标） | 真机 70% 成功率 |
@@ -440,19 +440,19 @@ P_goal = ApplyTransform((R,t), P_contact)
 ### 8.2 建議章節路徑
 
 **第一遍（理解核心思想）**：
-- §1 Introduction → 理解问题动机和核心洞见
-- §3 Figure 2 + Algorithm 1 → 把握整体流程
-- §4 Table II + III → 看结果是否 convincing
+- §1 Introduction $\to$ 理解问题动机和核心洞见
+- §3 Figure 2 + Algorithm 1 $\to$ 把握整体流程
+- §4 Table II + III $\to$ 看结果是否 convincing
 
 **第二遍（技术细节）**：
-- §3.2 Goal State Reasoning → 反射机制实现
-- §3.3 Spatial Grounding → 公式 (1)-(4) 推导
-- §4.4 Ablation Study → 验证各组件贡献
+- §3.2 Goal State Reasoning $\to$ 反射机制实现
+- §3.3 Spatial Grounding $\to$ 公式 $(1)$-$(4)$ 推导
+- §4.4 Ablation Study $\to$ 验证各组件贡献
 
 **第三遍（批判性阅读）**：
-- §4.6 Failure Cases → 理解局限性
-- §2 Related Work → 定位与自身工作的关系
-- Appendix（如有）→ 实验细节复现
+- §4.6 Failure Cases $\to$ 理解局限性
+- §2 Related Work $\to$ 定位与自身工作的关系
+- Appendix（如有）$\to$ 实验细节复现
 
 **可跳讀**：
 - §2 Related Work（第一遍可跳，有相关背景再回看）
@@ -474,7 +474,7 @@ P_goal = ApplyTransform((R,t), P_contact)
 
 ### ❓ 基线对比的公平性
 
-论文在严格零样本设定下对比，Goal-VLA 59.9% 远超 MOKA 26%。但 OpenVLA 和 π₀ 在零样本下几乎为零——它们本身是为 few-shot 微调设计的。一个更完整的对比是：Goal-VLA（0 demo）vs OpenVLA（N demo），画出 N vs 成功率曲线，看多少 demo 能追平。论文没有做这个实验，值得后续工作补上。
+论文在严格零样本设定下对比，Goal-VLA $59.9\%$ 远超 MOKA $26\%$。但 OpenVLA 和 $\pi_0$ 在零样本下几乎为零——它们本身是为 few-shot 微调设计的。一个更完整的对比是：Goal-VLA（$0$ demo）vs OpenVLA（$N$ demo），画出 $N$ vs 成功率曲线，看多少 demo 能追平。论文没有做这个实验，值得后续工作补上。
 
 ### ❓ 真机实验的覆盖面
 
@@ -558,7 +558,7 @@ VLOA 用 3D 点云轨迹，技术上更精确。但 Goal-VLA 的"目标图像"�
   - MOKA: https://arxiv.org/abs/2402.12188
   - VoxPoser: https://arxiv.org/abs/2307.05973
   - OpenVLA: https://arxiv.org/abs/2406.09246
-  - π₀: https://arxiv.org/abs/2410.24164
+  - $\pi_0$: https://arxiv.org/abs/2410.24164
 - **VLOA 关联**: [VLOA 具身世界模型](vloa_embodied_world_model_3d_point_cloud_trajectory_2026.md)
 
 ---

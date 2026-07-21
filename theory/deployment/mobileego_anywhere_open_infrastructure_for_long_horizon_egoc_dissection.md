@@ -94,15 +94,15 @@ VLA 模型的 scaling law 显示训练数据量每增加一倍，验证损失下
 H_world = K_arKit^{-1} · T_camera^{-1} · D(p_hand) · p_hand_2d
 ```
 
-**直觉**：从 2D 手部关键点到全局 3D 坐标的映射 = ARKit 相机内参逆 × 相机外参逆 × 深度采样。这是整个管线将"手机看到的 2D 手"变成"世界坐标系中的 3D 手轨迹"的数学核心。
+**直觉**：从 2D 手部关键点到全局 3D 坐标的映射 = ARKit 相机内参逆 $\times$ 相机外参逆 $\times$ 深度采样。这是整个管线将"手机看到的 2D 手"变成"世界坐标系中的 3D 手轨迹"的数学核心。
 
 **变量说明**：
 
 | 符号 | 含义 | 来源 |
 |------|------|------|
-| H_world | 全局坐标系中的 3D 手部关节位置 (21×3 MANO joints) | 计算输出 |
-| K_arKit | ARKit 相机内参矩阵 (3×3) | ARKit 每帧输出 |
-| T_camera | ARKit 6DoF 相机外参 (4×4 SE(3)) | ARKit 每帧输出 |
+| H_world | 全局坐标系中的 3D 手部关节位置 $(21\times 3$ MANO joints$)$ | 计算输出 |
+| K_arKit | ARKit 相机内参矩阵 $(3\times 3)$ | ARKit 每帧输出 |
+| T_camera | ARKit 6DoF 相机外参 $(4\times 4$ SE$(3))$ | ARKit 每帧输出 |
 | D(p_hand) | LiDAR 深度图在 2D 关键点处的采样值 | LiDAR 深度帧 |
 | p_hand_2d | WiLoR 预测的 2D 手部关键点 (21 joints) | WiLoR 网络输出 |
 
@@ -123,14 +123,14 @@ H_world = K_arKit^{-1} · T_camera^{-1} · D(p_hand) · p_hand_2d
 - WiLoR 检测到 2D 关键点 p_hand_2d = (u=320, v=240) 位于手腕关节
 - LiDAR 深度 D(p_hand) = 0.45m（手腕距相机 45cm）
 - ARKit 姿态 T_camera = 单位矩阵（初始参考系）
-- 反投影：H_world = K^{-1} · I^{-1} · 0.45 · (u,v,1) → 得到 (x=0.12, y=-0.08, z=0.45)
+- 反投影：$H_{\text{world}} = K^{-1} \cdot I^{-1} \cdot 0.45 \cdot (u,v,1) \to $ 得到 $(x=0.12, y=-0.08, z=0.45)$
 
 **帧 t=900（第 30 秒，假设 30fps）**：
 - 手腕移动到新位置，p_hand_2d = (u=280, v=200)
 - LiDAR 深度 D = 0.52m（手腕移远）
 - ARKit 姿态 T_camera 已累积旋转 R 和平移 t（VIO 估计）
 - 反投影后 H_world = (x=0.08, y=-0.12, z=0.52)
-- 位移 ΔH = (-0.04, -0.04, +0.07)m，速度 ≈ 0.03m/s（合理）
+- 位移 $\Delta H = (-0.04, -0.04, +0.07)\,\text{m}$，速度 $\approx 0.03\,\text{m/s}$（合理）
 
 **漂移验证**（论文 Table II 实验）：
 - 在场景中放置 ArUco 标记物
@@ -140,7 +140,7 @@ H_world = K_arKit^{-1} · T_camera^{-1} · D(p_hand) · p_hand_2d
 - 结论：ARKit 闭环检测有效，漂移可忽略
 
 **层级指令分解**（以烹饪 session 为例）：
-- 217 个原子 span（中位数 5s）→ 12 个 episode（中位数 42s）→ 5 个 sub-goal（中位数 3.9min）→ 1 个 session goal（36min）
+- $217$ 个原子 $\text{span}$（中位数 $5\,\text{s}$）$\to 12$ 个 $\text{episode}$（中位数 $42\,\text{s}$）$\to 5$ 个 $\text{sub-goal}$（中位数 $3.9\,\text{min}$）$\to 1$ 个 $\text{session goal}$（$36\,\text{min}$）
 - 每个层级之间有 4-8× 的时间尺度分离，自然匹配层次化 VLA 的多尺度监督需求
 
 ## 4. 工程视角 (Engineering View)
@@ -182,7 +182,7 @@ H_world = K_arKit^{-1} · T_camera^{-1} · D(p_hand) · p_hand_2d
 
 论文没有做"训练 VLA 然后测试"的闭环评测——这是数据基础设施论文的典型做法。评测聚焦于数据质量本身：
 
-1. **ARKit 漂移评估**（Table II）：3 种环境 × ArUco 标记物 revisit，漂移 <1cm 或 <0.1% 轨迹长度
+1. **ARKit 漂移评估**（Table II）：$3$ 种环境 $\times$ ArUco 标记物 $\text{revisit}$，漂移 $<1\,\text{cm}$ 或 $<0.1\%$ 轨迹长度
 2. **3D 手部一致性**（无 ground truth）：
    - 骨长 CV：中位数 1.27%（左）/ 1.43%（右），排除小指远端后 <1%
    - 关节角度：99.99% 在生物力学限制内

@@ -132,7 +132,7 @@ graph TD
 | **2006** | 首次机器人自模型（Bongard et al., Science） | 火柴人级别 |
 | ~2015 | 多摄像头 3D 自模型 | 粗略几何 |
 | 2019 | 可微物理仿真器用于自模型 | 动力学级别 |
-| **2025** | **单目视频 → 完整运动学模型** | **关节级精度** |
+| **2025** | **单目视频 $\to$ 完整运动学模型** | **关节级精度** |
 
 这不是一篇突然冒出来的论文——是 Hod Lipson 团队 **20 年**持续研究"机器人自我意识"的最新成果。从 2006 年发表在 Science 的那篇开创性论文算起，每一代都在逼近"人类照镜子"的能力。
 
@@ -153,7 +153,7 @@ VLA 领域的世界模型（DreamZero、EgoSim）试图预测**外部世界**的
 完整世界模型               → 两者联合 → "如果我转关节 3，杯子会被推到哪"
 ```
 
-→ 详见 [World Model 主线](world_model_mainline.md) · [DreamZero](dreamzero_world_action_models_zero_shot_policies_2026.md) · [EgoSim](egosim_egocentric_world_simulator_for_embodied_interaction_g_dissection.md)
+$\to$ 详见 [World Model 主线](world_model_mainline.md) · [DreamZero](dreamzero_world_action_models_zero_shot_policies_2026.md) · [EgoSim](egosim_egocentric_world_simulator_for_embodied_interaction_g_dissection.md)
 
 ### 连接 2：跨形态适配的基础设施
 
@@ -161,7 +161,7 @@ Sergey Levine 在最近访谈中说"不存在'人形机器人问题'和'机械�
 
 这篇论文提供了一条路径：**让机器人自己搞清楚自己是什么形态**，而不是人类手工写 URDF 告诉它。
 
-→ 详见 [VLA 核心架构](../vla-core/vla_arch.md) · [PI Sergey Levine 访谈](../vla-core/physical_intelligence_sergey_levine_foundation_model_vision_2026.md)
+$\to$ 详见 [VLA 核心架构](../vla-core/vla_arch.md) · [PI Sergey Levine 访谈](../vla-core/physical_intelligence_sergey_levine_foundation_model_vision_2026.md)
 
 ### 连接 3：损伤恢复 = 一种 online adaptation
 
@@ -172,7 +172,7 @@ VLA 领域讨论的"在线适配"通常指任务层面（新环境、新物体�
 - **运行中**：持续比较预测 vs 实际，检测异常
 - **损伤后**：自动更新自模型，无需人类干预
 
-→ 详见 [终身学习](../foundation/lifelong_imitation_learning_with_multimodal_latent_replay_an_dissection.md)
+$\to$ 详见 [终身学习](../foundation/lifelong_imitation_learning_with_multimodal_latent_replay_an_dissection.md)
 
 ### 连接 4：赌注 7 的生物学验证
 
@@ -226,7 +226,7 @@ VLA 跨形态适配的核心难题是：模型怎么知道当前控制的是什�
 
 <table><tr><td>
 
-**整理**：Claude Opus 4.6 × [Pulsar 照见](https://github.com/sou350121/Pulsar-KenVersion) · 2026-04-09
+**整理**：Claude Opus 4.6 $\times$ [Pulsar 照见](https://github.com/sou350121/Pulsar-KenVersion) · 2026-04-09
 **原始论文**：Hu, Y., Lin, J. & Lipson, H. Teaching robots to build simulations of themselves. *Nat Mach Intell* **7**, 484–494 (2025). [DOI](https://doi.org/10.1038/s42256-025-01006-w)
 
 </td></tr></table>

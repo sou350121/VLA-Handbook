@@ -103,11 +103,11 @@ min_θ  L_align = E_{clips} [ 1 - cos(z_a, Δh) ]
 
 | 符号 | 含义 | 维度 | 来源 |
 | --- | --- | --- | --- |
-| φ | 冻结的自监督视频编码器 | - | 预训练模型 (如 VideoMAE) |
-| f_θ | 待学习的潜在动作编码器 | - | Olaf-World 训练 |
-| h_t | t 时刻的视频特征 | d_model | φ(frame_t) |
-| Δh | 效果方向 (特征差分) | d_model | h_{t+T} - h_t |
-| z_a | 潜在动作表示 | d_action | f_θ(clip) |
+| $\phi$ | 冻结的自监督视频编码器 | - | 预训练模型 (如 VideoMAE) |
+| $f_\theta$ | 待学习的潜在动作编码器 | - | Olaf-World 训练 |
+| h_t | t 时刻的视频特征 | d_model | $\phi(\text{frame}_t)$ |
+| $\Delta h$ | 效果方向 (特征差分) | d_model | $h_{t+T} - h_t$ |
+| z_a | 潜在动作表示 | d_action | $f_\theta(\text{clip})$ |
 | T | 动作持续时间 (帧数) | - | 超参数 |
 
 ### 2.3 直觉解释

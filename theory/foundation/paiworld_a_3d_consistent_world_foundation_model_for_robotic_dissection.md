@@ -53,7 +53,7 @@ PAIWorld 建立在 Cosmos-Predict2.5（DiT-based flow matching 世界模型）�
 
 - **Latent 3D-REPA**: 从冻结的 Depth Anything 3 模型中提取3D感知特征，通过 token 关系蒸馏（而非直接特征回归）对齐 DiT 中间层表示。包括空间项（帧内跨视图关系）和时间项（跨帧关系），使用 SmoothL1 损失
 
-⚡ **Eureka Moment**: 跨视图3D一致性需要两个独立层面的解决方案同时存在——架构层面提供信息通道（让视图能交流），目标层面提供几何监督（让交流的内容有意义）。只有通道没有监督 → 模型学会纹理复制等捷径；只有监督没有通道 → 各视图各自3D感知但无法协调。
+⚡ **Eureka Moment**: 跨视图3D一致性需要两个独立层面的解决方案同时存在——架构层面提供信息通道（让视图能交流），目标层面提供几何监督（让交流的内容有意义）。只有通道没有监督 → 模型学会纹理复制等捷径；只有监督没有通道 → 各视图各自3D感知但无法协调。  
 
 ### 1.3 信息流/架构图 (Flow / Diagram)
 
@@ -130,16 +130,16 @@ Geo-RoPE 位姿向量:
 
 | 符号 | 含义 |
 |------|------|
-| z_0 | VAE 潜在表示 T×H×W×C |
-| u_θ | 流匹配速度场（DiT 输出） |
+| z_0 | VAE 潜在表示 $T \times H \times W \times C$   |
+| $u_\theta$   | 流匹配速度场（DiT 输出） |
 | s | 流匹配时间步 [0,1] |
-| d^v(h,w) | 视图 v 在像素 (h,w) 的世界空间射线方向 |
-| e^v | 视图 v 的12维相机位姿特征 |
-| Z_t^v | 视图 v 在帧 t 的特征图 (H·W)×D |
+| $d^v(h,w)$   | 视图 v 在像素 (h,w) 的世界空间射线方向 |
+| $e^v$   | 视图 v 的12维相机位姿特征 |
+| $Z_t^v$   | 视图 $v$ 在帧 $t$ 的特征图 $(H \cdot W) \times D$ |
 | gate | AdaLN-Zero 门控（初始化为0，保留预训练权重） |
-| F^DiT, F^DA3 | DiT 中间层 / Depth Anything 3 的特征 |
-| S(·) | 采样余弦相似度矩阵（token 关系） |
-| λ | REPA 损失权重 = 0.5 |
+| $F^{\text{DiT}}, F^{\text{DA3}}$ | DiT 中间层 / Depth Anything 3 的特征 |
+| $S(\cdot)$ | 采样余弦相似度矩阵（token 关系） |
+| $\lambda$ | REPA 损失权重 = 0.5 |
 
 > 符号与本文保持一致：所有公式基于论文 §3 节。Geo-RoPE 将 attention head 维度 d 分为 d_r=d/2（射线）和 d_p=d/2（位姿）两个子空间。
 
@@ -148,10 +148,10 @@ Geo-RoPE 位姿向量:
 假设一个简化的2视图（腕部摄像头 + 主体摄像头）、2帧（1帧上下文 + 1帧预测）场景：
 
 **设置**:
-- 相机内参 K^v: 焦距 f=500px, 分辨率 640×480
+- 相机内参 $K^v$: 焦距 $f=500\,\text{px}$, 分辨率 $640\times480$
 - 相机外参: 腕部相机在 (0, 0, 0.3)m，主体相机在 (0.5, 0, 0.8)m
-- VAE 潜在: T=2, H=16, W=16, C=4 → 每个视图 256 tokens/帧
-- 2 视图 × 2 帧 = 1024 tokens
+- VAE 潜在: $T=2$, $H=16$, $W=16$, $C=4$ → 每个视图 $256$ tokens/帧
+- $2$ 视图 $\times 2$ 帧 $= 1024$ tokens
 
 **前向传播**:
 
@@ -202,19 +202,19 @@ L_total = 0.35 + 0.5 × 0.20 = 0.45
 | 参数量 | ~14B | 与 Cosmos 相当，需多GPU分布式训练 |
 | 训练数据 | 2.5M 多视角视频片段 | 来自5个数据集，覆盖多种机械臂形态 |
 | 训练时长 | 30k iterations | 约 30k GPU-hours（H200） |
-| 优化器 | AdamW + cosine LR | LR warmup 3k steps → peak 3e-5 → decay |
+| 优化器 | AdamW + cosine LR | LR warmup $3\text{k}$ steps → peak $3e\text{-}5$ → decay |
 | 批量大小 | 与GPU数成正比 | 未公开具体数值 |
 | 推理延迟 | 未公开 | DiT flow matching 通常需 10-20 step 采样 |
 | Geo-RoPE 开销 | 每个 head 分裂为2子空间 | 计算量增加 ~10-15%（RoPE 本身廉价） |
-| Cross-View Attn 开销 | 每层 Q·K^T 从 (THW)² 到 (V·THW)² | 2视图约 4× token 数，attention 计算 ~16× |
-| 3D-REPA 开销 | Anchor 采样 O(M·K) | 全矩阵 O(M²) 不可行；K=64 anchors 使成本可控 |
+| Cross-View Attn 开销 | 每层 $Q\cdot K^T$ 从 $(THW)^2$ 到 $(V\cdot THW)^2$ | $2$视图约 $4\times$ token 数，attention 计算 $\sim 16\times$ |
+| 3D-REPA 开销 | Anchor 采样 $O(M\cdot K)$ | 全矩阵 $O(M^2)$ 不可行；$K=64$ anchors 使成本可控 |
 | 内存占用 | VAE latent + DiT 中间层 + DA3 特征 | DA3 冻结但不反向传播，节省显存 |
 | 部署约束 | 需要已知相机内外参 | Geo-RoPE 依赖精确相机标定；标定误差直接影响一致性 |
 
 **关键 trade-off**:
 - Cross-View Attention 的通信开销 vs 3D一致性收益：视图数 V 增加时，token 数线性增长但 attention 计算二次增长。论文未讨论 >3 视图的扩展性。
 - REPA anchor 数量 vs 监督质量：更多 anchor 提供更精确的关系矩阵但增加计算。论文未公开具体 K 值。
-- λ=0.5 的平衡：REPA 损失权重过高可能损害生成质量，过低则3D一致性不足。论文未做 λ 消融。
+- $\lambda=0.5$ 的平衡：REPA 损失权重过高可能损害生成质量，过低则3D一致性不足。论文未做 $\lambda$ 消融。
 
 ## 5. 数据与评测 (Data & Eval)
 
@@ -267,7 +267,7 @@ L_total = 0.35 + 0.5 × 0.20 = 0.45
 | 快速动态物体 | 流匹配模型的采样步数有限，快速运动可能导致帧间模糊/不一致 |
 | 未见过的相机配置 | 训练数据覆盖有限（5个数据集），新机器人平台的相机布局可能泛化不佳 |
 | 长程预测 | 世界模型的累积误差随预测步数增长；论文未报告 >10 步的结果 |
-| 无相机参数部署 | Geo-RoPE 需要精确的 K^v, R^v, t^v；无法在未知相机配置下工作 |
+| 无相机参数部署 | Geo-RoPE 需要精确的 $K^v$, $R^v$, $t^v$；无法在未知相机配置下工作 |
 
 ### 6.1 隐含假设 (Hidden Assumptions)
 

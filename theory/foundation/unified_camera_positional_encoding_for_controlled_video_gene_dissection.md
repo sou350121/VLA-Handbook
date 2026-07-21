@@ -32,10 +32,10 @@
 
 | 模块 | 输入 | 输出 | 频率/时序 | 训练/推理差异 |
 |------|------|------|-----------|---------------|
-| Relative Ray Encoding | 每像素 ray (o, d) + 相机向下方向 | 局部 ray-to-world 变换矩阵 T_tw^r | 每 token 独立计算 | 训练/推理一致 |
+| Relative Ray Encoding | 每像素 ray (o, d) + 相机向下方向 | 局部 ray-to-world 变换矩阵 $T_{tw}^r$   | 每 token 独立计算 | 训练/推理一致 |
 | Absolute Orientation Encoding | 世界空间 ray 方向 d_t | Lat-Up map (纬度角 + 上方向向量) | 每 token | 可选输入 |
 | Spatial Attention Adapter | 输入 tokens + UCPE 编码 | 相机感知 tokens | 每 DiT 块并行分支 | 零初始化保证预训练不变 |
-| UCPE 混合编码 | D_t^Ray (光线变换) + D_t^RoPE (图像位置) | 块对角算子 D_t^UCPE | 每 attention 层 | 与 RoPE 融合 |
+| UCPE 混合编码 | D_t^Ray (光线变换) + D_t^RoPE (图像位置) | 块对角算子 $D_t^{\text{UCPE}}$   | 每 attention 层 | 与 RoPE 融合 |
 
 ### 1.2 关键机制 (Key Mechanism)
 
@@ -124,10 +124,10 @@ Lat_t = arctan2(-d_t,y, sqrt(d_t,x^2 + d_t,z^2))
 |------|------|------|
 | o_t, d_t | token t 对应光线的原点/方向 | 相机模型 ray mapping |
 | T_trw | ray-to-world 变换矩阵 | Eq. 7 |
-| D_t^UCPE | UCPE 混合编码算子 | Eq. 10 |
+| $D_t^{\text{UCPE}}$   | UCPE 混合编码算子 | Eq. 10 |
 | Lat_t | 纬度角 (绝对俯仰) | Eq. 8 |
 | Up_t | 上方向向量 (绝对翻滚) | Eq. 9 |
-| ⊙ | token-wise 矩阵 - 向量乘法 | 逐 token 应用变换 |
+| $\odot$   | token-wise 矩阵 - 向量乘法 | 逐 token 应用变换 |
 
 **直觉**: 传统方法对整个图像应用同一个相机编码，UCPE 对每个像素应用其对应光线的独立编码——这就像从"给整个房间贴一个标签"变成"给房间里每个物体贴独立标签"，精度自然更高。
 
@@ -137,23 +137,23 @@ Lat_t = arctan2(-d_t,y, sqrt(d_t,x^2 + d_t,z^2))
 
 **步骤 1: 计算单像素的光线**
 - 像素坐标 (u,v) = (416, 240)（图像中心）
-- 通过 UCM 反投影得到相机坐标系光线 d_cam = [0, 0, 1]^T（正前方）
-- 相机位姿 R = I, t = [0, 0, 0]^T（原点）
-- 世界空间光线 d = R·d_cam = [0, 0, 1]^T
+- 通过 UCM 反投影得到相机坐标系光线 $d_{\text{cam}} = [0, 0, 1]^T$（正前方）  
+- 相机位姿 $R = I$, $t = [0, 0, 0]^T$（原点）  
+- 世界空间光线 $d = R \cdot d_{\text{cam}} = [0, 0, 1]^T$  
 
 **步骤 2: 构建局部射线坐标系**
-- z_t = d = [0, 0, 1]^T
-- 相机向下方向 y_cam = [0, 1, 0]^T（图像 y 轴向下）
-- x_t = y_cam × z_t = [1, 0, 0]^T
-- y_t = z_t × x_t = [0, 1, 0]^T
+- $z_t = d = [0, 0, 1]^T$  
+- 相机向下方向 $y_{\text{cam}} = [0, 1, 0]^T$（图像 $y$ 轴向下）  
+- $x_t = y_{\text{cam}} \times z_t = [1, 0, 0]^T$  
+- $y_t = z_t \times x_t = [0, 1, 0]^T$  
 - R_trw = [[1,0,0], [0,1,0], [0,0,1]] = I（此例中巧合为单位阵）
 
 **步骤 3: 应用 UCPE 到 attention**
-- Query 向量 Q_t ∈ R^d（假设 d=512）
+- Query 向量 $Q_t \in \mathbb{R}^d$（假设 $d = 512$）
 - D_t^Ray = I_(64) ⊗ T_trw = I_512（此例中）
-- D_t^RoPE 根据图像位置 (240, 416) 计算标准 RoPE
-- D_t^UCPE = blkdiag(I_256, RoPE_256)
-- 变换后 Query: Q'_t = (D_t^UCPE)^T ⊙ Q_t
+- $D_t^{\text{RoPE}}$ 根据图像位置 $(240, 416)$ 计算标准 RoPE
+- $D_t^{\text{UCPE}} = \operatorname{blkdiag}(I_{256}, \text{RoPE}_{256})$
+- 变换后 Query: $Q'_t = (D_t^{\text{UCPE}})^T \odot Q_t$
 
 **关键观察**: 对于图像边缘的像素（如鱼眼畸变区域），d_t 方向显著偏离针孔假设，R_trw 不再是单位阵，UCPE 会应用非平凡的几何变换——这正是它优于固定针孔编码的地方。
 
@@ -173,7 +173,7 @@ Lat_t = arctan2(-d_t,y, sqrt(d_t,x^2 + d_t,z^2))
 - Lat-Up map 为可选输入，若不需要绝对方向控制可省略
 
 **Trade-off**:
-- 压缩比 1/8（192×1 head）在效率与表达能力间最佳平衡（Table 1 ablation）
+- 压缩比 $1/8$（$192\times1$ head）在效率与表达能力间最佳平衡（Table 1 ablation）
 - Pre-Attn / Post-Attn 插入位置性能显著下降——并行架构是关键
 - 训练需相机标定数据，但推理时可泛化到未见过的相机配置（RealEstate10K 零样本验证）
 
@@ -184,10 +184,10 @@ Lat_t = arctan2(-d_t,y, sqrt(d_t,x^2 + d_t,z^2))
 | 属性 | 数值 |
 |------|------|
 | 视频片段数 | ~48k 训练 / 272 测试 |
-| 分辨率 | 480×832 @ 16fps |
+| 分辨率 | $480\times832$ @ 16fps |
 | 帧数/片段 | 81 帧 |
 | 相机类型覆盖 | 针孔 (90°-110°) / 广角 (110°-140°) / 鱼眼 (140°-180°) / 极限鱼眼 (160°-200°) |
-| 畸变参数 ξ | 0.0 (针孔) 到 2.3 (极限鱼眼) |
+| 畸变参数 $\xi$ | 0.0 (针孔) 到 2.3 (极限鱼眼) |
 | 数据来源 | 360° 全景视频 + CameraBench 运动轨迹迁移 |
 
 **构建流程**:

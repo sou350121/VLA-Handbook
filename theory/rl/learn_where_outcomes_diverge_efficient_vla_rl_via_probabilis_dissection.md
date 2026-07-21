@@ -4,13 +4,13 @@
 >
 > **论文**: Learn Where Outcomes Diverge: Efficient VLA RL via Probabilistic Chunk Masking
 > **链接**: https://arxiv.org/abs/2605.16154
-> **核心定位**: 解决 GRPO-based VLA RL 后训练中梯度计算占 78% 时间却大量浪费在"已学会阶段"的痛点，提出 Probabilistic Chunk Masking (PCM)——仅对结果发散的关键分块计算梯度，实现 2.38× 墙钟加速而不损失最终成功率。
+> **核心定位**: 解决 GRPO-based VLA RL 后训练中梯度计算占 $78\%$ 时间却大量浪费在"已学会阶段"的痛点，提出 Probabilistic Chunk Masking (PCM)——仅对结果发散的关键分块计算梯度，实现 $2.38\times$ 墙钟加速而不损失最终成功率。
 
 ## ⚡ 快速判斷（30 秒讀完這段就夠了）
 
 | 維度 | 判斷 |
 |------|------|
-| 核心結論 | PCM 通过概率分块掩码，仅对 <20% 的 trajectory chunks 计算梯度，在 LIBERO 上达到与全量 GRPO 相同的最终成功率，同时实现 2.38× 墙钟加速、4.8× 梯度更新加速、60% 激活内存降低 |
+| 核心結論 | PCM 通过概率分块掩码，仅对 $<20\%$ 的 trajectory chunks 计算梯度，在 LIBERO 上达到与全量 GRPO 相同的最终成功率，同时实现 $2.38\times$ 墙钟加速、$4.8\times$ 梯度更新加速、$60\%$ 激活内存降低 |
 | 適合精讀 | 如果你在研究 VLA 模型的 RL 后训练加速、GRPO 优化、或具身智能系统的训练效率问题，重点看 §4（方法论）和 §5.2（RQ4 消融分析） |
 | 可以跳過 | 如果你只关心世界模型加速 rollout 收集或奖励设计，这篇距离中等——它解决的是梯度计算分配问题 |
 | 落地可行性 | 高——drop-in 修改 GRPO，无需 reward model 或 critic，只需 gripper 轨迹做 phase 标注 |
@@ -38,7 +38,7 @@
 | Phase 感知 | 无——所有 phase 一视同仁 | 有——基于 Cc 成功-失败动作方差 |
 | 代理模型 | 不需要 | 不需要（零额外模型） |
 | 激活内存 | 10.1 GB | 4.1 GB（降低 60%） |
-| 梯度更新速度 | 基准 | 4.8× 更快 |
+| 梯度更新速度 | 基准 | $4.8\times$ 更快 |
 | 墙钟收敛时间 | 48.97h（均值） | 20.55h（均值） |
 | 最终成功率 | 45-51h 达 98% | 19-21h 达 98%（相同） |
 
@@ -48,7 +48,7 @@ PCM 的核心流程分为四步：
 
 1. **Phase 标注**：用夹爪闭合度 gf 将轨迹分为 5 个语义阶段（active-grip、pre-grasp、release-ramp、approach、tail）
 2. **代理信号计算**：计算每 phase 的成功-失败动作方差 Cc = ||E[a|成功, phase=c] - E[a|失败, phase=c]||
-3. **概率分配**：基于 Cc 计算 keep probability pc = max(pmin, ρ~c)，pmin=0.1 保底
+3. **概率分配**：基于 $C_c$ 计算 keep probability $p_c = \max(p_{\min}, \rho^c)$，$p_{\min}=0.1$ 保底
 4. **固定预算采样**：每条轨迹采样 B=12 个 chunks，未选中的从 backward pass 中物理移除
 
 ⚡ **Eureka Moment**：GRPO 的 learning signal 来自优势方差——只有成功和失败 rollouts 分化的 phase 才产生学习信号；用 rollout 中已有的成功-失败动作差异 Cc 作为梯度方差的代理，就能知道该把梯度预算花在哪里，无需额外模型。
@@ -98,7 +98,7 @@ PCM 的核心流程分为四步：
 ```
 b_c* = B · N_c·√V_c / Σ_c' N_c'·√V_c'
 ```
-Neyman 分配：固定预算 B 下，每个 phase 分配的 chunks 数正比于该 phase 的 chunk 数 N_c 乘以梯度方差平方根 √V_c——方差大的 phase 获得更多梯度预算。
+Neyman 分配：固定预算 $B$ 下，每个 phase 分配的 chunks 数正比于该 phase 的 chunk 数 $N_c$ 乘以梯度方差平方根 $\sqrt{V_c}$——方差大的 phase 获得更多梯度预算。
 
 **目标**：最小化 GRPO 梯度估计量的方差（即估计梯度与真实梯度之间的噪声），在固定 chunk 预算 B 下实现更快的 SGD 收敛。
 
@@ -121,12 +121,12 @@ PCM 目标:    L_PCM(θ) = -E_i [Σ_{k∈K_i} A_i · logπ(a_i,k|s_i,k)]
 
 | 符号 | 含义 |
 |------|------|
-| π_θ | VLA 策略（OpenVLA-OFT 7B + LoRA） |
-| a_{i,k} | 轨迹 i 中 chunk k 的动作 tokens |
-| s_{i,k} | 轨迹 i 中 chunk k 的观测 |
+| $\pi_\theta$ | VLA 策略（OpenVLA-OFT 7B + LoRA） |
+| $a_{i,k}$ | 轨迹 i 中 chunk k 的动作 tokens |
+| $s_{i,k}$ | 轨迹 i 中 chunk k 的观测 |
 | r_i | 轨迹 i 的二元奖励（成功=1，失败=0） |
 | A_i | GRPO group-relative advantage |
-| φ(i,k) | chunk (i,k) 的 phase 标签 |
+| $\varphi(i,k)$ | chunk (i,k) 的 phase 标签 |
 | V_c | phase c 的梯度方差（不可直接观测） |
 | C_c | phase c 的成功-失败动作方差（可观测代理） |
 | B | 每条轨迹的 chunk 预算（默认 12） |
@@ -135,7 +135,7 @@ PCM 目标:    L_PCM(θ) = -E_i [Σ_{k∈K_i} A_i · logπ(a_i,k|s_i,k)]
 | p_min | 保底概率 0.1（防止 phase 被完全排除） |
 | T_rc | 分数刷新窗口 5 steps |
 
-> 符号与本文保持一致。L_PCM 省略了 1/p_c 的重要性权重，因此是有偏估计量，但在 p_c ∝ √V_c 的分配下，偏差被 (1-p_c)·‖g_c‖ 抑制——当 V_c 小时，‖g_c‖ 也小（Lemma 1），偏差可忽略。
+> 符号与本文保持一致。$L_{\text{PCM}}$ 省略了 $1/p_c$ 的重要性权重，因此是有偏估计量，但在 $p_c \propto \sqrt{V_c}$ 的分配下，偏差被 $(1-p_c)\cdot\Vert g_c\Vert$ 抑制——当 $V_c$ 小时，$\Vert g_c\Vert$ 也小（Lemma 1），偏差可忽略。
 
 ## 3. 带数字走一遍：玩具例子 (Worked Example)
 
@@ -177,17 +177,17 @@ b_tail         = 12 × 0.86/11.35 ≈ 0.9 → 1 chunk
 |---------|-------------|-----|------|
 | 激活内存 | 10.1 GB | 4.1 GB | 60% 降低，意味着单 GPU 可跑更大 batch 或更大模型 |
 | 峰值 GPU 内存 | 39.7 GB | 33.6 GB | 15% 降低，减少 OOM 风险 |
-| 梯度更新速度 | 基准 | 4.8× | 200 steps 累计 backprop 时间 |
+| 梯度更新速度 | 基准 | $4.8\times$ | 200 steps 累计 backprop 时间 |
 | 墙钟收敛 | 48.97h | 20.55h | 达到 98% SR 的总训练时间 |
 | 采样开销 | 无 | 极低 | 加权采样无放回计算量可忽略 |
 | Phase 标注开销 | 无 | 极低 | 仅基于 gripper-close fraction 阈值判断 |
-| 在线缓冲开销 | 无 | 极低 | 5 steps × 5 phases 的 C_c 数组 |
+| 在线缓冲开销 | 无 | 极低 | 5 steps $\times$ 5 phases 的 $C_c$ 数组 |
 
 **工程含义**：
 - **控制频率不变**：PCM 不改变 action chunk 的预测频率（仍为 L=8 steps/chunk），只改变训练时的梯度计算范围
 - **模块边界清晰**：phase labeling 仅依赖 gripper 轨迹，不侵入 VLA 模型本身；可视为训练 pipeline 的独立模块
 - **部署零成本**：PCM 纯训练时技术，推理时策略与 vanilla GRPO 训练的策略完全相同，无额外推理开销
-- **可扩展性**：在 2×H100 上验证，理论上可扩展到更大模型（7B→13B+）因为激活内存大幅降低
+- **可扩展性**：在 $2\times$H100 上验证，理论上可扩展到更大模型（7B→13B+）因为激活内存大幅降低
 
 ## 5. 数据与评测 (Data & Eval)
 
@@ -201,14 +201,14 @@ b_tail         = 12 × 0.86/11.35 ≈ 0.9 → 1 chunk
 **训练设置**（论文 §5.1）：
 - GRPO group size G=10 rollouts/prompt
 - LoRA fine-tuning（非全参数）
-- 2× NVIDIA H100 GPUs
+- $2\times$ NVIDIA H100 GPUs
 - 每 step 用 50 条 held-out validation rollouts 评估
 - 3 个随机种子平均
 
 **Phase 标注规则**（§5.1）：
-基于每 chunk 的 gripper-close fraction gf[j] ∈ [0,1]，5 个 phase：
-- active-grip: gf[j] ≥ 0.5（持续抓取和搬运）
-- pre-grasp: 持续闭合前最多 3 个 chunk（0.1 ≤ gf[j] < 0.5）
+基于每 chunk 的 gripper-close fraction gf[j] $\in [0,1]$，5 个 phase：
+- active-grip: gf[j] $\geq 0.5$（持续抓取和搬运）
+- pre-grasp: 持续闭合前最多 3 个 chunk（$0.1 \leq$ gf[j] $< 0.5$）
 - release-ramp: 持续闭合后最多 3 个 chunk
 - approach: 其余接触前 chunk
 - tail: 释放后开爪 chunk
@@ -217,7 +217,7 @@ b_tail         = 12 × 0.86/11.35 ≈ 0.9 → 1 chunk
 
 **评测指标**：
 - 成功率（SR）随训练 step 和墙钟时间的变化曲线
-- 达到 98%±0.02 SR 的墙钟时间
+- 达到 98%$\pm 0.02$ SR 的墙钟时间
 - 每 step 更新时间和峰值 GPU 内存
 
 ## 6. 能力与失败模式 (Capabilities & Failure Modes)
@@ -226,9 +226,9 @@ b_tail         = 12 × 0.86/11.35 ≈ 0.9 → 1 chunk
 
 | 场景 | 能力 | 证据 |
 |------|------|------|
-| LIBERO-Object 单臂桌面操作 | 2.38× 加速到 98% SR | Table 1: 45.78→19.23h |
-| LIBERO-Goal 任务迁移 | 2.42× 加速 | Table 1: 51.25→21.18h |
-| LIBERO-Spatial 空间迁移 | 2.35× 加速 | Table 1: 49.89→21.23h |
+| LIBERO-Object 单臂桌面操作 | 2.38$\times$ 加速到 98% SR | Table 1: 45.78$\to$19.23h |
+| LIBERO-Goal 任务迁移 | 2.42$\times$ 加速 | Table 1: 51.25$\to$21.18h |
+| LIBERO-Spatial 空间迁移 | 2.35$\times$ 加速 | Table 1: 49.89$\to$21.23h |
 | 自适应学习信号跟踪 | 随训练自动调整 phase 预算分配 | Fig 6: approach/release-ramp 分配递减 |
 | 探索-利用平衡 | p_min=0.1 防止 phase 被永久排除 | §4.4 + RQ4 消融 |
 
@@ -248,13 +248,13 @@ b_tail         = 12 × 0.86/11.35 ≈ 0.9 → 1 chunk
 
 1. **Phase 可定义**：假设轨迹可以被一致的语义 phase 划分。当前用 gripper 轨迹做确定性标注，但对无夹爪机器人（如轮式移动机器人）或连续控制任务，phase 定义不明确。论文 §6 承认这一点。
 
-2. **Cc 是 V_c 的充分代理**：Lemma 2 给出 V_c ≥ C_c²/(4σ_π²) 的下界，但这是局部高斯假设下的结果。如果策略分布高度非高斯（如多模态），Cc 可能无法完全捕捉梯度方差的排序。
+2. **Cc 是 V_c 的充分代理**：Lemma 2 给出 $V_c \geq C_c^2/(4\sigma_\pi^2)$ 的下界，但这是局部高斯假设下的结果。如果策略分布高度非高斯（如多模态），Cc 可能无法完全捕捉梯度方差的排序。
 
-3. **二元奖励足够**：Cc 的计算依赖二元奖励 r_i ∈ {0,1} 来区分成功/失败轨迹。对于连续奖励或稀疏奖励场景，Cc 的定义需要修改。
+3. **二元奖励足够**：Cc 的计算依赖二元奖励 $r_i \in \{0,1\}$ 来区分成功/失败轨迹。对于连续奖励或稀疏奖励场景，Cc 的定义需要修改。
 
 4. **仿真到真实的 gap 不大**：LIBERO 仿真环境中的 phase 动力学可能与真实机器人不同（如摩擦、迟滞、传感器噪声），影响 C_c 的可靠性。
 
-5. **偏差-方差权衡的乐观估计**：L_PCM 是有偏估计量（省略 1/p_c 重要性权重），论文论证偏差被 (1-p_c)·‖g_c‖ 抑制，但这依赖于 V_c 小 → ‖g_c‖ 小的假设。如果某个低 V_c phase 实际上对长期信用分配很重要（如 approach phase 决定了能否到达抓取位置），偏差可能累积。
+5. **偏差-方差权衡的乐观估计**：$L_{\text{PCM}}$ 是有偏估计量（省略 $1/p_c$ 重要性权重），论文论证偏差被 $(1-p_c)\cdot\Vert g_c\Vert$ 抑制，但这依赖于 $V_c$ 小 $\to \Vert g_c\Vert$ 小的假设。如果某个低 $V_c$ phase 实际上对长期信用分配很重要（如 approach phase 决定了能否到达抓取位置），偏差可能累积。
 
 ## 7. 与相关工作对比 (Comparison)
 
@@ -277,7 +277,7 @@ b_tail         = 12 × 0.86/11.35 ≈ 0.9 → 1 chunk
 
 **值得精讀原文的人**：
 - 做 VLA 模型 RL 后训练的研究者——PCM 是首个在 phase 粒度做梯度分配的工作，直接降低训练成本
-- 评估 GRPO 在具身智能中规模化可行性的工程师——2.38× 加速意味着同样的 compute 预算可以训练更多任务
+- 评估 GRPO 在具身智能中规模化可行性的工程师——2.38$\times$ 加速意味着同样的 compute 预算可以训练更多任务
 - 对 Neyman allocation 在 RL 中应用感兴趣的研究者——Theorem 1 的推导简洁且有理论保证
 
 **建議章節路徑**：

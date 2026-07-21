@@ -34,7 +34,7 @@
 |------|----------------------|---------------------------|---------------|-----------|
 | **角色** | 高层决策：潜在世界建模 | 低层执行：潜在逆动力学 | 编码器+动作预测一体 | 文本/代码规划 + 独立控制器 |
 | **输入** | 语言指令 l_t + 当前视觉 o_t | 潜在意图 x_t + 当前视觉 o_t + 本体感知 q_t | 视觉+语言特征 | 视觉+语言指令 |
-| **输出** | 潜在预见 x_t ∈ R^(N×d) | 动作块 A_t (H=16 或 50 步) | 离散 token 或连续动作 | 文本子任务/代码 |
+| **输出** | 潜在预见 $x_t \in \mathbb{R}^{(N \times d)}$ | 动作块 A_t (H=16 或 50 步) | 离散 token 或连续动作 | 文本子任务/代码 |
 | **核心组件** | Qwen2.5-VL-3B + N=64 可学习 query + MLP head | 4-layer self-attention + 16-layer DiT + flow matching | VLM backbone + 动作头 | LLM/VLM + 策略网络 |
 | **训练方式** | L_world (MSE 对齐未来特征) | L_fm (flow matching 速度场回归) | 端到端动作监督 | 两阶段，非可微接口 |
 | **可微分性** | ✅ 端到端可微 | ✅ 端到端可微 | ✅ 可微但易崩溃 | ❌ 非可微接口 |
@@ -112,14 +112,14 @@ L_total = L_world + L_fm
 | 符号 | 含义 | 维度 |
 |------|------|------|
 | l_t | 语言指令 | 文本 |
-| o_t | 当前视觉观测 | 224×224 图像 |
+| o_t | 当前视觉观测 | $224 \times 224$ 图像 |
 | q_t | 本体感知状态 | 47D (仿真) / 50D (真实) |
-| x_t | 潜在意图/预见 | R^(N×d), N=64 |
-| A_t | 动作块 | R^(H×action_dim), H=16/50 |
+| x_t | 潜在意图/预见 | $\mathbb{R}^{(N \times d)}$, $N=64$ |
+| A_t | 动作块 | $\mathbb{R}^{(H \times \text{action\_dim})}$, $H=16/50$ |
 | H | 预测视界 | 16 步 (常规) / 50 步 (多阶段) |
-| τ | flow matching 时间变量 | U[0,1] |
-| ε | 高斯噪声 | N(0,I) |
-| V_θ | 速度场网络 | DiT 输出 |
+| $\tau$ | flow matching 时间变量 | U[0,1] |
+| $\varepsilon$ | 高斯噪声 | N(0,I) |
+| $V_\theta$ | 速度场网络 | DiT 输出 |
 
 > 符号与论文保持一致。Enc_ViT 是共享的冻结 ViT 编码器。
 
@@ -131,18 +131,18 @@ L_total = L_world + L_fm
 
 **Step 1 — System-2 生成潜在意图**：
 - 输入：指令 "把杯子放到盒子里" + 当前观测 o_t（杯子在 A 处，盒子在 B 处）
-- ViT 编码 o_t → 64 个 patch 特征
-- 64 个可学习 query 经过 LLM 处理，MLP head 投影 → x_t ∈ R^(64×d)
-- 目标：Enc_ViT(o_{t+H})，即 H=16 步后杯子已在盒子里的视觉特征
+- ViT 编码 $o_t$ → 64 个 patch 特征
+- 64 个可学习 query 经过 LLM 处理，MLP head 投影 → $x_t \in \mathbb{R}^{(64 \times d)}$
+- 目标：$\text{Enc\_ViT}(o_{t+H})$，即 $H=16$ 步后杯子已在盒子里的视觉特征
 - L_world = ||x_t - Enc_ViT(o_{t+H})||^2 = 0.05（预热阶段结束时）
 
 **Step 2 — System-1 计算动作**：
 - 输入：x_t（未来意图）+ Enc_ViT(o_t)（当前观测）+ q_t（当前关节角度 47D）
 - 4-layer self-attention 融合当前特征和意图 → 融合表征
-- DiT 接收融合表征 + 噪声动作 A_t^τ + q_t token
-- flow matching 时间 τ=0.3，噪声 ε ~ N(0,I)
-- 插值路径：A_t^τ = 0.3·A_t + 0.7·ε
-- 速度场预测 V_θ ≈ (A_t - ε) = 目标方向
+- DiT 接收融合表征 + 噪声动作 $A_t^\tau$ + $q_t$ token
+- flow matching 时间 $\tau=0.3$，噪声 $\varepsilon \sim \mathcal{N}(0,I)$
+- 插值路径：$A_t^\tau = 0.3 \cdot A_t + 0.7 \cdot \varepsilon$
+- 速度场预测 $V_\theta \approx (A_t - \varepsilon) = $ 目标方向
 - L_fm = ||V_θ - (A_t - ε)||^2 = 0.02
 
 **Step 3 — 端到端梯度流**：

@@ -13,11 +13,11 @@
 | 核心結論 | 用组合世界模型（Dynamics + Value）替代真实环境做 on-policy RL，VLA 策略可在想象空间中持续自改进 |
 | 適合精讀 | 做 VLA/具身智能 RL 微调的研究者；需要解决 contact-rich 任务失败恢复问题的工程师 |
 | 可以跳過 | 只关心纯仿真环境 RL（LIBERO 等）或纯 IL/VLA 预训练的人 |
-| 落地可行性 | 中（需大规模预训练 world model：16×H100×7天 + 8×H100×3天；但推理零开销） |
+| 落地可行性 | 中（需大规模预训练 world model：$16\times\text{H100}\times7$天 + $8\times\text{H100}\times3$天；但推理零开销） |
 | 主要風險 | 世界模型的误差累积限制连续想象步数（最多 2 步）；泛化到未见任务/机器人平台未验证 |
 
 💡 **X-Ray 开场**
-VLA 模型（如 OpenVLA、π₀.₅）在预训练时学到了广泛的语义理解，但在接触丰富任务（如动态分拣、背包整理）中，微小的执行偏差会累积成失败。传统的真实世界 RL 因为安全、硬件成本和重置困难而难以规模化。RISE 的核心发现是：一个分解为"动力学预测"和"价值评估"两个模块的组合世界模型，可以在想象空间中生成带 advantage 信号的 on-policy 数据，让 VLA 策略在不接触真实环境的情况下持续改进。对 VLA 研究者意味着——世界模型可以成为真实 RL 的可扩展替代品，而不只是可视化或规划工具。
+VLA 模型（如 OpenVLA、$\pi_{0.5}$）在预训练时学到了广泛的语义理解，但在接触丰富任务（如动态分拣、背包整理）中，微小的执行偏差会累积成失败。传统的真实世界 RL 因为安全、硬件成本和重置困难而难以规模化。RISE 的核心发现是：一个分解为"动力学预测"和"价值评估"两个模块的组合世界模型，可以在想象空间中生成带 advantage 信号的 on-policy 数据，让 VLA 策略在不接触真实环境的情况下持续改进。对 VLA 研究者意味着——世界模型可以成为真实 RL 的可扩展替代品，而不只是可视化或规划工具。
 
 📍 **研究全景时间线**
 ```
@@ -35,9 +35,9 @@ VLA 模型（如 OpenVLA、π₀.₅）在预训练时学到了广泛的语义�
 
 | 组件 | 基础架构 | 输入 | 输出 | 训练数据 | 训练开销 | 推理开销 |
 |------|----------|------|------|----------|----------|----------|
-| **Dynamics Model (𝒟)** | Genie Envisioner (LTX-Video) + 轻量 action encoder | 历史多视图观测 Oₜ + 动作序列 aₜ | H 步未来多视图观测 {ôₜ₊₁, ..., ôₜ₊H} | Agibot World + Galaxea（大规模机器人数据） | 预训练 16×H100×7天；微调 8×H100×3天 | <2秒生成 25 帧多视图（比 Cosmos 快 300×） |
-| **Value Model (𝒱)** | π₀.₅ VLA backbone（冻结/微调） | 单帧多视图观测 ôₜ + 语言指令 ℓ | 标量价值分数 V(ôₜ, ℓ) ∈ [0,1] | 任务特定离线数据（成功+失败） | 8×H100×1天（50k steps） | 前向传播一次（毫秒级） |
-| **Policy (π)** | π₀.₅ VLA（flow-matching） | 观测 oₜ + 指令 ℓ + advantage 离散 bin | 动作序列 aₜ（chunk length H） | 离线数据 warm-up + 想象 rollout 自改进 | warm-up + 10k steps self-improving，8×H100 | 与 π₀.₅ 相同（world model 不参与推理） |
+| **Dynamics Model (𝒟)** | Genie Envisioner (LTX-Video) + 轻量 action encoder | 历史多视图观测 $O_t$ + 动作序列 $a_t$ | $H$ 步未来多视图观测 $\{\hat{o}_{t+1}, ..., \hat{o}_{t+H}\}$ | Agibot World + Galaxea（大规模机器人数据） | 预训练 $16\times\text{H100}\times7$天；微调 $8\times\text{H100}\times3$天 | <2秒生成 25 帧多视图（比 Cosmos 快 $300\times$） |
+| **Value Model (𝒱)** | $\pi_{0.5}$ VLA backbone（冻结/微调） | 单帧多视图观测 $\hat{o}_t$ + 语言指令 $\ell$ | 标量价值分数 $V(\hat{o}_t, \ell) \in [0,1]$ | 任务特定离线数据（成功+失败） | $8\times\text{H100}\times1$天（50k steps） | 前向传播一次（毫秒级） |
+| **Policy (π)** | $\pi_{0.5}$ VLA（flow-matching） | 观测 $o_t$ + 指令 $\ell$ + advantage 离散 bin | 动作序列 $a_t$（chunk length $H$） | 离线数据 warm-up + 想象 rollout 自改进 | warm-up + 10k steps self-improving，8×H100 | 与 $\pi_{0.5}$ 相同（world model 不参与推理） |
 
 ### 1.2 关键机制 (Key Mechanism)
 
@@ -46,7 +46,7 @@ VLA 模型（如 OpenVLA、π₀.₅）在预训练时学到了广泛的语义�
 传统世界模型试图用一个模型同时完成"预测未来"和"评估好坏"两件事。RISE 的核心洞察是这两个子问题需要完全不同的架构和训练目标：
 
 - **Dynamics 需要速度和可控性**：用视频扩散模型（Genie Envisioner），优化生成速度（<2秒/25帧）和对动作的条件控制能力
-- **Value 需要判断力**：用 VLA backbone（π₀.₅），它已经具有机器人中心的理解力，天然适合做多视图输入的价值评估
+- **Value 需要判断力**：用 VLA backbone（$\pi_{0.5}$），它已经具有机器人中心的理解力，天然适合做多视图输入的价值评估
 
 分解后，每个模块可以用最适合的架构和优化目标独立训练，互不干扰。
 
@@ -153,7 +153,7 @@ A(oₜ, aₜ, ℓ) = (1/H) · Σ[k=1→H] V(ôₜ₊k, ℓ) − V(oₜ, ℓ)
 训练数据混合：想象 rollout + 离线标注数据（防 catastrophic forgetting）
 ```
 
-> 符号与本文保持一致：𝒟 = dynamics model, 𝒱 = value model, π = policy, H = action chunk length, N = history window length, ℓ = language instruction。
+> 符号与本文保持一致：$\mathcal{D} = \text{dynamics model}$, $\mathcal{V} = \text{value model}$, $\pi = \text{policy}$, $H = \text{action chunk length}$, $N = \text{history window length}$, $\ell = \text{language instruction}$。
 
 ## 3. 带数字走一遍：玩具例子 (Worked Example)
 
@@ -215,15 +215,15 @@ Advantage = −0.03，策略学到这是差动作。通过大量这样的正/负
 | **任务微调** | 8×H100 × 3天（dynamics FT）+ 8×H100 × 1天（value FT） | 每个新任务需要 |
 | **策略 warm-up** | 8×H100，batch=64 | 离线数据微调，类似 RECAP |
 | **自改进循环** | 8×H100，batch=64，~10k steps | 纯在想象空间中，不需要真实交互 |
-| **Dynamics 推理延迟** | <2秒生成 25 帧多视图 | 比 Cosmos（>10分钟）快 300×，这是 RL 可扩展的关键 |
+| **Dynamics 推理延迟** | <2秒生成 25 帧多视图 | 比 Cosmos（>10分钟）快 $300\times$，这是 RL 可扩展的关键 |
 | **连续想象步数** | 最多 2 步（从每个离线状态出发） | 受限于视频生成模型的误差累积 |
-| **推理开销** | 零（world model 不参与推理） | 部署时只需要 policy π，world model 仅在训练时使用 |
+| **推理开销** | 零（world model 不参与推理） | 部署时只需要 policy $\pi$，world model 仅在训练时使用 |
 
 **工程含义**：
 - World model 的训练成本不低（总计约 11 天×16 H100），但这是**一次性投入**，dynamics model 预训练后可跨多个任务微调
 - 每个任务的完整流程（world model FT + policy warm-up + self-improving）约需 5-6 天×8 H100
 - 关键 trade-off：想象步数限制在 2 步内，意味着每个 rollout 只能探索有限状态空间，需要更多初始状态来覆盖
-- 部署友好：推理时 world model 完全不参与，策略的 inference cost 与 π₀.₅ 完全相同
+- 部署友好：推理时 world model 完全不参与，策略的 inference cost 与 $\pi_{0.5}$ 完全相同  
 
 ## 5. 数据与评测 (Data & Eval)
 
@@ -240,18 +240,18 @@ Advantage = −0.03，策略学到这是差动作。通过大量这样的正/负
 | 任务 | 难度特征 | 挑战 |
 |------|----------|------|
 | **Dynamic Brick Sorting** | 动态 + 接触丰富 | 从移动传送带上精确抓取彩色砖块并分类 |
-| **Backpack Packing** | 长程 + 柔性物体 | 打开背包 → 放入衣服 → 提起 → 拉拉链 |
+| **Backpack Packing** | 长程 + 柔性物体 | 打开背包 → 放入衣服 → 提起 → 拉拉链   |
 | **Box Closing** | 精确双臂协调 | 折叠盒盖并将卡扣精确插入盒子 |
 
 ### 5.3 主要结果（论文 Table I）
 
 | 方法 | Dynamic Brick Sorting | Backpack Packing | Box Closing |
 |------|----------------------|------------------|-------------|
-| π₀.₅ (baseline) | 基线 | 基线 | 基线 |
-| π₀.₅ + DAgger | 有提升 | 有提升 | 有提升 |
-| π₀.₅ + PPO | 有限提升 | 有限提升 | 有限提升 |
-| π₀.₅ + DSRL | 中等提升 | 中等提升 | 中等提升 |
-| RECAP (π₀.₅) | 较强提升 | 较强提升 | 较强提升 |
+| $\pi_{0.5}$ (baseline)   | 基线 | 基线 | 基线 |
+| $\pi_{0.5}$ + DAgger   | 有提升 | 有提升 | 有提升 |
+| $\pi_{0.5}$ + PPO   | 有限提升 | 有限提升 | 有限提升 |
+| $\pi_{0.5}$ + DSRL   | 中等提升 | 中等提升 | 中等提升 |
+| RECAP ($\pi_{0.5}$)   | 较强提升 | 较强提升 | 较强提升 |
 | **RISE (Ours)** | **+35% 绝对提升** | **+45% 绝对提升** | **+35% 绝对提升** |
 
 > 数据来源：论文 Table I + 项目页。RISE 在所有三个任务上显著超越所有基线。
@@ -265,7 +265,7 @@ Advantage = −0.03，策略学到这是差动作。通过大量这样的正/负
 | **接触丰富任务改进** | 动态分拣、背包整理 | World model 能模拟接触状态变化，value model 能区分成功/失败接触 |
 | **长程任务恢复** | 背包打包（4 个子任务） | TD learning 让价值函数对中间失败敏感，advantage 信号引导恢复 |
 | **双臂精确协调** | 盒子关闭 | 多视图输入提供充足的空间信息，value model 能评估精度 |
-| **自纠错** | 执行偏差后的恢复 | 想象空间中探索失败路径 → 学到纠正动作 |
+| **自纠错** | 执行偏差后的恢复 | 想象空间中探索失败路径 → 学到纠正动作   |
 
 ### 6.2 失败模式
 
@@ -281,16 +281,16 @@ Advantage = −0.03，策略学到这是差动作。通过大量这样的正/负
 1. **世界模型的视觉保真度足够支撑价值判断**：假设动力学模型生成的想象帧在视觉和语义上足够准确，让价值模型能做出可靠评估。但如果生成帧出现细微失真（如物体位置偏差几像素），价值评估可能严重偏差。
 2. **优势信号在离散化后仍保留足够信息**：advantage 被离散化为 N 个 uniform bins。如果 bin 数量不足，可能丢失关键的细微差异信号。
 3. **offline data 的质量决定上限**：warm-up 阶段依赖任务特定的离线数据（专家演示 + rollout）。如果离线数据覆盖不足，想象空间中的探索可能无法突破数据分布的限制。
-4. **价值模型的多视图兼容性**：假设从 π₀.₅ 初始化的价值模型能自然地处理多视图输入。但 π₀.₅ 的多视图能力本身可能有限，这会影响价值评估质量。
+4. **价值模型的多视图兼容性**：假设从 $\pi_{0.5}$ 初始化的价值模型能自然地处理多视图输入。但 $\pi_{0.5}$ 的多视图能力本身可能有限，这会影响价值评估质量。  
 
 ## 7. 与相关工作对比 (Comparison)
 
 | 方法 | 核心思路 | 数据来源 | 是否需真实交互 | 优势 | 局限 |
 |------|----------|----------|----------------|------|------|
-| **π₀.₅ + IL** | 纯模仿学习 | 专家演示 | 否 | 简单，无需奖励设计 | exposure bias，无法恢复偏差 |
-| **π₀.₅ + DAgger** | 在线人工矫正 | 演示 + 人工干预 | 是 | 缓解 exposure bias | 需要持续人工参与，不扩展 |
-| **π₀.₅ + PPO** | 真实世界 on-policy RL | 真实交互 | 是 | 理论上最优 | 硬件成本高，安全风险，重置困难 |
-| **π₀.₅ + DSRL** | 冻结 VLA + 优化扩散噪声 | 离线数据 | 否 | 样本高效 | 受离线数据分布限制 |
+| **$\pi_{0.5}$ + IL**   | 纯模仿学习 | 专家演示 | 否 | 简单，无需奖励设计 | exposure bias，无法恢复偏差 |
+| **$\pi_{0.5}$ + DAgger**   | 在线人工矫正 | 演示 + 人工干预 | 是 | 缓解 exposure bias | 需要持续人工参与，不扩展 |
+| **$\pi_{0.5}$ + PPO**   | 真实世界 on-policy RL | 真实交互 | 是 | 理论上最优 | 硬件成本高，安全风险，重置困难 |
+| **$\pi_{0.5}$ + DSRL**   | 冻结 VLA + 优化扩散噪声 | 离线数据 | 否 | 样本高效 | 受离线数据分布限制 |
 | **RECAP** | advantage-conditioned offline RL | 离线数据 | 否 | 利用 advantage 信号 | 受离线数据 distribution shift 限制 |
 | **RISE (Ours)** | 组合世界模型做想象 RL | 离线 + 想象 rollout | 否（仅训练时） | 突破离线数据限制，on-policy 想象 | world model 训练成本高，泛化未验证 |
 
@@ -311,7 +311,7 @@ Advantage = −0.03，策略学到这是差动作。通过大量这样的正/负
 
 - **不值得精讀的理由**：
   - 如果你不做机器人学习（只关注纯视觉/语言任务），这篇的方法论距离较远
-  - 如果你已经熟悉 π₀.₆* 的 probabilistic inference 框架和 RECAP，核心创新主要在 world model 的组合设计上，RL 部分相对标准
+  - 如果你已经熟悉 $\pi_{0.6}^*$ 的 probabilistic inference 框架和 RECAP，核心创新主要在 world model 的组合设计上，RL 部分相对标准  
 
 ---
-[← Back to Theory](./README.md)
+[← Back to Theory](./README.md)  

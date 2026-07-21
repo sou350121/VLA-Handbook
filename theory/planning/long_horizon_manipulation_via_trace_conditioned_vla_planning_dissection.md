@@ -10,7 +10,7 @@
 
 | 維度 | 判斷 |
 |------|------|
-| 核心結論 | 解耦的 task manager + trace-conditioned VLA executor 在长视界任务上显著优于单体 VLA（π₀.₅） |
+| 核心結論 | 解耦的 task manager + trace-conditioned VLA executor 在长视界任务上显著优于单体 VLA（$\pi_{0.5}$）   |
 | 適合精讀 | 做多步操作规划、VLA 架构设计、receding-horizon 控制的研究者和工程师 |
 | 可以跳過 | 只关心单步抓取/放置、或只关注 VLA 底层动作建模的人 |
 | 落地可行性 | 中（需 fine-tune executor 适配 trace 渲染，manager 可直接用 Qwen3-VL 微调） |
@@ -35,14 +35,14 @@
 LoHo-Manip 是一个双层架构：
 
 - **高层 Task Manager**：VLM（基于 Qwen3-VL），负责从当前观测 + 文本进度记忆预测 remaining plan + visual trace
-- **低层 Executor**：VLA（基于 π₀.₅），负责根据 trace 渲染图 + 子任务文本执行短视界控制
+- **低层 Executor**：VLA（基于 $\pi_{0.5}$），负责根据 trace 渲染图 + 子任务文本执行短视界控制  
 
 ### 1.1 系统对比概览 (System Component Comparison)
 
 | 维度 | Task Manager | Executor (VLA) |
 |------|-------------|----------------|
-| **基座模型** | Qwen3-VL（视觉编码器冻结，LM 微调） | π₀.₅（从基座 checkpoint fine-tune） |
-| **输入** | 当前帧 + 指令 + 已完成文本摘要 Cₜ | 当前帧（含 trace 渲染叠加）+ 子任务文本 |
+| **基座模型** | Qwen3-VL（视觉编码器冻结，LM 微调） | $\pi_{0.5}$（从基座 checkpoint fine-tune） |
+| **输入** | 当前帧 + 指令 + 已完成文本摘要 $C_t$ | 当前帧（含 trace 渲染叠加）+ 子任务文本 |
 | **输出** | (1) 已完成/剩余子任务序列 (2) 2D keypoint trace | 短视界机器人动作序列 |
 | **训练数据** | Bridge 子集 + RoboVQA + EgoPlan-BenchIT + 合成失败恢复样本 | Bridge 子集 + trace 渲染监督 |
 | **调用频率** | 每步或固定间隔（receding-horizon） | 每步（高频控制） |
@@ -102,24 +102,24 @@ Executor:  aₜ = f_VLA(oₜ ⊕ render(τₜ), sₜ)
 System:    oₜ₊₁ = Env(oₜ, aₜ)  →  loop
 ```
 
-**目标**：将长视界任务 S̄ = [s̄⁽¹⁾, ..., s̄⁽ᴷ⁾] 的执行，分解为 K 个短视界子任务的序列执行，每一步通过 receding-horizon 预测保证进度自追踪。
+**目标**：将长视界任务 $\bar{S} = [\bar{s}^{(1)}, \dots, \bar{s}^{(K)}]$ 的执行，分解为 $K$ 个短视界子任务的序列执行，每一步通过 receding-horizon 预测保证进度自追踪。
 
 **变量说明**：
 
 | 符号 | 含义 |
 |------|------|
-| oₜ | 当前观测帧（RGB 图像） |
+| $o_t$ | 当前观测帧（RGB 图像） |
 | x | 任务指令（自然语言） |
-| Cₜ | 已完成子任务序列（文本记忆） |
-| Rₜ | 剩余子任务序列（manager 预测） |
-| τₜ | 2D keypoint trace = {pₜ, pₜ₊₁, ..., pₜₑ} |
-| pₜ | t 时刻机械臂末端执行器 2D 像素坐标 |
-| sₜ | 当前子任务文本（Rₜ 的第一个元素） |
-| ⊕ | trace 渲染叠加操作 |
+| $C_t$ | 已完成子任务序列（文本记忆） |
+| $R_t$ | 剩余子任务序列（manager 预测） |
+| $\tau_t$ | 2D keypoint trace = $\{p_t, p_{t+1}, \dots, p_{t_e}\}$ |
+| $p_t$ | t 时刻机械臂末端执行器 2D 像素坐标 |
+| $s_t$ | 当前子任务文本（$R_t$ 的第一个元素） |
+| $\oplus$ | trace 渲染叠加操作 |
 
-> 符号与本文保持一致：Cₜ 表示 completed prefix，Rₜ 表示 remaining suffix，τₜ 表示 visual trace。
+> 符号与本文保持一致：$C_t$ 表示 completed prefix，$R_t$ 表示 remaining suffix，$\tau_t$ 表示 visual trace。
 
-**直觉**：Manager 是一个从 (观测, 指令, 历史摘要) → (剩余计划, 空间轨迹) 的映射函数。Executor 是一个从 (观测+轨迹叠加, 子任务) → 动作的映射函数。两者的耦合仅通过 τₜ 这一 2D keypoint 序列实现，保持了最大模块独立性。
+**直觉**：Manager 是一个从 (观测, 指令, 历史摘要) $\to$ (剩余计划, 空间轨迹) 的映射函数。Executor 是一个从 (观测+轨迹叠加, 子任务) $\to$ 动作的映射函数。两者的耦合仅通过 $\tau_t$ 这一 2D keypoint 序列实现，保持了最大模块独立性。
 
 ## 3. 带数字走一遍：玩具例子 (Worked Example)
 
@@ -127,26 +127,26 @@ System:    oₜ₊₁ = Env(oₜ, aₜ)  →  loop
 
 **Step 0**：
 - Manager 输入：(o₀, "把玉米放进碗里，把寿司放进容器", C₋₁=[])
-- Manager 输出：R₀ = ["grab corn", "place corn in bowl", "grab sushi", "place sushi in container"]
-- Manager 输出：τ₀ = [p₀, p₁, p₂, p₃]（指向玉米的 4 个 keypoint 轨迹）
-- Executor 执行：跟随 τ₀，抓取玉米
+- Manager 输出：$R_0 = [\text{"grab corn"}, \text{"place corn in bowl"}, \text{"grab sushi"}, \text{"place sushi in container"}]$
+- Manager 输出：$\tau_0 = [p_0, p_1, p_2, p_3]$（指向玉米的 4 个 keypoint 轨迹）
+- Executor 执行：跟随 $\tau_0$，抓取玉米
 
 **Step 1**（假设抓取成功）：
-- Manager 输入：(o₁, x, C₀=["grab corn"])
-- Manager 输出：R₁ = ["place corn in bowl", "grab sushi", "place sushi in container"]
-- Manager 输出：τ₁ = [p₁, p₂, p₃]（指向碗的轨迹）
-- Executor 执行：跟随 τ₁，放置玉米
+- Manager 输入：$(o_1, x, C_0=["grab corn"])$
+- Manager 输出：$R_1 = ["place corn in bowl", "grab sushi", "place sushi in container"]$
+- Manager 输出：$\tau_1 = [p_1, p_2, p_3]$（指向碗的轨迹）
+- Executor 执行：跟随 $\tau_1$，放置玉米
 
 **Step 2**（假设抓取寿司时抓错了，抓到了寿司而非玉米——这是论文 Fig. 4 的错误恢复案例）：
-- Manager 输入：(o₂, x, C₁=["grab corn", "place corn in bowl"])
+- Manager 输入：$(o_2, x, C_1=["grab corn", "place corn in bowl"])$
 - Manager 检测到语义错误（通过视觉 grounding）
-- Manager 输出：R₂ = ["drop sushi", "grab corn", "place corn in bowl", "grab sushi", "place sushi in container"]
-- Manager 输出：τ₂ = 指向放下寿司位置的轨迹
+- Manager 输出：$R_2 = ["drop sushi", "grab corn", "place corn in bowl", "grab sushi", "place sushi in container"]$
+- Manager 输出：$\tau_2 =$ 指向放下寿司位置的轨迹
 - **关键**：无需显式错误检测器，manager 的重新预测自然包含了纠正动作
 
 **数值估算**：
 - 原始单体 VLA 在 4 步任务上的成功概率：假设每步 90% 成功率 → 0.9⁴ ≈ 65.6%
-- LoHo-Manip：每步独立重规划，失败自动恢复 → 有效成功率 ≈ 85-90%（论文 Fig. 7 实测数据支持）
+- LoHo-Manip：每步独立重规划，失败自动恢复 $\to$ 有效成功率 $\approx 85\text{-}90\%$（论文 Fig. 7 实测数据支持）
 
 ## 4. 工程视角 (Engineering View)
 
@@ -156,7 +156,7 @@ System:    oₜ₊₁ = Env(oₜ, aₜ)  →  loop
 | **吞吐** | Manager 是瓶颈（VLM 推理通常比 VLA 慢）。可通过降低 manager 调用频率（如每 5 步调用一次）缓解 |
 | **内存** | Manager 仅存文本摘要（几十字节），无视觉历史 buffer。相比基于 LSTM/Transformer 历史编码的方案，内存占用极低 |
 | **部署约束** | 需同时运行 VLM + VLA 两个模型。在边缘设备上可能需要模型量化或蒸馏 |
-| **模块化收益** | Manager 与 executor 解耦 → 可独立升级。换机器人平台只需 retrain executor，manager 零修改 |
+| **模块化收益** | Manager 与 executor 解耦 $\to$ 可独立升级。换机器人平台只需 retrain executor，manager 零修改 |
 | **数据效率** | 仅需 100 条真实演示（Bridge 子集）+ 合成失败样本即可 fine-tune。相比端到端方案数据需求低一个量级 |
 
 **工程含义**：trace 条件化将 VLA 的控制频率与 manager 的规划频率解耦。VLA 可以在 10-50Hz 高频执行短视界动作，manager 在 1-5Hz 低频更新全局计划。这符合传统机器人控制的分层频率设计（规划层低频 + 控制层高频）。
@@ -180,9 +180,9 @@ System:    oₜ₊₁ = Env(oₜ, aₜ)  →  loop
 | EgoPlan-Bench2 | 人类级规划 | Accuracy (%) | SOTA |
 | EmbodiedBench (Alfred) | 具身代理 | Accuracy (%) | 显著超越 ThinkAct |
 | EmbodiedBench (Habitat) | 语义导航 | Accuracy (%) | 显著超越基线 |
-| VLABench | 长视界 VLA 操作 | IS + PS | IS/PS 均超越 π₀.₅ 基线 |
+| VLABench | 长视界 VLA 操作 | IS + PS | IS/PS 均超越 $\pi_{0.5}$ 基线 |
 | LIBERO | 标准 VLA 操作 | Average Score | 四项 track 最高均分 |
-| Real Franka (OOD) | 真实机器人 | 成功率 | 显著超越 π₀.₅（同 100 样本 fine-tune） |
+| Real Franka (OOD) | 真实机器人 | 成功率 | 显著超越 $\pi_{0.5}$（同 100 样本 fine-tune） |
 
 **数据来源**：论文 Table 1-5 及 Figure 7。LIBERO 结果来自论文 Table 5；VLABench 来自 Table 4；真实机器人来自 Figure 7。
 
@@ -242,7 +242,7 @@ System:    oₜ₊₁ = Env(oₜ, aₜ)  →  loop
 - **不值得精讀的理由**：
   - 如果你只做单步抓取/放置，这篇的长视界框架是 overkill
   - 如果你已熟悉 ThinkAct 等单体内嵌规划方法，且不需要解耦架构，这篇的核心贡献可能不直接相关
-  - 如果你关注的是 VLA 底层动作建模（如扩散策略、自回归动作），这篇的 executor 部分只是 π₀.₅ 的 fine-tune，没有新的动作建模方法
+  - 如果你关注的是 VLA 底层动作建模（如扩散策略、自回归动作），这篇的 executor 部分只是 $\pi_{0.5}$ 的 fine-tune，没有新的动作建模方法
 
 
 ---
@@ -251,7 +251,7 @@ System:    oₜ₊₁ = Env(oₜ, aₜ)  →  loop
 **关键引用**：
 - [arXiv:2604.21924](https://arxiv.org/abs/2604.21924) — 论文原文
 - [Project Page](https://www.liuisabella.com/LoHoManip) — 项目主页 + 视频演示
-- [π₀.₅](https://www.physicalintelligence.company/download/pi0.pdf) — Executor 基座模型
+- [$\pi_{0.5}$](https://www.physicalintelligence.company/download/pi0.pdf) — Executor 基座模型
 - [Qwen3-VL](https://qwenlm.github.io/blog/qwen3-vl/) — Manager 基座模型
 - [LIBERO](https://libero-project.github.io) — 标准 VLA 评测基准
 - [VLABench](https://vlabench.github.io) — 长视界 VLA 评测基准

@@ -13,8 +13,8 @@
 | 核心結論 | 在扩散策略训练中加入收缩损失项，约束 score Jacobian 的最大特征值，使采样 ODE 轨迹收缩，减少求解器误差累积和动作方差 |
 | 適合精讀 | 如果你在做 diffusion policy for robotics/continuous control，或遇到训练数据有限、动作抖动问题，重点看 §3.2 和 §4 |
 | 可以跳過 | 如果你只用 diffusion 做图像生成、或已有充足 expert 数据且基线性能饱和，这篇距离中等 |
-| 落地可行性 | 中（只需加一个损失项和一个超参γ，但需调参；代码基于 CleanDiffuser，迁移到自有框架需理解 Jacobian 计算） |
-| 主要風險 | γ 调不好可能过度收缩导致模式坍塌；在部分环境中收益有限甚至轻微下降 |
+| 落地可行性 | 中（只需加一个损失项和一个超参 $\gamma$，但需调参；代码基于 CleanDiffuser，迁移到自有框架需理解 Jacobian 计算） |
+| 主要風險 | $\gamma$ 调不好可能过度收缩导致模式坍塌；在部分环境中收益有限甚至轻微下降 |
 
 💡 **X-Ray 开场**
 
@@ -40,19 +40,19 @@
 
 | 模块 | 标准扩散策略 | CDP (本文) | 差异说明 |
 |------|-------------|-----------|---------|
-| 训练目标 | score matching loss ℒd | ℒd + γ·ℒc (收缩损失) | 新增收缩正则项 |
-| Score Jacobian | 不约束 | 约束 λmax(Jϵθ_sym) < -f(t)/h(t) | 通过损失惩罚实现 |
-| 采样 ODE | d𝐚t = [f(t)𝐚t + h(t)ϵθ]dt | 相同形式，但ϵθ 已学得更"收缩" | 无需改采样代码 |
+| 训练目标 | score matching loss ℒd | $\mathcal{L}_d + \gamma \cdot \mathcal{L}_c$ (收缩损失) | 新增收缩正则项 |
+| Score Jacobian | 不约束 | 约束 $\lambda_{\max}(J_{\epsilon_\theta}^{\text{sym}}) < -f(t)/h(t)$ | 通过损失惩罚实现 |
+| 采样 ODE | $d\mathbf{a}_t = [f(t)\mathbf{a}_t + h(t)\epsilon_\theta]\,dt$ | 相同形式，但ϵθ 已学得更"收缩" | 无需改采样代码 |
 | 计算开销 | 基准 | +5-10% (power iteration K=3-4 次) | 每 batch 每 step 需算 Jacobian |
-| 超参数 | 扩散步数、学习率等 | 新增γ (收缩权重)、β (收缩阈值) | γ 需调，β 固定 0.1 即可 |
+| 超参数 | 扩散步数、学习率等 | 新增$\gamma$ (收缩权重)、$\beta$ (收缩阈值) | $\gamma$ 需调，$\beta$ 固定 $0.1$ 即可 |
 | 适用场景 | 通用 | 特别适合低数据、高噪声场景 | 数据充足时收益有限 |
 
 ### 1.2 关键机制 (Key Mechanism)
 
 **为什么需要收缩？**
 
-扩散策略的采样过程是一个 ODE：从噪声𝐚₁逐步去噪到动作𝐚₀。这个过程中：
-1. Score 函数ϵθ 是神经网络近似，有估计误差
+扩散策略的采样过程是一个 ODE：从噪声$\mathbf{a}_1$逐步去噪到动作$\mathbf{a}_0$。这个过程中：
+1. Score 函数$\epsilon_\theta$ 是神经网络近似，有估计误差
 2. ODE 求解器用离散步长，有数值积分误差
 3. 这些误差在迭代中累积，导致相同状态𝐬下，不同随机种子生成的动作差异大
 
@@ -74,7 +74,7 @@
 J_Fθ = f(t)·I + h(t)·J_ϵθ
 ```
 
-其中 f(t)·I 由前向扩散调度决定（通常已收缩），只有 J_ϵθ（score Jacobian）可训练。因此只需约束 J_ϵθ 的最大特征值。
+其中 $f(t)\cdot I$ 由前向扩散调度决定（通常已收缩），只有 $J_{\epsilon_\theta}$（score Jacobian）可训练。因此只需约束 $J_{\epsilon_\theta}$ 的最大特征值。
 
 ⚡ **Eureka Moment**：扩散采样的鲁棒性不取决于 score 函数的绝对精度，而取决于其局部敏感性（Jacobian 特征值）——通过 power iteration 高效估算最大特征值并加入训练损失，就能以极小代价实现收缩。
 
@@ -157,17 +157,17 @@ J_Fθ = ∂Fθ/∂𝐚t = f(t)·I + h(t)·J_ϵθ
 | 𝐚t | t 时刻的带噪动作 | 扩散过程状态 |
 | f(t) | 漂移函数 | 由前向扩散调度αt 决定：f(t) = d/dt log αt |
 | h(t) | 扩散系数缩放 | h(t) = g(t)²/(2σt)，g 和σ来自前向 SDE |
-| ϵθ | score 网络 | 学习对象，输入 (𝐚t, 𝐬, t) |
-| J_ϵθ_sym | score Jacobian 的对称部分 | J_sym = (J + Jᵀ)/2 |
-| λmax | 最大特征值 | 用 power iteration 近似 |
-| γ | 收缩损失权重 | 超参数，需调 [0.001, 100] |
-| β | 收缩阈值 margin | 固定 0.1 即可 |
+| $\epsilon_\theta$ | score 网络 | 学习对象，输入 (𝐚t, 𝐬, t) |
+| $J_{\epsilon_\theta}^{\text{sym}}$ | score Jacobian 的对称部分 | J_sym = (J + Jᵀ)/2 |
+| $\lambda_{\max}$ | 最大特征值 | 用 power iteration 近似 |
+| $\gamma$ | 收缩损失权重 | 超参数，需调 [0.001, 100] |
+| $\beta$ | 收缩阈值 margin | 固定 0.1 即可 |
 
 **直觉解释**：
 
 - f(t) 通常为负（variance-preserving 调度下αt 递减），所以-f(t)/h(t) 为正
-- 约束λmax 小于这个正阈值，等价于让 score Jacobian 不要"太扩张"
-- 过大的γ会过度收缩导致模式坍塌，过小则无效果
+$-$ 约束$\lambda_{\max}$ 小于这个正阈值，等价于让 score Jacobian 不要"太扩张"
+$-$ 过大的$\gamma$会过度收缩导致模式坍塌，过小则无效果
 
 ## 3. 带数字走一遍：玩具例子 (Worked Example)
 
@@ -181,7 +181,7 @@ J_Fθ = ∂Fθ/∂𝐚t = f(t)·I + h(t)·J_ϵθ
 
 **场景 1：标准扩散策略（无收缩）**
 
-假设 score Jacobian 在某点的特征值为 [2.5, -0.3]，则λmax = 2.5 > 2.0，不满足收缩条件。
+假设 score Jacobian 在某点的特征值为 $[2.5, -0.3]$，则 $\lambda_{\max} = 2.5 > 2.0$，不满足收缩条件。
 
 两条从相近初始噪声𝐚₀¹, 𝐚₀²出发的轨迹：
 ```
@@ -192,7 +192,7 @@ J_Fθ = ∂Fθ/∂𝐚t = f(t)·I + h(t)·J_ϵθ
 
 **场景 2：CDP（有收缩）**
 
-训练后，收缩损失迫使λmax 降至 1.5（< 2.0 阈值）：
+训练后，收缩损失迫使 $\lambda_{\max}$ 降至 $1.5$（$< 2.0$ 阈值）：
 ```
 ‖𝐚₀¹ - 𝐚₀²‖ = 0.1
 经过 10 步后：‖𝐚₁₀¹ - 𝐚₁₀²‖ ≈ 0.1 × e^((1.5-2.0)×10) ≈ 0.1 × e^(-5) ≈ 0.00067
@@ -202,10 +202,10 @@ J_Fθ = ∂Fθ/∂𝐚t = f(t)·I + h(t)·J_ϵθ
 **实际训练中的损失计算**：
 
 对 batch 中每个样本 (𝐬, 𝐚) 和每个扩散步 t：
-1. 前向传播得ϵθ(𝐚t, 𝐬, t)
-2. 用 power iteration (K=4 次) 估算λmax(J_ϵθ_sym)
-3. 计算收缩损失：ℒc = max(-0.1, λmax - 2.0)
-4. 总损失：ℒ = ℒd + 0.1·ℒc（假设γ=0.1）
+1. 前向传播得 $\epsilon_\theta(\mathbf{a}_t, \mathbf{s}, t)$
+2. 用 power iteration ($K=4$ 次) 估算 $\lambda_{\max}(J_{\epsilon_\theta}^{\text{sym}})$
+3. 计算收缩损失：$\mathcal{L}_c = \max(-0.1, \lambda_{\max} - 2.0)$
+4. 总损失：$\mathcal{L} = \mathcal{L}_d + 0.1 \cdot \mathcal{L}_c$（假设 $\gamma=0.1$）
 
 ## 4. 工程视角 (Engineering View)
 
@@ -222,9 +222,9 @@ J_Fθ = ∂Fθ/∂𝐚t = f(t)·I + h(t)·J_ϵθ
 
 | 参数 | 推荐范围 | 敏感度 | 备注 |
 |------|---------|--------|------|
-| γ (收缩权重) | [0.001, 0.01, 0.1, 1, 10] 网格搜索 | 高 | 最关键，不同任务最优值不同 |
-| β (收缩阈值) | 固定 0.1 | 低 | 无需调 |
-| contr_steps | 1.0 或 0.2×sampling_steps | 中 | 可只在后 20% 步数加收缩 |
+| $\gamma$ (收缩权重) | [0.001, 0.01, 0.1, 1, 10] 网格搜索 | 高 | 最关键，不同任务最优值不同 |
+| $\beta$ (收缩阈值) | 固定 0.1 | 低 | 无需调 |
+| contr_steps | $1.0$ 或 $0.2 \times \text{sampling\_steps}$ | 中 | 可只在后 20% 步数加收缩 |
 | num_pi (power iter) | 3-5 | 低 | K=4 通常足够 |
 | loss_type | "jacobian" (Frobenius) 或 "eigen" | 中 | jacobian 更快 |
 
@@ -232,12 +232,12 @@ J_Fθ = ∂Fθ/∂𝐚t = f(t)·I + h(t)·J_ϵθ
 
 - **适用框架**：基于 CleanDiffuser 实现，迁移到 Diffusion Policy/3D Diffuser-Actor 需重写 Jacobian 计算
 - **观测模态**：论文验证了低维状态（MLP encoder）和图像（ResNet/DiT），但图像实验较少
-- **动作维度**：理论无限制，但高维动作下 Jacobian 计算更贵（d×d 矩阵）
+- **动作维度**：理论无限制，但高维动作下 Jacobian 计算更贵（$d \times d$ 矩阵）
 - **求解器**：论文用 DPM-Solver++ 2M（二阶），其他 ODE 求解器需验证
 
 **潜在陷阱**：
 
-1. **过度收缩**：γ过大导致λmax 过小，动作多样性丧失（模式坍塌）
+1. **过度收缩**：$\gamma$ 过大导致 $\lambda_{\max}$ 过小，动作多样性丧失（模式坍塌）
 2. **调度依赖**：证明基于 VP-SDE，若用 VE-SDE 需调整阈值（见 Appendix D.2）
 3. **批大小影响**：Jacobian 计算 per sample，大 batch 时显存压力大
 
@@ -291,7 +291,7 @@ J_Fθ = ∂Fθ/∂𝐚t = f(t)·I + h(t)·J_ϵθ
 - ❌ 不能替代架构改进（如 UNet vs MLP 的差距）
 - ❌ 不能在数据充足且基线饱和时带来显著提升
 - ❌ 不能解决分布外（OOD）泛化问题（需结合其他方法）
-- ❌ 不能自动选择最优γ（需任务特定调参）
+- ❌ 不能自动选择最优 $\gamma$（需任务特定调参）
 
 ### 6.1 隐含假设 (Hidden Assumptions)
 

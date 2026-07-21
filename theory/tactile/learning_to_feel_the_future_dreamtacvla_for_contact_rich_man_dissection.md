@@ -34,10 +34,10 @@ VLA 模型（如 OpenVLA、RT-2）靠网络级视觉知识实现了惊人的泛�
 | 组件 | 输入 | 输出 | 训练阶段 | 是否可训练 |
 |------|------|------|----------|-----------|
 | CLIP ViT-L (视觉编码器) | 第三人称图像 + 腕部图像 + 语言指令 | 视觉 token 序列 | Stage 1+2 | 微调 |
-| V-JEPA2 ViT-L/G (触觉编码器) | 高分辨率触觉图像 I_τ | 触觉嵌入 z_τ (1024维) | 预训练后冻结 | 冻结 (+ 5.5M adapter) |
+| V-JEPA2 ViT-L/G (触觉编码器) | 高分辨率触觉图像 $I_\tau$   | 触觉嵌入 $z_\tau$ (1024维) | 预训练后冻结 | 冻结 (+ 5.5M adapter) |
 | MLP (机器人状态编码器) | 7-DOF 关节状态 | 状态 token | Stage 1+2 | 微调 |
 | HSA 对比损失 | 触觉/腕部/第三人称 token | 空间对齐表示 H_align | Stage 1+2 | 引导训练 |
-| Forecasting MLP (F_η) | 当前触觉嵌入 + draft action | 未来触觉嵌入 H_dream | Stage 2 | 从 0 训练 |
+| Forecasting MLP ($F_\eta$) | 当前触觉嵌入 + draft action | 未来触觉嵌入 H_dream | Stage 2 | 从 0 训练 |
 | Action Expert Transformer | 对齐 token + (可选) H_dream | 45 步 7-DOF 动作序列 | Stage 1+2 | 微调 |
 
 **训练/推理差异**：Stage 1 训练时 H_dream 用零张量占位（此时无世界模型）；Stage 2 推理时 H_dream 由 Forecasting MLP 生成，形成 Think-Dream-Act 闭环。
@@ -49,7 +49,7 @@ VLA 模型（如 OpenVLA、RT-2）靠网络级视觉知识实现了惊人的泛�
 - **Local（腕部相机）**：末端执行器视觉引导，回答"夹爪对准了吗"
 - **Micro（指尖触觉）**：滑移/插入力/纹理等细粒度接触线索，回答"接触上了吗、打滑了吗"
 
-**Hierarchical Spatial Alignment (HSA)**：核心创新。传统方法直接把触觉信号拼接到视觉 token 后面，但 VLA 的视觉-语言 backbone 从未见过触觉数据，会直接忽略它。HSA 用机器人运动学 + 相机标定参数，把触觉传感器的 3D 位姿投影到腕部和第三人称相机的 2D 图像上，得到对应的边界框。然后在 LLM 中间层提取三个 mean-pooled 向量——触觉 token 的均值 h_τ、腕部边界框内 token 的均值 h_w、第三人称边界框内 token 的均值 h_tp——用 InfoNCE 对比损失把 h_τ 和 h_w/h_tp 拉近，把负样本推远。这迫使模型"学会"触觉图像对应宏观视觉中的哪个区域。
+**Hierarchical Spatial Alignment (HSA)**：核心创新。传统方法直接把触觉信号拼接到视觉 token 后面，但 VLA 的视觉-语言 backbone 从未见过触觉数据，会直接忽略它。HSA 用机器人运动学 + 相机标定参数，把触觉传感器的 3D 位姿投影到腕部和第三人称相机的 2D 图像上，得到对应的边界框。然后在 LLM 中间层提取三个 mean-pooled 向量——触觉 token 的均值 $h_\tau$、腕部边界框内 token 的均值 $h_w$、第三人称边界框内 token 的均值 $h_{tp}$——用 InfoNCE 对比损失把 $h_\tau$ 和 $h_w/h_{tp}$ 拉近，把负样本推远。这迫使模型"学会"触觉图像对应宏观视觉中的哪个区域。
 
 ⚡ **Eureka Moment**：HSA 对比损失让触觉 token 和视觉 token 在同一个潜空间中对齐——模型不是"看到+感到"，而是学会"感受到的就是看到的"。
 
@@ -104,10 +104,10 @@ L_HSA-W = -log[ exp(h_τ · h_w / κ) / (exp(h_τ · h_w / κ) + Σ_i exp(h_τ �
 ```
 
 其中：
-- h_τ：触觉 token 的 mean-pooled 嵌入
+- $h_\tau$：触觉 token 的 mean-pooled 嵌入
 - h_w：腕部相机投影边界框内 token 的 mean-pooled 嵌入
-- h_{w,i}^{neg}：N_k 个负样本（其他区域或其他 batch 的 token）
-- κ：温度参数
+- $h_{w,i}^{neg}$：$N_k$ 个负样本（其他区域或其他 batch 的 token）
+- $\kappa$：温度参数
 
 **总 HSA 损失**：
 
@@ -131,7 +131,7 @@ H_dream(t+N) = F_η(z_τ(t), a_draft(t))
 
 Forecasting MLP 以当前触觉嵌入和 draft action 为输入，预测 N 步后的触觉潜状态。
 
-> 符号与本文保持一致：θ 为策略参数，ψ 为编码器参数，η 为 Forecasting MLP 参数，φ 为 V-JEPA2 世界模型参数（冻结）。
+> 符号与本文保持一致：$\theta$ 为策略参数，$\psi$ 为编码器参数，$\eta$ 为 Forecasting MLP 参数，$\varphi$ 为 V-JEPA2 世界模型参数（冻结）。
 
 ## 3. 带数字走一遍：玩具例子 (Worked Example)
 
@@ -143,8 +143,8 @@ Forecasting MLP 以当前触觉嵌入和 draft action 为输入，预测 N 步�
 - 即"继续向下插入 5mm"
 
 **Step 2 — DREAM**：
-- 当前触觉嵌入 z_τ（来自 V-JEPA2 编码）= [0.12, -0.03, ..., 0.45]（1024维，当前无接触特征）
-- Forecasting MLP 输入 (z_τ, a_draft)，预测执行该动作后的触觉嵌入：
+- 当前触觉嵌入 $z_\tau$（来自 V-JEPA2 编码）$= [0.12,\ -0.03,\ \dots,\ 0.45]$（1024维，当前无接触特征）
+- Forecasting MLP 输入 $(z_\tau,\ a_{\text{draft}})$，预测执行该动作后的触觉嵌入：
   H_dream = [0.35, 0.18, ..., -0.22]（预测到有接触压力分布）
 - 直觉解读：世界模型"梦到"插入 5mm 后，触觉传感器会感受到右侧压力增大——这暗示可能偏右了
 
@@ -200,7 +200,7 @@ Forecasting MLP 以当前触觉嵌入和 draft action 为输入，预测 N 步�
 - OpenVLA（纯视觉 VLA）
 - TactileVLA（低维触觉信号注入）
 - OmniVLA（多模态 VLA）
-- 具体对比数值：论文 Table 1 显示 DreamTacVLA 在 4 任务上均显著优于基线，Peg-in-Hole 达到 95%（± 某标准差）
+- 具体对比数值：论文 Table 1 显示 DreamTacVLA 在 4 任务上均显著优于基线，Peg-in-Hole 达到 $95\%$（± 某标准差）
 
 > TODO: 待补充 Table 1 中各基线的具体成功率数值、消融实验的量化结果。
 

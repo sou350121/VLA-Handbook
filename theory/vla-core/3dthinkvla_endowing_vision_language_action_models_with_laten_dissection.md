@@ -17,7 +17,7 @@
 | 主要風險 | 依赖Qwen3-VL-2B backbone；3D co-training数据构建成本未公开量化；教师-学生共享参数可能导致特征坍缩 |
 
 💡 **X-Ray 开场**
-VLA模型用2D图像做动作预测，但机器人操作发生在3D空间——这中间的"2D语义→3D推理"鸿沟怎么填？现有方法要么加3D传感器（贵、重、不通用），要么做特征对齐（破坏VLM原有的视觉-语言对齐）。3DThinkVLA发现了一个更根本的问题：即使你做了3D co-training，简单的动作提示词也会让模型"走捷径"，绕过已学到的3D先验。它的解法是：用一个共享的推理锚点token（τR），在潜空间里把教师分支的3D推理能力蒸馏给学生分支的动作预测路径——不需要显式生成推理文本，推理时连3D基础模型和教师分支都可以扔掉。
+VLA模型用2D图像做动作预测，但机器人操作发生在3D空间——这中间的"2D语义→3D推理"鸿沟怎么填？现有方法要么加3D传感器（贵、重、不通用），要么做特征对齐（破坏VLM原有的视觉-语言对齐）。3DThinkVLA发现了一个更根本的问题：即使你做了3D co-training，简单的动作提示词也会让模型"走捷径"，绕过已学到的3D先验。它的解法是：用一个共享的推理锚点token（$\tau_R$），在潜空间里把教师分支的3D推理能力蒸馏给学生分支的动作预测路径——不需要显式生成推理文本，推理时连3D基础模型和教师分支都可以扔掉。
 
 📍 **研究全景时间线**
 ```
@@ -49,7 +49,7 @@ VLA模型用2D图像做动作预测，但机器人操作发生在3D空间——�
 | 空间推理 | 无（仅几何） | 弱（仅低层对齐） | **有**（在线教师-学生蒸馏） |
 | Backbone修改 | 需要 | 需要 | **不需要**（仅中间层特征提取） |
 | 灾难性遗忘 | 未专门处理 | 未专门处理 | 3D VLM co-training + 推理锚点 |
-| 提示词推理gap | 未识别 | 未识别 | **识别并解决**（τR锚点） |
+| 提示词推理gap | 未识别 | 未识别 | **识别并解决**（$\tau_R$锚点） |
 | 推理延迟 | 高（传感器+模型） | 中（外部模型） | **低**（仅两个MLP适配器） |
 
 ### 1.2 关键机制 (Key Mechanism)
@@ -61,19 +61,19 @@ VLA模型用2D图像做动作预测，但机器人操作发生在3D空间——�
 - **关键设计**：不修改VLM backbone架构，仅在训练时使用3D基础模型
 
 **模块2：在线3D推理蒸馏（Online 3D Reasoning Distillation）**
-- 引入共享推理锚点token τR，插入在task instruction之后
-- 教师分支：用3D推理提示词 Lteacher 激活空间推理，获取 τR 的隐状态 H_teacher^R
-- 学生分支：用动作提示词 Laction，获取 τR 的隐状态 H_student^R
+- 引入共享推理锚点token $\tau_R$，插入在task instruction之后
+- 教师分支：用3D推理提示词 $L_{\text{teacher}}$ 激活空间推理，获取 $\tau_R$ 的隐状态 $H_{\text{teacher}}^R$
+- 学生分支：用动作提示词 $L_{\text{action}}$，获取 $\tau_R$ 的隐状态 $H_{\text{student}}^R$
 - 通过Reasoning Adapter R（MLP + LayerNorm）将学生隐状态投影到推理潜空间
 - 蒸馏损失：L_reasoning = 1 - cosine(H_teacher^R, R(H_student^R))
 - 教师分支stop-gradient，共享参数加速训练
 
 **模块3：空间增强动作集成（Spatially Augmented Action Integration）**
 - 将几何特征和推理特征分别投影到动作潜空间
-- 通过element-wise addition注入到action-query token τA
+- 通过element-wise addition注入到action-query token $\tau_A$
 - 训练时随机dropout几何/推理特征防止过拟合
 
-⚡ **Eureka Moment**：动作提示词会让模型"走捷径"绕过3D先验——但如果在task instruction和action instruction之间插入一个共享的推理锚点token τR，教师分支用3D推理提示词激活它，学生分支用动作提示词激活它，然后在潜空间做蒸馏，就能把高层3D推理能力"无声"地注入动作预测路径，无需显式生成推理文本。
+⚡ **Eureka Moment**：动作提示词会让模型"走捷径"绕过3D先验——但如果在task instruction和action instruction之间插入一个共享的推理锚点token $\tau_R$，教师分支用3D推理提示词激活它，学生分支用动作提示词激活它，然后在潜空间做蒸馏，就能把高层3D推理能力"无声"地注入动作预测路径，无需显式生成推理文本。
 
 ### 1.3 信息流/架构图 (Flow / Diagram)
 
@@ -132,21 +132,21 @@ L_total = L_action + λa·(1 - S(F3D, G(Fv))) + λd·(1 - S(H_teacher^R, R(H_stu
 
 | 符号 | 含义 |
 |------|------|
-| L_action | 动作L1损失：‖Â - A‖₁ |
+| L_action | 动作L1损失：$\Vert\hat{A} - A\Vert_1$ |
 | L_geo | 几何对齐损失：1 - cosine(F3D, F_Geo)，patch-level |
-| Fv | 视觉编码器第18层中间特征，维度 B×C×Hv×Wv |
-| F3D | VGGT输出的3D几何特征，维度 B×Cf×Hf×Wf |
+| Fv | 视觉编码器第18层中间特征，维度 $B \times C \times H_v \times W_v$ |
+| F3D | VGGT输出的3D几何特征，维度 $B \times C_f \times H_f \times W_f$ |
 | G | Geometry Adapter：MLP + LayerNorm |
 | L_reasoning | 推理蒸馏损失：1 - cosine(H_teacher^R, R(H_student^R)) |
-| H_teacher^R | 教师分支 τR token的隐状态（stop-gradient） |
-| H_student^R | 学生分支 τR token的隐状态 |
+| $H_{\text{teacher}}^R$ | 教师分支 $\tau_R$ token的隐状态（stop-gradient） |
+| $H_{\text{student}}^R$ | 学生分支 $\tau_R$ token的隐状态 |
 | R | Reasoning Adapter：MLP + LayerNorm |
 | L_CE | 标准交叉熵损失（3D VLM co-training） |
-| λa, λd, λ3D | 辅助损失权重（论文未给出具体数值） |
+| $\lambda_a$, $\lambda_d$, $\lambda_{3D}$ | 辅助损失权重（论文未给出具体数值） |
 
 > 符号与本文保持一致：F 表示特征张量，H 表示隐状态向量，G/R 表示适配器网络，S 表示余弦相似度。
 
-**直觉**：几何对齐让模型"看得见"3D形状（低层感知），推理蒸馏让模型"想得到"3D关系（高层推理），两者通过同一个 τR 锚点token 在动作预测时汇合。co-training 则确保模型不会忘记预训练的VLM知识。
+**直觉**：几何对齐让模型"看得见"3D形状（低层感知），推理蒸馏让模型"想得到"3D关系（高层推理），两者通过同一个 $\tau_R$ 锚点token 在动作预测时汇合。co-training 则确保模型不会忘记预训练的VLM知识。
 
 ## 3. 带数字走一遍：玩具例子 (Worked Example)
 
@@ -155,36 +155,36 @@ L_total = L_action + λa·(1 - S(F3D, G(Fv))) + λd·(1 - S(H_teacher^R, R(H_stu
 **场景**：机器人需要将一个红色方块从桌子左侧移到右侧杯子中。
 
 **输入**：
-- 单目RGB图像 It（640×480）
+- 单目RGB图像 $I_t$（640×480）
 - 任务指令 L_task = "put the red block into the cup"
 - 动作指令 L_action = "predict next action"
 
 **训练时前向传播**：
 
 1. **几何感知路径**：
-   - 视觉编码器第18层输出 Fv，假设维度 1×128×16×16（patch级）
-   - VGGT输出 F3D，维度 1×128×16×16
-   - Geometry Adapter G 投影：F_Geo = G(Fv)，维度 1×128×16×16
-   - 余弦相似度 S(F3D, F_Geo) ≈ 0.75（训练初期）
+   - 视觉编码器第18层输出 $F_v$，假设维度 $1 \times 128 \times 16 \times 16$（patch级）
+   - VGGT输出 $F_{3D}$，维度 $1 \times 128 \times 16 \times 16$
+   - Geometry Adapter $G$ 投影：$F_{\text{Geo}} = G(F_v)$，维度 $1 \times 128 \times 16 \times 16$
+   - 余弦相似度 $S(F_{3D}, F_{\text{Geo}}) \approx 0.75$（训练初期）
    - L_geo = 1 - 0.75 = 0.25
 
 2. **推理蒸馏路径**：
    - 教师分支：L_teacher = "what is the 3D position of the red block relative to the cup?"
    - 学生分支：L_action = "predict the next action"
-   - 两者共享 τR 位置（L_task之后）
-   - H_teacher^R = sg(fθ(It, L_task, L_teacher, τR))，维度 1×2048
-   - H_student^R = fθ(It, L_task, τR, L_action, τA)，维度 1×2048
-   - R(H_student^R) 投影后与 H_teacher^R 的余弦相似度 ≈ 0.60
+   - 两者共享 $\tau_R$ 位置（$L_{\text{task}}$之后）
+   - $H_{\text{teacher}}^R = \text{sg}(f_\theta(I_t, L_{\text{task}}, L_{\text{teacher}}, \tau_R))$，维度 $1 \times 2048$
+   - $H_{\text{student}}^R = f_\theta(I_t, L_{\text{task}}, \tau_R, L_{\text{action}}, \tau_A)$，维度 $1 \times 2048$
+   - $R(H_{\text{student}}^R)$ 投影后与 $H_{\text{teacher}}^R$ 的余弦相似度 $\approx 0.60$
    - L_reasoning = 1 - 0.60 = 0.40
 
 3. **动作集成**：
-   - H_geo^A = MLP_geo(F_Geo 的全局池化)，维度 1×2048
-   - H_reasoning^A = MLP_reasoning(R(H_student^R))，维度 1×2048
-   - H_A = τA 的隐状态，维度 1×2048
-   - Â = Action Head(H_A + H_geo^A + H_reasoning^A)
-   - L_action = ‖Â - A_gt‖₁ ≈ 0.15
+   - $H_{\text{geo}}^A = \text{MLP}_{\text{geo}}(F_{\text{Geo}} \text{ 的全局池化})$，维度 $1 \times 2048$
+   - $H_{\text{reasoning}}^A = \text{MLP}_{\text{reasoning}}(R(H_{\text{student}}^R))$，维度 $1 \times 2048$
+   - $H_A = \tau_A$ 的隐状态，维度 $1 \times 2048$
+   - $\hat{A} = \text{Action Head}(H_A + H_{\text{geo}}^A + H_{\text{reasoning}}^A)$
+   - $L_{\text{action}} = \Vert \hat{A} - A_{\text{gt}} \Vert_1 \approx 0.15$
 
-4. **总损失**（假设 λa=0.1, λd=0.1, λ3D=0.01）：
+4. **总损失**（假设 $\lambda_a=0.1$, $\lambda_d=0.1$, $\lambda_{3D}=0.01$）：
    ```
    L_total = 0.15 + 0.1×0.25 + 0.1×0.40 + 0.01×2.5
            = 0.15 + 0.025 + 0.040 + 0.025
@@ -237,7 +237,7 @@ L_total = L_action + λa·(1 - S(F3D, G(Fv))) + λd·(1 - S(H_teacher^R, R(H_stu
 - LIBERO：在2个套件上达到100%成功率（论文§4.2）
 - LIBERO-PLUS：平均81.0%，在高度变化扰动上优势最明显（§4.2, Table 2）
 - SimplerEnv：平均72.9%，超越所有基线（§4.2, Table 3）
-- 消融：co-training alone 从 baseline 95.8→97.4/97.9（3D co-training 比通用co-training更有效）
+- 消融：co-training alone 从 baseline $95.8\to97.4/97.9$（3D co-training 比通用co-training更有效）
 
 > TODO: 论文未给出真实机械臂实验的具体成功率数字；3D co-training数据的具体规模和来源也未在正文中明确。
 
@@ -264,7 +264,7 @@ L_total = L_action + λa·(1 - S(F3D, G(Fv))) + λd·(1 - S(H_teacher^R, R(H_stu
 ### 6.1 隐含假设 (Hidden Assumptions)
 
 1. **VGGT的3D特征足够好**：几何对齐的质量受限于VGGT的输出质量。如果VGGT在某些场景下（如透明物体、反光表面）表现差，几何感知也会受损。
-2. **τR锚点位置最优**：论文选择将τR插入L_task之后，理由是"在因果注意力下能吸收视觉和任务语义，同时最小化受下游动作解码影响"。但这只是一个经验选择，未做位置消融。
+2. **$\tau_R$锚点位置最优**：论文选择将$\tau_R$插入$L_{\text{task}}$之后，理由是"在因果注意力下能吸收视觉和任务语义，同时最小化受下游动作解码影响"。但这只是一个经验选择，未做位置消融。
 3. **教师-学生共享参数可行**：共享参数提高了训练稳定性，但也可能导致特征坍缩——推理token编码的信息量不足。论文通过3D VLM co-training缓解，但未量化分析坍缩程度。
 4. **2D图像隐含足够3D信息**：方法假设单目RGB图像中隐含了足够的3D线索供模型学习。在纹理缺失、遮挡严重或光照极端的情况下，这一假设可能不成立。
 5. **Qwen3-VL-2B的泛化性**：方法在Qwen3-VL-2B上验证，但未测试其他backbone（如OpenVLA、RT-2等）。迁移到其他backbone可能需要重新调参。
@@ -280,12 +280,12 @@ L_total = L_action + λa·(1 - S(F3D, G(Fv))) + λd·(1 - S(H_teacher^R, R(H_stu
 | **3DThinkVLA** | VGGT(训练时) | **无** | **强（几何+推理）** | **不需要** | **中高** |
 
 **面试 Tip**：当被问到"3DThinkVLA和SpatialVLA有什么区别"时，可以这样回答：
-> "SpatialVLA是显式3D注入——直接把点云或深度图拼到视觉特征里，推理时还需要3D传感器。3DThinkVLA走的是隐式路线：训练时用VGGT做几何对齐、用在线蒸馏做推理迁移，但推理时只保留两个轻量MLP适配器，完全不需要3D传感器或外部模型。更重要的是，它识别并解决了'prompt-induced reasoning gap'——即使做了3D co-training，动作提示词也会让模型走捷径绕过3D先验，而τR锚点设计正是为了解决这个问题。"
+> "SpatialVLA是显式3D注入——直接把点云或深度图拼到视觉特征里，推理时还需要3D传感器。3DThinkVLA走的是隐式路线：训练时用VGGT做几何对齐、用在线蒸馏做推理迁移，但推理时只保留两个轻量MLP适配器，完全不需要3D传感器或外部模型。更重要的是，它识别并解决了'prompt-induced reasoning gap'——即使做了3D co-training，动作提示词也会让模型走捷径绕过3D先验，而$\tau_R$锚点设计正是为了解决这个问题。"
 
 ## 8. 精讀建議 (Reading Guide)
 
 - **值得精讀原文的人**：
-  1. 做VLA空间 grounding 的研究者——τR锚点设计是一个可复用的蒸馏范式
+  1. 做VLA空间 grounding 的研究者——$\tau_R$锚点设计是一个可复用的蒸馏范式
   2. 要评估将3D先验注入现有VLA（如OpenVLA）可行性的工程师——两个Adapter即插即用
   3. 关注VLM灾难性遗忘问题的研究者——3D VLM co-training策略有参考价值
 

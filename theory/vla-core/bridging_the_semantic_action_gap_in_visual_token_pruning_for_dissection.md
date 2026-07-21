@@ -5,7 +5,7 @@
 > **论文**: Bridging the Semantic-Action Gap in Visual Token Pruning for Efficient VLA Inference
 > **链接**: https://arxiv.org/abs/2511.16449
 > **代码**: https://github.com/MINT-SJTU/VLA-Pruner
-> **核心定位**: 首次系统揭示 VLM 剪枝方法直接迁移到 VLA 时性能崩溃的根因——prefill 语义注意力与 action-decode 注意力高度不重合（仅 ~50% 重叠），并提出 VLA-Pruner 用「语义+动作」双路评分 + Combine-then-Filter 策略，在免训练前提下实现最高 1.99× 加速且保持操作质量。
+> **核心定位**: 首次系统揭示 VLM 剪枝方法直接迁移到 VLA 时性能崩溃的根因——prefill 语义注意力与 action-decode 注意力高度不重合（仅 $\sim 50\%$ 重叠），并提出 VLA-Pruner 用「语义+动作」双路评分 + Combine-then-Filter 策略，在免训练前提下实现最高 $1.99\times$ 加速且保持操作质量。  
 
 ## ⚡ 快速判斷（30 秒讀完這段就夠了）
 
@@ -44,7 +44,7 @@
 | 评分依据 | prefill attention | text-to-vision attn | 特征多样性 | 历史 token 复用率 | prefill attn + 时序平滑 action attn |
 | 选择策略 | top-k | top-k | 多样性贪心 | cache 复用 | Combine-then-Filter (union + MMDP) |
 | 是否训练 | 否 | 否 | 否 | 否 | 否 |
-| LIBERO 最高加速 | ~1.5× (掉点严重) | ~1.3× (掉点严重) | ~1.4× (掉点严重) | ~1.6× | **1.99×** (掉点可忽略) |
+| LIBERO 最高加速 | $\sim 1.5\times$ (掉点严重)   | $\sim 1.3\times$ (掉点严重)   | $\sim 1.4\times$ (掉点严重)   | $\sim 1.6\times$   | **$1.99\times$** (掉点可忽略)   |
 | 75% 剪枝率表现 | 严重退化 | 严重退化 | 中度退化 | 中度退化 | 轻微退化 |
 | 87.5% 剪枝率表现 | 基本不可用 | 基本不可用 | 严重退化 | 严重退化 | 仍可用 |
 
@@ -160,11 +160,11 @@ C~ = argmax_{C⊂C_dual, |C|=M~}  min_{i≠j∈C} d(v_i, v_j)
 ```
 
 > 符号说明：
-> - M: 原始视觉 token 数（通常 256×n）
+> - $M$: 原始视觉 token 数（通常 $256\times n$）  
 > - N: 文本 token 数（~30-50）
 > - M~: 目标保留 token 数（如 50% 剪枝率时 M~ = M/2）
 > - w: EMA 窗口大小（=3）
-> - γ: 指数衰减率（=0.8）
+> - $\gamma$: 指数衰减率（$=0.8$）  
 > - K: 剪枝发生的 Transformer 层（=3，早期层）
 
 ## 3. 带数字走一遍：玩具例子 (Worked Example)
@@ -179,10 +179,10 @@ C~ = argmax_{C⊂C_dual, |C|=M~}  min_{i≠j∈C} d(v_i, v_j)
 - 从 t-1, t-2, t-3 的 action attention 做 EMA
 - t-1 的 action attention 聚焦在「机械爪尖端附近区域」
 - Top-64 动作 token 集中在局部：C_act = {token_78, token_82, token_95, ..., token_200}（64 个）
-- C_vl ∩ C_act ≈ 20 个（~30% 重合，与论文 §3.2 数据一致）
+- $C_{vl} \cap C_{act} \approx 20$ 个（$\sim 30\%$ 重合，与论文 §3.2 数据一致）  
 
 **Step 3 — Combine**：
-- C_dual = C_vl ∪ C_act ≈ 108 个 token（> 64）
+- $C_{\text{dual}} = C_{vl} \cup C_{act} \approx 108$ 个 token（$> 64$）  
 
 **Step 4 — Filter（MMDP 贪心）**：
 - 从 C_dual 中迭代选取 64 个，使最小 pairwise cosine distance 最大
@@ -197,29 +197,29 @@ C~ = argmax_{C⊂C_dual, |C|=M~}  min_{i≠j∈C} d(v_i, v_j)
 | 工程维度 | 数值/设计 | 含义 |
 |----------|-----------|------|
 | 剪枝层 K | 3（早期层） | 越早剪枝，节省的 prefill 计算越多（剩余 L-3 层全部跳过） |
-| EMA 窗口 w | 3 | 短窗口→快速响应；过长则引入过时信息 |
-| 衰减率 γ | 0.8 | 近期 step 权重 0.8²=0.64，t-3 权重 0.8³=0.51 |
+| EMA 窗口 w | 3 | 短窗口→快速响应；过长则引入过时信息   |
+| 衰减率 $\gamma$   | 0.8 | 近期 step 权重 0.8²=0.64，t-3 权重 0.8³=0.51 |
 | 预热步数 | w=3 | 前 3 步无历史 action attn，仅用 S_vl 评分 |
 | 目标硬件 | RTX 4090 | 论文实验平台；边缘部署（Jetson）需额外验证 |
-| 加速比 | 最高 1.99× | 75% 剪枝率下；87.5% 时仍有可用性能 |
-| FLOPs 节省 | 与 token 数平方相关 | 自注意力 O(T²)，token 减半 → FLOPs ≈ 1/4 |
-| 架构依赖 | 需 action-to-vision cross-attn | OpenVLA、π₀ 等主流架构均支持；纯 encoder-only 不适用 |
+| 加速比 | 最高 $1.99\times$ | 75% 剪枝率下；87.5% 时仍有可用性能 |
+| FLOPs 节省 | 与 token 数平方相关 | 自注意力 $O(T^2)$，token 减半 → FLOPs $\approx 1/4$ |
+| 架构依赖 | 需 action-to-vision cross-attn | OpenVLA、$\pi_0$ 等主流架构均支持；纯 encoder-only 不适用 |
 
-**工程含义**：VLA-Pruner 把 token 剪枝从「纯语义决策」变成了「语义+动作双约束优化」。Combine-then-Filter 策略避免了加权融合的超参敏感问题（不需要调 α·S_vl + (1-α)·S_act），但 MMDP 贪心算法本身有 O(|C_dual| · M~) 的复杂度——在 M~ = 64, |C_dual| ≈ 108 时约 7K 次距离计算，远小于节省的 prefill 计算量。
+**工程含义**：VLA-Pruner 把 token 剪枝从「纯语义决策」变成了「语义+动作双约束优化」。Combine-then-Filter 策略避免了加权融合的超参敏感问题（不需要调 $\alpha \cdot S_{vl} + (1-\alpha) \cdot S_{act}$），但 MMDP 贪心算法本身有 $O(|C_{\text{dual}}| \cdot \tilde{M})$ 的复杂度——在 $\tilde{M} = 64$, $|C_{\text{dual}}| \approx 108$ 时约 7K 次距离计算，远小于节省的 prefill 计算量。
 
-**部署约束**：需要缓存最近 w=3 步的 action attention maps，内存开销约 3 × M × d（M=256, d=hidden_dim），可忽略。但对突发场景切换（如物体突然掉落），EMA 估计可能滞后 1-2 步。
+**部署约束**：需要缓存最近 $w=3$ 步的 action attention maps，内存开销约 $3 \times M \times d$（$M=256$, $d=\text{hidden\_dim}$），可忽略。但对突发场景切换（如物体突然掉落），EMA 估计可能滞后 1-2 步。
 
 ## 5. 数据与评测 (Data & Eval)
 
 **评测环境**：
-- **LIBERO**：4 个套件（Spatial / Object / Goal / Long），每套件 10 任务 × 500 eval episodes
+- **LIBERO**：4 个套件（Spatial / Object / Goal / Long），每套件 10 任务 $\times$ 500 eval episodes
 - **SIMPLER**：真实操作场景 benchmark
 - **真实机器人**：6-DoF xArm6
 
 **评测 VLA 模型**：
 - OpenVLA（autoregressive policy）
 - OpenVLA-OFT（action-chunk decoder）
-- π₀（diffusion-head policy）
+- $\pi_0$（diffusion-head policy）
 
 **基线方法**：
 - FastV（prefill attention pruning）
@@ -232,7 +232,7 @@ C~ = argmax_{C⊂C_dual, |C|=M~}  min_{i≠j∈C} d(v_i, v_j)
 **关键结果**（论文 Table / Figure 1, 4）：
 - 在 75% 剪枝率下，FastV/SparseVLM 在 LIBERO 上严重退化（success rate 大幅下降）
 - VLA-Pruner 在相同剪枝率下保持「可比操作质量」
-- 最高加速比 1.99×（具体模型/剪枝率组合待补充——论文原文数据在 Table 中）
+- 最高加速比 $1.99\times$（具体模型/剪枝率组合待补充——论文原文数据在 Table 中）
 - 87.5% 剪枝率下仍保持可用性能（VLM 方法在此比率下基本不可用）
 
 > TODO: 待补充具体数值——LIBERO 各套件 success rate 对比表（论文 Table 2-4 中的精确数字）
@@ -241,7 +241,7 @@ C~ = argmax_{C⊂C_dual, |C|=M~}  min_{i≠j∈C} d(v_i, v_j)
 
 ### 能做什么
 - **免训练加速**：不需要任何微调或重新训练，直接插到已有 VLA 模型上
-- **跨架构通用**：支持 autoregressive（OpenVLA）、action-chunk（OpenVLA-OFT）、diffusion-head（π₀）三种主流 VLA 架构
+- **跨架构通用**：支持 autoregressive（OpenVLA）、action-chunk（OpenVLA-OFT）、diffusion-head（$\pi_0$）三种主流 VLA 架构
 - **高剪枝率鲁棒**：87.5% 剪枝率下仍可用，为极端资源受限场景提供可能
 - **真实机器人验证**：在 6-DoF xArm6 上验证了加速效果
 

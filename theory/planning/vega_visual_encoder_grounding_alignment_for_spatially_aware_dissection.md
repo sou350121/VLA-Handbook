@@ -139,20 +139,20 @@ L_align = (1/N) · Σᵢ [1 - cosine(φ(F_DINOᵢ), F_FiT3Dᵢ)]
 
 | 符号 | 含义 | 维度/值 |
 |------|------|---------|
-| I | 输入图像 | H×W×3 |
+| I | 输入图像 | $H \times W \times 3$ |
 | N | patch token 数量 | 取决于 ViT 配置 |
 | d | 特征维度 | 1024 |
-| ε_DINO | VLA 的 DINOv2 编码器 | 冻结/LoRA 微调 |
-| ε_FiT3D | 3D 感知教师编码器 | 完全冻结 |
-| φ | 对齐 projector | LN + 2-layer MLP + GELU |
-| λ | 对齐损失权重 | 0.1 |
+| $\varepsilon_{\text{DINO}}$ | VLA 的 DINOv2 编码器 | 冻结/LoRA 微调 |
+| $\varepsilon_{\text{FiT3D}}$ | 3D 感知教师编码器 | 完全冻结 |
+| $\varphi$ | 对齐 projector | LN + 2-layer MLP + GELU |
+| $\lambda$ | 对齐损失权重 | 0.1 |
 | L_action | 动作预测损失 | 交叉熵或流匹配 |
 
 > 符号与本文保持一致：F 表示特征矩阵（大写），下标 i 表示第 i 个 patch token；上标 DINO/FiT3D 区分学生/教师。
 
 ## 3. 带数字走一遍：玩具例子 (Worked Example)
 
-假设一个简化场景：单视图 256×256 图像，ViT patch size = 16×16 → N = 256 个 patch tokens，特征维度 d = 1024。
+假设一个简化场景：单视图 $256 \times 256$ 图像，ViT patch size = $16 \times 16$ → $N = 256$ 个 patch tokens，特征维度 $d = 1024$。
 
 **训练步骤走一遍**：
 
@@ -200,13 +200,13 @@ L_align = (1/N) · Σᵢ [1 - cosine(φ(F_DINOᵢ), F_FiT3Dᵢ)]
 | **Projector 参数量** | ~2M（LN + 2-layer MLP） | 相对于 VLA  backbone 极小 |
 | **教师模型** | FiT3D（DINOv2 变体，冻结） | 仅训练阶段需要，推理时不加载 |
 | **LoRA rank** | 32（LLM backbone） | 参数高效微调 |
-| **对齐损失权重 λ** | 0.1 | 平衡空间对齐与任务学习 |
+| **对齐损失权重 $\lambda$** | 0.1 | 平衡空间对齐与任务学习 |
 | **特征维度** | 1024（DINOv2 与 FiT3D 对齐） | 无需维度变换 |
 
 **工程含义**：
 - **训练-推理不对称设计**：训练时需要教师模型在线推理（计算 F_FiT3D），推理时完全不需要。这意味着训练成本增加（需同时跑两个编码器），但部署成本不变。
 - **教师模型可预计算**：FiT3D 编码器是冻结的，理论上可以预计算所有训练图像的教师特征并缓存，避免训练时重复推理。论文未明确说明是否采用此优化。
-- **对齐损失占比小**：λ=0.1 使得 L_align 在总损失中占比约 2-5%，说明空间对齐是"辅助信号"而非主导信号。主任务（动作预测）仍是主要优化目标。
+- **对齐损失占比小**：$\lambda = 0.1$ 使得 $L_{\text{align}}$ 在总损失中占比约 $2\text{--}5\%$，说明空间对齐是"辅助信号"而非主导信号。主任务（动作预测）仍是主要优化目标。
 
 ## 5. 数据与评测 (Data & Eval)
 
@@ -257,10 +257,10 @@ L_align = (1/N) · Σᵢ [1 - cosine(φ(F_DINOᵢ), F_FiT3Dᵢ)]
 
 | 失败场景 | 原因 |
 |----------|------|
-| 非 DINOv2 backbone 的 VLA（如 π0 的 SigLIP-only） | VEGA 仅对齐 DINOv2 分支，需要适配其他视觉编码器 |
+| 非 DINOv2 backbone 的 VLA（如 $\pi_0$ 的 SigLIP-only） | VEGA 仅对齐 DINOv2 分支，需要适配其他视觉编码器 |
 | 超出训练分布的物体/场景 | 实验仅在 6 个 RoboTwin 任务 + 4 个 ALOHA 任务验证 |
 | 需要细粒度触觉反馈的任务 | VEGA 仅增强视觉空间感知，不涉及触觉模态 |
-| 流匹配架构（π0、GR00T） | 论文基于 OpenVLA-OFT（自回归 token 预测），未验证流匹配 VLA |
+| 流匹配架构（$\pi_0$、GR00T） | 论文基于 OpenVLA-OFT（自回归 token 预测），未验证流匹配 VLA |
 
 ### 6.1 隐含假设 (Hidden Assumptions)
 
@@ -272,7 +272,7 @@ L_align = (1/N) · Σᵢ [1 - cosine(φ(F_DINOᵢ), F_FiT3Dᵢ)]
 
 4. **单教师模型足够**：仅使用 FiT3D 作为教师，未探索多教师集成（如 FiT3D + VGGT + 深度估计）是否能进一步提升空间感知。
 
-5. **λ=0.1 是通用最优值**：对齐损失权重设为 0.1，但未报告敏感性分析。不同任务可能需要不同的 λ。
+5. **$\lambda = 0.1$ 是通用最优值**：对齐损失权重设为 $0.1$，但未报告敏感性分析。不同任务可能需要不同的 $\lambda$。
 
 ## 7. 与相关工作对比 (Comparison)
 

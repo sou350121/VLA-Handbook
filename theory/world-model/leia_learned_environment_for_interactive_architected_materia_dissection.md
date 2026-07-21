@@ -13,8 +13,8 @@
 | 核心結論 | 世界模型范式可迁移到 3D 非线性固体力学：Perceiver tokenization + action-conditioned DiT dynamics + 直接应力预测头，在 71K-442K 节点网格上实现实时交互式仿真 |
 | 適合精讀 | 在做 encode-process-decode 架构、action conditioning、或 surrogate model 的研究者；关注应力/导数预测的固体力学 ML 从业者 |
 | 可以跳過 | 只关心机器人操作 VLA 而不关注底层架构模式的研究者；只做流体动力学的读者 |
-| 落地可行性 | 中（需要 8×H100 训练；代码仓库 404，开源状态不明） |
-| 主要風險 | 几何范围极度受限（仅 5×5×15 立方对称晶格板）；无开源代码验证 |
+| 落地可行性 | 中（需要 $8\times$H100 训练；代码仓库 404，开源状态不明） |
+| 主要風險 | 几何范围极度受限（仅 $5\times5\times15$ 立方对称晶格板）；无开源代码验证 |
 
 💡 **X-Ray 开场**
 传统有限元仿真（FEM）在架构材料设计中是瓶颈——一个 3D 晶格结构需要数十万四面体单元，每次非线性求解都很慢。本文把"世界模型"的思路搬过来：工程师逐步施加边界条件，神经网络实时输出形变和应力场。核心发现是——与其从位移推导应力（误差放大），不如让网络直接预测应力分量，只需 6% 训练开销就能把 von Mises 应力相关系数从 0.24 拉到 0.87。对 VLA 研究者的意义：这套 encode-process-decode + action conditioning + autoregressive rollout 的架构模式，与机器人世界模型高度同构。
@@ -34,11 +34,11 @@
 
 | 组件 | 输入 | 输出 | 训练方式 | 推理特点 |
 |------|------|------|----------|----------|
-| **Tokenizer (Perceiver)** | 位移场 u(X,t) + 网格坐标 X | 固定长度隐向量 z ∈ R^{K×H} | 重建位移 + 应力（联合损失） | 网格尺寸无关；K=256 个 latent query |
-| **Latent Dynamics (DiT)** | 当前隐状态 z_t + 边界动作 a_t | 下一时刻隐状态 z_{t+1} | 教师强迫 + pushforward 训练 | 自回归 rollout；每步用户输入新动作 |
-| **Decoder** | 隐向量 z + 查询位置 X_j | 位移 û_j + 应力 σ̂_sym,j | 与 tokenizer 联合训练 | 支持任意分辨率解码 |
+| **Tokenizer (Perceiver)** | 位移场 u(X,t) + 网格坐标 X | 固定长度隐向量 $z \in \mathbb{R}^{K\times H}$ | 重建位移 + 应力（联合损失） | 网格尺寸无关；K=256 个 latent query |
+| **Latent Dynamics (DiT)** | 当前隐状态 z_t + 边界动作 a_t | 下一时刻隐状态 $z_{t+1}$ | 教师强迫 + pushforward 训练 | 自回归 rollout；每步用户输入新动作 |
+| **Decoder** | 隐向量 z + 查询位置 X_j | 位移 $\hat{u}_j$ + 应力 $\hat{\sigma}_{\text{sym},j}$ | 与 tokenizer 联合训练 | 支持任意分辨率解码 |
 | **Stress Head** | Decoder 隐状态（共享） | 6 个 Cauchy 应力分量 | 直接监督 FEM Cauchy 应力 | 常数开销，不依赖本构律复杂度 |
-| **Confidence Head** | Tokenizer latent + 图统计量 | 预测 von Mises 相关系数 ρ̂ | 监督 FEM 验证的 ρ | 用于 OOD 检测，无需 FEM |
+| **Confidence Head** | Tokenizer latent + 图统计量 | 预测 von Mises 相关系数 $\hat{\rho}$ | 监督 FEM 验证的 $\rho$ | 用于 OOD 检测，无需 FEM |
 
 ### 1.2 关键机制
 
@@ -116,17 +116,17 @@ L_dynamics = ‖ z_{t+1} - f_θ(z_t, a_t) ‖²
 
 | 符号 | 含义 | 维度 |
 |------|------|------|
-| z_t | t 时刻隐状态 | K×H (256×H) |
-| a_t | t 时刻边界条件动作 | 4 (stretch/twist/shear×2) |
-| u | 位移场 | N_nodes × 3 |
-| σ_sym | Cauchy 应力（Voigt 记号） | N_nodes × 6 |
-| X | 参考坐标 | N_nodes × 3 |
-| f_θ | DiT dynamics transformer | L_dyn layers |
-| D_ψ | Decoder | 双头（位移 + 应力） |
+| z_t | t 时刻隐状态 | $K\times H$ ($256\times H$) |
+| a_t | t 时刻边界条件动作 | $4$ (stretch/twist/shear$\times2$) |
+| u | 位移场 | $N_{\text{nodes}} \times 3$ |
+| $\sigma_{\text{sym}}$ | Cauchy 应力（Voigt 记号） | $N_{\text{nodes}} \times 6$ |
+| X | 参考坐标 | $N_{\text{nodes}} \times 3$ |
+| $f_\theta$ | DiT dynamics transformer | L_dyn layers |
+| $D_\psi$ | Decoder | 双头（位移 + 应力） |
 
-> 符号与本文保持一致：u=位移, σ=Cauchy应力, z=隐向量, a=边界动作, X=参考坐标。
+> 符号与本文保持一致：$u=$位移, $\sigma=$Cauchy应力, $z=$隐向量, $a=$边界动作, $X=$参考坐标。
 
-**直觉**: 想象一个"材料模拟器"——你给它一个初始形变状态（编码为 z），然后每步告诉它"往这个方向拉/扭/剪"（动作 a），它告诉你下一步材料会变成什么样（z_{t+1} 解码为位移和应力）。Stress Head 是关键——与其让网络先学位移再自己算应力（数值误差大），不如直接教它输出应力。
+**直觉**: 想象一个"材料模拟器"——你给它一个初始形变状态（编码为 $z$），然后每步告诉它"往这个方向拉/扭/剪"（动作 $a$），它告诉你下一步材料会变成什么样（$z_{t+1}$ 解码为位移和应力）。Stress Head 是关键——与其让网络先学位移再自己算应力（数值误差大），不如直接教它输出应力。
 
 ## 3. 带数字走一遍：玩具例子
 
@@ -195,7 +195,7 @@ t=2:  用户动作 a_2 = [0, +1, 0, 0] (施加扭转)
 | 核心挑战 | 复杂应力集中在 strut 连接处 | 路径依赖应力（18 个内部变量） |
 
 **评测指标**：
-1. 位移相对 L² 误差: ‖û - u‖ / ‖u‖ (中位数 per-frame)
+1. 位移相对 L² 误差: $\Vert\hat{u} - u\Vert / \Vert u\Vert$ (中位数 per-frame)
 2. von Mises 应力 Pearson 相关系数 (中位数 per-trajectory)
 
 **两种推理模式**：

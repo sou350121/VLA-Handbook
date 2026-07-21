@@ -43,7 +43,7 @@ WorldDP 是一个双层 MPC 框架：高层用对象中心世界模型规划子�
 
 | 组件 | 输入 | 输出 | 训练方式 | 推理角色 |
 |------|------|------|----------|----------|
-| DINOv2 Encoder | RGB 图像 224×224 | Patch features (P, d) | 冻结预训练 | 特征提取 |
+| DINOv2 Encoder | RGB 图像 $224 \times 224$ | Patch features (P, d) | 冻结预训练 | 特征提取 |
 | Object-Centric Encoder (OCE) | Patch features + N slots | Object slots s ∈ R^(N×d) | SAM2 引导 + L2 + Tversky | 状态编码 |
 | CDiT Dynamics Model | Object slots + 动作序列 | 预测下一状态 | 教师强制 MSE | 世界模型过渡函数 |
 | Contact Predictor | Object slot s_k | (N-2) 维接触概率 | MLP 训练 | MPC 成本函数 |
@@ -53,7 +53,7 @@ WorldDP 是一个双层 MPC 框架：高层用对象中心世界模型规划子�
 ### 1.2 关键机制 (Key Mechanism)
 
 **为什么用对象中心而不是 patch-level？**
-- Patch-level（如 DINOv2 的 14×14=196 个 patch）在切割时丢失小对象（如 10×10 像素的方块）的细粒度信息
+- Patch-level（如 DINOv2 的 $14 \times 14 = 196$ 个 patch）在切割时丢失小对象（如 $10 \times 10$ 像素的方块）的细粒度信息
 - 对象中心表征将环境分解为 N 个独立实体（机器人、背景、各物体），每个实体有独立向量
 - 这使得 MPC 可以针对单个物体做优化——"只移动红色方块"而不是"改变整张图"
 
@@ -145,10 +145,10 @@ C_ce(c^(q), c_ref) = CrossEntropy(contact_predictor(s_1^(q)...s_T^(q)), c_ref)
 | d | 每个槽的特征维度 | 标量 |
 | T | 世界模型规划步数 | 标量 |
 | Q | 粒子数量 | 标量 |
-| λ_plan | 接触成本权重 | 超参 |
+| $\lambda_{\text{plan}}$ | 接触成本权重 | 超参 |
 | s_k | 时刻 k 的对象中心状态 | R^(N×d) |
 | o_k | 排除机器人/背景的对象嵌入 | R^((N-2)×d) |
-| a_k | 末端执行器动作 (x,y,z,yaw,gripper) | R^5 |
+| a_k | 末端执行器动作 (x,y,z,yaw,gripper) | $\mathbb{R}^5$ |
 
 > 符号与本文保持一致：s 表示完整对象状态，o 表示纯物体子集，c 表示接触概率。
 
@@ -161,7 +161,7 @@ C_ce(c^(q), c_ref) = CrossEntropy(contact_predictor(s_1^(q)...s_T^(q)), c_ref)
 
 **Step 1 — 粒子初始化**:
 - 生成 Q=50 个粒子，每个粒子是 T=5 步的动作序列
-- 动作空间: 每步 (dx, dy, dz, dyaw, dgripper) ∈ R^5
+- 动作空间: 每步 $(dx, dy, dz, dyaw, dgripper) \in \mathbb{R}^5$
 - 种子从末端执行器到关键点的空间轨迹采样
 
 **Step 2 — 单粒子 Rollout 示例**（粒子 q=7）:
@@ -193,27 +193,27 @@ Total Cost = 0.0026 + 1.0 * 1.2 ≈ 1.2026
 **Step 4 — 选择**:
 - 50 个粒子中，成本最低的 M=5 个作为下一轮均值
 - 经过 L=10 轮迭代，最优粒子的子目标序列被提取
-- 假设最优子目标: [ŝ_1^o: 接近红方, ŝ_2^o: 抓住红方, ŝ_3^o: 放置红方到(4,4), ...]
+- 假设最优子目标: $[\hat{s}_1^o$: 接近红方, $\hat{s}_2^o$: 抓住红方, $\hat{s}_3^o$: 放置红方到$(4,4)$, ...]
 
 **Step 5 — 扩散策略执行**:
-- DP(curr_obs=初始帧, subgoal=ŝ_1^o) → 40 步动作 → 执行 → 新观测
-- DP(curr_obs=新帧, subgoal=ŝ_2^o) → 40 步动作 → 执行
+- DP$(\text{curr\_obs}=$初始帧$, \text{subgoal}=\hat{s}_1^o) \to 40$ 步动作 $\to$ 执行 $\to$ 新观测
+- DP$(\text{curr\_obs}=$新帧$, \text{subgoal}=\hat{s}_2^o) \to 40$ 步动作 $\to$ 执行
 - ...直到所有子目标完成
 
 ## 4. 工程视角 (Engineering View)
 
 | 维度 | 数值/设计 | 工程含义 |
 |------|-----------|----------|
-| 图像分辨率 | 224×224 | 较低分辨率，适合实时推理但丢失小对象细节 |
+| 图像分辨率 | $224 \times 224$ | 较低分辨率，适合实时推理但丢失小对象细节 |
 | DINOv2 | 冻结，ViT-B/14 | 196 个 patch，特征维度 d=768 |
-| 对象槽数 N | 取决于场景复杂度 | 越多槽 → 更多计算但更细粒度；论文未明确给出 N 值 |
+| 对象槽数 N | 取决于场景复杂度 | 越多槽 → 更多计算但更细粒度；论文未明确给出 $N$ 值 |
 | CDiT 深度 | 12 层，4 头注意力 | 中等规模，推理延迟可控 |
 | 动作嵌入维度 | 32 | 高度压缩的动作表征 |
 | 训练数据 | 200 万帧/环境 | 大量无标注 play 数据，无需 reward |
-| 训练批次 | 128，5 epochs | 约 77,500 总步数（15,500/epoch × 5） |
+| 训练批次 | 128，5 epochs | 约 $77{,}500$ 总步数（$15{,}500$/epoch × $5$） |
 | 硬件 | 单 H100 | 训练成本可控 |
 | DP 动作序列长度 | 40 步 | 短 horizon 匹配子目标间距；DP100 反而略差 |
-| 推理延迟 | 世界模型规划 (PF: Q×L 次 rollout) + DP 执行 | 规划是主要瓶颈；PF 比 CEM 更慢但质量更高 |
+| 推理延迟 | 世界模型规划 (PF: $Q \times L$ 次 rollout) + DP 执行 | 规划是主要瓶颈；PF 比 CEM 更慢但质量更高 |
 | 部署约束 | 需要 SAM2 预标注 | 新环境部署需额外标注步骤，非端到端 |
 
 **关键 trade-off**:
@@ -226,7 +226,7 @@ Total Cost = 0.0026 + 1.0 * 1.2 ≈ 1.2026
 **数据集**:
 - OGBench 仿真环境（Maes et al. 2026a 变体），每个环境 200 万帧 play 数据
 - 数据来源：随机 agent 交互，无 reward 信号，无 goal 标注
-- 图像分辨率：224×224
+- 图像分辨率：$224 \times 224$
 - 训练/测试：50 条独立测试轨迹/任务
 
 **任务设置**:
@@ -259,7 +259,7 @@ Total Cost = 0.0026 + 1.0 * 1.2 ≈ 1.2026
 ## 6. 能力与失败模式 (Capabilities & Failure Modes)
 
 **能做什么**:
-- 多阶段顺序操作：先按按钮→再开抽屉→再取物（Scene-Single-Composite 上 20% 成功率，基线接近 0%）
+- 多阶段顺序操作：先按按钮→再开抽屉→再取物（Scene-Single-Composite 上 $20\%$ 成功率，基线接近 $0\%$）
 - 多物体重排：三个方块依次放置（Cube-Triple 3-Cubes 指标上超过基线 2 倍）
 - 从目标图像推断任务：无需显式任务指令，仅靠 I_0 和 I_g 即可推断要操作哪个物体
 - 从无标注 play 数据学习：不需要 reward、不需要 goal 标签
