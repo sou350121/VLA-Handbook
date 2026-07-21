@@ -141,3 +141,7 @@
 | 2026-07-19 | Galbot | product | 2026年7月19日，银河通用在WAIC 2026展示迎宾机器人‘小盖’，其搭载自研DexNDM灵巧手世界模型，可完成‘盘核桃’等高精度手内操作任务。 | 🔧 | news | https://www.sina.cn/news/detail/5322012394521486.html |
 | 2026-07-19 | Galbot | product | 2026年7月19日，新浪新闻报道Galbot G1在WAIC 2026现场完成烤面包+倒饮料的早餐制作任务，在挪动面包、移走水壶、变换杯盘位置等随机干扰下，依托自研具身大模型‘银河星脑（AstraBrain）’实现稳定感知–规划–执行闭环。 | ⚡ | news | http://finance.sina.com.cn/roll/2026-07-19/doc-iniikara8257184.shtml.md |
 | 2026-07-19 | Lumos Robot | product | 鹿明机器人确认搭载Lumos NexCore泛工业场景物理AI引擎的系统已在真实产线部署，完成‘数据采集→模型训练→场景部署→效果反馈’闭环并持续回流高质量具身数据。 | 🔧 | news | https://yuanchuang.10jqka.com.cn/20260719/c678272948.shtml |
+| 2026-07-18 | UBTech | product | 优必选于2026年7月18日正式发布新一代人形机器人Walker S2，宣称其为全球首款支持无需人工干预、无需停机、三分钟内自主完成电池更换的人形机器人。 | ⚡ | news | https://www.163.com/dy/media/T1442472327522.html |
+| 2026-07-18 | UBTech | product | 优必选于2026年7月18日同步披露业务交付计划：预计2026年向智能制造业务交付约500台工业人形机器人，向科研及教育市场交付约300台‘天工行者’机器人。 | 🔧 | news | https://www.163.com/dy/media/T1442472327522.html |
+| 2026-07-20 | Fourier | product | 傅利叶宣布获得千万级GRx系列人形机器人订单，落地东南亚市场，并明确GR-3、GR Nano、GRW构成‘1+3+X’康养导向生态。 | ⚡ | news | https://k.sina.com.cn/article_7879848900_1d5acf3c4068038nok.html |
+| 2026-07-20 | Agibot | product | AGIBOT在WAIC发布四款面向真实场景运营的具身AI产品，强调可复用的工作流落地能力。 | ⚡ | news | https://www.therobotreport.com/agibot-unveils-four-embodied-ai-products-real-world-operations-waic/ |
