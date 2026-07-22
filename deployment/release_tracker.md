@@ -145,3 +145,8 @@
 | 2026-07-18 | UBTech | product | 优必选于2026年7月18日同步披露业务交付计划：预计2026年向智能制造业务交付约500台工业人形机器人，向科研及教育市场交付约300台‘天工行者’机器人。 | 🔧 | news | https://www.163.com/dy/media/T1442472327522.html |
 | 2026-07-20 | Fourier | product | 傅利叶宣布获得千万级GRx系列人形机器人订单，落地东南亚市场，并明确GR-3、GR Nano、GRW构成‘1+3+X’康养导向生态。 | ⚡ | news | https://k.sina.com.cn/article_7879848900_1d5acf3c4068038nok.html |
 | 2026-07-20 | Agibot | product | AGIBOT在WAIC发布四款面向真实场景运营的具身AI产品，强调可复用的工作流落地能力。 | ⚡ | news | https://www.therobotreport.com/agibot-unveils-four-embodied-ai-products-real-world-operations-waic/ |
+| 2026-07-16 | Tesla Optimus | product | 特斯拉官方指引Optimus Fremont首条产线将于2026年7月底至8月投产，产业链调研指向8月底至9月启动批量量产。 | ⚡ | news | https://k.sina.com.cn/article_5953740931_162dee08306703n5vg.html |
+| 2026-07-16 | Tesla Optimus | product | 特斯拉宣布Fremont工厂首条Optimus产线设计年产能为100万台，德州超级工厂将建设第二代产线，长期设计产能达1000万台/年。 | ⚡ | news | https://k.sina.cn/article_7857201856_1d45362c00190860jc.html |
+| 2026-07-17 | Agibot | product | AGIBOT于2026年7月17日至20日世界人工智能大会（WAIC 2026）期间一次性发布四款人形机器人新品，覆盖全尺寸人形到工业重载机器人。 | ⚡ | news | https://blog.csdn.net/dozenyaoyida/article/details/162987275 |
+| 2026-07-17 | UBTech | product | 优必选于2026年7月17日正式发布Walker S2，宣称其为全球首款具备完全自主换电能力的人形机器人，可在3分钟内无需人工干预、无需停机完成电池更换。 | ⚡ | news | https://finance.ifeng.com/c/8uqtjUpgRpF |
+| 2026-07-17 | Dreame | product | 追觅科技于2026年7月17日官宣，将于第四季度推出AURORA手机，定位万元至十万元级模块化高端机型，含旗舰版、模块化摄影旗舰版与高奢定制版三条产品线。 | ⚡ | news | https://k.sina.com.cn/article_7879776378_1d5abd87a06801dif6.html |
