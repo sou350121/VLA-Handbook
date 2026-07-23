@@ -150,3 +150,9 @@
 | 2026-07-17 | Agibot | product | AGIBOT于2026年7月17日至20日世界人工智能大会（WAIC 2026）期间一次性发布四款人形机器人新品，覆盖全尺寸人形到工业重载机器人。 | ⚡ | news | https://blog.csdn.net/dozenyaoyida/article/details/162987275 |
 | 2026-07-17 | UBTech | product | 优必选于2026年7月17日正式发布Walker S2，宣称其为全球首款具备完全自主换电能力的人形机器人，可在3分钟内无需人工干预、无需停机完成电池更换。 | ⚡ | news | https://finance.ifeng.com/c/8uqtjUpgRpF |
 | 2026-07-17 | Dreame | product | 追觅科技于2026年7月17日官宣，将于第四季度推出AURORA手机，定位万元至十万元级模块化高端机型，含旗舰版、模块化摄影旗舰版与高奢定制版三条产品线。 | ⚡ | news | https://k.sina.com.cn/article_7879776378_1d5abd87a06801dif6.html |
+| 2026-07-17 | Booster Robotics | product | Booster Robotics于2026世界人工智能大会（WAIC 2026）正式发布新一代具身开发旗舰平台——双足人形机器人Booster T2，搭载NVIDIA Thor芯片，提供2070 TFLOPS端侧算力，并同步推出开放开发平台Booster Studio。 | ⚡ | news | https://www.sina.cn/news/detail/5322528730911655.html |
+| 2026-07-17 | MagicLab | product | 2026年7月17日，MagicLab在WAIC2026上海开幕当天全球首发MagicBot X1（全尺寸人形机器人）、MagicBot D1（工业轮式人形机器人）、MagicDog T1（轻工业四足机器人），并发布通用具身大模型Magic-VLA K02。 | ⚡ | news | http://h5.ifeng.com/c/vivo/v0021OFuxhIvnZB7-_aYCC3TGc3HxQLy5owceeGWdKHMa9Rk__ |
+| 2026-07-17 | MagicLab | product | 2026年7月17日，MagicLab宣布其工业轮式人形机器人MagicBot D1已在追觅智能制造工厂进入常态化实战验证阶段。 | 🔧 | news | http://h5.ifeng.com/c/vivo/v0021OFuxhIvnZB7-_aYCC3TGc3HxQLy5owceeGWdKHMa9Rk__ |
+| 2026-07-18 | Galbot | product | 2026年7月18日，银河通用在WAIC 2026展台正式公开展示Galbot G1机器人执行长程、抗干扰早餐制作任务，并介绍其自研具身大模型‘银河星脑（AstraBrain）’及‘大脑—小脑—神经控制’端到端闭环架构。 | ⚡ | news | https://post.smzdm.com/p/a9kpw8ro/ |
+| 2026-07-19 | Booster Robotics | product | 《上证报中国证券网》报道Booster T2在WAIC 2026展出，强调其基于英伟达Drive Thor中央计算平台、支持75 DOF及140 N·m关节扭矩的技术参数，并定义其为‘当前双足人形机器人领域算力领先的平台’。 | 🔧 | news | https://stock.10jqka.com.cn/20260719/c678273896.shtml |
+| 2026-07-20 | Unitree | product | 宇树科技于2026年7月20日正式发布具身智能新模型UnifoLM-OminiA-0.3，支持全模态交互理解。 | ⚡ | news | https://www.unitree.com/cn/news |
