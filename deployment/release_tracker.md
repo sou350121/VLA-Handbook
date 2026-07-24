@@ -156,3 +156,4 @@
 | 2026-07-18 | Galbot | product | 2026年7月18日，银河通用在WAIC 2026展台正式公开展示Galbot G1机器人执行长程、抗干扰早餐制作任务，并介绍其自研具身大模型‘银河星脑（AstraBrain）’及‘大脑—小脑—神经控制’端到端闭环架构。 | ⚡ | news | https://post.smzdm.com/p/a9kpw8ro/ |
 | 2026-07-19 | Booster Robotics | product | 《上证报中国证券网》报道Booster T2在WAIC 2026展出，强调其基于英伟达Drive Thor中央计算平台、支持75 DOF及140 N·m关节扭矩的技术参数，并定义其为‘当前双足人形机器人领域算力领先的平台’。 | 🔧 | news | https://stock.10jqka.com.cn/20260719/c678273896.shtml |
 | 2026-07-20 | Unitree | product | 宇树科技于2026年7月20日正式发布具身智能新模型UnifoLM-OminiA-0.3，支持全模态交互理解。 | ⚡ | news | https://www.unitree.com/cn/news |
+| 2026-07-23 | Tesla Optimus | product | 2026年7月23日，马斯克在财报电话会中透露Optimus自研AI芯片已升级至AI6，AI4芯片计划于2027年年中量产。 | 🔧 | news | https://www.yicai.com/video/103105229.html |
