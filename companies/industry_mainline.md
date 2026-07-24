@@ -1,23 +1,27 @@
 # 🏭 行业判断地图
 
-> ⚙️ 本文由 industry-radar 每周自动生成 | 2026-07-17 | 综合自过去 8 天行业雷达日档
+> ⚙️ 本文由 industry-radar 每周自动生成 | 2026-07-24 | 综合自过去 8 天行业雷达日档
 > 仅含可追溯判断；来源链接均出自每日 `memory/blog/archives/industry-radar/` 日档。
 
 ## 融资格局（谁在拿钱、估值节奏、轮次信号）  
 
-· IPO已从融资终点升级为全球产能信用锚点：Unitree获证监会注册批复后，Surgie手术机器人登顶《Nature》，将420亿元估值锚定于临床级通用具身能力，资本市场开始以“真实场景交付深度”重估IPO企业价值中枢 [链接](http://finance.sina.com.cn/roll/2026-07-11/doc-inihkyif8369707.shtml)。  
-· 外资产业资本正从“财务投资”转向“制造主权共建”：三菱电机不仅领投Lumos Robot近10亿元，更将其Nexcore引擎部署于自身PLC产线；现代汽车260亿美元建厂专供Atlas量产——资本已不再购买技术期权，而是直接定义物理AI的制造标准与交付链路 [链接](https://new.qq.com/rain/a/20260511A04PL400)。  
+· IPO已从融资终点升级为全球产能信用锚点：Unitree通过上交所审核并进入证监会注册阶段，拟募资42.02亿元、对应估值约420亿元，其高增长（2026Q1营收+68.49%）与重投入策略获监管背书，标志着IPO正成为具身智能企业规模化交付能力的权威认证 [链接](http://finance.sina.com.cn/jjxw/2026-06-04/doc-iniafrts0459356.shtml)。  
+· 外资产业资本正从“财务投资”转向“制造主权共建”：三菱电机两轮领投Lumos Robot近10亿元，并将Lumos Nexcore物理AI引擎实际部署于自身PLC产线；现代汽车斥资260亿美元在美国建厂专供Boston Dynamics Atlas量产——资本已深度嵌入制造标准定义与产线级协同 [链接](https://new.qq.com/rain/a/20260511A04PL400)。  
+· 生态型融资正替代单点技术融资：智元机器人“元苼生态共建计划”首期投入1亿元扶持资金，同步覆盖开发者、高校与海外伙伴，表明头部玩家融资逻辑已从“验证模型”转向“构筑标准接口与协作基础设施” [链接](https://flash.jin10.com/detail/20260610112116519800)。  
 
 ## 产品节奏（发布/开源/降价/量产信号）  
 
+· 量产临界点已从“样机演示”全面转向“产线常态化运行”：Galbot S1在宁德时代产线实现7×24小时连续运行超3个月，Tesla Optimus V3弗里蒙特产线明确指向8月底启动批量量产，标志行业正式迈入真实工况下的可靠性验证周期 [链接](https://finance.sina.cn/2026-07-19/detail-iniikara8257184.d.html)。  
+· 全尺寸人形机器人价格锚点正式确立：逐际动力LimX Luna国内零售价29.8万元，首次将商业化门槛压至30万元区间，叠加Unitree G1税前售价2.73万美元（毛利率67%），证明成本可控性已成头部玩家核心竞争力 [链接](https://news.sohu.com/a/1032739190_554588)。  
+· VLA范式加速收敛至端到端统一建模：Galaxea发布VLA基础模型G0.5，支持“推理与动作共序列生成”，推动具身智能从模块化架构转向单一权重、联合优化的生成范式，成为训练效率与泛化能力跃迁的关键拐点 [链接](https://blog.csdn.net/v_JULY_v/article/details/161690445)。  
 
 ## 玩家动态（关键公司的战略动作与卡位）  
 
-· Unitree完成从“成本定义者”到“临床可信度定义者”的跃迁：G1成本结构被SemiAnalysis量化验证，Surgie远程手术登顶《Nature》，R1现货降价同步推进——其核心壁垒已从供应链整合升维至“高风险场景下的泛化鲁棒性”认证 [链接](http://finance.sina.com.cn/roll/2026-07-11/doc-inihkyif8369707.shtml)。  
 · 智元机器人生态主权建设进入执行深水区：“元苼生态共建计划”1亿元资金启动，同步覆盖海外高校与开发者，并以AIMA开源与World Challenge真机评测为技术接口——其目标已不是构建生态，而是定义具身智能全球协作的事实标准 [链接](https://xueqiu.com/7173013686/381513616)。  
+· Galbot确立工业级具身机器人全栈交付新范式：WAIC现场系统展示G1（服务）与S1（工业）双线产品矩阵，S1已在宁德时代稳定运行超3个月，并与上汽、博世、现代等头部车企/Tier1达成合作，标志其从单点技术突破迈向制造全链条嵌入 [链接](https://finance.sina.cn/2026-07-19/detail-iniikara8257184.d.html)。  
 
 ## 张力记录（与过去判断的冲突、悬而未决的问题；格式「· 旧判断X → 本周信号Y」）  
 
-· 旧判断“Tesla Optimus量产节奏为行业基准线” → 本周信号显示Optimus Gen3虽启动欧洲首秀，但Unitree Surgie已登顶《Nature》、Booster T1拿下RoboCup全满贯、AI² Robotics单轮融资7.35亿美元——行业基准线正坍缩为“临床/竞赛/资本”三重维度并行验证的碎片化现实 [链接](https://www.therobotreport.com/ai%c2%b2-robotics-raises-735m-3b-valuation-wheeled-humanoid-robots/)。  
-· 旧判断“宇树科技以差异化架构规避同质化风险” → 本周信号显示H2 Plus担纲英伟达公版参考设计的同时，R1降价25%并开放现货，暴露其正同时承担“架构标准化推手”与“价格战执行者”双重角色，公版化红利与品牌溢价不可兼得 [链接](http://mbd.baidu.com/newspage/data/dtlandingsuper?nid=dt_4965750474519458979)。  
-· 旧判断“中国公司主攻成本与量产，海外玩家聚焦高壁垒技术” → 本周Unitree Surgie手术机器人、Boston Dynamics Atlas工地实机作业、Booster T1竞赛统治力同步爆发，表明技术壁垒已从单项指标转向“复杂场景连续交付能力”，中美竞合进入全栈鲁棒性比拼阶段 [链接](http://finance.sina.com.cn/roll/2026-07-11/doc-inihkyif8369707.shtml)。
+· 旧判断“Tesla Optimus量产节奏为行业基准线” → 本周信号显示Optimus V3产线年化目标上调至7万台、量产窗口锁定8月底，但Galbot S1已在宁德时代实现3个月常态化运行，Unitree Surgie登顶《Nature》，表明行业基准线正从“单一时间表”坍缩为“多维交付实证”（产线稳定性×临床权威性×竞赛统治力） [链接](https://finance.sina.cn/2026-07-19/detail-iniikara8257184.d.html)。  
+· 旧判断“宇树科技以差异化架构规避同质化风险” → 本周信号显示H2 Plus担纲英伟达机器人参考设计角色，同时G1成本结构被第三方报告量化验证，暴露其正同时承担“架构标准化推手”与“成本定义者”双重身份，公版化红利与技术溢价存在结构性张力 [链接](http://mbd.baidu.com/newspage/data/dtlandingsuper?nid=dt_4965750474519458979)。  
+· 旧判断“中国公司主攻成本与量产，海外玩家聚焦高壁垒技术” → 本周Boston Dynamics Atlas集成Orbit软件实现自主换电与工厂导航，Agibot远征A3完成全球首个无干预实时人机乒乓球对抗，表明技术壁垒已从单项指标转向“复杂场景连续交付能力”，中美竞合进入全栈鲁棒性比拼阶段 [链接](http://finance.sina.com.cn/jjxw/2026-07-19/doc-iniiiwie8210986.shtml)。
