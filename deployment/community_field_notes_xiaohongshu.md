@@ -5,6 +5,7 @@
 > **定位**：论文不会告诉你的东西——社区实战者的真实参数、真实失败和真实吐槽。每条结论附「帖N」编号，可在原始数据中回溯验证。
 > **更新频率**：每 3 天自动增量收集（最近一次：2026-07-25 Round 8，50 篇有效帖，详见 §12.13；历轮方法论见 §12.16）
 > **结构说明（2026-07-25 重排）**：原先按日期分仓的 §12 / §14 / §15 已合并为一个按主题组织的档案 **§12（12.1-12.16）**；内容与证据逐字保留，每块标题后以 `〔原 §x.y〕`/`〔Round N〕` 标注来源。
+> **快速上手**：先看 **[图表速览](#图表速览visual-index)**——3 张图（文档地图 / 故障诊断树 / 模型谱系）+ 2 张表（关键效果数字 / 参数速查）。
 >
 > **阅读提示**：表格中的参数配置来自社区分享，不同硬件/任务下可能需要调整。"N 人验证"表示有多少独立来源报告了相同结论——数字越大越靠谱。
 >
@@ -55,58 +56,177 @@
 | 触觉/灵巧手怎么选传感器？ | 五大方案各有取舍：电阻/电容/压电/电磁/光学 | [§9.7](#97-触觉传感与灵巧手) |
 | 视觉编码器选哪个？ | SigLIP-2 是新标杆，VGGT 在空间任务可能优于 DINO | [§9.8](#98-视觉编码器选型) |
 | π0 怎么微调/部署？ | openpi 复现看§10.7，50条单臂可跑通，双臂需更多数据 | [§10.7](#107-π0-微调与真机部署) |
-| VLA 落地为什么失败？ | 泛化差+长任务弱+不可解释，团队已放弃纯VLA路线 | [§12.12（原 §12.10）](#1210-踩坑吐槽与落地反思真机实战负面经验) |
-| 开源数据微调效果极差？ | 开源数据与本机有 gap（视角/零点），自采 100 条 > 开源 1200 条 | [§12.12（原 §12.10）](#1210-踩坑吐槽与落地反思真机实战负面经验) |
-| VLA 中 Language 有用吗？ | 工业界实测 L 不起作用甚至有害，VA/VAM 路线崛起 | [§12.12（原 §12.10）](#1210-踩坑吐槽与落地反思真机实战负面经验) |
-| 加数据为什么不提升？ | action ambiguity + 时间维度 → 监督信号打架，需更多数据 | [§12.12（原 §12.10）](#1210-踩坑吐槽与落地反思真机实战负面经验) |
+| VLA 落地为什么失败？ | 泛化差+长任务弱+不可解释，团队已放弃纯VLA路线 | [§12.12（原 §12.10）](#踩坑吐槽与落地反思真机实战负面经验) |
+| 开源数据微调效果极差？ | 开源数据与本机有 gap（视角/零点），自采 100 条 > 开源 1200 条 | [§12.12（原 §12.10）](#踩坑吐槽与落地反思真机实战负面经验) |
+| VLA 中 Language 有用吗？ | 工业界实测 L 不起作用甚至有害，VA/VAM 路线崛起 | [§12.12（原 §12.10）](#踩坑吐槽与落地反思真机实战负面经验) |
+| 加数据为什么不提升？ | action ambiguity + 时间维度 → 监督信号打架，需更多数据 | [§12.12（原 §12.10）](#踩坑吐槽与落地反思真机实战负面经验) |
 | VLA+RL 怎么做？ | SimpleVLA-RL(R1式)/WMPO(世界模型内)/π-StepNFT(flow-based) | [§10.8](#108-vla--rl-强化学习) |
 | Sim2Real 怎么缩小 gap？ | DoorMan(分布包含)、PIN-WM(可微物理)、仿真数据价值被放大 | [§10.9](#109-sim2real-仿真迁移) |
 | 触觉怎么接入 VLA？ | VLA-Touch(NUS)、TaF-VLA(触力对齐)、VTLA-RL(触觉+RL) | [§10.10](#1010-触觉传感与力控) |
 | 移动操作怎么做？ | MoManipVLA(50条)、Mobi-π(固定→移动)、ODYSSEY(四足) | [§10.11](#1011-移动操作与导航) |
 | 具身智能融资热度？ | 2025Q1国内37笔35亿，9家估值破百亿，星海图/无界动力领跑 | [§10.12](#1012-产业融资与公司动态) |
-| 想做 visual-guide 替代 language？ | VISTA：2h数据/5物体→OOD 21物体 69%（pi0 仅 14%） | [§12.3（原 §14.1）](#141-vision-guide-替代-language-guide) |
-| HF 叠衣服怎么做到 90%？ | 1200 条高质量数据微调 40%→90% + SARM/RABC/RTC + DAgger | [§12.7（原 §14.3）](#143-huggingface-叠衣服-90-完整工程开源) |
-| WAM 架构真的优于 VLA 吗？ | 是。VLA 27 层 vision tower 只用 last hidden state（"长瘤子的 VLM"） | [§12.8（原 §14.4）](#144-wam-vs-vla-架构争议升级) |
-| WAM robustness 实测数据？ | LingBot-VA RoboTwin 2.0-Plus 74.2% / Cosmos LIBERO-Plus 82.2%（华为） | [§12.8（原 §14.4）](#144-wam-vs-vla-架构争议升级) |
-| 真机 RL = DAgger 包装？ | 大概率是。强如 PI 0.6\* 都拒绝做"无 DAgger ablation" | [§12.10（原 §14.5）](#145-dagger-是真机-rl-的真相) |
-| 触觉怎么接入 VLA 最好？ | 残差策略 + 安全感知（不是主决策模态） | [§12.9（原 §14.6）](#146-触觉应该是-vla-的残差安全层) |
-| LeRobot 还能用吗？ | ⚠️ 维护降级。Remi 离开 + HF 重心转移；考虑 fork 或迁移 FluxVLA | [§12.11（原 §14.7）](#147-lerobot-维护降级--fluxvla-补位) |
-| sim2sim 角速度对不上？ | mujoco root 角速度=local，isaac gym=global（节省一周调试） | [§12.6（原 §14.8）](#148-sim2real-工程级-pin-points) |
-| Sunday 机器人硬件 spec？ | 七轴 0.8m + 三节升降 2.1m + 三轮三转 1.7w 底盘（2026 新标配） | [§12.6（原 §14.9）](#149-sunday-机器人硬件--so101-bom) |
-| SO101 双臂 BOM 多少钱？ | 主从 ~3400 元（电机1200/摄像头700/零件1250） | [§12.6（原 §14.9）](#149-sunday-机器人硬件--so101-bom) |
-| Libero action space 是什么？ | osc controller (dx,dy,dz,dyaw,dpitch,droll)+gripper，7 维 delta | [§12.2（原 §14.10）](#1410-vla-action-space-技术答案) |
-| PI0 OOD 极限多少？ | 5000 条数据 / 分布外 97% / 分布内 100%（社区实测） | [§12.3（原 §14.11）](#1411-pi0-ood-极限实测) |
-| VLA 论文真上过真机吗？ | A12 178 赞神回："填个表格完事了"——逆共识已成共识 | [§12.12（原 §14.12）](#1412-vla--paper-factory-逆共识升格) |
-| VLA 推理为什么卡顿？怎么加速？ | 三件套都是无需重训主干：LAC 1.76× / DepthCache 1.3× / StreamingVLA 异步流式 | [§12.2（原 §15.1）](#151-推理加速三件套全部工程化vla-sota-不再单押更大底座) |
-| pi0.5 微调 200 条够吗？ | 不够。Rose 一手：能抓的位置就那一点点，无泛化；horizon 大小都抓不到；30Hz 比 25Hz 还抖 | [§12.3（原 §15.2）](#152-vla-泛化失败--oxe-shortcut-learning-量化小数据微调到泛化置信度--10) |
-| 30Hz 采集 vs 10-15Hz？ | **10-15Hz 比较合适，30Hz 太多了学不好**（Rorschach 评论一手） | [§12.3（原 §15.2）](#152-vla-泛化失败--oxe-shortcut-learning-量化小数据微调到泛化置信度--10) |
-| Libero 任务一直跑不到 SOTA？ | 评测代码 bug：搜 `ObjectState.check_on_top`，阈值 0.3→0.5。社区一手修复 | [§12.3（原 §15.2）](#152-vla-泛化失败--oxe-shortcut-learning-量化小数据微调到泛化置信度--10) |
-| VLA 视觉编码器的几何能力差？ | GR00T RMSE 0.92 vs VGGT 0.41。早融合 + 冻结 VLM → Unitree G1 抓取 84.44% vs 57.78% | [§12.3（原 §15.4）](#154-vla-的几何鸿沟被量化新子节点置信度-75) |
-| pi0.5 嵌入式部署做不上去？ | 已知坑：Jetson Thor/Orin 适配失败 + Hierarchical Planner 开源缺失（CyberSoma 5 大坑） | [§12.3（原 §15.2）](#152-vla-泛化失败--oxe-shortcut-learning-量化小数据微调到泛化置信度--10) |
-| Jim Fan / NVIDIA 怎么看 VLA？ | "VLA 已死、遥操作已死，21k 小时第一视角视频 + EgoScale，物理图灵测试 2-3 年" | [§12.8（原 §15.3）](#153-world-model--wam-范式收敛--内部质疑双轨升格) |
-| 采数据找一堆人还是多换场景？ | 场景多样性 > 采集者数量（Jim Fan EgoVerse 30% 涨点的核心发现） | [§12.7（原 §15.5）](#155-数据采集策略场景多样性--采集者数量) |
-| GELLO + Franka3 有什么硬伤？ | gripper 开闭 2s 延时 —— Franka hand 设计就是低频控制（社区一手） | [§12.7（原 §15.5）](#155-数据采集策略场景多样性--采集者数量) |
-| ALOHA 仿真复现物体乱飞？ | record vs eval 初始化逻辑不同！推理时必须把采集代码注释换成 eval | [§12.2（原 §15.6）](#156-flow-matching--diffusion--触觉--sim2sim-工程经验) |
-| Flow Matching RL sim2real 怎么提？ | FPO++ 测试时零采样：成功率 10%→70%+（Amazon FAR + Berkeley） | [§12.2（原 §15.6）](#156-flow-matching--diffusion--触觉--sim2sim-工程经验) |
-| V-JEPA vs DINO 谁更好？ | Meta 自家实验：DINO > V-JEPA（物体边界 + 局部空间结构刻画更细） | [§12.8（原 §15.3）](#153-world-model--wam-范式收敛--内部质疑双轨升格) |
-| 真机刚开机 VLA 成功率低？ | **冷启动！减速器温度影响摩擦力 → 轨迹跟踪滞后 → VLA 绝对 joint 角误差级联**。建议把温度加进 state | [§12.16（原 §15.9）](#159-round-3-经验补遗参数--踩坑导向帖277-283) |
-| 多卡 VLA 训练卡死不读数据？ | **NUMA 跨节点内存访问**！`numactl --membind` 指定节点；`HDF5_USE_FILE_LOCKING=FALSE`；DS zero0 > acc+DS | [§12.16（原 §15.9）](#159-round-3-经验补遗参数--踩坑导向帖277-283) |
-| HDF5 数据集太大跑不动？ | **lz4 压缩（clevel 小越快），2T → 250G**，解压代价 < 传输代价 | [§12.16（原 §15.9）](#159-round-3-经验补遗参数--踩坑导向帖277-283) |
-| 灾难性遗忘最新解法？ | 上交 CVPR'26 Driving Expert Adapter — **不改主参数，提示空间适配 + 动态调用专家**；全量微调破坏性最大 | [§12.16（原 §15.9）](#159-round-3-经验补遗参数--踩坑导向帖277-283) |
-| 宇树 G1 上跑 VLA 行不行？ | 一手报告：ACT / π0.5 / GR00T 三件套用官方数据都不行；**刚需 XR 自采 + 三 USB 别共用拓展坞** | [§12.16（原 §15.9）](#159-round-3-经验补遗参数--踩坑导向帖277-283) |
-| ACT 在非桌面机械臂能 work 吗？ | **不能。社区共识：ACT 适用 = 桌面**；franka 50 条 OK，G1/人形/移动都失败 → RL | [§12.16（原 §15.9）](#159-round-3-经验补遗参数--踩坑导向帖277-283) |
-| LeRobot 还能放心用吗？ | ⚠️ 维护降级第 4 次印证：**Libero MuJoCo 重力 bug 弹飞物体 + pi 兼容差 + 转换有问题** | [§12.16（原 §15.9）](#159-round-3-经验补遗参数--踩坑导向帖277-283) |
-| 主流 VLA 架构 vs 星海图 G0.5？ | 主流：VLM Encoder + action expert；**G0.5：单 decoder 同时 reasoning + action + 27 维 token vocab 抹平 18 本体差异** | [§12.16（原 §15.9）](#159-round-3-经验补遗参数--踩坑导向帖277-283) |
-| LeRobot 双臂训练突然炸了？ | 一个臂如果完全不动 → quantile normalization fallback bug → 推理时关节极端值。**用固定值替代静止臂** | [§12.16（原 §15.10）](#1510-round-4-经验补遗同日-continue-加帖284-290) |
-| Isaac Lab 国内卡死装不上？ | **不要先打开 IsaacSim 验证！** 会触发 S3 拉资产卡死。先下载资产包改本地路径 | [§12.16（原 §15.10）](#1510-round-4-经验补遗同日-continue-加帖284-290) |
-| VLA 训练数据要堆量吗？ | BC 阶段反而 **FrameSkip 20% 帧 > 100% 帧（76.15% vs 66.50%）**。预训练阶段才需要堆量 | [§12.16（原 §15.10）](#1510-round-4-经验补遗同日-continue-加帖284-290) |
-| SmolVLA 真机调不动？ | **至少 1w steps 起步**；默认超参不可信要手调；同等数据 π0 / GR00T 1.5 更稳 | [§12.16（原 §15.10）](#1510-round-4-经验补遗同日-continue-加帖284-290) |
-| VLA 任务一直跑不停摸物体？ | **任务终止判定缺失是普遍缺陷**（MolmoAct2 也有），目前无好解 | [§12.16（原 §15.10）](#1510-round-4-经验补遗同日-continue-加帖284-290) |
-| VLM 预训练底座到底重不重要？ | 大数据多任务下**绝对重要**：抽掉 VLM 真机成功率 83.6% → 48.5%（-35pp） | [§12.16（原 §15.10）](#1510-round-4-经验补遗同日-continue-加帖284-290) |
-| 跨本体 VLA 怎么实现？ | 两条路：G0.5 Action Tokenizer（27 维 vocab 抹平 18 本体）/ Qwen-VLA 文本 prompt 描述硬件差异（11 平台） | [§12.16（原 §15.10）](#1510-round-4-经验补遗同日-continue-加帖284-290) |
+| 想做 visual-guide 替代 language？ | VISTA：2h数据/5物体→OOD 21物体 69%（pi0 仅 14%） | [§12.3（原 §14.1）](#vision-guide-替代-language-guide) |
+| HF 叠衣服怎么做到 90%？ | 1200 条高质量数据微调 40%→90% + SARM/RABC/RTC + DAgger | [§12.7（原 §14.3）](#huggingface-叠衣服-90-完整工程开源-) |
+| WAM 架构真的优于 VLA 吗？ | 是。VLA 27 层 vision tower 只用 last hidden state（"长瘤子的 VLM"） | [§12.8（原 §14.4）](#wam-vs-vla-架构争议升级) |
+| WAM robustness 实测数据？ | LingBot-VA RoboTwin 2.0-Plus 74.2% / Cosmos LIBERO-Plus 82.2%（华为） | [§12.8（原 §14.4）](#wam-vs-vla-架构争议升级) |
+| 真机 RL = DAgger 包装？ | 大概率是。强如 PI 0.6\* 都拒绝做"无 DAgger ablation" | [§12.10（原 §14.5）](#dagger-是真机-rl-的真相-) |
+| 触觉怎么接入 VLA 最好？ | 残差策略 + 安全感知（不是主决策模态） | [§12.9（原 §14.6）](#触觉应该是-vla-的残差安全层) |
+| LeRobot 还能用吗？ | ⚠️ 维护降级。Remi 离开 + HF 重心转移；考虑 fork 或迁移 FluxVLA | [§12.11（原 §14.7）](#lerobot-维护降级--fluxvla-补位) |
+| sim2sim 角速度对不上？ | mujoco root 角速度=local，isaac gym=global（节省一周调试） | [§12.6（原 §14.8）](#sim2real-工程级-pin-points) |
+| Sunday 机器人硬件 spec？ | 七轴 0.8m + 三节升降 2.1m + 三轮三转 1.7w 底盘（2026 新标配） | [§12.6（原 §14.9）](#sunday-机器人硬件--so101-bom) |
+| SO101 双臂 BOM 多少钱？ | 主从 ~3400 元（电机1200/摄像头700/零件1250） | [§12.6（原 §14.9）](#sunday-机器人硬件--so101-bom) |
+| Libero action space 是什么？ | osc controller (dx,dy,dz,dyaw,dpitch,droll)+gripper，7 维 delta | [§12.2（原 §14.10）](#vla-action-space-技术答案) |
+| PI0 OOD 极限多少？ | 5000 条数据 / 分布外 97% / 分布内 100%（社区实测） | [§12.3（原 §14.11）](#pi0-ood-极限实测) |
+| VLA 论文真上过真机吗？ | A12 178 赞神回："填个表格完事了"——逆共识已成共识 | [§12.12（原 §14.12）](#vla--paper-factory-逆共识升格-) |
+| VLA 推理为什么卡顿？怎么加速？ | 三件套都是无需重训主干：LAC 1.76× / DepthCache 1.3× / StreamingVLA 异步流式 | [§12.2（原 §15.1）](#推理加速三件套全部工程化vla-sota-不再单押更大底座) |
+| pi0.5 微调 200 条够吗？ | 不够。Rose 一手：能抓的位置就那一点点，无泛化；horizon 大小都抓不到；30Hz 比 25Hz 还抖 | [§12.3（原 §15.2）](#vla-泛化失败--oxe-shortcut-learning-量化小数据微调到泛化置信度--10) |
+| 30Hz 采集 vs 10-15Hz？ | **10-15Hz 比较合适，30Hz 太多了学不好**（Rorschach 评论一手） | [§12.3（原 §15.2）](#vla-泛化失败--oxe-shortcut-learning-量化小数据微调到泛化置信度--10) |
+| Libero 任务一直跑不到 SOTA？ | 评测代码 bug：搜 `ObjectState.check_on_top`，阈值 0.3→0.5。社区一手修复 | [§12.3（原 §15.2）](#vla-泛化失败--oxe-shortcut-learning-量化小数据微调到泛化置信度--10) |
+| VLA 视觉编码器的几何能力差？ | GR00T RMSE 0.92 vs VGGT 0.41。早融合 + 冻结 VLM → Unitree G1 抓取 84.44% vs 57.78% | [§12.3（原 §15.4）](#vla-的几何鸿沟被量化新子节点置信度-75) |
+| pi0.5 嵌入式部署做不上去？ | 已知坑：Jetson Thor/Orin 适配失败 + Hierarchical Planner 开源缺失（CyberSoma 5 大坑） | [§12.3（原 §15.2）](#vla-泛化失败--oxe-shortcut-learning-量化小数据微调到泛化置信度--10) |
+| Jim Fan / NVIDIA 怎么看 VLA？ | "VLA 已死、遥操作已死，21k 小时第一视角视频 + EgoScale，物理图灵测试 2-3 年" | [§12.8（原 §15.3）](#world-model--wam-范式收敛--内部质疑双轨升格) |
+| 采数据找一堆人还是多换场景？ | 场景多样性 > 采集者数量（Jim Fan EgoVerse 30% 涨点的核心发现） | [§12.7（原 §15.5）](#数据采集策略场景多样性--采集者数量) |
+| GELLO + Franka3 有什么硬伤？ | gripper 开闭 2s 延时 —— Franka hand 设计就是低频控制（社区一手） | [§12.7（原 §15.5）](#数据采集策略场景多样性--采集者数量) |
+| ALOHA 仿真复现物体乱飞？ | record vs eval 初始化逻辑不同！推理时必须把采集代码注释换成 eval | [§12.2（原 §15.6）](#flow-matching--diffusion--触觉--sim2sim-工程经验) |
+| Flow Matching RL sim2real 怎么提？ | FPO++ 测试时零采样：成功率 10%→70%+（Amazon FAR + Berkeley） | [§12.2（原 §15.6）](#flow-matching--diffusion--触觉--sim2sim-工程经验) |
+| V-JEPA vs DINO 谁更好？ | Meta 自家实验：DINO > V-JEPA（物体边界 + 局部空间结构刻画更细） | [§12.8（原 §15.3）](#world-model--wam-范式收敛--内部质疑双轨升格) |
+| 真机刚开机 VLA 成功率低？ | **冷启动！减速器温度影响摩擦力 → 轨迹跟踪滞后 → VLA 绝对 joint 角误差级联**。建议把温度加进 state | [§12.16（原 §15.9）](#round-3-经验补遗参数--踩坑导向帖277-283) |
+| 多卡 VLA 训练卡死不读数据？ | **NUMA 跨节点内存访问**！`numactl --membind` 指定节点；`HDF5_USE_FILE_LOCKING=FALSE`；DS zero0 > acc+DS | [§12.16（原 §15.9）](#round-3-经验补遗参数--踩坑导向帖277-283) |
+| HDF5 数据集太大跑不动？ | **lz4 压缩（clevel 小越快），2T → 250G**，解压代价 < 传输代价 | [§12.16（原 §15.9）](#round-3-经验补遗参数--踩坑导向帖277-283) |
+| 灾难性遗忘最新解法？ | 上交 CVPR'26 Driving Expert Adapter — **不改主参数，提示空间适配 + 动态调用专家**；全量微调破坏性最大 | [§12.16（原 §15.9）](#round-3-经验补遗参数--踩坑导向帖277-283) |
+| 宇树 G1 上跑 VLA 行不行？ | 一手报告：ACT / π0.5 / GR00T 三件套用官方数据都不行；**刚需 XR 自采 + 三 USB 别共用拓展坞** | [§12.16（原 §15.9）](#round-3-经验补遗参数--踩坑导向帖277-283) |
+| ACT 在非桌面机械臂能 work 吗？ | **不能。社区共识：ACT 适用 = 桌面**；franka 50 条 OK，G1/人形/移动都失败 → RL | [§12.16（原 §15.9）](#round-3-经验补遗参数--踩坑导向帖277-283) |
+| LeRobot 还能放心用吗？ | ⚠️ 维护降级第 4 次印证：**Libero MuJoCo 重力 bug 弹飞物体 + pi 兼容差 + 转换有问题** | [§12.16（原 §15.9）](#round-3-经验补遗参数--踩坑导向帖277-283) |
+| 主流 VLA 架构 vs 星海图 G0.5？ | 主流：VLM Encoder + action expert；**G0.5：单 decoder 同时 reasoning + action + 27 维 token vocab 抹平 18 本体差异** | [§12.16（原 §15.9）](#round-3-经验补遗参数--踩坑导向帖277-283) |
+| LeRobot 双臂训练突然炸了？ | 一个臂如果完全不动 → quantile normalization fallback bug → 推理时关节极端值。**用固定值替代静止臂** | [§12.16（原 §15.10）](#round-4-经验补遗同日-continue-加帖284-290) |
+| Isaac Lab 国内卡死装不上？ | **不要先打开 IsaacSim 验证！** 会触发 S3 拉资产卡死。先下载资产包改本地路径 | [§12.16（原 §15.10）](#round-4-经验补遗同日-continue-加帖284-290) |
+| VLA 训练数据要堆量吗？ | BC 阶段反而 **FrameSkip 20% 帧 > 100% 帧（76.15% vs 66.50%）**。预训练阶段才需要堆量 | [§12.16（原 §15.10）](#round-4-经验补遗同日-continue-加帖284-290) |
+| SmolVLA 真机调不动？ | **至少 1w steps 起步**；默认超参不可信要手调；同等数据 π0 / GR00T 1.5 更稳 | [§12.16（原 §15.10）](#round-4-经验补遗同日-continue-加帖284-290) |
+| VLA 任务一直跑不停摸物体？ | **任务终止判定缺失是普遍缺陷**（MolmoAct2 也有），目前无好解 | [§12.16（原 §15.10）](#round-4-经验补遗同日-continue-加帖284-290) |
+| VLM 预训练底座到底重不重要？ | 大数据多任务下**绝对重要**：抽掉 VLM 真机成功率 83.6% → 48.5%（-35pp） | [§12.16（原 §15.10）](#round-4-经验补遗同日-continue-加帖284-290) |
+| 跨本体 VLA 怎么实现？ | 两条路：G0.5 Action Tokenizer（27 维 vocab 抹平 18 本体）/ Qwen-VLA 文本 prompt 描述硬件差异（11 平台） | [§12.16（原 §15.10）](#round-4-经验补遗同日-continue-加帖284-290) |
 
 ---
 
+## 图表速览（Visual Index）
+
+> 本节是全文的**视觉索引**：先用三张图定位到该读哪一节，再用两张表核对关键数字与参数。
+> 图表中的每个数字都可回溯到具体帖号，原始证据在 §12 对应小节。
+
+### 📍 图 1：我该读哪一节（文档地图）
+
+```mermaid
+flowchart TD
+  START(["我现在要解决什么问题？"])
+  START --> Q1["有具体报错 / 想抄参数"]
+  START --> Q2["要做选型决策"]
+  START --> Q3["想判断某模型或论文可不可信"]
+  START --> Q4["准备面试"]
+  START --> Q5["想了解行业判断与逆共识"]
+  Q1 --> A1["§1 训练参数<br/>§2 真机部署调试<br/>§12.5 工程踩坑与 bug"]
+  Q2 --> A2["§9 上游选型<br/>§12.6 硬件与 Sim2Real<br/>§12.7 数据采集"]
+  Q3 --> A3["§5 社区验证 vs 论文声称<br/>§12.4 benchmark 鸿沟<br/>§12.14 信念网络置信度"]
+  Q4 --> A4["§12.13 面试题库<br/>§12.1 模型架构演进<br/>§12.2 动作生成范式"]
+  Q5 --> A5["§6 少数派观点<br/>§12.12 产业与逆共识<br/>§13 黑话辞典"]
+  A3 --> WARN["读数字前先看 §12.4：<br/>论文指标与真机复现存在系统性落差"]
+```
+
+### 🩺 图 2：真机效果不对 → 根因 → 帖号（诊断树）
+
+```mermaid
+flowchart LR
+  P(["真机效果不对"])
+  P --> S1["动作抖动 / 不平滑"]
+  P --> S2["抓取偏移 / 不准"]
+  P --> S3["越训成功率越低"]
+  P --> S4["换场景就崩"]
+  P --> S5["跑不起来 / OOM / 太慢"]
+  P --> S6["长任务中途忘记做到哪"]
+  S1 --> C1["chunk 交接处导数突变<br/>→ RTC 三段式 · 帖315"]
+  S1 --> C2["lerobot 版 pi 隐藏 bug<br/>→ 用 openpi · 帖279 帖304"]
+  S1 --> C3["位置控制太硬<br/>→ 力矩 / 柔顺控制 · 帖350"]
+  S2 --> C4["先查标定 / 坐标系 / TCP / 深度尺度<br/>帖310 帖349"]
+  S2 --> C5["机械臂冷启动温度<br/>帖277"]
+  S3 --> C6["训推预处理不一致 BGR/RGB<br/>帖299"]
+  S3 --> C7["quantile normalization fallback<br/>静止臂统计炸裂 · 帖284"]
+  S4 --> C8["数据集碎片化导致 spurious features<br/>帖300 帖239"]
+  S4 --> C9["评测本身是分布内<br/>→ 换 OOD setting · 帖303"]
+  S5 --> C10["单卡策略：lora / fsdp2 / bs 调小<br/>帖348"]
+  S5 --> C11["量化漂移是闭环累积<br/>→ 按漂移风险混合精度 · 帖296"]
+  S6 --> C12["历史当状态建模<br/>SSM + 二阶动作桥 · 帖327"]
+```
+
+### 🌳 图 3：社区在用的 VLA 模型谱系
+
+```mermaid
+flowchart LR
+  subgraph PI["Physical Intelligence · π 系列"]
+    direction LR
+    p0["π0<br/>flow matching 出连续动作"] --> pfast["FAST<br/>动作 tokenizer"]
+    pfast --> p05["π0.5<br/>泛化更强 · 社区主力 baseline"]
+    p05 --> p06["π0.6<br/>RL 后训练"]
+    p06 --> p07["π0.7<br/>reward + goal 扩数据"]
+  end
+  subgraph THU["清华 TSAIL · RDT 系"]
+    direction LR
+    rdt["RDT-1B<br/>双臂扩散基础模型"] --> rdt2["RDT2<br/>UMI 数据 · 零样本跨本体"]
+  end
+  subgraph NV["NVIDIA"]
+    groot["GR00T N1.5 / N1.7<br/>取第 12 层特征存争议"]
+  end
+  subgraph CN["国产厂商开源"]
+    direction LR
+    ling["LingBot-VLA<br/>蚂蚁灵波"]
+    uni["UnifoLM-VLA-0<br/>宇树"]
+    g05["星海图 G0.5<br/>跨本体 action tokenizer"]
+    qwen["Qwen-VLA<br/>硬件差异写成文本 prompt"]
+  end
+  subgraph SMALL["轻量 / 社区线"]
+    direction LR
+    act["ACT<br/>适用桌面机械臂"] --> smol["SmolVLA<br/>真机需 1w steps 起步"]
+  end
+  p05 -.->|"社区最常用对照基线"| CMP(["复现对照"])
+  rdt2 -.-> CMP
+  ling -.-> CMP
+  groot -.-> CMP
+  CMP --> GAP["§12.4 benchmark 鸿沟：<br/>论文分数 ≠ 真机可用"]
+```
+
+### 📊 表 1：关键干预效果对照（社区实测数字）
+
+> 全部为帖内明确给出的数字；同一行内的对照来自同一来源，跨行不可直接比较（任务/本体/数据量不同）。
+
+| 干预 / 对照 | 实测效果 | 出处 |
+|---|---|---|
+| 抽掉 VLM 预训练底座（大数据多任务真机） | **83.6% → 48.5%**，差 35 个百分点 | 帖289 |
+| 数据质量 > 数量（HF 叠衣服） | 1200 条高质量微调 **40% → 90%** | 帖206 |
+| BC 阶段 FrameSkip 只用 20% 帧 | **76.15%** vs 全帧 66.50% | 帖286 |
+| 触觉 naive 拼进 pi0.5（反直觉） | 17% **反降到 6%** | 帖308 |
+| 触觉改为架构隔离（T-Rex：视觉 Planning / 触觉 Reactive） | → **65%**（pi0.5 17%、EgoMimic 35%） | 帖308 |
+| 触觉世界模型后训练（TACO，知识隔离） | **38% → 82%** | 帖307 |
+| RL 介入式后训练（RLT，网线柔顺插接） | **~30% → ~90%**，代价是人工介入数据 | 帖301 |
+| 把历史建成状态（SSM + 二阶动作桥，记忆依赖任务） | π0.5 **0%** → 记忆任务 72%、双 UR3 均值 78% | 帖327 |
+| Lingbot-VLA：论文 ↔ 一手复现 | 实测 **~20%**（同赛道 pi0.5 ~70%）；厂商回炉复现 **55/100** | 帖292 |
+| RDT2 vs pi0.5（叠衣服） | 成功率 **+40%** | 帖331 |
+
+> ⚠️ 读法提醒：上表右侧数字多来自作者自述或单一复现，**benchmark 分数与真机可用性存在系统性落差**（§12.4）。做决策前请配合 §12.14 的置信度看。
+
+### ⚙️ 表 2：训练 / 推理参数速查（社区经验值）
+
+| 项目 | 社区经验值 | 出处 |
+|---|---|---|
+| 训练 step | **≈20000**；epoch 过高容易过拟合 | 帖340 |
+| action chunk | **预测 50，执行 10-15**（执行步数影响明显） | 帖340 |
+| batch size | **32** | 帖340 |
+| 全量 vs LoRA | 数据多 → 全量；数据少 → LoRA | 帖340 |
+| SmolVLA 真机 | **至少 1w steps 起步**，默认超参不可信需手调 | 帖287 |
+| SmolVLA 参考配方 | 50ep / 20Hz / bs64 / lr4e-5 / 30K step / chunk30 → 成功率 50-80% | 帖156 |
+| 单卡 4090（24G） | LoRA / fsdp2 / bs 调小；全量微调可行但很慢 | 帖348 |
+| 数据采集纪律 | 光照一致、场景固定、每条从固定起点开始、终点在工作空间外、同物体每位置上百条、注意帧率 | 帖340 |
+| 数据处理必查 | resize 到训练格式、多模态对齐、**频率对齐**、确认 RGB / BGR | 帖340 帖299 |
+| 框架选择 | 用 **openpi** 而非 lerobot 版；原版 AdamW 不要换 SGD；jax 与 torch 的 OOD 表现差异明显 | 帖304 帖279 |
+
+---
 ## 1. 训练参数与配置经验 (Training Recipes)
 
 ### 1.1 ACT (Action Chunking with Transformers)
@@ -1088,7 +1208,9 @@ Kivy 的分析（帖17）：Diffusion Policy 有效的核心不是"多模态分�
 
 ### 12.1 模型与架构演进（π0 系列 / 国产开源 / 跨本体统一 / 海外）
 
-#### 国产 VLA 模型开源浪潮　〔原 §12.1〕
+#### 国产 VLA 模型开源浪潮
+
+<sub>来源：原 §12.1</sub>
 
 **LingBot-VLA：蚂蚁灵波全面开源**（帖132，量子位/蚂蚁灵波，高热度）：
 - 20,000 小时真机双臂操作数据预训练，覆盖 9 种主流双臂构型
@@ -1110,7 +1232,9 @@ Kivy 的分析（帖17）：Diffusion Policy 有效的核心不是"多模态分�
 - 蚂蚁灵波继 LingBot-VLA → LingBot-Depth → LingBot-World 后的最新力作
 - 统一视频预测和动作生成——World Model × VLA 的中国方案
 
-#### π0 系列微调与真机实践　〔原 §12.2〕
+#### π0 系列微调与真机实践
+
+<sub>来源：原 §12.2</sub>
 
 **π*0.6 真机 RL：机器人连续打工 18 小时**（帖136，36Kr/B站，高热度）：
 - 监督学习基础模型 → 离线 RL 预训练 → 示范微调 → 真实执行经验微调
@@ -1128,7 +1252,9 @@ Kivy 的分析（帖17）：Diffusion Policy 有效的核心不是"多模态分�
 - 比扩散版 π0 训练快 5× 但效果相当
 - **对 §11 空白的填补**：FAST tokenization 终于有中文社区解读
 
-#### Figure Helix 与海外进展　〔原 §12.3〕
+#### Figure Helix 与海外进展
+
+<sub>来源：原 §12.3</sub>
 
 **Figure Helix：人形机器人 VLA 里程碑**（帖139，机器人大讲堂/知乎，高热度）：
 - 全球首个 VLA 驱动的人形机器人连续上半身控制
@@ -1146,7 +1272,9 @@ Kivy 的分析（帖17）：Diffusion Policy 有效的核心不是"多模态分�
 - NVIDIA × Hugging Face 集成到 LeRobot 框架
 - 2026 年底正式发布
 
-#### 🔭 帖282：星海图 G0.5 — 单 decoder reasoning+action 范式 🔺　〔Round 3〕
+#### 🔭 帖282：星海图 G0.5 — 单 decoder reasoning+action 范式 🔺
+
+<sub>来源：Round 3</sub>
 
 **架构分歧**：
 - **主流**：VLM 作 Encoder + 外挂 action expert
@@ -1161,7 +1289,9 @@ Kivy 的分析（帖17）：Diffusion Policy 有效的核心不是"多模态分�
 
 → 新 belief **B18**（单 decoder vs encoder+expert）+ **B19**（跨本体 Tokenizer = 机器人 OS 雏形）
 
-#### 🎯 帖289：Qwen-VLA 预训练底座 vs 抽掉 — 83.6% vs 48.5% 🔥　〔Round 4〕
+#### 🎯 帖289：Qwen-VLA 预训练底座 vs 抽掉 — 83.6% vs 48.5% 🔥
+
+<sub>来源：Round 4</sub>
 
 **带 VLM 预训练底座成功率 83.6%，抽掉只剩 48.5% — 差 35 个百分点**。
 
@@ -1169,7 +1299,9 @@ Kivy 的分析（帖17）：Diffusion Policy 有效的核心不是"多模态分�
 - **小数据 / 单一任务**：L 边际收益低（原 §6.1 论点保留）
 - **大数据 / 多任务**：L 不可去（帖289 新硬数据）
 
-#### 🔬 帖290：Qwen 团队 insider — Qwen-VLA 设计哲学 🔥🔺　〔Round 4〕
+#### 🔬 帖290：Qwen 团队 insider — Qwen-VLA 设计哲学 🔥🔺
+
+<sub>来源：Round 4</sub>
 
 **风树 @ Qwen 团队**：
 
@@ -1186,7 +1318,9 @@ Kivy 的分析（帖17）：Diffusion Policy 有效的核心不是"多模态分�
 - **G0.5**：跨本体 Action **Tokenizer**（18 本体 → 27 维 token vocab）
 - **Qwen-VLA**：硬件差异**写成文本 prompt**（11 平台）
 
-#### 🎯 帖291：pi0.7 并没有提供好的新方法（duckduck，255 赞）🔵 逆共识　〔Round 5〕
+#### 🎯 帖291：pi0.7 并没有提供好的新方法（duckduck，255 赞）🔵 逆共识
+
+<sub>来源：Round 5</sub>
 
 **核心质疑**：pi0.7 本质=拓展数据做 reward 和 goal，**怀疑加 bagel 是临时蹭 world action model 概念**；数据标注成本会巨高（评分/细粒度 prompt/goal image）。
 
@@ -1194,7 +1328,9 @@ Kivy 的分析（帖17）：Diffusion Policy 有效的核心不是"多模态分�
 - "**pi0.7 的意义在走通 in-context 可带来 zero-shot 组合泛化这件事**；至于 VLA/WM/WAM 都是人为概念，没意义"
 - "现在的 world model 和 vla 都是错的" —— 世界模型 sub-goal 图像生成不靠谱 + 不开源"怎么吹都行"
 
-#### 🤖 帖288：MolmoAct2 开源 reasoning VLA 体验报告　〔Round 4〕
+#### 🤖 帖288：MolmoAct2 开源 reasoning VLA 体验报告
+
+<sub>来源：Round 4</sub>
 
 **王杰 JieWang @ Ai2**：MolmoAct2（Ai2 开源 2 天）的 closed-loop self-recovery：执行"放绿色杯子进红色杯子"任务中**撞倒一杯 → 自己扶起来继续**（prompt 里没说这步）。
 
@@ -1205,7 +1341,9 @@ Kivy 的分析（帖17）：Diffusion Policy 有效的核心不是"多模态分�
 
 ### 12.2 动作生成范式与推理效率（Diffusion / Flow / action space / 加速 / 量化）
 
-#### 推理加速三件套全部工程化（VLA SOTA 不再单押更大底座）　〔原 §15.1〕
+#### 推理加速三件套全部工程化（VLA SOTA 不再单押更大底座）
+
+<sub>来源：原 §15.1</sub>
 
 **核心信号**：05-04（昆阿默 VLA-Reasoner、AI椰青 30Hz 工程优化）+ 05-29 Round 1（LAC / DepthCache / StreamingVLA 三独立工作）一致指向 **"插件式 + 不重训主干"** 的推理加速路径。**具体收敛点**：
 
@@ -1216,7 +1354,9 @@ Kivy 的分析（帖17）：Diffusion Policy 有效的核心不是"多模态分�
 - **DepthCache 1.3× 加速**（帖259, 华科）：训练无关，RGB-D 深度按距离分区压缩视觉 token；近处精细远处粗略
 - **StreamingVLA**（帖260, 清华 + 联想）：把"观察—生成—执行"从串行改成异步并行；action 建模为对状态的连续更新（不再 action chunking）
 
-#### VLA action space 技术答案　〔原 §14.10〕
+#### VLA action space 技术答案
+
+<sub>来源：原 §14.10</sub>
 
 **📍 帖220：郁郁葱葱 —— vla 训练的 action space 是什么？（评论是金矿）**
 
@@ -1234,7 +1374,9 @@ Kivy 的分析（帖17）：Diffusion Policy 有效的核心不是"多模态分�
 
 > 评论 lornez 吸引子（北京）："**为什么帧间差分 state 前三维不等于 action，尺度完全不同？**"（关键追问，提示坐标系/缩放问题）
 
-#### EfficientVLA 量化部署（补帖223）　〔原 §14.13〕
+#### EfficientVLA 量化部署（补帖223）
+
+<sub>来源：原 §14.13</sub>
 
 **📍 帖223：具身智能之心 —— 上交 EfficientVLA**
 
@@ -1256,7 +1398,9 @@ Kivy 的分析（帖17）：Diffusion Policy 有效的核心不是"多模态分�
 >
 > — 具身智能之心（78 赞 / 12 评论），[帖223](https://www.xiaohongshu.com/explore/684e93b00000000021019280) 2025-06-15
 
-#### Flow Matching / Diffusion / 触觉 / Sim2Sim 工程经验　〔原 §15.6〕
+#### Flow Matching / Diffusion / 触觉 / Sim2Sim 工程经验
+
+<sub>来源：原 §15.6</sub>
 
 - **FPO++**（帖273, Amazon FAR + UC Berkeley + Stanford + CMU + HKU）：流匹配策略梯度取代 PPO；三大技术（逐样本比率裁剪 + 非对称信赖域 ASPO + **测试时零采样**），**机械臂任务 sim-to-real 成功率从 10% → 70%+**；Unitree Go2 / H1 / G1 + Boston Dynamics Spot 上稳定从头训练
 - **diffusion 比 ACT 更吃数据**（帖254, ALOHA 评论一手）：ACT 真机 50 episode 80% 成功率，dp 同等数据明显更差；**官方仿真环境缺手腕摄像头导致 diffusion 效果差**
@@ -1265,7 +1409,9 @@ Kivy 的分析（帖17）：Diffusion Policy 有效的核心不是"多模态分�
 - **触觉切向力的核心区分**（帖271, 硅基先生）：没切向力 → 做不了拧瓶盖 / 插钥匙 / 推拉抽屉 / 区分玻璃 vs 砂纸。Sharpa 灵巧手指尖可做切向力（CES 折纸为证）
 - **WALL-OSS**（帖253）+ **VR-Robo 3DGS 数字孪生**（帖261）：开源 VLA 微调一手 + 3DGS + mesh 混合表示重建仿真环境
 
-#### 🔢 帖296：VLA 一量化就"走偏"→ DA-PTQ（同济空间智能，59 赞）🔥 量化盲区　〔Round 6〕
+#### 🔢 帖296：VLA 一量化就"走偏"→ DA-PTQ（同济空间智能，59 赞）🔥 量化盲区
+
+<sub>来源：Round 6</sub>
 
 **问题**：VLA（OpenVLA/π0 类）上机器人端只能低精度量化，但**一量化机器人就"越走越偏"、轨迹漂移**。
 
@@ -1277,7 +1423,9 @@ Kivy 的分析（帖17）：Diffusion Policy 有效的核心不是"多模态分�
 
 ### 12.3 泛化失败与根因（shortcut / spurious features / VAG gap / 几何鸿沟 / OOD）
 
-#### VLA 泛化失败 + OXE shortcut learning 量化（"小数据微调到泛化"置信度 -10%）　〔原 §15.2〕
+#### VLA 泛化失败 + OXE shortcut learning 量化（"小数据微调到泛化"置信度 -10%）
+
+<sub>来源：原 §15.2</sub>
 
 **最强证据组合（3 个独立一手案例 + 1 个 CoRL 论文）**：
 
@@ -1288,7 +1436,9 @@ Kivy 的分析（帖17）：Diffusion Policy 有效的核心不是"多模态分�
 
 **Libero 评测 trap 修复**（帖262, 一手）：Libero 用「物体中心点移动到 container 范围」判成功，物体放偏被判失败 / 没放进也可能判成功。**作者发现解决办法**：搜 `ObjectState.check_on_top`，阈值从 **0.3 → 0.5** → 复现成功率从底跑到 99%。**直接救一票 Libero 复现做不上去的人**。
 
-#### VLA 的"几何鸿沟"被量化（新子节点，置信度 75%）　〔原 §15.4〕
+#### VLA 的"几何鸿沟"被量化（新子节点，置信度 75%）
+
+<sub>来源：原 §15.4</sub>
 
 **亚马逊机器人 + UT 奥斯汀 + MIT**（帖268, arXiv 2605.24642, 发布于 05-27）做了"解剖级"评测：
 - **GR00T-N1.5 视觉编码器 RMSE 0.92 vs VGGT 0.41**——线性探测下"几何鸿沟"一目了然
@@ -1297,7 +1447,9 @@ Kivy 的分析（帖17）：Diffusion Policy 有效的核心不是"多模态分�
 - **推翻"必须微调 LLM 才能利用 3D 特征"的固有认知**：冻结 VLM 主干，早融合即可注入几何信息，**大幅降低落地算力成本**
 - 与 帖247（Spatial Forcing, VGGT 特征蒸馏给 VLA, 2% 训练步 / 5% 数据达 SOTA）+ 帖251（CapVector capability vector 跨任务迁移 LIBERO→RoboTwin 成功率 6.7%→31.8%）一起构成 2026 H1 提升 VLA 数据效率最实操的三条路径
 
-#### PI0 OOD 极限实测　〔原 §14.11〕
+#### PI0 OOD 极限实测
+
+<sub>来源：原 §14.11</sub>
 
 **📍 帖226（68a7e92e）：Jovis Wang 主帖 + 评论金矿**
 
@@ -1317,7 +1469,9 @@ Kivy 的分析（帖17）：Diffusion Policy 有效的核心不是"多模态分�
 - PI0 OOD 97% 不是免费的——**门槛是 5000 条真机数据**（远超 100-200 条的入门级）
 - Franka / Aloha **直接部署**已可用（不需要微调），**主流硬件覆盖度仍是 PI0 success 的隐藏前提**
 
-#### Vision-guide 替代 Language-guide　〔原 §14.1〕
+#### Vision-guide 替代 Language-guide
+
+<sub>来源：原 §14.1</sub>
 
 **📍 帖201：李兴航 VISTA—— pi0.7 之前 2 个月的视觉引导方案**
 
@@ -1353,7 +1507,9 @@ Kivy 的分析（帖17）：Diffusion Policy 有效的核心不是"多模态分�
 
 **🔗 三方独立印证收敛**：李兴航 VISTA（帖201）实测 + AGI Robot 100 条数据实测（帖202）+ AGI Robot 自家 ICML2025 VIP 论文 → "**language → vision-guided**" 共识在 2026 上半年形成。**pi0.7 押注 language steerability 路线可能在 6 个月内被 visual subgoal + WAM 路线超越**。
 
-#### 🎥 帖298：视频模型一微调到机器人就变笨 → VAG gap / TR（Hokin，150 赞）🔥 论文洞见　〔Round 6〕
+#### 🎥 帖298：视频模型一微调到机器人就变笨 → VAG gap / TR（Hokin，150 赞）🔥 论文洞见
+
+<sub>来源：Round 6</sub>
 
 **VAG gap**（Video-to-Action Generalization gap）：视频生成模型很会举一反三，微调成机器人策略后本事没了。提出 **TR（时序依赖比）**指标——模型输出动作时到底在看当前帧还是"脑补"未来帧：
 - **TR 会动**：规划"下一步"时 TR 升高（多看未来）；精细抓取时 TR 降低（盯当前帧），和人的直觉一致
@@ -1361,21 +1517,27 @@ Kivy 的分析（帖17）：Diffusion Policy 有效的核心不是"多模态分�
 - **LoRA vs 全量、加多少噪声、看多远未来**——用 TR 一解释全对上
 - **推理时按 TR 动态调引导强度**即可，无需重训；OOD 涨、分布内不掉，仿真+双臂真机都稳
 
-#### 🧬 帖300：CoRL 25 — VLA 为什么泛化差（Xu Luo，195 赞）🔥 论文洞见　〔Round 6〕
+#### 🧬 帖300：CoRL 25 — VLA 为什么泛化差（Xu Luo，195 赞）🔥 论文洞见
+
+<sub>来源：Round 6</sub>
 
 **OXE 这类混合数据集训练的 VLA 泛化差，关键因素之一是 spurious features（用无关特征作预测）**。结论：
 - 通用机器人数据集得**连成一片整体、而非分割的孤岛**；若做不到，至少每个子数据集的每个变化因子要**足够密**
 - **当前数据规模下，应集中变动几个急需泛化的因子、尽量保持其他因子不变**（如 pi0.5 固定任务类型、Gemini 固定环境背景）
 - 对已有数据集，可用**特殊数据增强**（如 VISTA 作用于某因子）增子集多样性、减子集间隔阂
 
-#### 🧊 帖297：给 VLA 研究浇冷水（Sonata，567 赞）🔵 逆共识（正文在图，评论精华）　〔Round 6〕
+#### 🧊 帖297：给 VLA 研究浇冷水（Sonata，567 赞）🔵 逆共识（正文在图，评论精华）
+
+<sub>来源：Round 6</sub>
 
 正文是 4500 字长图（无法自动提取），**评论区辩论是金矿**：
 - "**现在的 VLA 更像一个小脑受损的人**——语义理解/任务规划很好，但精细运动和协调不行"；主张**大脑小脑解耦**、从底层 **atomic skill** 自底向上学，而非自上而下先学泛化再微调
 - 反方："失去下半身感觉的人仍能靠视觉反馈倒水做饭，**具身也许不需要小脑**"
 - "**每一代人注定重新发明一遍上一代人试过的东西**"（指没吃过上代 DL-for-robotics 的亏）
 
-#### 📉 帖286：FrameSkip — 用 20% 帧训练 VLA 反而更好 🔥　〔Round 4〕
+#### 📉 帖286：FrameSkip — 用 20% 帧训练 VLA 反而更好 🔥
+
+<sub>来源：Round 4</sub>
 
 **Liam（北京）**：RoboCasa-GR1 / SimplerEnv / LIBERO 三方对比：
 - **FrameSkip 20% 帧 = 76.15%（平均成功率）**
@@ -1389,7 +1551,9 @@ Kivy 的分析（帖17）：Diffusion Policy 有效的核心不是"多模态分�
 
 ### 12.4 评测与 benchmark 鸿沟（robotwin / libero setting / 厂商指标 vs 真机）
 
-#### 🔵 帖303：robotwin 评测 setting 被错用、不考验泛化（NOCAP1，434 赞）逆共识　〔Round 7〕
+#### 🔵 帖303：robotwin 评测 setting 被错用、不考验泛化（NOCAP1，434 赞）逆共识
+
+<sub>来源：Round 7</sub>
 
 刷到 Qwen manipulation report 后点出一个"诟病已久"的问题：**libero 和主流 robotwin 的评测本质是分布内评测，不考验泛化**。
 - **根因**：主流 robotwin 在 clean + 域随机化数据上混训，再在二者上测 → 训练与评估同分布，**只考验拟合能力**。这也是为什么**一些没有预训练的 VLA / WAM 也能在 robotwin / libero 达到 SOTA**。
@@ -1397,7 +1561,9 @@ Kivy 的分析（帖17）：Diffusion Policy 有效的核心不是"多模态分�
 - **结论**：robotwin 远没被真正刷爆，按新 setting 才有价值。
 - **评论对质**：`人来人往` 指出 motus / lingbotvla / fastwam 等最近火的都是这种过拟合 setting，大家 follow 着比谁刷得高，正常用 OOD 测试的反而火不起来；robotwin 作者之一 `陈天行` 回应"不同 setting 都有价值，既然其他 setting 被刷爆，欢迎回来玩最原始最困难的模式"。
 
-#### 💣 帖292：Lingbot-VLA 让人失望（Jiaming，581 赞）🔥🔥🔵 benchmark↔现实鸿沟　〔Round 5〕
+#### 💣 帖292：Lingbot-VLA 让人失望（Jiaming，581 赞）🔥🔥🔵 benchmark↔现实鸿沟
+
+<sub>来源：Round 5</sub>
 
 **本轮最高信号帖**。一手复现 Lingbot-VLA（对比 pi0.5）：
 
@@ -1412,7 +1578,9 @@ Kivy 的分析（帖17）：Diffusion Policy 有效的核心不是"多模态分�
 
 ### 12.5 训练参数、recipe 与工程踩坑（bug / 显存 / jax-torch / 训推一致性）
 
-#### 训练实操与成本　〔原 §12.6〕
+#### 训练实操与成本
+
+<sub>来源：原 §12.6</sub>
 
 **ACT + LeRobot 真机训练成本实测**（帖146，知乎/CSDN，中热度）：
 - 本地 3090 训练 100K steps = **3 小时**
@@ -1429,7 +1597,9 @@ Kivy 的分析（帖17）：Diffusion Policy 有效的核心不是"多模态分�
 - 2026-01-15 重组后 GitHub stars 破 10,000
 - 覆盖从论文到代码的完整技术栈
 
-#### SmolVLA 复现失败模式集锦　〔原 §14.2〕
+#### SmolVLA 复现失败模式集锦
+
+<sub>来源：原 §14.2</sub>
 
 **📍 帖203：Scrat —— 笔记本训 SmolVLA 寄录（4 类失败模式 + 4 个改进想法）**
 
@@ -1476,7 +1646,9 @@ Kivy 的分析（帖17）：Diffusion Policy 有效的核心不是"多模态分�
 
 **🔗 共识漂移**：3 篇独立帖（Scrat 笔记本失败 / Lisette 双臂抖动 / 尤里卡缝合怪）→ HF SmolVLA 在社区舆论中已从"消费级 VLA 平民化方案"贬值为"**缝合怪标题党**"。
 
-#### 🌡️ 帖277：冷启动温度影响 VLA 成功率（S!mple, 03-13）🔥　〔Round 3〕
+#### 🌡️ 帖277：冷启动温度影响 VLA 成功率（S!mple, 03-13）🔥
+
+<sub>来源：Round 3</sub>
 
 **机制链**：行星减速器摩擦力随温度变化 → 底层轨迹跟踪滞后 → VLA 绝对 joint 角动作空间误差级联放大 → action chunk 开环不补偿 → **机械臂刚启动测试成功率异常偏低，运行几分钟后才稳定**。VLAC 论文作者也提到空调温度影响（同样用松灵 Piper）。
 
@@ -1484,7 +1656,9 @@ Kivy 的分析（帖17）：Diffusion Policy 有效的核心不是"多模态分�
 
 → 新 belief **B17**：VLA 落地失败一大类原因是物理环境漂移，不是模型本身（置信度 55%）
 
-#### 🛠️ 帖279：lerobot pi vs openpi 的隐藏 bug（评论区精华）🔵　〔Round 3〕
+#### 🛠️ 帖279：lerobot pi vs openpi 的隐藏 bug（评论区精华）🔵
+
+<sub>来源：Round 3</sub>
 
 - **秋光的祝福**：lerobot 转换有问题 — Libero Spatial Task 05 上 **MuJoCo 重力 bug 把抓取物体弹到离谱位置导致成功率低**（与帖262 Libero 阈值 bug 形成同一 benchmark 第 2 个工程问题）
 - **星空和大海**：业内反馈 "lerobot 的 pi 兼容不好"，今年新版本不知道修没修
@@ -1493,7 +1667,9 @@ Kivy 的分析（帖17）：Diffusion Policy 有效的核心不是"多模态分�
 
 **§12.11（原 §14.7） LeRobot 维护降级警报本轮再添 3 条独立印证**。
 
-#### ⚙️ 帖281：XVLA + RoboTwin 多卡训练 5 大优化（金级一手）🔥　〔Round 3〕
+#### ⚙️ 帖281：XVLA + RoboTwin 多卡训练 5 大优化（金级一手）🔥
+
+<sub>来源：Round 3</sub>
 
 直接进入 §1.5 多卡训练经验：
 
@@ -1507,7 +1683,9 @@ Kivy 的分析（帖17）：Diffusion Policy 有效的核心不是"多模态分�
 
 `OMP_NUM_THREADS` 默认 1 会喂不饱进程，要 ≥ workers 数，但不要开太大。
 
-#### 🪲 帖284：LeRobot 双臂采集 quantile normalization fallback BUG 🔥🔥　〔Round 4〕
+#### 🪲 帖284：LeRobot 双臂采集 quantile normalization fallback BUG 🔥🔥
+
+<sub>来源：Round 4</sub>
 
 **Bug**：一个臂完全不动 → 统计数据过于理想 → 推理时数据爆炸 → 那条臂极端值（关节炸到几万）→ 模型整体卡死。**作者 笨蛋队长要变强 查了半个月**。
 
@@ -1515,14 +1693,18 @@ Kivy 的分析（帖17）：Diffusion Policy 有效的核心不是"多模态分�
 
 **作者解决办法**：跑一组 ideal 数据管道前后，用**固定值替代静止臂数据**。
 
-#### 🪲 帖285：Isaac Lab 2.0 国内用户避坑　〔Round 4〕
+#### 🪲 帖285：Isaac Lab 2.0 国内用户避坑
+
+<sub>来源：Round 4</sub>
 
 - **升级 pip**，否则启动报 module 缺失
 - 🚨 **不要先打开 IsaacSim 验证**——会触发亚马逊 S3 拉资产卡死。**先下载资产包设本地路径**
 - RL 训练同理改 `.json` 的 `cloud` 路径为本地
 - 评论："**这玩意就是个无底大坑**" + 作者回："**行业还很新，工具链不会很成熟**"
 
-#### 🪶 帖287：SmolVLA 真机微调一坨（评论参数金矿）🔵　〔Round 4〕
+#### 🪶 帖287：SmolVLA 真机微调一坨（评论参数金矿）🔵
+
+<sub>来源：Round 4</sub>
 
 **作者 😄😄（上海）50 条数据 2k steps 失败 → 准备 1w steps 重训**。
 
@@ -1532,7 +1714,9 @@ Kivy 的分析（帖17）：Diffusion Policy 有效的核心不是"多模态分�
 - **Runner21st**：**同样数据量 π0 / GR00T 1.5 都能高成功率 PnP** → 问题在 SmolVLA 训练
 - **Runner21st**：**SmolVLA 真机至少 1w steps 起步**（手册可记的硬参数）
 
-#### 🛠️ 帖293：修复 LeRobot 版 OpenPI 在 SO100 流畅微调（董子斌，102 赞）🔵　〔Round 5〕
+#### 🛠️ 帖293：修复 LeRobot 版 OpenPI 在 SO100 流畅微调（董子斌，102 赞）🔵
+
+<sub>来源：Round 5</sub>
 
 **痛点**：pi0 是 JAX 编码，劝退 PyTorch 惯用选手；官方 PyTorch 版 issue 反馈无代码说明、运行困难。
 
@@ -1540,11 +1724,15 @@ Kivy 的分析（帖17）：Diffusion Policy 有效的核心不是"多模态分�
 
 **评论金句**：用官方 pi0 策略训宇树双臂，**4090 上 OOM 跑不起来**；"机器人动起来不够平滑"；"改了一版 loss 还行但 eval 不好"。
 
-#### 🐞 帖299：vla 训推不一致，成功率越训越低（S!mple，49 赞）🔵 工程 trap　〔Round 6〕
+#### 🐞 帖299：vla 训推不一致，成功率越训越低（S!mple，49 赞）🔵 工程 trap
+
+<sub>来源：Round 6</sub>
 
 正文在图，**评论区锁定根因**：**图像预处理 BGR/RGB 转换不一致**（训练与推理/框架间混用，"让 AI 写很容易出问题"）→ 训推 gap → 真机成功率越训越低。**排查法**：保存每次 eval 的输入输出逐一对比。多人真机复现同一坑。
 
-#### 🐞 帖304：pi0.5 训练部署踩坑征集（momo，117 赞）评论区金矿　〔Round 7〕
+#### 🐞 帖304：pi0.5 训练部署踩坑征集（momo，117 赞）评论区金矿
+
+<sub>来源：Round 7</sub>
 
 正文是学校资源有限求少踩坑的征集帖，**价值全在评论**：
 - **openpi 的 pytorch 框架有个 convert jax→pytorch 脚本，默认把初始 checkpoint 所有精度设成 bf16**：也就是说后续哪怕用 pytorch fp32 训练，也是**从一个 bf16 版 ckpt 开始训**（隐藏精度隐患）。
@@ -1552,7 +1740,9 @@ Kivy 的分析（帖17）：Diffusion Policy 有效的核心不是"多模态分�
 - 建议：**用 openpi 别用 lerobot 版**；**用原版 AdamW，不要改成 sgd**。
 - 推理卡：有人 4090 跑 lerobot 的 pi0.5 **只有 3hz**；有人问是否靠调大 action chunk 缓解。
 
-#### 🧠 帖278：上交 CVPR'26 灾难性遗忘解法（驾驶 → VLA 通用）　〔Round 3〕
+#### 🧠 帖278：上交 CVPR'26 灾难性遗忘解法（驾驶 → VLA 通用）
+
+<sub>来源：Round 3</sub>
 
 **Driving Expert Adapter**：不改主参数，提示空间适配 + 动态调用专家模块。**Fidelity Driving Bench**（18 万场景 / 90 万 QA）确认：
 - 全量微调 → 任务高分但破坏性最大
@@ -1567,7 +1757,9 @@ Kivy 的分析（帖17）：Diffusion Policy 有效的核心不是"多模态分�
 
 ### 12.6 真机部署、硬件与 Sim2Real
 
-#### 硬件生态与选型更新　〔原 §12.5〕
+#### 硬件生态与选型更新
+
+<sub>来源：原 §12.5</sub>
 
 **SO-101 组装教程全球首发**（帖143，B站，中热度）：
 - LeRobot SO-ARM101 完整组装配置视频教程
@@ -1581,7 +1773,9 @@ Kivy 的分析（帖17）：Diffusion Policy 有效的核心不是"多模态分�
 - 中英德法西日 6 语言支持、<¥4000、<4 小时组装
 - 基于 LeRobot + Lekiwi + Bambot，IKEA RASKOG 底盘
 
-#### 部署与感知新进展　〔原 §12.7〕
+#### 部署与感知新进展
+
+<sub>来源：原 §12.7</sub>
 
 **力感知无力传感器：成功率 +39.5%**（帖149，学术前沿，中热度）：
 - 统一策略输出位置/力指令 + 外力预测
@@ -1593,7 +1787,9 @@ Kivy 的分析（帖17）：Diffusion Policy 有效的核心不是"多模态分�
 - 90% 遮挡下跟踪误差 <2 像素、30Hz 实时
 - **实操场景**：工业环境遮挡常见，这是刚需技术
 
-#### sim2real 工程级 pin-points　〔原 §14.8〕
+#### sim2real 工程级 pin-points
+
+<sub>来源：原 §14.8</sub>
 
 **📍 帖216：人形蘑菇 —— Real2Sim2Real 三阶段流程**
 
@@ -1638,7 +1834,9 @@ Kivy 的分析（帖17）：Diffusion Policy 有效的核心不是"多模态分�
 
 **🔗 实操建议**：sim2sim 迁移时**先检查 root state 坐标系**比检查 PD 参数更优先。
 
-#### Sunday 机器人硬件 + SO101 BOM　〔原 §14.9〕
+#### Sunday 机器人硬件 + SO101 BOM
+
+<sub>来源：原 §14.9</sub>
 
 **📍 帖218：小白学具身 —— Sunday 机器人完整 spec sheet**
 
@@ -1693,7 +1891,9 @@ Kivy 的分析（帖17）：Diffusion Policy 有效的核心不是"多模态分�
 
 **🔗 对入门门槛的影响**：与帖206 HF 叠衣服 OpenArm + 120 欧元遥操共同形成**"低成本 VLA 全套方案"图景**——VLA 入门门槛被打到地板。
 
-#### 🤖 帖280：宇树 G1 一手 — ACT / π0.5 / GR00T 全失败（2026-06-01 最新）🔥🔵　〔Round 3〕
+#### 🤖 帖280：宇树 G1 一手 — ACT / π0.5 / GR00T 全失败（2026-06-01 最新）🔥🔵
+
+<sub>来源：Round 3</sub>
 
 **硬件踩坑**：
 - 腕部相机 + 头部双目（宇树 + 第三方廉价方案 ~1000+）
@@ -1703,7 +1903,9 @@ Kivy 的分析（帖17）：Diffusion Policy 有效的核心不是"多模态分�
 
 **三点感想**：人形 VLA 部署比机械臂困难（接口频繁不匹配）；官方数据效果不好（**刚需 XR 设备自采**）；先看论文不工程复现。
 
-#### 🪡 帖283：ACT 适用范围 = 桌面机械臂（一手 + 评论 3 重对比）🔥　〔Round 3〕
+#### 🪡 帖283：ACT 适用范围 = 桌面机械臂（一手 + 评论 3 重对比）🔥
+
+<sub>来源：Round 3</sub>
 
 **作者 🍑气小周**：lerobot + 自己机械臂复现 ACT 失败（后验坍塌 + 泛化差 + 抖）；**temporal ensemble 好用，CVAE 别碰**。
 
@@ -1714,17 +1916,23 @@ Kivy 的分析（帖17）：Diffusion Policy 有效的核心不是"多模态分�
 
 → 新 belief **B-ACT 桌面边界**：ACT 适用范围 = 桌面机械臂（置信度 65%）
 
-#### 🧯 帖295：别急着上 RL，先把 Sim2Real 这 4 个坑补上（大车机器人，9 赞）　〔Round 5〕
+#### 🧯 帖295：别急着上 RL，先把 Sim2Real 这 4 个坑补上（大车机器人，9 赞）
+
+<sub>来源：Round 5</sub>
 
 **结构化 sim2real 排查框架**（赞不高但可操作性强）：仿真完美一上真机就摔倒/打滑/抓不稳/轨迹飘，基本归为 **4 大坑**：动力学不一致、接触不一致、传感与时序不一致、环境与分布不一致。每类拆成 **表现 → 根因 → 工程对策**，可反向指导验收/日志记录/迭代。**一句大实话：sim2real 本质是"误差管理 + 分布管理"，不是"换个更强的算法"**。
 
-#### 📚 帖306：Sim2Real Gap 综述 —— 失效症状导向（jiaxux，211 赞）综述　〔Round 7〕
+#### 📚 帖306：Sim2Real Gap 综述 —— 失效症状导向（jiaxux，211 赞）综述
+
+<sub>来源：Round 7</sub>
 
 NVIDIA × 苏黎世大学 RPG 合作综述《The Reality Gap in Robotics: Challenges, Solutions, and Best Practices》，发表于 *Annual Review of Control, Robotics, and Autonomous Systems*。以**"Sim2Real 失效的症状"**为主线归纳真实部署最常见的失效表现，并给出系统性建议：
 - **Reducing the Gap（减少差距）**：提高仿真保真度（加入真实噪声、延迟、动力参数）；System Identification & Residual Learning（学残差修正模拟误差）；Real-to-Sim（用真实数据反向重建仿真）。
 - （原文后续还有 hardware–software 协同等章节，帖内截断。）适合当作 sim2real 失效模式的**检索索引**。
 
-#### 🖐 帖305：pi0.5 双臂折箱子长程任务微调跑通（纸飞机，328 赞）一手　〔Round 7〕
+#### 🖐 帖305：pi0.5 双臂折箱子长程任务微调跑通（纸飞机，328 赞）一手
+
+<sub>来源：Round 7</sub>
 
 基于 pi0.5 的**双机械臂折箱子**项目，作者实习两个月从具身小白到能独立跑 baseline / benchmark。评论区的追问本身就是长程任务的经验清单：
 - 长程任务**采数据是直接做完整任务、还是拆成子任务采**？
@@ -1735,14 +1943,18 @@ NVIDIA × 苏黎世大学 RPG 合作综述《The Reality Gap in Robotics: Challe
 
 ### 12.7 数据采集与数据集
 
-#### 数据集与基准　〔原 §12.4〕
+#### 数据集与基准
+
+<sub>来源：原 §12.4</sub>
 
 **RoboMIND 2.0：55,000 轨迹 279 任务**（帖142，知乎/量子位，中热度）：
 - 覆盖家庭/厨房/工厂/办公/零售 5 大场景、258 场景系列
 - 多构型：Franka 31K + 天工人形 9.7K + AgileX 8K + UR-5e 6.9K
 - 遥操采集系统定制——大规模标准化数据采集的中国方案
 
-#### 数据采集策略：场景多样性 > 采集者数量　〔原 §15.5〕
+#### 数据采集策略：场景多样性 > 采集者数量
+
+<sub>来源：原 §15.5</sub>
 
 **Jim Fan EgoVerse**（帖264, 05-29 Round 1）：iPhone / Aria 智能眼镜替代遥操作；**2087 个普通人**第一视角视频；自动后处理（3D 手部 21 关键点 + 6DoF 头位姿 + 分位数归一化）；三个不同机器人联合训练 **性能提升最高 30%**。**意外发现**：**增加场景多样性远大于增加采集者数量**——直接质疑 Tesla / Figure 类"靠遥操作工时堆量"路线。
 
@@ -1750,7 +1962,9 @@ NVIDIA × 苏黎世大学 RPG 合作综述《The Reality Gap in Robotics: Challe
 
 **GELLO + Franka3 隐性硬伤**（帖263）：gripper 开闭 **2s 延时** —— Franka hand 设计就是低频控制。
 
-#### HuggingFace 叠衣服 90% 完整工程开源 🔺🔺　〔原 §14.3〕
+#### HuggingFace 叠衣服 90% 完整工程开源 🔺🔺
+
+<sub>来源：原 §14.3</sub>
 
 **📍 帖206：Hugging Face 法国官方—— 本批次最完整工程报告**
 
@@ -1790,7 +2004,9 @@ NVIDIA × 苏黎世大学 RPG 合作综述《The Reality Gap in Robotics: Challe
 
 ### 12.8 World Model / WAM 范式与质疑
 
-#### World Model / WAM 范式收敛 + 内部质疑双轨升格　〔原 §15.3〕
+#### World Model / WAM 范式收敛 + 内部质疑双轨升格
+
+<sub>来源：原 §15.3</sub>
 
 **Bull 侧**（"WAM 接棒 VLA" 收敛到第 4 个独立印证）：
 - **VLA-JEPA**（帖245, ZWY 一作亲述）：抽象 latent 对齐未来而非重建像素；严格不让模型把未来当输入
@@ -1807,7 +2023,9 @@ NVIDIA × 苏黎世大学 RPG 合作综述《The Reality Gap in Robotics: Challe
 - **Bear 评论"什么都叫世界模型了"**（帖257 评论）：术语膨胀警报
 - **NVIDIA 立场偏向**（帖274 评论："因为要吹算力需求"）：Jim Fan WAM 主张可能与 NVIDIA 商业立场绑定
 
-#### WAM vs VLA 架构争议升级　〔原 §14.4〕
+#### WAM vs VLA 架构争议升级
+
+<sub>来源：原 §14.4</sub>
 
 **📍 帖207：Ivory Seagull —— 源码层面论证 WAM 比 VLA 少冗余**
 
@@ -1892,7 +2110,9 @@ NVIDIA × 苏黎世大学 RPG 合作综述《The Reality Gap in Robotics: Challe
 > — Arthur12137（英国，259 赞 / 49 评论），[帖211](https://www.xiaohongshu.com/explore/69d6c50b000000001a029ba6) 2026-04-09
 > GitHub：**Bowen12137/Awesome-World-Models**
 
-#### 🧠 帖294：对 LeWorldModel 的一点看法（Fisher，695 赞）🔥🔵 理论逆共识　〔Round 5〕
+#### 🧠 帖294：对 LeWorldModel 的一点看法（Fisher，695 赞）🔥🔵 理论逆共识
+
+<sub>来源：Round 5</sub>
 
 **对杨立昆 LeJEPA/LeWorldModel 的一手批评**（作者自己踩过同款坑，有 ICLR 2026 相关工作）：
 
@@ -1907,7 +2127,9 @@ NVIDIA × 苏黎世大学 RPG 合作综述《The Reality Gap in Robotics: Challe
 
 ### 12.9 触觉与力控
 
-#### 触觉应该是 VLA 的残差/安全层　〔原 §14.6〕
+#### 触觉应该是 VLA 的残差/安全层
+
+<sub>来源：原 §14.6</sub>
 
 **📍 帖213：R&B All Night 🌙 —— 真机 VTLA-RL 系统论述**
 
@@ -1927,7 +2149,9 @@ NVIDIA × 苏黎世大学 RPG 合作综述《The Reality Gap in Robotics: Challe
 >
 > — R&B All Night🌙（185 赞 / 1319 评论），[帖213](https://www.xiaohongshu.com/explore/695bbb8e000000000e03f6fe) 2026-01-05
 
-#### 🔥 帖307：TACO 触觉世界模型后训练 38%→82%（刘家铭 PKU，134 赞）论文洞见　〔Round 7〕
+#### 🔥 帖307：TACO 触觉世界模型后训练 38%→82%（刘家铭 PKU，134 赞）论文洞见
+
+<sub>来源：Round 7</sub>
 
 **TACO🌮**：用触觉世界模型给具身大模型做可扩展后训练，聚焦 *last millimeter of execution*（接触）。
 - **动机**：接触密集任务的失败瞬间**视觉几乎看不出**（板擦盖住字迹但没压够力、夹爪对准但打滑），而**力觉信号早就报警**。
@@ -1935,7 +2159,9 @@ NVIDIA × 苏黎世大学 RPG 合作综述《The Reality Gap in Robotics: Challe
 - **关键工程洞见**：**直接把触觉模态塞进 VLA 训练可能破坏原本的预训练能力**，因此后训练用**知识隔离**——梯度不碰 VLM 主干、只更新动作专家。
 - **真机**：6 个接触丰富任务，平均成功率 **38%→82%（绝对 +44pp）**。
 
-#### 🔥 帖308：李飞飞 T-Rex —— 触觉不是没用、是模型不会用（阿旺，47 赞）论文洞见 / 反直觉　〔Round 7〕
+#### 🔥 帖308：李飞飞 T-Rex —— 触觉不是没用、是模型不会用（阿旺，47 赞）论文洞见 / 反直觉
+
+<sub>来源：Round 7</sub>
 
 李飞飞、Jim Fan、Pieter 等发布 **T-Rex** 论文，做了个反常识实验：在 pi0.5 上**直接加入触觉信号**。
 - **结果反向**：pi0.5 平均成功率 **17%，加触觉后反降到 6%** → 很多人据此说"触觉没价值"。
@@ -1946,7 +2172,9 @@ NVIDIA × 苏黎世大学 RPG 合作综述《The Reality Gap in Robotics: Challe
 >
 > 😂 **社区民俗一则**：`快过年了，这一波 Sim2Real 我彻底失败了`（bbbbz，108 赞）——用"大年初一 Policy 掉进局部最优 / 盯着满屏 CUDA OOM 说'这把真的收敛了'"的段子，精准刻画了具身科研狗的过年精神状态。无技术 takeaway，但校准预期用。
 
-#### 🖐 帖302：smolVLA + 触觉 + 灵巧手全流程实测（BozZ，201 赞）🔵 一手 pipeline　〔Round 6〕
+#### 🖐 帖302：smolVLA + 触觉 + 灵巧手全流程实测（BozZ，201 赞）🔵 一手 pipeline
+
+<sub>来源：Round 6</sub>
 
 - **路线**：策略 smolVLA + 视觉/触觉双模态；抓取姿态来自 **HUG（人手示范→灵巧手映射）**开源方案
 - **硬件**：星际光年 Gaia Hand 20 + 睿尔曼 RM65；**Gaia Hand 除指尖非线性外基本直驱 → sim2real 迁移友好、损耗小**
@@ -1957,7 +2185,9 @@ NVIDIA × 苏黎世大学 RPG 合作综述《The Reality Gap in Robotics: Challe
 
 ### 12.10 RL 后训练（DAgger 真相 / RLT 介入式）
 
-#### DAgger 是真机 RL 的真相 🔺　〔原 §14.5〕
+#### DAgger 是真机 RL 的真相 🔺
+
+<sub>来源：原 §14.5</sub>
 
 **📍 帖212：ronfjkks —— DAgger 是真机 RL 的唯一可行路径吗？**
 
@@ -1989,7 +2219,9 @@ NVIDIA × 苏黎世大学 RPG 合作综述《The Reality Gap in Robotics: Challe
 
 **🔗 与 §1.6 Evo-RL 范式相互印证**：Evo-RL 的"示教→部署→犯错→人工纠偏→数据回流→再训练" 本质就是 DAgger 闭环。**residual RL + DAgger 是 PI 系列的真实底色，pure RL 是营销叙事**。
 
-#### 🔩 帖301：RL Token + smolVLA 做网线柔顺装配（知白/Lee，141 赞）🔥 一手 30%→90%　〔Round 6〕
+#### 🔩 帖301：RL Token + smolVLA 做网线柔顺装配（知白/Lee，141 赞）🔥 一手 30%→90%
+
+<sub>来源：Round 6</sub>
 
 **柔顺插接（ethernet 网线）任务**，优化末端接近插口后的精细对准+插入：
 - 基础 VLA（XRobot 遥操采集 + 阻抗控制驱动）**成功率 ~30%**
@@ -2001,7 +2233,9 @@ NVIDIA × 苏黎世大学 RPG 合作综述《The Reality Gap in Robotics: Challe
 
 ### 12.11 生态、工具链与教育资源
 
-#### LeRobot 维护降级 + FluxVLA 补位　〔原 §14.7〕
+#### LeRobot 维护降级 + FluxVLA 补位
+
+<sub>来源：原 §14.7</sub>
 
 **📍 帖214：蓝瘦纸 —— lerobot 项目官方还维护么？（内部信号 🔺）**
 
@@ -2036,7 +2270,9 @@ NVIDIA × 苏黎世大学 RPG 合作综述《The Reality Gap in Robotics: Challe
 
 **🔗 接力信号**：LeRobot 维护降级 + 逐际动力 FluxVLA 补位 → **国内具身工程化基建有可能填补 HF 空缺**。
 
-#### 综述与教育资源　〔原 §12.9〕
+#### 综述与教育资源
+
+<sub>来源：原 §12.9</sub>
 
 **VLA 模型综述中文版（自动化学报）**（帖158，自动化学报，中热度）：
 - 面向具身操作的视觉-语言-动作模型综述
@@ -2061,7 +2297,9 @@ NVIDIA × 苏黎世大学 RPG 合作综述《The Reality Gap in Robotics: Challe
 
 ### 12.12 产业生态、逆共识与行业反思（含经典金句溯源）
 
-#### 行业生态与政策信号　〔原 §12.8〕
+#### 行业生态与政策信号
+
+<sub>来源：原 §12.8</sub>
 
 **人形机器人标准体系 2026 版发布**（帖151，新华网，极高信号）：
 - 我国首个覆盖人形机器人 + 具身智能全产业链的标准顶层设计
@@ -2094,7 +2332,9 @@ NVIDIA × 苏黎世大学 RPG 合作综述《The Reality Gap in Robotics: Challe
 - 覆盖 PhD/RA/实习/全职的具身智能岗位聚合
 - **求职资源**：目前最全的具身智能招聘信息源
 
-#### VLA = paper factory 逆共识升格 🔺　〔原 §14.12〕
+#### VLA = paper factory 逆共识升格 🔺
+
+<sub>来源：原 §14.12</sub>
 
 **📍 帖225：曾经的你 —— VLA 论文真上过真机吗？**
 
@@ -2116,7 +2356,9 @@ NVIDIA × 苏黎世大学 RPG 合作综述《The Reality Gap in Robotics: Challe
 - 178 赞的"填个表格完事了"暗示**学术 review 已经无法甄别 VLA 论文真伪**
 - §6（少数派观点）的"VLA 落地很难" 在本批升格为**正式逆共识 C?**（置信度 ~50%）
 
-#### 行业反思与逆共识升格　〔原 §15.7〕
+#### 行业反思与逆共识升格
+
+<sub>来源：原 §15.7</sub>
 
 - **Shawn "或许具身智能没火就好了"**（帖233, 788 赞 / 90 评论）：10 年从业者明确表示 "**过去这一年半，多次无法突破的竟然不是技术本身的瓶颈**"——指向行业氛围/资金/路线选择等非技术因素
 - **"我不确定" VLA 落地失败二次复盘**（帖238 → 帖249 第二次发帖）：**主动放弃纯 VLA 路线**，转 real2sim2real + VLA + residual RL + OpenClaw
@@ -2124,11 +2366,15 @@ NVIDIA × 苏黎世大学 RPG 合作综述《The Reality Gap in Robotics: Challe
 - **"本体越卷数据越贵"**（帖276）：未来具身领域最值钱的可能是卖"数据饲料"的而不是造本体的厂
 - **金句**（帖233 评论, Larissa98 28 赞）：**"具身智能概念兴起降低了门槛，但拉偏了关注，出去聊别人问的大多只是 VLA"**
 
-#### 踩坑吐槽与落地反思（真机实战负面经验）　〔原 §12.10〕
+#### 踩坑吐槽与落地反思（真机实战负面经验）
+
+<sub>来源：原 §12.10</sub>
 
 > **本节特色**：以下帖子全部来自小红书真实踩坑/吐槽帖，含直链 URL，经 Chrome MCP 逐篇验证。**高可靠**。
 
-#### 📜 §12.10.0 经典金句溯源（帖162-200 集中引用，按主题分组）⭐　〔原 §12.10.0〕
+#### 📜 §12.10.0 经典金句溯源（帖162-200 集中引用，按主题分组）⭐
+
+<sub>来源：原 §12.10.0</sub>
 
 > **2026-04 升级**：原 §12.12（原 §12.10） 的金句散落在各帖摘要里，本节集中起来 + 直链可追溯，方便引用 / 面试用。
 
@@ -2244,7 +2490,9 @@ NVIDIA × 苏黎世大学 RPG 合作综述《The Reality Gap in Robotics: Challe
 
 ### 12.13 Round 8 专题：面试题库与 50 帖精选
 
-#### 🎓 面试题库（一手考点，question-bank 强化）　〔原 §15.14.1 · Round 8〕
+#### 🎓 面试题库（一手考点，question-bank 强化）
+
+<sub>来源：原 §15.14.1 · Round 8</sub>
 
 - **帖309 腾讯 Robotics X 手术 VLA 一面（940 赞 / 36 评，程序员面试）🔥🔥** — 本轮最硬核。14+ 追问：① 扩散 Action Chunk 未跑完、组织已非线性位移，怎么闭环修正？② 手术几小时，Transformer KV Cache 爆炸换 Mamba，但 Mamba 线性压缩是 **Lossy**，怎么保证不产生幻觉？③ 为什么 Transformer 是 N²、Mamba 线性？④ 仿真杨氏模量和活体猪差异极大怎么对齐？⑤ Mamba selective scan 里"什么该忘什么该记"怎么定义？评论"我竟然会一半"。
 - **帖310 面试官视角 VLA 考察清单（225 赞 / 5 评，Token炼金术）🔥** — action token id 相邻 ≠ 动作相近；MSE 快但平均多峰、自回归有延迟、diffusion/flow 适合连续多峰 chunk；**π0 是 VLM expert tokens 与 action expert tokens 交互**（非只取最后 hidden state）；π0.5 避免 action loss 污染 VLM；快慢系统接口应发 object goal/skill/target pose + 时间戳/坐标系/版本；真机 debug 拆链路（标定→坐标系→TCP→深度尺度）。
@@ -2255,14 +2503,18 @@ NVIDIA × 苏黎世大学 RPG 合作综述《The Reality Gap in Robotics: Challe
 - **帖315 RTC 算法面试三段式（149 赞 / 4 评，余生实验室）** — 把延迟当"图像修复"：冻结区（前 d 步 100% 权重）+ 过渡区（软掩蔽指数衰减，"火车变轨"）+ 全新生成区；mutex 释放实现前后台真解耦。
 - 其余面经：**帖316 VLA面经2·Pi0演进图（80/1）、帖317 微分智飞面经（125/35）、帖318 原力灵机面经（87/10，含 leetcode）、帖319 sharpa 结构岗终面（62/30）、帖320 具身极简面经·面试官视角（75/1）、帖321 具身面经②VLA考点篇（147/5）**。
 
-#### 🧊 逆共识与行业判断　〔原 §15.14.2 · Round 8〕
+#### 🧊 逆共识与行业判断
+
+<sub>来源：原 §15.14.2 · Round 8</sub>
 
 - **帖322 根本没有什么具身大模型（358 赞 / 55 评，Ivory Seagull）🔥🔵** — 尖锐："所有具身都是微调，从 VLM/VM 浆糊里抽一点塞进 Action DiT；因为 Video Model 是 v-pred，Action 也被迫 v-pred"；预测 3-5 年几个初创倒闭。评论：自驾不缺 policy 数据可参考；"世界知识都是语言模态的，长期不可行，需革命性自监督方法才有基模"。
 - **帖323 GR00T "12th layer" 质疑（302 赞 / 28 评，Ivory Seagull）🔵** — GR00T 论文"we use the feature from 12th layer"无证明无消融；VLM 多层信息只取 12 层喂 action expert，vs pi 每层都吃。评论反驳：SwiGLU 作者也没证明、"实验 make sense 就好"。
 - **帖324 Motus/robotwin 刷分质疑（142 赞 / 45 评，duckduck）🔵** — stack 3 blocks 之前顶破天 20-30%，突然全刷到 80-90 真的假的？评论揭露：官方是 **25k 全量多任务**训练不是 50-shot 单任务；对比实验里 pi0.5 pick-place 都 <50%。
 - 产业：**帖325 清华特奖获得者开启具身创业（759/113）、帖326 RDT 一作刘松铭创业将闲科技·真格天使轮（60/0）**。
 
-#### 🧪 新方法与论文　〔原 §15.14.3 · Round 8〕
+#### 🧪 新方法与论文
+
+<sub>来源：原 §15.14.3 · Round 8</sub>
 
 - **帖327 "History is State"·超 π0.5 六倍（623 赞 / 48 评，光探）🔥** — selective SSM 每个控制步把观测编码成 state token 沿真实时间传播完整历史 + 物理启发二阶动作桥。Cover Blocks 记忆任务：**双 UR3 真机平均 78%，记忆依赖任务 72%，而 π0.5 为 0%**。
 - **帖328 D3P 动态去噪扩散（150 赞 / 0 评，THU_NICSefc_RL）** — 关键动作多去噪步、常规动作少算，轻量预测器 + RL 联合训练，**平均 2.2x 推理加速**。
@@ -2271,7 +2523,9 @@ NVIDIA × 苏黎世大学 RPG 合作综述《The Reality Gap in Robotics: Challe
 - **帖331 RDT2 叠衣服爆拉 pi0.5 40%（54 赞 / 9 评，具身智能之心）** + **帖332 RDT2 零样本跨本体（179/7，AI椰青）** — 清华 TSAIL，UMI 数据极限、无监督多模态预训练、未见本体零样本部署。
 - 其他方法/科普：**帖333 稀疏监督扩散掩码（76/2）、帖334 OMAD 在线多智能体扩散（60/0）、帖335 VLA policy head 科普（129/11）、帖336 DP 从零数学推导·MSE多峰必崩→score→DDPM（92/2）、帖337 扩散策略教程5（77/0）、帖338 Flow Matching 浅析（118）、帖339 扩散策略·RL 新范式（148）**。
 
-#### 🛠️ 一手复现与工程踩坑　〔原 §15.14.4 · Round 8〕
+#### 🛠️ 一手复现与工程踩坑
+
+<sub>来源：原 §15.14.4 · Round 8</sub>
 
 - **帖340 vla 技术 knowhow·工程 cheat-sheet（405 赞 / 38 评，Wesley 许伟胜）🔥** — 罕见的成体系参数手册：**数据采集**（光照一致/场景固定/每样本固定起点、终点在工作空间外/同物体每位置百条/注意帧率）；**数据处理**（resize、模态对齐、频率对齐、检查 RGB/BGR）；**模型**（torch vs jax、loss 降多少、step≈20000、epoch 过高过拟合、数据多用全量少用 lora、chunk 预测 50、bs 32）；**推理**（同步/异步、预测 50 执行 10-15、仿真开环测试）。评论补：freq 30/chunk 90/执行 30 快递分拣 90%+。
 - **帖341 starVLA 控制 G1 全身（271 赞 / 30 评，ZZZ）** — 复现 Sonic，用 starVLA 替 GR00T，单卡 4090 6 小时、50-300 条数据跑通 G1 全身控制，绕开大规模 VLA 预训练。
@@ -2279,13 +2533,17 @@ NVIDIA × 苏黎世大学 RPG 合作综述《The Reality Gap in Robotics: Challe
 - **帖343 ALOHA ACT 仿真保姆教程（91 赞 / 20 评，天真派）🔥坑** — 关键坑：MuJoCo 里 **采集(Record) 和推理(Eval) 对物体位置初始化逻辑不同**，Eval 时必须注释掉采集代码段否则物体乱飞抓不到。
 - **帖344 ACT 调 3 天抓不准解析（132/6，李一腾）、帖345 pi0.5 放抽屉抖动严重（67/60，dli1988，60 评求解）、帖346 赛博夹橙子 GR00T N1.5 微调 10000步/53条（82/4）、帖347 第一个 ACT 复现成功（87/72）、帖348 VLA 显存请教·单4090 bs8/lora（91/45）**。
 
-#### 🔩 硬件选型与数据　〔原 §15.14.5 · Round 8〕
+#### 🔩 硬件选型与数据
+
+<sub>来源：原 §15.14.5 · Round 8</sub>
 
 - **帖349 协作臂选型求助（186 赞 / 141 评，小八）** — 评论集体推荐：节卡/Kuka、排除遨博、要稳定选 Xarm、要先进/研究选星海图 A1 或 arx。
 - **帖350 MIT 力矩/柔顺控制开源（188/24）** — 低成本臂二次开发；评论 snark"柔顺控制上世纪就有，阻抗/导纳哪个不行"（反映社区对"重造轮子"的敏感）。
 - **帖351 Robot Data Studio 数据质检工具（77/17）、帖352 YAM 3500+ 小时全球最大双臂遥操数据集·UC/MIT/Amazon FAR/XDOF/CMU（59/2）、帖353 人类视频取代机器人数据采集成功率 +54%（82/2）、帖354 万字机械臂结构设计（102/0）、帖355 机械臂推荐·10w预算重精度（68/43）、帖356 数据采集-遥操作教程(1)（152/3）、帖357 个人 VLA 入坑路线（832/22）、帖358 从零搭建 VLA 流水线（529/44）**。
 
-#### 📋 Round 8 可追溯总表（50 帖，附赞 / 评论 / 链接）　〔原 §15.14.7 · Round 8〕
+#### 📋 Round 8 可追溯总表（50 帖，附赞 / 评论 / 链接）
+
+<sub>来源：原 §15.14.7 · Round 8</sub>
 
 | # | 标题 | 作者 | 赞 | 评论 | 链接 |
 |---|------|------|----|----|------|
@@ -2346,7 +2604,9 @@ NVIDIA × 苏黎世大学 RPG 合作综述《The Reality Gap in Robotics: Challe
 
 ### 12.14 信念网络汇总（各轮增量合并）
 
-#### 信念网络更新（三轮合并）　〔原 §15.8〕
+#### 信念网络更新（三轮合并）
+
+<sub>来源：原 §15.8</sub>
 
 | 信念 | 状态 | 校准置信度 | 致命实验 / 截止日 |
 |------|------|----------|------------------|
@@ -2364,7 +2624,9 @@ NVIDIA × 苏黎世大学 RPG 合作综述《The Reality Gap in Robotics: Challe
 
 ---
 
-#### 信念网络更新（合并双轮采集）　〔原 §14.14〕
+#### 信念网络更新（合并双轮采集）
+
+<sub>来源：原 §14.14</sub>
 
 | 信念 | 状态 | 校准置信度 | 致命实验 / 截止日 |
 |------|------|----------|------------------|
@@ -2378,7 +2640,9 @@ NVIDIA × 苏黎世大学 RPG 合作综述《The Reality Gap in Robotics: Challe
 
 ---
 
-#### 信念网络增量（Round 3）　〔Round 3〕
+#### 信念网络增量（Round 3）
+
+<sub>来源：Round 3</sub>
 
 | 信念 | 状态 | 置信度 |
 |------|------|--------|
@@ -2391,7 +2655,9 @@ NVIDIA × 苏黎世大学 RPG 合作综述《The Reality Gap in Robotics: Challe
 
 ---
 
-#### 信念网络增量（Round 4）　〔Round 4〕
+#### 信念网络增量（Round 4）
+
+<sub>来源：Round 4</sub>
 
 | 信念 | 状态 | 置信度 |
 |------|------|--------|
@@ -2405,7 +2671,9 @@ NVIDIA × 苏黎世大学 RPG 合作综述《The Reality Gap in Robotics: Challe
 
 ---
 
-#### 信念网络增量（Round 5）　〔Round 5〕
+#### 信念网络增量（Round 5）
+
+<sub>来源：Round 5</sub>
 
 | 信念 | 状态 | 置信度 |
 |------|------|--------|
@@ -2418,7 +2686,9 @@ NVIDIA × 苏黎世大学 RPG 合作综述《The Reality Gap in Robotics: Challe
 
 ---
 
-#### 信念网络增量（Round 6）　〔Round 6〕
+#### 信念网络增量（Round 6）
+
+<sub>来源：Round 6</sub>
 
 | 信念 | 状态 | 置信度 |
 |------|------|--------|
@@ -2433,7 +2703,9 @@ NVIDIA × 苏黎世大学 RPG 合作综述《The Reality Gap in Robotics: Challe
 
 ---
 
-#### 信念网络增量（Round 7）　〔Round 7〕
+#### 信念网络增量（Round 7）
+
+<sub>来源：Round 7</sub>
 
 | 信念 | 状态 | 置信度 |
 |------|------|--------|
@@ -2445,7 +2717,9 @@ NVIDIA × 苏黎世大学 RPG 合作综述《The Reality Gap in Robotics: Challe
 
 ---
 
-#### 信念网络增量（Round 8）　〔原 §15.14.6 · Round 8〕
+#### 信念网络增量（Round 8）
+
+<sub>来源：原 §15.14.6 · Round 8</sub>
 
 | 信念 | 状态 | 置信度 |
 |------|------|--------|
@@ -2459,7 +2733,9 @@ NVIDIA × 苏黎世大学 RPG 合作综述《The Reality Gap in Robotics: Challe
 
 ### 12.15 完整帖摘要索引（帖162-200，保留原批注 + 直链）
 
-#### 📋 §12.10.1 完整帖摘要（保留原批注 + 补足直链）　〔原 §12.10.1〕
+#### 📋 §12.10.1 完整帖摘要（保留原批注 + 补足直链）
+
+<sub>来源：原 §12.10.1</sub>
 
 **机械臂冷启动影响 VLA 成功率**（帖162，S!mple，117 赞，天津）：
 - 冷启动状态下 VLA 成功率明显偏低，运行几分钟后稳定回升
@@ -2791,27 +3067,39 @@ NVIDIA × 苏黎世大学 RPG 合作综述《The Reality Gap in Robotics: Challe
 > 2026-05-29 手动 Round 2（9 详细，用户指令"狂找"补录）→ 帖268-276
 > 原始档案：[2026-05-04-auto.md](../memory/blog/archives/xiaohongshu-community/2026-05-04-auto.md) / [2026-05-15-manual.md](../memory/blog/archives/xiaohongshu-community/2026-05-15-manual.md) / [2026-05-29-manual.md](../memory/blog/archives/xiaohongshu-community/2026-05-29-manual.md)
 
-#### Round 3 经验补遗（参数 / 踩坑导向，帖277-283）　〔原 §15.9〕
+#### Round 3 经验补遗（参数 / 踩坑导向，帖277-283）
+
+<sub>来源：原 §15.9</sub>
 
 > 用户指令"再去抓有用经验"，2026-06-01 加跑 7 个未覆盖关键词（机械臂标定 / 灾难性遗忘 / OpenPI 真机 / GR00T 微调 / RoboTwin 多卡 / FAST tokenizer / ACT 真机成功率）。原档案：[2026-06-01-round3-manual.md](../memory/blog/archives/xiaohongshu-community/2026-06-01-round3-manual.md)
 
-#### Round 4 经验补遗（同日 continue! 加!，帖284-290）　〔原 §15.10〕
+#### Round 4 经验补遗（同日 continue! 加!，帖284-290）
+
+<sub>来源：原 §15.10</sub>
 
 > 用户指令"continue! 加!"，2026-06-01 同日加跑 6 个 fresh 关键词（lerobot 训练 卡顿 / Isaac Lab 报错 坑 / VLA 数据增强 抖动 / VLA 微调 显存 OOM / 开源 VLA 翻车 / VLA 真机 debug 日常）。原档案：[2026-06-01-round4-manual.md](../memory/blog/archives/xiaohongshu-community/2026-06-01-round4-manual.md)
 
-#### Round 5 经验补遗（2026-07-08 定时采集，帖291-295）　〔原 §15.11〕
+#### Round 5 经验补遗（2026-07-08 定时采集，帖291-295）
+
+<sub>来源：原 §15.11</sub>
 
 > 定时任务自动跑，5 组关键词（pi0 训练 踩坑 / VLA RL 强化学习 / world model 机器人 / sim2real 失败 / 触觉 力觉 具身）。搜索页 102 条结果，去重后 48 条候选，筛出 8 篇详录；其中 3 篇（pi0.5 复现=帖40、张海爆 VLA+RL=帖184、VLA 加力=帖24）已在索引中，去重后保留 **5 篇新帖**。**说明**：本轮两个已连接 Chrome 中 Browser 1 未登录小红书（点搜索弹二维码），已切到 Browser 2（已登录）完成采集。
 
-#### Round 6 补采（2026-07-25，帖296-302）　〔原 §15.12〕
+#### Round 6 补采（2026-07-25，帖296-302）
+
+<sub>来源：原 §15.12</sub>
 
 > 用户"补采更多帖子"手动触发，5 组新关键词（VLA 量化 部署 / 具身智能 创业 反思 / VLA 泛化 失败 / 手眼标定 踩坑 / SmolVLA 微调），侧重此前盲区（边缘量化 / 泛化根因 / 训推一致性 / 柔顺装配）。搜索约 100 条，去重后 21 条候选，详录 **7 篇新帖**。
 
-#### Round 7 经验补遗（评测 setting / 触觉后训练 / openpi 踩坑，帖303-308）　〔原 §15.13〕
+#### Round 7 经验补遗（评测 setting / 触觉后训练 / openpi 踩坑，帖303-308）
+
+<sub>来源：原 §15.13</sub>
 
 > 2026-07-25 自动收集。关键词矩阵随机命中：`pi0 训练 踩坑` / `SmolVLA 微调` / `sim2real 失败` / `VLA 泛化 失败` / `触觉 力觉 具身`。本轮最大信号是**两篇触觉后训练论文（TACO / T-Rex）从不同角度指向同一结论：naive 拼接触觉会破坏视觉预训练，必须做架构/梯度隔离**。
 
-#### Round 8 大规模补采（2026-07-25，帖309-358，50 篇）　〔原 §15.14〕
+#### Round 8 大规模补采（2026-07-25，帖309-358，50 篇）
+
+<sub>来源：原 §15.14</sub>
 
 > 用户"找到 50 个有效帖深度强化"。用 15 组关键词（OpenVLA 部署 / ACT 复现 / RDT / GR00T 微调 / diffusion policy / 双臂遥操作 / VLA 推理加速 / 具身面经 / 机械臂选型 / RoboTwin / VLA 量化 / VLA 泛化失败 / SmolVLA / 手眼标定 / 创业反思）搜索，176 条去重候选，精选 50 篇有效帖。**每篇均附赞数 / 评论数 / 链接**（见 §12.13（原 §15.14.7） 总表）。本轮最大价值：**面试题库**（腾讯/傅利叶/众擎/原力灵机等一手考点）+ **逆共识**（"没有具身大模型"、GR00T 12 层质疑、Motus 刷分）+ **工程 cheat-sheet**（一手参数与踩坑）。
 
