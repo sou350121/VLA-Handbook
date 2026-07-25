@@ -2634,6 +2634,118 @@ NVIDIA × 苏黎世大学 RPG 合作综述《The Reality Gap in Robotics: Challe
 
 ---
 
+### 15.14 Round 8 大规模补采（2026-07-25，帖309-358，50 篇）
+
+> 用户"找到 50 个有效帖深度强化"。用 15 组关键词（OpenVLA 部署 / ACT 复现 / RDT / GR00T 微调 / diffusion policy / 双臂遥操作 / VLA 推理加速 / 具身面经 / 机械臂选型 / RoboTwin / VLA 量化 / VLA 泛化失败 / SmolVLA / 手眼标定 / 创业反思）搜索，176 条去重候选，精选 50 篇有效帖。**每篇均附赞数 / 评论数 / 链接**（见 §15.14.7 总表）。本轮最大价值：**面试题库**（腾讯/傅利叶/众擎/原力灵机等一手考点）+ **逆共识**（"没有具身大模型"、GR00T 12 层质疑、Motus 刷分）+ **工程 cheat-sheet**（一手参数与踩坑）。
+
+#### 15.14.1 🎓 面试题库（一手考点，question-bank 强化）
+
+- **帖309 腾讯 Robotics X 手术 VLA 一面（940 赞 / 36 评，程序员面试）🔥🔥** — 本轮最硬核。14+ 追问：① 扩散 Action Chunk 未跑完、组织已非线性位移，怎么闭环修正？② 手术几小时，Transformer KV Cache 爆炸换 Mamba，但 Mamba 线性压缩是 **Lossy**，怎么保证不产生幻觉？③ 为什么 Transformer 是 N²、Mamba 线性？④ 仿真杨氏模量和活体猪差异极大怎么对齐？⑤ Mamba selective scan 里"什么该忘什么该记"怎么定义？评论"我竟然会一半"。
+- **帖310 面试官视角 VLA 考察清单（225 赞 / 5 评，Token炼金术）🔥** — action token id 相邻 ≠ 动作相近；MSE 快但平均多峰、自回归有延迟、diffusion/flow 适合连续多峰 chunk；**π0 是 VLM expert tokens 与 action expert tokens 交互**（非只取最后 hidden state）；π0.5 避免 action loss 污染 VLM；快慢系统接口应发 object goal/skill/target pose + 时间戳/坐标系/版本；真机 debug 拆链路（标定→坐标系→TCP→深度尺度）。
+- **帖311 傅利叶一面（173 赞 / 8 评，Joey）** — UniVLA latent action model（VQ-VAE）、时间段标注规则、SFT 7B、latent action 1-2B、RTC(real-time chunking)、抖动后处理、桌面高度、深度感知任务 + leetcode（最长连续子数组绝对差≤limit）。
+- **帖312 具身面经④ pi 系列演进考点（368 赞 / 9 评，萝卜小智）** — pi0→FAST→pi0.5→pi0.6 逐版本追问脉络，"纯考点不放答案，练到能扛追问"。
+- **帖313 众擎 VLA 面经（137 赞 / 6 评，鹤 e）** — 手撕 Transformer、BN vs LN 归一化选择与原因、端到端 vla+rl 路线。
+- **帖314 一分钟看透 Pi0（409 赞 / 13 评，余生实验室）** — flow matching 出丝滑高频动作 vs 自回归卡顿、VLM+Action Expert 解耦、杂乱数据预训练兜底 + 高精数据微调；评论"pi0 在解耦感知/操作上已落后"。
+- **帖315 RTC 算法面试三段式（149 赞 / 4 评，余生实验室）** — 把延迟当"图像修复"：冻结区（前 d 步 100% 权重）+ 过渡区（软掩蔽指数衰减，"火车变轨"）+ 全新生成区；mutex 释放实现前后台真解耦。
+- 其余面经：**帖316 VLA面经2·Pi0演进图（80/1）、帖317 微分智飞面经（125/35）、帖318 原力灵机面经（87/10，含 leetcode）、帖319 sharpa 结构岗终面（62/30）、帖320 具身极简面经·面试官视角（75/1）、帖321 具身面经②VLA考点篇（147/5）**。
+
+#### 15.14.2 🧊 逆共识与行业判断
+
+- **帖322 根本没有什么具身大模型（358 赞 / 55 评，Ivory Seagull）🔥🔵** — 尖锐："所有具身都是微调，从 VLM/VM 浆糊里抽一点塞进 Action DiT；因为 Video Model 是 v-pred，Action 也被迫 v-pred"；预测 3-5 年几个初创倒闭。评论：自驾不缺 policy 数据可参考；"世界知识都是语言模态的，长期不可行，需革命性自监督方法才有基模"。
+- **帖323 GR00T "12th layer" 质疑（302 赞 / 28 评，Ivory Seagull）🔵** — GR00T 论文"we use the feature from 12th layer"无证明无消融；VLM 多层信息只取 12 层喂 action expert，vs pi 每层都吃。评论反驳：SwiGLU 作者也没证明、"实验 make sense 就好"。
+- **帖324 Motus/robotwin 刷分质疑（142 赞 / 45 评，duckduck）🔵** — stack 3 blocks 之前顶破天 20-30%，突然全刷到 80-90 真的假的？评论揭露：官方是 **25k 全量多任务**训练不是 50-shot 单任务；对比实验里 pi0.5 pick-place 都 <50%。
+- 产业：**帖325 清华特奖获得者开启具身创业（759/113）、帖326 RDT 一作刘松铭创业将闲科技·真格天使轮（60/0）**。
+
+#### 15.14.3 🧪 新方法与论文
+
+- **帖327 "History is State"·超 π0.5 六倍（623 赞 / 48 评，光探）🔥** — selective SSM 每个控制步把观测编码成 state token 沿真实时间传播完整历史 + 物理启发二阶动作桥。Cover Blocks 记忆任务：**双 UR3 真机平均 78%，记忆依赖任务 72%，而 π0.5 为 0%**。
+- **帖328 D3P 动态去噪扩散（150 赞 / 0 评，THU_NICSefc_RL）** — 关键动作多去噪步、常规动作少算，轻量预测器 + RL 联合训练，**平均 2.2x 推理加速**。
+- **帖329 SDP 集合监督扩散·RSS2026（129 赞 / 7 评，zmomo）** — 人类纠错不完美时，从"点监督"→"期望动作集合"（正+负动作），反射式扩散采样约束样本落在合理区域。
+- **帖330 FRAPPE 世界模型（73 赞 / 11 评，Zero-Hero34）** — 不预测像素未来，改在**特征空间想象未来**，省算力、避免过度关注无关像素。
+- **帖331 RDT2 叠衣服爆拉 pi0.5 40%（54 赞 / 9 评，具身智能之心）** + **帖332 RDT2 零样本跨本体（179/7，AI椰青）** — 清华 TSAIL，UMI 数据极限、无监督多模态预训练、未见本体零样本部署。
+- 其他方法/科普：**帖333 稀疏监督扩散掩码（76/2）、帖334 OMAD 在线多智能体扩散（60/0）、帖335 VLA policy head 科普（129/11）、帖336 DP 从零数学推导·MSE多峰必崩→score→DDPM（92/2）、帖337 扩散策略教程5（77/0）、帖338 Flow Matching 浅析（118）、帖339 扩散策略·RL 新范式（148）**。
+
+#### 15.14.4 🛠️ 一手复现与工程踩坑
+
+- **帖340 vla 技术 knowhow·工程 cheat-sheet（405 赞 / 38 评，Wesley 许伟胜）🔥** — 罕见的成体系参数手册：**数据采集**（光照一致/场景固定/每样本固定起点、终点在工作空间外/同物体每位置百条/注意帧率）；**数据处理**（resize、模态对齐、频率对齐、检查 RGB/BGR）；**模型**（torch vs jax、loss 降多少、step≈20000、epoch 过高过拟合、数据多用全量少用 lora、chunk 预测 50、bs 32）；**推理**（同步/异步、预测 50 执行 10-15、仿真开环测试）。评论补：freq 30/chunk 90/执行 30 快递分拣 90%+。
+- **帖341 starVLA 控制 G1 全身（271 赞 / 30 评，ZZZ）** — 复现 Sonic，用 starVLA 替 GR00T，单卡 4090 6 小时、50-300 条数据跑通 G1 全身控制，绕开大规模 VLA 预训练。
+- **帖342 pi0.5 双臂折箱子长程任务（328 赞 / 136 评，纸飞机）** — 实习两个月从小白到独立跑 baseline；评论追问长程任务采数据（完整 vs 拆子任务）、子任务 index vlm、数据量小时数、expert-only pi0.5。
+- **帖343 ALOHA ACT 仿真保姆教程（91 赞 / 20 评，天真派）🔥坑** — 关键坑：MuJoCo 里 **采集(Record) 和推理(Eval) 对物体位置初始化逻辑不同**，Eval 时必须注释掉采集代码段否则物体乱飞抓不到。
+- **帖344 ACT 调 3 天抓不准解析（132/6，李一腾）、帖345 pi0.5 放抽屉抖动严重（67/60，dli1988，60 评求解）、帖346 赛博夹橙子 GR00T N1.5 微调 10000步/53条（82/4）、帖347 第一个 ACT 复现成功（87/72）、帖348 VLA 显存请教·单4090 bs8/lora（91/45）**。
+
+#### 15.14.5 🔩 硬件选型与数据
+
+- **帖349 协作臂选型求助（186 赞 / 141 评，小八）** — 评论集体推荐：节卡/Kuka、排除遨博、要稳定选 Xarm、要先进/研究选星海图 A1 或 arx。
+- **帖350 MIT 力矩/柔顺控制开源（188/24）** — 低成本臂二次开发；评论 snark"柔顺控制上世纪就有，阻抗/导纳哪个不行"（反映社区对"重造轮子"的敏感）。
+- **帖351 Robot Data Studio 数据质检工具（77/17）、帖352 YAM 3500+ 小时全球最大双臂遥操数据集·UC/MIT/Amazon FAR/XDOF/CMU（59/2）、帖353 人类视频取代机器人数据采集成功率 +54%（82/2）、帖354 万字机械臂结构设计（102/0）、帖355 机械臂推荐·10w预算重精度（68/43）、帖356 数据采集-遥操作教程(1)（152/3）、帖357 个人 VLA 入坑路线（832/22）、帖358 从零搭建 VLA 流水线（529/44）**。
+
+#### 15.14.6 信念网络增量（Round 8）
+
+| 信念 | 状态 | 置信度 |
+|------|------|--------|
+| **B28**：VLA 面试已从"知道模型"转向"每个技术决策问为什么/换一种会怎样"，pi 系列演进是必考 | 新增 | 75% |
+| **B29**："没有真正具身基模、都是 VLM 微调"是社区一部分资深从业者的共识性焦虑（非个例） | 新观察 | 60% |
+| **B30**：benchmark 刷分与真实可复现的鸿沟在 robotwin/Motus 上再次被一手质疑（呼应 §15.13 帖303） | 强化 | 70% |
+| **B-history/SSM 建模长历史 + 二阶动作桥可显著提升记忆依赖任务**（π0.5 在记忆任务 0% → 78%） | 新观察 | 55% |
+| **B-社区对"重造经典控制/无消融取某层"高度敏感**（GR00T 12层、MIT 柔顺控制两处 snark） | 新观察 | 55% |
+
+#### 15.14.7 📋 Round 8 可追溯总表（50 帖，附赞 / 评论 / 链接）
+
+| # | 标题 | 作者 | 赞 | 评论 | 链接 |
+|---|------|------|----|----|------|
+| 309 | 腾讯Robotics X 具身算法一面（手术VLA，贼难） | 程序员面试 | 940 | 36 | [链接](https://www.xiaohongshu.com/explore/699bce54000000001b01d076) |
+| 310 | 面试官视角：我会重点问的VLA问题 | Token炼金术 | 225 | 5 | [链接](https://www.xiaohongshu.com/explore/6a4a01a600000000070277f9) |
+| 311 | 傅利叶机器人一面面经（UniVLA） | Joey | 173 | 8 | [链接](https://www.xiaohongshu.com/explore/69db175b000000001a037286) |
+| 312 | 具身面经④ pi系列 pi0→pi0.6 | 萝卜小智 | 368 | 9 | [链接](https://www.xiaohongshu.com/explore/6a49e3dc00000000060318e7) |
+| 313 | 众擎机器人 具身VLA算法面经 | 鹤 e | 137 | 6 | [链接](https://www.xiaohongshu.com/explore/68cdf41b0000000012021bca) |
+| 314 | 一分钟看透Pi0核心逻辑+防拷问 | 余生实验室 | 409 | 13 | [链接](https://www.xiaohongshu.com/explore/69b80964000000001a030d0f) |
+| 315 | 一文吃透RTC算法（面试高频） | 余生实验室 | 149 | 4 | [链接](https://www.xiaohongshu.com/explore/69ba89f2000000001d01abed) |
+| 316 | VLA面经2：一图搞懂Pi0系列演进 | 宇哥的具身笔记 | 80 | 1 | [链接](https://www.xiaohongshu.com/explore/6a4e41060000000011011c00) |
+| 317 | 具身VLA实习面经（微分智飞） | 小樱在创业 | 125 | 35 | [链接](https://www.xiaohongshu.com/explore/6a1c537d0000000037035168) |
+| 318 | 原力灵机vla算法面经（oc已拒） | 可可在eating | 87 | 10 | [链接](https://www.xiaohongshu.com/explore/6a5bd1c500000000110180d1) |
+| 319 | sharpa面试经历（结构岗终面） | 不是我怎么就风险账号了 | 62 | 30 | [链接](https://www.xiaohongshu.com/explore/69af920a0000000022021fcf) |
+| 320 | 具身极简面经（面试官视角） | 少年郎 | 75 | 1 | [链接](https://www.xiaohongshu.com/explore/6a216e3a00000000080245a8) |
+| 321 | 具身面经②VLA考点篇 | 萝卜小智 | 147 | 5 | [链接](https://www.xiaohongshu.com/explore/6a43da56000000002101b35d) |
+| 322 | 其实根本没有什么具身大模型 | Ivory Seagull | 358 | 55 | [链接](https://www.xiaohongshu.com/explore/69e771f000000000230234e2) |
+| 323 | GR00T "12th layer" 无证明质疑 | Ivory Seagull | 302 | 28 | [链接](https://www.xiaohongshu.com/explore/6a50abc1000000000f006121) |
+| 324 | Motus/robotwin刷分真的假的 | duckduck | 142 | 45 | [链接](https://www.xiaohongshu.com/explore/69513fa0000000001e0231f5) |
+| 325 | 清华特奖获得者开启具身创业 | Top全球AI人才社区 | 759 | 113 | [链接](https://www.xiaohongshu.com/explore/69c1ee5f000000001a02b59c) |
+| 326 | RDT一作刘松铭开启具身创业 | AI智件 | 60 | 0 | [链接](https://www.xiaohongshu.com/explore/69c174620000000022000d76) |
+| 327 | 超π0.5六倍！History is State | 光探 | 623 | 48 | [链接](https://www.xiaohongshu.com/explore/6a4744b70000000015026e40) |
+| 328 | D3P：动态去噪的扩散策略（2.2x） | THU_NICSefc_RL | 150 | 0 | [链接](https://www.xiaohongshu.com/explore/689b4259000000001b03e1c7) |
+| 329 | SDP：集合监督扩散（RSS2026） | zmomo | 129 | 7 | [链接](https://www.xiaohongshu.com/explore/6a4947570000000011007a10) |
+| 330 | FRAPPE：特征空间想象未来 | Zero-Hero34 | 73 | 11 | [链接](https://www.xiaohongshu.com/explore/6997f5ba000000001d024d65) |
+| 331 | RDT2叠衣服爆拉pi0.5 40% | 具身智能之心 | 54 | 9 | [链接](https://www.xiaohongshu.com/explore/6982bae8000000000d009116) |
+| 332 | RDT2：零样本跨本体基础模型 | AI椰青 | 179 | 7 | [链接](https://www.xiaohongshu.com/explore/68d745650000000012014847) |
+| 333 | 稀疏监督扩散·即插即用掩码 | AI朋友圈 | 76 | 2 | [链接](https://www.xiaohongshu.com/explore/6985a7ac000000000a02dd92) |
+| 334 | OMAD：在线多智能体扩散策略 | 小青同学Agent论文 | 60 | 0 | [链接](https://www.xiaohongshu.com/explore/699c2974000000001a0368c9) |
+| 335 | VLA后端策略头policy head科普 | 飞行日记🛰 | 129 | 11 | [链接](https://www.xiaohongshu.com/explore/696ca37d000000001a029e0d) |
+| 336 | Diffusion Policy从零数学推导 | TONYJ_7 | 92 | 2 | [链接](https://www.xiaohongshu.com/explore/6a506abe000000001702f95d) |
+| 337 | 具身5：扩散策略Diffusion Policy | Dev.E | 77 | 0 | [链接](https://www.xiaohongshu.com/explore/6a54a2b6000000000702db8c) |
+| 338 | 具身学习Day3：Flow Matching浅析 | Dev.E | 118 | — | [链接](https://www.xiaohongshu.com/explore/69ef30d6000000001a034e32) |
+| 339 | 扩散策略：强化学习新范式 | AGI CoLab | 148 | — | [链接](https://www.xiaohongshu.com/explore/67f12961000000001c00d018) |
+| 340 | vla技术和场景的knowhow（cheat-sheet） | Wesley 许伟胜 | 405 | 38 | [链接](https://www.xiaohongshu.com/explore/6a265c3b000000000803c42e) |
+| 341 | 用starVLA控制G1全身 | ZZZ | 271 | 30 | [链接](https://www.xiaohongshu.com/explore/6a106f64000000000702a9f4) |
+| 342 | pi0.5双臂折箱子长程任务 | 纸飞机 | 328 | 136 | [链接](https://www.xiaohongshu.com/explore/69ef3c61000000003601c97f) |
+| 343 | ALOHA ACT仿真保姆级教程（Record/Eval坑） | 天真派 | 91 | 20 | [链接](https://www.xiaohongshu.com/explore/69310a1c000000000d03c37e) |
+| 344 | ACT调3天抓不准解析 | 李一腾 | 132 | 6 | [链接](https://www.xiaohongshu.com/explore/686be2db0000000015023aec) |
+| 345 | 复现pi0.5放抽屉·抖动严重求解 | dli1988 | 67 | 60 | [链接](https://www.xiaohongshu.com/explore/68e7aacd000000000402af46) |
+| 346 | 赛博夹橙子·GR00T N1.5微调 | 今天又学2小时 | 82 | 4 | [链接](https://www.xiaohongshu.com/explore/68cebe570000000012032686) |
+| 347 | 从0复现成功第一个ACT | 橙鲜 | 87 | 72 | [链接](https://www.xiaohongshu.com/explore/69dfdc1e000000001b00274a) |
+| 348 | VLA训练显存请教（单4090） | 🍑蜀道山🍑 | 91 | 45 | [链接](https://www.xiaohongshu.com/explore/69e770de000000001d01c078) |
+| 349 | 协作臂选型求助（国产推荐） | 小八 | 186 | 141 | [链接](https://www.xiaohongshu.com/explore/66ce89c0000000001f03f0cb) |
+| 350 | 机械臂不再死磕位置：MIT力矩控制 | GML空间智能团队 | 188 | 24 | [链接](https://www.xiaohongshu.com/explore/6a4dffd700000000150270b0) |
+| 351 | 大一统的机器人数据平台RDS | AAA蟹黄堡批发-宇哥 | 77 | 17 | [链接](https://www.xiaohongshu.com/explore/6a43cd4c000000000f01cdfa) |
+| 352 | YAM 3500+小时全球最大双臂数据集 | i2RT 若动科技 | 59 | 2 | [链接](https://www.xiaohongshu.com/explore/6a3b94d30000000017028a74) |
+| 353 | 人类视频取代机器人数据采集，+54% | CyberSoma | 82 | 2 | [链接](https://www.xiaohongshu.com/explore/69a17061000000001d024965) |
+| 354 | 万字解读机械臂从关节到刚度结构设计 | 深蓝具身智能 | 102 | 0 | [链接](https://www.xiaohongshu.com/explore/6a190137000000000803ecf0) |
+| 355 | 求具身任务机械臂推荐（10w预算） | 🍑蜀道山🍑 | 68 | 43 | [链接](https://www.xiaohongshu.com/explore/69a13915000000002202e42f) |
+| 356 | 如何做具身智能数据采集-遥操作(1) | 阿亮聊具身智能 | 152 | 3 | [链接](https://www.xiaohongshu.com/explore/69c247b10000000022001800) |
+| 357 | 个人的VLA入坑经验/学习路线 | 具身33 | 832 | 22 | [链接](https://www.xiaohongshu.com/explore/6a4b03ae0000000016027030) |
+| 358 | 如何从零到一搭建VLA流水线 | 芯铭不是star | 529 | 44 | [链接](https://www.xiaohongshu.com/explore/694d2daa000000001e0175ce) |
+
+---
+
 ## 16. VLA 社区黑话辞典 🗣️
 
 > 在小红书 VLA 社区摸爬滚打几百篇帖子，你会发现一套独特的"黑话"体系。
@@ -3066,6 +3178,6 @@ NVIDIA × 苏黎世大学 RPG 合作综述《The Reality Gap in Robotics: Challe
 
 ---
 
-*本文件由定时收集器自动更新（v2.7，帖 1-308 + 可追溯索引 52 条 + 黑话辞典 28 条，共 416+ 条）。最近更新：2026-07-25 Round 7（5 关键词 / 6 篇新帖：robotwin 评测 setting 被错用 + openpi pytorch/jax 训练差异 trap + pi0.5 双臂长程任务 + NVIDIA sim2real 失效综述 + TACO 触觉后训练 38%→82% + 李飞飞 T-Rex 触觉隔离范式 17%→65%，详见 §15.13）。原始数据和方法论详见 [收集流程复盘](../memory/blog/archives/xiaohongshu-community/workflow-and-automation.md)。*
+*本文件由定时收集器自动更新（v2.8，帖 1-358 + 可追溯索引 52 条 + 黑话辞典 28 条，共 466+ 条）。最近更新：2026-07-25 Round 8（15 关键词 / 50 篇有效帖，均附赞/评论/链接：面试题库 + 逆共识 + 工程 cheat-sheet + 一手复现，详见 §15.14）。上一轮 Round 7（5 关键词 / 6 篇新帖：robotwin 评测 setting 被错用 + openpi pytorch/jax 训练差异 trap + pi0.5 双臂长程任务 + NVIDIA sim2real 失效综述 + TACO 触觉后训练 38%→82% + 李飞飞 T-Rex 触觉隔离范式 17%→65%，详见 §15.13）。原始数据和方法论详见 [收集流程复盘](../memory/blog/archives/xiaohongshu-community/workflow-and-automation.md)。*
 
 [← Back to Deployment](./README.md)
