@@ -1,0 +1,119 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="630" viewBox="0 0 1180 630" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif">
+<title>心态曲线</title>
+<rect width="1180" height="630" fill="#ffffff"/>
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#8b949e"/></marker></defs>
+<text x="24.0" y="36.0" font-size="20" fill="#1f2328" text-anchor="start" font-weight="700" opacity="1">图 6 · 具身炼丹师的一年（心态曲线 · 全程用黑话标注）</text>
+<text x="24.0" y="60.0" font-size="12" fill="#57606a" text-anchor="start" font-weight="400" opacity="1">纵轴 = 心情（1 想退学 → 5 天下无敌）。曲线的低谷正是黑话最密集的地方——梗的密度 = 痛点的密度</text>
+<rect x="49.9" y="110" width="181.2" height="284" rx="8" fill="#37b24d" opacity="0.08"/>
+<text x="140.5" y="102.0" font-size="14" fill="#37b24d" text-anchor="middle" font-weight="700" opacity="1">入坑期</text>
+<rect x="237.3" y="110" width="181.2" height="284" rx="8" fill="#1c7ed6" opacity="0.08"/>
+<text x="327.9" y="102.0" font-size="14" fill="#1c7ed6" text-anchor="middle" font-weight="700" opacity="1">跑通期</text>
+<rect x="424.7" y="110" width="306.1" height="284" rx="8" fill="#f03e3e" opacity="0.08"/>
+<text x="577.8" y="102.0" font-size="14" fill="#f03e3e" text-anchor="middle" font-weight="700" opacity="1">真机期</text>
+<rect x="737.1" y="110" width="243.6" height="284" rx="8" fill="#e8590c" opacity="0.08"/>
+<text x="858.9" y="102.0" font-size="14" fill="#e8590c" text-anchor="middle" font-weight="700" opacity="1">祛魅期</text>
+<rect x="986.9" y="110" width="181.2" height="284" rx="8" fill="#7048e8" opacity="0.08"/>
+<text x="1077.5" y="102.0" font-size="14" fill="#7048e8" text-anchor="middle" font-weight="700" opacity="1">和解期</text>
+<line x1="64" y1="372.0" x2="1140" y2="372.0" stroke="#e6e8eb" stroke-width="1"/>
+<text x="56.0" y="376.0" font-size="12" fill="#8b949e" text-anchor="end" font-weight="400" opacity="1">1</text>
+<line x1="64" y1="312.0" x2="1140" y2="312.0" stroke="#e6e8eb" stroke-width="1"/>
+<text x="56.0" y="316.0" font-size="12" fill="#8b949e" text-anchor="end" font-weight="400" opacity="1">2</text>
+<line x1="64" y1="252.0" x2="1140" y2="252.0" stroke="#e6e8eb" stroke-width="1"/>
+<text x="56.0" y="256.0" font-size="12" fill="#8b949e" text-anchor="end" font-weight="400" opacity="1">3</text>
+<line x1="64" y1="192.0" x2="1140" y2="192.0" stroke="#e6e8eb" stroke-width="1"/>
+<text x="56.0" y="196.0" font-size="12" fill="#8b949e" text-anchor="end" font-weight="400" opacity="1">4</text>
+<line x1="64" y1="132.0" x2="1140" y2="132.0" stroke="#e6e8eb" stroke-width="1"/>
+<text x="56.0" y="136.0" font-size="12" fill="#8b949e" text-anchor="end" font-weight="400" opacity="1">5</text>
+<polyline points="78.0,132.0 140.5,132.0 202.9,312.0 265.4,132.0 327.9,132.0 390.4,192.0 452.8,372.0 515.3,372.0 577.8,372.0 640.2,312.0 702.7,372.0 765.2,312.0 827.6,312.0 890.1,312.0 952.6,252.0 1015.1,192.0 1077.5,192.0 1140.0,132.0" fill="none" stroke="#1f6feb" stroke-width="2.6" stroke-linejoin="round"/>
+<circle cx="78.0" cy="132.0" r="10" fill="#37b24d" stroke="#fff" stroke-width="2"/>
+<text x="78.0" y="136.0" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="700" opacity="1">1</text>
+<circle cx="140.5" cy="132.0" r="10" fill="#37b24d" stroke="#fff" stroke-width="2"/>
+<text x="140.5" y="136.0" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="700" opacity="1">2</text>
+<circle cx="202.9" cy="312.0" r="10" fill="#37b24d" stroke="#fff" stroke-width="2"/>
+<text x="202.9" y="316.0" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="700" opacity="1">3</text>
+<circle cx="265.4" cy="132.0" r="10" fill="#1c7ed6" stroke="#fff" stroke-width="2"/>
+<text x="265.4" y="136.0" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="700" opacity="1">4</text>
+<circle cx="327.9" cy="132.0" r="10" fill="#1c7ed6" stroke="#fff" stroke-width="2"/>
+<text x="327.9" y="136.0" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="700" opacity="1">5</text>
+<circle cx="390.4" cy="192.0" r="10" fill="#1c7ed6" stroke="#fff" stroke-width="2"/>
+<text x="390.4" y="196.0" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="700" opacity="1">6</text>
+<circle cx="452.8" cy="372.0" r="10" fill="#f03e3e" stroke="#fff" stroke-width="2"/>
+<text x="452.8" y="376.0" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="700" opacity="1">7</text>
+<circle cx="515.3" cy="372.0" r="10" fill="#f03e3e" stroke="#fff" stroke-width="2"/>
+<text x="515.3" y="376.0" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="700" opacity="1">8</text>
+<circle cx="577.8" cy="372.0" r="10" fill="#f03e3e" stroke="#fff" stroke-width="2"/>
+<text x="577.8" y="376.0" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="700" opacity="1">9</text>
+<circle cx="640.2" cy="312.0" r="10" fill="#f03e3e" stroke="#fff" stroke-width="2"/>
+<text x="640.2" y="316.0" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="700" opacity="1">10</text>
+<circle cx="702.7" cy="372.0" r="10" fill="#f03e3e" stroke="#fff" stroke-width="2"/>
+<text x="702.7" y="376.0" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="700" opacity="1">11</text>
+<circle cx="765.2" cy="312.0" r="10" fill="#e8590c" stroke="#fff" stroke-width="2"/>
+<text x="765.2" y="316.0" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="700" opacity="1">12</text>
+<circle cx="827.6" cy="312.0" r="10" fill="#e8590c" stroke="#fff" stroke-width="2"/>
+<text x="827.6" y="316.0" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="700" opacity="1">13</text>
+<circle cx="890.1" cy="312.0" r="10" fill="#e8590c" stroke="#fff" stroke-width="2"/>
+<text x="890.1" y="316.0" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="700" opacity="1">14</text>
+<circle cx="952.6" cy="252.0" r="10" fill="#e8590c" stroke="#fff" stroke-width="2"/>
+<text x="952.6" y="256.0" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="700" opacity="1">15</text>
+<circle cx="1015.1" cy="192.0" r="10" fill="#7048e8" stroke="#fff" stroke-width="2"/>
+<text x="1015.1" y="196.0" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="700" opacity="1">16</text>
+<circle cx="1077.5" cy="192.0" r="10" fill="#7048e8" stroke="#fff" stroke-width="2"/>
+<text x="1077.5" y="196.0" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="700" opacity="1">17</text>
+<circle cx="1140.0" cy="132.0" r="10" fill="#7048e8" stroke="#fff" stroke-width="2"/>
+<text x="1140.0" y="136.0" font-size="11" fill="#ffffff" text-anchor="middle" font-weight="700" opacity="1">18</text>
+<text x="24.0" y="424.0" font-size="13" fill="#1f2328" text-anchor="start" font-weight="700" opacity="1">图例（编号对应曲线上的点）</text>
+<circle cx="32.0" cy="440.0" r="8" fill="#37b24d"/>
+<text x="32.0" y="444.0" font-size="10" fill="#ffffff" text-anchor="middle" font-weight="700" opacity="1">1</text>
+<text x="46.0" y="444.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">读到 pi0 论文</text>
+<circle cx="32.0" cy="462.0" r="8" fill="#37b24d"/>
+<text x="32.0" y="466.0" font-size="10" fill="#ffffff" text-anchor="middle" font-weight="700" opacity="1">2</text>
+<text x="46.0" y="466.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">3400 元 + MacBook 起步</text>
+<circle cx="32.0" cy="484.0" r="8" fill="#37b24d"/>
+<text x="32.0" y="488.0" font-size="10" fill="#ffffff" text-anchor="middle" font-weight="700" opacity="1">3</text>
+<text x="46.0" y="488.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">没有机械臂玩个锤子</text>
+<circle cx="32.0" cy="506.0" r="8" fill="#1c7ed6"/>
+<text x="32.0" y="510.0" font-size="10" fill="#ffffff" text-anchor="middle" font-weight="700" opacity="1">4</text>
+<text x="46.0" y="510.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">第一个 ACT 复现成功 激动到流泪</text>
+<circle cx="32.0" cy="528.0" r="8" fill="#1c7ed6"/>
+<text x="32.0" y="532.0" font-size="10" fill="#ffffff" text-anchor="middle" font-weight="700" opacity="1">5</text>
+<text x="46.0" y="532.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">赛博夹橙子 超级解压</text>
+<circle cx="32.0" cy="550.0" r="8" fill="#1c7ed6"/>
+<text x="32.0" y="554.0" font-size="10" fill="#ffffff" text-anchor="middle" font-weight="700" opacity="1">6</text>
+<text x="46.0" y="554.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">loss 0.002 以为自己是天才</text>
+<circle cx="409.3" cy="440.0" r="8" fill="#f03e3e"/>
+<text x="409.3" y="444.0" font-size="10" fill="#ffffff" text-anchor="middle" font-weight="700" opacity="1">7</text>
+<text x="423.3" y="444.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">上真机 全程 VLA 帕金森</text>
+<circle cx="409.3" cy="462.0" r="8" fill="#f03e3e"/>
+<text x="409.3" y="466.0" font-size="10" fill="#ffffff" text-anchor="middle" font-weight="700" opacity="1">8</text>
+<text x="423.3" y="466.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">loss 0.002 真机寄</text>
+<circle cx="409.3" cy="484.0" r="8" fill="#f03e3e"/>
+<text x="409.3" y="488.0" font-size="10" fill="#ffffff" text-anchor="middle" font-weight="700" opacity="1">9</text>
+<text x="423.3" y="488.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">一调一个不吱声</text>
+<circle cx="409.3" cy="506.0" r="8" fill="#f03e3e"/>
+<text x="409.3" y="510.0" font-size="10" fill="#ffffff" text-anchor="middle" font-weight="700" opacity="1">10</text>
+<text x="423.3" y="510.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">发现是 BGR / RGB 搞反了</text>
+<circle cx="409.3" cy="528.0" r="8" fill="#f03e3e"/>
+<text x="409.3" y="532.0" font-size="10" fill="#ffffff" text-anchor="middle" font-weight="700" opacity="1">11</text>
+<text x="423.3" y="532.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">纬度是超参数 冷启动也影响</text>
+<circle cx="409.3" cy="550.0" r="8" fill="#e8590c"/>
+<text x="409.3" y="554.0" font-size="10" fill="#ffffff" text-anchor="middle" font-weight="700" opacity="1">12</text>
+<text x="423.3" y="554.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">论文 288Hz 实测 14Hz</text>
+<circle cx="786.7" cy="440.0" r="8" fill="#e8590c"/>
+<text x="786.7" y="444.0" font-size="10" fill="#ffffff" text-anchor="middle" font-weight="700" opacity="1">13</text>
+<text x="800.7" y="444.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">原来大家普遍都是裁缝</text>
+<circle cx="786.7" cy="462.0" r="8" fill="#e8590c"/>
+<text x="786.7" y="466.0" font-size="10" fill="#ffffff" text-anchor="middle" font-weight="700" opacity="1">14</text>
+<text x="800.7" y="466.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">真机 RL = reward 加权 BC</text>
+<circle cx="786.7" cy="484.0" r="8" fill="#e8590c"/>
+<text x="786.7" y="488.0" font-size="10" fill="#ffffff" text-anchor="middle" font-weight="700" opacity="1">15</text>
+<text x="800.7" y="488.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">半个行业建立在 Qwen 上</text>
+<circle cx="786.7" cy="506.0" r="8" fill="#7048e8"/>
+<text x="786.7" y="510.0" font-size="10" fill="#ffffff" text-anchor="middle" font-weight="700" opacity="1">16</text>
+<text x="800.7" y="510.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">不存在没有意义的复现</text>
+<circle cx="786.7" cy="528.0" r="8" fill="#7048e8"/>
+<text x="786.7" y="532.0" font-size="10" fill="#ffffff" text-anchor="middle" font-weight="700" opacity="1">17</text>
+<text x="800.7" y="532.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">触觉是残差不是主决策</text>
+<circle cx="786.7" cy="550.0" r="8" fill="#7048e8"/>
+<text x="786.7" y="554.0" font-size="10" fill="#ffffff" text-anchor="middle" font-weight="700" opacity="1">18</text>
+<text x="800.7" y="554.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">数据质量远比数量重要</text>
+</svg>

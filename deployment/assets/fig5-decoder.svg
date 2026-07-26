@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="550" viewBox="0 0 1100 550" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif">
+<title>黑话解码器</title>
+<rect width="1100" height="550" fill="#ffffff"/>
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#8b949e"/></marker></defs>
+<text x="24.0" y="36.0" font-size="20" fill="#1f2328" text-anchor="start" font-weight="700" opacity="1">图 5 · 黑话解码器（梗 → 真实痛点 → 该读哪节）</text>
+<text x="24.0" y="60.0" font-size="12" fill="#57606a" text-anchor="start" font-weight="400" opacity="1">黑话的价值不在好笑，而在它是真实技术痛点的压缩包</text>
+<rect x="24.0" y="80.0" width="330.0" height="30.0" rx="8" fill="#fff3bf" stroke="#f59f00" stroke-width="1"/>
+<text x="189.0" y="100.0" font-size="13" fill="#f59f00" text-anchor="middle" font-weight="700" opacity="1">你听到的梗</text>
+<rect x="378.0" y="80.0" width="400.0" height="30.0" rx="8" fill="#ffe3e3" stroke="#f03e3e" stroke-width="1"/>
+<text x="578.0" y="100.0" font-size="13" fill="#f03e3e" text-anchor="middle" font-weight="700" opacity="1">它指向的真实痛点</text>
+<rect x="800.0" y="80.0" width="276.0" height="30.0" rx="8" fill="#d3f9d8" stroke="#2f9e44" stroke-width="1"/>
+<text x="938.0" y="100.0" font-size="13" fill="#2f9e44" text-anchor="middle" font-weight="700" opacity="1">去读这里</text>
+<rect x="24.0" y="120.0" width="330.0" height="46.0" rx="9" fill="#fffbe6" stroke="#f0c36d" stroke-width="1"/>
+<text x="189.0" y="147.4" font-size="12" fill="#1f2328" text-anchor="middle" font-weight="400" opacity="1">VLA 帕金森 / 重新发明低通滤波</text>
+<path d="M354.0,143.0 L376.0,143.0" stroke="#8b949e" stroke-width="1.8" fill="none" marker-end="url(#ah)"/>
+<rect x="378.0" y="120.0" width="400.0" height="46.0" rx="9" fill="#fff5f5" stroke="#f5a3a3" stroke-width="1"/>
+<text x="578.0" y="147.4" font-size="12" fill="#1f2328" text-anchor="middle" font-weight="400" opacity="1">action chunk 衔接与平滑性；控制频率不足需插值</text>
+<path d="M778.0,143.0 L798.0,143.0" stroke="#8b949e" stroke-width="1.8" fill="none" marker-end="url(#ah)"/>
+<rect x="800.0" y="120.0" width="276.0" height="46.0" rx="9" fill="#f4fce3" stroke="#a9d977" stroke-width="1"/>
+<text x="938.0" y="147.2" font-size="12" fill="#1f2328" text-anchor="middle" font-weight="400" opacity="1">§1 参数 · §12.2 动作生成</text>
+<rect x="24.0" y="174.0" width="330.0" height="46.0" rx="9" fill="#fffbe6" stroke="#f0c36d" stroke-width="1"/>
+<text x="189.0" y="201.4" font-size="12" fill="#1f2328" text-anchor="middle" font-weight="400" opacity="1">不学 L 了 / VLA = VA + 营销</text>
+<path d="M354.0,197.0 L376.0,197.0" stroke="#8b949e" stroke-width="1.8" fill="none" marker-end="url(#ah)"/>
+<rect x="378.0" y="174.0" width="400.0" height="46.0" rx="9" fill="#fff5f5" stroke="#f5a3a3" stroke-width="1"/>
+<text x="578.0" y="201.4" font-size="12" fill="#1f2328" text-anchor="middle" font-weight="400" opacity="1">语言模态贡献存疑，视觉主导，底座是否可去</text>
+<path d="M778.0,197.0 L798.0,197.0" stroke="#8b949e" stroke-width="1.8" fill="none" marker-end="url(#ah)"/>
+<rect x="800.0" y="174.0" width="276.0" height="46.0" rx="9" fill="#f4fce3" stroke="#a9d977" stroke-width="1"/>
+<text x="938.0" y="201.2" font-size="12" fill="#1f2328" text-anchor="middle" font-weight="400" opacity="1">§12.3 泛化根因 · §6 少数派</text>
+<rect x="24.0" y="228.0" width="330.0" height="46.0" rx="9" fill="#fffbe6" stroke="#f0c36d" stroke-width="1"/>
+<text x="189.0" y="255.4" font-size="12" fill="#1f2328" text-anchor="middle" font-weight="400" opacity="1">π0.5 纯纯过拟合 / 监督信号打架</text>
+<path d="M354.0,251.0 L376.0,251.0" stroke="#8b949e" stroke-width="1.8" fill="none" marker-end="url(#ah)"/>
+<rect x="378.0" y="228.0" width="400.0" height="46.0" rx="9" fill="#fff5f5" stroke="#f5a3a3" stroke-width="1"/>
+<text x="578.0" y="255.4" font-size="12" fill="#1f2328" text-anchor="middle" font-weight="400" opacity="1">小数据微调不出泛化；多来源监督互相冲突</text>
+<path d="M778.0,251.0 L798.0,251.0" stroke="#8b949e" stroke-width="1.8" fill="none" marker-end="url(#ah)"/>
+<rect x="800.0" y="228.0" width="276.0" height="46.0" rx="9" fill="#f4fce3" stroke="#a9d977" stroke-width="1"/>
+<text x="938.0" y="255.2" font-size="12" fill="#1f2328" text-anchor="middle" font-weight="400" opacity="1">§12.5 踩坑 · §12.7 数据</text>
+<rect x="24.0" y="282.0" width="330.0" height="46.0" rx="9" fill="#fffbe6" stroke="#f0c36d" stroke-width="1"/>
+<text x="189.0" y="309.4" font-size="12" fill="#1f2328" text-anchor="middle" font-weight="400" opacity="1">纬度是超参数 / 远离 Piper</text>
+<path d="M354.0,305.0 L376.0,305.0" stroke="#8b949e" stroke-width="1.8" fill="none" marker-end="url(#ah)"/>
+<rect x="378.0" y="282.0" width="400.0" height="46.0" rx="9" fill="#fff5f5" stroke="#f5a3a3" stroke-width="1"/>
+<text x="578.0" y="309.4" font-size="12" fill="#1f2328" text-anchor="middle" font-weight="400" opacity="1">硬件一致性与标定：温度、零点、仿真约定</text>
+<path d="M778.0,305.0 L798.0,305.0" stroke="#8b949e" stroke-width="1.8" fill="none" marker-end="url(#ah)"/>
+<rect x="800.0" y="282.0" width="276.0" height="46.0" rx="9" fill="#f4fce3" stroke="#a9d977" stroke-width="1"/>
+<text x="938.0" y="309.2" font-size="12" fill="#1f2328" text-anchor="middle" font-weight="400" opacity="1">§9 选型 · §12.6 部署硬件</text>
+<rect x="24.0" y="336.0" width="330.0" height="46.0" rx="9" fill="#fffbe6" stroke="#f0c36d" stroke-width="1"/>
+<text x="189.0" y="363.4" font-size="12" fill="#1f2328" text-anchor="middle" font-weight="400" opacity="1">DAgger 拯救了世界 / 物料被干烂</text>
+<path d="M354.0,359.0 L376.0,359.0" stroke="#8b949e" stroke-width="1.8" fill="none" marker-end="url(#ah)"/>
+<rect x="378.0" y="336.0" width="400.0" height="46.0" rx="9" fill="#fff5f5" stroke="#f5a3a3" stroke-width="1"/>
+<text x="578.0" y="363.4" font-size="12" fill="#1f2328" text-anchor="middle" font-weight="400" opacity="1">真机 RL 成本极高，本质常退化为 DAgger</text>
+<path d="M778.0,359.0 L798.0,359.0" stroke="#8b949e" stroke-width="1.8" fill="none" marker-end="url(#ah)"/>
+<rect x="800.0" y="336.0" width="276.0" height="46.0" rx="9" fill="#f4fce3" stroke="#a9d977" stroke-width="1"/>
+<text x="938.0" y="363.2" font-size="12" fill="#1f2328" text-anchor="middle" font-weight="400" opacity="1">§12.10 RL 后训练</text>
+<rect x="24.0" y="390.0" width="330.0" height="46.0" rx="9" fill="#fffbe6" stroke="#f0c36d" stroke-width="1"/>
+<text x="189.0" y="417.4" font-size="12" fill="#1f2328" text-anchor="middle" font-weight="400" opacity="1">VLA 八股文 / 288Hz 实测 14Hz</text>
+<path d="M354.0,413.0 L376.0,413.0" stroke="#8b949e" stroke-width="1.8" fill="none" marker-end="url(#ah)"/>
+<rect x="378.0" y="390.0" width="400.0" height="46.0" rx="9" fill="#fff5f5" stroke="#f5a3a3" stroke-width="1"/>
+<text x="578.0" y="417.4" font-size="12" fill="#1f2328" text-anchor="middle" font-weight="400" opacity="1">指标不可复现，论文数字与真机落差</text>
+<path d="M778.0,413.0 L798.0,413.0" stroke="#8b949e" stroke-width="1.8" fill="none" marker-end="url(#ah)"/>
+<rect x="800.0" y="390.0" width="276.0" height="46.0" rx="9" fill="#f4fce3" stroke="#a9d977" stroke-width="1"/>
+<text x="938.0" y="417.2" font-size="12" fill="#1f2328" text-anchor="middle" font-weight="400" opacity="1">§12.4 benchmark 鸿沟 · §5</text>
+<rect x="24.0" y="444.0" width="330.0" height="46.0" rx="9" fill="#fffbe6" stroke="#f0c36d" stroke-width="1"/>
+<text x="189.0" y="471.4" font-size="12" fill="#1f2328" text-anchor="middle" font-weight="400" opacity="1">触觉是残差不是主决策</text>
+<path d="M354.0,467.0 L376.0,467.0" stroke="#8b949e" stroke-width="1.8" fill="none" marker-end="url(#ah)"/>
+<rect x="378.0" y="444.0" width="400.0" height="46.0" rx="9" fill="#fff5f5" stroke="#f5a3a3" stroke-width="1"/>
+<text x="578.0" y="471.4" font-size="12" fill="#1f2328" text-anchor="middle" font-weight="400" opacity="1">高频脆弱信号定位错，不该承担主决策</text>
+<path d="M778.0,467.0 L798.0,467.0" stroke="#8b949e" stroke-width="1.8" fill="none" marker-end="url(#ah)"/>
+<rect x="800.0" y="444.0" width="276.0" height="46.0" rx="9" fill="#f4fce3" stroke="#a9d977" stroke-width="1"/>
+<text x="938.0" y="471.2" font-size="12" fill="#1f2328" text-anchor="middle" font-weight="400" opacity="1">§12.9 触觉与力控</text>
+<rect x="24.0" y="498.0" width="330.0" height="46.0" rx="9" fill="#fffbe6" stroke="#f0c36d" stroke-width="1"/>
+<text x="189.0" y="525.4" font-size="12" fill="#1f2328" text-anchor="middle" font-weight="400" opacity="1">左脚踩右脚 / 真机采集是财务诈骗</text>
+<path d="M354.0,521.0 L376.0,521.0" stroke="#8b949e" stroke-width="1.8" fill="none" marker-end="url(#ah)"/>
+<rect x="378.0" y="498.0" width="400.0" height="46.0" rx="9" fill="#fff5f5" stroke="#f5a3a3" stroke-width="1"/>
+<text x="578.0" y="525.4" font-size="12" fill="#1f2328" text-anchor="middle" font-weight="400" opacity="1">商业模型与数采成本算不过账</text>
+<path d="M778.0,521.0 L798.0,521.0" stroke="#8b949e" stroke-width="1.8" fill="none" marker-end="url(#ah)"/>
+<rect x="800.0" y="498.0" width="276.0" height="46.0" rx="9" fill="#f4fce3" stroke="#a9d977" stroke-width="1"/>
+<text x="938.0" y="525.2" font-size="12" fill="#1f2328" text-anchor="middle" font-weight="400" opacity="1">§12.12 产业与逆共识</text>
+</svg>

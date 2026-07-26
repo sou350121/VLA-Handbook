@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="700" viewBox="0 0 1180 700" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif">
+<title>黑话四象限</title>
+<rect width="1180" height="700" fill="#ffffff"/>
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#8b949e"/></marker></defs>
+<text x="24.0" y="36.0" font-size="20" fill="#1f2328" text-anchor="start" font-weight="700" opacity="1">图 7 · 黑话四象限（技术含量 × 出圈杀伤力）</text>
+<text x="24.0" y="60.0" font-size="12" fill="#57606a" text-anchor="start" font-weight="400" opacity="1">右上角 = 又硬又出圈，想用一句话打动外行就从这里挑</text>
+<rect x="110.0" y="112.0" width="325.0" height="246.0" fill="#fff0f6"/>
+<text x="120.0" y="132.0" font-size="13" fill="#adb5bd" text-anchor="start" font-weight="700" opacity="1">行业级暴论</text>
+<rect x="435.0" y="112.0" width="325.0" height="246.0" fill="#fff9db"/>
+<text x="750.0" y="132.0" font-size="13" fill="#adb5bd" text-anchor="end" font-weight="700" opacity="1">出圈金句</text>
+<rect x="110.0" y="358.0" width="325.0" height="246.0" fill="#f1f3f5"/>
+<text x="120.0" y="594.0" font-size="13" fill="#adb5bd" text-anchor="start" font-weight="700" opacity="1">日常怨念</text>
+<rect x="435.0" y="358.0" width="325.0" height="246.0" fill="#e7f5ff"/>
+<text x="750.0" y="594.0" font-size="13" fill="#adb5bd" text-anchor="end" font-weight="700" opacity="1">内行黑话</text>
+<rect x="110" y="112" width="650.0" height="492.0" fill="none" stroke="#d0d7de"/>
+<line x1="435.0" y1="112" x2="435.0" y2="604" stroke="#d0d7de" stroke-dasharray="5 4"/>
+<line x1="110" y1="358.0" x2="760" y2="358.0" stroke="#d0d7de" stroke-dasharray="5 4"/>
+<text x="435.0" y="656.0" font-size="13" fill="#57606a" text-anchor="middle" font-weight="600" opacity="1">技术含量：纯情绪吐槽 → 硬核技术判据</text>
+<text x="36" y="358.0" font-size="13" fill="#57606a" font-weight="600" text-anchor="middle" transform="rotate(-90 36 358.0)">出圈杀伤力：圈内自嗨 → 出圈</text>
+<path d="M110.0,626.0 L760.0,626.0" stroke="#adb5bd" stroke-width="1.4" fill="none" marker-end="url(#ah)"/>
+<path d="M84.0,604.0 L84.0,112.0" stroke="#adb5bd" stroke-width="1.4" fill="none" marker-end="url(#ah)"/>
+<circle cx="467.5" cy="134.1" r="7" fill="#f03e3e" opacity="0.92"/>
+<text x="456.5" y="138.1" font-size="11" fill="#1f2328" text-anchor="end" font-weight="700" opacity="1">真机采集就是财务诈骗</text>
+<circle cx="578.0" cy="161.2" r="7" fill="#f03e3e" opacity="0.92"/>
+<text x="567.0" y="165.2" font-size="11" fill="#1f2328" text-anchor="end" font-weight="700" opacity="1">半个行业建立在 Qwen 上</text>
+<circle cx="630.0" cy="188.3" r="7" fill="#f03e3e" opacity="0.92"/>
+<text x="619.0" y="192.3" font-size="11" fill="#1f2328" text-anchor="end" font-weight="700" opacity="1">空调测试</text>
+<circle cx="500.0" cy="210.4" r="7" fill="#f03e3e" opacity="0.92"/>
+<text x="489.0" y="214.4" font-size="11" fill="#1f2328" text-anchor="end" font-weight="700" opacity="1">扫地机器人够好用了吗</text>
+<circle cx="318.0" cy="168.6" r="5" fill="#1f6feb" opacity="0.92"/>
+<text x="329.0" y="172.6" font-size="11" fill="#57606a" text-anchor="start" font-weight="400" opacity="1">左脚踩右脚涨估值</text>
+<circle cx="630.0" cy="259.6" r="7" fill="#f03e3e" opacity="0.92"/>
+<text x="619.0" y="263.6" font-size="11" fill="#1f2328" text-anchor="end" font-weight="700" opacity="1">大家普遍都是裁缝</text>
+<circle cx="695.0" cy="308.8" r="5" fill="#1f6feb" opacity="0.92"/>
+<text x="684.0" y="312.8" font-size="11" fill="#57606a" text-anchor="end" font-weight="400" opacity="1">论文 288Hz 实测 14Hz</text>
+<circle cx="714.5" cy="387.5" r="5" fill="#1f6feb" opacity="0.92"/>
+<text x="703.5" y="391.5" font-size="11" fill="#57606a" text-anchor="end" font-weight="400" opacity="1">真机 RL = reward 加权 BC</text>
+<circle cx="662.5" cy="441.6" r="5" fill="#1f6feb" opacity="0.92"/>
+<text x="651.5" y="445.6" font-size="11" fill="#57606a" text-anchor="end" font-weight="400" opacity="1">大水池小水管</text>
+<circle cx="682.0" cy="353.1" r="5" fill="#1f6feb" opacity="0.92"/>
+<text x="671.0" y="357.1" font-size="11" fill="#57606a" text-anchor="end" font-weight="400" opacity="1">不学 L 了</text>
+<circle cx="552.0" cy="466.2" r="5" fill="#1f6feb" opacity="0.92"/>
+<text x="541.0" y="470.2" font-size="11" fill="#57606a" text-anchor="end" font-weight="400" opacity="1">VLA 帕金森</text>
+<circle cx="480.5" cy="500.7" r="5" fill="#1f6feb" opacity="0.92"/>
+<text x="469.5" y="504.7" font-size="11" fill="#57606a" text-anchor="end" font-weight="400" opacity="1">柔顺控制棺材板压不住</text>
+<circle cx="305.0" cy="505.6" r="5" fill="#1f6feb" opacity="0.92"/>
+<text x="316.0" y="509.6" font-size="11" fill="#57606a" text-anchor="start" font-weight="400" opacity="1">星宿老仙</text>
+<circle cx="396.0" cy="540.0" r="5" fill="#1f6feb" opacity="0.92"/>
+<text x="407.0" y="544.0" font-size="11" fill="#57606a" text-anchor="start" font-weight="400" opacity="1">一调一个不吱声</text>
+<circle cx="201.0" cy="549.9" r="5" fill="#1f6feb" opacity="0.92"/>
+<text x="212.0" y="553.9" font-size="11" fill="#57606a" text-anchor="start" font-weight="400" opacity="1">大年初一掉进局部最优</text>
+<circle cx="175.0" cy="436.7" r="5" fill="#1f6feb" opacity="0.92"/>
+<text x="186.0" y="440.7" font-size="11" fill="#57606a" text-anchor="start" font-weight="400" opacity="1">究竟是谁在上岸啊</text>
+<circle cx="240.0" cy="576.9" r="5" fill="#1f6feb" opacity="0.92"/>
+<text x="251.0" y="580.9" font-size="11" fill="#57606a" text-anchor="start" font-weight="400" opacity="1">赛博夹橙子</text>
+<rect x="800.0" y="112.0" width="340.0" height="164.0" rx="10" fill="#fff5f5" stroke="#f03e3e" stroke-width="1.5"/>
+<text x="818.0" y="142.0" font-size="14" fill="#c92a2a" text-anchor="start" font-weight="700" opacity="1">🔥 出圈三件套</text>
+<text x="818.0" y="174.0" font-size="12" fill="#c92a2a" text-anchor="start" font-weight="400" opacity="1">· 半个具身行业建立在 Qwen VLM 上</text>
+<text x="818.0" y="206.0" font-size="12" fill="#c92a2a" text-anchor="start" font-weight="400" opacity="1">· 真机采集就是机器人公司的财务诈骗</text>
+<text x="818.0" y="238.0" font-size="12" fill="#c92a2a" text-anchor="start" font-weight="400" opacity="1">· 空调测试：机器人上门装空调才算成</text>
+<rect x="800.0" y="298.0" width="340.0" height="150.0" rx="10" fill="#f6f8fa" stroke="#d0d7de" stroke-width="1.5"/>
+<text x="818.0" y="328.0" font-size="13" fill="#1f2328" text-anchor="start" font-weight="700" opacity="1">读法</text>
+<text x="818.0" y="358.0" font-size="12" fill="#57606a" text-anchor="start" font-weight="400" opacity="1">· 红点 = 又硬又出圈，可直接引用</text>
+<text x="818.0" y="384.0" font-size="12" fill="#57606a" text-anchor="start" font-weight="400" opacity="1">· 蓝点 = 圈内向，需要背景才好笑</text>
+<text x="818.0" y="410.0" font-size="12" fill="#57606a" text-anchor="start" font-weight="400" opacity="1">· 坐标为编者主观标注，非量化数据</text>
+<text x="818.0" y="436.0" font-size="12" fill="#57606a" text-anchor="start" font-weight="400" opacity="1">· 完整原话与直链见 §13.1–13.4</text>
+</svg>

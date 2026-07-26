@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1020" height="470" viewBox="0 0 1020 470" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif">
+<title>文档地图</title>
+<rect width="1020" height="470" fill="#ffffff"/>
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#8b949e"/></marker></defs>
+<text x="24.0" y="34.0" font-size="19" fill="#1f2328" text-anchor="start" font-weight="700" opacity="1">图 1 · 我该读哪一节（文档地图）</text>
+<rect x="24.0" y="62.0" width="190.0" height="60.0" rx="12" fill="#1f6feb" stroke="#1f6feb" stroke-width="1.5"/>
+<text x="119.0" y="86.8" font-size="14" fill="#ffffff" text-anchor="middle" font-weight="700" opacity="1">我现在要</text>
+<text x="119.0" y="107.0" font-size="14" fill="#ffffff" text-anchor="middle" font-weight="700" opacity="1">解决什么问题？</text>
+<path d="M214.0,92.0 C241.0,92.0 241.0,90.0 268.0,90.0" stroke="#8b949e" stroke-width="1.8" fill="none" marker-end="url(#ah)"/>
+<rect x="268.0" y="62.0" width="250.0" height="56.0" rx="10" fill="#fff3bf" stroke="#f59f00" stroke-width="1.5"/>
+<text x="393.0" y="94.5" font-size="13" fill="#1f2328" text-anchor="middle" font-weight="600" opacity="1">有具体报错 / 想抄参数</text>
+<path d="M518.0,90.0 L566.0,90.0" stroke="#8b949e" stroke-width="1.8" fill="none" marker-end="url(#ah)"/>
+<rect x="566.0" y="62.0" width="300.0" height="56.0" rx="10" fill="#f6f8fa" stroke="#d0d7de" stroke-width="1.5"/>
+<text x="716.0" y="77.4" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="400" opacity="1">§1 训练参数</text>
+<text x="716.0" y="94.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="400" opacity="1">§2 真机部署调试</text>
+<text x="716.0" y="110.7" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="400" opacity="1">§12.5 工程踩坑与 bug</text>
+<path d="M214.0,92.0 C241.0,92.0 241.0,164.0 268.0,164.0" stroke="#8b949e" stroke-width="1.8" fill="none" marker-end="url(#ah)"/>
+<rect x="268.0" y="136.0" width="250.0" height="56.0" rx="10" fill="#d0ebff" stroke="#1c7ed6" stroke-width="1.5"/>
+<text x="393.0" y="168.6" font-size="13" fill="#1f2328" text-anchor="middle" font-weight="600" opacity="1">要做选型决策</text>
+<path d="M518.0,164.0 L566.0,164.0" stroke="#8b949e" stroke-width="1.8" fill="none" marker-end="url(#ah)"/>
+<rect x="566.0" y="136.0" width="300.0" height="56.0" rx="10" fill="#f6f8fa" stroke="#d0d7de" stroke-width="1.5"/>
+<text x="716.0" y="151.3" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="400" opacity="1">§9 上游选型</text>
+<text x="716.0" y="168.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="400" opacity="1">§12.6 硬件与 Sim2Real</text>
+<text x="716.0" y="184.7" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="400" opacity="1">§12.7 数据采集</text>
+<path d="M214.0,92.0 C241.0,92.0 241.0,238.0 268.0,238.0" stroke="#8b949e" stroke-width="1.8" fill="none" marker-end="url(#ah)"/>
+<rect x="268.0" y="210.0" width="250.0" height="56.0" rx="10" fill="#ffe3e3" stroke="#f03e3e" stroke-width="1.5"/>
+<text x="393.0" y="242.6" font-size="13" fill="#1f2328" text-anchor="middle" font-weight="600" opacity="1">判断模型/论文可不可信</text>
+<path d="M518.0,238.0 L566.0,238.0" stroke="#8b949e" stroke-width="1.8" fill="none" marker-end="url(#ah)"/>
+<rect x="566.0" y="210.0" width="300.0" height="56.0" rx="10" fill="#f6f8fa" stroke="#d0d7de" stroke-width="1.5"/>
+<text x="716.0" y="225.3" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="400" opacity="1">§5 社区验证 vs 论文声称</text>
+<text x="716.0" y="242.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="400" opacity="1">§12.4 benchmark 鸿沟</text>
+<text x="716.0" y="258.7" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="400" opacity="1">§12.14 信念网络置信度</text>
+<path d="M214.0,92.0 C241.0,92.0 241.0,312.0 268.0,312.0" stroke="#8b949e" stroke-width="1.8" fill="none" marker-end="url(#ah)"/>
+<rect x="268.0" y="284.0" width="250.0" height="56.0" rx="10" fill="#d3f9d8" stroke="#2f9e44" stroke-width="1.5"/>
+<text x="393.0" y="316.6" font-size="13" fill="#1f2328" text-anchor="middle" font-weight="600" opacity="1">准备面试</text>
+<path d="M518.0,312.0 L566.0,312.0" stroke="#8b949e" stroke-width="1.8" fill="none" marker-end="url(#ah)"/>
+<rect x="566.0" y="284.0" width="300.0" height="56.0" rx="10" fill="#f6f8fa" stroke="#d0d7de" stroke-width="1.5"/>
+<text x="716.0" y="299.3" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="400" opacity="1">§12.13 面试题库</text>
+<text x="716.0" y="316.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="400" opacity="1">§12.1 模型架构演进</text>
+<text x="716.0" y="332.7" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="400" opacity="1">§12.2 动作生成范式</text>
+<path d="M214.0,92.0 C241.0,92.0 241.0,386.0 268.0,386.0" stroke="#8b949e" stroke-width="1.8" fill="none" marker-end="url(#ah)"/>
+<rect x="268.0" y="358.0" width="250.0" height="56.0" rx="10" fill="#f3d9fa" stroke="#9c36b5" stroke-width="1.5"/>
+<text x="393.0" y="390.6" font-size="13" fill="#1f2328" text-anchor="middle" font-weight="600" opacity="1">了解行业判断与逆共识</text>
+<path d="M518.0,386.0 L566.0,386.0" stroke="#8b949e" stroke-width="1.8" fill="none" marker-end="url(#ah)"/>
+<rect x="566.0" y="358.0" width="300.0" height="56.0" rx="10" fill="#f6f8fa" stroke="#d0d7de" stroke-width="1.5"/>
+<text x="716.0" y="373.3" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="400" opacity="1">§6 少数派观点</text>
+<text x="716.0" y="390.0" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="400" opacity="1">§12.12 产业与逆共识</text>
+<text x="716.0" y="406.7" font-size="11" fill="#1f2328" text-anchor="middle" font-weight="400" opacity="1">§13 黑话辞典</text>
+<rect x="566.0" y="438.0" width="300.0" height="44.0" rx="10" fill="#fff5f5" stroke="#f03e3e" stroke-width="1.5"/>
+<text x="716.0" y="455.7" font-size="11" fill="#c92a2a" text-anchor="middle" font-weight="600" opacity="1">⚠ 读数字前先看 §12.4：</text>
+<text x="716.0" y="472.4" font-size="11" fill="#c92a2a" text-anchor="middle" font-weight="600" opacity="1">论文指标与真机复现存在系统性落差</text>
+</svg>

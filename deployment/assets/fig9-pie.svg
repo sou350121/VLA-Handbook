@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="470" viewBox="0 0 1000 470" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif">
+<title>黑话主题分布</title>
+<rect width="1000" height="470" fill="#ffffff"/>
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#8b949e"/></marker></defs>
+<text x="24.0" y="36.0" font-size="20" fill="#1f2328" text-anchor="start" font-weight="700" opacity="1">图 9 · 93 条黑话的主题分布</text>
+<text x="24.0" y="60.0" font-size="12" fill="#57606a" text-anchor="start" font-weight="400" opacity="1">按 §13 实际词条逐条统计（合计 93 条）</text>
+<path d="M250.00,100.00 A150,150 0 0,1 396.40,217.33 L326.13,233.01 A78,78 0 0,0 250.00,172.00 Z" fill="#f03e3e" stroke="#fff" stroke-width="2"/>
+<text x="321.3" y="166.0" font-size="15" fill="#ffffff" text-anchor="middle" font-weight="700" opacity="1">20</text>
+<path d="M396.40,217.33 A150,150 0 0,1 322.80,381.15 L287.85,318.20 A78,78 0 0,0 326.13,233.01 Z" fill="#1c7ed6" stroke="#fff" stroke-width="2"/>
+<text x="354.0" y="301.7" font-size="15" fill="#ffffff" text-anchor="middle" font-weight="700" opacity="1">19</text>
+<path d="M322.80,381.15 A150,150 0 0,1 160.20,370.15 L203.30,312.48 A78,78 0 0,0 287.85,318.20 Z" fill="#e8590c" stroke="#fff" stroke-width="2"/>
+<text x="242.3" y="368.7" font-size="15" fill="#ffffff" text-anchor="middle" font-weight="700" opacity="1">17</text>
+<path d="M160.20,370.15 A150,150 0 0,1 103.60,217.33 L173.87,233.01 A78,78 0 0,0 203.30,312.48 Z" fill="#9c36b5" stroke="#fff" stroke-width="2"/>
+<text x="143.1" y="294.6" font-size="15" fill="#ffffff" text-anchor="middle" font-weight="700" opacity="1">17</text>
+<path d="M103.60,217.33 A150,150 0 0,1 148.51,139.55 L197.22,192.57 A78,78 0 0,0 173.87,233.01 Z" fill="#37b24d" stroke="#fff" stroke-width="2"/>
+<text x="151.3" y="198.0" font-size="15" fill="#ffffff" text-anchor="middle" font-weight="700" opacity="1">9</text>
+<path d="M148.51,139.55 A150,150 0 0,1 200.29,108.48 L224.15,176.41 A78,78 0 0,0 197.22,192.57 Z" fill="#0c8599" stroke="#fff" stroke-width="2"/>
+<text x="191.3" y="157.2" font-size="15" fill="#ffffff" text-anchor="middle" font-weight="700" opacity="1">6</text>
+<path d="M200.29,108.48 A150,150 0 0,1 250.00,100.00 L250.00,172.00 A78,78 0 0,0 224.15,176.41 Z" fill="#d6336c" stroke="#fff" stroke-width="2"/>
+<text x="230.8" y="142.6" font-size="15" fill="#ffffff" text-anchor="middle" font-weight="700" opacity="1">5</text>
+<text x="250.0" y="244.0" font-size="34" fill="#1f2328" text-anchor="middle" font-weight="700" opacity="1">93</text>
+<text x="250.0" y="268.0" font-size="13" fill="#57606a" text-anchor="middle" font-weight="400" opacity="1">条黑话</text>
+<rect x="470" y="98" width="16" height="16" rx="4" fill="#f03e3e"/>
+<text x="496.0" y="111.0" font-size="13" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">模型/架构质疑（裁缝派·不学L派·小脑派）</text>
+<text x="966.0" y="111.0" font-size="12" fill="#57606a" text-anchor="end" font-weight="400" opacity="1">20 条 · 22%</text>
+<rect x="470" y="130" width="16" height="16" rx="4" fill="#1c7ed6"/>
+<text x="496.0" y="143.0" font-size="13" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">工程与 Sim2Real 踩坑</text>
+<text x="966.0" y="143.0" font-size="12" fill="#57606a" text-anchor="end" font-weight="400" opacity="1">19 条 · 20%</text>
+<rect x="470" y="162" width="16" height="16" rx="4" fill="#e8590c"/>
+<text x="496.0" y="175.0" font-size="13" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">学术圈 / paper factory / 重复发明</text>
+<text x="966.0" y="175.0" font-size="12" fill="#57606a" text-anchor="end" font-weight="400" opacity="1">17 条 · 18%</text>
+<rect x="470" y="194" width="16" height="16" rx="4" fill="#9c36b5"/>
+<text x="496.0" y="207.0" font-size="13" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">产业·资本·数采·智驾</text>
+<text x="966.0" y="207.0" font-size="12" fill="#57606a" text-anchor="end" font-weight="400" opacity="1">17 条 · 18%</text>
+<rect x="470" y="226" width="16" height="16" rx="4" fill="#37b24d"/>
+<text x="496.0" y="239.0" font-size="13" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">科研生活梗</text>
+<text x="966.0" y="239.0" font-size="12" fill="#57606a" text-anchor="end" font-weight="400" opacity="1">9 条 · 10%</text>
+<rect x="470" y="258" width="16" height="16" rx="4" fill="#0c8599"/>
+<text x="496.0" y="271.0" font-size="13" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">评测打假与验收标准</text>
+<text x="966.0" y="271.0" font-size="12" fill="#57606a" text-anchor="end" font-weight="400" opacity="1">6 条 · 6%</text>
+<rect x="470" y="290" width="16" height="16" rx="4" fill="#d6336c"/>
+<text x="496.0" y="303.0" font-size="13" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">真机 RL 与 DAgger 真相</text>
+<text x="966.0" y="303.0" font-size="12" fill="#57606a" text-anchor="end" font-weight="400" opacity="1">5 条 · 5%</text>
+<rect x="470.0" y="340.0" width="496.0" height="70.0" rx="10" fill="#f6f8fa" stroke="#d0d7de" stroke-width="1"/>
+<text x="718.0" y="361.2" font-size="12" fill="#57606a" text-anchor="middle" font-weight="400" opacity="1">架构质疑 + 工程踩坑 ≈ 42%（技术痛点）</text>
+<text x="718.0" y="379.4" font-size="12" fill="#57606a" text-anchor="middle" font-weight="400" opacity="1">学术圈 + 产业资本 ≈ 37%（生态痛点）</text>
+<text x="718.0" y="397.5" font-size="12" fill="#57606a" text-anchor="middle" font-weight="400" opacity="1">社区火力基本对半分</text>
+</svg>

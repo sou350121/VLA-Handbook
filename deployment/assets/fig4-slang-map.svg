@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1098" height="734" viewBox="0 0 1098 734" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif">
+<title>黑话全景</title>
+<rect width="1098" height="734" fill="#ffffff"/>
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#8b949e"/></marker></defs>
+<text x="24.0" y="36.0" font-size="20" fill="#1f2328" text-anchor="start" font-weight="700" opacity="1">图 4 · VLA 社区黑话全景（听懂哪几类 = 踩过哪几种坑）</text>
+<text x="24.0" y="60.0" font-size="12" fill="#57606a" text-anchor="start" font-weight="400" opacity="1">14 类 · 93 条词条；完整原话、作者、赞数与直链见 §13.1–13.4</text>
+<rect x="24.0" y="80.0" width="252.0" height="152.0" rx="12" fill="#ffe3e3" stroke="#f03e3e" stroke-width="1.5"/>
+<text x="36.0" y="102.0" font-size="13" fill="#f03e3e" text-anchor="start" font-weight="700" opacity="1">🪡 动作质量</text>
+<text x="40.0" y="124.0" font-size="11" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· VLA 帕金森</text>
+<text x="40.0" y="144.0" font-size="11" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· 重新发明低通滤波</text>
+<text x="40.0" y="164.0" font-size="11" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· 变树懒</text>
+<text x="40.0" y="184.0" font-size="11" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· smolvla 也是很抖</text>
+<text x="40.0" y="204.0" font-size="11" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· loss 0.002 真机寄</text>
+<rect x="290.0" y="80.0" width="252.0" height="152.0" rx="12" fill="#fff3bf" stroke="#f59f00" stroke-width="1.5"/>
+<text x="302.0" y="102.0" font-size="13" fill="#f59f00" text-anchor="start" font-weight="700" opacity="1">🔇 Language 不学派</text>
+<text x="306.0" y="124.0" font-size="11" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· 不学 L 了</text>
+<text x="306.0" y="144.0" font-size="11" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· VLA = VA + 营销</text>
+<text x="306.0" y="164.0" font-size="11" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· VLM 三成功力都没用到</text>
+<text x="306.0" y="184.0" font-size="11" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· 长瘤子的 VLM</text>
+<text x="306.0" y="204.0" font-size="11" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· vision-guide 才是真理</text>
+<rect x="556.0" y="80.0" width="252.0" height="152.0" rx="12" fill="#ffe8cc" stroke="#e8590c" stroke-width="1.5"/>
+<text x="568.0" y="102.0" font-size="13" fill="#e8590c" text-anchor="start" font-weight="700" opacity="1">🧵 裁缝派 架构质疑</text>
+<text x="572.0" y="124.0" font-size="11" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· 大家普遍都是裁缝</text>
+<text x="572.0" y="144.0" font-size="11" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· 从浆糊里抽一点</text>
+<text x="572.0" y="164.0" font-size="11" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· 只有瘤子没有基座</text>
+<text x="572.0" y="184.0" font-size="11" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· 大水池小水管</text>
+<text x="572.0" y="204.0" font-size="11" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· 没有 next token 的 taste</text>
+<rect x="822.0" y="80.0" width="252.0" height="152.0" rx="12" fill="#e5dbff" stroke="#7048e8" stroke-width="1.5"/>
+<text x="834.0" y="102.0" font-size="13" fill="#7048e8" text-anchor="start" font-weight="700" opacity="1">🧠 小脑派之争</text>
+<text x="838.0" y="124.0" font-size="11" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· 小脑受损的人</text>
+<text x="838.0" y="144.0" font-size="11" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· 具身也许不需要小脑</text>
+<rect x="24.0" y="246.0" width="252.0" height="132.0" rx="12" fill="#d0ebff" stroke="#1c7ed6" stroke-width="1.5"/>
+<text x="36.0" y="268.0" font-size="13" fill="#1c7ed6" text-anchor="start" font-weight="700" opacity="1">📊 数据与过拟合</text>
+<text x="40.0" y="290.0" font-size="11" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· 监督信号打架</text>
+<text x="40.0" y="310.0" font-size="11" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· 1200 高 &gt; 5688 普通</text>
+<text x="40.0" y="330.0" font-size="11" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· 把人当 GPU 用</text>
+<text x="40.0" y="350.0" font-size="11" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· 外包采数据的🤡</text>
+<rect x="290.0" y="246.0" width="252.0" height="132.0" rx="12" fill="#d3f9d8" stroke="#2f9e44" stroke-width="1.5"/>
+<text x="302.0" y="268.0" font-size="13" fill="#2f9e44" text-anchor="start" font-weight="700" opacity="1">🌡 硬件 trap</text>
+<text x="306.0" y="290.0" font-size="11" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· 纬度是超参数</text>
+<text x="306.0" y="310.0" font-size="11" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· 珍爱生命远离 Piper</text>
+<text x="306.0" y="330.0" font-size="11" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· 原来 lerobot = 不幸</text>
+<text x="306.0" y="350.0" font-size="11" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· mujoco 角速度陷阱</text>
+<rect x="556.0" y="246.0" width="252.0" height="132.0" rx="12" fill="#ffdeeb" stroke="#d6336c" stroke-width="1.5"/>
+<text x="568.0" y="268.0" font-size="13" fill="#d6336c" text-anchor="start" font-weight="700" opacity="1">🎯 真机 RL 真相</text>
+<text x="572.0" y="290.0" font-size="11" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· DAgger 拯救了世界</text>
+<text x="572.0" y="310.0" font-size="11" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· 真机 RL = reward 加权 BC</text>
+<text x="572.0" y="330.0" font-size="11" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· 组内物料都被干烂了</text>
+<text x="572.0" y="350.0" font-size="11" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· 黑色孔抠图对准就好了</text>
+<rect x="822.0" y="246.0" width="252.0" height="132.0" rx="12" fill="#c5f6fa" stroke="#0c8599" stroke-width="1.5"/>
+<text x="834.0" y="268.0" font-size="13" fill="#0c8599" text-anchor="start" font-weight="700" opacity="1">♻️ 跨代重复发明</text>
+<text x="838.0" y="290.0" font-size="11" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· 每一代人重新发明一遍</text>
+<text x="838.0" y="310.0" font-size="11" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· 柔顺控制棺材板压不住</text>
+<text x="838.0" y="330.0" font-size="11" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· 学计算机的重复发现机械</text>
+<text x="838.0" y="350.0" font-size="11" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· 星宿老仙</text>
+<rect x="24.0" y="392.0" width="252.0" height="152.0" rx="12" fill="#f3d9fa" stroke="#9c36b5" stroke-width="1.5"/>
+<text x="36.0" y="414.0" font-size="13" fill="#9c36b5" text-anchor="start" font-weight="700" opacity="1">📜 Paper factory</text>
+<text x="40.0" y="436.0" font-size="11" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· VLA 八股文</text>
+<text x="40.0" y="456.0" font-size="11" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· 开辟新坑继续卷</text>
+<text x="40.0" y="476.0" font-size="11" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· 小农经济学术界</text>
+<text x="40.0" y="496.0" font-size="11" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· 288Hz 实测 14Hz</text>
+<rect x="290.0" y="392.0" width="252.0" height="152.0" rx="12" fill="#fff0f6" stroke="#a61e4d" stroke-width="1.5"/>
+<text x="302.0" y="414.0" font-size="13" fill="#a61e4d" text-anchor="start" font-weight="700" opacity="1">📈 刷分打假</text>
+<text x="306.0" y="436.0" font-size="11" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· 不是兄弟真的假的</text>
+<text x="306.0" y="456.0" font-size="11" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· 分布内评测不考验泛化</text>
+<rect x="556.0" y="392.0" width="252.0" height="152.0" rx="12" fill="#fff9db" stroke="#e67700" stroke-width="1.5"/>
+<text x="568.0" y="414.0" font-size="13" fill="#e67700" text-anchor="start" font-weight="700" opacity="1">💰 资本泡沫</text>
+<text x="572.0" y="436.0" font-size="11" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· 左脚踩右脚</text>
+<text x="572.0" y="456.0" font-size="11" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· 硬找场景</text>
+<text x="572.0" y="476.0" font-size="11" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· 养蛊</text>
+<text x="572.0" y="496.0" font-size="11" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· 半个行业建立在 Qwen 上</text>
+<text x="572.0" y="516.0" font-size="11" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· 十年前的 VR / 元宇宙</text>
+<rect x="822.0" y="392.0" width="252.0" height="152.0" rx="12" fill="#ebfbee" stroke="#37b24d" stroke-width="1.5"/>
+<text x="834.0" y="414.0" font-size="13" fill="#37b24d" text-anchor="start" font-weight="700" opacity="1">🧪 验收标准梗</text>
+<text x="838.0" y="436.0" font-size="11" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· 扫地机器人够好用了吗</text>
+<text x="838.0" y="456.0" font-size="11" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· 空调测试</text>
+<text x="838.0" y="476.0" font-size="11" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· 和工业自动化没本质区别</text>
+<rect x="24.0" y="558.0" width="252.0" height="152.0" rx="12" fill="#e7f5ff" stroke="#1971c2" stroke-width="1.5"/>
+<text x="36.0" y="580.0" font-size="13" fill="#1971c2" text-anchor="start" font-weight="700" opacity="1">🎥 数采产业链</text>
+<text x="40.0" y="602.0" font-size="11" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· 真机采集就是财务诈骗</text>
+<text x="40.0" y="622.0" font-size="11" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· 数采账本 支出550收入300</text>
+<text x="40.0" y="642.0" font-size="11" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· 所采即所得</text>
+<rect x="290.0" y="558.0" width="252.0" height="152.0" rx="12" fill="#fff4e6" stroke="#f76707" stroke-width="1.5"/>
+<text x="302.0" y="580.0" font-size="13" fill="#f76707" text-anchor="start" font-weight="700" opacity="1">🍊 科研生活</text>
+<text x="306.0" y="602.0" font-size="11" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· 大年初一掉进局部最优</text>
+<text x="306.0" y="622.0" font-size="11" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· 一调一个不吱声</text>
+<text x="306.0" y="642.0" font-size="11" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· 赛博夹橙子</text>
+<text x="306.0" y="662.0" font-size="11" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· 激动到流泪</text>
+<text x="306.0" y="682.0" font-size="11" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· 究竟是谁在上岸啊</text>
+</svg>

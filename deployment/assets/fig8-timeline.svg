@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="520" viewBox="0 0 1180 520" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif">
+<title>黑话演化史</title>
+<rect width="1180" height="520" fill="#ffffff"/>
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#8b949e"/></marker></defs>
+<text x="24.0" y="36.0" font-size="20" fill="#1f2328" text-anchor="start" font-weight="700" opacity="1">图 8 · 黑话演化史：吐槽重心的迁移</text>
+<text x="24.0" y="60.0" font-size="12" fill="#57606a" text-anchor="start" font-weight="400" opacity="1">一年时间，社区的关注点从「我的机械臂在抖」升级到「这门生意算不算得过来账」——梗的迁移就是行业阶段的迁移</text>
+<line x1="40" y1="150" x2="1140" y2="150" stroke="#d0d7de" stroke-width="3"/>
+<circle cx="171.0" cy="150" r="11" fill="#37b24d" stroke="#fff" stroke-width="3"/>
+<text x="171.0" y="120.0" font-size="15" fill="#37b24d" text-anchor="middle" font-weight="700" opacity="1">2025 H2</text>
+<text x="171.0" y="138.0" font-size="12" fill="#57606a" text-anchor="middle" font-weight="400" opacity="1">调参期</text>
+<rect x="40.0" y="178.0" width="262.0" height="114.0" rx="12" fill="#ffffff" stroke="#37b24d" stroke-width="1.5"/>
+<rect x="40.0" y="178" width="262.0" height="26" rx="12" fill="#37b24d" opacity="0.12"/>
+<text x="171.0" y="196.0" font-size="12" fill="#37b24d" text-anchor="middle" font-weight="700" opacity="1">关键词</text>
+<text x="56.0" y="220.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· VLA 帕金森</text>
+<text x="56.0" y="242.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· 变树懒</text>
+<text x="56.0" y="264.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· 重新发明低通滤波</text>
+<rect x="40.0" y="304.0" width="262.0" height="54.0" rx="10" fill="#f6f8fa" stroke="#d0d7de" stroke-width="1"/>
+<text x="171.0" y="326.5" font-size="12" fill="#57606a" text-anchor="middle" font-weight="400" opacity="1">这一阶段的核心焦虑</text>
+<text x="171.0" y="343.9" font-size="12" fill="#57606a" text-anchor="middle" font-weight="400" opacity="1">我的机械臂在抖</text>
+<path d="M304.0,150.0 L322.0,150.0" stroke="#adb5bd" stroke-width="2" fill="none" marker-end="url(#ah)"/>
+<circle cx="457.0" cy="150" r="11" fill="#1c7ed6" stroke="#fff" stroke-width="3"/>
+<text x="457.0" y="120.0" font-size="15" fill="#1c7ed6" text-anchor="middle" font-weight="700" opacity="1">2026 Q1</text>
+<text x="457.0" y="138.0" font-size="12" fill="#57606a" text-anchor="middle" font-weight="400" opacity="1">祛魅期</text>
+<rect x="326.0" y="178.0" width="262.0" height="158.0" rx="12" fill="#ffffff" stroke="#1c7ed6" stroke-width="1.5"/>
+<rect x="326.0" y="178" width="262.0" height="26" rx="12" fill="#1c7ed6" opacity="0.12"/>
+<text x="457.0" y="196.0" font-size="12" fill="#1c7ed6" text-anchor="middle" font-weight="700" opacity="1">关键词</text>
+<text x="342.0" y="220.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· 不学 L 了</text>
+<text x="342.0" y="242.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· VLA = VA + 营销</text>
+<text x="342.0" y="264.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· 长瘤子的 VLM</text>
+<text x="342.0" y="286.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· 纬度是超参数</text>
+<text x="342.0" y="308.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· loss 0.002 真机寄</text>
+<rect x="326.0" y="348.0" width="262.0" height="54.0" rx="10" fill="#f6f8fa" stroke="#d0d7de" stroke-width="1"/>
+<text x="457.0" y="370.5" font-size="12" fill="#57606a" text-anchor="middle" font-weight="400" opacity="1">这一阶段的核心焦虑</text>
+<text x="457.0" y="387.9" font-size="12" fill="#57606a" text-anchor="middle" font-weight="400" opacity="1">语言模态到底有没有用</text>
+<path d="M590.0,150.0 L608.0,150.0" stroke="#adb5bd" stroke-width="2" fill="none" marker-end="url(#ah)"/>
+<circle cx="743.0" cy="150" r="11" fill="#e8590c" stroke="#fff" stroke-width="3"/>
+<text x="743.0" y="120.0" font-size="15" fill="#e8590c" text-anchor="middle" font-weight="700" opacity="1">2026 Q2</text>
+<text x="743.0" y="138.0" font-size="12" fill="#57606a" text-anchor="middle" font-weight="400" opacity="1">架构质疑期</text>
+<rect x="612.0" y="178.0" width="262.0" height="158.0" rx="12" fill="#ffffff" stroke="#e8590c" stroke-width="1.5"/>
+<rect x="612.0" y="178" width="262.0" height="26" rx="12" fill="#e8590c" opacity="0.12"/>
+<text x="743.0" y="196.0" font-size="12" fill="#e8590c" text-anchor="middle" font-weight="700" opacity="1">关键词</text>
+<text x="628.0" y="220.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· 大家普遍都是裁缝</text>
+<text x="628.0" y="242.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· 从浆糊里抽一点</text>
+<text x="628.0" y="264.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· 大水池小水管</text>
+<text x="628.0" y="286.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· 柔顺控制棺材板压不住</text>
+<text x="628.0" y="308.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· 不是兄弟真的假的</text>
+<rect x="612.0" y="348.0" width="262.0" height="54.0" rx="10" fill="#f6f8fa" stroke="#d0d7de" stroke-width="1"/>
+<text x="743.0" y="370.5" font-size="12" fill="#57606a" text-anchor="middle" font-weight="400" opacity="1">这一阶段的核心焦虑</text>
+<text x="743.0" y="387.9" font-size="12" fill="#57606a" text-anchor="middle" font-weight="400" opacity="1">这套架构本身是不是错的</text>
+<path d="M876.0,150.0 L894.0,150.0" stroke="#adb5bd" stroke-width="2" fill="none" marker-end="url(#ah)"/>
+<circle cx="1029.0" cy="150" r="11" fill="#f03e3e" stroke="#fff" stroke-width="3"/>
+<text x="1029.0" y="120.0" font-size="15" fill="#f03e3e" text-anchor="middle" font-weight="700" opacity="1">2026 H1</text>
+<text x="1029.0" y="138.0" font-size="12" fill="#57606a" text-anchor="middle" font-weight="400" opacity="1">泡沫期</text>
+<rect x="898.0" y="178.0" width="262.0" height="158.0" rx="12" fill="#ffffff" stroke="#f03e3e" stroke-width="1.5"/>
+<rect x="898.0" y="178" width="262.0" height="26" rx="12" fill="#f03e3e" opacity="0.12"/>
+<text x="1029.0" y="196.0" font-size="12" fill="#f03e3e" text-anchor="middle" font-weight="700" opacity="1">关键词</text>
+<text x="914.0" y="220.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· 左脚踩右脚</text>
+<text x="914.0" y="242.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· 养蛊</text>
+<text x="914.0" y="264.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· 半个行业建立在 Qwen 上</text>
+<text x="914.0" y="286.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· 真机采集就是财务诈骗</text>
+<text x="914.0" y="308.0" font-size="12" fill="#1f2328" text-anchor="start" font-weight="400" opacity="1">· 空调测试</text>
+<rect x="898.0" y="348.0" width="262.0" height="54.0" rx="10" fill="#f6f8fa" stroke="#d0d7de" stroke-width="1"/>
+<text x="1029.0" y="370.5" font-size="12" fill="#57606a" text-anchor="middle" font-weight="400" opacity="1">这一阶段的核心焦虑</text>
+<text x="1029.0" y="387.9" font-size="12" fill="#57606a" text-anchor="middle" font-weight="400" opacity="1">这门生意算不算得过来账</text>
+</svg>
