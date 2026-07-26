@@ -5,7 +5,8 @@
 ```bash
 python3 gen1.py   # 图1 文档地图, 图2 故障诊断树
 python3 gen2.py   # 图3 模型谱系, 图4 黑话全景, 图5 黑话解码器
-python3 fix67.py  # 图6 心态曲线, 图7 黑话四象限
+python3 fix67.py  # 图7 黑话四象限（图6 已由 fig6b.py 取代）
+python3 fig6b.py  # 图6 心态曲线（深度版：期望vs现实双轨 + 解药条 + 黑话密度）
 python3 gen4.py   # 图8 演化时间线, 图9 主题饼图
 ```
 
