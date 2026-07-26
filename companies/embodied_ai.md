@@ -57,3 +57,4 @@
 | 2026-07-17 | ⚡ | MagicLab | MagicLab与AliExpress签署独家战略合作，加入‘Brand+’超级品牌出海计划，速卖通成为其海外新品首发核心阵地。 | 标志其正式以B2C渠道切入全球消费级及轻商用机器人市场，开启规模化出海路径。 | [来源](http://finance.sina.com.cn/wm/2026-07-17/doc-iniickay1481075.shtml) |
 | 2026-07-17 | ⚡ | MagicLab | 2026年7月17日，MagicLab在WAIC2026上海开幕当天全球首发MagicBot X1（全尺寸人形机器人）、MagicBot D1（工业轮式人形机器人）、MagicDog T1（轻工业四足机器人），并发布通用具身大模型Magic-VLA K02。 | 确立其在具身智能硬件与模型协同研发领域的前沿地位，支撑九大行业场景解决方案落地。 | [来源](http://h5.ifeng.com/c/vivo/v0021OFuxhIvnZB7-_aYCC3TGc3HxQLy5owceeGWdKHMa9Rk__) |
 | 2026-07-17 | 🔧 | MagicLab | 2026年7月17日，MagicLab宣布其工业轮式人形机器人MagicBot D1已在追觅智能制造工厂进入常态化实战验证阶段。 | 标志该机型从实验室走向真实产线闭环验证，加速工业场景商业化进程。 | [来源](http://h5.ifeng.com/c/vivo/v0021OFuxhIvnZB7-_aYCC3TGc3HxQLy5owceeGWdKHMa9Rk__) |
+| 2026-07-22 | ⚡ | MagicLab | 魔法原子（MagicLab）于2026年7月22日与阿里巴巴旗下跨境零售平台速卖通达成独家战略合作，正式加入‘速卖通品牌出海计划’。 | 标志着MagicLab加速国际化布局，依托速卖通全球渠道拓展海外市场。 | [来源](https://www.tianyancha.com/steam/3306585497-eb2f) |

@@ -158,3 +158,4 @@
 | 2026-07-20 | Unitree | product | 宇树科技于2026年7月20日正式发布具身智能新模型UnifoLM-OminiA-0.3，支持全模态交互理解。 | ⚡ | news | https://www.unitree.com/cn/news |
 | 2026-07-23 | Tesla Optimus | product | 2026年7月23日，马斯克在财报电话会中透露Optimus自研AI芯片已升级至AI6，AI4芯片计划于2027年年中量产。 | 🔧 | news | https://www.yicai.com/video/103105229.html |
 | 2026-07-21 | Agibot | product | 2026年7月21日，Agibot（智元机器人）在世界人工智能大会（WAIC 2026）发布四款新品，实现从形态到负载的全栈覆盖。 | ⚡ | news | https://zhuanlan.zhihu.com/p/2062904931267432809 |
+| 2026-07-20 | Lumos Robot | product | Lumos Robot在WAIC 2026静安专场同期展示Lumos无本体数据采集设备及Lumos NexCore操作系统，覆盖数据管线、模型评测和场景工具链。 | 🔧 | news | https://it.sohu.com/a/1049752829_121124372 |
