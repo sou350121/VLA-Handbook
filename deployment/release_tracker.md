@@ -159,3 +159,7 @@
 | 2026-07-23 | Tesla Optimus | product | 2026年7月23日，马斯克在财报电话会中透露Optimus自研AI芯片已升级至AI6，AI4芯片计划于2027年年中量产。 | 🔧 | news | https://www.yicai.com/video/103105229.html |
 | 2026-07-21 | Agibot | product | 2026年7月21日，Agibot（智元机器人）在世界人工智能大会（WAIC 2026）发布四款新品，实现从形态到负载的全栈覆盖。 | ⚡ | news | https://zhuanlan.zhihu.com/p/2062904931267432809 |
 | 2026-07-20 | Lumos Robot | product | Lumos Robot在WAIC 2026静安专场同期展示Lumos无本体数据采集设备及Lumos NexCore操作系统，覆盖数据管线、模型评测和场景工具链。 | 🔧 | news | https://it.sohu.com/a/1049752829_121124372 |
+| 2026-07-24 | Unitree | product | 宇树科技于2026年7月24日正式发布轮足机器人As2-W，命名为“超凡健将”，融合四轮与四腿结构，具备6 m/s极限速度、80 cm垂直攀爬、45°陡坡通行等性能。 | ⚡ | news | https://k.sina.com.cn/article_7096020433_v1a6f4add106801kv9o.html |
+| 2026-07-24 | Tesla Optimus | product | 特斯拉在2026年Q2财报电话会上宣布Optimus进入生产准备阶段，明确第三代产品将于2027年底开始向公众销售。 | ⚡ | news | https://news.qq.com/rain/a/20260724A03U4100?adChannelId=auto |
+| 2026-07-27 | Tesla Optimus | product | 特斯拉确认于2026年7–8月启动Optimus第三代小批量SOP，首批机器人不对外发售，专用于内部‘Optimus学院’真实场景数据采集。 | 🔧 | news | https://k.sina.com.cn/article_7857201856_1d45362c001908gm3w.html |
+| 2026-07-27 | Tesla Optimus | product | 东吴证券报告指出特斯拉App已开始为Optimus人形机器人上线做准备。 | 🔧 | news | http://finance.sina.com.cn/stock/t/2026-07-27/doc-inikfsve9845804.shtml |

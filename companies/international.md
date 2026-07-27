@@ -174,3 +174,8 @@ DYNA 的公开指标设计非常“部署导向”，值得当作你评估任何
 | 2026-07-22 | ⚡ | Agility Robotics | Agility Robotics 于2026年7月22日联合 Churchill Capital Corp XI 向美国证监会（SEC）秘密提交 S-4 表格注册声明草案，启动拟议业务合并程序。 | 标志着公司正式进入SPAC合并上市的关键申报阶段，为成为全球首家上市人形机器人企业奠定法律与监管基础。 | [来源](https://cj.sina.com.cn/articles/view/6522004851/184bde57300101e3bu) |
 | 2026-07-23 | ⚡ | Tesla Optimus | 2026年7月23日，马斯克在财报电话会议中指出Optimus是特斯拉最困难的产品，因所有部件均需自研自产，无现成供应链，初期量产节奏将非常缓慢。 | 明确传递Optimus商业化路径的长期性与高壁垒，影响资本市场对短期盈利预期的修正。 | [来源](https://k.sina.com.cn/article_7857201856_1d45362c001908d3gi.html) |
 | 2026-07-23 | 🔧 | Tesla Optimus | 2026年7月23日，马斯克在财报电话会中透露Optimus自研AI芯片已升级至AI6，AI4芯片计划于2027年年中量产。 | 反映底层算力自主化进程加速，支撑后续机器人性能迭代与成本控制能力。 | [来源](https://www.yicai.com/video/103105229.html) |
+| 2026-07-21 | ⚡ | Boston Dynamics | 现代汽车集团于2026年7月21日宣布完成对Boston Dynamics的100%控股收购。 | 标志着Boston Dynamics正式成为现代汽车集团全资子公司，企业控制权与战略主导权完全转移。 | [来源](https://www.chinadaily.com.cn/business/motoring) |
+| 2026-07-24 | ⚡ | Tesla Optimus | 特斯拉在2026年Q2财报电话会上宣布Optimus进入生产准备阶段，明确第三代产品将于2027年底开始向公众销售。 | 标志Optimus从原型验证正式转入量产规划阶段，确立商业化时间锚点。 | [来源](https://news.qq.com/rain/a/20260724A03U4100?adChannelId=auto) |
+| 2026-07-27 | 🔧 | Tesla Optimus | 特斯拉确认于2026年7–8月启动Optimus第三代小批量SOP，首批机器人不对外发售，专用于内部‘Optimus学院’真实场景数据采集。 | 开启闭环训练基础设施建设，为AI能力迭代提供规模化真实世界数据输入。 | [来源](https://k.sina.com.cn/article_7857201856_1d45362c001908gm3w.html) |
+| 2026-07-27 | 🔧 | Tesla Optimus | 东吴证券报告指出特斯拉App已开始为Optimus人形机器人上线做准备。 | 表明用户端控制与交互生态正同步构建，是产品落地前关键基础设施进展。 | [来源](http://finance.sina.com.cn/stock/t/2026-07-27/doc-inikfsve9845804.shtml) |
+| 2026-07-27 | ⚡ | Tesla Optimus | 特斯拉公布Optimus目标单机成本压至2万美元以下，对应零售价区间为2–3万美元，并计划2026年内量产约2万台全部投入‘Optimus学院’训练闭环。 | 确立大众化定价锚点与初期产能规模，释放规模化降本与数据飞轮启动信号。 | [来源](https://www.zhihu.com/question/1891085426317579680/answer/2062590840015533390) |
