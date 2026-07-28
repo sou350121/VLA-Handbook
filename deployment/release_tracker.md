@@ -163,3 +163,7 @@
 | 2026-07-24 | Tesla Optimus | product | 特斯拉在2026年Q2财报电话会上宣布Optimus进入生产准备阶段，明确第三代产品将于2027年底开始向公众销售。 | ⚡ | news | https://news.qq.com/rain/a/20260724A03U4100?adChannelId=auto |
 | 2026-07-27 | Tesla Optimus | product | 特斯拉确认于2026年7–8月启动Optimus第三代小批量SOP，首批机器人不对外发售，专用于内部‘Optimus学院’真实场景数据采集。 | 🔧 | news | https://k.sina.com.cn/article_7857201856_1d45362c001908gm3w.html |
 | 2026-07-27 | Tesla Optimus | product | 东吴证券报告指出特斯拉App已开始为Optimus人形机器人上线做准备。 | 🔧 | news | http://finance.sina.com.cn/stock/t/2026-07-27/doc-inikfsve9845804.shtml |
+| 2026-07-23 | Tesla Optimus | product | 2026年7月23日，特斯拉确认Optimus首条专用产线落地，标志着其正式进入制造、数据、芯片与供应链协同构建阶段。 | ⚡ | news | https://stock.10jqka.com.cn/20260723/c678376091.shtml |
+| 2026-07-24 | Unitree | product | 宇树科技于2026年7月24日发布轮足复合机器人Unitree As2-W，支持最高6 m/s轮式巡航与80 cm高台越障，IP54防护，静态承重150 kg。 | ⚡ | news | https://news.sohu.com/a/1054421379_122066679 |
+| 2026-07-24 | Unitree | product | 宇树科技同步明确As2-W为‘轮足初号机’，提出未来可衍生搜救、探测、运输等特化机型。 | 🔧 | news | https://news.sohu.com/a/1054421379_122066679 |
+| 2026-07-24 | Unitree | product | 宇树科技明确As2-W目标场景为工业巡检、应急救援和科研教育，并突出其IP54防护等级与运动负载能力。 | 🔧 | news | https://sina.cn/news/detail/5324870577821455.html |
