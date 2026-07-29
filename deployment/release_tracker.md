@@ -167,3 +167,4 @@
 | 2026-07-24 | Unitree | product | 宇树科技于2026年7月24日发布轮足复合机器人Unitree As2-W，支持最高6 m/s轮式巡航与80 cm高台越障，IP54防护，静态承重150 kg。 | ⚡ | news | https://news.sohu.com/a/1054421379_122066679 |
 | 2026-07-24 | Unitree | product | 宇树科技同步明确As2-W为‘轮足初号机’，提出未来可衍生搜救、探测、运输等特化机型。 | 🔧 | news | https://news.sohu.com/a/1054421379_122066679 |
 | 2026-07-24 | Unitree | product | 宇树科技明确As2-W目标场景为工业巡检、应急救援和科研教育，并突出其IP54防护等级与运动负载能力。 | 🔧 | news | https://sina.cn/news/detail/5324870577821455.html |
+| 2026-07-27 | Lumos Robot | product | 鹿明机器人于2026年7月27日发布面向教学与科研场景的新一代具身智能技能开发平台Lumos Station Lite，提供模型部署、真实执行与量化评测一体化能力。 | ⚡ | news | https://www.d1ev.com/news/shichang/308787 |
