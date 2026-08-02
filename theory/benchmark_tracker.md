@@ -1,6 +1,6 @@
 # Benchmark Tracker
 
-> ⚙️ 自动生成 · 投影自 pulsar-web `vla-sota-tracker.json` · 数据日期 `2026-07-31` · last_checked `2026-08-01` · 474 entries / 6 benchmarks
+> ⚙️ 自动生成 · 投影自 pulsar-web `vla-sota-tracker.json` · 数据日期 `2026-07-31` · last_checked `2026-08-02` · 474 entries / 6 benchmarks
 > 每日刷新（`maintenance/build-benchmark-tracker.py`）· 数据源 evosota + paper extraction。
 > 本文件为 JSON 的整体投影，非手工追加——勿手动编辑（改动会被下次重生覆盖）。
 
