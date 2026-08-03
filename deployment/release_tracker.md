@@ -172,3 +172,4 @@
 | 2026-07-27 | Lumos Robot | product | Lumos Robot（鹿明机器人）于2026年7月27日发布面向教学与科研场景的新一代具身智能技能开发平台Lumos Station Lite，支持模型部署、真实执行与量化评测的一体化技能验证。 | 🔧 | news | http://auto.cnfol.com/cheshidongtai/20260728/32319443.shtml |
 | 2026-07-28 | Unitree | product | 宇树科技于2026年7月28日官方发布轮足四足机器人Unitree AS2-W。 | ⚡ | news | https://data.eastmoney.com/report/zw_industry.jshtml?infocode=AP202607281827424630 |
 | 2026-07-31 | Fourier | product | 中大力德公告确认傅利叶智能GR-1人形机器人所用腰部/腿部关节行星减速器已通过技术验证并实现量产交付 | ⚡ | news | https://caifuhao.eastmoney.com/news/20260731120859675785610 |
+| 2026-07-31 | ByteDance Seed | product | 字节跳动于2026年7月31日正式发布新一代视频生成模型Seedance 2.5，支持单次生成30秒高质量视频，在生成时长、多模态理解与编辑精度方面全面升级。 | ⚡ | news | https://www.163.com/dy/article/L3BQ4E9T05568W0A.html |
