@@ -173,3 +173,4 @@
 | 2026-07-28 | Unitree | product | 宇树科技于2026年7月28日官方发布轮足四足机器人Unitree AS2-W。 | ⚡ | news | https://data.eastmoney.com/report/zw_industry.jshtml?infocode=AP202607281827424630 |
 | 2026-07-31 | Fourier | product | 中大力德公告确认傅利叶智能GR-1人形机器人所用腰部/腿部关节行星减速器已通过技术验证并实现量产交付 | ⚡ | news | https://caifuhao.eastmoney.com/news/20260731120859675785610 |
 | 2026-07-31 | ByteDance Seed | product | 字节跳动于2026年7月31日正式发布新一代视频生成模型Seedance 2.5，支持单次生成30秒高质量视频，在生成时长、多模态理解与编辑精度方面全面升级。 | ⚡ | news | https://www.163.com/dy/article/L3BQ4E9T05568W0A.html |
+| 2026-07-31 | 1X Technologies | product | 1X Technologies于2026年7月31日正式发布专为NEO人形机器人打造的新一代肌腱驱动灵巧手，具备25自由度、IP68防水等级、食品级接触材料、可水洗清洁，已实现规模化量产，规划年产能1万只，首批产品已下线。 | 🔧 | news | https://zhuanlan.zhihu.com/p/2066540887543396025 |
