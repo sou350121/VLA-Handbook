@@ -174,3 +174,6 @@
 | 2026-07-31 | Fourier | product | 中大力德公告确认傅利叶智能GR-1人形机器人所用腰部/腿部关节行星减速器已通过技术验证并实现量产交付 | ⚡ | news | https://caifuhao.eastmoney.com/news/20260731120859675785610 |
 | 2026-07-31 | ByteDance Seed | product | 字节跳动于2026年7月31日正式发布新一代视频生成模型Seedance 2.5，支持单次生成30秒高质量视频，在生成时长、多模态理解与编辑精度方面全面升级。 | ⚡ | news | https://www.163.com/dy/article/L3BQ4E9T05568W0A.html |
 | 2026-07-31 | 1X Technologies | product | 1X Technologies于2026年7月31日正式发布专为NEO人形机器人打造的新一代肌腱驱动灵巧手，具备25自由度、IP68防水等级、食品级接触材料、可水洗清洁，已实现规模化量产，规划年产能1万只，首批产品已下线。 | 🔧 | news | https://zhuanlan.zhihu.com/p/2066540887543396025 |
+| 2026-07-30 | UBTech | product | UBTech于2026年7月30日官方发布全尺寸超仿生人形机器人UWORLD U1，定位C端消费市场。 | ⚡ | news | http://finance.sina.com.cn/stock/kechuangban/qydt/2019-05-06/doc-ihvhiews0157189.shtml |
+| 2026-07-31 | Tesla Optimus | product | 特斯拉确认Optimus V3于2026年7月下旬至8月初在弗里蒙特工厂专属产线正式投产，规模化量产将于2026年底启动。 | ⚡ | news | https://guba.sina.com.cn/?s=thread&bid=21046&tid=251049 |
+| 2026-08-03 | Tesla Optimus | product | 特斯拉Optimus项目负责人于2026年8月3日公开重申远期年产能目标为1000万台，该目标与得州超级工厂第二产线规划直接挂钩。 | ⚡ | news | https://blog.csdn.net/haohaizi_liu/article/details/163444773 |
