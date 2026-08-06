@@ -177,3 +177,5 @@
 | 2026-07-30 | UBTech | product | UBTech于2026年7月30日官方发布全尺寸超仿生人形机器人UWORLD U1，定位C端消费市场。 | ⚡ | news | http://finance.sina.com.cn/stock/kechuangban/qydt/2019-05-06/doc-ihvhiews0157189.shtml |
 | 2026-07-31 | Tesla Optimus | product | 特斯拉确认Optimus V3于2026年7月下旬至8月初在弗里蒙特工厂专属产线正式投产，规模化量产将于2026年底启动。 | ⚡ | news | https://guba.sina.com.cn/?s=thread&bid=21046&tid=251049 |
 | 2026-08-03 | Tesla Optimus | product | 特斯拉Optimus项目负责人于2026年8月3日公开重申远期年产能目标为1000万台，该目标与得州超级工厂第二产线规划直接挂钩。 | ⚡ | news | https://blog.csdn.net/haohaizi_liu/article/details/163444773 |
+| 2026-08-05 | Tesla Optimus | product | Optimus Gen-3（V3）于2026年7–8月在弗里蒙特工厂启动量产，首批50台样机已部署至特斯拉总装车间执行零部件转运、轻型装配和质量检测任务。 | 🔧 | news | http://finance.sina.com.cn/wm/2026-06-01/doc-inhzxmec8272774.shtml |
+| null | Agibot | product | 智元创新于2026年发布自研机器人操作系统‘灵渠OS’和AGIBOT WORLD 2026数据集，作为其当前技术基座，在8月3日前后被官网及媒体报道明确援引。 | ⚡ | news | https://www.163.com/dy/article/L3FO2QD105198R3E.html |
