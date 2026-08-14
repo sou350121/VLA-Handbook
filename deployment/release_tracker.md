@@ -182,3 +182,6 @@
 | 2026-08-09 | Tesla Optimus | product | 2026年8月9日，特斯拉确认弗里蒙特工厂Model S/X产线已于5月10日终止生产，仅用46天完成改造为Optimus V3专用产线，目标年产100万台。 | 🔧 | news | https://zhuanlan.zhihu.com/p/2056847145999808292 |
 | 2026-08-11 | Tesla Optimus | product | 行业报告确认Optimus V3已于2026年6–7月正式发布/亮相，7–8月弗里蒙特工厂改造完成并启动量产爬坡，2026年全年产量目标为5–10万台。 | 🔧 | news | https://www.myzaker.com/article/6a77f2148e9f09752542c804 |
 | 2026-08-13 | Fourier | product | 傅利叶智能推进GR-3人形机器人在康养场景的实际应用，‘智能康复港’升级为‘具身智能康复港’，并依托FOCUS集控系统开展多机协同与长序列任务执行验证 | 🔧 | news | https://liaocheng.dzwww.com/gnxw/202608/t20260813_18017909.htm |
+| 2026-08-11 | DYNA Robotics | product | Dyna Robotics披露DYNA-2在高精度制造任务中成功率超80%，WAM指标为VLA架构的1.55倍，显著优于前代DYNA-1。 | 🔧 | news | https://m.sohu.com/a/938297018_121956424 |
+| 2026-08-13 | Fourier | product | 傅利叶智能发布康养/康复机器人品牌分析，披露GR-3‘Care-bot’人形机器人及GRW辅助型轮式机器人在‘具身智能康复港’和‘具身之家’解决方案中的落地进展。 | 🔧 | news | https://liaocheng.dzwww.com/gnxw/202608/t20260813_18017909.htm |
+| 2026-08-13 | Tesla Optimus | product | 多方信源交叉确认Optimus第三代（Gen 3）于2026年8月在弗里蒙特工厂正式启动量产，标志项目从演示阶段迈入工业化落地阶段。 | ⚡ | news | https://www.tmtpost.com/agent/ai-article/19741 |
