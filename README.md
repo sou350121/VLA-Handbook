@@ -33,7 +33,7 @@
 VLA 论文每天几十篇，真正能用的工程细节零散在 GitHub Issue 和论文附录里。
 这个 Handbook 做一件事：**把"看懂论文"和"跑通代码"之间的坑，全部填平。**
 
-> 380 篇理论文档（10 个主题目录，每日自动新增 2-3 篇深度解析） · 165 篇英文社区实战笔记 · 300+ 条中文社区蒸馏 · 47 条 GitHub Issues 工程经验 · 12 期双周推理报告 · **行业情报雷达**（公司动态 · 融资 · IPO 每日追踪） · 每日自动 pipeline（⚡ 论文评分 · 深度拆解 · 社交情报）
+> 525 篇理论文档（10 个主题目录，每日自动新增 2-3 篇深度解析） · 165 篇英文社区实战笔记 · 300+ 条中文社区蒸馏 · 47 条 GitHub Issues 工程经验 · 24 期双周推理报告 · **行业情报雷达**（公司动态 · 融资 · IPO 每日追踪） · 每日自动 pipeline（⚡ 论文评分 · 深度拆解 · 社交情报）
 
 ---
 
@@ -156,9 +156,9 @@ VLA 论文每天几十篇，真正能用的工程细节零散在 GitHub Issue �
 
 | 目录 | 内容 |
 |------|------|
-| [`theory/`](theory/) | 203 篇理论文档：90 篇核心 + 60 篇前沿 + 9 篇触觉 + 6 篇 LLM 推理 + 5 篇经典 + 子目录专题 |
+| [`theory/`](theory/) | 525 篇理论文档：vla-core 105 · foundation 78 · world-model 72 · planning 60 · tactile 43 · frontier 38 · diffusion-flow 37 · deployment 35 · rl 31 · perception 24 |
 | [`deployment/`](deployment/) | 真机部署：硬件选型 · 多模态同步 · Sim-to-Real + 三份社区实战笔记 |
-| [`reports/biweekly/`](reports/biweekly/) | 12 期双周推理报告（含预测回顾 ✅/❌ 打分）|
+| [`reports/biweekly/`](reports/biweekly/) | 24 期双周推理报告（含预测回顾 ✅/❌ 打分）|
 | [`reports/weekly/`](reports/weekly/) | 29 期周报 + 每日 digest + SOTA + 风向洞察 |
 | [`memory/blog/archives/`](memory/blog/archives/) | 30 期 VLA 社交情报 + 小红书原始数据 |
 | [`scripts/`](scripts/) | 自动化 pipeline（SCRIPTS.md 含完整 DAG）|
@@ -186,7 +186,7 @@ VLA 论文每天几十篇，真正能用的工程细节零散在 GitHub Issue �
 
 ---
 
-## 2026 前沿深度解析（33 篇 · 自动 pipeline 持续生成中）
+## 2026 前沿深度解析（30 篇 · 自动 pipeline 持续生成中）
 
 > ⚡ = 重要进展  🔧 = 工程可用  每日持续更新中
 
@@ -246,7 +246,7 @@ VLA Handbook 的每日内容由 [照见 Pulsar](https://github.com/sou350121/Pul
 
 ## 🤖 让 AI 编程助手变成 VLA 专家
 
-想让你的 AI 助手直接拥有本 Handbook 203 篇理论文档的知识？
+想让你的 AI 助手直接拥有本 Handbook 525 篇理论文档的知识？
 
 **[VLA Expert Skill](https://github.com/sou350121/VLA-expert-skill)** 把 Handbook 的知识压缩成一个即插即用的 AI Skill，支持多个平台：
 
