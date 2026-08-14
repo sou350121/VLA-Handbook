@@ -179,3 +179,6 @@
 | 2026-08-03 | Tesla Optimus | product | 特斯拉Optimus项目负责人于2026年8月3日公开重申远期年产能目标为1000万台，该目标与得州超级工厂第二产线规划直接挂钩。 | ⚡ | news | https://blog.csdn.net/haohaizi_liu/article/details/163444773 |
 | 2026-08-05 | Tesla Optimus | product | Optimus Gen-3（V3）于2026年7–8月在弗里蒙特工厂启动量产，首批50台样机已部署至特斯拉总装车间执行零部件转运、轻型装配和质量检测任务。 | 🔧 | news | http://finance.sina.com.cn/wm/2026-06-01/doc-inhzxmec8272774.shtml |
 | null | Agibot | product | 智元创新于2026年发布自研机器人操作系统‘灵渠OS’和AGIBOT WORLD 2026数据集，作为其当前技术基座，在8月3日前后被官网及媒体报道明确援引。 | ⚡ | news | https://www.163.com/dy/article/L3FO2QD105198R3E.html |
+| 2026-08-09 | Tesla Optimus | product | 2026年8月9日，特斯拉确认弗里蒙特工厂Model S/X产线已于5月10日终止生产，仅用46天完成改造为Optimus V3专用产线，目标年产100万台。 | 🔧 | news | https://zhuanlan.zhihu.com/p/2056847145999808292 |
+| 2026-08-11 | Tesla Optimus | product | 行业报告确认Optimus V3已于2026年6–7月正式发布/亮相，7–8月弗里蒙特工厂改造完成并启动量产爬坡，2026年全年产量目标为5–10万台。 | 🔧 | news | https://www.myzaker.com/article/6a77f2148e9f09752542c804 |
+| 2026-08-13 | Fourier | product | 傅利叶智能推进GR-3人形机器人在康养场景的实际应用，‘智能康复港’升级为‘具身智能康复港’，并依托FOCUS集控系统开展多机协同与长序列任务执行验证 | 🔧 | news | https://liaocheng.dzwww.com/gnxw/202608/t20260813_18017909.htm |
