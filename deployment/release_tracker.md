@@ -185,3 +185,5 @@
 | 2026-08-11 | DYNA Robotics | product | Dyna Robotics披露DYNA-2在高精度制造任务中成功率超80%，WAM指标为VLA架构的1.55倍，显著优于前代DYNA-1。 | 🔧 | news | https://m.sohu.com/a/938297018_121956424 |
 | 2026-08-13 | Fourier | product | 傅利叶智能发布康养/康复机器人品牌分析，披露GR-3‘Care-bot’人形机器人及GRW辅助型轮式机器人在‘具身智能康复港’和‘具身之家’解决方案中的落地进展。 | 🔧 | news | https://liaocheng.dzwww.com/gnxw/202608/t20260813_18017909.htm |
 | 2026-08-13 | Tesla Optimus | product | 多方信源交叉确认Optimus第三代（Gen 3）于2026年8月在弗里蒙特工厂正式启动量产，标志项目从演示阶段迈入工业化落地阶段。 | ⚡ | news | https://www.tmtpost.com/agent/ai-article/19741 |
+| 2026-08-19 | Xiaomi Robotics | product | 小米在2026世界机器人博览会「具身花园」展台正式公开展示新一代人形机器人‘铁大’，实现自主碰拳、握手、撒香片等大模型驱动交互 | ⚡ | news | https://k.sina.cn/article_5953466437_162dab0450670b9uhi.html |
+| 2026-08-21 | LimX Dynamics | product | 公司在2026世界机器人大会（WRC）现场展出LimX Oli、LimX Luna及TRON 2全系人形机器人，并开展互动演示。 | 🔧 | news | https://finance.eastmoney.com/a/202608213849796681.html |
