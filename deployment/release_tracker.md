@@ -187,3 +187,9 @@
 | 2026-08-13 | Tesla Optimus | product | 多方信源交叉确认Optimus第三代（Gen 3）于2026年8月在弗里蒙特工厂正式启动量产，标志项目从演示阶段迈入工业化落地阶段。 | ⚡ | news | https://www.tmtpost.com/agent/ai-article/19741 |
 | 2026-08-19 | Xiaomi Robotics | product | 小米在2026世界机器人博览会「具身花园」展台正式公开展示新一代人形机器人‘铁大’，实现自主碰拳、握手、撒香片等大模型驱动交互 | ⚡ | news | https://k.sina.cn/article_5953466437_162dab0450670b9uhi.html |
 | 2026-08-21 | LimX Dynamics | product | 公司在2026世界机器人大会（WRC）现场展出LimX Oli、LimX Luna及TRON 2全系人形机器人，并开展互动演示。 | 🔧 | news | https://finance.eastmoney.com/a/202608213849796681.html |
+| 2026-08-17 | Booster Robotics | product | 现场演示K1与T2机器人完成高强度足球对抗及节奏同步Disco舞蹈 | 🔧 | news | https://weibo.com/6368573516/RdPOAycgx |
+| 2026-08-19 | Fourier | product | 傅利叶智能于2026年8月19日亮相世界机器人大会（WRC），发布‘具身之家’具身智能全链路技术Demo | ⚡ | news | https://www.163.com/dy/article/L4NM2JT9055040N3.html |
+| 2026-08-19 | Noetix Robotics | product | 2026年8月19日至23日展会周期内，松延动力在WRC集中发布小布米声学系统全链路升级，涵盖拾音灵敏度、语音识别准确率、应答语境贴合性及扬声器音腔表现力优化 | 🔧 | news | https://m.163.com/dy/article/L4P6B45I0553BL7H.html |
+| 2026-08-21 | Noetix Robotics | product | 2026年8月21日，松延动力在WRC首发仿生机器人IP‘x-head 1（小月）’、男版IP‘小辰’及四款全新妆造形象，并同步呈现小布米拳击舞台、国风打卡点与声控互动舞台 | ⚡ | news | https://m.163.com/dy/article/L4RKBGAV053469RG.html |
+| 2026-08-21 | Noetix Robotics | product | 2026年8月21日，松延动力宣布消费级人形机器人‘小布米’上线OTA v3.0系统升级，系人形机器人领域首个落地的OTA升级版本，并接入喜马拉雅、编程猫等内容生态 | ⚡ | news | https://m.163.com/dy/article/L4RKBGAV053469RG.html |
+| 2026-08-22 | Booster Robotics | product | 80台Booster T2拼出运动会会徽、另80台拼出'BEIJING'字样，并完成大规模自主队列变换 | ⚡ | news | https://www.21ic.com/a/1007705.html |

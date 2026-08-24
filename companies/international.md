@@ -191,3 +191,5 @@ DYNA 的公开指标设计非常“部署导向”，值得当作你评估任何
 | 2026-08-13 | ⚡ | Tesla Optimus | 多方信源交叉确认Optimus第三代（Gen 3）于2026年8月在弗里蒙特工厂正式启动量产，标志项目从演示阶段迈入工业化落地阶段。 | 首次实现人形机器人规模化实体生产，为全球首条人形机器人量产产线落地提供关键验证。 | [来源](https://www.tmtpost.com/agent/ai-article/19741) |
 | 2026-08-13 | 🔧 | Apptronik | RoboBusiness 2026论坛将组织人形机器人专题研讨，汇聚Agility、Apptronik、Persona AI和PSYONIC等头部公司专家。 | 反映人形机器人产业已形成多玩家竞合生态，行业共识加速形成，但属会议预告而非实质动态，故重要性中等。 | [来源](https://www.therobotreport.com/experts-discuss-state-humanoid-robots-robobusiness-2026/) |
 | 2026-08-14 | ⚡ | Agility Robotics | Agility Robotics通过SPAC方式完成上市，成为机器人领域非传统IPO路径的代表性案例。 | 为具身智能/移动操作机器人公司提供资本化新范式，降低IPO门槛并加速商业化进程。 | [来源](https://www.therobotreport.com/robots-on-wall-street-non-traditional-paths-public-markets-robotics-companies/) |
+| 2026-08-19 | 🔧 | Tesla Optimus | Model S/X产线于2026年8月19日完成为期46天的物理拆解与产线改造，正式为Optimus V3/V4产线腾出空间。 | 证实产线切换已进入实质执行阶段，具备可验证的工程节点和时间刻度。 | [来源](https://post.smzdm.com/p/awwr49pp/) |
+| 2026-08-19 | ⚡ | Agility Robotics | Agility Robotics于2026年8月19日在加州弗里蒙特开设占地6万平方英尺的AI训练中心，毗邻特斯拉Optimus工厂，用于Digit人形机器人的真实场景AI训练与部署。 | 标志Digit进入规模化真机训练与商业化落地新阶段，强化其与特斯拉生态的地理协同及物理AI基础设施能力。 | [来源](https://www.163.com/dy/article/KSDTQTVH05569K8R.html) |
