@@ -193,3 +193,11 @@
 | 2026-08-21 | Noetix Robotics | product | 2026年8月21日，松延动力在WRC首发仿生机器人IP‘x-head 1（小月）’、男版IP‘小辰’及四款全新妆造形象，并同步呈现小布米拳击舞台、国风打卡点与声控互动舞台 | ⚡ | news | https://m.163.com/dy/article/L4RKBGAV053469RG.html |
 | 2026-08-21 | Noetix Robotics | product | 2026年8月21日，松延动力宣布消费级人形机器人‘小布米’上线OTA v3.0系统升级，系人形机器人领域首个落地的OTA升级版本，并接入喜马拉雅、编程猫等内容生态 | ⚡ | news | https://m.163.com/dy/article/L4RKBGAV053469RG.html |
 | 2026-08-22 | Booster Robotics | product | 80台Booster T2拼出运动会会徽、另80台拼出'BEIJING'字样，并完成大规模自主队列变换 | ⚡ | news | https://www.21ic.com/a/1007705.html |
+| 2026-08-19 | Astribot | product | Astribot在WRC主会场系统性演示S1与T1双平台协同完成书包收纳+拉链操作、人机桌面冰球对抗、‘机器人MART’自主零售全流程等真实场景任务。 | 🔧 | news | https://finance.eastmoney.com/a/202608203848156184.html |
+| 2026-08-19 | Galaxea | product | Galaxea Dynamics（星海图旗下品牌）于CES 2026首次亮相，推出全球首款‘开箱即用’视觉-语言-动作（VLA）一体机平台，并同步展示全栈式硬件、算法与工具链解决方案。 | ⚡ | news | https://www.163.com/dy/article/KIN6178G0553O396.html |
+| 2026-08-19 | Galaxea | product | Galaxea在CES 2026展出了R1 Lite机器人搭载的「万物抓取」功能演示，以及17自由度四指灵巧手DEXO。 | 🔧 | news | https://www.163.com/dy/article/KIN6178G0553O396.html |
+| 2026-08-19 | Galaxea | product | Galaxea在CES 2026展出R1 Pro商业主理人型号，定位面向B端客户的服务机器人解决方案。 | 🔧 | news | https://www.163.com/dy/article/KIN6178G0553O396.html |
+| 2026-08-19 | Lumos Robot | product | 鹿明机器人于2026年8月19日正式发布NexCore，定位为面向产业具身智能的进化引擎，支持任务定义、数据接入、模型训练、评测验证、部署运行与数据回流全闭环。 | ⚡ | news | https://stock.10jqka.com.cn/20260819/c679081726.shtml |
+| 2026-08-19 | Lumos Robot | product | 鹿明机器人于2026年8月19日官宣Lumos NexCore全面开放早期开发者接入，并同步发布配套SDK及底层物理AI引擎。 | 🔧 | news | https://k.sina.com.cn/article_7879776380_1d5abd87c06801g9rw.html |
+| 2026-08-21 | Astribot | product | Astribot宣布面向北京和上海开发者开放AOS生态‘一句话生成APP’机器人黑客松总决赛选手招募。 | 🔧 | news | https://stock.10jqka.com.cn/20260821/c679168608.shtml |
+| 2026-08-21 | Galaxea | product | Galaxea（星海图）R1系列机器人在2026世界机器人大会上完成礼品递送、动态人机交互等非结构化场景实操演示。 | 🔧 | news | https://k.sina.com.cn/article_7857201856_1d45362c001908kcq0.html |
