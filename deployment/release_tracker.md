@@ -201,3 +201,6 @@
 | 2026-08-19 | Lumos Robot | product | 鹿明机器人于2026年8月19日官宣Lumos NexCore全面开放早期开发者接入，并同步发布配套SDK及底层物理AI引擎。 | 🔧 | news | https://k.sina.com.cn/article_7879776380_1d5abd87c06801g9rw.html |
 | 2026-08-21 | Astribot | product | Astribot宣布面向北京和上海开发者开放AOS生态‘一句话生成APP’机器人黑客松总决赛选手招募。 | 🔧 | news | https://stock.10jqka.com.cn/20260821/c679168608.shtml |
 | 2026-08-21 | Galaxea | product | Galaxea（星海图）R1系列机器人在2026世界机器人大会上完成礼品递送、动态人机交互等非结构化场景实操演示。 | 🔧 | news | https://k.sina.com.cn/article_7857201856_1d45362c001908kcq0.html |
+| 2026-08-21 | Agibot | product | 智元创新(上海)科技股份有限公司于2026年8月21日获一项人形机器人相关授权外观设计专利。 | 🔧 | news | https://it.sohu.com/a/1053074360_100265270 |
+| 2026-08-21 | Agibot | product | 智元创新于2026年8月21日公开一项名为‘动作价值模型训练方法及装置’的发明专利。 | ⚡ | news | https://it.sohu.com/a/1053074360_100265270 |
+| 2026-08-24 | Fourier | product | 傅利叶智能于2026年8月24日在WRC期间发布脑机数采技术、EGO数据采集头环Lume R1、光学六维力传感器、准直驱动行星关节模组及‘半人马’轮足复合机器人。 | 🔧 | news | http://finance.sina.com.cn/wm/2026-08-24/doc-inipkzxw2865816.shtml |
