@@ -43,4 +43,4 @@
 - 📡 [RSS 订阅](https://sou350121.github.io/pulsar-web/subscribe/)
 - 📊 [VLA 数据工程指南](../theory/foundation/vla_data_engineering_guide.md)
 
-> 本快照由 `scripts/export-method-family-viz.py` 每日自动生成 · 最后更新 `2026-08-31 04:30 UTC` · CC BY 4.0
+> 本快照由 `scripts/export-method-family-viz.py` 每日自动生成 · 最后更新 `2026-09-01 04:30 UTC` · CC BY 4.0
