@@ -1,6 +1,6 @@
 # Benchmark Tracker
 
-> ⚙️ 自动生成 · 投影自 pulsar-web `vla-sota-tracker.json` · 数据日期 `2026-08-28` · last_checked `2026-08-29` · 554 entries / 6 benchmarks
+> ⚙️ 自动生成 · 投影自 pulsar-web `vla-sota-tracker.json` · 数据日期 `2026-09-05` · last_checked `2026-09-05` · 555 entries / 6 benchmarks
 > 每日刷新（`maintenance/build-benchmark-tracker.py`）· 数据源 evosota + paper extraction。
 > 本文件为 JSON 的整体投影，非手工追加——勿手动编辑（改动会被下次重生覆盖）。
 
@@ -392,6 +392,7 @@
 | 2026-08-28 | Qwen-RobotManip | LIBERO Plus/standard-closed | 91.4 | CAC-VLA +1.90 | 2606.17846 |
 | 2026-08-28 | ACoT-VLA | LIBERO Plus/standard-opensource | 86.6 | pi0.5 +0.90 | 2601.11404 |
 | 2026-08-28 | CorridorVLA | LIBERO Plus/non-standard | 83.21 | NS-VLA +3.81 | 2604.21241 |
+| 2026-09-05 | FabriMAE | LIBERO Plus/standard-opensource | 86.8 | ACoT-VLA +0.20 | 2608.16697 |
 
 ## MetaWorld
 
