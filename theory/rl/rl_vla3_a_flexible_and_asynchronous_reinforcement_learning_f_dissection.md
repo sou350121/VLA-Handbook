@@ -1,223 +1,246 @@
-# RL-VLA³：面向 VLA 后训练的灵活异步 RL 框架 (RL-VLA³: A Flexible and Asynchronous Reinforcement Learning Framework for VLA Training)
+# RL-VLA³：面向 VLA 训练的灵活异步强化学习框架 (RL-VLA³: A Flexible and Asynchronous Reinforcement Learning Framework for VLA Training)
 
-> ⚙️ 本文由 Moltbot 自动生成 | 2026-09-08
+> ⚙️ 本文由 Moltbot 自动生成 | 2026-09-09
 >
 > **论文**: RL-VLA³: A Flexible and Asynchronous Reinforcement Learning Framework for VLA Training
-> **链接**: https://arxiv.org/abs/2602.05765
-> **核心定位**: 解决 VLA 在线 RL 后训练中同步框架吞吐受限的痛点，通过异步解耦 Simulator/Generator/Trainer 三大组件，将训练吞吐量提升最高 85.2%
+> **链接**: https://arxiv.org/abs/2602.05765 (COLM 2026)
+> **代码**: https://github.com/Haoran0301/RL-VLA3
+> **核心定位**: 解决 VLA 后训练 RL 框架中同步设计导致的吞吐量瓶颈——将 Simulator、Generator、Trainer 三组资源完全解耦，实现全异步流水线。
 
 ## ⚡ 快速判斷（30 秒讀完這段就夠了）
 
 | 維度 | 判斷 |
 |------|------|
-| 核心結論 | 首个专为 VLA 设计的完全异步分布式 RL 训练框架，解耦仿真、推理与策略优化，吞吐量较同步基线最高提升 85.2%，样本效率不变 |
-| 適合精讀 | 如果你在构建或优化 VLA 在线 RL 训练管线、需要多 GPU 规模化训练 |
-| 可以跳過 | 如果你只做 SFT 微调、不碰在线 RL 后训练 |
-| 落地可行性 | 中（框架开源但需 8+ GPU 集群；动态批处理超参需调优） |
-| 主要風險 | 256 GPU 规模下扩展效率下降（通信瓶颈），极端并发时异步梯度陈旧度未量化分析 |
+| 核心結論 | 全异步 RL 框架可将 VLA 训练吞吐量提升最高 85.2%，同时保持样本效率不变 |
+| 適合精讀 | 如果你在搭建/优化 VLA 在线 RL 训练系统，重点看 §3.2（异步 Rollout）和 §3.3（异步 Training） |
+| 可以跳过 | 如果你只关心 VLA 模型架构本身（如 π₀、OpenVLA），不关心训练基础设施 |
+| 落地可行性 | 高（已开源，基于 RLinf 二次开发，YAML 配置驱动） |
+| 主要風險 | 256 GPU 规模出现亚线性扩展，通信瓶颈待解决；Colocated 模式下 ManiSkill 因高频上下文切换反而可能变慢 |
 
 💡 **X-Ray 开场**
-VLA 模型用 RL 做后训练时，传统框架沿用 LLM 的同步设计——等所有仿真环境跑完一批再统一推理、再统一训练。但物理仿真器的延迟高度不稳定（碰撞计算、渲染耗时波动大），这种"等所有人到齐再出发"的模式导致 GPU 大量空闲。RL-VLA³ 的核心思路是：**让仿真、推理、训练三个环节各自独立推进，互不等待**，通过动态批处理和细粒度环境分片来吸收延迟波动，最终把硬件利用率拉满。对 VLA 研究者意味着：在线 RL 后训练不再是"能跑就行"的瓶颈环节，而是可以规模化加速的工程问题。
+VLA 模型的 RL 后训练需要一个物理模拟器来与环境交互——但模拟器计算时间极不稳定（99 秒推理 vs 22 秒仿真）。现有框架沿用 LLM 的同步设计，等所有模拟器完成才批量推理，导致 GPU 大量空闲。RL-VLA³ 的核心发现是：把 Simulator、Generator、Trainer 完全解耦，配合动态批调度和细粒度环境分片，可以让三组资源各自独立推进，吞吐量大幅提升。对 VLA 研究者意味着：在线 RL 后训练的系统瓶颈不再是算法，而是基础设施——而这篇论文给出了一个可落地的答案。
 
 📍 **研究全景时间线**
 ```
-2024 RT-2 (SFT) → 2024 OpenVLA (SFT) → 2025 SimpleVLA/RLinf (同步RL) → 2026 RL-VLA³ (异步RL) ← 当前位置
-                                                                        ↑
-                                              局限: 256 GPU 扩展效率下降，异步梯度陈旧度未量化
+[2024] RT-2 / OpenVLA (SFT)
+  → [2025] RL 后训练验证有效（GR00T, π系列 + RL）
+  → [2025] SimpleVLA / RLinf（同步 RL 框架，继承 LLM 设计）
+  → [2026] RL-VLA³ ← 当前位置：首个全异步 VLA RL 框架
+  → [未来] 256+ GPU 通信瓶颈 / 多机器人异步协调
 ```
 
 ## 1. 核心架构/方法总览 (Overview / Architecture)
 
 ### 1.1 系统对比概览 (System Component Comparison)
 
+RL-VLA³ 将传统 RL 训练流水线拆分为三个独立的资源组，与同步基线形成鲜明对比：
+
 | 维度 | 同步基线 (RLinf) | RL-VLA³ |
-|------|-------------------|---------|
-| 架构组件 | Simulator + Generator + Trainer  colocated/hybrid | 显式三分组，完全异步交互 |
-| Rollout 执行 | 全局屏障：等所有环境完成 → 统一推理 → 统一训练 | 环境完成后立即提交请求，Generator 动态聚合推理 |
-| 训练执行 | Rollout 全部完成后再开始训练 | 轨迹完成后立即推送 Trainer，持续优化 |
-| 批处理策略 | 固定批量 | 动态批处理（max_batch_size + max_wait_latency 双约束） |
-| 环境并行 | 整批映射到单个 Generator | 细粒度分片，多 Generator 路由 |
-| 吞吐瓶颈 | 仿真延迟波动 + 上下文切换 | 通信开销（256 GPU 时） |
-| 适用场景 | 小规模实验验证 | 8-256 GPU 规模化训练 |
+|------|-----------------|---------|
+| **资源分组** | Colocated: 单 GPU 分时承载 Simulator + Generator + Trainer | 可配置：Colocated / Hybrid / Disaggregated |
+| **Rollout 阶段** | 等所有 Simulator 完成 → 统一 batch 推理 | 每个 Env 完成后立即提交请求 → 动态聚合推理 |
+| **Training 阶段** | 等所有 rollout 完成 → 批量 policy update | 轨迹完成即推送 Trainer → 持续优化 |
+| **同步屏障** | Rollout ↔ Training 严格交替 | 三组资源完全异步，无全局屏障 |
+| **批处理** | 固定 batch size | 动态批调度（max_batch_size + timeout_ms 双约束） |
+| **环境映射** | 1 个 batch → 1 个 Generator | 细粒度分片：1 个 batch → 多个 slot → 多个 Generator |
 
 ### 1.2 关键机制 (Key Mechanism)
 
-**为什么这样设计？** VLA 训练与 LLM RL 训练有本质区别：LLM 的"环境"是 GPU 上稳定的奖励模型，延迟可预测；VLA 的"环境"是物理仿真器（ManiSkill/LIBERO/Meta-World），涉及碰撞计算和渲染，延迟高度不可预测。同步框架在这种场景下，GPU 大量时间花在"等仿真"或"等训练"上。
+**三资源组解耦**：Simulator 负责物理仿真（产生 observation），Generator 加载 VLA 模型做推理（产生 action），Trainer 做策略梯度计算和参数更新。三者各自独立运行，通过全局请求队列和异步通信机制交互。
 
-RL-VLA³ 的三项关键机制：
+**动态批调度器 (Dynamic Batching Scheduler)**：解决异步环境下 Generator 利用率低的问题。调度器在两个正交约束下工作——最大批大小（max_batch_size）和最大等待延迟（timeout_ms）。当队列达到批大小阈值 **或** 最老的请求超过延迟限制时，才触发 Generator 推理。这消除了 Generator 的 pipeline bubble。
 
-1. **动态批处理调度器**：Generator 推理不在队列非空时立即触发（会导致小批量低效），而是聚合请求直到达到 max_batch_size 或 max_wait_latency 阈值——在批处理效率和排队延迟之间找最优平衡点。
-2. **细粒度环境分片**：大规模环境批次被切分为多个 slot，分发到不同 Generator，避免单个 Simulator 等待单个 Generator 造成的空闲。
-3. **异步训练**：轨迹完成后立即推送到 Trainer，不需要等所有 rollout worker 完成——消除 Rollout 和 Training 之间的全局屏障。
+**细粒度环境分片 (Fine-grained Environment Sharding)**：对于高并行度的仿真环境，将大批量环境拆分为多个小 slot，分发到不同 Generator。既保留大批量环境的吞吐优势，又减少单个 Simulator 的等待时间。
 
-⚡ **Eureka Moment**：VLA RL 训练的三个组件（仿真/推理/训练）天然可以解耦——物理仿真器的延迟波动不是"需要容忍的噪声"，而是"应该用异步流水线吸收的变量"。
+⚡ **Eureka Moment**：VLA RL 训练的系统瓶颈不在算法——而在同步屏障。物理模拟器的延迟高度不可预测（CPU 碰撞计算 + GPU 渲染），用同步设计等"最慢的那台"会浪费大量 GPU 算力。全异步 + 动态批调度 = 用软件调度吸收硬件不确定性。
 
 ### 1.3 信息流/架构图 (Flow / Diagram)
 
 ```
-┌─────────────┐     ┌──────────────┐     ┌─────────────┐
-│ Simulator   │────→│ Request Queue│────→│ Generator   │
-│ (环境步进)   │  obs│ (优先级队列)  │  req │ (模型推理)   │
-│             │←────│              │←────│             │
-└──────┬──────┘     └──────────────┘     └──────┬──────┘
-       │ 轨迹完成                                  │ action
-       │                                          │
-       ▼                                          ▼
-┌──────────────────────────────────────────────────────┐
-│                   Trainer (策略优化)                  │
-│              (PPO / GRPO 梯度更新)                    │
-│              ↓ 模型权重同步回 Generator                │
-└──────────────────────────────────────────────────────┘
-
-异步数据流: obs → queue → action → transition → queue → train → weight sync
-关键: 三个组件各自独立推进，无全局同步屏障
+                    ┌─────────────────────────────────────────────┐
+                    │              Main Pipeline                   │
+                    │  spawn(collect_rollout) ──→ train loop      │
+                    └─────────────────────────────────────────────┘
+                                      │
+              ┌───────────────────────┼───────────────────────┐
+              ▼                       ▼                       ▼
+    ┌─────────────────┐   ┌─────────────────┐   ┌─────────────────┐
+    │   Simulator     │   │   Generator     │   │    Trainer      │
+    │  (Env Stepping) │   │ (VLA Inference) │   │ (Policy Update) │
+    │                 │   │                 │   │                 │
+    │ Env Batch 1 ──┐ │   │ Dynamic Batching│   │ Async Stream    │
+    │ Env Batch 2 ──┤ │   │ Scheduler       │   │ Queue           │
+    │ Env Batch N ──┘ │   │ ┌─────────────┐ │   │                 │
+    │       │         │   │ │ Queue       │ │   │ ┌─────────────┐ │
+    │  obs ─┼───────► │   │ │ max_size    │ │   │ │ Grad Accum  │ │
+    │       │         │   │ │ timeout_ms  │ │   │ │ PPO / GRPO  │ │
+    └───────┼─────────┘   │ └─────────────┘ │   │ └─────────────┘ │
+            │             │       │         │   └────────┬────────┘
+            │             │  action├─────────────────────┤
+            │             └────────┼─────────────────────┘
+            │                      │
+            ▼                      ▼
+    transition ──────────────►  version sync
+    (s, a, r, s')               (sync_interval epochs)
 ```
 
 ## 2. 数学核心 (Math Core)
 
 📌 **Napkin Formula**（一行抓住本质）：
-```
-max Throughput = f(async(Sim, Gen, Train), dynamic_batch(max_N, max_T), shard(K))
-```
 
-**目标**：在保持样本效率（success rate vs. training steps）不变的前提下，最大化单位时间内的环境状态转移数（throughput）。
-
-**核心优化问题**：
 ```
-max_θ  E[Σ_t R(s_t, a_t)]
-s.t.  throughput(Sim, Gen, Train) → max
-    sample_efficiency_async ≈ sample_efficiency_sync
+T_throughput = f(async(Sim, Gen, Train)) / f(sync(Sim → Gen → Train))
+             ≈ 1 / (1 - idle_fraction)
 ```
 
-**变量说明**：
+**目标**：最大化吞吐量 T（单位时间内处理的环境状态转换数），同时保持样本效率（达到相同成功率所需的环境步数）不变。
 
-| 符号 | 含义 |
-|------|------|
-| Sim | Simulator 资源组（物理仿真环境） |
-| Gen | Generator 资源组（VLA 模型推理） |
-| Train | Trainer 资源组（策略梯度优化） |
-| max_N | 动态批处理最大批量数 |
-| max_T | 动态批处理最大等待延迟 |
-| K | 环境分片数（映射到不同 Generator） |
-| θ | VLA 策略网络参数 |
+**核心直觉**：同步流水线中，整体吞吐由最慢的环节决定（木桶效应）。异步设计让 Simulator、Generator、Trainer 各自以自身速度推进，消除 idle_fraction → 吞吐逼近三者之和而非最小值。
 
-> 符号与本文/相关文档保持一致：框架沿用了 RLinf 的三分组抽象，但将同步交互改为异步。PPO/GRPO 的优化目标本身不变，改变的是数据供给方式。
+**关键变量**：
+- `max_batch_size`：动态批调度器的最大批大小，影响 Generator 利用率
+- `timeout_ms`：最大等待延迟，防止小批触发导致的硬件浪费
+- `sync_interval`：Trainer 本地更新多少 epoch 后同步 model version 到 rollout
+- `N_gpus`：GPU 总数，验证范围 8~256
+
+> 符号与本文保持一致：Simulator = 仿真环境步进，Generator = VLA 模型推理，Trainer = 策略优化。
 
 ## 3. 带数字走一遍：玩具例子 (Worked Example)
 
-假设一个 VLA 训练任务，参数如下：
+假设一个 ManiSkill 训练场景，配置如下：
 
-- 12 个并行环境（每个环境一个 Simulator）
-- 2 个 Generator（各加载 π0.5 模型）
-- 1 个 Trainer（PPO 优化）
-- 动态批处理：max_batch_size = 6, max_wait_latency = 500ms
+| 参数 | 值 |
+|------|-----|
+| GPU 总数 | 8（Hybrid: 6 Sim + 2 Gen） |
+| 每 GPU 环境批数 | 2（共 12 个 Env Batch） |
+| 每批环境数 | 32（共 384 个并行环境） |
+| Simulator 步进时间 | 22 秒（ManiSkill GPU 加速） |
+| Generator 推理时间（batch=640） | 9 秒 |
+| max_batch_size | 5 slots |
+| timeout_ms | 2000 ms |
 
 **同步基线流程**：
-1. 12 个环境步进 → 最慢的 22 秒完成，其余等它 → 22 秒
-2. 收集 12 个 obs → 推理 12 个 action → 假设 3 秒
-3. 环境执行 action → 又 22 秒
-4. 全部完成 → Trainer 开始训练 → 5 秒
-5. 单步总耗时 ≈ 52 秒，其中 Generator 空闲 49 秒，Trainer 空闲 47 秒
+1. 12 个 Env Batch 全部完成步进 → 等待最慢的 batch（22s）
+2. 收集 384 个 observation → 统一 batch 推理 → 9s
+3. 执行 action → 重复
+4. 总周期 ≈ 22 + 9 = 31s / 轮
 
 **RL-VLA³ 异步流程**：
-1. 环境 1 完成（5 秒）→ 提交请求到 queue
-2. 环境 3 完成（8 秒）→ 提交请求到 queue
-3. ... 第 6 个请求到达 → 触发 Generator 推理（批量=6）→ 1.5 秒
-4. 同时环境 7-12 继续步进，Trainer 处理之前完成的轨迹
-5. 单步有效耗时 ≈ 22 秒（仅受最慢环境限制），Generator/Trainer 持续工作
+1. Env Batch 1 完成（~18s）→ 立即提交请求到队列
+2. Env Batch 2 完成（~19s）→ 提交请求
+3. ... 队列积累到 5 slots → 触发 Generator 推理 → ~3s（小批）
+4. Generator 推理完成 → 返回 action → 对应 batch 继续步进
+5. 同时，其他 batch 继续步进、继续提交
+6. 总周期 ≈ 最大步进时间（22s），Generator 持续工作无等待
 
-**结果**：吞吐量从 12/52 ≈ 0.23 steps/s 提升到 12/22 ≈ 0.55 steps/s，提升约 139%（理论上限）。实际实验中因通信和调度开销，测得最高 85.2% 提升。
+**吞吐量提升估算**：
+- 同步：384 transitions / 31s ≈ 12.4 trans/s
+- 异步：384 transitions / 22s ≈ 17.5 trans/s
+- 提升 ≈ (17.5 - 12.4) / 12.4 ≈ **41%**
+
+这与论文中 ManiSkill + Hybrid 模式实测 78.6% 提升的方向一致（实际提升更大，因为还消除了 Training 阶段的 idle time）。
 
 ## 4. 工程视角 (Engineering View)
 
-| 工程指标 | 数值/特征 | 来源 |
-|----------|-----------|------|
-| 吞吐量提升 | 最高 85.2%（Meta-World + π0.5, Colocated） | 论文 Figure 5 |
-| 扩展规模 | 8 → 256 GPU，近线性扩展到 24 GPU | 论文 Figure 7 |
-| 256 GPU 效率 | 次线性下降，通信瓶颈（权重广播+梯度同步） | 论文 §4.2 |
-| 样本效率 | 与同步基线一致（success rate vs. steps 曲线重合） | 论文 Figure 6 |
-| 动态批处理调参 | max_batch_size × max_wait_latency 二维空间需搜索 | 论文 Figure 8 |
-| 部署约束 | 需 8+ GPU；Hybrid 模式需隔离 Simulator/Generator GPU | 论文 §4.1 |
+| 工程维度 | 同步基线 | RL-VLA³ | 含义 |
+|----------|---------|---------|------|
+| **GPU 利用率** | Colocated 模式下频繁上下文切换，利用率波动大 | 三组资源独立运行，GPU 持续满载 | 减少"等模拟器"的空转 |
+| **内存占用** | 单 GPU 需同时加载 Simulator + VLA 模型 + Optimizer | 可按 placement 策略分散 | Hybrid/Disaggregated 降低单卡显存压力 |
+| **通信开销** | 低（同步屏障少但 idle 高） | 256 GPU 时 weight broadcast + gradient sync 成为瓶颈 | 扩展性在极端规模下降 |
+| **调参复杂度** | 低（只需调 batch size） | 中（需调 max_batch_size + timeout_ms + sync_interval + placement） | 论文 §4.3 提供了 ablation 指导 |
+| **部署约束** | 所有 GPU 同质 | 可异构：Sim 用 CPU 密集型实例，Gen 用高显存 GPU | 云部署可优化成本 |
 
-**工程含义**：
-- **控制频率**：异步框架下，Generator 推理频率由动态调度器控制，不再固定为每 N 步一次
-- **模块边界**：Sim/Gen/Train 三分组之间通过异步队列通信，边界清晰，可独立扩展
-- **部署约束**：CPU-bound 仿真（LIBERO/Meta-World）可省略 Simulator 专用 GPU；GPU-bound 仿真（ManiSkill/RoboCasa）必须用 Hybrid 模式隔离
+**工程含义**：RL-VLA³ 把 VLA RL 训练从"算法问题"变成了"系统调度问题"。核心 trade-off 是动态批调度器的两个超参——max_batch_size 太大 → 延迟高；太小 → Generator 利用率低。论文 Figure 8 的 ablation 显示存在一个"甜蜜点"（sweet spot），需要根据具体环境调优。
 
 ## 5. 数据与评测 (Data & Eval)
 
-**仿真环境**（4 个，覆盖不同计算特征）：
+### 仿真环境（4 种，覆盖不同计算特征）
 
-| 环境 | 计算特征 | 渲染方式 | GPU 依赖 |
-|------|----------|----------|----------|
-| LIBERO | CPU-bound MuJoCo | 简单渲染 | 低 |
-| Meta-World | CPU-bound MuJoCo | 简单渲染 | 低 |
-| ManiSkill | GPU 高度并行 | 光线追踪 | 高 |
-| RoboCasa | CPU+GPU 混合 | 照片级渲染 | 中高 |
+| 环境 | 计算特征 | 物理引擎 | GPU/CPU 依赖 |
+|------|---------|---------|-------------|
+| **LIBERO** | 轻量桌面操作 | MuJoCo (CPU) | CPU-bound，无需 GPU |
+| **ManiSkill** | 高并行抓取 | GPU-accelerated | GPU-bound，高度并行 |
+| **Meta-World** | 中等复杂度操作 | MuJoCo (CPU) | CPU-bound |
+| **RoboCasa** | 重度光追仿真 | Robosuite | CPU+GPU 混合，不稳定 |
 
-**VLA 模型**（4 个，覆盖不同架构）：
-- GR00T N1.5（扩散架构）
-- π0 / π0.5（扩散架构）
-- OpenVLA-OFT（自回归，action chunk 预测）
+### VLA 骨干模型（4 种）
 
-**RL 算法**：PPO（近端策略优化）+ GRPO（组相对策略优化）
+| 模型 | 类型 | 动作输出 |
+|------|------|---------|
+| **π₀** | Diffusion-based | 单步动作 |
+| **π₀.₅** | Diffusion-based | 单步动作 |
+| **GR00T N1.5** | Diffusion-based | 单步动作 |
+| **OpenVLA-OFT** | Autoregressive | Action chunks（多步） |
 
-**基线**：RLinf 同步管线（Colocated 和 Hybrid 两种部署模式）
+### RL 算法
 
-**评测指标**：
-- 吞吐量：单位时间环境状态转移数（等效于单位时间 action 推理步数）
-- 训练性能：有限步数内的成功率曲线
-- 扩展性：8-256 GPU 的吞吐量缩放曲线
+- **PPO**（Proximal Policy Optimization）：经典 on-policy 方法
+- **GRPO**（Group Relative Policy Optimization）：GoGrPO 系列使用的 group-relative 方法
+
+### 评测指标
+
+- **吞吐量**：单位时间内的环境状态转换数（核心系统指标）
+- **成功率曲线**：随环境步数变化的任务成功率（验证样本效率不变）
+- **扩展性**：8 → 256 GPU 的吞吐缩放效率
 
 ## 6. 能力与失败模式 (Capabilities & Failure Modes)
 
-**能做什么**：
-- 在 4 种仿真环境 × 4 种 VLA 模型 × 2 种 RL 算法的 32 种组合中，**全部**取得吞吐量提升
-- 8-24 GPU 范围内近线性扩展
-- 保持与同步基线相同的样本效率（不因为异步而牺牲训练质量）
+### 能做什么 ✅
 
-**不能做什么 / 局限**：
-- **256 GPU 扩展效率下降**：权重广播和梯度同步的通信开销成为瓶颈（论文 §4.2 明确承认）
-- **ManiSkill Colocated 模式下的边缘情况**：高度并行的 GPU 仿真 + 模型推理交替执行时，异步反而引入频繁的上下文切换开销（Hybrid 模式可解决）
-- **异步梯度陈旧度未量化**：论文没有分析异步训练下 Trainer 使用的梯度相对于当前策略的陈旧程度（stale gradient problem），这在大规模异步 RL 中是一个已知的理论问题
-- **动态批处理超参敏感**：Figure 8 显示 max_batch_size 和 max_wait_latency 的组合对吞吐量的影响很大，需要针对每个环境-模型组合手动调参
+- **大幅提升 VLA RL 训练吞吐**：在 4 种仿真环境 × 4 种 VLA 骨干 × 2 种 RL 算法的所有组合上均优于同步基线
+- **保持样本效率**：异步执行不破坏策略更新的数学正确性（成功率曲线对齐，Figure 6）
+- **灵活部署**：支持 Colocated / Hybrid / Disaggregated 三种 placement 策略
+- **大规模扩展**：8 → 24 GPU 近线性扩展，256 GPU 仍有优势
+
+### 不能做什么 ❌
+
+- **256 GPU 以上扩展性不足**：通信开销（weight broadcast + gradient sync）导致亚线性退化（Figure 7）
+- **Colocated + ManiSkill 的特殊情况**：ManiSkill 本身高度 GPU 并行，Colocated 模式下强制异步反而引入高频上下文切换开销（论文 §4.2 明确承认）
+- **不解决 RL 算法本身的问题**：reward design、exploration、credit assignment 等算法层面挑战不在本文范围内
+- **真实机器人部署**：所有实验在仿真环境进行，未涉及 real-world sim-to-real transfer
 
 ### 6.1 隐含假设 (Hidden Assumptions)
 
-1. **仿真延迟波动是主要瓶颈**：论文假设 VLA 训练的最大瓶颈是仿真器的不可预测延迟。但如果推理本身成为瓶颈（如超大 VLA 模型），异步收益可能缩小。
-2. **异步梯度不影响收敛**：论文通过实验验证了成功率曲线重合，但没有从理论上分析异步梯度陈旧度对 PPO/GRPO 收敛性的影响边界。
-3. **GPU 资源充足**：框架设计假设可以分配专用 GPU 给 Sim/Gen/Train。在资源受限场景（如单卡 8 GPU），Hybrid 模式的隔离优势无法发挥。
-4. **仿真器可并行化**：环境分片策略假设仿真器支持批量并行。如果某个仿真器本质上是单线程的，分片收益有限。
+1. **Simulator 延迟是可变的但可预测的**：动态批调度器假设 latency 分布有界，timeout_ms 能覆盖大多数情况。如果模拟器出现极端长尾延迟（如物理引擎卡死），调度器可能超时触发小批推理
+2. **异步更新不会引入过大的 policy stale 问题**：Trainer 和 Generator 使用不同 version 的 model 时，梯度可能基于旧策略。论文通过 sync_interval 控制，但未定量分析 stale 程度对收敛的影响
+3. **单节点 VLA 训练场景**：实验最大 256 GPU，未涉及跨节点多机训练的网络延迟和容错问题
+4. **单臂桌面操作**：所有仿真环境都是单臂操作任务，未验证双臂、移动操作、人形机器人等更复杂场景
 
 ## 7. 与相关工作对比 (Comparison)
 
-| 框架 | 异步程度 | 专为 VLA 设计 | 动态批处理 | 环境分片 | 扩展规模 |
-|------|----------|--------------|-----------|---------|---------|
-| RLinf (2025) | 同步 | 是 | 否 | 否 | 单节点 |
-| SimpleVLA (2025) | 同步 | 是 | 否 | 否 | 未报道 |
-| VeRL (LLM) | 异步 | 否 | 是 | 否 | 大规模 |
-| AReaL (LLM) | 异步 | 否 | 是 | 否 | 大规模 |
-| **RL-VLA³ (2026)** | **完全异步** | **是** | **是** | **是** | **8-256 GPU** |
+| 框架 | 异步程度 | 面向 VLA | 核心创新 | 局限 |
+|------|---------|---------|---------|------|
+| **RLinf** (Zang et al., 2025) | 同步 rollout + 同步 training | ✅ 是 | 首个 VLA RL 框架 | 同步屏障严重限制吞吐 |
+| **SimpleVLA** (Li et al., 2025a) | 同步 | ✅ 是 | 简化 VLA RL 接口 | 继承 LLM RL 的同步设计 |
+| **VeRL** (Sheng et al., 2025b) | 异步（LLM 专用） | ❌ 否 | ZERRO，vLLM 优化 | 环境是 reward model，非物理仿真 |
+| **AReaL** (Fu et al., 2025) | 异步（LLM 专用） | ❌ 否 | 轨迹级异步 | 同上，不适用于 VLA |
+| **RL-VLA³** (本文) | **全异步** | ✅ 是 | 动态批调度 + 环境分片 + 全异步 | 256+ GPU 扩展性待改进 |
 
-**面试 Tip**：当被问到"RL-VLA³ 和 LLM 的异步 RL 框架（如 VeRL）有什么区别"时，回答要点是：**VLA 的环境是物理仿真器而非 GPU 奖励模型，延迟不可预测且计算特征多样（CPU/GPU 混合），因此需要环境分片和动态批处理来吸收仿真延迟波动——这是 LLM RL 框架不需要解决的问题。**
+> **面试 Tip**：当被问到"RL-VLA³ 和 VeRL/AReaL 的区别"时，核心答案是：LLM RL 的环境是 GPU 上稳定的 reward model，延迟可预测；VLA RL 的环境是物理模拟器，延迟高度不可预测。RL-VLA³ 的动态批调度和环境分片是专门为吸收模拟器延迟波动而设计的，不能直接从 LLM RL 框架迁移。
 
 ## 8. 精讀建議 (Reading Guide)
 
-- **值得精讀原文的人**：
-  1. 构建 VLA 在线 RL 训练管线的工程师——异步架构和动态批处理可直接复用
-  2. 研究多 GPU 规模化具身智能训练的研究者——扩展性分析和 256 GPU 瓶颈有参考价值
-  3. 对比同步/异步 RL 框架系统设计的系统方向研究者
+**值得精讀原文的人**：
+- 正在搭建或优化 VLA 在线 RL 训练系统的工程师——§3.2 和 §3.3 的异步机制设计可直接指导系统架构
+- 研究具身智能基础设施的研究者——本文首次系统分析了 VLA RL 训练的系统级瓶颈
+- 需要评估大规模 VLA 训练成本/效率的团队——§4.2 的吞吐数据和 §4.3 的 ablation 提供调参依据
 
-- **建議章節路徑**：先讀 §3（设计原理，含架构图和伪代码）→ 再看 §4.2 Benchmark（吞吐量/扩展性/训练性能）→ 可跳 §2（相关工作，除非你做文献综述）
+**建議章節路徑**：
+1. 先读 §3.1（Overall Framework）→ 理解三资源组解耦的整体架构
+2. 再看 §3.2（Asynchronous Rollout）→ 动态批调度和环境分片是核心创新
+3. 然后看 §3.3（Asynchronous Training）→ 理解训练侧的异步设计
+4. 可跳 §2（Related Work）→ 除非你需要引用对比
 
-- **不值得精讀的理由**：如果你不做在线 RL 后训练（只做 SFT 或离线 RL），或者你的训练规模在单卡级别，读摘要和快速判断表即可。
+**不值得精讀的理由**：
+- 如果你不做 VLA 训练基础设施（只关心模型架构或算法），读摘要和 §1 即可
+- 如果你关注的是真实机器人部署而非仿真训练，本文的实验设置距离 real-world 还有距离
+- 如果你已经熟悉 VeRL/AReaL 等 LLM RL 框架，§2.2 的对比分析可以略读
 
 ---
-
 [← Back to Theory](./README.md)
 
 **关键引用**：
-- 论文: https://arxiv.org/abs/2602.05765 (COLM 2026)
-- 代码: https://github.com/Haoran0301/RL-VLA3
-- 基线框架: RLinf (Zang et al., 2025)
-- 仿真环境: ManiSkill, LIBERO, Meta-World, RoboCasa
+- [论文 arXiv](https://arxiv.org/abs/2602.05765)
+- [代码 GitHub](https://github.com/Haoran0301/RL-VLA3)
+- [RLinf 上游框架](https://github.com/RLinf/RLinf)
+- [RLinf 文档](https://rlinf.readthedocs.io/en/latest/)
