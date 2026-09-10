@@ -374,3 +374,5 @@ FastUMI Pro 是从学术界 FastUMI 升级而来的工业级、无本体数据�
 | 2026-08-24 | 🔧 | Fourier | 傅利叶智能于2026年8月24日在WRC期间发布脑机数采技术、EGO数据采集头环Lume R1、光学六维力传感器、准直驱动行星关节模组及‘半人马’轮足复合机器人。 | 拓展其在感知、交互与运动控制层面的技术矩阵，支撑多场景具身智能应用开发。 | [来源](http://finance.sina.com.cn/wm/2026-08-24/doc-inipkzxw2865816.shtml) |
 | 2026-08-24 | ⚡ | Xiaomi Robotics | 原字节跳动机器人团队负责人孔涛加入小米负责机器人基座模型研发，并牵头设立‘具身智能与应用部’；原小爱同学负责人王刚已调任机器人业务线。 | 显著增强小米在具身智能算法、多模态感知与人机交互方向的核心研发能力。 | [来源](http://finance.sina.com.cn/wm/2026-08-24/doc-inipmnpk9993635.shtml) |
 | 2026-08-25 | ⚡ | Astribot | 天眼查及财经信源确认星尘智能已于2026年7月完成股份制改造，并于8月25日前完成B轮融资，金额超10亿元人民币。 | 为后续IPO铺平制度路径，显著增强资本实力以支撑T1量产、AOS生态建设及商业场景扩张。 | [来源](http://www.cb.com.cn/index/show/jr/cv/cv135268782428) |
+| 2026-09-09 | 🔧 | Unitree | 宇树科技（Unitree）股价自 IPO 后下跌 53%，市值回调。 | 反映资本市场对高估值机器人初创公司的重新评估，或受宏观/行业情绪影响。 | [来源](https://www.therobotreport.com/unitree-shares-down-53-from-ipo-debut/) |
+| 2026-09-09 | 🔧 | Agibot | 智元机器人（AGIBOT）将在 RoboBusiness 分享人形机器人从实验室到现实世界的规模化方案。 | 展示中国头部人形机器人公司在商业化落地和开发者生态建设方面的进展。 | [来源](https://www.therobotreport.com/agibot-share-plans-scale-humanoids-from-lab-to-real-world-at-robobusiness/) |

@@ -194,3 +194,4 @@ DYNA 的公开指标设计非常“部署导向”，值得当作你评估任何
 | 2026-08-19 | 🔧 | Tesla Optimus | Model S/X产线于2026年8月19日完成为期46天的物理拆解与产线改造，正式为Optimus V3/V4产线腾出空间。 | 证实产线切换已进入实质执行阶段，具备可验证的工程节点和时间刻度。 | [来源](https://post.smzdm.com/p/awwr49pp/) |
 | 2026-08-19 | ⚡ | Agility Robotics | Agility Robotics于2026年8月19日在加州弗里蒙特开设占地6万平方英尺的AI训练中心，毗邻特斯拉Optimus工厂，用于Digit人形机器人的真实场景AI训练与部署。 | 标志Digit进入规模化真机训练与商业化落地新阶段，强化其与特斯拉生态的地理协同及物理AI基础设施能力。 | [来源](https://www.163.com/dy/article/KSDTQTVH05569K8R.html) |
 | 2026-08-27 | ⚡ | 1X Technologies | 软银正与1X Technologies洽谈以约60亿美元估值收购其多数股权，旨在控股并推进家庭场景软体机器人研发与商业化。 | 若达成，将显著加速1X Technologies产品规模化落地与物理AI技术产业化进程，并可能重塑人形机器人领域资本与产业格局。 | [来源](https://www.163.com/dy/article/L5BAB4UL0556D2C6.html) |
+| 2026-09-07 | 🔧 | Agility Robotics | Agility Robotics 在 SPAC 上市前披露 S-4 文件，显示 2025 年营收 180 万美元，运营亏损 1.4 亿美元。 | 揭示人形机器人初创公司目前的财务健康状况及商业化早期阶段的挑战。 | [来源](https://www.therobotreport.com/agility-robotics-reports-18m-revenue-ahead-of-humanoid-spac/) |
