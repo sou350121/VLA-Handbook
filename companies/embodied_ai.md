@@ -58,3 +58,4 @@
 | 2026-07-17 | ⚡ | MagicLab | 2026年7月17日，MagicLab在WAIC2026上海开幕当天全球首发MagicBot X1（全尺寸人形机器人）、MagicBot D1（工业轮式人形机器人）、MagicDog T1（轻工业四足机器人），并发布通用具身大模型Magic-VLA K02。 | 确立其在具身智能硬件与模型协同研发领域的前沿地位，支撑九大行业场景解决方案落地。 | [来源](http://h5.ifeng.com/c/vivo/v0021OFuxhIvnZB7-_aYCC3TGc3HxQLy5owceeGWdKHMa9Rk__) |
 | 2026-07-17 | 🔧 | MagicLab | 2026年7月17日，MagicLab宣布其工业轮式人形机器人MagicBot D1已在追觅智能制造工厂进入常态化实战验证阶段。 | 标志该机型从实验室走向真实产线闭环验证，加速工业场景商业化进程。 | [来源](http://h5.ifeng.com/c/vivo/v0021OFuxhIvnZB7-_aYCC3TGc3HxQLy5owceeGWdKHMa9Rk__) |
 | 2026-07-22 | ⚡ | MagicLab | 魔法原子（MagicLab）于2026年7月22日与阿里巴巴旗下跨境零售平台速卖通达成独家战略合作，正式加入‘速卖通品牌出海计划’。 | 标志着MagicLab加速国际化布局，依托速卖通全球渠道拓展海外市场。 | [来源](https://www.tianyancha.com/steam/3306585497-eb2f) |
+| 2026-09-10 | ⚡ | Skild AI | Skild AI 利用 NVIDIA 的物理 AI 技术，实现让机器人通过单个视频学习新任务。 | 展示了大模型与硬件厂商合作在降低机器人编程门槛方面的突破，加速具身智能技术迭代。 | [来源](https://blogs.nvidia.com/blog/skild-ai-s1-physical-ai/) |
