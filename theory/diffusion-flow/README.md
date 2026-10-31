@@ -66,7 +66,7 @@
 
 > 上方保留人工导读与主题分组。本节列出本目录内全部 Git 已追踪 Markdown 文件，包含综述与索引，不含 README。按文件路径排序。
 
-**共 51 份文档。**
+**共 52 份文档。**
 
 - [动作生成范式详解 (Action Representations &amp; Generation)](./action_representations.md)
 - [动作到动作流匹配 (Action-to-Action Flow Matching)](./action_to_action_flow_matching_dissection.md)
@@ -93,6 +93,7 @@
 - [GeCO：时间无条件流匹配用于自适应鲁棒机器人控制 (Generative Control as Optimization: Time Unconditional Flow Matching for Adaptive and Robust Robotic Control)](./generative_control_as_optimization_time_unconditional_flow_m_dissection.md)
 - [Hyper-DP3：频域感知的3D扩散策略轻量化重构 (Frequency-Aware Right-Sizing of 3D Diffusion Policies for Visuomotor Control)](./hyper_dp3_frequency_aware_right_sizing_of_3d_diffusion_polic_dissection.md)
 - [IMLE-VLA：用条件隐式最大似然估计实现单步动作生成 (IMLE-VLA: Fast Single-Step Action Generation for Vision-Language-Action Policies)](./imle_vla_fast_single_step_action_generation_for_vision_langu_dissection.md)
+- [从二值可行性 Oracle 学习安全的 Flow-Matching 机器人策略 (Learning Safe Flow-Matching Robot Policies from Binary Feasibility Oracles)](./learning_safe_flow_matching_robot_policies_from_binary_feasi_dissection.md)
 - [Lie 群 B 样条扩散策略：让扩散策略的轨迹真正平滑 (LieSpline-DP: Lie-Group B-Spline Diffusion Policy for Smooth Robot Manipulation)](./liespline_dp_lie_group_b_spline_diffusion_policy_for_smooth_dissection.md)
 - [LTLf 约束引导的多智能体扩散策略 (LTLDiff: Finite Linear Temporal Logic-Guided Data Generation and Diffusion Policies for Multi-agent Robotic Manipulation)](./ltldiff_finite_linear_temporal_logic_guided_data_generation_dissection.md)
 - [MOSS：面向机器人流匹配策略的模式导向源分布塑造 (Mode-Oriented Source Shaping for Robot Flow Matching Policies)](./moss_mode_oriented_source_shaping_for_robot_flow_matching_po_dissection.md)
