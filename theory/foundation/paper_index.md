@@ -781,6 +781,7 @@
 | RePO-VLA: Recovery-Driven Policy Optimization for Vision-Language-Action Models | [link](https://arxiv.org/abs/2605.09410) | 🎯 tactile \| 🔧 daily 2026-10-28 |
 | Learning to Feel the Future: DreamTacVLA for Contact-Rich Manipulation | [link](https://arxiv.org/abs/2512.23864) | 🎯 tactile \| 🔧 daily 2026-10-28 |
 | Tactus: Tactile & Pose Sensing Glove for Natural Dexterity Data Collection | [link](https://arxiv.org/abs/2610.39076) | 🎯 tactile \| 🔧 daily 2026-10-31 |
+| This Disembodied Hand Is All the Robot You Need | [link](https://spectrum.ieee.org/walking-robotic-hand) | 🎯 tactile \| 📖 daily 2026-11-01 |
 
 ### 其他
 
