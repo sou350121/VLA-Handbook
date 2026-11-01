@@ -96,7 +96,7 @@
 
 > 上方保留人工导读与主题分组。本节列出本目录内全部 Git 已追踪 Markdown 文件，包含综述与索引，不含 README。按文件路径排序。
 
-**共 78 份文档。**
+**共 79 份文档。**
 
 - [分层时空动作分词器：上下文模仿学习的新范式 (HiST-AT: A Hierarchical Spatiotemporal Action Tokenizer for In-Context Imitation Learning)](./a_hierarchical_spatiotemporal_action_tokenizer_for_in_contex_dissection.md)
 - [弹性视觉智能体的架构模式语言 (A Pattern Language for Resilient Visual Agents)](./a_pattern_language_for_resilient_visual_agents_dissection.md)
@@ -129,6 +129,7 @@
 - [GeneralVLA-2：几何感知重建与受控记忆驱动机器人规划 (GeneralVLA-2: Geometry-Aware Reconstruction and Governed Memory for Robot Planning)](./generalvla_2_geometry_aware_reconstruction_and_governed_memo_dissection.md)
 - [AgiBot：ERIQ + FACT + GenieReasoner —— 量化“推理→动作”的传递损耗](./geniereasoner_eriq_fact.md)
 - [HazardArena：评估 VLA 模型的语义安全 (HazardArena: Evaluating Semantic Safety in Vision-Language-Action Models)](./hazardarena_evaluating_semantic_safety_in_vision_language_action_models_dissection.md)
+- [VLA 该多大程度信任自己的推理？逐步引导作为可测量的动作价值函数 (How Much Should a VLA Trust Its Reasoning? Step-Level Guidance as a Measured Action-Value Function)](./how_much_should_a_vla_trust_its_reasoning_step_level_guidanc_dissection.md)
 - [如何用刀削皮：将细粒度操作与人类偏好对齐 (How to Peel with a Knife: Aligning Fine-Grained Manipulation with Human Preference)](./how_to_peel_with_a_knife_aligning_fine_grained_manipulation_dissection.md)
 - [行为克隆策略有多脆弱？通用对抗扰动攻击现代BC策略 (How Vulnerable Is My Learned Policy? Universal Adversarial Perturbation Attacks On Modern Behavior Cloning Policies)](./how_vulnerable_is_my_learned_policy_universal_adversarial_pe_dissection.md)
 - [IAIL：跨机器人行为适配中的意图对齐 (Cross-robot Behavior Adaptation through Intention Alignment)](./iail_cross_robot_behavior_adaptation_through_intention_alignment_2026.md)
