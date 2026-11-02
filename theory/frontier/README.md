@@ -53,7 +53,7 @@
 
 > 上方保留人工导读与主题分组。本节列出本目录内全部 Git 已追踪 Markdown 文件，包含综述与索引，不含 README。按文件路径排序。
 
-**共 96 份文档。**
+**共 97 份文档。**
 
 - [3DROID：可渲染 3D Gaussian 機器人數據集與逐場景可靠性度量 (3DROID: A Renderable 3D Gaussian Dataset with Measured Per-Scene Reliability)](./3droid_a_renderable_3d_gaussian_dataset_with_measured_per_sc_dissection.md)
 - [生物物理線蟲神經環路作為視覺魯棒機器人操作的「任務無關動力學核心」 (A Biophysically Detailed C. elegans Circuit as a Task-Agnostic Dynamical Core for Visually Robust Robot Manipulation)](./a_biophysically_detailed_c_elegans_circuit_as_a_task_agnosti_dissection.md)
@@ -126,6 +126,7 @@
 - [Recova：代理引導的自主機器人操作失敗恢復 (Recova: Agent-Guided Failure Recovery for Autonomous Robotic Manipulation)](./recova_agent_guided_failure_recovery_for_autonomous_robotic_dissection.md)
 - [以预言强化动作策略 (Reinforcing Action Policies by Prophesying)](./reinforcing_action_policies_by_prophesying_dissection.md)
 - [REKI：把记忆注册进 VLA（REKI: Registering Knowledge in VLAs）](./reki_registering_knowledge_in_vlas_dissection.md)
+- [RoboArchitect：自动设计带持久记忆的机器人 Agent Harness（RoboArchitect: Automating the Design of Robotic Agents with Persistent Memory）](./roboarchitect_automating_the_design_of_robotic_agents_with_p_dissection.md)
 - [RoboCousin：构建你自己的双臂操作仿真游乐场 (RoboCousin: Build Your Own Simulation Playground for Robust Bimanual Robotic Manipulation)](./robocousin_build_your_own_simulation_playground_for_robust_b_dissection.md)
 - [RoSHI: 野外便携式全身动捕套装 (RoSHI: A Versatile Robot-oriented Suit for Human Data In-the-Wild)](./roshi_a_versatile_robot_oriented_suit_for_human_data_in_the_dissection.md)
 - [策略性扩展数据：通过偏差感知评估与数据采集学习机器人操作的组合泛化 (Scale Up Strategically: Learning Compositional Generalization via Bias-Aware Evaluation and Data Collection for Robotic Manipulation)](./scale_up_strategically_learning_compositional_generalization_dissection.md)
