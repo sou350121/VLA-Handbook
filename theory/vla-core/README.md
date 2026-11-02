@@ -114,7 +114,7 @@
 
 > 上方保留人工导读与主题分组。本节列出本目录内全部 Git 已追踪 Markdown 文件，包含综述与索引，不含 README。按文件路径排序。
 
-**共 188 份文档。**
+**共 189 份文档。**
 
 - [2D 还是 3D：谁主导 VLA 模型中的显著性？—— 三阶段 Token 剪枝框架与模态显著性感知 (2D or 3D: Who Governs Salience in VLA Models? -- Tri-Stage Token Pruning Framework with Modality Salience Awareness)](./2d_or_3d_who_governs_salience_in_vla_models_tri_stage_token_dissection.md)
 - [3DThinkVLA：通过3D思维引导协同训练赋予VLA模型隐式3D空间推理能力 (3DThinkVLA: Endowing Vision-Language-Action Models with Latent 3D Priors via 3D-Thinking-Guided Co-training)](./3dthinkvla_endowing_vision_language_action_models_with_laten_dissection.md)
@@ -257,6 +257,7 @@
 - [RouterVLA：将烟雾测试转化为异构 VLA 选择的监督信号 (RouterVLA: Turning Smoke Tests into Supervision for Heterogeneous VLA Selection)](./routervla_turning_smoke_tests_into_supervision_for_heterogen_dissection.md)
 - [物理现实锚定的具身基础模型：RynnBrain (RynnBrain: Open Embodied Foundation Models)](./rynnbrain_open_embodied_foundation_models_2026.md)
 - [给冻结 VLA 装一圈「安全带」：SafeLoop 的风险预测 + 回滚恢复 (SafeLoop: Risk-Aware Rollback for Vision-Language-Action Manipulation)](./safeloop_risk_aware_rollback_for_vision_language_action_mani_dissection.md)
+- [SaiVLA-JEPA：在 JEPA 条件化的 VLA 控制中检验未来隐表示预测 (SaiVLA-JEPA: Evaluating Future Latent Prediction in JEPA-Conditioned VLA Control)](./saivla_jepa_evaluating_future_latent_prediction_in_jepa_cond_dissection.md)
 - [SEAM：动作块平滑执行 (Smooth Execution of Action-Chunked Motion for Vision-Language-Action Policies)](./seam_smooth_execution_of_action_chunked_motion_for_vision_la_dissection.md)
 - [自適應 VLA：讓部署後的策略用「自己的失敗軌跡」逐步補償硬體漂移 (Self-Adaptive VLA for Robust Robot Deployment)](./self_adaptive_vla_for_robust_robot_deployment_dissection.md)
 - [把幾何接進動作專家：sensVLA 的空間接地 VLA 架構 (sensVLA: Spatially-Grounded Vision-Language-Action Model for Autonomous Wheel Loader)](./sensvla_spatially_grounded_vision_language_action_model_for_dissection.md)
