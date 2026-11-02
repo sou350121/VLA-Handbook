@@ -642,6 +642,7 @@
 | HuGe: Scaling Humanoid Generalist Vision-Language-Action Models with Egocentric Experience | [link](https://arxiv.org/abs/2610.34186) | 🔧 daily 2026-10-27 |
 | RoboDuo: Attempt, Check and Atomic Recovery through Code for Vision-Language-Action Models | [link](https://arxiv.org/abs/2610.34108) | 🔧 daily 2026-10-27 |
 | EXE: Egocentric Cross-Embodiment Pretraining via Factorized Latent Actions for VLA Models | [link](https://arxiv.org/abs/2610.33685) | 🔧 daily 2026-10-27 |
+| STAR: Steering Action Representations during Inference | [link](https://arxiv.org/abs/2610.41009) | 🔧 daily 2026-11-02 |
 
 ### 動作生成
 
@@ -704,6 +705,8 @@
 | Adapting Video Models for Robot Control via Motion-guided Asymmetric Prediction | [link](https://arxiv.org/abs/2610.36624) | 🔧 daily 2026-10-29 |
 | Learning Safe Flow Matching Robot Policies from Binary Feasibility Oracles | [link](https://arxiv.org/abs/2610.40075) | 🔧 daily 2026-10-31 |
 | What Actually Matters? A Paired Evaluation of Inference Settings for $\pi_{0.5}$ on BEHAVIOR-1K | [link](https://arxiv.org/abs/2610.37917) | 🔧 daily 2026-10-31 |
+| $\pi$-StepNFT: Wider Space Needs Finer Steps in Online RL for Flow-based VLAs | [link](https://arxiv.org/abs/2603.02083) | [RL] 🔧 daily 2026-11-02 |
+| Nexus-VLA: Bridging Human and Robot Experiences via a Shared Hierarchical Semantic Latent Space | [link](https://arxiv.org/abs/2610.42021) | 🔧 daily 2026-11-02 |
 
 ### 數據
 
@@ -782,6 +785,7 @@
 | Learning to Feel the Future: DreamTacVLA for Contact-Rich Manipulation | [link](https://arxiv.org/abs/2512.23864) | 🎯 tactile \| 🔧 daily 2026-10-28 |
 | Tactus: Tactile & Pose Sensing Glove for Natural Dexterity Data Collection | [link](https://arxiv.org/abs/2610.39076) | 🎯 tactile \| 🔧 daily 2026-10-31 |
 | This Disembodied Hand Is All the Robot You Need | [link](https://spectrum.ieee.org/walking-robotic-hand) | 🎯 tactile \| 📖 daily 2026-11-01 |
+| TacClaw-Infinity: A Large-Scale Vision-Tactile-Language-Action Dataset for Dexterous Manipulation | [link](https://arxiv.org/abs/2610.20320) | 🎯 tactile \| 🔧 daily 2026-11-02 |
 
 ### 其他
 
