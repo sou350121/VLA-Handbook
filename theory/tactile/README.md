@@ -74,7 +74,7 @@
 
 > 上方保留人工导读与主题分组。本节列出本目录内全部 Git 已追踪 Markdown 文件，包含综述与索引，不含 README。按文件路径排序。
 
-**共 68 份文档。**
+**共 69 份文档。**
 
 - [主动触觉探索用于刚体姿态与形状估计 (Active Tactile Exploration for Rigid Body Pose and Shape Estimation)](./active_tactile_exploration_for_rigid_body_pose_and_shape_est_dissection.md)
 - [Active Tactile Exploration：仅触觉的刚体位姿+形状估计 (Active Tactile Exploration for Rigid Body Pose and Shape Estimation)](./active_tactile_exploration_rigid_body_pose_shape_eig_2026.md)
@@ -82,6 +82,7 @@
 - [Bench2Dex：跨 12 种灵巧手的双臂视觉-触觉操作基准 (Bench2Dex: Benchmarking Visuo-Tactile Bimanual Dexterous Manipulation Across Dexterous Hands)](./bench2dex_benchmarking_visuo_tactile_bimanual_dexterous_mani_dissection.md)
 - [DEFT-VLA：面向接触丰富操作的分阶段力觉专精 (DEFT-VLA: Stage-Localized Force Specialization for Contact-Rich Robotic Manipulation)](./deft_vla_stage_localized_force_specialization_for_contact_ri_dissection.md)
 - [人類觸覺澆灌機器人世界模型 (DexTouch-WM: Learning Action-Conditioned Tactile World Models from Human Touch for Dexterous Robot Manipulation)](./dextouch_wm_learning_action_conditioned_tactile_world_models_dissection.md)
+- [EquiContact：分层 SE(3) 视觉到力等变框架拆解 (EquiContact: A Hierarchical SE(3) Vision-to-Force Equivariant Framework for Spatially Generalizable Contact-rich Tasks)](./equicontact_a_hierarchical_se_vision_to_force_equivariant_fr_dissection.md)
 - [工作空间级等变视觉-触觉扩散策略：VISTA (Equivariant Visual-Tactile Diffusion Policy for Contact-Rich Manipulation)](./equivariant_visual_tactile_diffusion_policy_for_contact_rich_dissection.md)
 - [ETac：轻量高效的触觉仿真框架，赋能灵巧操作学习 (ETac: A Lightweight and Efficient Tactile Simulation Framework for Learning Dexterous Manipulation)](./etac_a_lightweight_and_efficient_tactile_simulation_framewor_dissection.md)
 - [Event-VLA：动作条件化事件融合实现光照鲁棒 VLA (Event-VLA: Action-Conditioned Event Fusion for Robust Vision-Language-Action Model)](./event_vla_action_conditioned_event_fusion_for_robust_vision_dissection.md)

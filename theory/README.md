@@ -391,7 +391,7 @@ New articles added daily. Explore with sparklines and trends at [VLA Deep Dive](
 
 > 本节由固定程序生成。统计 Git 已追踪的十个主题目录内 Markdown 文件，包含综述与索引，不含各目录 README；数量不代表内容质量。
 
-**共 798 份文档，10 个主题。**
+**共 799 份文档，10 个主题。**
 
 | 主题 | 文档数 | 完整目录 |
 |---|---:|---|
@@ -399,7 +399,7 @@ New articles added daily. Explore with sparklines and trends at [VLA Deep Dive](
 | foundation | 89 | [浏览全部](./foundation/README.md#theory-complete-index) |
 | planning | 79 | [浏览全部](./planning/README.md#theory-complete-index) |
 | world-model | 106 | [浏览全部](./world-model/README.md#theory-complete-index) |
-| tactile | 68 | [浏览全部](./tactile/README.md#theory-complete-index) |
+| tactile | 69 | [浏览全部](./tactile/README.md#theory-complete-index) |
 | deployment | 50 | [浏览全部](./deployment/README.md#theory-complete-index) |
 | rl | 44 | [浏览全部](./rl/README.md#theory-complete-index) |
 | perception | 24 | [浏览全部](./perception/README.md#theory-complete-index) |
