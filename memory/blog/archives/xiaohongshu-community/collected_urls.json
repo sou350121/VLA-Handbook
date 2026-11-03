@@ -186,10 +186,18 @@
     "https://www.xiaohongshu.com/explore/6a10fafc00000000080000f4",
     "https://www.xiaohongshu.com/explore/6adcca6a0000000033037ed3",
     "https://www.xiaohongshu.com/explore/69043c63000000000300d4dd",
-    "https://www.xiaohongshu.com/explore/6a40e855000000001102f624"
+    "https://www.xiaohongshu.com/explore/6a40e855000000001102f624",
+    "https://www.xiaohongshu.com/explore/6ae176710000000023007310",
+    "https://www.xiaohongshu.com/explore/6a3825140000000022009c85",
+    "https://www.xiaohongshu.com/explore/6abbb67c0000000014000cee",
+    "https://www.xiaohongshu.com/explore/68c0626c000000001b01d857",
+    "https://www.xiaohongshu.com/explore/6970af4c000000000a028aa8",
+    "https://www.xiaohongshu.com/explore/68f4d284000000000503a8ce",
+    "https://www.xiaohongshu.com/explore/685807fe000000001001398c",
+    "https://www.xiaohongshu.com/explore/6a96752a0000000028034c58"
   ],
-  "count": 187,
-  "last_updated": "2026-10-25",
+  "count": 195,
+  "last_updated": "2026-11-03",
   "runs": [
     {
       "date": "2026-04-17",
@@ -480,6 +488,41 @@
         "6a40e855000000001102f624"
       ],
       "report": "2026-10-25-codex-round4-20.md"
+    },
+    {
+      "date": "2026-11-03",
+      "run_id": "xhs-vla-20261101",
+      "kind": "weekly continuation, bounded partial collection",
+      "keywords": [
+        "VLA 复现 踩坑",
+        "pi0.5 复现",
+        "LeRobot 训练 踩坑",
+        "OpenVLA OFT 部署",
+        "RDT 微调"
+      ],
+      "last_search_started_but_unread": "RoboTwin 复现",
+      "search_result_slots": 25,
+      "details_read": 9,
+      "new_added": 8,
+      "experiment_or_project": 7,
+      "critique_or_discussion": 1,
+      "excluded_after_detail": 1,
+      "filtered_before_detail": 7,
+      "prior_excluded_now_selected": [],
+      "series_total_new": 68,
+      "target": 30,
+      "status": "partial_browser_tool_limit",
+      "new_note_ids": [
+        "6ae176710000000023007310",
+        "6a3825140000000022009c85",
+        "6abbb67c0000000014000cee",
+        "68c0626c000000001b01d857",
+        "6970af4c000000000a028aa8",
+        "68f4d284000000000503a8ce",
+        "685807fe000000001001398c",
+        "6a96752a0000000028034c58"
+      ],
+      "report": "2026-11-03-codex-weekly.md"
     }
   ]
 }
