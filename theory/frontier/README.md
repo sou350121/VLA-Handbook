@@ -53,7 +53,7 @@
 
 > 上方保留人工导读与主题分组。本节列出本目录内全部 Git 已追踪 Markdown 文件，包含综述与索引，不含 README。按文件路径排序。
 
-**共 97 份文档。**
+**共 98 份文档。**
 
 - [3DROID：可渲染 3D Gaussian 機器人數據集與逐場景可靠性度量 (3DROID: A Renderable 3D Gaussian Dataset with Measured Per-Scene Reliability)](./3droid_a_renderable_3d_gaussian_dataset_with_measured_per_sc_dissection.md)
 - [生物物理線蟲神經環路作為視覺魯棒機器人操作的「任務無關動力學核心」 (A Biophysically Detailed C. elegans Circuit as a Task-Agnostic Dynamical Core for Visually Robust Robot Manipulation)](./a_biophysically_detailed_c_elegans_circuit_as_a_task_agnosti_dissection.md)
@@ -142,6 +142,7 @@
 - [UniMem：把视觉与文本记忆统一进 VLA 的非马尔可夫任务框架 (UniMem: Unifying Visual and Textual Memory in VLAs for Non-Markovian Tasks)](./unimem_unifying_visual_and_textual_memory_in_vlas_for_non_ma_dissection.md)
 - [用「可实现转移」打通预测、记忆与动作：UniMPA 深度拆解 (UniMPA: A Unified Memory-Prediction-Action Model via Action-Grounded Transition Modeling)](./unimpa_a_unified_memory_prediction_action_model_via_action_g_dissection.md)
 - [USER：面向真实世界在线策略学习的统一可扩展系统 (USER: A Unified and Extensible System for Real-World Online Policy Learning in Embodied AI)](./user_a_unified_and_extensible_system_for_real_world_online_p_dissection.md)
+- [从野生第一视角视频学导航 VLA：VEGA 的几何轨迹监督 (VEGA: Learning Navigation VLAs from In-the-Wild Egocentric Video with Geometric Trajectory Supervision)](./vega_learning_navigation_vlas_from_in_the_wild_egocentric_vi_dissection.md)
 - [从视频到形式化规范：Video2STL 如何把「看会的动作」变成可训练的信号 (Video2STL: Grounding VLM-Generated Temporal Specifications for Robot Learning)](./video2stl_grounding_vlm_generated_temporal_specifications_fo_dissection.md)
 - [Vision-Language-Delta-Action：把紧凑 Delta 作为可操作的状态转移接口 (Vision-Language-Delta-Action: Learning Compact Deltas as Actionable Transition Interfaces for Robotic Manipulation)](./vision_language_delta_action_learning_compact_deltas_as_acti_dissection.md)
 - [显式动作空间接地：让预训练 VLM 原生成为机械臂动作模型 (VLMs are Native Action Models: Unleashing the Manipulation Capabilities of VLMs with Explicit Action-Space Grounding)](./vlms_are_native_action_models_unleashing_the_manipulation_ca_dissection.md)
