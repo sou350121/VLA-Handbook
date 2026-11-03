@@ -96,7 +96,7 @@
 
 > 上方保留人工导读与主题分组。本节列出本目录内全部 Git 已追踪 Markdown 文件，包含综述与索引，不含 README。按文件路径排序。
 
-**共 89 份文档。**
+**共 90 份文档。**
 
 - [动作-效应记忆预训练用于机器人操作 (Action-Effect Memory Pretraining for Robot Manipulation)](./action_effect_memory_pretraining_for_robot_manipulation_dissection.md)
 - [动作 QFormer：动作监督下的结构化表征塑造 (Action QFormer: Structured Representation Shaping under Action Supervision in Vision-Language-Action Models)](./action_qformer_structured_representation_shaping_under_actio_dissection.md)
@@ -168,6 +168,7 @@
 - [RoboTok：互联网规模的人类演示检索与灵巧操作学习 (RoboTok: An Internet-Scale Data Engine for Human Demonstration Retrieval and Dexterous Manipulation Learning)](./robotok_an_internet_scale_data_engine_for_human_demonstratio_dissection.md)
 - [RoboTTT：通过测试时训练将 VLA 上下文扩展至 8K 时间步 (RoboTTT: Context Scaling for Robot Policies)](./robottt_context_scaling_for_robot_policies_dissection.md)
 - [RoboWorld：面向通用机器人策略评估的快速可靠神经仿真器 (RoboWorld: Fast and Reliable Neural Simulators for Generalist Robot Policy Evaluation)](./roboworld_fast_and_reliable_neural_simulators_for_generalist_dissection.md)
+- [SACQ：面向超低比特 VLA 的结构感知码本量化 (SACQ: Structure-Aware Codebook Quantization for Ultra-Low-Bit Vision-Language-Action Models)](./sacq_structure_aware_codebook_quantization_for_ultra_low_bit_dissection.md)
 - [从 1,500 小时演示到在线纠正：双臂家务操作规模化 (Scaling Bimanual Household Manipulation from 1,500 hours of Demonstrations to On-Policy Corrections)](./scaling_bimanual_household_manipulation_from_1500_hours_of_d_dissection.md)
 - [自监督学习 (Self-Supervised Learning)](./self_supervised_learning.md)
 - [Shallow-π：Flow-based VLA 的层深蒸馏 (Shallow-π: Knowledge Distillation for Flow-based VLAs)](./shallow_pi_knowledge_distillation_flow_vla_2026.md)
