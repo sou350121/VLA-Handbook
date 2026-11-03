@@ -90,7 +90,7 @@
 
 > 上方保留人工导读与主题分组。本节列出本目录内全部 Git 已追踪 Markdown 文件，包含综述与索引，不含 README。按文件路径排序。
 
-**共 106 份文档。**
+**共 107 份文档。**
 
 - [AcceRL：面向 VLA 的分布式异步强化学习与世界模型框架 (AcceRL: A Distributed Asynchronous Reinforcement Learning and World Model Framework for Vision-Language-Action Models)](./accerl_a_distributed_asynchronous_reinforcement_learning_and_dissection.md)
 - [AeroAct: 动作中心世界-动作模型用于语言条件四旋翼飞行 (AeroAct: Action-Centered World-Action Models for Language-Conditioned Quadrotor Flight)](./aeroact_action_centered_world_action_models_for_language_con_dissection.md)
@@ -186,6 +186,7 @@
 - [用人类玩耍视频在测试时转向世界-动作模型（WAM-TTT: Steering World-Action Models by Watching Human Play at Test Time）](./wam_ttt_steering_world_action_models_by_watching_human_play_dissection.md)
 - [Wanderland：开放世界具身 AI 的几何 grounding 仿真平台 (Wanderland: Geometrically Grounded Simulation for Open-World Embodied AI)](./wanderland_geometrically_grounded_simulation_for_open_world_dissection.md)
 - [Wh0: 用生成式世界模型合成第一人称手部操作数据 (Wh0: Generative World Models as Scalable Sources of Egocentric Human Hand Manipulation Data)](./wh0_generative_world_models_as_scalable_sources_of_egocentri_dissection.md)
+- [当仿真器而非策略失败：审计仿真机器人基准中的接触伪影 (When the Simulator Fails, Not the Policy: Auditing Contact Artifacts in Simulated Robot Benchmarks)](./when_the_simulator_fails_not_the_policy_auditing_contact_art_dissection.md)
 - [WISE：世界模型引导的想象调度，用于高效 VLA 后训练 (World-model-guided Imagination Scheduling for Efficient Post-training of Vision-Language-Action Models)](./wise_world_model_guided_imagination_scheduling_for_efficient_dissection.md)
 - [将世界模型想象力蒸馏进 VLM：面向动态空间推理的训练框架 (World2VLM: Distilling World Model Imagination into VLMs for Dynamic Spatial Reasoning)](./world2vlm_distilling_world_model_imagination_into_vlms_for_d_dissection.md)
 - [世界动作智能体：让 VLM 在「世界动作预演」中直接驾驶机器人 (World Action Agent: Harnessing VLMs for Robot Manipulation via World Action Rehearsal)](./world_action_agent_harnessing_vlms_for_robot_manipulation_vi_dissection.md)
