@@ -273,3 +273,5 @@
 | 2026-10-22 | Tesla Optimus | product | 特斯拉在2026年第三季度10-Q中披露，研发费用同比增长主要源于SI及Optimus等项目成本增加，并表示正为Optimus的大规模生产做筹备和投资。 | 🔧 | news | https://www.sec.gov/Archives/edgar/data/1318605/000162828026066775/tsla-20260930.htm |
 | 2026-10-29 | OmniGibson | sim | v3.9.4 released |  | github_release | https://github.com/StanfordVL/BEHAVIOR-1K/releases/tag/v3.9.4 |
 | 2026-10-29 | NVIDIA Robotics | product | NVIDIA 发布 Isaac Lab 3.0，这是一个轻量、模块化的机器人策略训练与部署框架，新增 Newton 物理、可切换后端、渲染选项、集群级并行训练、实验性 RL 后训练及 LEAPP 部署导出。 | 🔧 | news | https://forums.developer.nvidia.com/t/nvidia-isaac-lab-3-0-now-available/387360 |
+| 2026-10-29 | NVIDIA Robotics | product | NVIDIA 于 2026 年 10 月 29 日发布 Isaac Lab 3.0，这是一个用于训练和部署机器人策略的轻量模块化框架。 | 🔧 | news | https://forums.developer.nvidia.com/t/nvidia-isaac-lab-3-0-now-available/387354 |
+| 2026-11-02 | Xpeng Robotics | product | 小鹏集团在2026武汉国际车展上携全新一代人形机器人IRON与多款车型、飞行汽车一同亮相，展示物理AI场景布局。 | 🔧 | news | https://www.xiaopeng.com/news/company_news/5610.html |
