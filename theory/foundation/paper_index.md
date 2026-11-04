@@ -707,6 +707,10 @@
 | What Actually Matters? A Paired Evaluation of Inference Settings for $\pi_{0.5}$ on BEHAVIOR-1K | [link](https://arxiv.org/abs/2610.37917) | 🔧 daily 2026-10-31 |
 | $\pi$-StepNFT: Wider Space Needs Finer Steps in Online RL for Flow-based VLAs | [link](https://arxiv.org/abs/2603.02083) | [RL] 🔧 daily 2026-11-02 |
 | Nexus-VLA: Bridging Human and Robot Experiences via a Shared Hierarchical Semantic Latent Space | [link](https://arxiv.org/abs/2610.42021) | 🔧 daily 2026-11-02 |
+| Should the Action Expert Train the VLM? Action-Token Supervision and Gradient Routing in Mixture-of-Transformer VLAs | [link](https://arxiv.org/abs/2611.05249) | 🔧 daily 2026-11-04 |
+| Asynchronous Robot Policies | [link](https://arxiv.org/abs/2611.05155) | 🔧 daily 2026-11-04 |
+| Future Representation Distillation for Imagination-Free World Action Models | [link](https://arxiv.org/abs/2611.04527) | [VLA后训] 🔧 daily 2026-11-04 |
+| RAFT: Reasoning-Aligned Fine-Tuning Improves Robustness of VLA Post-Training | [link](https://arxiv.org/abs/2611.04368) | [VLA后训] 🔧 daily 2026-11-04 |
 
 ### 數據
 
@@ -737,6 +741,7 @@
 | RCT: A Robot-Collected Touch-Vision-Language Dataset for Tactile Generalization | [论文](https://arxiv.org/abs/2606.31694) | 🔧 数据采集专题补录 2026-10-25；首发 2026-06-30；公开代码入口已读，未复现 \| repo: https://github.com/faerber-lab/RCT |
 | RoboSTD: Zero-Shot Single-to-Dual Transfer via Sagittal Mirroring for Bimanual Learning | [link](https://arxiv.org/abs/2610.36685) | 🔧 daily 2026-10-28 |
 | UMI-Live for In-The-Wild Bimanual Robotics Data Collection | [link](https://arxiv.org/abs/2610.39385) | 🔧 daily 2026-10-31 |
+| AIRoA-0: Long-Horizon, Precise, Cross-Embodiment Manipulation from Handheld Data | [link](https://arxiv.org/abs/2611.03815) | 🔧 daily 2026-11-04 |
 
 ### 部署
 
