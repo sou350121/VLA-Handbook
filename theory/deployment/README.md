@@ -74,7 +74,7 @@
 
 > 上方保留人工导读与主题分组。本节列出本目录内全部 Git 已追踪 Markdown 文件，包含综述与索引，不含 README。按文件路径排序。
 
-**共 50 份文档。**
+**共 51 份文档。**
 
 - [MoGAP：用运动引导的非对称预测把视频扩散模型适配成机器人策略（Adapting Video Models for Robot Control via Motion-guided Asymmetric Prediction）](./adapting_video_models_for_robot_control_via_motion_guided_as_dissection.md)
 - [AEGIS：物理 AI 的備份反射機制 (A Backup Reflex for Physical AI)](./aegis_a_backup_reflex_for_physical_ai_dissection.md)
@@ -83,6 +83,7 @@
 - [BLaDA：在 3DGS 场中桥接语言与功能性灵巧动作 (BLaDA: Bridging Language to Functional Dexterous Actions within 3DGS Fields)](./blada_bridging_language_to_functional_dexterous_actions_with_dissection.md)
 - [免费的柔顺：用双边遥操作学习可辨识阻抗 (Compliance for Free: Learning Identifiable Impedance via Bilateral Teleoperation)](./compliance_for_free_learning_identifiable_impedance_via_bila_dissection.md)
 - [🔧 部署与硬件 — 实战落地主线总纲](./deployment_mainline.md)
+- [DexCanvas：把人类演示补成带接触力的灵巧操作数据 (DexCanvas: Bridging Human Demonstrations and Robot Learning for Dexterous Manipulation)](./dexcanvas_bridging_human_demonstrations_and_robot_learning_f_dissection.md)
 - [DexGrasp-Zero：形态对齐的零样本跨本体灵巧抓取策略 (DexGrasp-Zero: A Morphology-Aligned Policy for Zero-Shot Cross-Embodiment Dexterous Grasping)](./dexgrasp_zero_a_morphology_aligned_policy_for_zero_shot_cros_dissection.md)
 - [中金人机系列05（灵巧手）→ VLA/控制/硬件的“可计算约束”框架（理论侧整理）](./dexterous_hand_industry_cicc_05.md)
 - [灵巧手机械学深度解析 (Dexterous Hand Mechanics) — 修订整合版 v2](./dexterous_hand_mechanics.md)
