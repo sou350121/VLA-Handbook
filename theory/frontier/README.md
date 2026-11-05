@@ -53,12 +53,13 @@
 
 > 上方保留人工导读与主题分组。本节列出本目录内全部 Git 已追踪 Markdown 文件，包含综述与索引，不含 README。按文件路径排序。
 
-**共 99 份文档。**
+**共 100 份文档。**
 
 - [3DROID：可渲染 3D Gaussian 機器人數據集與逐場景可靠性度量 (3DROID: A Renderable 3D Gaussian Dataset with Measured Per-Scene Reliability)](./3droid_a_renderable_3d_gaussian_dataset_with_measured_per_sc_dissection.md)
 - [生物物理線蟲神經環路作為視覺魯棒機器人操作的「任務無關動力學核心」 (A Biophysically Detailed C. elegans Circuit as a Task-Agnostic Dynamical Core for Visually Robust Robot Manipulation)](./a_biophysically_detailed_c_elegans_circuit_as_a_task_agnosti_dissection.md)
 - [面向工业机器人的延迟感知视觉运动策略学习框架 (A Latency-Aware Framework for Visuomotor Policy Learning on Industrial Robots)](./a_latency_aware_framework_for_visuomotor_policy_learning_on_dissection.md)
 - [AntiGrounding：把「可执行轨迹」当作视觉提示，让 VLM 选动作 (AntiGrounding: Executable Robot Trajectories as Visual Prompts for VLM-Guided Manipulation)](./antigrounding_executable_robot_trajectories_as_visual_prompt_dissection.md)
+- [异步机器人策略：把 VLM 慢推理与高频动作专家解耦 (Asynchronous Robot Policies)](./asynchronous_robot_policies_dissection.md)
 - [AutoResearch：把 AI Agent 变成“小型研究组织”的最小实验框架 (AutoResearch: A Minimal Autonomous Research Org on a Single GPU)](./autoresearch_agentic_research_org_single_gpu_llm_training_2026.md)
 - [用 Feynman–Kac 后验采样给预训练策略上约束 (BayesFP: Posterior Estimation for Flow-Based Policies via Feynman-Kac Sampling)](./bayesfp_posterior_estimation_for_flow_based_policies_via_fey_dissection.md)
 - [行为提示策略：用单条演示作为操作任务的 Prompt (Behavior Prompting Policy: Demonstrations as Prompts for Manipulation)](./behavior_prompting_policy_demonstrations_as_prompts_for_mani_dissection.md)
