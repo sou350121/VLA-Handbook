@@ -276,3 +276,4 @@
 | 2026-10-29 | NVIDIA Robotics | product | NVIDIA 于 2026 年 10 月 29 日发布 Isaac Lab 3.0，这是一个用于训练和部署机器人策略的轻量模块化框架。 | 🔧 | news | https://forums.developer.nvidia.com/t/nvidia-isaac-lab-3-0-now-available/387354 |
 | 2026-11-02 | Xpeng Robotics | product | 小鹏集团在2026武汉国际车展上携全新一代人形机器人IRON与多款车型、飞行汽车一同亮相，展示物理AI场景布局。 | 🔧 | news | https://www.xiaopeng.com/news/company_news/5610.html |
 | 2026-11-03 | Boston Dynamics | product | Boston Dynamics于2026年11月3日发布第二代自主移动拖车卸货机器人Stretch Gen 2，基于第一代部署经验进行硬件与结构升级。 | ⚡ | news | https://bostondynamics.com/news/boston-dynamics-launches-next-generation-stretch-robot/ |
+| 2026-11-02 | Xpeng Robotics | product | 小鹏集团在2026武汉国际车展上携全新一代人形机器人IRON等前沿产品亮相，展示物理AI领域成果与场景布局。 | 🔧 | news | https://www.xiaopeng.com/news/company_news/5609.html |
