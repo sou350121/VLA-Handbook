@@ -114,7 +114,7 @@
 
 > 上方保留人工导读与主题分组。本节列出本目录内全部 Git 已追踪 Markdown 文件，包含综述与索引，不含 README。按文件路径排序。
 
-**共 190 份文档。**
+**共 191 份文档。**
 
 - [2D 还是 3D：谁主导 VLA 模型中的显著性？—— 三阶段 Token 剪枝框架与模态显著性感知 (2D or 3D: Who Governs Salience in VLA Models? -- Tri-Stage Token Pruning Framework with Modality Salience Awareness)](./2d_or_3d_who_governs_salience_in_vla_models_tri_stage_token_dissection.md)
 - [3DThinkVLA：通过3D思维引导协同训练赋予VLA模型隐式3D空间推理能力 (3DThinkVLA: Endowing Vision-Language-Action Models with Latent 3D Priors via 3D-Thinking-Guided Co-training)](./3dthinkvla_endowing_vision_language_action_models_with_laten_dissection.md)
@@ -177,6 +177,7 @@
 - [FocusVLA：未来意图引导的多视角动态路由 (FocusVLA: Future-Intent Guided Dynamic View Routing for Vision-Language-Action Models)](./focusvla_future_intent_guided_dynamic_view_routing_for_visio_dissection.md)
 - [从动作标签到动作集合：重新思考纠正反馈下的模仿学习动作监督 (From Action Labels to Sets: Rethinking Action Supervision for Imitation Learning from Corrective Feedback)](./from_action_labels_to_sets_rethinking_action_supervision_for_dissection.md)
 - [从噪声到意图：用残差桥接锚定生成式 VLA 策略 (From Noise to Intent: Anchoring Generative VLA Policies with Residual Bridges)](./from_noise_to_intent_anchoring_generative_vla_policies_with_dissection.md)
+- [从像素到动作：NEO-VLA 的原生 VLA 策略拆解 (From Pixels to Actions – Towards Native Vision-Language-Action Policies)](./from_pixels_to_actions_towards_native_vision_language_action_dissection.md)
 - [Galaxea G0: 双系统 VLA 框架](./galaxea_g0.md)
 - [GazeVLA：用人类注视学习操作意图 (Learning Human Intention for Robotic Manipulation)](./gazevla_learning_human_intention_for_robotic_manipulation_dissection.md)
 - [Genie Sim PanoRecon：从单张全景图快速生成沉浸式 3D 场景 (Genie Sim PanoRecon: Fast Immersive Scene Generation from Single-View Panorama)](./genie_sim_panorecon_fast_immersive_scene_generation_from_sin_dissection.md)
