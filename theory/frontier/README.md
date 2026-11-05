@@ -53,7 +53,7 @@
 
 > 上方保留人工导读与主题分组。本节列出本目录内全部 Git 已追踪 Markdown 文件，包含综述与索引，不含 README。按文件路径排序。
 
-**共 98 份文档。**
+**共 99 份文档。**
 
 - [3DROID：可渲染 3D Gaussian 機器人數據集與逐場景可靠性度量 (3DROID: A Renderable 3D Gaussian Dataset with Measured Per-Scene Reliability)](./3droid_a_renderable_3d_gaussian_dataset_with_measured_per_sc_dissection.md)
 - [生物物理線蟲神經環路作為視覺魯棒機器人操作的「任務無關動力學核心」 (A Biophysically Detailed C. elegans Circuit as a Task-Agnostic Dynamical Core for Visually Robust Robot Manipulation)](./a_biophysically_detailed_c_elegans_circuit_as_a_task_agnosti_dissection.md)
@@ -130,6 +130,7 @@
 - [RoboCousin：构建你自己的双臂操作仿真游乐场 (RoboCousin: Build Your Own Simulation Playground for Robust Bimanual Robotic Manipulation)](./robocousin_build_your_own_simulation_playground_for_robust_b_dissection.md)
 - [RoSHI: 野外便携式全身动捕套装 (RoSHI: A Versatile Robot-oriented Suit for Human Data In-the-Wild)](./roshi_a_versatile_robot_oriented_suit_for_human_data_in_the_dissection.md)
 - [策略性扩展数据：通过偏差感知评估与数据采集学习机器人操作的组合泛化 (Scale Up Strategically: Learning Compositional Generalization via Bias-Aware Evaluation and Data Collection for Robotic Manipulation)](./scale_up_strategically_learning_compositional_generalization_dissection.md)
+- [动作专家该不该训练 VLM？动作 Token 监督与梯度路由 (Should the Action Expert Train the VLM? Action-Token Supervision and Gradient Routing in Mixture-of-Transformer VLAs)](./should_the_action_expert_train_the_vlm_action_token_supervis_dissection.md)
 - [SlotVLA：用物体-关系槽位替代稠密 Token 的机器人操作表征 (SlotVLA: Towards Modeling of Object-Relation Representations in Robotic Manipulation)](./slotvla_towards_modeling_of_object_relation_representations_dissection.md)
 - [SpatialVAM: 空间感知多视图视频扩散作为数据高效的机器人策略 (Spatial-Aware Multi-View Video Diffusion as a Data-Efficient Robot Policy)](./spatialvamspatial_aware_multi_view_video_diffusion_as_a_data_dissection.md)
 - [StaMo：从紧凑状态表示无监督学习可泛化机器人运动 / StaMo: Unsupervised Learning of Generalizable Robot Motion from Compact State Representation](./stamo_unsupervised_learning_of_generalizable_robot_motion_fr_dissection.md)
