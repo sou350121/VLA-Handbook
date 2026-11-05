@@ -643,6 +643,8 @@
 | RoboDuo: Attempt, Check and Atomic Recovery through Code for Vision-Language-Action Models | [link](https://arxiv.org/abs/2610.34108) | 🔧 daily 2026-10-27 |
 | EXE: Egocentric Cross-Embodiment Pretraining via Factorized Latent Actions for VLA Models | [link](https://arxiv.org/abs/2610.33685) | 🔧 daily 2026-10-27 |
 | STAR: Steering Action Representations during Inference | [link](https://arxiv.org/abs/2610.41009) | 🔧 daily 2026-11-02 |
+| From Pixels to Actions - Towards Native Vision-Language-Action Policies | [link](https://arxiv.org/abs/2611.06918) | 🔧 daily 2026-11-05 |
+| Where Is VLA Inference Time Spent? Bottlenecks and Optimization Interactions Across GPUs | [link](https://arxiv.org/abs/2611.06710) | [VLA后训] 🔧 daily 2026-11-05 |
 
 ### 動作生成
 
@@ -791,6 +793,8 @@
 | Tactus: Tactile & Pose Sensing Glove for Natural Dexterity Data Collection | [link](https://arxiv.org/abs/2610.39076) | 🎯 tactile \| 🔧 daily 2026-10-31 |
 | This Disembodied Hand Is All the Robot You Need | [link](https://spectrum.ieee.org/walking-robotic-hand) | 🎯 tactile \| 📖 daily 2026-11-01 |
 | TacClaw-Infinity: A Large-Scale Vision-Tactile-Language-Action Dataset for Dexterous Manipulation | [link](https://arxiv.org/abs/2610.20320) | 🎯 tactile \| 🔧 daily 2026-11-02 |
+| Bridging the Morphology Gap: Adapting VLA Models to Dexterous Manipulation via Intent-Conditioned Fine-Tuning | [link](https://arxiv.org/abs/2606.12109) | 🎯 tactile \| 🔧 daily 2026-11-05 |
+| Which Physical Tactile Cues Matter for Contact-Rich Imitation Learning? A Controlled Real-Robot Study | [link](https://arxiv.org/abs/2611.06673) | 🎯 tactile \| 🔧 daily 2026-11-05 |
 
 ### 其他
 
