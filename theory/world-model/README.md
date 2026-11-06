@@ -90,7 +90,7 @@
 
 > 上方保留人工导读与主题分组。本节列出本目录内全部 Git 已追踪 Markdown 文件，包含综述与索引，不含 README。按文件路径排序。
 
-**共 107 份文档。**
+**共 108 份文档。**
 
 - [AcceRL：面向 VLA 的分布式异步强化学习与世界模型框架 (AcceRL: A Distributed Asynchronous Reinforcement Learning and World Model Framework for Vision-Language-Action Models)](./accerl_a_distributed_asynchronous_reinforcement_learning_and_dissection.md)
 - [AeroAct: 动作中心世界-动作模型用于语言条件四旋翼飞行 (AeroAct: Action-Centered World-Action Models for Language-Conditioned Quadrotor Flight)](./aeroact_action_centered_world_action_models_for_language_con_dissection.md)
@@ -198,6 +198,7 @@
 - [WorldCycle：自验证强化学习用于长视界视频世界模型 (WorldCycle: Self-Verifiable Reinforcement Learning for Long-Horizon Video World Models)](./worldcycle_self_verifiable_reinforcement_learning_for_long_h_dissection.md)
 - [世界模型评估机器人策略：WorldEval (World Model as Real-World Robot Policies Evaluator)](./worldeval_world_model_policy_evaluator_2025.md)
 - [WorldKV：通过检索与压缩实现高效世界记忆 (Efficient World Memory with World Retrieval and Compression)](./worldkv_efficient_world_memory_with_world_retrieval_and_comp_dissection.md)
+- [把世界模型当“可靠但不完美”的 RL 仿真器：WoVR 论文拆解 (WoVR: World Models as Reliable Simulators for Post-Training VLA Policies with RL)](./wovr_world_models_as_reliable_simulators_for_post_training_v_dissection.md)
 - [X-Foresight：通过预测世界模型实现视觉-动作联合因果预测网络 (X-Foresight: A Joint Vision-Action Causal Forecasting Network via Predictive World Modeling)](./x_foresight_a_joint_vision_action_causal_forecasting_network_dissection.md)
 
 <!-- VLA:THEORY-NAV:END -->
