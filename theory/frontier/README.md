@@ -53,7 +53,7 @@
 
 > 上方保留人工导读与主题分组。本节列出本目录内全部 Git 已追踪 Markdown 文件，包含综述与索引，不含 README。按文件路径排序。
 
-**共 101 份文档。**
+**共 102 份文档。**
 
 - [3DROID：可渲染 3D Gaussian 機器人數據集與逐場景可靠性度量 (3DROID: A Renderable 3D Gaussian Dataset with Measured Per-Scene Reliability)](./3droid_a_renderable_3d_gaussian_dataset_with_measured_per_sc_dissection.md)
 - [生物物理線蟲神經環路作為視覺魯棒機器人操作的「任務無關動力學核心」 (A Biophysically Detailed C. elegans Circuit as a Task-Agnostic Dynamical Core for Visually Robust Robot Manipulation)](./a_biophysically_detailed_c_elegans_circuit_as_a_task_agnosti_dissection.md)
@@ -72,6 +72,7 @@
 - [障礙感知外殼：讓免訓練編碼智能體安全操作機械臂 (Coding Agents with an Obstacle-Aware Harness for Safe Robot Manipulation)](./coding_agents_with_an_obstacle_aware_harness_for_safe_robot_dissection.md)
 - [用自由语言指令操控人形机器人：统一运动词汇的大型语言动作模型 (Commanding Humanoid by Free-form Language: A Large Language Action Model with Unified Motion Vocabulary)](./commanding_humanoid_by_free_form_language_a_large_language_a_dissection.md)
 - [未来一致才提交：面向机器人操作的结果感知自适应动作分块（Commit While Futures Agree: Consequence-Aware Adaptive Action Chunking for Robot Manipulation）](./commit_while_futures_agree_consequence_aware_adaptive_action_dissection.md)
+- [Concertina：把操作与认知装进同一个扩散 VLM（Concertina: Embodying Manipulation and Cognition in One Diffusion Vision-Language Model）](./concertina_embodying_manipulation_and_cognition_in_one_diffu_dissection.md)
 - [CoRDE：概念先验路由扩散专家 (Concept-Prior Routed Diffusion Experts for Structural Generalization in Robot Manipulation)](./corde_concept_prior_routed_diffusion_experts_for_structural_dissection.md)
 - [反事实行为克隆：从不完美人类演示中进行离线模仿学习 (Counterfactual Behavior Cloning: Offline Imitation Learning from Imperfect Human Demonstrations)](./counterfactual_behavior_cloning_offline_imitation_learning_f_dissection.md)
 - [cuRoboV2：高自由度机器人的动力学感知运动生成 (cuRoboV2: Dynamics-Aware Motion Generation with Depth-Fused Distance Fields for High-DoF Robots)](./curobov2_dynamics_aware_motion_generation_with_depth_fused_d_dissection.md)
