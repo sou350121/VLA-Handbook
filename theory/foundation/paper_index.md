@@ -713,6 +713,9 @@
 | Asynchronous Robot Policies | [link](https://arxiv.org/abs/2611.05155) | 🔧 daily 2026-11-04 |
 | Future Representation Distillation for Imagination-Free World Action Models | [link](https://arxiv.org/abs/2611.04527) | [VLA后训] 🔧 daily 2026-11-04 |
 | RAFT: Reasoning-Aligned Fine-Tuning Improves Robustness of VLA Post-Training | [link](https://arxiv.org/abs/2611.04368) | [VLA后训] 🔧 daily 2026-11-04 |
+| WoVR: World Models as Reliable Simulators for Post-Training VLA Policies with RL | [link](https://arxiv.org/abs/2602.13977) | [RL] 🔧 daily 2026-11-06 |
+| Concertina: Embodying Manipulation and Cognition in One Diffusion Vision-Language Model | [link](https://arxiv.org/abs/2611.07513) | 🔧 daily 2026-11-06 |
+| OopsieRecover: Learning Transferable VLA Corrections from Semantic Interventions | [link](https://arxiv.org/abs/2611.08462) | [VLA后训] 🔧 daily 2026-11-06 |
 
 ### 數據
 
@@ -795,6 +798,8 @@
 | TacClaw-Infinity: A Large-Scale Vision-Tactile-Language-Action Dataset for Dexterous Manipulation | [link](https://arxiv.org/abs/2610.20320) | 🎯 tactile \| 🔧 daily 2026-11-02 |
 | Bridging the Morphology Gap: Adapting VLA Models to Dexterous Manipulation via Intent-Conditioned Fine-Tuning | [link](https://arxiv.org/abs/2606.12109) | 🎯 tactile \| 🔧 daily 2026-11-05 |
 | Which Physical Tactile Cues Matter for Contact-Rich Imitation Learning? A Controlled Real-Robot Study | [link](https://arxiv.org/abs/2611.06673) | 🎯 tactile \| 🔧 daily 2026-11-05 |
+| VTAM: Efficient Visuo-Tactile World-Action Models for Contact-Rich Manipulation without Tactile Pretraining | [link](https://arxiv.org/abs/2603.23481) | 🎯 tactile \| 🔧 daily 2026-11-06 |
+| TactileLab: Sim-to-Real Dexterous Robot Manipulation with Efficient Shear-Sensitive Tactile Simulation | [link](https://arxiv.org/abs/2611.07881) | 🎯 tactile \| 🔧 daily 2026-11-06 |
 
 ### 其他
 
