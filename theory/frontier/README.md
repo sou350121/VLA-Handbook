@@ -53,7 +53,7 @@
 
 > 上方保留人工导读与主题分组。本节列出本目录内全部 Git 已追踪 Markdown 文件，包含综述与索引，不含 README。按文件路径排序。
 
-**共 100 份文档。**
+**共 101 份文档。**
 
 - [3DROID：可渲染 3D Gaussian 機器人數據集與逐場景可靠性度量 (3DROID: A Renderable 3D Gaussian Dataset with Measured Per-Scene Reliability)](./3droid_a_renderable_3d_gaussian_dataset_with_measured_per_sc_dissection.md)
 - [生物物理線蟲神經環路作為視覺魯棒機器人操作的「任務無關動力學核心」 (A Biophysically Detailed C. elegans Circuit as a Task-Agnostic Dynamical Core for Visually Robust Robot Manipulation)](./a_biophysically_detailed_c_elegans_circuit_as_a_task_agnosti_dissection.md)
@@ -149,6 +149,7 @@
 - [Vision-Language-Delta-Action：把紧凑 Delta 作为可操作的状态转移接口 (Vision-Language-Delta-Action: Learning Compact Deltas as Actionable Transition Interfaces for Robotic Manipulation)](./vision_language_delta_action_learning_compact_deltas_as_acti_dissection.md)
 - [显式动作空间接地：让预训练 VLM 原生成为机械臂动作模型 (VLMs are Native Action Models: Unleashing the Manipulation Capabilities of VLMs with Explicit Action-Space Grounding)](./vlms_are_native_action_models_unleashing_the_manipulation_ca_dissection.md)
 - [什么在何时重要？诊断与改进视觉运动模仿策略中的条件视觉定位 (What Matters, When? Diagnosing and Improving Conditional Visual Grounding in Visuomotor Imitation Policies)](./what_matters_when_diagnosing_and_improving_conditional_visua_dissection.md)
+- [当视觉压过语言：VLA 反事实失败的评测与缓解 (When Vision Overrides Language: Evaluating and Mitigating Counterfactual Failures in VLAs)](./when_vision_overrides_language_evaluating_and_mitigating_cou_dissection.md)
 - [为什么动作分块能提升行为克隆的性能？(Why Does Action Chunking Improve Behavioral Cloning Performance in Robotic Control?)](./why_does_action_chunking_improve_behavioral_cloning_performa_dissection.md)
 - [Workspace Models：用顯著性監督把 VLM 記憶「攤銷」進一個輕量 token (Workspace Models: Lightweight Robotic Memory via Saliency-Driven Supervision)](./workspace_models_lightweight_robotic_memory_via_saliency_dri_dissection.md)
 - [掌中世界：野外人类操作数据的规模化生态 (World In Your Hands: A Large-Scale and Open-Source Ecosystem for Learning Human-Centric Manipulation in the Wild)](./world_in_your_hands_a_large_scale_and_open_source_ecosystem_dissection.md)
