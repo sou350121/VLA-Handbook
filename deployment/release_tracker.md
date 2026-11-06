@@ -277,3 +277,4 @@
 | 2026-11-02 | Xpeng Robotics | product | 小鹏集团在2026武汉国际车展上携全新一代人形机器人IRON与多款车型、飞行汽车一同亮相，展示物理AI场景布局。 | 🔧 | news | https://www.xiaopeng.com/news/company_news/5610.html |
 | 2026-11-03 | Boston Dynamics | product | Boston Dynamics于2026年11月3日发布第二代自主移动拖车卸货机器人Stretch Gen 2，基于第一代部署经验进行硬件与结构升级。 | ⚡ | news | https://bostondynamics.com/news/boston-dynamics-launches-next-generation-stretch-robot/ |
 | 2026-11-02 | Xpeng Robotics | product | 小鹏集团在2026武汉国际车展上携全新一代人形机器人IRON等前沿产品亮相，展示物理AI领域成果与场景布局。 | 🔧 | news | https://www.xiaopeng.com/news/company_news/5609.html |
+| 2026-11-05 | LeRobot | toolchain | v0.7.0 released |  | github_release | https://github.com/huggingface/lerobot/releases/tag/v0.7.0 |
