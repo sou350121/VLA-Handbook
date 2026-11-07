@@ -74,7 +74,7 @@
 
 > 上方保留人工导读与主题分组。本节列出本目录内全部 Git 已追踪 Markdown 文件，包含综述与索引，不含 README。按文件路径排序。
 
-**共 69 份文档。**
+**共 70 份文档。**
 
 - [主动触觉探索用于刚体姿态与形状估计 (Active Tactile Exploration for Rigid Body Pose and Shape Estimation)](./active_tactile_exploration_for_rigid_body_pose_and_shape_est_dissection.md)
 - [Active Tactile Exploration：仅触觉的刚体位姿+形状估计 (Active Tactile Exploration for Rigid Body Pose and Shape Estimation)](./active_tactile_exploration_rigid_body_pose_shape_eig_2026.md)
@@ -142,6 +142,7 @@
 - [VLA-Touch：用双层触觉反馈增强 VLA / Enhancing Vision-Language-Action Models with Dual-Level Tactile Feedback](./vla_touch_dual_level_tactile_feedback_2025.md)
 - [VPWEM: Non-Markovian Visuomotor Policy with Working and Episodic Memory (VPWEM: Non-Markovian Visuomotor Policy with Working and Episodic Memory)](./vpwem_non_markovian_visuomotor_policy_with_working_and_episo_dissection.md)
 - [VT-MUSE：多模态统一序列视觉触觉表征学习 (VT-MUSE: Multimodal Unified Sequential Visuotactile Representation Learning for Manipulation)](./vt_muse_multimodal_unified_sequential_visuotactile_represent_dissection.md)
+- [VTAM：无需触觉预训练的高效视觉-触觉世界-动作模型 (VTAM: Efficient Visuo-Tactile World-Action Models for Contact-Rich Manipulation without Tactile Pretraining)](./vtam_efficient_visuo_tactile_world_action_models_for_contact_dissection.md)
 - [唤醒触觉！MLLM 中的掩码隔离触觉对齐学习 (Wake up for Touch! Mask-isolated Tactile Alignment Learning in MLLMs)](./wake_up_for_touch_mask_isolated_tactile_alignment_learning_i_dissection.md)
 - [在哪里触碰，如何接触：分层 RL-MPC 几何感知 Sim-to-Real 操作框架 (Where to Touch, How to Contact: A Hierarchical RL-MPC Framework for Geometry-Aware Sim-to-Real Manipulation)](./where_to_touch_how_to_contact_a_hierarchical_rl_mpc_framewor_dissection.md)
 - [用触觉训练、用视觉部署：ZeroTouch 的「无触觉」接触力估计 (ZeroTouch: Tactile-Supervised Visual Contact Estimation for Contact-Rich Manipulation)](./zerotouch_tactile_supervised_visual_contact_estimation_for_c_dissection.md)
