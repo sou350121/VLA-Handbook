@@ -114,7 +114,7 @@
 
 > 上方保留人工导读与主题分组。本节列出本目录内全部 Git 已追踪 Markdown 文件，包含综述与索引，不含 README。按文件路径排序。
 
-**共 191 份文档。**
+**共 192 份文档。**
 
 - [2D 还是 3D：谁主导 VLA 模型中的显著性？—— 三阶段 Token 剪枝框架与模态显著性感知 (2D or 3D: Who Governs Salience in VLA Models? -- Tri-Stage Token Pruning Framework with Modality Salience Awareness)](./2d_or_3d_who_governs_salience_in_vla_models_tri_stage_token_dissection.md)
 - [3DThinkVLA：通过3D思维引导协同训练赋予VLA模型隐式3D空间推理能力 (3DThinkVLA: Endowing Vision-Language-Action Models with Latent 3D Priors via 3D-Thinking-Guided Co-training)](./3dthinkvla_endowing_vision_language_action_models_with_laten_dissection.md)
@@ -227,6 +227,7 @@
 - [神经符号 VLA：把操作拆成「原始動作計劃」再餵給連續控制器 (NS-VLA: Towards Neuro-Symbolic Vision-Language-Action Models)](./ns_vla_towards_neuro_symbolic_vision_language_action_models_dissection.md)
 - [OGPO：面向可恢复 VLA 的离线目标条件策略优化 (Offline Goal-conditioned Policy Optimization for Recoverable Vision-Language-Action Models)](./ogpo_offline_goal_conditioned_policy_optimization_for_recove_dissection.md)
 - [OneTwoVLA 模型解构 (Dissecting OneTwoVLA)](./onetwovla.md)
+- [OopsieRecover：从语义干预学习可迁移的 VLA 纠正 (OopsieRecover: Learning Transferable VLA Corrections from Semantic Interventions)](./oopsierecover_learning_transferable_vla_corrections_from_sem_dissection.md)
 - [完全开源 VLA 选型指南：谁是真开源，谁在"开源洗"](./open_source_vla_guide.md)
 - [PDRVLA：把物理动力学表征压进 VLA，而不是在控制回路里生成视频 (PDRVLA: A Vision–Language–Action Model with Physical Dynamics Representations)](./pdrvla_a_vision_language_action_model_with_physical_dynamics_dissection.md)
 - [Physical Intelligence：构建通用具身基础模型 — Sergey Levine 深度访谈解析](./physical_intelligence_sergey_levine_foundation_model_vision_2026.md)
