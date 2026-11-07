@@ -825,3 +825,4 @@
 | UniWALM: Unified World Action Language Model for Embodied Robot Control | [link](https://arxiv.org/abs/2610.28626) | 🔧 daily 2026-10-21 |
 | TOPS: Reshaping Flow Source and Transport for Multi-Task Robot Manipulation | [link](https://arxiv.org/abs/2610.36694) | 🔧 daily 2026-10-28 |
 | DRIFT: A Residual Flow Adapter for Decoding Continuous Outputs in Vision-Language Models | [link](https://arxiv.org/abs/2606.05758) | [VLA后训] 🔧 daily 2026-10-29 |
+| EgoGeneralist: Unifying Egocentric Action-Video Tasks through Video-Native Modeling | [link](https://tldr.takara.ai/p/2611.08477) | [世界模型] 📖 daily 2026-11-07 |
