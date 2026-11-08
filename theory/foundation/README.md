@@ -96,7 +96,7 @@
 
 > 上方保留人工导读与主题分组。本节列出本目录内全部 Git 已追踪 Markdown 文件，包含综述与索引，不含 README。按文件路径排序。
 
-**共 91 份文档。**
+**共 92 份文档。**
 
 - [动作-效应记忆预训练用于机器人操作 (Action-Effect Memory Pretraining for Robot Manipulation)](./action_effect_memory_pretraining_for_robot_manipulation_dissection.md)
 - [动作 QFormer：动作监督下的结构化表征塑造 (Action QFormer: Structured Representation Shaping under Action Supervision in Vision-Language-Action Models)](./action_qformer_structured_representation_shaping_under_actio_dissection.md)
@@ -174,6 +174,7 @@
 - [自监督学习 (Self-Supervised Learning)](./self_supervised_learning.md)
 - [Shallow-π：Flow-based VLA 的层深蒸馏 (Shallow-π: Knowledge Distillation for Flow-based VLAs)](./shallow_pi_knowledge_distillation_flow_vla_2026.md)
 - [SimuScene：从单图重建仿真就绪的组合 3D 场景 (SimuScene: Simulation-Ready Compositional 3D Scene Reconstruction from a Single Image)](./simuscene_simulation_ready_compositional_3d_scene_reconstruc_dissection.md)
+- [SLA：通过持续预训练扩展空间-语言-动作模型（SLA: Scaling Spatial-Language-Action Model via Continual Pre-training）](./sla_scaling_spatial_language_action_model_via_continual_pre_dissection.md)
 - [StarVLA-α：给 VLA 系统做减法 (StarVLA-α: Reducing Complexity in Vision-Language-Action Systems)](./starvla_alpha_reducing_complexity_in_vision_language_action_dissection.md)
 - [StereoVLA：用立体视觉增强 VLA 的空间感知 (Enhancing Vision-Language-Action Models with Stereo Vision)](./stereovla_enhancing_vision_language_action_models_with_stere_dissection.md)
 - [τ₀-VLA：世界模型引导测试时计算的分层机器人基础模型 (τ₀-VLA: a Hierarchical Robot Foundation Model with World-Model-Guided Test-Time Computation)](./tau0_vla_a_hierarchical_robot_foundation_model_with_world_mo_dissection.md)
