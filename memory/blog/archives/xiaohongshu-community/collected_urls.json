@@ -211,9 +211,22 @@
     "https://www.xiaohongshu.com/explore/68b5aeb4000000001d025790",
     "https://www.xiaohongshu.com/explore/6a955bd8000000001f0037cd",
     "https://www.xiaohongshu.com/explore/69de552e000000001f004540",
-    "https://www.xiaohongshu.com/explore/6aa92db20000000012003f30"
+    "https://www.xiaohongshu.com/explore/6aa92db20000000012003f30",
+    "https://www.xiaohongshu.com/explore/6aec2ce2000000001f0170ef",
+    "https://www.xiaohongshu.com/explore/6a278d680000000022021f8c",
+    "https://www.xiaohongshu.com/explore/6aa815e6000000000f03a400",
+    "https://www.xiaohongshu.com/explore/6a4c5743000000000f01d9bc",
+    "https://www.xiaohongshu.com/explore/6adf62dd0000000002008f2f",
+    "https://www.xiaohongshu.com/explore/6a928ab80000000021030f8f",
+    "https://www.xiaohongshu.com/explore/6978d9050000000021029c3f",
+    "https://www.xiaohongshu.com/explore/6a70c1ac0000000033019351",
+    "https://www.xiaohongshu.com/explore/69fcdea40000000023015cec",
+    "https://www.xiaohongshu.com/explore/6aefe75d000000001802fa40",
+    "https://www.xiaohongshu.com/explore/6a341b3c000000000f028a96",
+    "https://www.xiaohongshu.com/explore/6a12aa100000000035028dfa",
+    "https://www.xiaohongshu.com/explore/6ac6a03e0000000019038800"
   ],
-  "count": 212,
+  "count": 225,
   "last_updated": "2026-11-08",
   "runs": [
     {
@@ -594,6 +607,60 @@
         "6a955bd8000000001f0037cd",
         "69de552e000000001f004540",
         "6aa92db20000000012003f30"
+      ],
+      "report": "2026-11-08-codex-weekly.md"
+    },
+    {
+      "date": "2026-11-08",
+      "run_id": "xhs-vla-20261108-continuation",
+      "parent_run_id": "xhs-vla-20261108",
+      "kind": "explicitly requested continuation to complete same 30-source batch",
+      "keywords": [
+        "OpenVLA 微调 失败",
+        "遥操作 时间戳 数据",
+        "GR00T 复现 失败",
+        "触觉 VLA 复现",
+        "VLA 训练 过拟合",
+        "VLA RL DAgger 失败",
+        "Piper 手眼标定 误差",
+        "UMI 遥操作 数据 质量",
+        "VLA 真机 demo 批评",
+        "LeRobot 数据 采集 丢帧"
+      ],
+      "search_result_slots": 50,
+      "unique_search_ids": 47,
+      "repeated_search_slots": 3,
+      "details_read": 17,
+      "new_added": 13,
+      "experiment_or_project": 7,
+      "critique_or_discussion": 6,
+      "excluded_after_detail": 4,
+      "unread_unique_ids": 30,
+      "prior_excluded_now_selected": [
+        {
+          "id": "6a12aa100000000035028dfa",
+          "previous_status": "title recorded, detail unread because tool interrupted",
+          "reason": "上一批因工具中断，只列入未读详情表；本次首次核读正文及评论，补到概念定义、工程权衡和可追问的级联误差问题，符合讨论类收录条件。"
+        }
+      ],
+      "weekly_batch_total_new": 30,
+      "incremental_series_total_new": 98,
+      "target": 30,
+      "status": "complete",
+      "new_note_ids": [
+        "6aec2ce2000000001f0170ef",
+        "6a278d680000000022021f8c",
+        "6aa815e6000000000f03a400",
+        "6a4c5743000000000f01d9bc",
+        "6adf62dd0000000002008f2f",
+        "6a928ab80000000021030f8f",
+        "6978d9050000000021029c3f",
+        "6a70c1ac0000000033019351",
+        "69fcdea40000000023015cec",
+        "6aefe75d000000001802fa40",
+        "6a341b3c000000000f028a96",
+        "6a12aa100000000035028dfa",
+        "6ac6a03e0000000019038800"
       ],
       "report": "2026-11-08-codex-weekly.md"
     }
