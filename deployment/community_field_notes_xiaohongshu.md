@@ -34,6 +34,8 @@
 
 > 🧭 **先看症状，再挑模型；先复查链路，再抄参数。** 下面是排查入口，具体配方和反例都在后文。
 
+> **把现场话变成可核查记录（2026-11-08）**：[数采验收表](./robot_data_collection_acceptance.md#collection-acceptance-record) · [真机排查流程](../cheat-sheet/failure-modes.md#real-world-diagnosis) · [失败恢复评测](../system-design/evaluation.md#failure-recovery-evaluation)。正文案例与原帖证据边界保留在本页，三份工程文档只补记录方法，不新增“已实测”结论。
+
 **🛠️ 已经跑起来，但真机不对劲**
 
 | 你的问题 | 一句话回答 | 详情 |

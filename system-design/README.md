@@ -28,6 +28,7 @@
     - Simulation Benchmark (仿真基准)
     - Real-world Proxy (真机代理指标)
     - A/B Testing & Canary Deployment
+    - [失败恢复评测](./evaluation.md#failure-recovery-evaluation)：固定状态面板与自然失败分开，明确检测、恢复、介入和超时分母。
 
 5.  **[AI Coding 智能体设计 (AI Coding Agent Design)](./ai_coding_agent_design.md)** 🆕
     - 提示词预处理 (@路径, Slash 命令)
