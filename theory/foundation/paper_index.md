@@ -645,6 +645,9 @@
 | STAR: Steering Action Representations during Inference | [link](https://arxiv.org/abs/2610.41009) | 🔧 daily 2026-11-02 |
 | From Pixels to Actions - Towards Native Vision-Language-Action Policies | [link](https://arxiv.org/abs/2611.06918) | 🔧 daily 2026-11-05 |
 | Where Is VLA Inference Time Spent? Bottlenecks and Optimization Interactions Across GPUs | [link](https://arxiv.org/abs/2611.06710) | [VLA后训] 🔧 daily 2026-11-05 |
+| Real-Time Execution with Autoregressive Policies | [link](https://arxiv.org/abs/2606.13355) | 🔧 daily 2026-11-09 |
+| ActPrune: Action-Grounded Visual Token Pruning for Efficient Vision-Language-Action Models | [link](https://arxiv.org/abs/2611.08827) | [VLA后训] 🔧 daily 2026-11-09 |
+| VICTR: Value-Informed In-Context Learning for Vision-Language-Action Models | [link](https://arxiv.org/abs/2611.08698) | [VLA后训] 🔧 daily 2026-11-09 |
 
 ### 動作生成
 
@@ -716,6 +719,7 @@
 | WoVR: World Models as Reliable Simulators for Post-Training VLA Policies with RL | [link](https://arxiv.org/abs/2602.13977) | [RL] 🔧 daily 2026-11-06 |
 | Concertina: Embodying Manipulation and Cognition in One Diffusion Vision-Language Model | [link](https://arxiv.org/abs/2611.07513) | 🔧 daily 2026-11-06 |
 | OopsieRecover: Learning Transferable VLA Corrections from Semantic Interventions | [link](https://arxiv.org/abs/2611.08462) | [VLA后训] 🔧 daily 2026-11-06 |
+| ODEAction: From Predicting Chunks to Evolving Actions | [link](https://arxiv.org/abs/2611.09672) | 🔧 daily 2026-11-09 |
 
 ### 數據
 
@@ -800,6 +804,7 @@
 | Which Physical Tactile Cues Matter for Contact-Rich Imitation Learning? A Controlled Real-Robot Study | [link](https://arxiv.org/abs/2611.06673) | 🎯 tactile \| 🔧 daily 2026-11-05 |
 | VTAM: Efficient Visuo-Tactile World-Action Models for Contact-Rich Manipulation without Tactile Pretraining | [link](https://arxiv.org/abs/2603.23481) | 🎯 tactile \| 🔧 daily 2026-11-06 |
 | TactileLab: Sim-to-Real Dexterous Robot Manipulation with Efficient Shear-Sensitive Tactile Simulation | [link](https://arxiv.org/abs/2611.07881) | 🎯 tactile \| 🔧 daily 2026-11-06 |
+| MDF++: Visuo-Tactile World Action Model with End-to-end Representation Learning | [link](https://arxiv.org/abs/2611.09293) | 🎯 tactile \| 🔧 daily 2026-11-09 |
 
 ### 其他
 
