@@ -279,3 +279,4 @@
 | 2026-11-02 | Xpeng Robotics | product | 小鹏集团在2026武汉国际车展上携全新一代人形机器人IRON等前沿产品亮相，展示物理AI领域成果与场景布局。 | 🔧 | news | https://www.xiaopeng.com/news/company_news/5609.html |
 | 2026-11-05 | LeRobot | toolchain | v0.7.0 released |  | github_release | https://github.com/huggingface/lerobot/releases/tag/v0.7.0 |
 | 2026-11-06 | MuJoCo | sim | 4.0.0 released |  | github_release | https://github.com/google-deepmind/mujoco/releases/tag/4.0.0 |
+| 2026-11-08 | Genesis | sim | v1.4.6 released |  | github_release | https://github.com/Genesis-Embodied-AI/genesis-world/releases/tag/v1.4.6 |
