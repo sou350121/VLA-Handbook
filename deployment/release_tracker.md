@@ -280,3 +280,4 @@
 | 2026-11-05 | LeRobot | toolchain | v0.7.0 released |  | github_release | https://github.com/huggingface/lerobot/releases/tag/v0.7.0 |
 | 2026-11-06 | MuJoCo | sim | 4.0.0 released |  | github_release | https://github.com/google-deepmind/mujoco/releases/tag/4.0.0 |
 | 2026-11-08 | Genesis | sim | v1.4.6 released |  | github_release | https://github.com/Genesis-Embodied-AI/genesis-world/releases/tag/v1.4.6 |
+| 2026-11-09 | NVIDIA Robotics | product | NVIDIA在CoRL大会上推出基于Cosmos构建的开放世界动作模型GR00T 2、开源机器人学习框架Isaac Lab 3.0，以及新的开放基准与智能体工作流。 | ⚡ | news | https://blogs.nvidia.com/blog/robotics-simulation-advancements-corl/ |
