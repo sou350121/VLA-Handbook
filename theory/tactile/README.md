@@ -74,12 +74,13 @@
 
 > 上方保留人工导读与主题分组。本节列出本目录内全部 Git 已追踪 Markdown 文件，包含综述与索引，不含 README。按文件路径排序。
 
-**共 70 份文档。**
+**共 71 份文档。**
 
 - [主动触觉探索用于刚体姿态与形状估计 (Active Tactile Exploration for Rigid Body Pose and Shape Estimation)](./active_tactile_exploration_for_rigid_body_pose_and_shape_est_dissection.md)
 - [Active Tactile Exploration：仅触觉的刚体位姿+形状估计 (Active Tactile Exploration for Rigid Body Pose and Shape Estimation)](./active_tactile_exploration_rigid_body_pose_shape_eig_2026.md)
 - [敏捷触觉世界动作模型：把触觉世界模型压进 ~10ms 推理 (Agile-WAM: An Agile Tactile World Action Model for Contact-Rich Robot Control)](./agile_wam_an_agile_tactile_world_action_model_for_contact_ri_dissection.md)
 - [Bench2Dex：跨 12 种灵巧手的双臂视觉-触觉操作基准 (Bench2Dex: Benchmarking Visuo-Tactile Bimanual Dexterous Manipulation Across Dexterous Hands)](./bench2dex_benchmarking_visuo_tactile_bimanual_dexterous_mani_dissection.md)
+- [CompVLA：面向接触丰富操作的可变柔顺 VLA (CompVLA: A Variable Compliance Vision-Language-Action Model for Contact-rich Manipulation)](./compvla_a_variable_compliance_vision_language_action_model_f_dissection.md)
 - [DEFT-VLA：面向接触丰富操作的分阶段力觉专精 (DEFT-VLA: Stage-Localized Force Specialization for Contact-Rich Robotic Manipulation)](./deft_vla_stage_localized_force_specialization_for_contact_ri_dissection.md)
 - [人類觸覺澆灌機器人世界模型 (DexTouch-WM: Learning Action-Conditioned Tactile World Models from Human Touch for Dexterous Robot Manipulation)](./dextouch_wm_learning_action_conditioned_tactile_world_models_dissection.md)
 - [EquiContact：分层 SE(3) 视觉到力等变框架拆解 (EquiContact: A Hierarchical SE(3) Vision-to-Force Equivariant Framework for Spatially Generalizable Contact-rich Tasks)](./equicontact_a_hierarchical_se_vision_to_force_equivariant_fr_dissection.md)
