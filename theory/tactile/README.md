@@ -74,7 +74,7 @@
 
 > 上方保留人工导读与主题分组。本节列出本目录内全部 Git 已追踪 Markdown 文件，包含综述与索引，不含 README。按文件路径排序。
 
-**共 71 份文档。**
+**共 72 份文档。**
 
 - [主动触觉探索用于刚体姿态与形状估计 (Active Tactile Exploration for Rigid Body Pose and Shape Estimation)](./active_tactile_exploration_for_rigid_body_pose_and_shape_est_dissection.md)
 - [Active Tactile Exploration：仅触觉的刚体位姿+形状估计 (Active Tactile Exploration for Rigid Body Pose and Shape Estimation)](./active_tactile_exploration_rigid_body_pose_shape_eig_2026.md)
@@ -130,6 +130,7 @@
 - [TAMEn: 触觉感知操作引擎用于接触丰富任务中的闭环数据收集 (TAMEn: Tactile-Aware Manipulation Engine for Closed-Loop Data Collection in Contact-Rich Tasks)](./tamen_tactile_aware_manipulation_engine_for_closed_loop_data_dissection.md)
 - [TAO-Force：融合力觉感知与快慢双环控制的接触丰富操作 (TAO-Force: Unifying Force-Aware Perception and Fast–Slow Control for Contact-Rich Manipulation)](./tao_force_unifying_force_aware_perception_and_fast_slow_cont_dissection.md)
 - [τ: 从未来视觉监督学习触觉增强 VLA 模型 (Learning Touch-Augmented Vision-Language-Action Models from Future Visual Supervision)](./tau_learning_touch_augmented_vision_language_action_models_f_dissection.md)
+- [TouchAnnotator：多源触觉监督与特权视角蒸馏 (TouchAnnotator: Multi-Source Tactile Supervision with Privileged-View Distillation)](./touchannotator_multi_source_tactile_supervision_with_privile_dissection.md)
 - [TouchGuide: 推理时触觉引导视觉运动策略 (TouchGuide: Inference-Time Steering of Visuomotor Policies via Touch Guidance)](./touchguide_inference_time_steering_of_visuomotor_policies_vi_dissection.md)
 - [让策略先“看见”，再“摸准”：TouchGuide 触觉推理引导 (TouchGuide: Inference-Time Steering of Visuomotor Policies via Touch Guidance)](./touchguide_inference_time_steering_touch_guidance_2026.md)
 - [TouchScale：500 小时人类视觉-触觉数据 (TouchScale: 500 Hours of Human Vision and Touch for Visual-Tactile Learning)](./touchscale_500_hours_of_human_vision_and_touch_for_visual_ta_dissection.md)
