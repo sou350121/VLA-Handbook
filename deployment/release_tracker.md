@@ -281,3 +281,5 @@
 | 2026-11-06 | MuJoCo | sim | 4.0.0 released |  | github_release | https://github.com/google-deepmind/mujoco/releases/tag/4.0.0 |
 | 2026-11-08 | Genesis | sim | v1.4.6 released |  | github_release | https://github.com/Genesis-Embodied-AI/genesis-world/releases/tag/v1.4.6 |
 | 2026-11-09 | NVIDIA Robotics | product | NVIDIA在CoRL大会上推出基于Cosmos构建的开放世界动作模型GR00T 2、开源机器人学习框架Isaac Lab 3.0，以及新的开放基准与智能体工作流。 | ⚡ | news | https://blogs.nvidia.com/blog/robotics-simulation-advancements-corl/ |
+| 2026-11-09 | NVIDIA Robotics | product | NVIDIA在CoRL大会上推出基于Cosmos构建的开放前沿世界动作模型GR00T 2，支持灵巧操作技能学习与跨机器人本体技能迁移。 | ⚡ | news | https://blogs.nvidia.com/blog/robotics-simulation-advancements-corl/?ncid=so-link-353370-vt48 |
+| 2026-11-09 | Boston Dynamics | product | Boston Dynamics 在 Atlas 机器人上测试加装轮子，以验证全身强化学习控制器与真实执行硬件的配合。 | 🔧 | news | https://bostondynamics.com/blog/atlas-on-a-roll/ |
