@@ -71,7 +71,7 @@
 
 > 上方保留人工导读与主题分组。本节列出本目录内全部 Git 已追踪 Markdown 文件，包含综述与索引，不含 README。按文件路径排序。
 
-**共 44 份文档。**
+**共 45 份文档。**
 
 - [AlphaNIST：从二值任务奖励中涌现的装配技能 (AlphaNIST: Emergent Assembly Skills from Binary Task Rewards)](./alphanist_emergent_assembly_skills_from_binary_task_rewards_dissection.md)
 - [超越示教：面向 VLA 的强化学习仿真—真实协同训练 (Beyond Imitation: Reinforcement Learning-Based Sim-Real Co-Training for VLA Models)](./beyond_imitation_reinforcement_learning_based_sim_real_co_tr_dissection.md)
@@ -83,6 +83,7 @@
 - [Evo-RL：在低成本机械臂上把 π\*0.6 / RECAP 真机 RL 跑成可复现工程 (Evo-RL for Open Real-World RL on SO101 and Beyond)](./evo_rl_open_real_world_rl_recap_pistar06_so101_2026.md)
 - [ForceRFT：以力引导残差强化学习精修 VLA 动作 (ForceRFT: Refining VLA Actions through Force-Guided Residual Reinforcement Learning)](./forcerft_refining_vla_actions_through_force_guided_residual_dissection.md)
 - [GR-RL 模型解剖 (Dissecting GR-RL)](./gr_rl_dissection.md)
+- [HiMEM：受海马体启发的 VLA 记忆巩固、剪枝与组合（HiMEM: Hippocampus-Inspired Memory Consolidation, Pruning, and Composition for Vision-Language-Action Models in 3D Scenes）](./himem_hippocampus_inspired_memory_consolidation_pruning_and_dissection.md)
 - [复用 VLA 表征做内在奖励 (Intrinsic Robot Rewarding: Reusing VLA Representations for Autonomous Evaluation and Policy Improvement)](./intrinsic_robot_rewarding_reusing_vla_representations_for_au_dissection.md)
 - [学习结果发散之处：通过概率分块掩码加速 VLA RL 后训练 (Learn Where Outcomes Diverge: Efficient VLA RL via Probabilistic Chunk Masking)](./learn_where_outcomes_diverge_efficient_vla_rl_via_probabilis_dissection.md)
 - [从失败中学更多：VLA 后训练的事后强化学习 (Learning More from Less: Reinforcement Learning from Hindsight)](./learning_more_from_less_reinforcement_learning_from_hindsigh_dissection.md)
