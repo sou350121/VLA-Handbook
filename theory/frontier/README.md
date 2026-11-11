@@ -53,7 +53,7 @@
 
 > 上方保留人工导读与主题分组。本节列出本目录内全部 Git 已追踪 Markdown 文件，包含综述与索引，不含 README。按文件路径排序。
 
-**共 102 份文档。**
+**共 103 份文档。**
 
 - [3DROID：可渲染 3D Gaussian 機器人數據集與逐場景可靠性度量 (3DROID: A Renderable 3D Gaussian Dataset with Measured Per-Scene Reliability)](./3droid_a_renderable_3d_gaussian_dataset_with_measured_per_sc_dissection.md)
 - [生物物理線蟲神經環路作為視覺魯棒機器人操作的「任務無關動力學核心」 (A Biophysically Detailed C. elegans Circuit as a Task-Agnostic Dynamical Core for Visually Robust Robot Manipulation)](./a_biophysically_detailed_c_elegans_circuit_as_a_task_agnosti_dissection.md)
@@ -119,6 +119,7 @@
 - [前史记忆：人形 Loco-Manipulation 的对象事件关键帧记忆 (Memory before Goal: Role of Pre-History Memory for Humanoid Loco-Manipulation)](./memory_before_goal_role_of_pre_history_memory_for_humanoid_l_dissection.md)
 - [免整理记忆：为机器人策略学习多流潜在记忆 (Memory Without Curation: Learning Multi-Stream Latent Memory for Robot Policies)](./memory_without_curation_learning_multi_stream_latent_memory_dissection.md)
 - [分階段操作：以行為相位解耦實現類人機器人操作 (Move-Then-Operate: Behavioral Phasing for Human-Like Robotic Manipulation)](./move_then_operate_behavioral_phasing_for_human_like_robotic_dissection.md)
+- [智能体式操作策略：将通用智能体接入控制环的 AMP1（On Agentic Manipulation Policies）](./on_agentic_manipulation_policies_dissection.md)
 - [一只手注视另一只手：动态环境下的多智能体协作双臂操作 (One Hand Watches The Other: Dynamic Multi-Agent Cooperation for Sample-Efficient Bimanual Manipulation in Dynamic Environments)](./one_hand_watches_the_other_dynamic_multi_agent_cooperation_f_dissection.md)
 - [一个策略，多种形态：统一相机中心动作几何预训练用于异构具身操作 (One Policy, Many Embodiments: Unified Camera-Centric Action Geometry Pre-training for Heterogeneous Embodied Manipulation)](./one_policy_many_embodiments_unified_camera_centric_action_ge_dissection.md)
 - [Physics of AI：把神经网络当物理系统来研究](./physics_of_ai_liuziming.md)
