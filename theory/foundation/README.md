@@ -96,7 +96,7 @@
 
 > 上方保留人工导读与主题分组。本节列出本目录内全部 Git 已追踪 Markdown 文件，包含综述与索引，不含 README。按文件路径排序。
 
-**共 92 份文档。**
+**共 93 份文档。**
 
 - [动作-效应记忆预训练用于机器人操作 (Action-Effect Memory Pretraining for Robot Manipulation)](./action_effect_memory_pretraining_for_robot_manipulation_dissection.md)
 - [动作 QFormer：动作监督下的结构化表征塑造 (Action QFormer: Structured Representation Shaping under Action Supervision in Vision-Language-Action Models)](./action_qformer_structured_representation_shaping_under_actio_dissection.md)
@@ -125,6 +125,7 @@
 - [HEX：跨具身全身操控的类人对齐专家架构 (HEX: Humanoid-Aligned Experts for Cross-Embodiment Whole-Body Manipulation)](./hex_humanoid_aligned_experts_for_cross_embodiment_whole_body_dissection.md)
 - [HiMoE-VLA：分层混合专家通用视觉-语言-动作策略 (Hierarchical Mixture-of-Experts for Generalist Vision-Language-Action Policies)](./himoe_vla_hierarchical_mixture_of_experts_for_generalist_vis_dissection.md)
 - [HoloQ-VLA：均匀 W4A4 量化视觉-语言-动作模型 (HoloQ-VLA: Uniform W4A4 Quantization of Vision-Language-Action Models)](./holoq_vla_uniform_w4a4_quantization_of_vision_language_actio_dissection.md)
+- [一个 VLA 需要多少条示范？VLA 微调样本效率解剖 (How Many Demonstrations Does a VLA Need? On the Sample Efficiency of VLA Finetuning)](./how_many_demonstrations_does_a_vla_need_on_the_sample_effici_dissection.md)
 - [人类数据是伪装成另一种形式的机器人数据：Danfei Xu 深度访谈（2026）](./human_data_sensorimotor_ghost_danfei_xu_interview_2026.md)
 - [HY-Embodied-0.5：具身基础模型实战解析 (HY-Embodied-0.5: Embodied Foundation Models for Real-World Agents)](./hy_embodied_05_embodied_foundation_models_for_real_world_age_dissection.md)
 - [Hydra-0：基于动作流的通用世界模型与控制 (Hydra-0: Action Flow for Generalist World Modeling and Control)](./hydra_0_action_flow_for_generalist_world_modeling_and_contro_dissection.md)
