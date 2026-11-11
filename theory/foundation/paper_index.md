@@ -720,6 +720,8 @@
 | Concertina: Embodying Manipulation and Cognition in One Diffusion Vision-Language Model | [link](https://arxiv.org/abs/2611.07513) | 🔧 daily 2026-11-06 |
 | OopsieRecover: Learning Transferable VLA Corrections from Semantic Interventions | [link](https://arxiv.org/abs/2611.08462) | [VLA后训] 🔧 daily 2026-11-06 |
 | ODEAction: From Predicting Chunks to Evolving Actions | [link](https://arxiv.org/abs/2611.09672) | 🔧 daily 2026-11-09 |
+| Is Your Robot's Memory Just a Clock? Temporal Shortcuts in Memory-Augmented VLA Policies | [link](https://arxiv.org/abs/2611.14488) | 🔧 daily 2026-11-11 |
+| How Much of Your VLA Is kNN | [link](https://arxiv.org/abs/2611.13160) | [世界模型] 🔧 daily 2026-11-11 |
 
 ### 數據
 
@@ -805,6 +807,7 @@
 | VTAM: Efficient Visuo-Tactile World-Action Models for Contact-Rich Manipulation without Tactile Pretraining | [link](https://arxiv.org/abs/2603.23481) | 🎯 tactile \| 🔧 daily 2026-11-06 |
 | TactileLab: Sim-to-Real Dexterous Robot Manipulation with Efficient Shear-Sensitive Tactile Simulation | [link](https://arxiv.org/abs/2611.07881) | 🎯 tactile \| 🔧 daily 2026-11-06 |
 | MDF++: Visuo-Tactile World Action Model with End-to-end Representation Learning | [link](https://arxiv.org/abs/2611.09293) | 🎯 tactile \| 🔧 daily 2026-11-09 |
+| DexSeed: Expanding Human Hand-Object Interactions into Robot Demonstrations for Dexterous Policy Learning | [link](https://arxiv.org/abs/2611.14092) | 🎯 tactile \| 🔧 daily 2026-11-11 |
 
 ### 其他
 
