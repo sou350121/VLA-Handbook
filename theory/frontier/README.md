@@ -53,7 +53,7 @@
 
 > 上方保留人工导读与主题分组。本节列出本目录内全部 Git 已追踪 Markdown 文件，包含综述与索引，不含 README。按文件路径排序。
 
-**共 103 份文档。**
+**共 105 份文档。**
 
 - [3DROID：可渲染 3D Gaussian 機器人數據集與逐場景可靠性度量 (3DROID: A Renderable 3D Gaussian Dataset with Measured Per-Scene Reliability)](./3droid_a_renderable_3d_gaussian_dataset_with_measured_per_sc_dissection.md)
 - [生物物理線蟲神經環路作為視覺魯棒機器人操作的「任務無關動力學核心」 (A Biophysically Detailed C. elegans Circuit as a Task-Agnostic Dynamical Core for Visually Robust Robot Manipulation)](./a_biophysically_detailed_c_elegans_circuit_as_a_task_agnosti_dissection.md)
@@ -66,6 +66,7 @@
 - [Beyond Reconstruction：动作 Tokenization 到底需要什么？(Beyond Reconstruction: What Matters in Action Tokenization for Robot Policies?)](./beyond_reconstruction_what_matters_in_action_tokenization_fo_dissection.md)
 - [超越视角泛化：多视角演示为机器人操作提供了什么，以及如何合成它们 (Beyond Viewpoint Generalization: What Multi-View Demonstrations Offer and How to Synthesize Them for Robot Manipulation?)](./beyond_viewpoint_generalization_what_multi_view_demonstratio_dissection.md)
 - [BURGER：用“具身绘画”给 VLA 泛化能力做压力测试 (BURGER: Benchmarking and Understanding Robotic Generalization via Embodied dRawing)](./burger_benchmarking_and_understanding_robotic_generalization_dissection.md)
+- [让 LLM 直接改机器人策略权重：词法 grounding 的稀疏修复 (Can LLMs Debug Robots by Editing Their Weights?)](./can_llms_debug_robots_by_editing_their_weights_dissection.md)
 - [经典 GNN 仍然很强：节点分类基线再评估 (Classic GNNs are Strong Baselines for Node Classification)](./classic_gnns_strong_baselines_node_classification_2024.md)
 - [Claude Code Memory 系統 → VLA 機器人記憶：跨領域架構遷移分析](./claude_code_memory_architecture_applied_to_vla_2026.md)
 - [部署中协同演化机器人编排器与策略 (Co-Evolving Robot Orchestrators and Policies through Deployment)](./co_evolving_robot_orchestrators_and_policies_through_deploym_dissection.md)
@@ -119,6 +120,7 @@
 - [前史记忆：人形 Loco-Manipulation 的对象事件关键帧记忆 (Memory before Goal: Role of Pre-History Memory for Humanoid Loco-Manipulation)](./memory_before_goal_role_of_pre_history_memory_for_humanoid_l_dissection.md)
 - [免整理记忆：为机器人策略学习多流潜在记忆 (Memory Without Curation: Learning Multi-Stream Latent Memory for Robot Policies)](./memory_without_curation_learning_multi_stream_latent_memory_dissection.md)
 - [分階段操作：以行為相位解耦實現類人機器人操作 (Move-Then-Operate: Behavioral Phasing for Human-Like Robotic Manipulation)](./move_then_operate_behavioral_phasing_for_human_like_robotic_dissection.md)
+- [ODEAction：从预测动作块到连续演化动作（ODEAction: From Predicting Chunks to Evolving Actions）](./odeaction_from_predicting_chunks_to_evolving_actions_dissection.md)
 - [智能体式操作策略：将通用智能体接入控制环的 AMP1（On Agentic Manipulation Policies）](./on_agentic_manipulation_policies_dissection.md)
 - [一只手注视另一只手：动态环境下的多智能体协作双臂操作 (One Hand Watches The Other: Dynamic Multi-Agent Cooperation for Sample-Efficient Bimanual Manipulation in Dynamic Environments)](./one_hand_watches_the_other_dynamic_multi_agent_cooperation_f_dissection.md)
 - [一个策略，多种形态：统一相机中心动作几何预训练用于异构具身操作 (One Policy, Many Embodiments: Unified Camera-Centric Action Geometry Pre-training for Heterogeneous Embodied Manipulation)](./one_policy_many_embodiments_unified_camera_centric_action_ge_dissection.md)
