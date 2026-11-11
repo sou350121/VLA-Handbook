@@ -283,3 +283,4 @@
 | 2026-11-09 | NVIDIA Robotics | product | NVIDIA在CoRL大会上推出基于Cosmos构建的开放世界动作模型GR00T 2、开源机器人学习框架Isaac Lab 3.0，以及新的开放基准与智能体工作流。 | ⚡ | news | https://blogs.nvidia.com/blog/robotics-simulation-advancements-corl/ |
 | 2026-11-09 | NVIDIA Robotics | product | NVIDIA在CoRL大会上推出基于Cosmos构建的开放前沿世界动作模型GR00T 2，支持灵巧操作技能学习与跨机器人本体技能迁移。 | ⚡ | news | https://blogs.nvidia.com/blog/robotics-simulation-advancements-corl/?ncid=so-link-353370-vt48 |
 | 2026-11-09 | Boston Dynamics | product | Boston Dynamics 在 Atlas 机器人上测试加装轮子，以验证全身强化学习控制器与真实执行硬件的配合。 | 🔧 | news | https://bostondynamics.com/blog/atlas-on-a-roll/ |
+| 2026-11-06 | Robot Era | product | 星动纪元在2026亚洲国际物流技术与运输系统展览会上展示具身智能物流解决方案，覆盖拣选、打包、供包分拣三大环节，并称同一机器人本体可适配不同作业形态。 | 🔧 | news | https://mp.weixin.qq.com/s/thAIDMlPneVQdT-jsfdzEQ |
