@@ -114,7 +114,7 @@
 
 > 上方保留人工导读与主题分组。本节列出本目录内全部 Git 已追踪 Markdown 文件，包含综述与索引，不含 README。按文件路径排序。
 
-**共 193 份文档。**
+**共 194 份文档。**
 
 - [2D 还是 3D：谁主导 VLA 模型中的显著性？—— 三阶段 Token 剪枝框架与模态显著性感知 (2D or 3D: Who Governs Salience in VLA Models? -- Tri-Stage Token Pruning Framework with Modality Salience Awareness)](./2d_or_3d_who_governs_salience_in_vla_models_tri_stage_token_dissection.md)
 - [3DThinkVLA：通过3D思维引导协同训练赋予VLA模型隐式3D空间推理能力 (3DThinkVLA: Endowing Vision-Language-Action Models with Latent 3D Priors via 3D-Thinking-Guided Co-training)](./3dthinkvla_endowing_vision_language_action_models_with_laten_dissection.md)
@@ -197,6 +197,7 @@
 - [INSIGHT: 推理时序列自省生成人工辅助触发器 (INference-time Sequence Introspection for Generating Help Triggers in VLA Models)](./insight_inference_time_sequence_introspection_for_generating_dissection.md)
 - [InstructVLA：从理解到操作的视觉 - 语言 - 动作指令微调 (InstructVLA: Vision-Language-Action Instruction Tuning from Understanding to Manipulation)](./instructvla_vision_language_action_instruction_tuning_from_u_dissection.md)
 - [成功率就够了么？输入扰动如何改变 VLA 在桌面操作中的行为 (Is Success All You Need? Investigating the Impact of Input Perturbations on VLA Behaviour in Tabletop Manipulation Tasks)](./is_success_all_you_need_investigating_the_impact_of_input_pe_dissection.md)
+- [你的机器人记忆只是时钟吗？记忆增强 VLA 的时间捷径拆解 (Is Your Robot's Memory Just a Clock? Temporal Shortcuts in Memory-Augmented VLA Policies)](./is_your_robots_memory_just_a_clock_temporal_shortcuts_in_mem_dissection.md)
 - [JevVLA：用同一个能量标量为离散候选与连续动作块做轻量适配 (JevVLA: Jev-Inspired Energy-Based Adaptation for Vision-Language-Action Policies)](./jevvla_jev_inspired_energy_based_adaptation_for_vision_langu_dissection.md)
 - [Juno：驯服预测隐变量用于 VLA 模型 (Juno: Taming Predictive Latents for Vision-Language-Action Models)](./juno_taming_predictive_latents_for_vision_language_action_mo_dissection.md)
 - [最小可觉差建模用于 VLA Token 压缩 (Just Noticeable Difference Modeling for Token Compression in Vision-Language-Action Models)](./just_noticeable_difference_modeling_for_token_compression_in_dissection.md)
