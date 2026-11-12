@@ -90,7 +90,7 @@
 
 > 上方保留人工导读与主题分组。本节列出本目录内全部 Git 已追踪 Markdown 文件，包含综述与索引，不含 README。按文件路径排序。
 
-**共 108 份文档。**
+**共 109 份文档。**
 
 - [AcceRL：面向 VLA 的分布式异步强化学习与世界模型框架 (AcceRL: A Distributed Asynchronous Reinforcement Learning and World Model Framework for Vision-Language-Action Models)](./accerl_a_distributed_asynchronous_reinforcement_learning_and_dissection.md)
 - [AeroAct: 动作中心世界-动作模型用于语言条件四旋翼飞行 (AeroAct: Action-Centered World-Action Models for Language-Conditioned Quadrotor Flight)](./aeroact_action_centered_world_action_models_for_language_con_dissection.md)
@@ -130,6 +130,7 @@
 - [ImageWAM：世界动作模型真的需要视频生成吗？(ImageWAM: Do World Action Models Really Need Video Generation, or Just Image Editing?)](./imagewam_do_world_action_models_really_need_video_generation_dissection.md)
 - [用接地潜在动作世界模型从异构演示中学习 (Imitation from Heterogeneous Demonstrations using Grounded Latent-Action World Models)](./imitation_from_heterogeneous_demonstrations_using_grounded_l_dissection.md)
 - [保留未来，丢掉推演：RIFT 让世界动作模型一步生成未来缓存 (Keep the Future, Drop the Rollout: RIFT for World Action Models)](./keep_the_future_drop_the_rollout_rift_for_world_action_model_dissection.md)
+- [LaST0.5：以交互为中心隐空间推理的通用世界动作模型 (LaST0.5: A Generalist World Action Model with Interaction-Centric Latent Reasoning)](./last05_a_generalist_world_action_model_with_interaction_cent_dissection.md)
 - [LaWAM：隐空间世界动作模型 (Latent World Action Models for Efficient Dynamics-Aware Robot Policies)](./lawam_latent_world_action_models_for_efficient_dynamics_awar_dissection.md)
 - [LDA-1B：把 VLA 與世界模型在 DINO 隱空間裡縫合 (Latent Dynamics Action Model via Universal Embodied Data Ingestion)](./lda_1b_dissection.md)
 - [从视频生成模型学习物理：多模态连续序列世界交互模型用于机器人操作 (Learning Physics from Pretrained Video Models: A Multimodal Continuous and Sequential World Interaction Models for Robotic Manipulation)](./learning_physics_from_pretrained_video_models_a_multimodal_c_dissection.md)
