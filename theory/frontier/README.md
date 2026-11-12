@@ -53,7 +53,7 @@
 
 > 上方保留人工导读与主题分组。本节列出本目录内全部 Git 已追踪 Markdown 文件，包含综述与索引，不含 README。按文件路径排序。
 
-**共 105 份文档。**
+**共 106 份文档。**
 
 - [3DROID：可渲染 3D Gaussian 機器人數據集與逐場景可靠性度量 (3DROID: A Renderable 3D Gaussian Dataset with Measured Per-Scene Reliability)](./3droid_a_renderable_3d_gaussian_dataset_with_measured_per_sc_dissection.md)
 - [生物物理線蟲神經環路作為視覺魯棒機器人操作的「任務無關動力學核心」 (A Biophysically Detailed C. elegans Circuit as a Task-Agnostic Dynamical Core for Visually Robust Robot Manipulation)](./a_biophysically_detailed_c_elegans_circuit_as_a_task_agnosti_dissection.md)
@@ -102,6 +102,7 @@
 - [GIFT：通过动作导向的结构化监督引导中间特征训练 (Guided Intermediate Feature Training via Action-Oriented Structural Supervision for Robotic Manipulation)](./gift_guided_intermediate_feature_training_via_action_oriente_dissection.md)
 - [以 3D Grounding 作为机器人基座：Grounded Action Model (Grounded Action Model: 3D Grounding as a Foundation for Robotics)](./grounded_action_model_3d_grounding_as_a_foundation_for_robot_dissection.md)
 - [GuidedAttention：可解释可纠正的视觉注意力，提升 OOD 鲁棒的模仿学习 (GuidedAttention: Interpretable and Correctable Visual Attention for OOD-Robust Robot Manipulation via Imitation Learning)](./guidedattention_interpretable_and_correctable_visual_attenti_dissection.md)
+- [HABIT：面向人机共存环境的机器人操作示范数据集（HABIT: Human-Aware Behavior and Interaction Training Dataset for Robot Manipulation）](./habit_human_aware_behavior_and_interaction_training_dataset_dissection.md)
 - [手物交互多视角联合生成：HarmoHOI (Harmonizing Appearance and 3D Motion for Multi-view Hand-Object Interaction Synthesis)](./harmohoi_harmonizing_appearance_and_3d_motion_for_multi_view_dissection.md)
 - [基于轨迹分割的人类高效大规模机器人后训练框架 (HELP: Human-Efficient Large-Scale Robot Post-Training with Rollout Segmentation)](./help_human_efficient_large_scale_robot_post_training_with_ro_dissection.md)
 - [HexaShell：用薄封装探测 VLM 编码 Agent 作为机器人编码 Agent 的上限 (HexaShell: A Thin Harness for Exploring the Limits of VLM Agents as Robot Coding Agents)](./hexashell_a_thin_harness_for_exploring_the_limits_of_vlm_age_dissection.md)
