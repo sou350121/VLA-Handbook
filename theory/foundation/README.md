@@ -96,7 +96,7 @@
 
 > 上方保留人工导读与主题分组。本节列出本目录内全部 Git 已追踪 Markdown 文件，包含综述与索引，不含 README。按文件路径排序。
 
-**共 93 份文档。**
+**共 94 份文档。**
 
 - [动作-效应记忆预训练用于机器人操作 (Action-Effect Memory Pretraining for Robot Manipulation)](./action_effect_memory_pretraining_for_robot_manipulation_dissection.md)
 - [动作 QFormer：动作监督下的结构化表征塑造 (Action QFormer: Structured Representation Shaping under Action Supervision in Vision-Language-Action Models)](./action_qformer_structured_representation_shaping_under_actio_dissection.md)
@@ -120,6 +120,7 @@
 - [ForeTime-VLA：从世界动作模型蒸馏因果未来Token到VLA (ForeTime-VLA: Causal Future-Token Distillation from a World Action Model for Conveyor-Belt Manipulation)](./foretime_vla_causal_future_token_distillation_from_a_world_a_dissection.md)
 - [🏗️ 基础理论 — ML 工具箱主线总纲](./foundation_mainline.md)
 - [几何感知潜在动作建模：让跨具身 VLA 预训练"看见手指" (GALA: Geometry-Aware Latent Action Modeling for Vision-Language-Action Model Pretraining across Embodiments)](./gala_geometry_aware_latent_action_modeling_for_vision_langua_dissection.md)
+- [游戏数据做具身预训练：事件预测 + 前瞻监督的完整配方 (Game-Enhanced Embodied Learning with Event and Foresight Pretraining)](./game_enhanced_embodied_learning_with_event_and_foresight_pre_dissection.md)
 - [GDLAM：分组解耦的隐动作模型，为具身预训练提供"可干预"的表征 (GDLAM: Group-Disentangled Latent Action Model for Highly Disentangled Embodied Pretraining)](./gdlam_group_disentangled_latent_action_model_for_highly_dise_dissection.md)
 - [HBVLA：将 VLA 模型推向 1-Bit 后训练量化 (Pushing 1-Bit Post-Training Quantization for Vision-Language-Action Models)](./hbvla_pushing_1_bit_post_training_quantization_for_vision_la_dissection.md)
 - [HEX：跨具身全身操控的类人对齐专家架构 (HEX: Humanoid-Aligned Experts for Cross-Embodiment Whole-Body Manipulation)](./hex_humanoid_aligned_experts_for_cross_embodiment_whole_body_dissection.md)
