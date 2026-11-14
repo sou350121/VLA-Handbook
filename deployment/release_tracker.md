@@ -285,3 +285,4 @@
 | 2026-11-09 | Boston Dynamics | product | Boston Dynamics 在 Atlas 机器人上测试加装轮子，以验证全身强化学习控制器与真实执行硬件的配合。 | 🔧 | news | https://bostondynamics.com/blog/atlas-on-a-roll/ |
 | 2026-11-06 | Robot Era | product | 星动纪元在2026亚洲国际物流技术与运输系统展览会上展示具身智能物流解决方案，覆盖拣选、打包、供包分拣三大环节，并称同一机器人本体可适配不同作业形态。 | 🔧 | news | https://mp.weixin.qq.com/s/thAIDMlPneVQdT-jsfdzEQ |
 | 2026-11-11 | MuJoCo | sim | 4.0.1 released |  | github_release | https://github.com/google-deepmind/mujoco/releases/tag/4.0.1 |
+| 2026-11-09 | NVIDIA Robotics | product | NVIDIA在CoRL推出Isaac Lab-Arena 0.4开发者预览版，以及面向工业灵巧性与适应性的DexBench和VABAR开放基准。 | 🔧 | news | https://forums.developer.nvidia.com/t/news-nvidia-at-corl-2026-advancing-robot-learning/388596 |
