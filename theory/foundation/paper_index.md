@@ -722,6 +722,7 @@
 | ODEAction: From Predicting Chunks to Evolving Actions | [link](https://arxiv.org/abs/2611.09672) | 🔧 daily 2026-11-09 |
 | Is Your Robot's Memory Just a Clock? Temporal Shortcuts in Memory-Augmented VLA Policies | [link](https://arxiv.org/abs/2611.14488) | 🔧 daily 2026-11-11 |
 | How Much of Your VLA Is kNN | [link](https://arxiv.org/abs/2611.13160) | [世界模型] 🔧 daily 2026-11-11 |
+| What Can a VLA Learn from the Agent That Calls It? Task-Level Experience Distillation for Embodied Navigation | [link](https://tldr.takara.ai/p/2611.16246) | [VLA后训] 🔧 daily 2026-11-14 |
 
 ### 數據
 
@@ -753,6 +754,7 @@
 | RoboSTD: Zero-Shot Single-to-Dual Transfer via Sagittal Mirroring for Bimanual Learning | [link](https://arxiv.org/abs/2610.36685) | 🔧 daily 2026-10-28 |
 | UMI-Live for In-The-Wild Bimanual Robotics Data Collection | [link](https://arxiv.org/abs/2610.39385) | 🔧 daily 2026-10-31 |
 | AIRoA-0: Long-Horizon, Precise, Cross-Embodiment Manipulation from Handheld Data | [link](https://arxiv.org/abs/2611.03815) | 🔧 daily 2026-11-04 |
+| EgoX: Egocentric Cross-Embodiment Manipulation with Embodiment Dreaming | [link](https://tldr.takara.ai/p/2611.16728) | 🔧 daily 2026-11-14 |
 
 ### 部署
 
