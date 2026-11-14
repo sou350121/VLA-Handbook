@@ -53,7 +53,7 @@
 
 > 上方保留人工导读与主题分组。本节列出本目录内全部 Git 已追踪 Markdown 文件，包含综述与索引，不含 README。按文件路径排序。
 
-**共 109 份文档。**
+**共 110 份文档。**
 
 - [3DROID：可渲染 3D Gaussian 機器人數據集與逐場景可靠性度量 (3DROID: A Renderable 3D Gaussian Dataset with Measured Per-Scene Reliability)](./3droid_a_renderable_3d_gaussian_dataset_with_measured_per_sc_dissection.md)
 - [生物物理線蟲神經環路作為視覺魯棒機器人操作的「任務無關動力學核心」 (A Biophysically Detailed C. elegans Circuit as a Task-Agnostic Dynamical Core for Visually Robust Robot Manipulation)](./a_biophysically_detailed_c_elegans_circuit_as_a_task_agnosti_dissection.md)
@@ -87,6 +87,7 @@
 - [Ego Guidance：用无动作人类 egocentric 视频增强机器人策略学习 (Ego Guidance: Enhancing Robot Policy Learning with Action-Free Human Egocentric Videos)](./ego_guidance_enhancing_robot_policy_learning_with_action_fre_dissection.md)
 - [自我中心人类演示直迁人形全身协调技能 (EgoHumanoid-V2: Human-to-Humanoid Transfer of Coordinated Whole-Body Skills for Loco-Manipulation)](./egohumanoid_v2_human_to_humanoid_transfer_of_coordinated_who_dissection.md)
 - [EgoSpeedUp：把人类操作节奏迁移给机器人策略 (EgoSpeedUp: Transferring Human Manipulation Tempo to Robot Policies)](./egospeedup_transferring_human_manipulation_tempo_to_robot_po_dissection.md)
+- [Embodied First Exam：把 coding agent 放进物理约束下的机器人考场 (Embodied First Exam)](./embodied_first_exam_dissection.md)
 - [从视觉运动轨迹中涌现符号结构：ENAP 论文精读 (Emergent Neural Automaton Policies)](./emergent_neural_automaton_policies_learning_symbolic_structu_dissection.md)
 - [人工三元智能：生物启发的物理 AI 传感器优先架构 (Artificial Tripartite Intelligence: A Bio-Inspired, Sensor-First Architecture for Physical AI)](./emerging_ideas_artificial_tripartite_intelligence_a_bio_insp_dissection.md)
 - [ENPIRE：真实世界中的具身智能体策略自进化 (ENPIRE: Agentic Robot Policy Self-Improvement in the Real World)](./enpire_agentic_robot_policy_self_improvement_in_the_real_wor_dissection.md)
