@@ -250,9 +250,13 @@
     "https://www.xiaohongshu.com/explore/6ae6883e000000001802cb0c",
     "https://www.xiaohongshu.com/explore/6ace39ba0000000018007cdc",
     "https://www.xiaohongshu.com/explore/6aa04d02000000000f03a400",
-    "https://www.xiaohongshu.com/explore/6af35903000000002b0049fe"
+    "https://www.xiaohongshu.com/explore/6af35903000000002b0049fe",
+    "https://www.xiaohongshu.com/explore/6af7275b000000002903e4e9",
+    "https://www.xiaohongshu.com/explore/6ac879fc0000000013018fb1",
+    "https://www.xiaohongshu.com/explore/6ae290740000000034005525",
+    "https://www.xiaohongshu.com/explore/6a72b7c10000000005028e5a"
   ],
-  "count": 251,
+  "count": 255,
   "last_updated": "2026-11-15",
   "runs": [
     {
@@ -784,6 +788,28 @@
         "6ace39ba0000000018007cdc",
         "6aa04d02000000000f03a400",
         "6af35903000000002b0049fe"
+      ],
+      "report": "2026-11-15-codex-weekly.md"
+    },
+    {
+      "date": "2026-11-15",
+      "run_id": "xhs-vla-20261115-final",
+      "parent_run_id": "xhs-vla-20261115",
+      "searches": 9,
+      "detail_attempts": 16,
+      "new_added": 4,
+      "experiment_or_project": 3,
+      "critique_or_discussion": 1,
+      "excluded_or_unverified": 12,
+      "weekly_batch_total_new": 30,
+      "incremental_series_total_new": 128,
+      "target": 30,
+      "status": "complete",
+      "new_note_ids": [
+        "6af7275b000000002903e4e9",
+        "6ac879fc0000000013018fb1",
+        "6ae290740000000034005525",
+        "6a72b7c10000000005028e5a"
       ],
       "report": "2026-11-15-codex-weekly.md"
     }
