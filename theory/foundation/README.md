@@ -96,7 +96,7 @@
 
 > 上方保留人工导读与主题分组。本节列出本目录内全部 Git 已追踪 Markdown 文件，包含综述与索引，不含 README。按文件路径排序。
 
-**共 94 份文档。**
+**共 95 份文档。**
 
 - [动作-效应记忆预训练用于机器人操作 (Action-Effect Memory Pretraining for Robot Manipulation)](./action_effect_memory_pretraining_for_robot_manipulation_dissection.md)
 - [动作 QFormer：动作监督下的结构化表征塑造 (Action QFormer: Structured Representation Shaping under Action Supervision in Vision-Language-Action Models)](./action_qformer_structured_representation_shaping_under_actio_dissection.md)
@@ -191,6 +191,7 @@
 - [VLA 数据工程指南：从采集到训练的完整链路](./vla_data_engineering_guide.md)
 - [VLA Loss Functions Handbook（VLM-Robot Policy 训练目标实务手册）](./vla_loss_functions_handbook.md)
 - [WEAVER：更好的、更快的、更长的——面向机器人操作的高效世界模型](./weaver_better_faster_longer_an_effective_world_model_for_rob_dissection.md)
+- [当 VLA 学会“调用它的 Agent”：任务级经验蒸馏（What Can a VLA Learn from the Agent That Calls It? Task-Level Experience Distillation for Embodied Navigation）](./what_can_a_vla_learn_from_the_agent_that_calls_it_task_level_dissection.md)
 - [WAM 自我回放：用世界模型生成伪轨迹实现持续模仿学习 (World Action Models Enable Continual Imitation Learning with Recurrent Generative Replays)](./world_action_models_enable_continual_imitation_learning_with_dissection.md)
 
 <!-- VLA:THEORY-NAV:END -->
