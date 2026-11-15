@@ -234,9 +234,25 @@
     "https://www.xiaohongshu.com/explore/6ae7cb9b000000001901d800",
     "https://www.xiaohongshu.com/explore/6aa0f8200000000011033eae",
     "https://www.xiaohongshu.com/explore/6aed93240000000009013835",
-    "https://www.xiaohongshu.com/explore/6af883fc000000002a00eafe"
+    "https://www.xiaohongshu.com/explore/6af883fc000000002a00eafe",
+    "https://www.xiaohongshu.com/explore/6addc22c000000003301f79f",
+    "https://www.xiaohongshu.com/explore/6aa2b6d6000000002800357d",
+    "https://www.xiaohongshu.com/explore/69bcf929000000002a03bcf6",
+    "https://www.xiaohongshu.com/explore/6809923c000000001d03a863",
+    "https://www.xiaohongshu.com/explore/6aeae4c800000000190002b9",
+    "https://www.xiaohongshu.com/explore/6ad82c99000000003102ecc9",
+    "https://www.xiaohongshu.com/explore/6aba6c080000000015012d62",
+    "https://www.xiaohongshu.com/explore/68efd5c3000000000703438c",
+    "https://www.xiaohongshu.com/explore/6aa7b8d1000000000d02553c",
+    "https://www.xiaohongshu.com/explore/6aed9b0b000000002b0287f0",
+    "https://www.xiaohongshu.com/explore/6aa5df9c000000002802e001",
+    "https://www.xiaohongshu.com/explore/6ad5cbfd0000000028025f17",
+    "https://www.xiaohongshu.com/explore/6ae6883e000000001802cb0c",
+    "https://www.xiaohongshu.com/explore/6ace39ba0000000018007cdc",
+    "https://www.xiaohongshu.com/explore/6aa04d02000000000f03a400",
+    "https://www.xiaohongshu.com/explore/6af35903000000002b0049fe"
   ],
-  "count": 235,
+  "count": 251,
   "last_updated": "2026-11-15",
   "runs": [
     {
@@ -719,6 +735,57 @@
         "具身智能 采集手套 工厂 UMI 失败 真机",
         "具身智能 VLA 数据 采集 真机 失败 复盘 SO101"
       ]
+    },
+    {
+      "date": "2026-11-15",
+      "run_id": "xhs-vla-20261115-continuation",
+      "parent_run_id": "xhs-vla-20261115",
+      "keywords": [
+        "机械臂 真机 成功率 失败 实测 SO101",
+        "SO101 自己训练 夹爪 成功 失败 LeRobot",
+        "LeRobot record 数据 关节 时间同步 相机 帧率",
+        "真机 π0.5 微调 训练步数 示教 失败",
+        "ACT 真机 机械臂 录制 回放 数据集 失败",
+        "机器人 具身 数据集 遥操 采集 失败 回放 piper",
+        "机械臂 手眼标定 误差 真机 测试 复盘",
+        "真机强化学习 HIL SERL DAgger 我的 失败 次数",
+        "机械臂 数据采集 踩坑 丢帧 回放 关节",
+        "机器人 真机 部署 复现 复盘 grasp pi0.5 数据 迭代",
+        "机械臂 夹爪 末端 误差 TCP 重复 定位 我的 测试",
+        "具身智能 真机 数据采集 时间戳 传感器 对齐 开源 数据",
+        "机械臂 真机 调试 实验 失败 延迟 夹取 录制",
+        "开源 VLA 复现 真机 我的 数据 条 机械臂 抓取",
+        "真机 数采 我的 示教 数据集 ACT SO ARM 机械臂"
+      ],
+      "searches": 15,
+      "detail_attempts": 30,
+      "new_added": 16,
+      "experiment_or_project": 12,
+      "critique_or_discussion": 4,
+      "excluded_or_unverified": 14,
+      "weekly_batch_total_new": 26,
+      "incremental_series_total_new": 124,
+      "target": 30,
+      "status": "partial_quality_threshold",
+      "new_note_ids": [
+        "6addc22c000000003301f79f",
+        "6aa2b6d6000000002800357d",
+        "69bcf929000000002a03bcf6",
+        "6809923c000000001d03a863",
+        "6aeae4c800000000190002b9",
+        "6ad82c99000000003102ecc9",
+        "6aba6c080000000015012d62",
+        "68efd5c3000000000703438c",
+        "6aa7b8d1000000000d02553c",
+        "6aed9b0b000000002b0287f0",
+        "6aa5df9c000000002802e001",
+        "6ad5cbfd0000000028025f17",
+        "6ae6883e000000001802cb0c",
+        "6ace39ba0000000018007cdc",
+        "6aa04d02000000000f03a400",
+        "6af35903000000002b0049fe"
+      ],
+      "report": "2026-11-15-codex-weekly.md"
     }
   ]
 }
