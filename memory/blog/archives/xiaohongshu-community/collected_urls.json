@@ -224,10 +224,20 @@
     "https://www.xiaohongshu.com/explore/6aefe75d000000001802fa40",
     "https://www.xiaohongshu.com/explore/6a341b3c000000000f028a96",
     "https://www.xiaohongshu.com/explore/6a12aa100000000035028dfa",
-    "https://www.xiaohongshu.com/explore/6ac6a03e0000000019038800"
+    "https://www.xiaohongshu.com/explore/6ac6a03e0000000019038800",
+    "https://www.xiaohongshu.com/explore/6ad9bb44000000002b00fe03",
+    "https://www.xiaohongshu.com/explore/6af7f31d000000001f01415f",
+    "https://www.xiaohongshu.com/explore/6af39c510000000023012db7",
+    "https://www.xiaohongshu.com/explore/6a71b0d00000000025013dea",
+    "https://www.xiaohongshu.com/explore/6adac70e000000003301ee3d",
+    "https://www.xiaohongshu.com/explore/6a6427500000000011010b38",
+    "https://www.xiaohongshu.com/explore/6ae7cb9b000000001901d800",
+    "https://www.xiaohongshu.com/explore/6aa0f8200000000011033eae",
+    "https://www.xiaohongshu.com/explore/6aed93240000000009013835",
+    "https://www.xiaohongshu.com/explore/6af883fc000000002a00eafe"
   ],
-  "count": 225,
-  "last_updated": "2026-11-08",
+  "count": 235,
+  "last_updated": "2026-11-15",
   "runs": [
     {
       "date": "2026-04-17",
@@ -663,6 +673,52 @@
         "6ac6a03e0000000019038800"
       ],
       "report": "2026-11-08-codex-weekly.md"
+    },
+    {
+      "date": "2026-11-15",
+      "run_id": "xhs-vla-20261115",
+      "searches": 18,
+      "eligible_searches": 15,
+      "detail_attempts": 49,
+      "eligible_detail_attempts": 46,
+      "new_added": 10,
+      "experiment_or_project": 4,
+      "critique_or_discussion": 6,
+      "excluded_or_unverified_within_scope": 36,
+      "out_of_scope_details_discarded": 3,
+      "incremental_series_total_new": 108,
+      "target": 30,
+      "status": "partial_quality_threshold",
+      "new_note_ids": [
+        "6ad9bb44000000002b00fe03",
+        "6af7f31d000000001f01415f",
+        "6af39c510000000023012db7",
+        "6a71b0d00000000025013dea",
+        "6adac70e000000003301ee3d",
+        "6a6427500000000011010b38",
+        "6ae7cb9b000000001901d800",
+        "6aa0f8200000000011033eae",
+        "6aed93240000000009013835",
+        "6af883fc000000002a00eafe"
+      ],
+      "report": "2026-11-15-codex-weekly.md",
+      "keywords": [
+        "具身智能 数据采集 遥操作 踩坑",
+        "LeRobot 真机 训练 失败",
+        "机器人 遥操作 数据采集 复现 UMI",
+        "OpenVLA OFT 微调 真机 piper 失败",
+        "具身智能 机械臂 真机 部署 抖动 标定",
+        "VLA WAM 世界模型 刷榜 Demo 复现 批评",
+        "pi0.5 真机 复现 数据 失败 LeRobot RDT",
+        "RoboTwin LIBERO 评测 复现 环境 踩坑",
+        "机器人 遥操作 标定 同步 episode 数据 采集",
+        "pi0.5 openpi 真机 部署 回抖 遥操作",
+        "LeRobot 采集 丢帧 时间戳 相机 数据集",
+        "真机 VLA 失败 恢复 数据 DAgger 介入",
+        "真机 vla 机器人 失败 恢复 评测 遥操作",
+        "具身智能 采集手套 工厂 UMI 失败 真机",
+        "具身智能 VLA 数据 采集 真机 失败 复盘 SO101"
+      ]
     }
   ]
 }
