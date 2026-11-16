@@ -648,6 +648,9 @@
 | Real-Time Execution with Autoregressive Policies | [link](https://arxiv.org/abs/2606.13355) | 🔧 daily 2026-11-09 |
 | ActPrune: Action-Grounded Visual Token Pruning for Efficient Vision-Language-Action Models | [link](https://arxiv.org/abs/2611.08827) | [VLA后训] 🔧 daily 2026-11-09 |
 | VICTR: Value-Informed In-Context Learning for Vision-Language-Action Models | [link](https://arxiv.org/abs/2611.08698) | [VLA后训] 🔧 daily 2026-11-09 |
+| Recursive Belief Vision Language Action Models | [link](https://arxiv.org/abs/2602.20659) | 🔧 daily 2026-11-16 |
+| D-VLA: A High-Concurrency Distributed Asynchronous Reinforcement Learning Framework for Vision-Language-Action Models | [link](https://arxiv.org/abs/2605.13276) | [RL] 🔧 daily 2026-11-16 |
+| E0: Expressive Fine-Grained Discrete Action Prediction for Vision-Language-Action Models via Tweedie Discrete Diffusion | [link](https://arxiv.org/abs/2511.21542) | 🔧 daily 2026-11-16 |
 
 ### 動作生成
 
@@ -723,6 +726,7 @@
 | Is Your Robot's Memory Just a Clock? Temporal Shortcuts in Memory-Augmented VLA Policies | [link](https://arxiv.org/abs/2611.14488) | 🔧 daily 2026-11-11 |
 | How Much of Your VLA Is kNN | [link](https://arxiv.org/abs/2611.13160) | [世界模型] 🔧 daily 2026-11-11 |
 | What Can a VLA Learn from the Agent That Calls It? Task-Level Experience Distillation for Embodied Navigation | [link](https://tldr.takara.ai/p/2611.16246) | [VLA后训] 🔧 daily 2026-11-14 |
+| Agentic-Teacher: An Agentic Data Engine for Failure-Driven VLA Post-Training | [link](https://arxiv.org/abs/2611.17394) | [VLA后训] 🔧 daily 2026-11-16 |
 
 ### 數據
 
@@ -810,6 +814,7 @@
 | TactileLab: Sim-to-Real Dexterous Robot Manipulation with Efficient Shear-Sensitive Tactile Simulation | [link](https://arxiv.org/abs/2611.07881) | 🎯 tactile \| 🔧 daily 2026-11-06 |
 | MDF++: Visuo-Tactile World Action Model with End-to-end Representation Learning | [link](https://arxiv.org/abs/2611.09293) | 🎯 tactile \| 🔧 daily 2026-11-09 |
 | DexSeed: Expanding Human Hand-Object Interactions into Robot Demonstrations for Dexterous Policy Learning | [link](https://arxiv.org/abs/2611.14092) | 🎯 tactile \| 🔧 daily 2026-11-11 |
+| TouchTwin: Scaling Human Touch Data via Real-to-Sim-to-Real | [link](https://arxiv.org/abs/2611.17619) | 🎯 tactile \| 🔧 daily 2026-11-16 |
 
 ### 其他
 
