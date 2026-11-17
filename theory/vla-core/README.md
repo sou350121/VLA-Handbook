@@ -114,7 +114,7 @@
 
 > 上方保留人工导读与主题分组。本节列出本目录内全部 Git 已追踪 Markdown 文件，包含综述与索引，不含 README。按文件路径排序。
 
-**共 198 份文档。**
+**共 199 份文档。**
 
 - [2D 还是 3D：谁主导 VLA 模型中的显著性？—— 三阶段 Token 剪枝框架与模态显著性感知 (2D or 3D: Who Governs Salience in VLA Models? -- Tri-Stage Token Pruning Framework with Modality Salience Awareness)](./2d_or_3d_who_governs_salience_in_vla_models_tri_stage_token_dissection.md)
 - [3DThinkVLA：通过3D思维引导协同训练赋予VLA模型隐式3D空间推理能力 (3DThinkVLA: Endowing Vision-Language-Action Models with Latent 3D Priors via 3D-Thinking-Guided Co-training)](./3dthinkvla_endowing_vision_language_action_models_with_laten_dissection.md)
@@ -247,6 +247,7 @@
 - [RDT: 机器人扩散变换器 (Robotics Diffusion Transformer)](./rdt.md)
 - [REACT：滚动去噪与双重解耦的 VLA 反应式机器人控制（REACT: Rolling Denoising and Dual Decoupling for Reactive Robot Control with VLA Models）](./react_rolling_denoising_and_dual_decoupling_for_reactive_rob_dissection.md)
 - [ReconVLA：用“重建式监督”做隐式视觉接地（让 VLA 注意力不跑偏）](./reconvla_implicit_grounding_by_reconstruction.md)
+- [递归信念驱动的视觉-语言-动作模型（Recursive Belief Vision Language Action Models）](./recursive_belief_vision_language_action_models_dissection.md)
 - [通过质量多样性环境生成对 VLA 做红队评测 (Red-Teaming of Vision-Language-Action Models via Quality Diversity Environment Generation)](./red_teaming_of_vision_language_action_models_via_quality_div_dissection.md)
 - [基于反思的任务适应：自改进 VLA 框架 (Reflection-Based Task Adaptation for Self-Improving VLA)](./reflection_based_task_adaptation_for_self_improving_vla_dissection.md)
 - [Reflex: 面向反应关键型操作的快速预测 VLA (Reflex: Enabling Fast and Predictive Vision-Language-Action Models for Reaction-Critical Manipulation)](./reflex_enabling_fast_and_predictive_vision_language_action_m_dissection.md)
