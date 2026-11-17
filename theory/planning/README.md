@@ -96,7 +96,7 @@
 
 > 上方保留人工导读与主题分组。本节列出本目录内全部 Git 已追踪 Markdown 文件，包含综述与索引，不含 README。按文件路径排序。
 
-**共 80 份文档。**
+**共 81 份文档。**
 
 - [分层时空动作分词器：上下文模仿学习的新范式 (HiST-AT: A Hierarchical Spatiotemporal Action Tokenizer for In-Context Imitation Learning)](./a_hierarchical_spatiotemporal_action_tokenizer_for_in_contex_dissection.md)
 - [弹性视觉智能体的架构模式语言 (A Pattern Language for Resilient Visual Agents)](./a_pattern_language_for_resilient_visual_agents_dissection.md)
@@ -168,6 +168,7 @@
 - [ThinkWorld：用世界想象强化动力学链推理（ThinkWorld: World Imagination Reinforces Chain-of-Dynamics Reasoning）](./thinkworld_world_imagination_reinforces_chain_of_dynamics_re_dissection.md)
 - [13 参数推理微调：TinyLoRA (Learning to Reason in 13 Parameters)](./tiny_lora_13_params_reasoning_2026.md)
 - [可证明概率安全：具身 AI 系统的大规模部署新范式 (Towards Provable Probabilistic Safety for Scalable Embodied AI Systems)](./towards_provable_probabilistic_safety_for_scalable_embodied_dissection.md)
+- [在仿真中训练推理模型以原生使用真实机器人（Training Reasoning Models in Simulation to Natively Use Real Robots）](./training_reasoning_models_in_simulation_to_natively_use_real_dissection.md)
 - [Uni-Skill：构建自演化技能库实现通用机器人操作 (Uni-Skill: Building Self-Evolving Skill Repository for Generalizable Robotic Manipulation)](./uni_skill_building_self_evolving_skill_repository_for_genera_dissection.md)
 - [V-VLAPS：价值引导的 VLA 规划 (Value-Guided Planning for Vision-Language-Action Models)](./v_vlaps_value_guided_planning_for_vision_language_action_mod_dissection.md)
 - [VEGA：视觉编码器接地对齐实现空间感知 VLA (VEGA: Visual Encoder Grounding Alignment for Spatially-Aware Vision-Language-Action Models)](./vega_visual_encoder_grounding_alignment_for_spatially_aware_dissection.md)
