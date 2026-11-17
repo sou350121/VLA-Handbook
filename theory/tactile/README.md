@@ -74,7 +74,7 @@
 
 > 上方保留人工导读与主题分组。本节列出本目录内全部 Git 已追踪 Markdown 文件，包含综述与索引，不含 README。按文件路径排序。
 
-**共 73 份文档。**
+**共 74 份文档。**
 
 - [主动触觉探索用于刚体姿态与形状估计 (Active Tactile Exploration for Rigid Body Pose and Shape Estimation)](./active_tactile_exploration_for_rigid_body_pose_and_shape_est_dissection.md)
 - [Active Tactile Exploration：仅触觉的刚体位姿+形状估计 (Active Tactile Exploration for Rigid Body Pose and Shape Estimation)](./active_tactile_exploration_rigid_body_pose_shape_eig_2026.md)
@@ -100,6 +100,7 @@
 - [多模态操作 via 多模态策略共识 (Multi-Modal Manipulation via Multi-Modal Policy Consensus)](./multi_modal_manipulation_via_multi_modal_policy_consensus_dissection.md)
 - [多视图统一相机场：面向几何感知动作表征的 RGB -only 多相机 VLA 策略 (Multi-View Unified Camera Fields: Geometry-Shaped Action-Facing Representations for RGB-Only Multi-Camera VLA Policies)](./multi_view_unified_camera_fields_geometry_shaped_action_faci_dissection.md)
 - [N₀-VTLA：把触觉变成“未来接触”的 latent 条件](./n0_vtla_latent_tactile_tokens_2026.md)
+- [目标即策略：VLM 生成 MPC 代价程序做接触丰富操作 (Objectives as Policies: Vision-Language Model Cost Programs for Contact-Rich Manipulation)](./objectives_as_policies_vision_language_model_cost_programs_f_dissection.md)
 - [OmniUMI: 面向物理具身机器人学习的多模态交互接口 (Towards Physically Grounded Robot Learning via Human-Aligned Multimodal Interaction)](./omniumi_towards_physically_grounded_robot_learning_via_human_dissection.md)
 - [OmniVTA: 大规模视触世界模型用于接触丰富操作 (OmniVTA: Visuo-Tactile World Modeling for Contact-Rich Robotic Manipulation)](./omnivta_visuo_tactile_world_modeling_for_contact_rich_roboti_dissection.md)
 - [OpenViTac：统一仿真-真实框架下的视触觉策略学习与基准评测 (OpenViTac: Learning and Benchmarking Visuo-Tactile Policies in a Unified Sim-and-Real Framework)](./openvitac_learning_and_benchmarking_visuo_tactile_policies_i_dissection.md)
