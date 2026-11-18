@@ -71,7 +71,7 @@
 
 > 上方保留人工导读与主题分组。本节列出本目录内全部 Git 已追踪 Markdown 文件，包含综述与索引，不含 README。按文件路径排序。
 
-**共 45 份文档。**
+**共 46 份文档。**
 
 - [AlphaNIST：从二值任务奖励中涌现的装配技能 (AlphaNIST: Emergent Assembly Skills from Binary Task Rewards)](./alphanist_emergent_assembly_skills_from_binary_task_rewards_dissection.md)
 - [超越示教：面向 VLA 的强化学习仿真—真实协同训练 (Beyond Imitation: Reinforcement Learning-Based Sim-Real Co-Training for VLA Models)](./beyond_imitation_reinforcement_learning_based_sim_real_co_tr_dissection.md)
@@ -90,6 +90,7 @@
 - [多种成功路径：面向 VLA 泛化的多样性驱动 RL 微调 (Many Ways to Succeed: Diversity-Driven RL Fine-Tuning for VLA Generalization)](./many_ways_to_succeed_diversity_driven_rl_fine_tuning_for_vla_dissection.md)
 - [MPCoT：奖励引导多路径潜在推理实现 VLA 测试时扩展 (MPCoT: Reward-Guided Multi-Path Latent Reasoning for Test-Time Scalable Vision-Language-Action)](./mpcot_reward_guided_multi_path_latent_reasoning_for_test_tim_dissection.md)
 - [即时 VLA 自适应 via 测试时强化学习 (On-the-Fly VLA Adaptation via Test-Time Reinforcement Learning)](./on_the_fly_vla_adaptation_via_test_time_reinforcement_learni_dissection.md)
+- [Outcome-Balanced PPO 与策略诱导流校正：面向 Flow-based VLA 的在线 RL 后训练 (Outcome-Balanced PPO and Policy-Induced Flow Rectification for Flow-Based VLA Policies)](./outcome_balanced_ppo_and_policy_induced_flow_rectification_f_dissection.md)
 - [π\*0.6 / RECAP：披着 RL 外衣的 Supervised Learning？——从 Offline RL 的“监督化”到 VLA Post-training 的新范式](./pi0_6_recap_rl_as_supervised_learning.md)
 - [$\\pi$-StepNFT：更宽探索空间需要更细粒度步级监督 (Wider Space Needs Finer Steps in Online RL for Flow-based VLAs)](./pi_stepnft_wider_space_needs_finer_steps_in_online_rl_for_fl_dissection.md)
 - [好的具身奖励模型需要坏行为数据 (Good Embodied Reward Models Need Bad Behavior Data)](./position_good_embodied_reward_models_need_bad_behavior_data_dissection.md)
