@@ -289,3 +289,5 @@
 | 2026-11-13 | Xpeng Robotics | product | 小鹏在英国品牌之夜上首次向英国公众展示全新一代人形机器人IRON，并计划于2027年进入全球市场。 | ⚡ | news | https://www.xiaopeng.com/news/company_news/5620.html |
 | 2026-11-16 | Robot Era | product | 星动纪元宣布星动XHAND 1 Pro-U面向全球科研团队与具身智能开发者限量发售，仅40只，售完即止；该手为英伟达GEAR DexUMI外骨骼的唯一官配构型，并用于GR00T 2五指灵巧操作任务的真机部署。 | ⚡ | news | https://mp.weixin.qq.com/s/sukMI2n1Edeyptr_9e1Clw |
 | 2026-11-17 | Genesis | sim | v1.4.7 released |  | github_release | https://github.com/Genesis-Embodied-AI/genesis-world/releases/tag/v1.4.7 |
+| 2026-11-18 | Fourier | product | 2026年11月16日至19日，傅利叶在德国杜塞尔多夫MEDICA 2026展会上首次展出Care-bot人形机器人GR-3，并设置井字棋人机对弈等互动演示。 | 🔧 | news | https://fftai.com/fourier/article/2122993482026000385 |
+| 2026-11-17 | Xpeng Robotics | product | 小鹏集团在2026年第三季度财报中披露，新一代人形机器人正在向年底的规模量产里程碑加速前进。 | ⚡ | news | https://www.xiaopeng.com/news/company_news/5621.html |
