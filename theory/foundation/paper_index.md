@@ -651,6 +651,7 @@
 | Recursive Belief Vision Language Action Models | [link](https://arxiv.org/abs/2602.20659) | 🔧 daily 2026-11-16 |
 | D-VLA: A High-Concurrency Distributed Asynchronous Reinforcement Learning Framework for Vision-Language-Action Models | [link](https://arxiv.org/abs/2605.13276) | [RL] 🔧 daily 2026-11-16 |
 | E0: Expressive Fine-Grained Discrete Action Prediction for Vision-Language-Action Models via Tweedie Discrete Diffusion | [link](https://arxiv.org/abs/2511.21542) | 🔧 daily 2026-11-16 |
+| VSpark: Speculative Decoding for Autoregressive Vision-Language-Action Models | [link](https://arxiv.org/abs/2611.22666) | 🔧 daily 2026-11-18 |
 
 ### 動作生成
 
@@ -727,6 +728,9 @@
 | How Much of Your VLA Is kNN | [link](https://arxiv.org/abs/2611.13160) | [世界模型] 🔧 daily 2026-11-11 |
 | What Can a VLA Learn from the Agent That Calls It? Task-Level Experience Distillation for Embodied Navigation | [link](https://tldr.takara.ai/p/2611.16246) | [VLA后训] 🔧 daily 2026-11-14 |
 | Agentic-Teacher: An Agentic Data Engine for Failure-Driven VLA Post-Training | [link](https://arxiv.org/abs/2611.17394) | [VLA后训] 🔧 daily 2026-11-16 |
+| Outcome-Balanced PPO and Policy-Induced Flow Rectification for Flow-Based VLA Policies | [link](https://arxiv.org/abs/2611.22878) | [RL] 🔧 daily 2026-11-18 |
+| Future Prediction as Training-Only Video Supervision for Pretrained VLA Policies | [link](https://arxiv.org/abs/2610.34593) | 🔧 daily 2026-11-18 |
+| CoBoVLA: Decoupling Language from Action with Discrete Codes for Robust and Interpretable Robot Manipulation | [link](https://arxiv.org/abs/2611.22395) | 🔧 daily 2026-11-18 |
 
 ### 數據
 
@@ -815,6 +819,7 @@
 | MDF++: Visuo-Tactile World Action Model with End-to-end Representation Learning | [link](https://arxiv.org/abs/2611.09293) | 🎯 tactile \| 🔧 daily 2026-11-09 |
 | DexSeed: Expanding Human Hand-Object Interactions into Robot Demonstrations for Dexterous Policy Learning | [link](https://arxiv.org/abs/2611.14092) | 🎯 tactile \| 🔧 daily 2026-11-11 |
 | TouchTwin: Scaling Human Touch Data via Real-to-Sim-to-Real | [link](https://arxiv.org/abs/2611.17619) | 🎯 tactile \| 🔧 daily 2026-11-16 |
+| TouchBridge: Tactile-Conditioned Human-to-Robot Transfer for Dexterous Manipulation | [link](https://arxiv.org/abs/2610.40349) | 🎯 tactile \| 🔧 daily 2026-11-18 |
 
 ### 其他
 
