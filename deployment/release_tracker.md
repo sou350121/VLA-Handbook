@@ -288,3 +288,4 @@
 | 2026-11-09 | NVIDIA Robotics | product | NVIDIA在CoRL推出Isaac Lab-Arena 0.4开发者预览版，以及面向工业灵巧性与适应性的DexBench和VABAR开放基准。 | 🔧 | news | https://forums.developer.nvidia.com/t/news-nvidia-at-corl-2026-advancing-robot-learning/388596 |
 | 2026-11-13 | Xpeng Robotics | product | 小鹏在英国品牌之夜上首次向英国公众展示全新一代人形机器人IRON，并计划于2027年进入全球市场。 | ⚡ | news | https://www.xiaopeng.com/news/company_news/5620.html |
 | 2026-11-16 | Robot Era | product | 星动纪元宣布星动XHAND 1 Pro-U面向全球科研团队与具身智能开发者限量发售，仅40只，售完即止；该手为英伟达GEAR DexUMI外骨骼的唯一官配构型，并用于GR00T 2五指灵巧操作任务的真机部署。 | ⚡ | news | https://mp.weixin.qq.com/s/sukMI2n1Edeyptr_9e1Clw |
+| 2026-11-17 | Genesis | sim | v1.4.7 released |  | github_release | https://github.com/Genesis-Embodied-AI/genesis-world/releases/tag/v1.4.7 |
