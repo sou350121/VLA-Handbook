@@ -114,7 +114,7 @@
 
 > 上方保留人工导读与主题分组。本节列出本目录内全部 Git 已追踪 Markdown 文件，包含综述与索引，不含 README。按文件路径排序。
 
-**共 200 份文档。**
+**共 201 份文档。**
 
 - [2D 还是 3D：谁主导 VLA 模型中的显著性？—— 三阶段 Token 剪枝框架与模态显著性感知 (2D or 3D: Who Governs Salience in VLA Models? -- Tri-Stage Token Pruning Framework with Modality Salience Awareness)](./2d_or_3d_who_governs_salience_in_vla_models_tri_stage_token_dissection.md)
 - [3DThinkVLA：通过3D思维引导协同训练赋予VLA模型隐式3D空间推理能力 (3DThinkVLA: Endowing Vision-Language-Action Models with Latent 3D Priors via 3D-Thinking-Guided Co-training)](./3dthinkvla_endowing_vision_language_action_models_with_laten_dissection.md)
@@ -312,6 +312,7 @@
 - [VLA 受限于训练但具备新指令泛化能力 (VLAs are Confined yet Capable of Generalizing to Novel Instructions)](./vlas_are_confined_yet_capable_of_generalizing_to_novel_instr_dissection.md)
 - [DualVLN：Ground Slow, Move Fast —— VLN 的“快慢系统”基础模型](./vln_dualvln.md)
 - [VQActFlow：向量量化動作流的多任務機器人操控 (VQActFlow: Vector-Quantized Action Mode Steering for Multi-Task Robot Manipulation)](./vqactflow_vector_quantized_action_mode_steering_for_multi_ta_dissection.md)
+- [VSpark：面向自回归视觉-语言-动作模型的投机解码 (VSpark: Speculative Decoding for Autoregressive Vision-Language-Action Models)](./vspark_speculative_decoding_for_autoregressive_vision_langua_dissection.md)
 - [WALL-OSS: 点燃 VLM 走向具身空间](./wall_oss.md)
 - [机器人策略该学什么预测？重审 VLA 学习的监督目标 (What Should Robot Policies Learn to Predict? Rethinking Supervision Targets in Vision-Language-Action Learning)](./what_should_robot_policies_learn_to_predict_rethinking_super_dissection.md)
 - [World Pilot：用世界-动作先验引导 VLA 决策 (World Pilot: Steering Vision-Language-Action Models with World-Action Priors)](./world_pilot_steering_vision_language_action_models_with_worl_dissection.md)
