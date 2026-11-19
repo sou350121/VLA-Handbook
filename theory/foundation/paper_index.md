@@ -731,6 +731,8 @@
 | Outcome-Balanced PPO and Policy-Induced Flow Rectification for Flow-Based VLA Policies | [link](https://arxiv.org/abs/2611.22878) | [RL] 🔧 daily 2026-11-18 |
 | Future Prediction as Training-Only Video Supervision for Pretrained VLA Policies | [link](https://arxiv.org/abs/2610.34593) | 🔧 daily 2026-11-18 |
 | CoBoVLA: Decoupling Language from Action with Discrete Codes for Robust and Interpretable Robot Manipulation | [link](https://arxiv.org/abs/2611.22395) | 🔧 daily 2026-11-18 |
+| Homeward: No Place Like the Training View | [link](https://arxiv.org/abs/2611.24455) | [VLA后训] 🔧 daily 2026-11-19 |
+| BiCAT: Bimanual Coordination Action Tokenization | [link](https://arxiv.org/abs/2611.23499) | 🔧 daily 2026-11-19 |
 
 ### 數據
 
@@ -820,6 +822,9 @@
 | DexSeed: Expanding Human Hand-Object Interactions into Robot Demonstrations for Dexterous Policy Learning | [link](https://arxiv.org/abs/2611.14092) | 🎯 tactile \| 🔧 daily 2026-11-11 |
 | TouchTwin: Scaling Human Touch Data via Real-to-Sim-to-Real | [link](https://arxiv.org/abs/2611.17619) | 🎯 tactile \| 🔧 daily 2026-11-16 |
 | TouchBridge: Tactile-Conditioned Human-to-Robot Transfer for Dexterous Manipulation | [link](https://arxiv.org/abs/2610.40349) | 🎯 tactile \| 🔧 daily 2026-11-18 |
+| CoRA-VTLA: Contact-Guided Attention and Queryable Response Memory for Tactile Post-Training | [link](https://arxiv.org/abs/2611.23963) | 🎯 tactile \| 🔧 daily 2026-11-19 |
+| 3DTouch: A Tactile-aware VLA Model with 3D Geometric Relations for Dexterous Manipulation | [link](https://arxiv.org/abs/2611.23961) | 🎯 tactile \| 🔧 daily 2026-11-19 |
+| Finetuning VLAs for Dexterous Manipulation: The Right Checkpoint Is All You Need | [link](https://arxiv.org/abs/2611.23676) | 🎯 tactile \| 🔧 daily 2026-11-19 |
 
 ### 其他
 
