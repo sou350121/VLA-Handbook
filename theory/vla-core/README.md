@@ -114,7 +114,7 @@
 
 > 上方保留人工导读与主题分组。本节列出本目录内全部 Git 已追踪 Markdown 文件，包含综述与索引，不含 README。按文件路径排序。
 
-**共 201 份文档。**
+**共 202 份文档。**
 
 - [2D 还是 3D：谁主导 VLA 模型中的显著性？—— 三阶段 Token 剪枝框架与模态显著性感知 (2D or 3D: Who Governs Salience in VLA Models? -- Tri-Stage Token Pruning Framework with Modality Salience Awareness)](./2d_or_3d_who_governs_salience_in_vla_models_tri_stage_token_dissection.md)
 - [3DThinkVLA：通过3D思维引导协同训练赋予VLA模型隐式3D空间推理能力 (3DThinkVLA: Endowing Vision-Language-Action Models with Latent 3D Priors via 3D-Thinking-Guided Co-training)](./3dthinkvla_endowing_vision_language_action_models_with_laten_dissection.md)
@@ -129,6 +129,7 @@
 - [AFCE：为 VLA 学习“未来操作目标”的效果监督 (Beyond Actions: Learning Future Operation Targets for Vision-Language-Action Models)](./beyond_actions_learning_future_operation_targets_for_vision_dissection.md)
 - [超越注意力幅度：利用层间秩一致性实现高效 VLA 模型 (Beyond Attention Magnitude: Leveraging Inter-layer Rank Consistency for Efficient Vision-Language-Action Models)](./beyond_attention_magnitude_leveraging_inter_layer_rank_consi_dissection.md)
 - [重建误差不等于控制性能：自回归 VLA 的动作 Tokenization 该看什么 (Beyond Reconstruction Error: Analytical and Data-Driven Action Tokenization for Autoregressive Vision-Language-Action Models)](./beyond_reconstruction_error_analytical_and_data_driven_actio_dissection.md)
+- [径向注意力还是注意力汇？流式 VLA 策略中首末动作 token 的机制拆解 (Beyond the Sink Interpretation: Radial Attention in Flow-Based VLA Policies)](./beyond_the_sink_interpretation_radial_attention_in_flow_base_dissection.md)
 - [超越 Token 重要性：为高效 VLA 推理保留空间骨架 (Beyond Token Importance: Preserving Spatial Scaffolds for Efficient Vision-Language-Action Inference)](./beyond_token_importance_preserving_spatial_scaffolds_for_eff_dissection.md)
 - [位翻轉攻擊 VLA：動作解碼架構決定脆弱性 (Bit-Flip Attacks on Vision-Language-Action Models: Action-Decoding Architecture Shapes the Vulnerability)](./bit_flip_attacks_on_vision_language_action_models_action_dec_dissection.md)
 - [弥合语义-动作鸿沟：面向高效 VLA 推理的视觉 Token 剪枝 (Bridging the Semantic-Action Gap in Visual Token Pruning for Efficient VLA Inference)](./bridging_the_semantic_action_gap_in_visual_token_pruning_for_dissection.md)
