@@ -733,6 +733,9 @@
 | CoBoVLA: Decoupling Language from Action with Discrete Codes for Robust and Interpretable Robot Manipulation | [link](https://arxiv.org/abs/2611.22395) | 🔧 daily 2026-11-18 |
 | Homeward: No Place Like the Training View | [link](https://arxiv.org/abs/2611.24455) | [VLA后训] 🔧 daily 2026-11-19 |
 | BiCAT: Bimanual Coordination Action Tokenization | [link](https://arxiv.org/abs/2611.23499) | 🔧 daily 2026-11-19 |
+| One View, One Action: Spatially Generalizable VLAs through Observation-Aligned Experts and Cross Graph Consistency | [link](https://arxiv.org/abs/2611.26161) | 🔧 daily 2026-11-20 |
+| UniVEP: Unifying Velocity and Endpoint Prediction for Robot Manipulation | [link](https://arxiv.org/abs/2611.26103) | [世界模型] 🔧 daily 2026-11-20 |
+| WEVO: World Model-Enabled VLA Optimization for Whole-Body Loco-Manipulation | [link](https://arxiv.org/abs/2611.25251) | [RL] 🔧 daily 2026-11-20 |
 
 ### 數據
 
@@ -825,6 +828,7 @@
 | CoRA-VTLA: Contact-Guided Attention and Queryable Response Memory for Tactile Post-Training | [link](https://arxiv.org/abs/2611.23963) | 🎯 tactile \| 🔧 daily 2026-11-19 |
 | 3DTouch: A Tactile-aware VLA Model with 3D Geometric Relations for Dexterous Manipulation | [link](https://arxiv.org/abs/2611.23961) | 🎯 tactile \| 🔧 daily 2026-11-19 |
 | Finetuning VLAs for Dexterous Manipulation: The Right Checkpoint Is All You Need | [link](https://arxiv.org/abs/2611.23676) | 🎯 tactile \| 🔧 daily 2026-11-19 |
+| TacInno: Teaching Vision-Language-Action Models the Contact Dynamics Beyond Vision and Action | [link](https://arxiv.org/abs/2611.26405) | 🎯 tactile \| 🔧 daily 2026-11-20 |
 
 ### 其他
 
