@@ -114,7 +114,7 @@
 
 > 上方保留人工导读与主题分组。本节列出本目录内全部 Git 已追踪 Markdown 文件，包含综述与索引，不含 README。按文件路径排序。
 
-**共 202 份文档。**
+**共 203 份文档。**
 
 - [2D 还是 3D：谁主导 VLA 模型中的显著性？—— 三阶段 Token 剪枝框架与模态显著性感知 (2D or 3D: Who Governs Salience in VLA Models? -- Tri-Stage Token Pruning Framework with Modality Salience Awareness)](./2d_or_3d_who_governs_salience_in_vla_models_tri_stage_token_dissection.md)
 - [3DThinkVLA：通过3D思维引导协同训练赋予VLA模型隐式3D空间推理能力 (3DThinkVLA: Endowing Vision-Language-Action Models with Latent 3D Priors via 3D-Thinking-Guided Co-training)](./3dthinkvla_endowing_vision_language_action_models_with_laten_dissection.md)
@@ -281,6 +281,7 @@
 - [异步回放锚定的在线 VLA 后训练 (Stable and Efficient Real-World Online VLA Post-Training via Asynchronous Replay-Anchored Policy Improvement)](./stable_and_efficient_real_world_online_vla_post_training_via_dissection.md)
 - [StageCraft：執行期干擾物與阻塞失效的緩解 (StageCraft: Execution Aware Mitigation of Distractor and Obstruction Failures in VLA Models)](./stagecraft_execution_aware_mitigation_of_distractor_and_obst_dissection.md)
 - [StarVLA：Lego-like 的 VLA 研发代码库 (StarVLA: A Lego-like Codebase for VLA)](./starvla_lego_like_vla_codebase_2026.md)
+- [TacInno：让 VLA 学习视觉与动作之外的接触动力学 (TacInno: Teaching Vision-Language-Action Models the Contact Dynamics Beyond Vision and Action)](./tacinno_teaching_vision_language_action_models_the_contact_d_dissection.md)
 - [驯服执行误差下的 VLA：部署期自补偿与压力测试 (Taming VLAs under Robot Execution Errors: Self-Compensation and Stress Testing)](./taming_vlas_under_robot_execution_errors_self_compensation_a_dissection.md)
 - [TANGO: 在杂乱的室内环境中用全身 VLA 导航 (Humanoid Navigation in Cluttered Environments with a Whole-Body Vision-Language-Action Model)](./tango_humanoid_navigation_in_cluttered_environments_with_a_w_dissection.md)
 - [TemporalFlow-VLA：学习物理接地的执行历史以支持长时程机器人操作 (TemporalFlow-VLA: Learning Physically Grounded Execution History for Long-Horizon Robot Manipulation)](./temporalflow_vla_learning_physically_grounded_execution_hist_dissection.md)
