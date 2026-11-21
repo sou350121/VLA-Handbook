@@ -652,6 +652,7 @@
 | D-VLA: A High-Concurrency Distributed Asynchronous Reinforcement Learning Framework for Vision-Language-Action Models | [link](https://arxiv.org/abs/2605.13276) | [RL] 🔧 daily 2026-11-16 |
 | E0: Expressive Fine-Grained Discrete Action Prediction for Vision-Language-Action Models via Tweedie Discrete Diffusion | [link](https://arxiv.org/abs/2511.21542) | 🔧 daily 2026-11-16 |
 | VSpark: Speculative Decoding for Autoregressive Vision-Language-Action Models | [link](https://arxiv.org/abs/2611.22666) | 🔧 daily 2026-11-18 |
+| SimVLA: Attributing Gains in VLA Models Through Controlled Ablation | [link](https://arxiv.org/abs/2602.18224) | 🔧 daily 2026-11-21 |
 
 ### 動作生成
 
@@ -736,6 +737,8 @@
 | One View, One Action: Spatially Generalizable VLAs through Observation-Aligned Experts and Cross Graph Consistency | [link](https://arxiv.org/abs/2611.26161) | 🔧 daily 2026-11-20 |
 | UniVEP: Unifying Velocity and Endpoint Prediction for Robot Manipulation | [link](https://arxiv.org/abs/2611.26103) | [世界模型] 🔧 daily 2026-11-20 |
 | WEVO: World Model-Enabled VLA Optimization for Whole-Body Loco-Manipulation | [link](https://arxiv.org/abs/2611.25251) | [RL] 🔧 daily 2026-11-20 |
+| GroundingPI: A Grounding Foundation Model towards Physical Intelligence with Visual Primitives | [link](https://arxiv.org/abs/2609.39601) | 🔧 daily 2026-11-21 |
+| ActMem: From Latent Memory Reasoning to Grounded Robotic Action | [link](https://arxiv.org/abs/2611.25461) | 🔧 daily 2026-11-21 |
 
 ### 數據
 
