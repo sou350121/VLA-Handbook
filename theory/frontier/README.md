@@ -53,7 +53,7 @@
 
 > 上方保留人工导读与主题分组。本节列出本目录内全部 Git 已追踪 Markdown 文件，包含综述与索引，不含 README。按文件路径排序。
 
-**共 111 份文档。**
+**共 112 份文档。**
 
 - [3DROID：可渲染 3D Gaussian 機器人數據集與逐場景可靠性度量 (3DROID: A Renderable 3D Gaussian Dataset with Measured Per-Scene Reliability)](./3droid_a_renderable_3d_gaussian_dataset_with_measured_per_sc_dissection.md)
 - [生物物理線蟲神經環路作為視覺魯棒機器人操作的「任務無關動力學核心」 (A Biophysically Detailed C. elegans Circuit as a Task-Agnostic Dynamical Core for Visually Robust Robot Manipulation)](./a_biophysically_detailed_c_elegans_circuit_as_a_task_agnosti_dissection.md)
@@ -129,6 +129,7 @@
 - [一只手注视另一只手：动态环境下的多智能体协作双臂操作 (One Hand Watches The Other: Dynamic Multi-Agent Cooperation for Sample-Efficient Bimanual Manipulation in Dynamic Environments)](./one_hand_watches_the_other_dynamic_multi_agent_cooperation_f_dissection.md)
 - [一个策略，多种形态：统一相机中心动作几何预训练用于异构具身操作 (One Policy, Many Embodiments: Unified Camera-Centric Action Geometry Pre-training for Heterogeneous Embodied Manipulation)](./one_policy_many_embodiments_unified_camera_centric_action_ge_dissection.md)
 - [一个先验，两种动力学：复用视频扩散 Transformer 做自监督潜动作学习 (One Prior, Two Dynamics: Repurposing Video Diffusion Transformers for Self-Supervised Latent Action Learning)](./one_prior_two_dynamics_repurposing_video_diffusion_transform_dissection.md)
+- [一视角一动作：把动作监督搬进相机系的空间泛化 VLA (One View, One Action: Spatially Generalizable VLAs through Observation-Aligned Experts and Cross Graph Consistency)](./one_view_one_action_spatially_generalizable_vlas_through_obs_dissection.md)
 - [Physics of AI：把神经网络当物理系统来研究](./physics_of_ai_liuziming.md)
 - [PhysicsLENS：診斷視頻生成模型的「物理屬性盲區」 (PhysicsLENS: Diagnosing Physical Property Blindness in Video Generation Models)](./physicslens_diagnosing_physical_property_blindness_in_video_dissection.md)
 - [鸽子“自带导航”的硬核机制：内耳前庭系统的电流检测式磁感（2025 Science + Nature 新闻解读）](./pigeon_magnetoreception_vestibular_electrosense.md)
