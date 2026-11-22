@@ -114,7 +114,7 @@
 
 > 上方保留人工导读与主题分组。本节列出本目录内全部 Git 已追踪 Markdown 文件，包含综述与索引，不含 README。按文件路径排序。
 
-**共 203 份文档。**
+**共 204 份文档。**
 
 - [2D 还是 3D：谁主导 VLA 模型中的显著性？—— 三阶段 Token 剪枝框架与模态显著性感知 (2D or 3D: Who Governs Salience in VLA Models? -- Tri-Stage Token Pruning Framework with Modality Salience Awareness)](./2d_or_3d_who_governs_salience_in_vla_models_tri_stage_token_dissection.md)
 - [3DThinkVLA：通过3D思维引导协同训练赋予VLA模型隐式3D空间推理能力 (3DThinkVLA: Endowing Vision-Language-Action Models with Latent 3D Priors via 3D-Thinking-Guided Co-training)](./3dthinkvla_endowing_vision_language_action_models_with_laten_dissection.md)
@@ -273,6 +273,7 @@
 - [SEAM：动作块平滑执行 (Smooth Execution of Action-Chunked Motion for Vision-Language-Action Policies)](./seam_smooth_execution_of_action_chunked_motion_for_vision_la_dissection.md)
 - [自適應 VLA：讓部署後的策略用「自己的失敗軌跡」逐步補償硬體漂移 (Self-Adaptive VLA for Robust Robot Deployment)](./self_adaptive_vla_for_robust_robot_deployment_dissection.md)
 - [把幾何接進動作專家：sensVLA 的空間接地 VLA 架構 (sensVLA: Spatially-Grounded Vision-Language-Action Model for Autonomous Wheel Loader)](./sensvla_spatially_grounded_vision_language_action_model_for_dissection.md)
+- [SimVLA：用受控消融归因 VLA 性能增益 (SimVLA: Attributing Gains in VLA Models Through Controlled Ablation)](./simvla_attributing_gains_in_vla_models_through_controlled_ab_dissection.md)
 - [SimVLA：为什么一个“简单 VLA baseline”反而值得全行业重看？ (SimVLA: A Simple VLA Baseline for Robotic Manipulation)](./simvla_simple_vla_baseline_robotic_manipulation_2026.md)
 - [小模型 VLA 研究方向深度分析](./small_vla_models.md)
 - [紧凑 VLA 的持久循环记忆：SmoLSTM (SmoLSTM: A Compact Vision-Language-Action Model with Recurrent Memory that Persists)](./smolstm_a_compact_vision_language_action_model_with_recurren_dissection.md)
