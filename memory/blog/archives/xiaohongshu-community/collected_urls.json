@@ -261,9 +261,23 @@
     "https://www.xiaohongshu.com/explore/6a983a790000000029011515",
     "https://www.xiaohongshu.com/explore/6afd497a000000001802d5cb",
     "https://www.xiaohongshu.com/explore/6a99f714000000000f03a400",
-    "https://www.xiaohongshu.com/explore/6a684c40000000000401f268"
+    "https://www.xiaohongshu.com/explore/6a684c40000000000401f268",
+    "https://www.xiaohongshu.com/explore/6b03acea00000000160331ca",
+    "https://www.xiaohongshu.com/explore/6b0295b3000000002a038c42",
+    "https://www.xiaohongshu.com/explore/6b041a41000000002b0262a9",
+    "https://www.xiaohongshu.com/explore/6a317f7a00000000210152c5",
+    "https://www.xiaohongshu.com/explore/6b042388000000002a038545",
+    "https://www.xiaohongshu.com/explore/6afff09b000000002b01bc76",
+    "https://www.xiaohongshu.com/explore/6a24604a0000000006035caf",
+    "https://www.xiaohongshu.com/explore/6af4ac6f000000002a01be78",
+    "https://www.xiaohongshu.com/explore/6b002238000000002a01ad4b",
+    "https://www.xiaohongshu.com/explore/6af01ef30000000014029f79",
+    "https://www.xiaohongshu.com/explore/6b001c73000000002a02ee0f",
+    "https://www.xiaohongshu.com/explore/6a6178d9000000000c033c01",
+    "https://www.xiaohongshu.com/explore/6ae1c5220000000022039515",
+    "https://www.xiaohongshu.com/explore/6934493b000000001b033a4f"
   ],
-  "count": 262,
+  "count": 276,
   "last_updated": "2026-11-23",
   "runs": [
     {
@@ -871,6 +885,38 @@
         "insufficient_experiment_detail": 2,
         "image_or_video_not_fully_read": 2
       }
+    },
+    {
+      "date": "2026-11-22",
+      "run_id": "xhs-vla-20261122-b03",
+      "collected_at": "2026-11-23",
+      "searches": 12,
+      "detail_attempts": 26,
+      "new_added": 14,
+      "experiment_or_project": 8,
+      "critique_or_discussion": 6,
+      "excluded_or_unverified": 12,
+      "weekly_batch_total_new": 21,
+      "incremental_series_total_new": 149,
+      "target": 30,
+      "status": "partial_quality_threshold",
+      "new_note_ids": [
+        "6b03acea00000000160331ca",
+        "6b0295b3000000002a038c42",
+        "6b041a41000000002b0262a9",
+        "6a317f7a00000000210152c5",
+        "6b042388000000002a038545",
+        "6afff09b000000002b01bc76",
+        "6a24604a0000000006035caf",
+        "6af4ac6f000000002a01be78",
+        "6b002238000000002a01ad4b",
+        "6af01ef30000000014029f79",
+        "6b001c73000000002a02ee0f",
+        "6a6178d9000000000c033c01",
+        "6ae1c5220000000022039515",
+        "6934493b000000001b033a4f"
+      ],
+      "report": "2026-11-22-codex-weekly.md"
     }
   ]
 }
