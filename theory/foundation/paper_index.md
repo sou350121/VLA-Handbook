@@ -739,6 +739,7 @@
 | WEVO: World Model-Enabled VLA Optimization for Whole-Body Loco-Manipulation | [link](https://arxiv.org/abs/2611.25251) | [RL] 🔧 daily 2026-11-20 |
 | GroundingPI: A Grounding Foundation Model towards Physical Intelligence with Visual Primitives | [link](https://arxiv.org/abs/2609.39601) | 🔧 daily 2026-11-21 |
 | ActMem: From Latent Memory Reasoning to Grounded Robotic Action | [link](https://arxiv.org/abs/2611.25461) | 🔧 daily 2026-11-21 |
+| Learning from Incomplete Actions: Interval Motion Supervision for Vision-Language-Action Policies | [link](https://arxiv.org/abs/2611.27171) | 🔧 daily 2026-11-23 |
 
 ### 數據
 
@@ -832,6 +833,8 @@
 | 3DTouch: A Tactile-aware VLA Model with 3D Geometric Relations for Dexterous Manipulation | [link](https://arxiv.org/abs/2611.23961) | 🎯 tactile \| 🔧 daily 2026-11-19 |
 | Finetuning VLAs for Dexterous Manipulation: The Right Checkpoint Is All You Need | [link](https://arxiv.org/abs/2611.23676) | 🎯 tactile \| 🔧 daily 2026-11-19 |
 | TacInno: Teaching Vision-Language-Action Models the Contact Dynamics Beyond Vision and Action | [link](https://arxiv.org/abs/2611.26405) | 🎯 tactile \| 🔧 daily 2026-11-20 |
+| Coherent Moment Propagation: Epistemic Uncertainty for Pre-trained Robot Policies | [link](https://arxiv.org/abs/2611.26855) | 🎯 tactile \| 🔧 daily 2026-11-23 |
+| FORTH: Grounding Tactile VLA Execution via Forward-Only Proxy-Control Pairing | [link](https://arxiv.org/abs/2611.26744) | 🎯 tactile \| 🔧 daily 2026-11-23 |
 
 ### 其他
 
