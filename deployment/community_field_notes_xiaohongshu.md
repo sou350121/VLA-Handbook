@@ -3,6 +3,7 @@
 > **来源**：2026-03-14 起持续收集；历史帖号 1–365、来源索引与黑话辞典，另有 **XHS-20261025-01～60**。历史“500+ 条”包含摘要、索引和黑话，**不能相加当作独立帖子数**。
 > **原始数据**：[memory/blog/archives/xiaohongshu-community/](../memory/blog/archives/xiaohongshu-community/)
 > **定位**：论文不会告诉你的东西——社区实战者的参数、失败和吐槽。**保留现场感，也保留条件**：先找同类问题，再看原帖和版本，最后拿自己的实验说话。
+> **本周完成（2026-11-23）**。本批新增 **2 篇**，周累计 **30／30 篇**。去重登记 283→285 个原帖 ID。[批次记录](../memory/blog/archives/xiaohongshu-community/2026-11-22-codex-weekly.md#xhs-20261122-b05)。
 > **本周手动续收（2026-11-23）**。本批新增 **7 篇**，周累计 **28／30 篇**。去重登记 276→283 个原帖 ID。[批次记录](../memory/blog/archives/xiaohongshu-community/2026-11-22-codex-weekly.md#xhs-20261122-b04)。
 > **本周手动续收（2026-11-23）**。本批新增 **14 篇**，周累计 **21／30 篇**。去重登记 262→276 个原帖 ID。[批次记录](../memory/blog/archives/xiaohongshu-community/2026-11-22-codex-weekly.md#xhs-20261122-b03)。
 > **本周续收（2026-11-23）**：本批新增 **6 篇**，周累计 **1＋6＝7／30 篇**。补充 PiperX 网格摆位采数、PiPER 微调配置、部署硬件匹配、失败误确认，以及 3DGS／LeWM 的证据边界。去重登记 256→262 个 ID。[续收记录](../memory/blog/archives/xiaohongshu-community/2026-11-22-codex-weekly.md#xhs-20261122-b02)。
@@ -1899,6 +1900,23 @@ Kivy 的分析（帖17）：Diffusion Policy 有效的核心不是"多模态分�
 - 编辑收录，保留研究或方法的原始出处。
 - 限该平台、三项任务和对应的部署接口。结论可用于比较动作表征与接口，跨不同本体与精细接触任务仍需验证。
 - [补充查证](https://arxiv.org/html/2611.24585v1) · [周档](../memory/blog/archives/xiaohongshu-community/2026-11-22-codex-weekly.md#xhs-20261122-25)。若裸链受限，可在平台用标题和作者检索。
+
+</details>
+
+<a id="xhs-20261122-29"></a>
+#### XHS-20261122-29 · 北大｜机器人如何记住关键一瞬间的细节？
+
+> zyc · 原帖显示 **编辑于 3小时前** · 项目方发布，核对真机试验 · [原帖](https://www.xiaohongshu.com/explore/6b040214000000001603d9d4)
+
+**现场**。MomentMem 保留短暂出现的原始画面。在两项真机任务中，相比同表的 π₀.₅，按示范位置放回方块从 3/30 到 14/30，翻杯找方块从 11/30 到 17/30。
+
+<details>
+<summary>阅读范围、限制与查证</summary>
+
+- 实际阅读为正文、首屏两条可见评论与论文表 5，未完整查看原帖视频。
+- 编辑收录，保留研究或方法的原始出处。
+- 两项任务检验关键画面被遮住后还能否完成操作。适用范围是论文的两项真机任务；仿真均分和少样本记忆标注另有协议。
+- [补充查证](https://arxiv.org/html/2611.26745v1) · [周档](../memory/blog/archives/xiaohongshu-community/2026-11-22-codex-weekly.md#xhs-20261122-29)。若裸链受限，可在平台用标题和作者检索。
 
 </details>
 
@@ -4387,6 +4405,23 @@ NVIDIA × 苏黎世大学 RPG 合作综述《The Reality Gap in Robotics: Challe
 - 5 分，按原实验／项目标准。
 - 原帖未给试验总数、数据划分细节、起始条件或对照。标题中的 30 秒只作单次展示描述，无法代表延迟分布。
 - [周档](../memory/blog/archives/xiaohongshu-community/2026-11-22-codex-weekly.md#xhs-20261122-24)。若裸链受限，可在平台用标题和作者检索。
+
+</details>
+
+<a id="xhs-20261122-30"></a>
+#### XHS-20261122-30 · 图像生成模型能直接控机器人？
+
+> 一只具身喵🐱 · 原帖显示 **5小时前** · 论文导读，核对真机扰动 · [原帖](https://www.xiaohongshu.com/explore/6b03eca9000000002a01971a)
+
+**现场**。GenPA 与三种基线都用同一批 600 条演示微调。每策略在标准、背景干扰和光照扰动下各做 50 次 USB 转插。GenPA 分别成功 46/50、45/50、26/50；成功要求 50 秒内插入并松爪且全程无掉落。
+
+<details>
+<summary>阅读范围、限制与查证</summary>
+
+- 实际阅读为正文及论文表 4、真机协议，未完整查看原帖配图或视频。
+- 编辑收录，保留研究或方法的原始出处。
+- 只覆盖一个真机任务。光照条件明显较弱；这些是分条件的任务完成率，论文未单独统计失败后重试或恢复成功率。
+- [补充查证](https://arxiv.org/html/2611.27446v1) · [周档](../memory/blog/archives/xiaohongshu-community/2026-11-22-codex-weekly.md#xhs-20261122-30)。若裸链受限，可在平台用标题和作者检索。
 
 </details>
 
