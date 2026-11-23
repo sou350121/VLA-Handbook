@@ -96,10 +96,11 @@
 
 > 上方保留人工导读与主题分组。本节列出本目录内全部 Git 已追踪 Markdown 文件，包含综述与索引，不含 README。按文件路径排序。
 
-**共 81 份文档。**
+**共 82 份文档。**
 
 - [分层时空动作分词器：上下文模仿学习的新范式 (HiST-AT: A Hierarchical Spatiotemporal Action Tokenizer for In-Context Imitation Learning)](./a_hierarchical_spatiotemporal_action_tokenizer_for_in_contex_dissection.md)
 - [弹性视觉智能体的架构模式语言 (A Pattern Language for Resilient Visual Agents)](./a_pattern_language_for_resilient_visual_agents_dissection.md)
+- [ActMem：从潜在记忆推理到落地的机器人动作 (ActMem: From Latent Memory Reasoning to Grounded Robotic Action)](./actmem_from_latent_memory_reasoning_to_grounded_robotic_acti_dissection.md)
 - [VLA 的安全、对齐与约束决策 (Safety &amp; Alignment for VLA)](./alignment_vla.md)
 - [ARC：面向机器人基础模型的推理后训练配方（Arc: A Reasoning Recipe for Robot Foundation Models）](./arc_a_reasoning_recipe_for_robot_foundation_models_dissection.md)
 - [BEHAVIOR-1K：为什么它不是“任务更多的 benchmark”，而是对通用机器人提出了更真实的要求？ (BEHAVIOR-1K: A Human-Centered Embodied AI Benchmark with OmniGibson)](./behavior_1k_human_centered_embodied_ai_benchmark_omnigibson_2024.md)
