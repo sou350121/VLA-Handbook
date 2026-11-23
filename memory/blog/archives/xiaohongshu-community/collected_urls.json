@@ -255,10 +255,16 @@
     "https://www.xiaohongshu.com/explore/6ac879fc0000000013018fb1",
     "https://www.xiaohongshu.com/explore/6ae290740000000034005525",
     "https://www.xiaohongshu.com/explore/6a72b7c10000000005028e5a",
-    "https://www.xiaohongshu.com/explore/6af3e9c6000000002601137e"
+    "https://www.xiaohongshu.com/explore/6af3e9c6000000002601137e",
+    "https://www.xiaohongshu.com/explore/6b02fb1d000000002b034d1e",
+    "https://www.xiaohongshu.com/explore/69545c25000000002103e742",
+    "https://www.xiaohongshu.com/explore/6a983a790000000029011515",
+    "https://www.xiaohongshu.com/explore/6afd497a000000001802d5cb",
+    "https://www.xiaohongshu.com/explore/6a99f714000000000f03a400",
+    "https://www.xiaohongshu.com/explore/6a684c40000000000401f268"
   ],
-  "count": 256,
-  "last_updated": "2026-11-22",
+  "count": 262,
+  "last_updated": "2026-11-23",
   "runs": [
     {
       "date": "2026-04-17",
@@ -834,6 +840,36 @@
       "exclusion_reasons": {
         "body_or_detail_not_fully_loaded": 4,
         "image_only_not_fully_read": 1
+      }
+    },
+    {
+      "date": "2026-11-22",
+      "run_id": "xhs-vla-20261122-b02",
+      "collected_at": "2026-11-23",
+      "searches": 12,
+      "detail_attempts": 13,
+      "new_added": 6,
+      "experiment_or_project": 5,
+      "critique_or_discussion": 1,
+      "excluded_or_unverified": 7,
+      "weekly_batch_total_new": 7,
+      "incremental_series_total_new": 135,
+      "target": 30,
+      "status": "partial_quality_threshold",
+      "new_note_ids": [
+        "6b02fb1d000000002b034d1e",
+        "69545c25000000002103e742",
+        "6a983a790000000029011515",
+        "6afd497a000000001802d5cb",
+        "6a99f714000000000f03a400",
+        "6a684c40000000000401f268"
+      ],
+      "report": "2026-11-22-codex-weekly.md",
+      "exclusion_reasons": {
+        "service_advertisement": 1,
+        "secondhand_or_existing_coverage": 2,
+        "insufficient_experiment_detail": 2,
+        "image_or_video_not_fully_read": 2
       }
     }
   ]
