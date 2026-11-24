@@ -291,3 +291,4 @@
 | 2026-11-17 | Genesis | sim | v1.4.7 released |  | github_release | https://github.com/Genesis-Embodied-AI/genesis-world/releases/tag/v1.4.7 |
 | 2026-11-18 | Fourier | product | 2026年11月16日至19日，傅利叶在德国杜塞尔多夫MEDICA 2026展会上首次展出Care-bot人形机器人GR-3，并设置井字棋人机对弈等互动演示。 | 🔧 | news | https://fftai.com/fourier/article/2122993482026000385 |
 | 2026-11-17 | Xpeng Robotics | product | 小鹏集团在2026年第三季度财报中披露，新一代人形机器人正在向年底的规模量产里程碑加速前进。 | ⚡ | news | https://www.xiaopeng.com/news/company_news/5621.html |
+| 2026-11-23 | Genesis | sim | v1.5.0 released |  | github_release | https://github.com/Genesis-Embodied-AI/genesis-world/releases/tag/v1.5.0 |
