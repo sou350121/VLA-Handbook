@@ -74,7 +74,7 @@
 
 > 上方保留人工导读与主题分组。本节列出本目录内全部 Git 已追踪 Markdown 文件，包含综述与索引，不含 README。按文件路径排序。
 
-**共 53 份文档。**
+**共 54 份文档。**
 
 - [MoGAP：用运动引导的非对称预测把视频扩散模型适配成机器人策略（Adapting Video Models for Robot Control via Motion-guided Asymmetric Prediction）](./adapting_video_models_for_robot_control_via_motion_guided_as_dissection.md)
 - [AEGIS：物理 AI 的備份反射機制 (A Backup Reflex for Physical AI)](./aegis_a_backup_reflex_for_physical_ai_dissection.md)
@@ -95,6 +95,7 @@
 - [EquiBim：双臂操作中的对称等变策略学习 (EquiBim: Learning Symmetry-Equivariant Policy for Bimanual Manipulation)](./equibim_learning_symmetry_equivariant_policy_for_bimanual_ma_dissection.md)
 - [EquiDexFlow：接触约束的 SE(3) 等变灵巧抓取生成流 (EquiDexFlow: Contact-Grounded SE(3)-Equivariant Dexterous Grasp Generative Flows)](./equidexflow_contact_grounded_se_equivariant_dexterous_grasp_dissection.md)
 - [FlashDexRetarget：多動作重定向加速靈巧操作資料生成 (FlashDexRetarget: Accelerating Dexterous Manipulation Data Generation through Multi-Motion Retargeting)](./flashdexretarget_accelerating_dexterous_manipulation_data_ge_dissection.md)
+- [让行为流起来：Koopman 行为模型作为视觉运动灵巧操作的伪规划器 (Going with the Flow: Koopman Behavioral Models as Pseudo Planners for Visuo-Motor Dexterity)](./going_with_the_flow_koopman_behavioral_models_as_pseudo_plan_dissection.md)
 - [GR-Dexter（ByteDance Seed）：把 VLA 扩展到高自由度灵巧手的“硬件-数据-模型”全栈框架](./gr_dexter_bimanual_dexterous_vla.md)
 - [抓取算法与仿真平台 (Grasp Algorithms &amp; Simulation Platforms)](./grasp_algorithms.md)
 - [手在环中：通过无缝手-臂干预改善 VLA 灵巧操作策略 (Hand-in-the-Loop: Improving VLA Policies for Dexterous Manipulation via Seamless Hand-Arm Intervention)](./hand_in_the_loop_improving_vla_policies_for_dexterous_manipu_dissection.md)
