@@ -740,6 +740,9 @@
 | GroundingPI: A Grounding Foundation Model towards Physical Intelligence with Visual Primitives | [link](https://arxiv.org/abs/2609.39601) | 🔧 daily 2026-11-21 |
 | ActMem: From Latent Memory Reasoning to Grounded Robotic Action | [link](https://arxiv.org/abs/2611.25461) | 🔧 daily 2026-11-21 |
 | Learning from Incomplete Actions: Interval Motion Supervision for Vision-Language-Action Policies | [link](https://arxiv.org/abs/2611.27171) | 🔧 daily 2026-11-23 |
+| EgoLoAF: Learning Humanoid Loco-Manipulation from Egocentric Demonstrations with Hand-Object Affordances | [link](https://arxiv.org/abs/2611.32260) | [VLA后训] 🔧 daily 2026-11-25 |
+| KeyMemVLA: Subtask-Guided Key Memory for Long-Horizon Robotic Manipulation | [link](https://arxiv.org/abs/2611.32081) | 🔧 daily 2026-11-25 |
+| Hi3R-VLA: Grounding Semantics and Actions in 3D | [link](https://arxiv.org/abs/2611.31535) | 🔧 daily 2026-11-25 |
 
 ### 數據
 
@@ -772,6 +775,7 @@
 | UMI-Live for In-The-Wild Bimanual Robotics Data Collection | [link](https://arxiv.org/abs/2610.39385) | 🔧 daily 2026-10-31 |
 | AIRoA-0: Long-Horizon, Precise, Cross-Embodiment Manipulation from Handheld Data | [link](https://arxiv.org/abs/2611.03815) | 🔧 daily 2026-11-04 |
 | EgoX: Egocentric Cross-Embodiment Manipulation with Embodiment Dreaming | [link](https://tldr.takara.ai/p/2611.16728) | 🔧 daily 2026-11-14 |
+| RoboHarness-RL: Agentic Reinforcement Learning for VLM-Based Robot Manipulation | [link](https://arxiv.org/abs/2611.32016) | [RL] 🔧 daily 2026-11-25 |
 
 ### 部署
 
@@ -835,6 +839,7 @@
 | TacInno: Teaching Vision-Language-Action Models the Contact Dynamics Beyond Vision and Action | [link](https://arxiv.org/abs/2611.26405) | 🎯 tactile \| 🔧 daily 2026-11-20 |
 | Coherent Moment Propagation: Epistemic Uncertainty for Pre-trained Robot Policies | [link](https://arxiv.org/abs/2611.26855) | 🎯 tactile \| 🔧 daily 2026-11-23 |
 | FORTH: Grounding Tactile VLA Execution via Forward-Only Proxy-Control Pairing | [link](https://arxiv.org/abs/2611.26744) | 🎯 tactile \| 🔧 daily 2026-11-23 |
+| ViTacLab: Physically Consistent Visuo-Tactile Simulation, Benchmarking, and Representation Learning for Robotic Manipulation | [link](https://arxiv.org/abs/2611.32476) | 🎯 tactile \| 🔧 daily 2026-11-25 |
 
 ### 其他
 
