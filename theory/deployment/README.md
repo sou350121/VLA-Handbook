@@ -74,7 +74,7 @@
 
 > 上方保留人工导读与主题分组。本节列出本目录内全部 Git 已追踪 Markdown 文件，包含综述与索引，不含 README。按文件路径排序。
 
-**共 54 份文档。**
+**共 55 份文档。**
 
 - [MoGAP：用运动引导的非对称预测把视频扩散模型适配成机器人策略（Adapting Video Models for Robot Control via Motion-guided Asymmetric Prediction）](./adapting_video_models_for_robot_control_via_motion_guided_as_dissection.md)
 - [AEGIS：物理 AI 的備份反射機制 (A Backup Reflex for Physical AI)](./aegis_a_backup_reflex_for_physical_ai_dissection.md)
@@ -89,6 +89,7 @@
 - [中金人机系列05（灵巧手）→ VLA/控制/硬件的“可计算约束”框架（理论侧整理）](./dexterous_hand_industry_cicc_05.md)
 - [灵巧手机械学深度解析 (Dexterous Hand Mechanics) — 修订整合版 v2](./dexterous_hand_mechanics.md)
 - [机器人开可乐/发牌有多难？灵巧手：硬件路线 × 接触数学 × 数据金字塔（访谈摘录整理）](./dexterous_hands_open_can_cards_data_pyramid.md)
+- [DexWAC：把世界模型、Actor 与 Critic 绑进一个共享前缀 (DexWAC: A Unified World–Actor–Critic Model for Dexterous Robot Manipulation)](./dexwac_a_unified_world_actor_critic_model_for_dexterous_robo_dissection.md)
 - [DITTO-X：面向灵巧操作的正向与反向遥操作及人类干预 (DITTO-X: Forward and Reverse Teleoperation for Dexterous Manipulation and Human Intervention)](./ditto_x_forward_and_reverse_teleoperation_for_dexterous_mani_dissection.md)
 - [DockAnywhere: 通过演示生成提升移动操作数据效率 (DockAnywhere: Data-Efficient Visuomotor Policy Learning for Mobile Manipulation via Novel Demonstration Generation)](./dockanywhere_data_efficient_visuomotor_policy_learning_for_m_dissection.md)
 - [EchoVLA：协同声明式记忆赋能移动操作 (EchoVLA: Robotic Vision-Language-Action Model with Synergistic Declarative Memory for Mobile Manipulation)](./echovla_robotic_vision_language_action_model_with_synergisti_dissection.md)
