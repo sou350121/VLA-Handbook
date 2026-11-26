@@ -53,7 +53,7 @@
 
 > 上方保留人工导读与主题分组。本节列出本目录内全部 Git 已追踪 Markdown 文件，包含综述与索引，不含 README。按文件路径排序。
 
-**共 114 份文档。**
+**共 115 份文档。**
 
 - [3DROID：可渲染 3D Gaussian 機器人數據集與逐場景可靠性度量 (3DROID: A Renderable 3D Gaussian Dataset with Measured Per-Scene Reliability)](./3droid_a_renderable_3d_gaussian_dataset_with_measured_per_sc_dissection.md)
 - [生物物理線蟲神經環路作為視覺魯棒機器人操作的「任務無關動力學核心」 (A Biophysically Detailed C. elegans Circuit as a Task-Agnostic Dynamical Core for Visually Robust Robot Manipulation)](./a_biophysically_detailed_c_elegans_circuit_as_a_task_agnosti_dissection.md)
@@ -149,6 +149,7 @@
 - [SpatialVAM: 空间感知多视图视频扩散作为数据高效的机器人策略 (Spatial-Aware Multi-View Video Diffusion as a Data-Efficient Robot Policy)](./spatialvamspatial_aware_multi_view_video_diffusion_as_a_data_dissection.md)
 - [StaMo：从紧凑状态表示无监督学习可泛化机器人运动 / StaMo: Unsupervised Learning of Generalizable Robot Motion from Compact State Representation](./stamo_unsupervised_learning_of_generalizable_robot_motion_fr_dissection.md)
 - [砍掉皮层也能“打架求偶”：皮层下才是行为与状态调控的主战场（Ann Kennedy 对谈要点）](./subcortical_control_knobs_neuropeptides_temporality.md)
+- [供给几何，只学执行：Screw Attention 零样本策略迁移拆解 (Supply Geometry, Learn Execution: Screw Attention for Zero-Shot Policy Transfer in Robot Manipulation)](./supply_geometry_learn_execution_screw_attention_for_zero_sho_dissection.md)
 - [测试时计算重塑人形行为基座模型 (Test-Time Compute for Humanoid Behavior Foundation Models)](./test_time_compute_for_humanoid_behavior_foundation_models_dissection.md)
 - [离散时间高斯过程混合物在机器人策略学习中的不合理有效性 (The Unreasonable Effectiveness of Discrete-Time Gaussian Process Mixtures for Robot Policy Learning)](./the_unreasonable_effectiveness_of_discrete_time_gaussian_pro_dissection.md)
 - [時頻幾何交叉注意力：把動作塊當多變量軌跡建模 (Time–Frequency Geometric Cross-Attention for Chunked Vision–Language–Action Models)](./time_frequency_geometric_cross_attention_for_chunked_vision_dissection.md)
