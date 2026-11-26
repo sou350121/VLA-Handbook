@@ -653,6 +653,8 @@
 | E0: Expressive Fine-Grained Discrete Action Prediction for Vision-Language-Action Models via Tweedie Discrete Diffusion | [link](https://arxiv.org/abs/2511.21542) | 🔧 daily 2026-11-16 |
 | VSpark: Speculative Decoding for Autoregressive Vision-Language-Action Models | [link](https://arxiv.org/abs/2611.22666) | 🔧 daily 2026-11-18 |
 | SimVLA: Attributing Gains in VLA Models Through Controlled Ablation | [link](https://arxiv.org/abs/2602.18224) | 🔧 daily 2026-11-21 |
+| FreshVLA: Frequency-Regularized Time Scale Hierarchical Latent Actions for Vision-Language-Action Models | [link](https://arxiv.org/abs/2611.33635) | 🔧 daily 2026-11-26 |
+| Best-of-$N$ Test-Time Steering Can Lead to Reward Hacking in Vision-Language-Action Models | [link](https://arxiv.org/abs/2611.33398) | [RL] 🔧 daily 2026-11-26 |
 
 ### 動作生成
 
@@ -743,6 +745,8 @@
 | EgoLoAF: Learning Humanoid Loco-Manipulation from Egocentric Demonstrations with Hand-Object Affordances | [link](https://arxiv.org/abs/2611.32260) | [VLA后训] 🔧 daily 2026-11-25 |
 | KeyMemVLA: Subtask-Guided Key Memory for Long-Horizon Robotic Manipulation | [link](https://arxiv.org/abs/2611.32081) | 🔧 daily 2026-11-25 |
 | Hi3R-VLA: Grounding Semantics and Actions in 3D | [link](https://arxiv.org/abs/2611.31535) | 🔧 daily 2026-11-25 |
+| HoloBrain-0.5 Technical Report | [link](https://arxiv.org/abs/2611.34449) | 🔧 daily 2026-11-26 |
+| Escapingthe instruction blackhole of vision-language-action policies via optimal-transport wormholes | [link](https://arxiv.org/abs/2611.34280) | 🔧 daily 2026-11-26 |
 
 ### 數據
 
@@ -840,6 +844,7 @@
 | Coherent Moment Propagation: Epistemic Uncertainty for Pre-trained Robot Policies | [link](https://arxiv.org/abs/2611.26855) | 🎯 tactile \| 🔧 daily 2026-11-23 |
 | FORTH: Grounding Tactile VLA Execution via Forward-Only Proxy-Control Pairing | [link](https://arxiv.org/abs/2611.26744) | 🎯 tactile \| 🔧 daily 2026-11-23 |
 | ViTacLab: Physically Consistent Visuo-Tactile Simulation, Benchmarking, and Representation Learning for Robotic Manipulation | [link](https://arxiv.org/abs/2611.32476) | 🎯 tactile \| 🔧 daily 2026-11-25 |
+| CoTacWAM: Joint Modeling of Vision and Touch for Robotic Manipulation | [link](https://arxiv.org/abs/2611.34117) | 🎯 tactile \| 🔧 daily 2026-11-26 |
 
 ### 其他
 
