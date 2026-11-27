@@ -655,6 +655,7 @@
 | SimVLA: Attributing Gains in VLA Models Through Controlled Ablation | [link](https://arxiv.org/abs/2602.18224) | 🔧 daily 2026-11-21 |
 | FreshVLA: Frequency-Regularized Time Scale Hierarchical Latent Actions for Vision-Language-Action Models | [link](https://arxiv.org/abs/2611.33635) | 🔧 daily 2026-11-26 |
 | Best-of-$N$ Test-Time Steering Can Lead to Reward Hacking in Vision-Language-Action Models | [link](https://arxiv.org/abs/2611.33398) | [RL] 🔧 daily 2026-11-26 |
+| A Failure-Driven Data Flywheel for Post-Training Vision-Language-Action Models | [link](https://arxiv.org/abs/2611.34698) | [VLA后训] 🔧 daily 2026-11-27 |
 
 ### 動作生成
 
@@ -747,6 +748,10 @@
 | Hi3R-VLA: Grounding Semantics and Actions in 3D | [link](https://arxiv.org/abs/2611.31535) | 🔧 daily 2026-11-25 |
 | HoloBrain-0.5 Technical Report | [link](https://arxiv.org/abs/2611.34449) | 🔧 daily 2026-11-26 |
 | Escapingthe instruction blackhole of vision-language-action policies via optimal-transport wormholes | [link](https://arxiv.org/abs/2611.34280) | 🔧 daily 2026-11-26 |
+| Entangle: Scaling Human-Video In-Context World-Action Models across Unseen Tasks and Contexts | [link](https://arxiv.org/abs/2611.28732) | 🔧 daily 2026-11-27 |
+| RePace: Reasoning about Demonstration Speedup for Faster Vision-Language-Action Policies | [link](https://arxiv.org/abs/2611.34864) | [VLA后训] 🔧 daily 2026-11-27 |
+| Keep or Roll Back? Out-of-Loop Judges for Self-Improving VLA and End-to-End Embodied Policies | [link](https://arxiv.org/abs/2611.33794) | 🔧 daily 2026-11-27 |
+| DriftWAM: Faster World-Action Models via Action-Aware Video Drifting | [link](https://tldr.takara.ai/p/2611.33797) | [VLA后训] 🔧 daily 2026-11-27 |
 
 ### 數據
 
