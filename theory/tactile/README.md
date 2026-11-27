@@ -74,7 +74,7 @@
 
 > 上方保留人工导读与主题分组。本节列出本目录内全部 Git 已追踪 Markdown 文件，包含综述与索引，不含 README。按文件路径排序。
 
-**共 74 份文档。**
+**共 75 份文档。**
 
 - [主动触觉探索用于刚体姿态与形状估计 (Active Tactile Exploration for Rigid Body Pose and Shape Estimation)](./active_tactile_exploration_for_rigid_body_pose_and_shape_est_dissection.md)
 - [Active Tactile Exploration：仅触觉的刚体位姿+形状估计 (Active Tactile Exploration for Rigid Body Pose and Shape Estimation)](./active_tactile_exploration_rigid_body_pose_shape_eig_2026.md)
@@ -142,6 +142,7 @@
 - [UniVTAC：统一视触觉仿真平台、表征与基准 (UniVTAC: Unified Simulation Platform for Visuo-Tactile Manipulation)](./univtac_unified_visuo_tactile_simulation_platform_2026.md)
 - [视触觉“感同身受”的神经基础 (Vicarious Body Maps)](./vicarious_body_maps.md)
 - [视触觉预训练 + 在线多任务学习：用单目 + 二值触觉解锁“类人灵巧操作” (Visual-Tactile Pretraining + Online Multitask Learning)](./visual_tactile_pretraining_online_multitask_learning_2026.md)
+- [ViTacLab：物理一致的视触觉仿真、基准与表征学习 (ViTacLab: Physically Consistent Visuo-Tactile Simulation, Benchmarking, and Representation Learning for Robotic Manipulation)](./vitaclab_physically_consistent_visuo_tactile_simulation_benc_dissection.md)
 - [ViTacWorld：可扩展视触觉世界模型用于接触丰富操作 (ViTacWorld: Scaling Visuo-Tactile World Models for Contact-Rich Robot Manipulation)](./vitacworld_scaling_visuo_tactile_world_models_for_contact_ri_dissection.md)
 - [VLA-Touch：用双层触觉反馈增强 VLA / Enhancing Vision-Language-Action Models with Dual-Level Tactile Feedback](./vla_touch_dual_level_tactile_feedback_2025.md)
 - [VPWEM: Non-Markovian Visuomotor Policy with Working and Episodic Memory (VPWEM: Non-Markovian Visuomotor Policy with Working and Episodic Memory)](./vpwem_non_markovian_visuomotor_policy_with_working_and_episo_dissection.md)
