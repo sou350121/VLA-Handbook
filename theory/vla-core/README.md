@@ -114,7 +114,7 @@
 
 > 上方保留人工导读与主题分组。本节列出本目录内全部 Git 已追踪 Markdown 文件，包含综述与索引，不含 README。按文件路径排序。
 
-**共 205 份文档。**
+**共 206 份文档。**
 
 - [2D 还是 3D：谁主导 VLA 模型中的显著性？—— 三阶段 Token 剪枝框架与模态显著性感知 (2D or 3D: Who Governs Salience in VLA Models? -- Tri-Stage Token Pruning Framework with Modality Salience Awareness)](./2d_or_3d_who_governs_salience_in_vla_models_tri_stage_token_dissection.md)
 - [3DThinkVLA：通过3D思维引导协同训练赋予VLA模型隐式3D空间推理能力 (3DThinkVLA: Endowing Vision-Language-Action Models with Latent 3D Priors via 3D-Thinking-Guided Co-training)](./3dthinkvla_endowing_vision_language_action_models_with_laten_dissection.md)
@@ -208,6 +208,7 @@
 - [JevVLA：用同一个能量标量为离散候选与连续动作块做轻量适配 (JevVLA: Jev-Inspired Energy-Based Adaptation for Vision-Language-Action Policies)](./jevvla_jev_inspired_energy_based_adaptation_for_vision_langu_dissection.md)
 - [Juno：驯服预测隐变量用于 VLA 模型 (Juno: Taming Predictive Latents for Vision-Language-Action Models)](./juno_taming_predictive_latents_for_vision_language_action_mo_dissection.md)
 - [最小可觉差建模用于 VLA Token 压缩 (Just Noticeable Difference Modeling for Token Compression in Vision-Language-Action Models)](./just_noticeable_difference_modeling_for_token_compression_in_dissection.md)
+- [环外裁判：自提升 VLA 与端到端具身策略的保留/回滚判定 (Keep or Roll Back? Out-of-Loop Judges for Self-Improving VLA and End-to-End Embodied Policies)](./keep_or_roll_back_out_of_loop_judges_for_self_improving_vla_dissection.md)
 - [知道何时停止：基于 VLA 内部交叉注意力动态的自适应动作分块 (Knowing When to Stop: Adaptive Action Chunking via Internal Cross-Attention Dynamics in VLAs)](./knowing_when_to_stop_adaptive_action_chunking_via_internal_c_dissection.md)
 - [LACY：基于视觉语言模型的双向语言-动作循环，实现机器人自我改进操作 (LACY: A Vision-Language Model-based Language-Action Cycle for Self-Improving Robotic Manipulation)](./lacy_a_vision_language_model_based_language_action_cycle_for_dissection.md)
 - [LangGap：诊断与修复 VLA 模型的语言理解缺口 (Diagnosing and Closing the Language Gap in Vision-Language-Action Models)](./langgap_diagnosing_and_closing_the_language_gap_in_vision_la_dissection.md)
