@@ -114,7 +114,7 @@
 
 > 上方保留人工导读与主题分组。本节列出本目录内全部 Git 已追踪 Markdown 文件，包含综述与索引，不含 README。按文件路径排序。
 
-**共 204 份文档。**
+**共 205 份文档。**
 
 - [2D 还是 3D：谁主导 VLA 模型中的显著性？—— 三阶段 Token 剪枝框架与模态显著性感知 (2D or 3D: Who Governs Salience in VLA Models? -- Tri-Stage Token Pruning Framework with Modality Salience Awareness)](./2d_or_3d_who_governs_salience_in_vla_models_tri_stage_token_dissection.md)
 - [3DThinkVLA：通过3D思维引导协同训练赋予VLA模型隐式3D空间推理能力 (3DThinkVLA: Endowing Vision-Language-Action Models with Latent 3D Priors via 3D-Thinking-Guided Co-training)](./3dthinkvla_endowing_vision_language_action_models_with_laten_dissection.md)
@@ -168,6 +168,7 @@
 - [EgoX：第一人称跨本体操作与 Embodiment Dreaming (Egocentric Cross-Embodiment Manipulation with Embodiment Dreaming)](./egox_egocentric_cross_embodiment_manipulation_with_embodimen_dissection.md)
 - [具身可解释性：因果理解驱动 VLA 泛化 (Embodied Interpretability: Linking Causal Understanding to Generalization in Vision-Language-Action Models)](./embodied_interpretability_linking_causal_understanding_to_ge_dissection.md)
 - [具身中间训练：用数据邻近度弥合 VLM 与 VLA 之间的鸿沟 (EmbodiedMidtrain: Bridging the Gap between Vision-Language Models and Vision-Language-Action Models via Mid-training)](./embodiedmidtrain_bridging_the_gap_between_vision_language_mo_dissection.md)
+- [指令黑洞与最优传输虫洞：VLA 执行中改指令的机制拆解 (Escaping the Instruction Black Hole of Vision-Language-Action Policies via Optimal-Transport Wormholes)](./escapingthe_instruction_blackhole_of_vision_language_action_dissection.md)
 - [把 LLM–VLA 的协作过程变成后训练数据：ESI 飞轮拆解 (ESI: An Embodied Self-Improvement Flywheel for LLM–VLA Agents)](./esi_an_embodied_self_improvement_flywheel_for_llm_vla_agents_dissection.md)
 - [事件锚定的 VLA 稀疏自编码器分析 (Event-Grounded Sparse Autoencoders for Vision-Language-Action Policies)](./event_grounded_sparse_autoencoders_for_vision_language_actio_dissection.md)
 - [Evo-World：用光流监督未来运动预测的轻量 VLA (Evo-World: A Lightweight Vision-Language-Action Model with Future Motion Prediction via Optical-Flow Supervision)](./evo_world_a_lightweight_vision_language_action_model_with_fu_dissection.md)
